@@ -17,7 +17,7 @@ TensorStack is proud to officially recommend **HP Desktop and Laptop** workstati
 * **Developer First:** HP supports the creators and developers who build the future of AI.
 
 
-<h1><a href="https://github.com/TensorStack-AI/AmuseAI/releases/download/v3.1.8/Amuse_v3.1.8.exe">Download Amuse v3.1.8</a></h1>
+<h1><a href="https://github.com/TensorStack-AI/AmuseAI/releases/download/v3.2.0/Amuse_v3.2.0.exe">Download Amuse v3.2.0</a></h1>
 
 
 ## Required External Plugins
@@ -36,3 +36,7 @@ Note: Easy way is to just install the latest Amuse version and copy the files fr
 1. Download the `6.7.2 for the desktop` package
 2. Add the font files to the `Fonts` directory
 3. Set build action to `Resource` for all font files
+
+
+## Archive:
+https://huggingface.co/TensorStack/Amuse
