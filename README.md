@@ -1,24 +1,22 @@
 
-<p align="left">
-   <img width="17%" src="Assets/Amuse-Logo-512.png">
-    <img src="https://upload.wikimedia.org/wikipedia/commons/a/ad/HP_logo_2012.svg" width="15%" alt="HP Logo">
+<p align="center">
+   <img width="30%" src="Assets/Amuse-Logo-512.png">
 </p>
-
-# TensorStack Choice: Power Your AI with HP
-
-TensorStack is proud to officially recommend **HP Desktop and Laptop** workstations as our hardware of choice for the Amuse ecosystem. 
-
-### We choose to highlight the hardware that leads the AI revolution with integrity and raw performance.
+<div align="center">
+   <h2><a href="https://github.com/TensorStack-AI/AmuseAI/releases/download/v3.2.0/Amuse_v3.2.0.exe">Download Amuse v3.2.0</a></h2>
+</div>
 
 
-### **Why TensorStack Recommends HP**
-* **Ultimate AI Performance:** Experience the power of the **HP OmniBook Ultra 14**, featuring the 2026 industry-standard **85 TOPS NPU** for near-instant generative local workloads.
-* **Pro-Grade Precision:** The **HP ZBook Power G11** series provides the thermal overhead and RTX Ada graphics power required for high-fidelity tensor processing.
-* **Developer First:** HP supports the creators and developers who build the future of AI.
 
+## Amuse Roadmap
+* ~~**.NET 10 + OnnxRuntime Latest:** Migration to the .NET 10 framework and integration of the latest OnnxRuntime for optimized hardware acceleration.~~ (v3.2.0)
+* **Python Inference Runtime:** Implementation of a dedicated Python backend to provide seamless interop with the broader machine learning ecosystem.
+* **LoRA Adapters:** Support for dynamic loading and blending of LoRA adapters for fine-tuned style and character control.
+* **Z-Image & FLUX2 Models:** Integration of next-generation transformer architectures, including Z-Image and FLUX2, for high-fidelity image synthesis.
+* **WAN & LTX-2 Video Models:** Expansion into generative video using WAN and LTX-2 architectures for advanced motion and temporal consistency.
+* **STT + TTS Audio Models:** Deployment of Speech-to-Text for voice-driven prompting and Text-to-Speech for high-quality audio generation.
 
-<h1><a href="https://github.com/TensorStack-AI/AmuseAI/releases/download/v3.2.0/Amuse_v3.2.0.exe">Download Amuse v3.2.0</a></h1>
-
+---
 
 ## Required External Plugins
 1. `ContentFilter` add `ContentFilter.onnx` & `ContentFilter.bin` to `Plugins\ContentFilter`
@@ -26,6 +24,7 @@ TensorStack is proud to officially recommend **HP Desktop and Laptop** workstati
 
 Note: Easy way is to just install the latest Amuse version and copy the files from the `X:\Program Files\Amuse\Plugins` directory
 
+---
 
 ## Required External Licences
 
@@ -37,6 +36,7 @@ Note: Easy way is to just install the latest Amuse version and copy the files fr
 2. Add the font files to the `Fonts` directory
 3. Set build action to `Resource` for all font files
 
+---
 
 ## Archive:
 https://huggingface.co/TensorStack/Amuse
