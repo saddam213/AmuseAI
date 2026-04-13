@@ -1,0 +1,48 @@
+﻿<UserControl x:Class="Amuse.App.Controls.SeedControl"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:Amuse.App.Controls"
+             xmlns:CommonControls="clr-namespace:TensorStack.WPF.Controls;assembly=TensorStack.WPF"
+             Name="UI" >
+    <DockPanel DataContext="{Binding ElementName=UI}">
+        <UniformGrid DockPanel.Dock="Right" Columns="2" VerticalAlignment="Bottom" Height="22">
+            <CommonControls:AddOnButton Icon="f051" IconSize="14" IconColor="{StaticResource DefaultForeground}" Width="25" IconOpacity=".8" Command="{Binding SeedCommand}" CommandParameter="{StaticResource False}" ToolTip="New Seed"/>
+            <CommonControls:AddOnButton Icon="f074" IconSize="14" IconColor="{StaticResource DefaultForeground}" Width="25" IconOpacity=".8" Command="{Binding SeedCommand}" CommandParameter="{StaticResource True}" ToolTip="Random Seeds"/>
+        </UniformGrid>
+        <Grid>
+            <TextBox x:Name="TextBoxSeed" Text="{Binding Seed, UpdateSourceTrigger=PropertyChanged}" >
+                <TextBox.Style>
+                    <Style TargetType="TextBox" BasedOn="{StaticResource {x:Type TextBox}}">
+                        <Style.Triggers>
+                            <MultiDataTrigger>
+                                <MultiDataTrigger.Conditions>
+                                    <Condition Binding="{Binding Seed}" Value="0"/>
+                                    <Condition Binding="{Binding IsFocused, ElementName=TextBoxSeed}" Value="False"/>
+                                </MultiDataTrigger.Conditions>
+                                <Setter Property="Foreground" Value="Transparent"/>
+                            </MultiDataTrigger>
+                        </Style.Triggers>
+                    </Style>
+                </TextBox.Style>
+            </TextBox>
+            <TextBlock Text="Random" IsHitTestVisible="False" Opacity=".8" Margin="4,3,0,0" Foreground="{StaticResource DefaultForeground}">
+                <TextBlock.Style>
+                    <Style TargetType="TextBlock">
+                        <Setter Property="Visibility" Value="Collapsed"/>
+                        <Style.Triggers>
+                            <MultiDataTrigger>
+                                <MultiDataTrigger.Conditions>
+                                    <Condition Binding="{Binding Seed}" Value="0"/>
+                                    <Condition Binding="{Binding IsFocused, ElementName=TextBoxSeed}" Value="False"/>
+                                </MultiDataTrigger.Conditions>
+                                <Setter Property="Visibility" Value="Visible"/>
+                            </MultiDataTrigger>
+                        </Style.Triggers>
+                    </Style>
+                </TextBlock.Style>
+            </TextBlock>
+        </Grid>
+    </DockPanel>
+</UserControl>

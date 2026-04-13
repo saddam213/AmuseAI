@@ -1,0 +1,41 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+    <AssemblyName>AmuseHost</AssemblyName>
+    <TargetFramework>net10.0-windows10.0.17763.0</TargetFramework>
+    <PlatformTarget>x64</PlatformTarget>
+    <ApplicationIcon>Icon.ico</ApplicationIcon>
+    <Configurations>Debug;Release;Release-Installer</Configurations>
+    <ErrorOnDuplicatePublishOutputFiles>false</ErrorOnDuplicatePublishOutputFiles>
+  </PropertyGroup>
+
+  <!--Projects-->
+  <ItemGroup>
+    <ProjectReference Include="..\Amuse.Common\Amuse.Common.csproj" />
+  </ItemGroup>
+
+  <!--TensorStack-->
+  <ItemGroup>
+    <PackageReference Include="TensorStack.Python" Version="0.6.11" />
+  </ItemGroup>
+
+  <!--Common-->
+  <ItemGroup>
+    <PackageReference Include="Serilog.Extensions.Logging" Version="10.0.0" />
+    <PackageReference Include="Serilog.Sinks.File" Version="7.0.0" />
+  </ItemGroup>
+
+  <!--Binaries-->
+  <ItemGroup>
+    <Reference Include="CSnakes.Runtime">
+      <HintPath>CSnakes.Runtime.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+
+  <!--Images-->
+  <ItemGroup>
+    <Resource Include="Icon.ico" />
+  </ItemGroup>
+
+</Project>

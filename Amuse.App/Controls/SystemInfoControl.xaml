@@ -1,0 +1,136 @@
+﻿<UserControl x:Class="Amuse.App.Controls.SystemInfoControl"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:Amuse.App.Controls"
+             Name="UI" >
+    <Grid DataContext="{Binding ElementName=UI}">
+        <ItemsControl  ItemsSource="{Binding DeviceCollection}" >
+            <ItemsControl.ItemsPanel>
+                <ItemsPanelTemplate>
+                    <UniformGrid Rows="1" />
+                </ItemsPanelTemplate>
+            </ItemsControl.ItemsPanel>
+            <ItemsControl.ItemTemplate>
+                <DataTemplate>
+                    <UniformGrid ToolTipService.InitialShowDelay="0" ToolTipService.Placement="Top">
+                        <UniformGrid.Style>
+                            <Style TargetType="{x:Type UniformGrid}">
+                                <Setter Property="Rows" Value="2" />
+                                <Setter Property="Height" Value="196" />
+                                <Style.Triggers>
+                                    <DataTrigger Binding="{Binding DeviceCollection.Count, ElementName=UI}" Value="2">
+                                        <Setter Property="Rows" Value="1" />
+                                        <Setter Property="Height" Value="196" />
+                                    </DataTrigger>
+                                </Style.Triggers>
+                            </Style>
+                        </UniformGrid.Style>
+
+                        <!--Memory-->
+                        <Grid >
+                            <ProgressBar Maximum="{Binding MemoryGB}" Value="{Binding ProgressValue, Mode=OneWay}" Margin="0,12,0,12" Opacity="1"  Orientation="Vertical"  />
+                            <ProgressBar Maximum="{Binding MemoryGB}" Value="{Binding ProgressSubValue, Mode=OneWay}" Margin="0,12,0,12"  Orientation="Vertical" Background="Transparent" Foreground="Black" Opacity=".15" />
+                            <UniformGrid Rows="3" HorizontalAlignment="Center">
+                                <TextBlock Text="{Binding MemoryGB, StringFormat={}{0:N0}GB}" VerticalAlignment="Top" HorizontalAlignment="Center" FontSize="9" Opacity=".7" FontStyle="Italic" />
+                                <TextBlock Text="{Binding MemoryUsage, StringFormat={}{0:N0}GB}" VerticalAlignment="Center" HorizontalAlignment="Center" FontSize="10" Foreground="#BFFFFFFF" >
+                                    <TextBlock.Effect>
+                                        <DropShadowEffect Color="Black" BlurRadius="4" ShadowDepth="1" Opacity="1"/>
+                                    </TextBlock.Effect>
+                                </TextBlock>
+                                <TextBlock HorizontalAlignment="Center" VerticalAlignment="Bottom" FontSize="9" Opacity=".7" FontStyle="Italic" >
+                                    <TextBlock.Style>
+                                        <Style TargetType="{x:Type TextBlock}" BasedOn="{StaticResource {x:Type TextBlock}}">
+                                            <Setter Property="Text" Value="RAM" />
+                                            <Style.Triggers>
+                                                <DataTrigger Binding="{Binding Type}" Value="GPU">
+                                                    <Setter Property="Text" Value="VRAM" />
+                                                </DataTrigger>
+                                                <DataTrigger Binding="{Binding Type}" Value="NPU">
+                                                    <Setter Property="Text" Value="SRAM" />
+                                                </DataTrigger>
+                                            </Style.Triggers>
+                                        </Style>
+                                    </TextBlock.Style>
+                                </TextBlock>
+                            </UniformGrid>
+                            <Grid.Style>
+                                <Style TargetType="{x:Type Grid}">
+                                    <Setter Property="Margin" Value="0,0,1,4" />
+                                    <Style.Triggers>
+                                        <DataTrigger Binding="{Binding DeviceCollection.Count, ElementName=UI}" Value="2">
+                                            <Setter Property="Margin" Value="0,0,1,0" />
+                                        </DataTrigger>
+                                    </Style.Triggers>
+                                </Style>
+                            </Grid.Style>
+                        </Grid>
+
+                        <!--Usage-->
+                        <Grid Margin="0,0,1,0">
+                            <ProgressBar Maximum="100" Value="{Binding Usage}"  Margin="0,12,0,12" Orientation="Vertical" />
+                            <UniformGrid Rows="3" HorizontalAlignment="Center">
+                                <TextBlock Text="100%" VerticalAlignment="Top" HorizontalAlignment="Center" FontSize="9" Opacity=".7" FontStyle="Italic" />
+                                <TextBlock Text="{Binding Usage, StringFormat={}{0:N0}%}" VerticalAlignment="Center" HorizontalAlignment="Center" FontSize="10" Foreground="#BFFFFFFF" >
+                                    <TextBlock.Effect>
+                                        <DropShadowEffect Color="Black" BlurRadius="4" ShadowDepth="1" Opacity="1"/>
+                                    </TextBlock.Effect>
+                                </TextBlock>
+                                <TextBlock HorizontalAlignment="Center" VerticalAlignment="Bottom" FontSize="9" Opacity=".7" FontStyle="Italic" >
+                                    <TextBlock.Style>
+                                        <Style TargetType="{x:Type TextBlock}" BasedOn="{StaticResource {x:Type TextBlock}}">
+                                            <Setter Property="Text" Value="CPU" />
+                                            <Style.Triggers>
+                                                <DataTrigger Binding="{Binding Type}" Value="GPU">
+                                                    <Setter Property="Text" Value="GPU" />
+                                                </DataTrigger>
+                                                <DataTrigger Binding="{Binding Type}" Value="NPU">
+                                                    <Setter Property="Text" Value="NPU" />
+                                                </DataTrigger>
+                                            </Style.Triggers>
+                                        </Style>
+                                    </TextBlock.Style>
+                                </TextBlock>
+                            </UniformGrid>
+                        </Grid>
+
+                        <!--ToolTip-->
+                        <UniformGrid.ToolTip>
+                            <StackPanel Margin="2,4">
+                                <TextBlock Text="{Binding Name}" HorizontalAlignment="Center" FontWeight="DemiBold" />
+                                <Border BorderBrush="{StaticResource ButtonBorderBrush}" BorderThickness="1" Margin="0,1,0,3"/>
+                                <DockPanel>
+                                    <Grid DockPanel.Dock="Left" VerticalAlignment="Center">
+                                        <TextBlock Text="{Binding Usage, StringFormat={}{0}%}" FontSize="30" Margin="0,0,15,2"/>
+                                    </Grid>
+                                    <StackPanel>
+                                        <StackPanel Orientation="Horizontal" VerticalAlignment="Center" >
+                                            <TextBlock Text="Amuse: " FontStyle="Italic" Opacity=".7"/>
+                                            <TextBlock Text="{Binding ProcessMemoryUsage, StringFormat={}{0:F1}GB}" />
+                                        </StackPanel>
+                                        <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
+                                            <TextBlock Text="System: " FontStyle="Italic" Opacity=".7"/>
+                                            <TextBlock Text="{Binding ProgressSubValue, StringFormat={}{0:F1}GB}" />
+                                        </StackPanel>
+                                        <StackPanel Orientation="Horizontal" VerticalAlignment="Center" >
+                                            <TextBlock Text="Total Used: " FontStyle="Italic" Opacity=".7"/>
+                                            <TextBlock Text="{Binding MemoryUsage, StringFormat={}{0:F1}GB}" />
+                                        </StackPanel>
+                                        <StackPanel Orientation="Horizontal"  VerticalAlignment="Center" >
+                                            <TextBlock Text="Remaining: " FontStyle="Italic" Opacity=".7"/>
+                                            <TextBlock Text="{Binding MemoryRemaining, StringFormat={}{0:F1}GB}" />
+                                            <TextBlock Text=" / " FontStyle="Italic" Opacity=".7"/>
+                                            <TextBlock Text="{Binding MemoryGB, StringFormat={}{0:F1}GB}" />
+                                        </StackPanel>
+                                    </StackPanel>
+                                </DockPanel>
+                            </StackPanel>
+                        </UniformGrid.ToolTip>
+
+                    </UniformGrid>
+                </DataTemplate>
+            </ItemsControl.ItemTemplate>
+        </ItemsControl>
+    </Grid>
+</UserControl>

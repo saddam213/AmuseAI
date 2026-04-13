@@ -1,0 +1,24 @@
+﻿<CommonControls:BaseControl x:Class="Amuse.App.Controls.UpscaleInputControl"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:Amuse.App.Controls"
+             xmlns:CommonControls="clr-namespace:TensorStack.WPF.Controls;assembly=TensorStack.WPF"
+             Name="UpscaleInputUI" >
+    <StackPanel DataContext="{Binding ElementName=UpscaleInputUI}">
+        <UniformGrid Columns="3">
+            <StackPanel>
+                <CheckBox Content="Enable Tiling" IsChecked="{Binding Options.IsTileEnabled}" Margin="0,19,0,0"/>
+            </StackPanel>
+            <StackPanel IsEnabled="{Binding Options.IsTileEnabled}" Margin="0,0,2,0">
+                <TextBlock Text="Tile Size" Style="{StaticResource FieldTextBlockStyle}" />
+                <TextBox Text="{Binding Options.TileSize}" />
+            </StackPanel>
+            <StackPanel IsEnabled="{Binding Options.IsTileEnabled}" Margin="2,0,0,0">
+                <TextBlock Text="Tile Overlap" Style="{StaticResource FieldTextBlockStyle}" />
+                <TextBox Text="{Binding Options.TileOverlap}" />
+            </StackPanel>
+        </UniformGrid>
+    </StackPanel>
+</CommonControls:BaseControl>

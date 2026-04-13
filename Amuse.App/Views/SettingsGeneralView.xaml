@@ -1,0 +1,121 @@
+﻿<Views:ViewBase x:Class="Amuse.App.Views.SettingsGeneralView"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+    xmlns:local="clr-namespace:Amuse.App.Views"
+    xmlns:CommonControls="clr-namespace:TensorStack.WPF.Controls;assembly=TensorStack.WPF"
+    xmlns:Controls="clr-namespace:Amuse.App.Controls"
+    xmlns:Views="clr-namespace:Amuse.App.Views">
+    <Grid DataContext="{Binding RelativeSource={RelativeSource AncestorType={x:Type local:SettingsGeneralView}}}" Margin="10, 20, 20, 20"  >
+        <Grid>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="1*" />
+                <ColumnDefinition Width="1*" />
+            </Grid.ColumnDefinitions>
+
+            <DockPanel Grid.Column="0" VerticalAlignment="Top">
+                <Button DockPanel.Dock="Bottom" Command="{Binding SaveCommand}" Width="120" Height="30" HorizontalAlignment="Right" Margin="0,10,0,0" >
+                    <StackPanel Orientation="Horizontal">
+                        <CommonControls:FontAwesome Icon="f0c7" IconStyle="Light" Color="{StaticResource InfoColour}"/>
+                        <TextBlock Text="Save Changes" Margin="5,0,0,0"/>
+                    </StackPanel>
+                </Button>
+
+                <StackPanel >
+
+
+
+                    <!--Model Settings-->
+                    <GroupBox Header="Model Settings">
+                        <StackPanel Margin="6">
+
+                            <StackPanel>
+                                <TextBlock Text="Model Directory" Style="{StaticResource FieldTextBlockStyle}"/>
+                                <CommonControls:FilePickerTextBox FileName="{Binding Settings.DirectoryModel, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" IsFolderPicker="True" />
+                            </StackPanel>
+                            <StackPanel>
+                                <TextBlock Text="HuggingFace Model Cache" Style="{StaticResource FieldTextBlockStyle}"/>
+                                <CommonControls:FilePickerTextBox FileName="{Binding Settings.DirectoryCache, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" IsFolderPicker="True" />
+                            </StackPanel>
+                            <StackPanel>
+                                <TextBlock Text="HuggingFace Access Token" Style="{StaticResource FieldTextBlockStyle}"/>
+                                <TextBox  Text="{Binding Settings.SecureToken}" />
+                            </StackPanel>
+
+                        </StackPanel>
+                    </GroupBox>
+
+                    <!--History Settings-->
+                    <GroupBox Header="History Settings" Margin="0,20,0,0">
+                        <StackPanel Margin="6">
+
+                            <StackPanel >
+                                <TextBlock Text="Directory" Style="{StaticResource FieldTextBlockStyle}"/>
+                                <CommonControls:FilePickerTextBox FileName="{Binding Settings.DirectoryHistory, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" IsFolderPicker="True" />
+                            </StackPanel>
+                            <UniformGrid Columns="2">
+                                <StackPanel Margin="0,0,4,0" >
+                                    <TextBlock Text="Orientation" Style="{StaticResource FieldTextBlockStyle}"/>
+                                    <ComboBox  SelectedItem="{Binding Settings.HistoryOrientation, Mode=TwoWay}" ItemsSource="{Binding Source={StaticResource Orientation}}"  />
+                                </StackPanel>
+                                <StackPanel Margin="4,0,0,0" >
+                                    <TextBlock Text="Max Items" Style="{StaticResource FieldTextBlockStyle}"/>
+                                    <TextBox  Text="{Binding Settings.HistoryItems, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"  />
+                                </StackPanel>
+                            </UniformGrid>
+
+                        </StackPanel>
+                    </GroupBox>
+
+                    <!--Other Settings-->
+                    <GroupBox Header="Other Settings" Margin="0,20,0,0">
+                        <StackPanel Margin="6">
+                            <UniformGrid Columns="4" >
+                                <StackPanel>
+                                    <TextBlock Text="UI Scale" Style="{StaticResource FieldTextBlockStyle}"/>
+                                    <ComboBox ItemsSource="{Binding ScaleOptions}" SelectedValue="{Binding Settings.UIScale, Mode=TwoWay}" SelectedValuePath="Value" DisplayMemberPath="Label" />
+                                </StackPanel>
+
+                                <!--<CheckBox Content="Check For Updates" IsChecked="{Binding Settings.IsUpdateEnabled}" Margin="22,20,0,0"/>-->
+                            </UniformGrid>
+
+                            <StackPanel Margin="0,4,0,0">
+                                <TextBlock Text="Temp Directory" Style="{StaticResource FieldTextBlockStyle}"/>
+                                <CommonControls:FilePickerTextBox FileName="{Binding Settings.DirectoryTemp, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" IsFolderPicker="True" />
+                            </StackPanel>
+
+                        </StackPanel>
+                    </GroupBox>
+
+
+                    <!--Experimental Settings-->
+                    <GroupBox Header="Experimental" Margin="0,20,0,0">
+                        <StackPanel Margin="6">
+                            <UniformGrid Columns="1" >
+                                <StackPanel>
+                                    <CheckBox Content="Pipeline Debug" IsChecked="{Binding Settings.IsServerDebugEnabled}" />
+                                    <TextBlock Text="Show the pipeline status in a seperate console window" FontSize="11" FontStyle="Italic" Opacity=".6" Margin="22,0,0,0"/>
+                                </StackPanel>
+                                <StackPanel Margin="0,4,0,0">
+                                    <CheckBox Content="Optimize Device" IsChecked="{Binding Settings.IsOptimizeDeviceEnabled}"  />
+                                    <TextBlock Text="Set device specific optimizations (matmul_precision, reduced_precision, allow_tf32 etc.)" FontSize="11" FontStyle="Italic" Opacity=".6" Margin="22,0,0,0"/>
+                                </StackPanel>
+                                <StackPanel Margin="0,4,0,0">
+                                    <CheckBox Content="Optimize Channels" IsChecked="{Binding Settings.IsOptimizeChannelsEnabled}" />
+                                    <TextBlock Text="Set the model channel order NCHW -> NHWC" FontSize="11" FontStyle="Italic" Opacity=".6" Margin="22,0,0,0"/>
+                                </StackPanel>
+                                <StackPanel Margin="0,4,0,0">
+                                    <CheckBox Content="Device Quantization" IsChecked="{Binding Settings.IsDeviceQuantizationEnabled}" />
+                                    <TextBlock Text="Quantize model on GPU device" FontSize="11" FontStyle="Italic" Opacity=".6" Margin="22,0,0,0"/>
+                                </StackPanel>
+                            </UniformGrid>
+                        </StackPanel>
+                    </GroupBox>
+
+                </StackPanel>
+            </DockPanel>
+
+        </Grid>
+    </Grid>
+</Views:ViewBase>

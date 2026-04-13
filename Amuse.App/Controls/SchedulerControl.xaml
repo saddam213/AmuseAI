@@ -1,0 +1,1771 @@
+﻿<CommonControls:BaseControl x:Class="Amuse.App.Controls.SchedulerControl"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:i="http://schemas.microsoft.com/xaml/behaviors"
+             xmlns:scm="clr-namespace:System.ComponentModel;assembly=WindowsBase"
+             xmlns:base="clr-namespace:Amuse.App"
+             xmlns:local="clr-namespace:Amuse.App.Controls"
+             xmlns:Behaviors="clr-namespace:TensorStack.WPF.Behaviors;assembly=TensorStack.WPF"
+             xmlns:CommonControls="clr-namespace:TensorStack.WPF.Controls;assembly=TensorStack.WPF"
+             xmlns:CommonConverters="clr-namespace:TensorStack.WPF.Converters;assembly=TensorStack.WPF"
+             xmlns:Controls="clr-namespace:Amuse.App.Controls"
+             xmlns:Common="clr-namespace:Amuse.App.Common"
+             xmlns:Views="clr-namespace:Amuse.App.Views">
+
+    <CommonControls:BaseControl.Resources>
+
+
+        <DataTemplate DataType="{x:Type Common:SchedulerInputOptions}" x:Key="DefaultLayout" >
+            <TextBlock Text="{Binding Scheduler}" />
+        </DataTemplate>
+
+        <DataTemplate DataType="{x:Type Common:SchedulerInputOptions}" x:Key="LMSLayout">
+            <StackPanel>
+                <!--Beta Schedule-->
+                <UniformGrid Columns="3" Margin="0,4,0,0">
+                    <StackPanel Margin="0,0,0,0">
+                        <TextBlock Text="Beta Schedule" Style="{StaticResource FieldTextBlockStyle}" />
+                        <ComboBox ItemsSource="{Binding Source={StaticResource BetaScheduleType}}" SelectedItem="{Binding BetaSchedule}" />
+                    </StackPanel>
+                    <StackPanel Margin="4,0,4,0">
+                        <TextBlock Text="Beta Start" Style="{StaticResource FieldTextBlockStyle}" />
+                        <CommonControls:FloatBox FloatValue="{Binding BetaStart, UpdateSourceTrigger=PropertyChanged}" />
+                    </StackPanel>
+                    <StackPanel Margin="0,0,0,0">
+                        <TextBlock Text="Beta End" Style="{StaticResource FieldTextBlockStyle}" />
+                        <CommonControls:FloatBox FloatValue="{Binding BetaEnd, UpdateSourceTrigger=PropertyChanged}" />
+                    </StackPanel>
+                </UniformGrid>
+
+                <!--Prediction/TimestepSpacing-->
+                <UniformGrid  Columns="3">
+                    <StackPanel Margin="0,0,0,0">
+                        <TextBlock Text="Prediction" Style="{StaticResource FieldTextBlockStyle}" />
+                        <ComboBox ItemsSource="{Binding Source={StaticResource PredictionType}}" SelectedItem="{Binding PredictionType}" />
+                    </StackPanel>
+                    <StackPanel Margin="4,0,4,0">
+                        <TextBlock Text="Timestep Spacing" Style="{StaticResource FieldTextBlockStyle}" />
+                        <ComboBox ItemsSource="{Binding Source={StaticResource TimestepSpacingType}}" SelectedItem="{Binding TimestepSpacing}" />
+                    </StackPanel>
+                    <StackPanel Margin="0,0,0,0">
+                        <TextBlock Text="StepsOffset" Style="{StaticResource FieldTextBlockStyle}" />
+                        <TextBox Text="{Binding StepsOffset, UpdateSourceTrigger=PropertyChanged}" />
+                    </StackPanel>
+                </UniformGrid>
+
+                <!--SigmasType-->
+                <DockPanel Margin="0,4,0,0">
+                    <TextBlock DockPanel.Dock="Top" Text="Sigma Type" Style="{StaticResource FieldTextBlockStyle}" />
+                    <StackPanel Orientation="Horizontal" Margin="0,2,0,0">
+                        <RadioButton GroupName="SigmasType" IsChecked="True" Content="Default"/>
+                        <RadioButton GroupName="SigmasType" IsChecked="{Binding UseKarrasSigmas}" Content="Karras" Margin="20,0,0,0"/>
+                        <RadioButton GroupName="SigmasType" IsChecked="{Binding UseBetaSigmas}" Content="Beta" Margin="20,0,0,0"/>
+                        <RadioButton GroupName="SigmasType" IsChecked="{Binding UseExponentialSigmas}" Content="Exponential" Margin="20,0,0,0"/>
+                    </StackPanel>
+                </DockPanel>
+
+              
+            </StackPanel>
+        </DataTemplate>
+
+        <DataTemplate DataType="{x:Type Common:SchedulerInputOptions}" x:Key="EulerLayout">
+            <StackPanel>
+                <!--Beta Schedule-->
+                <UniformGrid Columns="3" Margin="0,4,0,0">
+                    <StackPanel Margin="0,0,0,0">
+                        <TextBlock Text="Beta Schedule" Style="{StaticResource FieldTextBlockStyle}" />
+                        <ComboBox ItemsSource="{Binding Source={StaticResource BetaScheduleType}}" SelectedItem="{Binding BetaSchedule}" />
+                    </StackPanel>
+                    <StackPanel Margin="4,0,4,0">
+                        <TextBlock Text="Beta Start" Style="{StaticResource FieldTextBlockStyle}" />
+                        <CommonControls:FloatBox FloatValue="{Binding BetaStart, UpdateSourceTrigger=PropertyChanged}" />
+                    </StackPanel>
+                    <StackPanel Margin="0,0,0,0">
+                        <TextBlock Text="Beta End" Style="{StaticResource FieldTextBlockStyle}" />
+                        <CommonControls:FloatBox FloatValue="{Binding BetaEnd, UpdateSourceTrigger=PropertyChanged}" />
+                    </StackPanel>
+                </UniformGrid>
+
+                <!--Prediction/TimestepSpacing-->
+                <UniformGrid  Columns="3">
+                    <StackPanel Margin="0,0,0,0">
+                        <TextBlock Text="Prediction" Style="{StaticResource FieldTextBlockStyle}" />
+                        <ComboBox ItemsSource="{Binding Source={StaticResource PredictionType}}" SelectedItem="{Binding PredictionType}" />
+                    </StackPanel>
+                    <StackPanel Margin="4,0,4,0">
+                        <TextBlock Text="Timestep Spacing" Style="{StaticResource FieldTextBlockStyle}" />
+                        <ComboBox ItemsSource="{Binding Source={StaticResource TimestepSpacingType}}" SelectedItem="{Binding TimestepSpacing}" />
+                    </StackPanel>
+                    <StackPanel Margin="0,0,0,0">
+                        <TextBlock Text="StepsOffset" Style="{StaticResource FieldTextBlockStyle}" />
+                        <TextBox Text="{Binding StepsOffset, UpdateSourceTrigger=PropertyChanged}" />
+                    </StackPanel>
+                </UniformGrid>
+
+                <!--Sigmas Min/Max-->
+                <UniformGrid  Columns="3">
+                    <StackPanel Margin="0,0,0,0">
+                        <TextBlock Text="Sigma Min" Style="{StaticResource FieldTextBlockStyle}" />
+                        <CommonControls:FloatBox FloatValue="{Binding SigmaMin, UpdateSourceTrigger=PropertyChanged}" />
+                    </StackPanel>
+                    <StackPanel Margin="4,0,4,0">
+                        <TextBlock Text="Sigma Max" Style="{StaticResource FieldTextBlockStyle}" />
+                        <CommonControls:FloatBox FloatValue="{Binding SigmaMax, UpdateSourceTrigger=PropertyChanged}" />
+                    </StackPanel>
+                    <StackPanel Margin="0,0,0,0">
+                        <TextBlock Text="Final Sigmas Type" Style="{StaticResource FieldTextBlockStyle}" />
+                        <ComboBox ItemsSource="{Binding Source={StaticResource FinalSigmasType}}" SelectedItem="{Binding FinalSigmasType}" />
+                    </StackPanel>
+                </UniformGrid>
+
+                <UniformGrid  Columns="3">
+                    <StackPanel Margin="0,0,0,0">
+                        <TextBlock Text="Interpolation Type" Style="{StaticResource FieldTextBlockStyle}" />
+                        <ComboBox ItemsSource="{Binding Source={StaticResource InterpolationType}}" SelectedItem="{Binding InterpolationType}" />
+                    </StackPanel>
+                    <StackPanel Margin="4,0,4,0">
+                        <TextBlock Text="Timestep Type" Style="{StaticResource FieldTextBlockStyle}" />
+                        <ComboBox ItemsSource="{Binding Source={StaticResource TimestepType}}" SelectedItem="{Binding TimestepType}" />
+                    </StackPanel>
+                    <StackPanel Margin="0,0,0,0">
+                        <CheckBox Content="Rescale Betas SNR" IsChecked="{Binding RescaleBetasZeroSNR}" Margin="4,20,0,0"/>
+                    </StackPanel>
+                </UniformGrid>
+
+                <!--SigmasType-->
+                <DockPanel Margin="0,4,0,0">
+                    <TextBlock DockPanel.Dock="Top" Text="Sigma Type" Style="{StaticResource FieldTextBlockStyle}" />
+                    <StackPanel Orientation="Horizontal" Margin="0,2,0,0">
+                        <RadioButton GroupName="SigmasType" IsChecked="True" Content="Default"/>
+                        <RadioButton GroupName="SigmasType" IsChecked="{Binding UseKarrasSigmas}" Content="Karras" Margin="20,0,0,0"/>
+                        <RadioButton GroupName="SigmasType" IsChecked="{Binding UseBetaSigmas}" Content="Beta" Margin="20,0,0,0"/>
+                        <RadioButton GroupName="SigmasType" IsChecked="{Binding UseExponentialSigmas}" Content="Exponential" Margin="20,0,0,0"/>
+                    </StackPanel>
+                </DockPanel>
+
+            </StackPanel>
+        </DataTemplate>
+
+        <DataTemplate DataType="{x:Type Common:SchedulerInputOptions}" x:Key="EulerAncestralLayout">
+            <StackPanel>
+                <!--Beta Schedule-->
+                <UniformGrid Columns="3" Margin="0,4,0,0">
+                    <StackPanel Margin="0,0,0,0">
+                        <TextBlock Text="Beta Schedule" Style="{StaticResource FieldTextBlockStyle}" />
+                        <ComboBox ItemsSource="{Binding Source={StaticResource BetaScheduleType}}" SelectedItem="{Binding BetaSchedule}" />
+                    </StackPanel>
+                    <StackPanel Margin="4,0,4,0">
+                        <TextBlock Text="Beta Start" Style="{StaticResource FieldTextBlockStyle}" />
+                        <CommonControls:FloatBox FloatValue="{Binding BetaStart, UpdateSourceTrigger=PropertyChanged}" />
+                    </StackPanel>
+                    <StackPanel Margin="0,0,0,0">
+                        <TextBlock Text="Beta End" Style="{StaticResource FieldTextBlockStyle}" />
+                        <CommonControls:FloatBox FloatValue="{Binding BetaEnd, UpdateSourceTrigger=PropertyChanged}" />
+                    </StackPanel>
+                </UniformGrid>
+
+                <!--Prediction/TimestepSpacing-->
+                <UniformGrid  Columns="3">
+                    <StackPanel Margin="0,0,0,0">
+                        <TextBlock Text="Prediction" Style="{StaticResource FieldTextBlockStyle}" />
+                        <ComboBox ItemsSource="{Binding Source={StaticResource PredictionType}}" SelectedItem="{Binding PredictionType}" />
+                    </StackPanel>
+                    <StackPanel Margin="4,0,4,0">
+                        <TextBlock Text="Timestep Spacing" Style="{StaticResource FieldTextBlockStyle}" />
+                        <ComboBox ItemsSource="{Binding Source={StaticResource TimestepSpacingType}}" SelectedItem="{Binding TimestepSpacing}" />
+                    </StackPanel>
+                    <StackPanel Margin="0,0,0,0">
+                        <TextBlock Text="StepsOffset" Style="{StaticResource FieldTextBlockStyle}" />
+                        <TextBox Text="{Binding StepsOffset, UpdateSourceTrigger=PropertyChanged}" />
+                    </StackPanel>
+                </UniformGrid>
+
+                <!--RescaleBetasZeroSNR-->
+                <UniformGrid  Columns="2">
+                    <StackPanel Margin="0,0,0,0">
+                        <CheckBox Content="Rescale Betas SNR" IsChecked="{Binding RescaleBetasZeroSNR}" Margin="0,8,0,0"/>
+                    </StackPanel>
+                </UniformGrid>
+
+            </StackPanel>
+        </DataTemplate>
+
+        <DataTemplate DataType="{x:Type Common:SchedulerInputOptions}" x:Key="DDPMLayout">
+            <StackPanel>
+                <!--Beta Schedule-->
+                <UniformGrid Columns="3" Margin="0,4,0,0">
+                    <StackPanel Margin="0,0,0,0">
+                        <TextBlock Text="Beta Schedule" Style="{StaticResource FieldTextBlockStyle}" />
+                        <ComboBox ItemsSource="{Binding Source={StaticResource BetaScheduleType}}" SelectedItem="{Binding BetaSchedule}" />
+                    </StackPanel>
+                    <StackPanel Margin="4,0,4,0">
+                        <TextBlock Text="Beta Start" Style="{StaticResource FieldTextBlockStyle}" />
+                        <CommonControls:FloatBox FloatValue="{Binding BetaStart, UpdateSourceTrigger=PropertyChanged}" />
+                    </StackPanel>
+                    <StackPanel Margin="0,0,0,0">
+                        <TextBlock Text="Beta End" Style="{StaticResource FieldTextBlockStyle}" />
+                        <CommonControls:FloatBox FloatValue="{Binding BetaEnd, UpdateSourceTrigger=PropertyChanged}" />
+                    </StackPanel>
+                </UniformGrid>
+
+                <!--Prediction/TimestepSpacing-->
+                <UniformGrid  Columns="3">
+                    <StackPanel Margin="0,0,0,0">
+                        <TextBlock Text="Prediction" Style="{StaticResource FieldTextBlockStyle}" />
+                        <ComboBox ItemsSource="{Binding Source={StaticResource PredictionType}}" SelectedItem="{Binding PredictionType}" />
+                    </StackPanel>
+                    <StackPanel Margin="4,0,4,0">
+                        <TextBlock Text="Timestep Spacing" Style="{StaticResource FieldTextBlockStyle}" />
+                        <ComboBox ItemsSource="{Binding Source={StaticResource TimestepSpacingType}}" SelectedItem="{Binding TimestepSpacing}" />
+                    </StackPanel>
+                    <StackPanel Margin="0,0,0,0">
+                        <TextBlock Text="StepsOffset" Style="{StaticResource FieldTextBlockStyle}" />
+                        <TextBox Text="{Binding StepsOffset, UpdateSourceTrigger=PropertyChanged}" />
+                    </StackPanel>
+                </UniformGrid>
+
+                <!--ClipSample-->
+                <UniformGrid  Columns="3">
+                    <StackPanel Margin="0,0,0,0">
+                        <CheckBox Content="Clip Sample" IsChecked="{Binding ClipSample}" Margin="0,20,0,0"/>
+                    </StackPanel>
+                    <StackPanel Margin="4,0,4,0">
+                        <TextBlock Text="Clip Sample Range" Style="{StaticResource FieldTextBlockStyle}" />
+                        <TextBox Text="{Binding ClipSampleRange, UpdateSourceTrigger=PropertyChanged}" />
+                    </StackPanel>
+                    <StackPanel Margin="0,0,0,0">
+                        <TextBlock Text="Sample Max Value" Style="{StaticResource FieldTextBlockStyle}" />
+                        <TextBox Text="{Binding SampleMaxValue, UpdateSourceTrigger=PropertyChanged}" />
+                    </StackPanel>
+                </UniformGrid>
+
+                <!--ClipSample-->
+                <UniformGrid  Columns="3">
+                    <StackPanel Margin="0,0,0,0">
+                        <CheckBox Content="Thresholding" IsChecked="{Binding Thresholding}" Margin="0,20,0,0"/>
+                    </StackPanel>
+                    <StackPanel Margin="4,0,4,0">
+                        <TextBlock Text="Thresholding Ratio" Style="{StaticResource FieldTextBlockStyle}" />
+                        <CommonControls:FloatBox FloatValue="{Binding DynamicThresholdingRatio, UpdateSourceTrigger=PropertyChanged}" />
+                    </StackPanel>
+                    <StackPanel Margin="0,0,0,0">
+                        <TextBlock Text="Variance" Style="{StaticResource FieldTextBlockStyle}" />
+                        <ComboBox ItemsSource="{Binding Source={StaticResource VarianceType}}" SelectedItem="{Binding VarianceType}" />
+                    </StackPanel>
+                </UniformGrid>
+
+                <!--RescaleBetasZeroSNR-->
+                <UniformGrid  Columns="2">
+                    <StackPanel Margin="0,0,0,0">
+                        <CheckBox Content="Rescale Betas SNR" IsChecked="{Binding RescaleBetasZeroSNR}" Margin="0,8,0,0"/>
+                    </StackPanel>
+                </UniformGrid>
+
+            </StackPanel>
+        </DataTemplate>
+
+        <DataTemplate DataType="{x:Type Common:SchedulerInputOptions}" x:Key="DDIMLayout">
+            <StackPanel>
+                <!--Beta Schedule-->
+                <UniformGrid Columns="3" Margin="0,4,0,0">
+                    <StackPanel Margin="0,0,0,0">
+                        <TextBlock Text="Beta Schedule" Style="{StaticResource FieldTextBlockStyle}" />
+                        <ComboBox ItemsSource="{Binding Source={StaticResource BetaScheduleType}}" SelectedItem="{Binding BetaSchedule}" />
+                    </StackPanel>
+                    <StackPanel Margin="4,0,4,0">
+                        <TextBlock Text="Beta Start" Style="{StaticResource FieldTextBlockStyle}" />
+                        <CommonControls:FloatBox FloatValue="{Binding BetaStart, UpdateSourceTrigger=PropertyChanged}" />
+                    </StackPanel>
+                    <StackPanel Margin="0,0,0,0">
+                        <TextBlock Text="Beta End" Style="{StaticResource FieldTextBlockStyle}" />
+                        <CommonControls:FloatBox FloatValue="{Binding BetaEnd, UpdateSourceTrigger=PropertyChanged}" />
+                    </StackPanel>
+                </UniformGrid>
+
+                <!--Prediction/TimestepSpacing-->
+                <UniformGrid  Columns="3">
+                    <StackPanel Margin="0,0,0,0">
+                        <TextBlock Text="Prediction" Style="{StaticResource FieldTextBlockStyle}" />
+                        <ComboBox ItemsSource="{Binding Source={StaticResource PredictionType}}" SelectedItem="{Binding PredictionType}" />
+                    </StackPanel>
+                    <StackPanel Margin="4,0,4,0">
+                        <TextBlock Text="Timestep Spacing" Style="{StaticResource FieldTextBlockStyle}" />
+                        <ComboBox ItemsSource="{Binding Source={StaticResource TimestepSpacingType}}" SelectedItem="{Binding TimestepSpacing}" />
+                    </StackPanel>
+                    <StackPanel Margin="0,0,0,0">
+                        <TextBlock Text="StepsOffset" Style="{StaticResource FieldTextBlockStyle}" />
+                        <TextBox Text="{Binding StepsOffset, UpdateSourceTrigger=PropertyChanged}" />
+                    </StackPanel>
+                </UniformGrid>
+
+                <!--ClipSample-->
+                <UniformGrid  Columns="3">
+                    <StackPanel Margin="0,0,0,0">
+                        <CheckBox Content="Clip Sample" IsChecked="{Binding ClipSample}" Margin="0,20,0,0"/>
+                    </StackPanel>
+                    <StackPanel Margin="4,0,4,0">
+                        <TextBlock Text="Clip Sample Range" Style="{StaticResource FieldTextBlockStyle}" />
+                        <TextBox Text="{Binding ClipSampleRange, UpdateSourceTrigger=PropertyChanged}" />
+                    </StackPanel>
+                    <StackPanel Margin="0,0,0,0">
+                        <TextBlock Text="Sample Max Value" Style="{StaticResource FieldTextBlockStyle}" />
+                        <TextBox Text="{Binding SampleMaxValue, UpdateSourceTrigger=PropertyChanged}" />
+                    </StackPanel>
+                </UniformGrid>
+
+                <!--ClipSample-->
+                <UniformGrid  Columns="3">
+                    <StackPanel Margin="0,0,0,0">
+                        <CheckBox Content="Thresholding" IsChecked="{Binding Thresholding}" Margin="0,20,0,0"/>
+                    </StackPanel>
+                    <StackPanel Margin="4,0,4,0">
+                        <TextBlock Text="Thresholding Ratio" Style="{StaticResource FieldTextBlockStyle}" />
+                        <CommonControls:FloatBox FloatValue="{Binding DynamicThresholdingRatio, UpdateSourceTrigger=PropertyChanged}" />
+                    </StackPanel>
+                    <StackPanel Margin="0,0,0,0">
+                        <CheckBox Content="Set Alpha To One" IsChecked="{Binding SetAlphaToOne}" Margin="0,20,0,0"/>
+                    </StackPanel>
+                </UniformGrid>
+
+                <!--RescaleBetasZeroSNR-->
+                <UniformGrid  Columns="2">
+                    <StackPanel Margin="0,8,0,0">
+                        <CheckBox Content="Rescale Betas SNR" IsChecked="{Binding RescaleBetasZeroSNR}" />
+                    </StackPanel>
+                </UniformGrid>
+
+            </StackPanel>
+        </DataTemplate>
+
+        <DataTemplate DataType="{x:Type Common:SchedulerInputOptions}" x:Key="DDPMWuerstchenLayout">
+            <StackPanel>
+                <UniformGrid Columns="3" Margin="0,4,0,0">
+                    <StackPanel Margin="0,0,0,0">
+                        <TextBlock Text="S Value" Style="{StaticResource FieldTextBlockStyle}" />
+                        <CommonControls:FloatBox FloatValue="{Binding SValue, UpdateSourceTrigger=PropertyChanged}" />
+                    </StackPanel>
+                    <StackPanel Margin="4,0,4,0">
+                        <TextBlock Text="Scaler" Style="{StaticResource FieldTextBlockStyle}" />
+                        <CommonControls:FloatBox FloatValue="{Binding Scaler, UpdateSourceTrigger=PropertyChanged}" />
+                    </StackPanel>
+                </UniformGrid>
+            </StackPanel>
+        </DataTemplate>
+
+        <DataTemplate DataType="{x:Type Common:SchedulerInputOptions}" x:Key="LCMLayout">
+            <StackPanel>
+                <!--Beta Schedule-->
+                <UniformGrid Columns="3" Margin="0,4,0,0">
+                    <StackPanel Margin="0,0,0,0">
+                        <TextBlock Text="Beta Schedule" Style="{StaticResource FieldTextBlockStyle}" />
+                        <ComboBox ItemsSource="{Binding Source={StaticResource BetaScheduleType}}" SelectedItem="{Binding BetaSchedule}" />
+                    </StackPanel>
+                    <StackPanel Margin="4,0,4,0">
+                        <TextBlock Text="Beta Start" Style="{StaticResource FieldTextBlockStyle}" />
+                        <CommonControls:FloatBox FloatValue="{Binding BetaStart, UpdateSourceTrigger=PropertyChanged}" />
+                    </StackPanel>
+                    <StackPanel Margin="0,0,0,0">
+                        <TextBlock Text="Beta End" Style="{StaticResource FieldTextBlockStyle}" />
+                        <CommonControls:FloatBox FloatValue="{Binding BetaEnd, UpdateSourceTrigger=PropertyChanged}" />
+                    </StackPanel>
+                </UniformGrid>
+
+                <!--Prediction/TimestepSpacing-->
+                <UniformGrid  Columns="3">
+                    <StackPanel Margin="0,0,0,0">
+                        <TextBlock Text="Prediction" Style="{StaticResource FieldTextBlockStyle}" />
+                        <ComboBox ItemsSource="{Binding Source={StaticResource PredictionType}}" SelectedItem="{Binding PredictionType}" />
+                    </StackPanel>
+                    <StackPanel Margin="4,0,4,0">
+                        <TextBlock Text="Timestep Spacing" Style="{StaticResource FieldTextBlockStyle}" />
+                        <ComboBox ItemsSource="{Binding Source={StaticResource TimestepSpacingType}}" SelectedItem="{Binding TimestepSpacing}" />
+                    </StackPanel>
+                    <StackPanel Margin="0,0,0,0">
+                        <TextBlock Text="StepsOffset" Style="{StaticResource FieldTextBlockStyle}" />
+                        <TextBox Text="{Binding StepsOffset, UpdateSourceTrigger=PropertyChanged}" />
+                    </StackPanel>
+                </UniformGrid>
+
+                <!--ClipSample-->
+                <UniformGrid  Columns="3">
+                    <StackPanel Margin="0,0,0,0">
+                        <CheckBox Content="Clip Sample" IsChecked="{Binding ClipSample}" Margin="0,20,0,0"/>
+                    </StackPanel>
+                    <StackPanel Margin="4,0,4,0">
+                        <TextBlock Text="Clip Sample Range" Style="{StaticResource FieldTextBlockStyle}" />
+                        <CommonControls:FloatBox FloatValue="{Binding ClipSampleRange, UpdateSourceTrigger=PropertyChanged}" />
+                    </StackPanel>
+                    <StackPanel Margin="0,0,0,0">
+                        <TextBlock Text="Sample Max Value" Style="{StaticResource FieldTextBlockStyle}" />
+                        <CommonControls:FloatBox FloatValue="{Binding SampleMaxValue, UpdateSourceTrigger=PropertyChanged}" />
+                    </StackPanel>
+                </UniformGrid>
+
+                <!--ClipSample-->
+                <UniformGrid  Columns="3">
+                    <StackPanel Margin="0,0,0,0">
+                        <CheckBox Content="Thresholding" IsChecked="{Binding Thresholding}" Margin="0,20,0,0"/>
+                    </StackPanel>
+                    <StackPanel Margin="4,0,4,0">
+                        <TextBlock Text="Thresholding Ratio" Style="{StaticResource FieldTextBlockStyle}" />
+                        <CommonControls:FloatBox FloatValue="{Binding DynamicThresholdingRatio, UpdateSourceTrigger=PropertyChanged}" />
+                    </StackPanel>
+                    <StackPanel Margin="0,0,0,0">
+                        <TextBlock Text="Timestep Scaling" Style="{StaticResource FieldTextBlockStyle}" />
+                        <CommonControls:FloatBox FloatValue="{Binding TimestepScaling, UpdateSourceTrigger=PropertyChanged}" />
+                    </StackPanel>
+                </UniformGrid>
+
+                <!--RescaleBetasZeroSNR-->
+                <UniformGrid  Columns="2">
+                    <StackPanel Margin="0,8,0,0">
+                        <CheckBox Content="Set Alpha To One" IsChecked="{Binding SetAlphaToOne}" />
+                        <CheckBox Content="Rescale Betas SNR" IsChecked="{Binding RescaleBetasZeroSNR}" />
+                    </StackPanel>
+                </UniformGrid>
+
+            </StackPanel>
+        </DataTemplate>
+
+        <DataTemplate DataType="{x:Type Common:SchedulerInputOptions}" x:Key="FlowMatchEulerLayout">
+            <StackPanel>
+                <UniformGrid Columns="3" Margin="0,4,0,0">
+                    <StackPanel Margin="0,0,0,0">
+                        <TextBlock Text="Shift" Style="{StaticResource FieldTextBlockStyle}" />
+                        <CommonControls:FloatBox FloatValue="{Binding Shift, UpdateSourceTrigger=PropertyChanged}" />
+                    </StackPanel>
+                    <StackPanel Margin="4,0,4,0">
+                        <TextBlock Text="Base Shift" Style="{StaticResource FieldTextBlockStyle}" />
+                        <CommonControls:FloatBox FloatValue="{Binding BaseShift, UpdateSourceTrigger=PropertyChanged}" />
+                    </StackPanel>
+                    <StackPanel Margin="0,0,0,0">
+                        <TextBlock Text="Max Shift" Style="{StaticResource FieldTextBlockStyle}" />
+                        <CommonControls:FloatBox FloatValue="{Binding MaxShift, UpdateSourceTrigger=PropertyChanged}" />
+                    </StackPanel>
+                </UniformGrid>
+
+                <UniformGrid Columns="3" Margin="0,4,0,0">
+                    <StackPanel Margin="0,0,0,0">
+                        <TextBlock Text="Shift Terminal" Style="{StaticResource FieldTextBlockStyle}" />
+                        <CommonControls:FloatBox FloatValue="{Binding ShiftTerminal, UpdateSourceTrigger=PropertyChanged}" />
+                    </StackPanel>
+                    <StackPanel Margin="4,0,4,0">
+                        <TextBlock Text="TimeShift" Style="{StaticResource FieldTextBlockStyle}" />
+                        <ComboBox ItemsSource="{Binding Source={StaticResource TimeShiftType}}" SelectedItem="{Binding TimeShiftType}" />
+                    </StackPanel>
+                    <StackPanel Margin="0,0,0,0">
+                        <CheckBox Content="Dynamic Shifting" IsChecked="{Binding UseDynamicShifting}" Margin="0,20,0,0"/>
+                    </StackPanel>
+                </UniformGrid>
+
+                <!--<UniformGrid Columns="3" Margin="0,4,0,0">
+                    <StackPanel Margin="0,0,0,0">
+                        <TextBlock Text="Base SeqLen" Style="{StaticResource FieldTextBlockStyle}" />
+                        <TextBox Text="{Binding BaseImageSeqLen, UpdateSourceTrigger=PropertyChanged}" />
+                    </StackPanel>
+                    <StackPanel Margin="4,0,4,0">
+                        <TextBlock Text="Max SeqLen" Style="{StaticResource FieldTextBlockStyle}" />
+                        <TextBox Text="{Binding MaxImageSeqLen, UpdateSourceTrigger=PropertyChanged}" />
+                    </StackPanel>
+                </UniformGrid>-->
+
+                <!--InvertSigmas-->
+                <UniformGrid  Columns="2" Margin="0,8,0,0">
+                    <CheckBox Content="Invert Sigmas" IsChecked="{Binding InvertSigmas}" />
+                    <CheckBox Content="Stochastic Sampling" IsChecked="{Binding StochasticSampling}" />
+                </UniformGrid>
+
+                <!--SigmasType-->
+                <DockPanel Margin="0,4,0,0">
+                    <TextBlock DockPanel.Dock="Top" Text="Sigma Type" Style="{StaticResource FieldTextBlockStyle}" />
+                    <StackPanel Orientation="Horizontal" Margin="0,2,0,0">
+                        <RadioButton GroupName="SigmasType" IsChecked="True" Content="Default"/>
+                        <RadioButton GroupName="SigmasType" IsChecked="{Binding UseKarrasSigmas}" Content="Karras" Margin="20,0,0,0"/>
+                        <RadioButton GroupName="SigmasType" IsChecked="{Binding UseBetaSigmas}" Content="Beta" Margin="20,0,0,0"/>
+                        <RadioButton GroupName="SigmasType" IsChecked="{Binding UseExponentialSigmas}" Content="Exponential" Margin="20,0,0,0"/>
+                    </StackPanel>
+                </DockPanel>
+            </StackPanel>
+        </DataTemplate>
+
+        <DataTemplate DataType="{x:Type Common:SchedulerInputOptions}" x:Key="FlowMatchHeunLayout">
+            <StackPanel>
+                <UniformGrid Columns="3" Margin="0,4,0,0">
+                    <StackPanel Margin="0,0,0,0">
+                        <TextBlock Text="Shift" Style="{StaticResource FieldTextBlockStyle}" />
+                        <CommonControls:FloatBox FloatValue="{Binding Shift, UpdateSourceTrigger=PropertyChanged}" />
+                    </StackPanel>
+                </UniformGrid>
+            </StackPanel>
+        </DataTemplate>
+
+        <DataTemplate DataType="{x:Type Common:SchedulerInputOptions}" x:Key="PNDMLayout">
+            <StackPanel>
+                <!--Beta Schedule-->
+                <UniformGrid Columns="3" Margin="0,4,0,0">
+                    <StackPanel Margin="0,0,0,0">
+                        <TextBlock Text="Beta Schedule" Style="{StaticResource FieldTextBlockStyle}" />
+                        <ComboBox ItemsSource="{Binding Source={StaticResource BetaScheduleType}}" SelectedItem="{Binding BetaSchedule}" />
+                    </StackPanel>
+                    <StackPanel Margin="4,0,4,0">
+                        <TextBlock Text="Beta Start" Style="{StaticResource FieldTextBlockStyle}" />
+                        <CommonControls:FloatBox FloatValue="{Binding BetaStart, UpdateSourceTrigger=PropertyChanged}" />
+                    </StackPanel>
+                    <StackPanel Margin="0,0,0,0">
+                        <TextBlock Text="Beta End" Style="{StaticResource FieldTextBlockStyle}" />
+                        <CommonControls:FloatBox FloatValue="{Binding BetaEnd, UpdateSourceTrigger=PropertyChanged}" />
+                    </StackPanel>
+                </UniformGrid>
+
+                <!--Prediction/TimestepSpacing-->
+                <UniformGrid  Columns="3">
+                    <StackPanel Margin="0,0,0,0">
+                        <TextBlock Text="Prediction" Style="{StaticResource FieldTextBlockStyle}" />
+                        <ComboBox ItemsSource="{Binding Source={StaticResource PredictionType}}" SelectedItem="{Binding PredictionType}" />
+                    </StackPanel>
+                    <StackPanel Margin="4,0,4,0">
+                        <TextBlock Text="Timestep Spacing" Style="{StaticResource FieldTextBlockStyle}" />
+                        <ComboBox ItemsSource="{Binding Source={StaticResource TimestepSpacingType}}" SelectedItem="{Binding TimestepSpacing}" />
+                    </StackPanel>
+                    <StackPanel Margin="0,0,0,0">
+                        <TextBlock Text="StepsOffset" Style="{StaticResource FieldTextBlockStyle}" />
+                        <TextBox Text="{Binding StepsOffset, UpdateSourceTrigger=PropertyChanged}" />
+                    </StackPanel>
+                </UniformGrid>
+
+                <!--SetAlphaToOne-->
+                <UniformGrid  Columns="2" Margin="0,8,0,0">
+                    <CheckBox Content="Set Alpha To One" IsChecked="{Binding SetAlphaToOne}" />
+                    <CheckBox Content="Skip Prk Steps" IsChecked="{Binding SkipPrkSteps}" />
+                </UniformGrid>
+            </StackPanel>
+        </DataTemplate>
+
+        <DataTemplate DataType="{x:Type Common:SchedulerInputOptions}" x:Key="HeunLayout">
+            <StackPanel>
+                <!--Beta Schedule-->
+                <UniformGrid Columns="3" Margin="0,4,0,0">
+                    <StackPanel Margin="0,0,0,0">
+                        <TextBlock Text="Beta Schedule" Style="{StaticResource FieldTextBlockStyle}" />
+                        <ComboBox ItemsSource="{Binding Source={StaticResource BetaScheduleType}}" SelectedItem="{Binding BetaSchedule}" />
+                    </StackPanel>
+                    <StackPanel Margin="4,0,4,0">
+                        <TextBlock Text="Beta Start" Style="{StaticResource FieldTextBlockStyle}" />
+                        <CommonControls:FloatBox FloatValue="{Binding BetaStart, UpdateSourceTrigger=PropertyChanged}" />
+                    </StackPanel>
+                    <StackPanel Margin="0,0,0,0">
+                        <TextBlock Text="Beta End" Style="{StaticResource FieldTextBlockStyle}" />
+                        <CommonControls:FloatBox FloatValue="{Binding BetaEnd, UpdateSourceTrigger=PropertyChanged}" />
+                    </StackPanel>
+                </UniformGrid>
+
+                <!--Prediction/TimestepSpacing-->
+                <UniformGrid  Columns="3">
+                    <StackPanel Margin="0,0,0,0">
+                        <TextBlock Text="Prediction" Style="{StaticResource FieldTextBlockStyle}" />
+                        <ComboBox ItemsSource="{Binding Source={StaticResource PredictionType}}" SelectedItem="{Binding PredictionType}" />
+                    </StackPanel>
+                    <StackPanel Margin="4,0,4,0">
+                        <TextBlock Text="Timestep Spacing" Style="{StaticResource FieldTextBlockStyle}" />
+                        <ComboBox ItemsSource="{Binding Source={StaticResource TimestepSpacingType}}" SelectedItem="{Binding TimestepSpacing}" />
+                    </StackPanel>
+                    <StackPanel Margin="0,0,0,0">
+                        <TextBlock Text="StepsOffset" Style="{StaticResource FieldTextBlockStyle}" />
+                        <TextBox Text="{Binding StepsOffset, UpdateSourceTrigger=PropertyChanged}" />
+                    </StackPanel>
+                </UniformGrid>
+
+                <UniformGrid  Columns="3">
+                    <StackPanel Margin="0,0,0,0">
+                        <CheckBox Content="Clip Sample" IsChecked="{Binding ClipSample}" Margin="0,20,0,0"/>
+                    </StackPanel>
+                    <StackPanel Margin="4,0,4,0">
+                        <TextBlock Text="Clip Sample Range" Style="{StaticResource FieldTextBlockStyle}" />
+                        <TextBox Text="{Binding ClipSampleRange, UpdateSourceTrigger=PropertyChanged}" />
+                    </StackPanel>
+                </UniformGrid>
+
+                <!--SigmasType-->
+                <DockPanel Margin="0,4,0,0">
+                    <TextBlock DockPanel.Dock="Top" Text="Sigma Type" Style="{StaticResource FieldTextBlockStyle}" />
+                    <StackPanel Orientation="Horizontal" Margin="0,2,0,0">
+                        <RadioButton GroupName="SigmasType" IsChecked="True" Content="Default"/>
+                        <RadioButton GroupName="SigmasType" IsChecked="{Binding UseKarrasSigmas}" Content="Karras" Margin="20,0,0,0"/>
+                        <RadioButton GroupName="SigmasType" IsChecked="{Binding UseBetaSigmas}" Content="Beta" Margin="20,0,0,0"/>
+                        <RadioButton GroupName="SigmasType" IsChecked="{Binding UseExponentialSigmas}" Content="Exponential" Margin="20,0,0,0"/>
+                    </StackPanel>
+                </DockPanel>
+            </StackPanel>
+        </DataTemplate>
+
+        <DataTemplate DataType="{x:Type Common:SchedulerInputOptions}" x:Key="UniPCMultistepLayout">
+            <StackPanel>
+                <!--Beta Schedule-->
+                <UniformGrid Columns="3" Margin="0,4,0,0">
+                    <StackPanel Margin="0,0,0,0">
+                        <TextBlock Text="Beta Schedule" Style="{StaticResource FieldTextBlockStyle}" />
+                        <ComboBox ItemsSource="{Binding Source={StaticResource BetaScheduleType}}" SelectedItem="{Binding BetaSchedule}" />
+                    </StackPanel>
+                    <StackPanel Margin="4,0,4,0">
+                        <TextBlock Text="Beta Start" Style="{StaticResource FieldTextBlockStyle}" />
+                        <CommonControls:FloatBox FloatValue="{Binding BetaStart, UpdateSourceTrigger=PropertyChanged}" />
+                    </StackPanel>
+                    <StackPanel Margin="0,0,0,0">
+                        <TextBlock Text="Beta End" Style="{StaticResource FieldTextBlockStyle}" />
+                        <CommonControls:FloatBox FloatValue="{Binding BetaEnd, UpdateSourceTrigger=PropertyChanged}" />
+                    </StackPanel>
+                </UniformGrid>
+
+                <!--Prediction/TimestepSpacing-->
+                <UniformGrid  Columns="3">
+                    <StackPanel Margin="0,0,0,0">
+                        <TextBlock Text="Prediction" Style="{StaticResource FieldTextBlockStyle}" />
+                        <ComboBox ItemsSource="{Binding Source={StaticResource PredictionType}}" SelectedItem="{Binding PredictionType}" />
+                    </StackPanel>
+                    <StackPanel Margin="4,0,4,0">
+                        <TextBlock Text="Timestep Spacing" Style="{StaticResource FieldTextBlockStyle}" />
+                        <ComboBox ItemsSource="{Binding Source={StaticResource TimestepSpacingType}}" SelectedItem="{Binding TimestepSpacing}" />
+                    </StackPanel>
+                    <StackPanel Margin="0,0,0,0">
+                        <TextBlock Text="StepsOffset" Style="{StaticResource FieldTextBlockStyle}" />
+                        <TextBox Text="{Binding StepsOffset, UpdateSourceTrigger=PropertyChanged}" />
+                    </StackPanel>
+                </UniformGrid>
+
+                <!--Thresholding-->
+                <UniformGrid  Columns="3">
+                    <StackPanel Margin="0,0,0,0">
+                        <CheckBox Content="Thresholding" IsChecked="{Binding Thresholding}" Margin="0,20,0,0"/>
+                    </StackPanel>
+                    <StackPanel Margin="4,0,4,0">
+                        <TextBlock Text="Thresholding Ratio" Style="{StaticResource FieldTextBlockStyle}" />
+                        <CommonControls:FloatBox FloatValue="{Binding DynamicThresholdingRatio, UpdateSourceTrigger=PropertyChanged}" />
+                    </StackPanel>
+                    <StackPanel Margin="0,0,0,0">
+                        <TextBlock Text="Sample MaxValue" Style="{StaticResource FieldTextBlockStyle}" />
+                        <CommonControls:FloatBox FloatValue="{Binding SampleMaxValue, UpdateSourceTrigger=PropertyChanged}" />
+                    </StackPanel>
+                </UniformGrid>
+
+                <!--Sigmas Min/Max-->
+                <UniformGrid  Columns="3">
+                    <StackPanel Margin="0,0,0,0">
+                        <TextBlock Text="Sigma Min" Style="{StaticResource FieldTextBlockStyle}" />
+                        <CommonControls:FloatBox FloatValue="{Binding SigmaMin, UpdateSourceTrigger=PropertyChanged}" />
+                    </StackPanel>
+                    <StackPanel Margin="4,0,4,0">
+                        <TextBlock Text="Sigma Max" Style="{StaticResource FieldTextBlockStyle}" />
+                        <CommonControls:FloatBox FloatValue="{Binding SigmaMax, UpdateSourceTrigger=PropertyChanged}" />
+                    </StackPanel>
+                    <StackPanel Margin="0,0,0,0">
+                        <TextBlock Text="Final Sigmas Type" Style="{StaticResource FieldTextBlockStyle}" />
+                        <ComboBox ItemsSource="{Binding Source={StaticResource FinalSigmasType}}" SelectedItem="{Binding FinalSigmasType}" />
+                    </StackPanel>
+                </UniformGrid>
+
+                <!--SolverType-->
+                <UniformGrid  Columns="3">
+                    <StackPanel Margin="0,0,0,0">
+                        <TextBlock Text="Solver" Style="{StaticResource FieldTextBlockStyle}" />
+                        <ComboBox ItemsSource="{Binding Source={StaticResource SolverType}}" SelectedItem="{Binding SolverType}" />
+                    </StackPanel>
+                    <StackPanel Margin="4,0,4,0">
+                        <TextBlock Text="Solver Order" Style="{StaticResource FieldTextBlockStyle}" />
+                        <TextBox Text="{Binding SolverOrder, UpdateSourceTrigger=PropertyChanged}" />
+                    </StackPanel>
+                    <StackPanel Margin="0,0,0,0">
+                        <CheckBox Content="Lower Order Final" IsChecked="{Binding LowerOrderFinal}" Margin="0,20,0,0"/>
+                    </StackPanel>
+                </UniformGrid>
+
+                <UniformGrid Columns="3" Margin="0,4,0,0">
+                    <StackPanel Margin="0,0,0,0">
+                        <TextBlock Text="Shift Terminal" Style="{StaticResource FieldTextBlockStyle}" />
+                        <CommonControls:FloatBox FloatValue="{Binding ShiftTerminal, UpdateSourceTrigger=PropertyChanged}" />
+                    </StackPanel>
+                    <StackPanel Margin="4,0,4,0">
+                        <TextBlock Text="TimeShift" Style="{StaticResource FieldTextBlockStyle}" />
+                        <ComboBox ItemsSource="{Binding Source={StaticResource TimeShiftType}}" SelectedItem="{Binding TimeShiftType}" />
+                    </StackPanel>
+                    <StackPanel Margin="0,0,0,0">
+                        <CheckBox Content="Dynamic Shifting" IsChecked="{Binding UseDynamicShifting}" Margin="0,20,0,0"/>
+                    </StackPanel>
+                </UniformGrid>
+
+                <UniformGrid Columns="3" Margin="0,4,0,0">
+                    <StackPanel Margin="0,0,0,0">
+                        <TextBlock Text="Flow Shift" Style="{StaticResource FieldTextBlockStyle}" />
+                        <CommonControls:FloatBox FloatValue="{Binding FlowShift, UpdateSourceTrigger=PropertyChanged}" />
+                    </StackPanel>
+                    <StackPanel Margin="4,0,4,0">
+                        <CheckBox Content="Predict x0" IsChecked="{Binding PredictX0}" Margin="0,20,0,0"/>
+                    </StackPanel>
+                    <StackPanel Margin="0,0,0,0">
+                        <CheckBox Content="Use FlowSigmas" IsChecked="{Binding UseFlowSigmas}" Margin="0,20,0,0"/>
+                    </StackPanel>
+                </UniformGrid>
+
+                <!--SigmasType-->
+                <DockPanel Margin="0,4,0,0">
+                    <TextBlock DockPanel.Dock="Top" Text="Sigma Type" Style="{StaticResource FieldTextBlockStyle}" />
+                    <StackPanel Orientation="Horizontal" Margin="0,2,0,0">
+                        <RadioButton GroupName="SigmasType" IsChecked="True" Content="Default"/>
+                        <RadioButton GroupName="SigmasType" IsChecked="{Binding UseKarrasSigmas}" Content="Karras" Margin="20,0,0,0"/>
+                        <RadioButton GroupName="SigmasType" IsChecked="{Binding UseBetaSigmas}" Content="Beta" Margin="20,0,0,0"/>
+                        <RadioButton GroupName="SigmasType" IsChecked="{Binding UseExponentialSigmas}" Content="Exponential" Margin="20,0,0,0"/>
+                    </StackPanel>
+                </DockPanel>
+
+                <StackPanel Margin="0,8,0,0">
+                    <CheckBox Content="Rescale Betas SNR" IsChecked="{Binding RescaleBetasZeroSNR}"/>
+                </StackPanel>
+            </StackPanel>
+        </DataTemplate>
+
+        <DataTemplate DataType="{x:Type Common:SchedulerInputOptions}" x:Key="DPMSolverMultistepLayout">
+            <StackPanel>
+                <!--Beta Schedule-->
+                <UniformGrid Columns="3" Margin="0,4,0,0">
+                    <StackPanel Margin="0,0,0,0">
+                        <TextBlock Text="Beta Schedule" Style="{StaticResource FieldTextBlockStyle}" />
+                        <ComboBox ItemsSource="{Binding Source={StaticResource BetaScheduleType}}" SelectedItem="{Binding BetaSchedule}" />
+                    </StackPanel>
+                    <StackPanel Margin="4,0,4,0">
+                        <TextBlock Text="Beta Start" Style="{StaticResource FieldTextBlockStyle}" />
+                        <CommonControls:FloatBox FloatValue="{Binding BetaStart, UpdateSourceTrigger=PropertyChanged}" />
+                    </StackPanel>
+                    <StackPanel Margin="0,0,0,0">
+                        <TextBlock Text="Beta End" Style="{StaticResource FieldTextBlockStyle}" />
+                        <CommonControls:FloatBox FloatValue="{Binding BetaEnd, UpdateSourceTrigger=PropertyChanged}" />
+                    </StackPanel>
+                </UniformGrid>
+
+                <!--Prediction/TimestepSpacing-->
+                <UniformGrid  Columns="3">
+                    <StackPanel Margin="0,0,0,0">
+                        <TextBlock Text="Prediction" Style="{StaticResource FieldTextBlockStyle}" />
+                        <ComboBox ItemsSource="{Binding Source={StaticResource PredictionType}}" SelectedItem="{Binding PredictionType}" />
+                    </StackPanel>
+                    <StackPanel Margin="4,0,4,0">
+                        <TextBlock Text="Timestep Spacing" Style="{StaticResource FieldTextBlockStyle}" />
+                        <ComboBox ItemsSource="{Binding Source={StaticResource TimestepSpacingType}}" SelectedItem="{Binding TimestepSpacing}" />
+                    </StackPanel>
+                    <StackPanel Margin="0,0,0,0">
+                        <TextBlock Text="StepsOffset" Style="{StaticResource FieldTextBlockStyle}" />
+                        <TextBox Text="{Binding StepsOffset, UpdateSourceTrigger=PropertyChanged}" />
+                    </StackPanel>
+                </UniformGrid>
+
+                <!--Thresholding-->
+                <UniformGrid  Columns="3">
+                    <StackPanel Margin="0,0,0,0">
+                        <CheckBox Content="Thresholding" IsChecked="{Binding Thresholding}" Margin="0,20,0,0"/>
+                    </StackPanel>
+                    <StackPanel Margin="4,0,4,0">
+                        <TextBlock Text="Thresholding Ratio" Style="{StaticResource FieldTextBlockStyle}" />
+                        <CommonControls:FloatBox FloatValue="{Binding DynamicThresholdingRatio, UpdateSourceTrigger=PropertyChanged}" />
+                    </StackPanel>
+                    <StackPanel Margin="0,0,0,0">
+                        <TextBlock Text="Sample MaxValue" Style="{StaticResource FieldTextBlockStyle}" />
+                        <CommonControls:FloatBox FloatValue="{Binding SampleMaxValue, UpdateSourceTrigger=PropertyChanged}" />
+                    </StackPanel>
+                </UniformGrid>
+
+                <!--SolverType-->
+                <UniformGrid  Columns="3">
+                    <StackPanel Margin="0,0,0,0">
+                        <TextBlock Text="Solver" Style="{StaticResource FieldTextBlockStyle}" />
+                        <ComboBox ItemsSource="{Binding Source={StaticResource SolverType}}" SelectedItem="{Binding SolverType}" />
+                    </StackPanel>
+                    <StackPanel Margin="4,0,4,0">
+                        <TextBlock Text="Solver Order" Style="{StaticResource FieldTextBlockStyle}" />
+                        <TextBox Text="{Binding SolverOrder, UpdateSourceTrigger=PropertyChanged}" />
+                    </StackPanel>
+                    <StackPanel Margin="0,0,0,0">
+                        <CheckBox Content="Lower Order Final" IsChecked="{Binding LowerOrderFinal}" Margin="0,20,0,0"/>
+                    </StackPanel>
+                </UniformGrid>
+
+                <UniformGrid Columns="3" Margin="0,4,0,0">
+                    <StackPanel Margin="0,0,0,0">
+                        <TextBlock Text="Flow Shift" Style="{StaticResource FieldTextBlockStyle}" />
+                        <CommonControls:FloatBox FloatValue="{Binding FlowShift, UpdateSourceTrigger=PropertyChanged}" />
+                    </StackPanel>
+                    <StackPanel Margin="4,0,4,0">
+                        <TextBlock Text="TimeShift" Style="{StaticResource FieldTextBlockStyle}" />
+                        <ComboBox ItemsSource="{Binding Source={StaticResource TimeShiftType}}" SelectedItem="{Binding TimeShiftType}" />
+                    </StackPanel>
+                    <StackPanel Margin="0,0,0,0">
+                        <TextBlock Text="Final Sigmas Type" Style="{StaticResource FieldTextBlockStyle}" />
+                        <ComboBox ItemsSource="{Binding Source={StaticResource FinalSigmasType}}" SelectedItem="{Binding FinalSigmasType}" />
+                    </StackPanel>
+                </UniformGrid>
+
+                <UniformGrid Columns="3" Margin="0,8,0,0">
+                    <CheckBox Content="Dynamic Shifting" IsChecked="{Binding UseDynamicShifting}" />
+                    <CheckBox Content="Flow Sigmas" IsChecked="{Binding UseFlowSigmas}" />
+                    <CheckBox Content="Euler At Final" IsChecked="{Binding EulerAtFinal}" />
+                </UniformGrid>
+
+                <UniformGrid Columns="3" Margin="0,4,0,0">
+                    <StackPanel Margin="0,0,0,0">
+                        <TextBlock Text="Algorithm Type" Style="{StaticResource FieldTextBlockStyle}" />
+                        <ComboBox ItemsSource="{Binding Source={StaticResource AlgorithmType}}" SelectedItem="{Binding AlgorithmType}" />
+                    </StackPanel>
+                  
+                    <StackPanel Margin="0,0,0,0">
+                        <CheckBox Content="Lu Lambdas" IsChecked="{Binding UseLuLambdas}" Margin="0,20,0,0"/>
+                    </StackPanel>
+                </UniformGrid>
+
+                <!--SigmasType-->
+                <DockPanel Margin="0,4,0,0">
+                    <TextBlock DockPanel.Dock="Top" Text="Sigma Type" Style="{StaticResource FieldTextBlockStyle}" />
+                    <StackPanel Orientation="Horizontal" Margin="0,2,0,0">
+                        <RadioButton GroupName="SigmasType" IsChecked="True" Content="Default"/>
+                        <RadioButton GroupName="SigmasType" IsChecked="{Binding UseKarrasSigmas}" Content="Karras" Margin="20,0,0,0"/>
+                        <RadioButton GroupName="SigmasType" IsChecked="{Binding UseBetaSigmas}" Content="Beta" Margin="20,0,0,0"/>
+                        <RadioButton GroupName="SigmasType" IsChecked="{Binding UseExponentialSigmas}" Content="Exponential" Margin="20,0,0,0"/>
+                    </StackPanel>
+                </DockPanel>
+
+                <StackPanel Margin="0,8,0,0">
+                    <CheckBox Content="Rescale Betas SNR" IsChecked="{Binding RescaleBetasZeroSNR}"/>
+                </StackPanel>
+            </StackPanel>
+        </DataTemplate>
+
+        <DataTemplate DataType="{x:Type Common:SchedulerInputOptions}" x:Key="DPMSolverSinglestepLayout">
+            <StackPanel>
+                <UniformGrid Columns="3" Margin="0,4,0,0">
+                    <StackPanel Margin="0,0,0,0">
+                        <TextBlock Text="Beta Schedule" Style="{StaticResource FieldTextBlockStyle}" />
+                        <ComboBox ItemsSource="{Binding Source={StaticResource BetaScheduleType}}" SelectedItem="{Binding BetaSchedule}" />
+                    </StackPanel>
+                    <StackPanel Margin="4,0,4,0">
+                        <TextBlock Text="Beta Start" Style="{StaticResource FieldTextBlockStyle}" />
+                        <CommonControls:FloatBox FloatValue="{Binding BetaStart, UpdateSourceTrigger=PropertyChanged}" />
+                    </StackPanel>
+                    <StackPanel Margin="0,0,0,0">
+                        <TextBlock Text="Beta End" Style="{StaticResource FieldTextBlockStyle}" />
+                        <CommonControls:FloatBox FloatValue="{Binding BetaEnd, UpdateSourceTrigger=PropertyChanged}" />
+                    </StackPanel>
+                </UniformGrid>
+
+                <UniformGrid  Columns="3">
+                    <StackPanel Margin="0,0,0,0">
+                        <TextBlock Text="Prediction" Style="{StaticResource FieldTextBlockStyle}" />
+                        <ComboBox ItemsSource="{Binding Source={StaticResource PredictionType}}" SelectedItem="{Binding PredictionType}" />
+                    </StackPanel>
+                    <StackPanel Margin="4,0,4,0">
+                        <TextBlock Text="Timestep Spacing" Style="{StaticResource FieldTextBlockStyle}" />
+                        <ComboBox ItemsSource="{Binding Source={StaticResource TimestepSpacingType}}" SelectedItem="{Binding TimestepSpacing}" />
+                    </StackPanel>
+                    <StackPanel Margin="0,0,0,0">
+                        <TextBlock Text="StepsOffset" Style="{StaticResource FieldTextBlockStyle}" />
+                        <TextBox Text="{Binding StepsOffset, UpdateSourceTrigger=PropertyChanged}" />
+                    </StackPanel>
+                </UniformGrid>
+
+                <UniformGrid  Columns="3">
+                    <StackPanel Margin="0,0,0,0">
+                        <CheckBox Content="Thresholding" IsChecked="{Binding Thresholding}" Margin="0,20,0,0"/>
+                    </StackPanel>
+                    <StackPanel Margin="4,0,4,0">
+                        <TextBlock Text="Thresholding Ratio" Style="{StaticResource FieldTextBlockStyle}" />
+                        <CommonControls:FloatBox FloatValue="{Binding DynamicThresholdingRatio, UpdateSourceTrigger=PropertyChanged}" />
+                    </StackPanel>
+                    <StackPanel Margin="0,0,0,0">
+                        <TextBlock Text="Sample MaxValue" Style="{StaticResource FieldTextBlockStyle}" />
+                        <CommonControls:FloatBox FloatValue="{Binding SampleMaxValue, UpdateSourceTrigger=PropertyChanged}" />
+                    </StackPanel>
+                </UniformGrid>
+
+                <UniformGrid  Columns="3">
+                    <StackPanel Margin="0,0,0,0">
+                        <TextBlock Text="Solver" Style="{StaticResource FieldTextBlockStyle}" />
+                        <ComboBox ItemsSource="{Binding Source={StaticResource SolverType}}" SelectedItem="{Binding SolverType}" />
+                    </StackPanel>
+                    <StackPanel Margin="4,0,4,0">
+                        <TextBlock Text="Solver Order" Style="{StaticResource FieldTextBlockStyle}" />
+                        <TextBox Text="{Binding SolverOrder, UpdateSourceTrigger=PropertyChanged}" />
+                    </StackPanel>
+                    <StackPanel Margin="0,0,0,0">
+                        <CheckBox Content="Lower Order Final" IsChecked="{Binding LowerOrderFinal}" Margin="0,20,0,0"/>
+                    </StackPanel>
+                </UniformGrid>
+
+                <UniformGrid Columns="3" Margin="0,4,0,0">
+                    <StackPanel Margin="0,0,0,0">
+                        <TextBlock Text="Flow Shift" Style="{StaticResource FieldTextBlockStyle}" />
+                        <CommonControls:FloatBox FloatValue="{Binding FlowShift, UpdateSourceTrigger=PropertyChanged}" />
+                    </StackPanel>
+                    <StackPanel Margin="4,0,4,0">
+                        <TextBlock Text="Variance Type" Style="{StaticResource FieldTextBlockStyle}" />
+                        <ComboBox ItemsSource="{Binding Source={StaticResource VarianceType}}" SelectedItem="{Binding VarianceType}" />
+                    </StackPanel>
+                    <StackPanel Margin="0,0,0,0">
+                        <TextBlock Text="Algorithm Type" Style="{StaticResource FieldTextBlockStyle}" />
+                        <ComboBox ItemsSource="{Binding Source={StaticResource AlgorithmType}}" SelectedItem="{Binding AlgorithmType}" />
+                    </StackPanel>
+                </UniformGrid>
+
+                <UniformGrid Columns="3" Margin="0,4,0,0">
+
+                    <StackPanel Margin="4,0,4,0">
+                        <TextBlock Text="Final Sigmas Type" Style="{StaticResource FieldTextBlockStyle}" />
+                        <ComboBox ItemsSource="{Binding Source={StaticResource FinalSigmasType}}" SelectedItem="{Binding FinalSigmasType}" />
+                    </StackPanel>
+                    <StackPanel Margin="0,0,0,0">
+                        <CheckBox Content="Flow Sigmas" IsChecked="{Binding UseFlowSigmas}" Margin="0,20,0,0"/>
+                    </StackPanel>
+                </UniformGrid>
+
+                <!--SigmasType-->
+                <DockPanel Margin="0,4,0,0">
+                    <TextBlock DockPanel.Dock="Top" Text="Sigma Type" Style="{StaticResource FieldTextBlockStyle}" />
+                    <StackPanel Orientation="Horizontal" Margin="0,2,0,0">
+                        <RadioButton GroupName="SigmasType" IsChecked="True" Content="Default"/>
+                        <RadioButton GroupName="SigmasType" IsChecked="{Binding UseKarrasSigmas}" Content="Karras" Margin="20,0,0,0"/>
+                        <RadioButton GroupName="SigmasType" IsChecked="{Binding UseBetaSigmas}" Content="Beta" Margin="20,0,0,0"/>
+                        <RadioButton GroupName="SigmasType" IsChecked="{Binding UseExponentialSigmas}" Content="Exponential" Margin="20,0,0,0"/>
+                    </StackPanel>
+                </DockPanel>
+            </StackPanel>
+        </DataTemplate>
+
+        <DataTemplate DataType="{x:Type Common:SchedulerInputOptions}" x:Key="DPMSolverSDELayout">
+            <StackPanel>
+                <UniformGrid Columns="3" Margin="0,4,0,0">
+                    <StackPanel Margin="0,0,0,0">
+                        <TextBlock Text="Beta Schedule" Style="{StaticResource FieldTextBlockStyle}" />
+                        <ComboBox ItemsSource="{Binding Source={StaticResource BetaScheduleType}}" SelectedItem="{Binding BetaSchedule}" />
+                    </StackPanel>
+                    <StackPanel Margin="4,0,4,0">
+                        <TextBlock Text="Beta Start" Style="{StaticResource FieldTextBlockStyle}" />
+                        <CommonControls:FloatBox FloatValue="{Binding BetaStart, UpdateSourceTrigger=PropertyChanged}" />
+                    </StackPanel>
+                    <StackPanel Margin="0,0,0,0">
+                        <TextBlock Text="Beta End" Style="{StaticResource FieldTextBlockStyle}" />
+                        <CommonControls:FloatBox FloatValue="{Binding BetaEnd, UpdateSourceTrigger=PropertyChanged}" />
+                    </StackPanel>
+                </UniformGrid>
+
+                <UniformGrid  Columns="3">
+                    <StackPanel Margin="0,0,0,0">
+                        <TextBlock Text="Prediction" Style="{StaticResource FieldTextBlockStyle}" />
+                        <ComboBox ItemsSource="{Binding Source={StaticResource PredictionType}}" SelectedItem="{Binding PredictionType}" />
+                    </StackPanel>
+                    <StackPanel Margin="4,0,4,0">
+                        <TextBlock Text="Timestep Spacing" Style="{StaticResource FieldTextBlockStyle}" />
+                        <ComboBox ItemsSource="{Binding Source={StaticResource TimestepSpacingType}}" SelectedItem="{Binding TimestepSpacing}" />
+                    </StackPanel>
+                    <StackPanel Margin="0,0,0,0">
+                        <TextBlock Text="StepsOffset" Style="{StaticResource FieldTextBlockStyle}" />
+                        <TextBox Text="{Binding StepsOffset, UpdateSourceTrigger=PropertyChanged}" />
+                    </StackPanel>
+                </UniformGrid>
+
+                <UniformGrid  Columns="3">
+                    <StackPanel Margin="0,0,0,0">
+                        <TextBlock Text="Noise Seed" Style="{StaticResource FieldTextBlockStyle}" />
+                        <TextBox Text="{Binding NoiseSamplerSeed, UpdateSourceTrigger=PropertyChanged}" />
+                    </StackPanel>
+                    <StackPanel Margin="4,0,4,0">
+                    </StackPanel>
+                    <StackPanel Margin="0,0,0,0">
+                    </StackPanel>
+                </UniformGrid>
+
+                <!--SigmasType-->
+                <DockPanel Margin="0,4,0,0">
+                    <TextBlock DockPanel.Dock="Top" Text="Sigma Type" Style="{StaticResource FieldTextBlockStyle}" />
+                    <StackPanel Orientation="Horizontal" Margin="0,2,0,0">
+                        <RadioButton GroupName="SigmasType" IsChecked="True" Content="Default"/>
+                        <RadioButton GroupName="SigmasType" IsChecked="{Binding UseKarrasSigmas}" Content="Karras" Margin="20,0,0,0"/>
+                        <RadioButton GroupName="SigmasType" IsChecked="{Binding UseBetaSigmas}" Content="Beta" Margin="20,0,0,0"/>
+                        <RadioButton GroupName="SigmasType" IsChecked="{Binding UseExponentialSigmas}" Content="Exponential" Margin="20,0,0,0"/>
+                    </StackPanel>
+                </DockPanel>
+            </StackPanel>
+        </DataTemplate>
+
+        <DataTemplate DataType="{x:Type Common:SchedulerInputOptions}" x:Key="DEISMultistepLayout">
+            <StackPanel>
+                <UniformGrid Columns="3" Margin="0,4,0,0">
+                    <StackPanel Margin="0,0,0,0">
+                        <TextBlock Text="Beta Schedule" Style="{StaticResource FieldTextBlockStyle}" />
+                        <ComboBox ItemsSource="{Binding Source={StaticResource BetaScheduleType}}" SelectedItem="{Binding BetaSchedule}" />
+                    </StackPanel>
+                    <StackPanel Margin="4,0,4,0">
+                        <TextBlock Text="Beta Start" Style="{StaticResource FieldTextBlockStyle}" />
+                        <CommonControls:FloatBox FloatValue="{Binding BetaStart, UpdateSourceTrigger=PropertyChanged}" />
+                    </StackPanel>
+                    <StackPanel Margin="0,0,0,0">
+                        <TextBlock Text="Beta End" Style="{StaticResource FieldTextBlockStyle}" />
+                        <CommonControls:FloatBox FloatValue="{Binding BetaEnd, UpdateSourceTrigger=PropertyChanged}" />
+                    </StackPanel>
+                </UniformGrid>
+
+                <UniformGrid  Columns="3">
+                    <StackPanel Margin="0,0,0,0">
+                        <TextBlock Text="Prediction" Style="{StaticResource FieldTextBlockStyle}" />
+                        <ComboBox ItemsSource="{Binding Source={StaticResource PredictionType}}" SelectedItem="{Binding PredictionType}" />
+                    </StackPanel>
+                    <StackPanel Margin="4,0,4,0">
+                        <TextBlock Text="Timestep Spacing" Style="{StaticResource FieldTextBlockStyle}" />
+                        <ComboBox ItemsSource="{Binding Source={StaticResource TimestepSpacingType}}" SelectedItem="{Binding TimestepSpacing}" />
+                    </StackPanel>
+                    <StackPanel Margin="0,0,0,0">
+                        <TextBlock Text="StepsOffset" Style="{StaticResource FieldTextBlockStyle}" />
+                        <TextBox Text="{Binding StepsOffset, UpdateSourceTrigger=PropertyChanged}" />
+                    </StackPanel>
+                </UniformGrid>
+
+                <UniformGrid  Columns="3">
+                    <StackPanel Margin="0,0,0,0">
+                        <CheckBox Content="Thresholding" IsChecked="{Binding Thresholding}" Margin="0,20,0,0"/>
+                    </StackPanel>
+                    <StackPanel Margin="4,0,4,0">
+                        <TextBlock Text="Thresholding Ratio" Style="{StaticResource FieldTextBlockStyle}" />
+                        <CommonControls:FloatBox FloatValue="{Binding DynamicThresholdingRatio, UpdateSourceTrigger=PropertyChanged}" />
+                    </StackPanel>
+                    <StackPanel Margin="0,0,0,0">
+                        <TextBlock Text="Sample MaxValue" Style="{StaticResource FieldTextBlockStyle}" />
+                        <CommonControls:FloatBox FloatValue="{Binding SampleMaxValue, UpdateSourceTrigger=PropertyChanged}" />
+                    </StackPanel>
+                </UniformGrid>
+
+                <UniformGrid  Columns="3">
+                    <StackPanel Margin="0,0,0,0">
+                        <TextBlock Text="Solver" Style="{StaticResource FieldTextBlockStyle}" />
+                        <ComboBox ItemsSource="{Binding Source={StaticResource SolverType}}" SelectedItem="{Binding SolverType}" />
+                    </StackPanel>
+                    <StackPanel Margin="4,0,4,0">
+                        <TextBlock Text="Solver Order" Style="{StaticResource FieldTextBlockStyle}" />
+                        <TextBox Text="{Binding SolverOrder, UpdateSourceTrigger=PropertyChanged}" />
+                    </StackPanel>
+                    <StackPanel Margin="0,0,0,0">
+                        <CheckBox Content="Lower Order Final" IsChecked="{Binding LowerOrderFinal}" Margin="0,20,0,0"/>
+                    </StackPanel>
+                </UniformGrid>
+
+                <UniformGrid Columns="3" Margin="0,4,0,0">
+                    <StackPanel Margin="0,0,0,0">
+                        <TextBlock Text="Flow Shift" Style="{StaticResource FieldTextBlockStyle}" />
+                        <CommonControls:FloatBox FloatValue="{Binding FlowShift, UpdateSourceTrigger=PropertyChanged}" />
+                    </StackPanel>
+                    <StackPanel Margin="4,0,4,0">
+                        <TextBlock Text="TimeShift" Style="{StaticResource FieldTextBlockStyle}" />
+                        <ComboBox ItemsSource="{Binding Source={StaticResource TimeShiftType}}" SelectedItem="{Binding TimeShiftType}" />
+                    </StackPanel>
+                    <StackPanel Margin="0,0,0,0">
+                        <TextBlock Text="Algorithm Type" Style="{StaticResource FieldTextBlockStyle}" />
+                        <ComboBox ItemsSource="{Binding Source={StaticResource AlgorithmType}}" SelectedItem="{Binding AlgorithmType}" />
+                    </StackPanel>
+                </UniformGrid>
+
+                <UniformGrid Columns="3" Margin="0,8,0,0">
+                    <CheckBox Content="Dynamic Shifting" IsChecked="{Binding UseDynamicShifting}" />
+                    <CheckBox Content="Flow Sigmas" IsChecked="{Binding UseFlowSigmas}" />
+                </UniformGrid>
+
+                <!--SigmasType-->
+                <DockPanel Margin="0,4,0,0">
+                    <TextBlock DockPanel.Dock="Top" Text="Sigma Type" Style="{StaticResource FieldTextBlockStyle}" />
+                    <StackPanel Orientation="Horizontal" Margin="0,2,0,0">
+                        <RadioButton GroupName="SigmasType" IsChecked="True" Content="Default"/>
+                        <RadioButton GroupName="SigmasType" IsChecked="{Binding UseKarrasSigmas}" Content="Karras" Margin="20,0,0,0"/>
+                        <RadioButton GroupName="SigmasType" IsChecked="{Binding UseBetaSigmas}" Content="Beta" Margin="20,0,0,0"/>
+                        <RadioButton GroupName="SigmasType" IsChecked="{Binding UseExponentialSigmas}" Content="Exponential" Margin="20,0,0,0"/>
+                    </StackPanel>
+                </DockPanel>
+
+            </StackPanel>
+        </DataTemplate>
+
+        <DataTemplate DataType="{x:Type Common:SchedulerInputOptions}" x:Key="EDMEulerLayout">
+            <StackPanel>
+                <StackPanel Margin="0,0,0,0">
+                    <TextBlock Text="Prediction" Style="{StaticResource FieldTextBlockStyle}" />
+                    <ComboBox ItemsSource="{Binding Source={StaticResource PredictionType}}" SelectedItem="{Binding PredictionType}" />
+                </StackPanel>
+
+                <UniformGrid  Columns="3">
+                    <StackPanel Margin="0,0,0,0">
+                        <TextBlock Text="Sigma Min" Style="{StaticResource FieldTextBlockStyle}" />
+                        <CommonControls:FloatBox FloatValue="{Binding SigmaMin, UpdateSourceTrigger=PropertyChanged}" />
+                    </StackPanel>
+                    <StackPanel Margin="4,0,4,0">
+                        <TextBlock Text="Sigma Max" Style="{StaticResource FieldTextBlockStyle}" />
+                        <CommonControls:FloatBox FloatValue="{Binding SigmaMax, UpdateSourceTrigger=PropertyChanged}" />
+                    </StackPanel>
+                    <StackPanel Margin="0,0,0,0">
+                        <TextBlock Text="Final Sigmas Type" Style="{StaticResource FieldTextBlockStyle}" />
+                        <ComboBox ItemsSource="{Binding Source={StaticResource FinalSigmasType}}" SelectedItem="{Binding FinalSigmasType}" />
+                    </StackPanel>
+                </UniformGrid>
+
+                <UniformGrid  Columns="3">
+                    <StackPanel Margin="0,0,0,0">
+                        <TextBlock Text="Rho" Style="{StaticResource FieldTextBlockStyle}" />
+                        <CommonControls:FloatBox FloatValue="{Binding Rho, UpdateSourceTrigger=PropertyChanged}" />
+                    </StackPanel>
+                    <StackPanel Margin="4,0,4,0">
+                        <TextBlock Text="SigmaData" Style="{StaticResource FieldTextBlockStyle}" />
+                        <CommonControls:FloatBox FloatValue="{Binding SigmaData, UpdateSourceTrigger=PropertyChanged}" />
+                    </StackPanel>
+                    <StackPanel Margin="0,0,0,0">
+                        <TextBlock Text="Sigma Schedule Type" Style="{StaticResource FieldTextBlockStyle}" />
+                        <ComboBox ItemsSource="{Binding Source={StaticResource SigmaScheduleType}}" SelectedItem="{Binding SigmaScheduleType}" />
+                    </StackPanel>
+                </UniformGrid>
+            </StackPanel>
+        </DataTemplate>
+
+        <DataTemplate DataType="{x:Type Common:SchedulerInputOptions}" x:Key="EDMDPMSolverMultistepLayout">
+            <StackPanel>
+                <UniformGrid  Columns="3">
+                    <StackPanel Margin="0,0,0,0">
+                        <TextBlock Text="Prediction" Style="{StaticResource FieldTextBlockStyle}" />
+                        <ComboBox ItemsSource="{Binding Source={StaticResource PredictionType}}" SelectedItem="{Binding PredictionType}" />
+                    </StackPanel>
+                    <StackPanel Margin="4,0,4,0">
+                        <TextBlock Text="Algorithm Type" Style="{StaticResource FieldTextBlockStyle}" />
+                        <ComboBox ItemsSource="{Binding Source={StaticResource AlgorithmType}}" SelectedItem="{Binding AlgorithmType}" />
+                    </StackPanel>
+                    <StackPanel Margin="0,0,0,0">
+                        <CheckBox Content="Euler At Final" IsChecked="{Binding EulerAtFinal}" Margin="0,20,0,0"/>
+                    </StackPanel>
+                </UniformGrid>
+
+                <UniformGrid  Columns="3">
+                    <StackPanel Margin="0,0,0,0">
+                        <TextBlock Text="Sigma Min" Style="{StaticResource FieldTextBlockStyle}" />
+                        <CommonControls:FloatBox FloatValue="{Binding SigmaMin, UpdateSourceTrigger=PropertyChanged}" />
+                    </StackPanel>
+                    <StackPanel Margin="4,0,4,0">
+                        <TextBlock Text="Sigma Max" Style="{StaticResource FieldTextBlockStyle}" />
+                        <CommonControls:FloatBox FloatValue="{Binding SigmaMax, UpdateSourceTrigger=PropertyChanged}" />
+                    </StackPanel>
+                    <StackPanel Margin="0,0,0,0">
+                        <TextBlock Text="Final Sigmas Type" Style="{StaticResource FieldTextBlockStyle}" />
+                        <ComboBox ItemsSource="{Binding Source={StaticResource FinalSigmasType}}" SelectedItem="{Binding FinalSigmasType}" />
+                    </StackPanel>
+                </UniformGrid>
+
+                <UniformGrid  Columns="3">
+                    <StackPanel Margin="0,0,0,0">
+                        <TextBlock Text="Rho" Style="{StaticResource FieldTextBlockStyle}" />
+                        <CommonControls:FloatBox FloatValue="{Binding Rho, UpdateSourceTrigger=PropertyChanged}" />
+                    </StackPanel>
+                    <StackPanel Margin="4,0,4,0">
+                        <TextBlock Text="SigmaData" Style="{StaticResource FieldTextBlockStyle}" />
+                        <CommonControls:FloatBox FloatValue="{Binding SigmaData, UpdateSourceTrigger=PropertyChanged}" />
+                    </StackPanel>
+                    <StackPanel Margin="0,0,0,0">
+                        <TextBlock Text="Sigma Schedule Type" Style="{StaticResource FieldTextBlockStyle}" />
+                        <ComboBox ItemsSource="{Binding Source={StaticResource SigmaScheduleType}}" SelectedItem="{Binding SigmaScheduleType}" />
+                    </StackPanel>
+                </UniformGrid>
+
+                <UniformGrid  Columns="3">
+                    <StackPanel Margin="0,0,0,0">
+                        <CheckBox Content="Thresholding" IsChecked="{Binding Thresholding}" Margin="0,20,0,0"/>
+                    </StackPanel>
+                    <StackPanel Margin="4,0,4,0">
+                        <TextBlock Text="Thresholding Ratio" Style="{StaticResource FieldTextBlockStyle}" />
+                        <CommonControls:FloatBox FloatValue="{Binding DynamicThresholdingRatio, UpdateSourceTrigger=PropertyChanged}" />
+                    </StackPanel>
+                    <StackPanel Margin="0,0,0,0">
+                        <TextBlock Text="Sample MaxValue" Style="{StaticResource FieldTextBlockStyle}" />
+                        <CommonControls:FloatBox FloatValue="{Binding SampleMaxValue, UpdateSourceTrigger=PropertyChanged}" />
+                    </StackPanel>
+                </UniformGrid>
+
+                <UniformGrid  Columns="3">
+                    <StackPanel Margin="0,0,0,0">
+                        <TextBlock Text="Solver" Style="{StaticResource FieldTextBlockStyle}" />
+                        <ComboBox ItemsSource="{Binding Source={StaticResource SolverType}}" SelectedItem="{Binding SolverType}" />
+                    </StackPanel>
+                    <StackPanel Margin="4,0,4,0">
+                        <TextBlock Text="Solver Order" Style="{StaticResource FieldTextBlockStyle}" />
+                        <TextBox Text="{Binding SolverOrder, UpdateSourceTrigger=PropertyChanged}" />
+                    </StackPanel>
+                    <StackPanel Margin="0,0,0,0">
+                        <CheckBox Content="Lower Order Final" IsChecked="{Binding LowerOrderFinal}" Margin="0,20,0,0"/>
+                    </StackPanel>
+                </UniformGrid>
+            </StackPanel>
+        </DataTemplate>
+
+        <DataTemplate DataType="{x:Type Common:SchedulerInputOptions}" x:Key="FlowMatchLCMLayout">
+            <StackPanel>
+                <UniformGrid Columns="3" Margin="0,4,0,0">
+                    <StackPanel Margin="0,0,0,0">
+                        <TextBlock Text="Shift" Style="{StaticResource FieldTextBlockStyle}" />
+                        <CommonControls:FloatBox FloatValue="{Binding Shift, UpdateSourceTrigger=PropertyChanged}" />
+                    </StackPanel>
+                    <StackPanel Margin="4,0,4,0">
+                        <TextBlock Text="Base Shift" Style="{StaticResource FieldTextBlockStyle}" />
+                        <CommonControls:FloatBox FloatValue="{Binding BaseShift, UpdateSourceTrigger=PropertyChanged}" />
+                    </StackPanel>
+                    <StackPanel Margin="0,0,0,0">
+                        <TextBlock Text="Max Shift" Style="{StaticResource FieldTextBlockStyle}" />
+                        <CommonControls:FloatBox FloatValue="{Binding MaxShift, UpdateSourceTrigger=PropertyChanged}" />
+                    </StackPanel>
+                </UniformGrid>
+
+                <UniformGrid Columns="3" Margin="0,4,0,0">
+                    <StackPanel Margin="0,0,0,0">
+                        <TextBlock Text="Shift Terminal" Style="{StaticResource FieldTextBlockStyle}" />
+                        <CommonControls:FloatBox FloatValue="{Binding ShiftTerminal, UpdateSourceTrigger=PropertyChanged}" />
+                    </StackPanel>
+                    <StackPanel Margin="4,0,4,0">
+                        <TextBlock Text="TimeShift" Style="{StaticResource FieldTextBlockStyle}" />
+                        <ComboBox ItemsSource="{Binding Source={StaticResource TimeShiftType}}" SelectedItem="{Binding TimeShiftType}" />
+                    </StackPanel>
+                    <StackPanel Margin="0,0,0,0">
+                        <TextBlock Text="Upscale Mode" Style="{StaticResource FieldTextBlockStyle}" />
+                        <ComboBox ItemsSource="{Binding Source={StaticResource UpscaleModeType}}" SelectedItem="{Binding UpscaleMode}" />
+                    </StackPanel>
+                </UniformGrid>
+
+                <!--<UniformGrid Columns="3" Margin="0,4,0,0">
+                    <StackPanel Margin="0,0,0,0">
+                        <TextBlock Text="Base SeqLen" Style="{StaticResource FieldTextBlockStyle}" />
+                        <TextBox Text="{Binding BaseImageSeqLen, UpdateSourceTrigger=PropertyChanged}" />
+                    </StackPanel>
+                    <StackPanel Margin="4,0,4,0">
+                        <TextBlock Text="Max SeqLen" Style="{StaticResource FieldTextBlockStyle}" />
+                        <TextBox Text="{Binding MaxImageSeqLen, UpdateSourceTrigger=PropertyChanged}" />
+                    </StackPanel>
+                </UniformGrid>-->
+
+                <!--InvertSigmas-->
+                <UniformGrid  Columns="2" Margin="0,8,0,0">
+                    <CheckBox Content="Invert Sigmas" IsChecked="{Binding InvertSigmas}" />
+                    <CheckBox Content="Dynamic Shifting" IsChecked="{Binding UseDynamicShifting}" />
+                </UniformGrid>
+
+                <!--SigmasType-->
+                <DockPanel Margin="0,4,0,0">
+                    <TextBlock DockPanel.Dock="Top" Text="Sigma Type" Style="{StaticResource FieldTextBlockStyle}" />
+                    <StackPanel Orientation="Horizontal" Margin="0,2,0,0">
+                        <RadioButton GroupName="SigmasType" IsChecked="True" Content="Default"/>
+                        <RadioButton GroupName="SigmasType" IsChecked="{Binding UseKarrasSigmas}" Content="Karras" Margin="20,0,0,0"/>
+                        <RadioButton GroupName="SigmasType" IsChecked="{Binding UseBetaSigmas}" Content="Beta" Margin="20,0,0,0"/>
+                        <RadioButton GroupName="SigmasType" IsChecked="{Binding UseExponentialSigmas}" Content="Exponential" Margin="20,0,0,0"/>
+                    </StackPanel>
+                </DockPanel>
+            </StackPanel>
+        </DataTemplate>
+
+        <DataTemplate DataType="{x:Type Common:SchedulerInputOptions}" x:Key="IPNDMLayout">
+        </DataTemplate>
+
+        <DataTemplate DataType="{x:Type Common:SchedulerInputOptions}" x:Key="CogVideoXDDIMLayout">
+            <StackPanel>
+                <UniformGrid Columns="3" Margin="0,4,0,0">
+                    <StackPanel Margin="0,0,0,0">
+                        <TextBlock Text="Beta Schedule" Style="{StaticResource FieldTextBlockStyle}" />
+                        <ComboBox ItemsSource="{Binding Source={StaticResource BetaScheduleType}}" SelectedItem="{Binding BetaSchedule}" />
+                    </StackPanel>
+                    <StackPanel Margin="4,0,4,0">
+                        <TextBlock Text="Beta Start" Style="{StaticResource FieldTextBlockStyle}" />
+                        <CommonControls:FloatBox FloatValue="{Binding BetaStart, UpdateSourceTrigger=PropertyChanged}" />
+                    </StackPanel>
+                    <StackPanel Margin="0,0,0,0">
+                        <TextBlock Text="Beta End" Style="{StaticResource FieldTextBlockStyle}" />
+                        <CommonControls:FloatBox FloatValue="{Binding BetaEnd, UpdateSourceTrigger=PropertyChanged}" />
+                    </StackPanel>
+                </UniformGrid>
+
+                <UniformGrid  Columns="3">
+                    <StackPanel Margin="0,0,0,0">
+                        <TextBlock Text="Prediction" Style="{StaticResource FieldTextBlockStyle}" />
+                        <ComboBox ItemsSource="{Binding Source={StaticResource PredictionType}}" SelectedItem="{Binding PredictionType}" />
+                    </StackPanel>
+                    <StackPanel Margin="4,0,4,0">
+                        <TextBlock Text="Timestep Spacing" Style="{StaticResource FieldTextBlockStyle}" />
+                        <ComboBox ItemsSource="{Binding Source={StaticResource TimestepSpacingType}}" SelectedItem="{Binding TimestepSpacing}" />
+                    </StackPanel>
+                    <StackPanel Margin="0,0,0,0">
+                        <TextBlock Text="StepsOffset" Style="{StaticResource FieldTextBlockStyle}" />
+                        <TextBox Text="{Binding StepsOffset, UpdateSourceTrigger=PropertyChanged}" />
+                    </StackPanel>
+                </UniformGrid>
+
+                <UniformGrid  Columns="3">
+                    <StackPanel Margin="0,0,0,0">
+                        <CheckBox Content="Clip Sample" IsChecked="{Binding ClipSample}" Margin="0,20,0,0"/>
+                    </StackPanel>
+                    <StackPanel Margin="4,0,4,0">
+                        <TextBlock Text="Clip Sample Range" Style="{StaticResource FieldTextBlockStyle}" />
+                        <TextBox Text="{Binding ClipSampleRange, UpdateSourceTrigger=PropertyChanged}" />
+                    </StackPanel>
+                    <StackPanel Margin="0,0,0,0">
+                        <TextBlock Text="Sample Max Value" Style="{StaticResource FieldTextBlockStyle}" />
+                        <TextBox Text="{Binding SampleMaxValue, UpdateSourceTrigger=PropertyChanged}" />
+                    </StackPanel>
+                </UniformGrid>
+
+                <UniformGrid  Columns="3" Margin="0,8,0,0">
+                    <CheckBox Content="SetAlphaToOne" IsChecked="{Binding SetAlphaToOne}" />
+                    <CheckBox Content="SNRShiftScale" IsChecked="{Binding SNRShiftScale}" Margin="0,20,0,0"/>
+                    <CheckBox Content="RescaleBetasZeroSNR" IsChecked="{Binding RescaleBetasZeroSNR}" Margin="0,20,0,0"/>
+                </UniformGrid>
+            </StackPanel>
+        </DataTemplate>
+
+        <DataTemplate DataType="{x:Type Common:SchedulerInputOptions}" x:Key="CogVideoXDPMLayout">
+            <StackPanel>
+                <UniformGrid Columns="3" Margin="0,4,0,0">
+                    <StackPanel Margin="0,0,0,0">
+                        <TextBlock Text="Beta Schedule" Style="{StaticResource FieldTextBlockStyle}" />
+                        <ComboBox ItemsSource="{Binding Source={StaticResource BetaScheduleType}}" SelectedItem="{Binding BetaSchedule}" />
+                    </StackPanel>
+                    <StackPanel Margin="4,0,4,0">
+                        <TextBlock Text="Beta Start" Style="{StaticResource FieldTextBlockStyle}" />
+                        <CommonControls:FloatBox FloatValue="{Binding BetaStart, UpdateSourceTrigger=PropertyChanged}" />
+                    </StackPanel>
+                    <StackPanel Margin="0,0,0,0">
+                        <TextBlock Text="Beta End" Style="{StaticResource FieldTextBlockStyle}" />
+                        <CommonControls:FloatBox FloatValue="{Binding BetaEnd, UpdateSourceTrigger=PropertyChanged}" />
+                    </StackPanel>
+                </UniformGrid>
+
+                <UniformGrid  Columns="3">
+                    <StackPanel Margin="0,0,0,0">
+                        <TextBlock Text="Prediction" Style="{StaticResource FieldTextBlockStyle}" />
+                        <ComboBox ItemsSource="{Binding Source={StaticResource PredictionType}}" SelectedItem="{Binding PredictionType}" />
+                    </StackPanel>
+                    <StackPanel Margin="4,0,4,0">
+                        <TextBlock Text="Timestep Spacing" Style="{StaticResource FieldTextBlockStyle}" />
+                        <ComboBox ItemsSource="{Binding Source={StaticResource TimestepSpacingType}}" SelectedItem="{Binding TimestepSpacing}" />
+                    </StackPanel>
+                    <StackPanel Margin="0,0,0,0">
+                        <TextBlock Text="StepsOffset" Style="{StaticResource FieldTextBlockStyle}" />
+                        <TextBox Text="{Binding StepsOffset, UpdateSourceTrigger=PropertyChanged}" />
+                    </StackPanel>
+                </UniformGrid>
+
+                <UniformGrid  Columns="3">
+                    <StackPanel Margin="0,0,0,0">
+                        <CheckBox Content="Clip Sample" IsChecked="{Binding ClipSample}" Margin="0,20,0,0"/>
+                    </StackPanel>
+                    <StackPanel Margin="4,0,4,0">
+                        <TextBlock Text="Clip Sample Range" Style="{StaticResource FieldTextBlockStyle}" />
+                        <TextBox Text="{Binding ClipSampleRange, UpdateSourceTrigger=PropertyChanged}" />
+                    </StackPanel>
+                    <StackPanel Margin="0,0,0,0">
+                        <TextBlock Text="Sample Max Value" Style="{StaticResource FieldTextBlockStyle}" />
+                        <TextBox Text="{Binding SampleMaxValue, UpdateSourceTrigger=PropertyChanged}" />
+                    </StackPanel>
+                </UniformGrid>
+
+                <UniformGrid  Columns="3" Margin="0,8,0,0">
+                    <CheckBox Content="SetAlphaToOne" IsChecked="{Binding SetAlphaToOne}" />
+                    <CheckBox Content="SNRShiftScale" IsChecked="{Binding SNRShiftScale}" Margin="0,20,0,0"/>
+                    <CheckBox Content="RescaleBetasZeroSNR" IsChecked="{Binding RescaleBetasZeroSNR}" Margin="0,20,0,0"/>
+                </UniformGrid>
+            </StackPanel>
+        </DataTemplate>
+
+        <DataTemplate DataType="{x:Type Common:SchedulerInputOptions}" x:Key="HeliosLayout">
+            <StackPanel>
+                <UniformGrid Columns="3" Margin="0,4,0,0">
+                    <StackPanel Margin="0,0,0,0">
+                        <TextBlock Text="Prediction" Style="{StaticResource FieldTextBlockStyle}" />
+                        <ComboBox ItemsSource="{Binding Source={StaticResource PredictionType}}" SelectedItem="{Binding PredictionType}" />
+                    </StackPanel>
+                    <StackPanel Margin="4,0,4,0">
+                        <TextBlock Text="Shift" Style="{StaticResource FieldTextBlockStyle}" />
+                        <CommonControls:FloatBox FloatValue="{Binding Shift, UpdateSourceTrigger=PropertyChanged}" />
+                    </StackPanel>
+                    <StackPanel Margin="0,0,0,0">
+                        <TextBlock Text="Gamma" Style="{StaticResource FieldTextBlockStyle}" />
+                        <CommonControls:FloatBox FloatValue="{Binding Gamma, UpdateSourceTrigger=PropertyChanged}" />
+                    </StackPanel>
+                </UniformGrid>
+
+                <UniformGrid  Columns="3">
+                    <StackPanel Margin="0,0,0,0">
+                        <TextBlock Text="Solver" Style="{StaticResource FieldTextBlockStyle}" />
+                        <ComboBox ItemsSource="{Binding Source={StaticResource SolverType}}" SelectedItem="{Binding SolverType}" />
+                    </StackPanel>
+                    <StackPanel Margin="4,0,4,0">
+                        <TextBlock Text="Solver Order" Style="{StaticResource FieldTextBlockStyle}" />
+                        <TextBox Text="{Binding SolverOrder, UpdateSourceTrigger=PropertyChanged}" />
+                    </StackPanel>
+                    <StackPanel Margin="0,0,0,0">
+                        <CheckBox Content="Lower Order Final" IsChecked="{Binding LowerOrderFinal}" Margin="0,20,0,0"/>
+                    </StackPanel>
+                </UniformGrid>
+
+                <UniformGrid  Columns="3">
+                    <StackPanel Margin="0,0,0,0">
+                        <TextBlock Text="TimeShiftType" Style="{StaticResource FieldTextBlockStyle}" />
+                        <ComboBox ItemsSource="{Binding Source={StaticResource TimeShiftType}}" SelectedItem="{Binding TimeShiftType}" />
+                    </StackPanel>
+                    <StackPanel Margin="4,0,4,0">
+                        <CheckBox Content="Dynamic Shifting" IsChecked="{Binding UseDynamicShifting}" Margin="0,20,0,0"/>
+                    </StackPanel>
+                    <StackPanel Margin="0,0,0,0">
+                        <CheckBox Content="Flow Sigmas" IsChecked="{Binding UseFlowSigmas}" Margin="0,20,0,0"/>
+                    </StackPanel>
+                </UniformGrid>
+
+                <UniformGrid  Columns="3" Margin="0,8,0,0">
+                    <CheckBox Content="Predict x0" IsChecked="{Binding PredictX0}" />
+                    <CheckBox Content="Thresholding" IsChecked="{Binding Thresholding}" />
+                </UniformGrid>
+            </StackPanel>
+        </DataTemplate>
+
+        <DataTemplate DataType="{x:Type Common:SchedulerInputOptions}" x:Key="HeliosDMDLayout">
+            <StackPanel>
+                <UniformGrid Columns="3" Margin="0,4,0,0">
+                    <StackPanel Margin="0,0,0,0">
+                        <TextBlock Text="Prediction" Style="{StaticResource FieldTextBlockStyle}" />
+                        <ComboBox ItemsSource="{Binding Source={StaticResource PredictionType}}" SelectedItem="{Binding PredictionType}" />
+                    </StackPanel>
+                    <StackPanel Margin="4,0,4,0">
+                        <TextBlock Text="Shift" Style="{StaticResource FieldTextBlockStyle}" />
+                        <CommonControls:FloatBox FloatValue="{Binding Shift, UpdateSourceTrigger=PropertyChanged}" />
+                    </StackPanel>
+                    <StackPanel Margin="0,0,0,0">
+                        <TextBlock Text="Gamma" Style="{StaticResource FieldTextBlockStyle}" />
+                        <CommonControls:FloatBox FloatValue="{Binding Gamma, UpdateSourceTrigger=PropertyChanged}" />
+                    </StackPanel>
+                </UniformGrid>
+
+                <UniformGrid  Columns="3">
+                    <StackPanel Margin="0,0,0,0">
+                        <TextBlock Text="TimeShiftType" Style="{StaticResource FieldTextBlockStyle}" />
+                        <ComboBox ItemsSource="{Binding Source={StaticResource TimeShiftType}}" SelectedItem="{Binding TimeShiftType}" />
+                    </StackPanel>
+                    <StackPanel Margin="4,0,4,0">
+                        <CheckBox Content="Dynamic Shifting" IsChecked="{Binding UseDynamicShifting}" Margin="0,20,0,0"/>
+                    </StackPanel>
+                    <StackPanel Margin="0,0,0,0">
+                        <CheckBox Content="Flow Sigmas" IsChecked="{Binding UseFlowSigmas}" Margin="0,20,0,0"/>
+                    </StackPanel>
+                </UniformGrid>
+
+            </StackPanel>
+        </DataTemplate>
+
+        <DataTemplate DataType="{x:Type Common:SchedulerInputOptions}" x:Key="TCDLayout">
+            <StackPanel>
+                <UniformGrid Columns="3" Margin="0,4,0,0">
+                    <StackPanel Margin="0,0,0,0">
+                        <TextBlock Text="Beta Schedule" Style="{StaticResource FieldTextBlockStyle}" />
+                        <ComboBox ItemsSource="{Binding Source={StaticResource BetaScheduleType}}" SelectedItem="{Binding BetaSchedule}" />
+                    </StackPanel>
+                    <StackPanel Margin="4,0,4,0">
+                        <TextBlock Text="Beta Start" Style="{StaticResource FieldTextBlockStyle}" />
+                        <CommonControls:FloatBox FloatValue="{Binding BetaStart, UpdateSourceTrigger=PropertyChanged}" />
+                    </StackPanel>
+                    <StackPanel Margin="0,0,0,0">
+                        <TextBlock Text="Beta End" Style="{StaticResource FieldTextBlockStyle}" />
+                        <CommonControls:FloatBox FloatValue="{Binding BetaEnd, UpdateSourceTrigger=PropertyChanged}" />
+                    </StackPanel>
+                </UniformGrid>
+
+                <UniformGrid  Columns="3">
+                    <StackPanel Margin="0,0,0,0">
+                        <TextBlock Text="Prediction" Style="{StaticResource FieldTextBlockStyle}" />
+                        <ComboBox ItemsSource="{Binding Source={StaticResource PredictionType}}" SelectedItem="{Binding PredictionType}" />
+                    </StackPanel>
+                    <StackPanel Margin="4,0,4,0">
+                        <TextBlock Text="Timestep Spacing" Style="{StaticResource FieldTextBlockStyle}" />
+                        <ComboBox ItemsSource="{Binding Source={StaticResource TimestepSpacingType}}" SelectedItem="{Binding TimestepSpacing}" />
+                    </StackPanel>
+                    <StackPanel Margin="0,0,0,0">
+                        <TextBlock Text="StepsOffset" Style="{StaticResource FieldTextBlockStyle}" />
+                        <TextBox Text="{Binding StepsOffset, UpdateSourceTrigger=PropertyChanged}" />
+                    </StackPanel>
+                </UniformGrid>
+
+                <UniformGrid  Columns="3">
+                    <StackPanel Margin="0,0,0,0">
+                        <CheckBox Content="Clip Sample" IsChecked="{Binding ClipSample}" Margin="0,20,0,0"/>
+                    </StackPanel>
+                    <StackPanel Margin="4,0,4,0">
+                        <TextBlock Text="Clip Sample Range" Style="{StaticResource FieldTextBlockStyle}" />
+                        <TextBox Text="{Binding ClipSampleRange, UpdateSourceTrigger=PropertyChanged}" />
+                    </StackPanel>
+                    <StackPanel Margin="0,0,0,0">
+                        <TextBlock Text="Sample Max Value" Style="{StaticResource FieldTextBlockStyle}" />
+                        <TextBox Text="{Binding SampleMaxValue, UpdateSourceTrigger=PropertyChanged}" />
+                    </StackPanel>
+                </UniformGrid>
+
+                <UniformGrid  Columns="3">
+                    <StackPanel Margin="0,0,0,0">
+                        <CheckBox Content="Thresholding" IsChecked="{Binding Thresholding}" Margin="0,20,0,0"/>
+                    </StackPanel>
+                    <StackPanel Margin="4,0,4,0">
+                        <TextBlock Text="Thresholding Ratio" Style="{StaticResource FieldTextBlockStyle}" />
+                        <CommonControls:FloatBox FloatValue="{Binding DynamicThresholdingRatio, UpdateSourceTrigger=PropertyChanged}" />
+                    </StackPanel>
+                    <StackPanel Margin="0,0,0,0">
+                        <TextBlock Text="Timestep Scaling" Style="{StaticResource FieldTextBlockStyle}" />
+                        <CommonControls:FloatBox FloatValue="{Binding TimestepScaling, UpdateSourceTrigger=PropertyChanged}" />
+                    </StackPanel>
+                </UniformGrid>
+
+                <UniformGrid  Columns="3">
+                    <StackPanel Margin="0,0,0,0">
+                        <TextBlock Text="Original Steps" Style="{StaticResource FieldTextBlockStyle}" />
+                        <TextBox Text="{Binding OriginalInferenceSteps, UpdateSourceTrigger=PropertyChanged}" />
+                    </StackPanel>
+                    <StackPanel Margin="4,0,4,0">
+                        <CheckBox Content="Set Alpha To One" IsChecked="{Binding SetAlphaToOne}" Margin="0,20,0,0"/>
+                    </StackPanel>
+                    <StackPanel Margin="0,0,0,0">
+                        <CheckBox Content="Rescale Betas SNR" IsChecked="{Binding RescaleBetasZeroSNR}" Margin="0,20,0,0"/>
+                    </StackPanel>
+                </UniformGrid>
+            </StackPanel>
+        </DataTemplate>
+
+        <DataTemplate DataType="{x:Type Common:SchedulerInputOptions}" x:Key="SCMLayout">
+            <StackPanel>
+                <UniformGrid Columns="3" Margin="0,4,0,0">
+                    <StackPanel Margin="0,0,0,0">
+                        <TextBlock Text="Prediction" Style="{StaticResource FieldTextBlockStyle}" />
+                        <ComboBox ItemsSource="{Binding Source={StaticResource PredictionType}}" SelectedItem="{Binding PredictionType}" />
+                    </StackPanel>
+                    <StackPanel Margin="4,0,4,0">
+                        <TextBlock Text="Sigma Data" Style="{StaticResource FieldTextBlockStyle}" />
+                        <CommonControls:FloatBox FloatValue="{Binding SigmaData, UpdateSourceTrigger=PropertyChanged}" />
+                    </StackPanel>
+                </UniformGrid>
+            </StackPanel>
+        </DataTemplate>
+
+        <DataTemplate DataType="{x:Type Common:SchedulerInputOptions}" x:Key="SASolverLayout">
+            <StackPanel>
+                <UniformGrid Columns="3" Margin="0,4,0,0">
+                    <StackPanel Margin="0,0,0,0">
+                        <TextBlock Text="Beta Schedule" Style="{StaticResource FieldTextBlockStyle}" />
+                        <ComboBox ItemsSource="{Binding Source={StaticResource BetaScheduleType}}" SelectedItem="{Binding BetaSchedule}" />
+                    </StackPanel>
+                    <StackPanel Margin="4,0,4,0">
+                        <TextBlock Text="Beta Start" Style="{StaticResource FieldTextBlockStyle}" />
+                        <CommonControls:FloatBox FloatValue="{Binding BetaStart, UpdateSourceTrigger=PropertyChanged}" />
+                    </StackPanel>
+                    <StackPanel Margin="0,0,0,0">
+                        <TextBlock Text="Beta End" Style="{StaticResource FieldTextBlockStyle}" />
+                        <CommonControls:FloatBox FloatValue="{Binding BetaEnd, UpdateSourceTrigger=PropertyChanged}" />
+                    </StackPanel>
+                </UniformGrid>
+
+                <UniformGrid  Columns="3">
+                    <StackPanel Margin="0,0,0,0">
+                        <TextBlock Text="Prediction" Style="{StaticResource FieldTextBlockStyle}" />
+                        <ComboBox ItemsSource="{Binding Source={StaticResource PredictionType}}" SelectedItem="{Binding PredictionType}" />
+                    </StackPanel>
+                    <StackPanel Margin="4,0,4,0">
+                        <TextBlock Text="Timestep Spacing" Style="{StaticResource FieldTextBlockStyle}" />
+                        <ComboBox ItemsSource="{Binding Source={StaticResource TimestepSpacingType}}" SelectedItem="{Binding TimestepSpacing}" />
+                    </StackPanel>
+                    <StackPanel Margin="0,0,0,0">
+                        <TextBlock Text="StepsOffset" Style="{StaticResource FieldTextBlockStyle}" />
+                        <TextBox Text="{Binding StepsOffset, UpdateSourceTrigger=PropertyChanged}" />
+                    </StackPanel>
+                </UniformGrid>
+
+                <UniformGrid  Columns="3">
+                    <StackPanel Margin="0,0,0,0">
+                        <CheckBox Content="Thresholding" IsChecked="{Binding Thresholding}" Margin="0,20,0,0"/>
+                    </StackPanel>
+                    <StackPanel Margin="4,0,4,0">
+                        <TextBlock Text="Thresholding Ratio" Style="{StaticResource FieldTextBlockStyle}" />
+                        <CommonControls:FloatBox FloatValue="{Binding DynamicThresholdingRatio, UpdateSourceTrigger=PropertyChanged}" />
+                    </StackPanel>
+                    <StackPanel Margin="0,0,0,0">
+                        <TextBlock Text="Sample MaxValue" Style="{StaticResource FieldTextBlockStyle}" />
+                        <CommonControls:FloatBox FloatValue="{Binding SampleMaxValue, UpdateSourceTrigger=PropertyChanged}" />
+                    </StackPanel>
+                </UniformGrid>
+
+                <UniformGrid Columns="3" Margin="0,4,0,0">
+                    <StackPanel Margin="0,0,0,0">
+                        <TextBlock Text="Flow Shift" Style="{StaticResource FieldTextBlockStyle}" />
+                        <CommonControls:FloatBox FloatValue="{Binding FlowShift, UpdateSourceTrigger=PropertyChanged}" />
+                    </StackPanel>
+                    <StackPanel Margin="4,0,4,0">
+                        <TextBlock Text="Algorithm Type" Style="{StaticResource FieldTextBlockStyle}" />
+                        <ComboBox ItemsSource="{Binding Source={StaticResource AlgorithmType}}" SelectedItem="{Binding AlgorithmType}" />
+                    </StackPanel>
+                    <StackPanel Margin="0,0,0,0">
+                        <TextBlock Text="Variance Type" Style="{StaticResource FieldTextBlockStyle}" />
+                        <ComboBox ItemsSource="{Binding Source={StaticResource VarianceType}}" SelectedItem="{Binding VarianceType}" />
+                    </StackPanel>
+                </UniformGrid>
+
+                <UniformGrid Columns="3" Margin="0,4,0,0">
+
+                    <StackPanel Margin="4,0,4,0">
+                        <TextBlock Text="Predictor Order" Style="{StaticResource FieldTextBlockStyle}" />
+                        <TextBox Text="{Binding PredictorOrder, UpdateSourceTrigger=PropertyChanged}" />
+                    </StackPanel>
+                    <StackPanel Margin="0,0,0,0">
+                        <TextBlock Text="Corrector Order" Style="{StaticResource FieldTextBlockStyle}" />
+                        <TextBox Text="{Binding CorrectorOrder, UpdateSourceTrigger=PropertyChanged}" />
+                    </StackPanel>
+                </UniformGrid>
+
+                <UniformGrid Columns="3" Margin="0,8,0,0">
+                    <CheckBox Content="Flow Sigmas" IsChecked="{Binding UseFlowSigmas}" />
+                    <CheckBox Content="Lower Order Final" IsChecked="{Binding LowerOrderFinal}" />
+                </UniformGrid>
+
+                <!--SigmasType-->
+                <DockPanel Margin="0,4,0,0">
+                    <TextBlock DockPanel.Dock="Top" Text="Sigma Type" Style="{StaticResource FieldTextBlockStyle}" />
+                    <StackPanel Orientation="Horizontal" Margin="0,2,0,0">
+                        <RadioButton GroupName="SigmasType" IsChecked="True" Content="Default"/>
+                        <RadioButton GroupName="SigmasType" IsChecked="{Binding UseKarrasSigmas}" Content="Karras" Margin="20,0,0,0"/>
+                        <RadioButton GroupName="SigmasType" IsChecked="{Binding UseBetaSigmas}" Content="Beta" Margin="20,0,0,0"/>
+                        <RadioButton GroupName="SigmasType" IsChecked="{Binding UseExponentialSigmas}" Content="Exponential" Margin="20,0,0,0"/>
+                    </StackPanel>
+                </DockPanel>
+
+            </StackPanel>
+        </DataTemplate>
+
+        <DataTemplate DataType="{x:Type Common:SchedulerInputOptions}" x:Key="LTXEulerAncestralLayout">
+            <StackPanel>
+                <UniformGrid Columns="3" Margin="0,4,0,0">
+                    <StackPanel Margin="4,0,4,0">
+                        <TextBlock Text="Eta" Style="{StaticResource FieldTextBlockStyle}" />
+                        <CommonControls:FloatBox FloatValue="{Binding Eta, UpdateSourceTrigger=PropertyChanged}" />
+                    </StackPanel>
+                    <StackPanel Margin="4,0,4,0">
+                        <TextBlock Text="SNoise" Style="{StaticResource FieldTextBlockStyle}" />
+                        <CommonControls:FloatBox FloatValue="{Binding SNoise, UpdateSourceTrigger=PropertyChanged}" />
+                    </StackPanel>
+                </UniformGrid>
+            </StackPanel>
+        </DataTemplate>
+    </CommonControls:BaseControl.Resources>
+
+    <DockPanel  DataContext="{Binding RelativeSource={RelativeSource AncestorType={x:Type local:SchedulerControl}}}">
+
+
+        <!--Scheduler Type-->
+        <StackPanel DockPanel.Dock="Top">
+            <TextBlock Text="Scheduler" Style="{StaticResource FieldTextBlockStyle}" />
+            <ComboBox SelectedItem="{Binding SelectedOptions}" ItemsSource="{Binding Options}"/>
+        </StackPanel>
+
+
+        <!--Scheduler Options-->
+        <ContentControl Content="{Binding SelectedOptions}" Visibility="{Binding IsSelectorOnly, Converter={StaticResource InverseBooleanToVisibilityConverter}}">
+            <ContentControl.Style>
+                <Style TargetType="ContentControl">
+                    <Setter Property="ContentTemplate" Value="{StaticResource DefaultLayout}" />
+                    <Style.Triggers>
+                        <DataTrigger Binding="{Binding SelectedOptions.Scheduler}" Value="LMS">
+                            <Setter Property="ContentTemplate" Value="{StaticResource LMSLayout}" />
+                        </DataTrigger>
+                        <DataTrigger Binding="{Binding SelectedOptions.Scheduler}" Value="Euler">
+                            <Setter Property="ContentTemplate" Value="{StaticResource EulerLayout}" />
+                        </DataTrigger>
+                        <DataTrigger Binding="{Binding SelectedOptions.Scheduler}" Value="EulerAncestral">
+                            <Setter Property="ContentTemplate" Value="{StaticResource EulerAncestralLayout}" />
+                        </DataTrigger>
+                        <DataTrigger Binding="{Binding SelectedOptions.Scheduler}" Value="DDPM">
+                            <Setter Property="ContentTemplate" Value="{StaticResource DDPMLayout}" />
+                        </DataTrigger>
+                        <DataTrigger Binding="{Binding SelectedOptions.Scheduler}" Value="DDIM">
+                            <Setter Property="ContentTemplate" Value="{StaticResource DDIMLayout}" />
+                        </DataTrigger>
+                        <DataTrigger Binding="{Binding SelectedOptions.Scheduler}" Value="KDPM2">
+                            <Setter Property="ContentTemplate" Value="{StaticResource LMSLayout}" />
+                        </DataTrigger>
+                        <DataTrigger Binding="{Binding SelectedOptions.Scheduler}" Value="KDPM2Ancestral">
+                            <Setter Property="ContentTemplate" Value="{StaticResource LMSLayout}" />
+                        </DataTrigger>
+                        <DataTrigger Binding="{Binding SelectedOptions.Scheduler}" Value="DDPMWuerstchen">
+                            <Setter Property="ContentTemplate" Value="{StaticResource DDPMWuerstchenLayout}" />
+                        </DataTrigger>
+                        <DataTrigger Binding="{Binding SelectedOptions.Scheduler}" Value="LCM">
+                            <Setter Property="ContentTemplate" Value="{StaticResource LCMLayout}" />
+                        </DataTrigger>
+                        <DataTrigger Binding="{Binding SelectedOptions.Scheduler}" Value="FlowMatchEuler">
+                            <Setter Property="ContentTemplate" Value="{StaticResource FlowMatchEulerLayout}" />
+                        </DataTrigger>
+                        <DataTrigger Binding="{Binding SelectedOptions.Scheduler}" Value="FlowMatchHeun">
+                            <Setter Property="ContentTemplate" Value="{StaticResource FlowMatchHeunLayout}" />
+                        </DataTrigger>
+                        <DataTrigger Binding="{Binding SelectedOptions.Scheduler}" Value="PNDM">
+                            <Setter Property="ContentTemplate" Value="{StaticResource PNDMLayout}" />
+                        </DataTrigger>
+                        <DataTrigger Binding="{Binding SelectedOptions.Scheduler}" Value="Heun">
+                            <Setter Property="ContentTemplate" Value="{StaticResource HeunLayout}" />
+                        </DataTrigger>
+                        <DataTrigger Binding="{Binding SelectedOptions.Scheduler}" Value="UniPCMultistep">
+                            <Setter Property="ContentTemplate" Value="{StaticResource UniPCMultistepLayout}" />
+                        </DataTrigger>
+                        <DataTrigger Binding="{Binding SelectedOptions.Scheduler}" Value="DPMSolverMultistep">
+                            <Setter Property="ContentTemplate" Value="{StaticResource DPMSolverMultistepLayout}" />
+                        </DataTrigger>
+                        <DataTrigger Binding="{Binding SelectedOptions.Scheduler}" Value="DPMSolverSinglestep">
+                            <Setter Property="ContentTemplate" Value="{StaticResource DPMSolverSinglestepLayout}" />
+                        </DataTrigger>
+                        <DataTrigger Binding="{Binding SelectedOptions.Scheduler}" Value="DPMSolverSDE">
+                            <Setter Property="ContentTemplate" Value="{StaticResource DPMSolverSDELayout}" />
+                        </DataTrigger>
+                        <DataTrigger Binding="{Binding SelectedOptions.Scheduler}" Value="DEISMultistep">
+                            <Setter Property="ContentTemplate" Value="{StaticResource DEISMultistepLayout}" />
+                        </DataTrigger>
+                        <DataTrigger Binding="{Binding SelectedOptions.Scheduler}" Value="EDMEuler">
+                            <Setter Property="ContentTemplate" Value="{StaticResource EDMEulerLayout}" />
+                        </DataTrigger>
+                        <DataTrigger Binding="{Binding SelectedOptions.Scheduler}" Value="EDMDPMSolverMultistep">
+                            <Setter Property="ContentTemplate" Value="{StaticResource EDMDPMSolverMultistepLayout}" />
+                        </DataTrigger>
+                        <DataTrigger Binding="{Binding SelectedOptions.Scheduler}" Value="FlowMatchLCM">
+                            <Setter Property="ContentTemplate" Value="{StaticResource FlowMatchLCMLayout}" />
+                        </DataTrigger>
+                        <DataTrigger Binding="{Binding SelectedOptions.Scheduler}" Value="IPNDM">
+                            <Setter Property="ContentTemplate" Value="{StaticResource IPNDMLayout}" />
+                        </DataTrigger>
+                        <DataTrigger Binding="{Binding SelectedOptions.Scheduler}" Value="CogVideoXDDIM">
+                            <Setter Property="ContentTemplate" Value="{StaticResource CogVideoXDDIMLayout}" />
+                        </DataTrigger>
+                        <DataTrigger Binding="{Binding SelectedOptions.Scheduler}" Value="CogVideoXDPM">
+                            <Setter Property="ContentTemplate" Value="{StaticResource CogVideoXDPMLayout}" />
+                        </DataTrigger>
+                        <DataTrigger Binding="{Binding SelectedOptions.Scheduler}" Value="Helios">
+                            <Setter Property="ContentTemplate" Value="{StaticResource HeliosLayout}" />
+                        </DataTrigger>
+                        <DataTrigger Binding="{Binding SelectedOptions.Scheduler}" Value="HeliosDMD">
+                            <Setter Property="ContentTemplate" Value="{StaticResource HeliosDMDLayout}" />
+                        </DataTrigger>
+                        <DataTrigger Binding="{Binding SelectedOptions.Scheduler}" Value="TCD">
+                            <Setter Property="ContentTemplate" Value="{StaticResource TCDLayout}" />
+                        </DataTrigger>
+                        <DataTrigger Binding="{Binding SelectedOptions.Scheduler}" Value="SCM">
+                            <Setter Property="ContentTemplate" Value="{StaticResource SCMLayout}" />
+                        </DataTrigger>
+                        <DataTrigger Binding="{Binding SelectedOptions.Scheduler}" Value="SASolver">
+                            <Setter Property="ContentTemplate" Value="{StaticResource SASolverLayout}" />
+                        </DataTrigger>
+                        <DataTrigger Binding="{Binding SelectedOptions.Scheduler}" Value="LTXEulerAncestral">
+                            <Setter Property="ContentTemplate" Value="{StaticResource LTXEulerAncestralLayout}" />
+                        </DataTrigger>
+                    </Style.Triggers>
+                </Style>
+            </ContentControl.Style>
+        </ContentControl>
+
+    </DockPanel>
+</CommonControls:BaseControl>

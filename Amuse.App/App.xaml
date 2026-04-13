@@ -1,0 +1,1089 @@
+﻿<Application x:Class="Amuse.App.App"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:local="clr-namespace:Amuse.App"
+             xmlns:System="clr-namespace:System;assembly=mscorlib"
+             xmlns:CoreCommon="clr-namespace:TensorStack.Common;assembly=TensorStack.Common"
+             xmlns:CommonControls="clr-namespace:TensorStack.WPF.Controls;assembly=TensorStack.WPF"
+             xmlns:PythonOptions="clr-namespace:TensorStack.Python.Common;assembly=TensorStack.Python"
+             xmlns:PythonScheduler="clr-namespace:TensorStack.Python.Scheduler;assembly=TensorStack.Python"
+             xmlns:Extractors="clr-namespace:TensorStack.Extractors.Common;assembly=TensorStack.Extractors"
+             xmlns:Whisper="clr-namespace:TensorStack.TextGeneration.Pipelines.Whisper;assembly=TensorStack.TextGeneration"
+             xmlns:TextGeneration="clr-namespace:TensorStack.TextGeneration.Common;assembly=TensorStack.TextGeneration"
+             xmlns:Common="clr-namespace:Amuse.App.Common"
+             ShutdownMode="OnMainWindowClose">
+    <Application.Resources>
+        <ResourceDictionary>
+
+            <!--TensorStack.WPF-->
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="pack://application:,,,/TensorStack.WPF;component/ThemeDefault.xaml" />
+            </ResourceDictionary.MergedDictionaries>
+
+            <!--Images-->
+            <BitmapImage x:Key="ImageIcon" UriSource="pack://application:,,,/Amuse;component/Images/Icon.png" />
+
+            <!--Fonts-->
+            <FontFamily x:Key="FontAwesomeBrands">pack://application:,,,/Amuse;component/Fonts/Brands-Regular-400.otf#Font Awesome 7 Brands</FontFamily>
+            <FontFamily x:Key="FontAwesomeLight">pack://application:,,,/Amuse;component/Fonts/Light-300.otf#Font Awesome 7 Pro Light</FontFamily>
+            <FontFamily x:Key="FontAwesomeRegular">pack://application:,,,/Amuse;component/Fonts/Regular-400.otf#Font Awesome 7 Pro</FontFamily>
+            <FontFamily x:Key="FontAwesomeSolid">pack://application:,,,/Amuse;component/Fonts/Solid-900.otf#Font Awesome 7 Pro Solid</FontFamily>
+            <FontFamily x:Key="FontAwesomeThin">pack://application:,,,/Amuse;component/Fonts/Thin-100.otf#Font Awesome 7 Pro Thin</FontFamily>
+            <FontFamily x:Key="FontAwesomeSharpLight">pack://application:,,,/Amuse;component/Fonts/Sharp-Light-300.otf#Font Awesome 7 Sharp Light</FontFamily>
+            <FontFamily x:Key="FontAwesomeSharpRegular">pack://application:,,,/Amuse;component/Fonts/Sharp-Regular-400.otf#Font Awesome 7 Sharp</FontFamily>
+            <FontFamily x:Key="FontAwesomeSharpSolid">pack://application:,,,/Amuse;component/Fonts/Sharp-Solid-900.otf#Font Awesome 7 Sharp Solid</FontFamily>
+            <FontFamily x:Key="FontAwesomeSharpThin">pack://application:,,,/Amuse;component/Fonts/Sharp-Thin-100.otf#Font Awesome 7 Sharp Thin</FontFamily>
+
+
+            <!--Amuse-->
+            <ObjectDataProvider x:Key="NormalizationType" MethodName="GetValues" ObjectType="{x:Type System:Enum}">
+                <ObjectDataProvider.MethodParameters>
+                    <x:Type TypeName="CoreCommon:Normalization"/>
+                </ObjectDataProvider.MethodParameters>
+            </ObjectDataProvider>
+
+            <ObjectDataProvider x:Key="ExtractorType" MethodName="GetValues" ObjectType="{x:Type System:Enum}">
+                <ObjectDataProvider.MethodParameters>
+                    <x:Type TypeName="Common:ExtractorType"/>
+                </ObjectDataProvider.MethodParameters>
+            </ObjectDataProvider>
+
+            <ObjectDataProvider x:Key="MemoryMode" MethodName="GetValues" ObjectType="{x:Type System:Enum}">
+                <ObjectDataProvider.MethodParameters>
+                    <x:Type TypeName="Common:MemoryMode"/>
+                </ObjectDataProvider.MethodParameters>
+            </ObjectDataProvider>
+
+            <ObjectDataProvider x:Key="QualityMode" MethodName="GetValues" ObjectType="{x:Type System:Enum}">
+                <ObjectDataProvider.MethodParameters>
+                    <x:Type TypeName="Common:QualityMode"/>
+                </ObjectDataProvider.MethodParameters>
+            </ObjectDataProvider>
+
+            <ObjectDataProvider x:Key="EnvironmentType" MethodName="GetValues" ObjectType="{x:Type System:Enum}">
+                <ObjectDataProvider.MethodParameters>
+                    <x:Type TypeName="Common:EnvironmentType"/>
+                </ObjectDataProvider.MethodParameters>
+            </ObjectDataProvider>
+
+            <ObjectDataProvider x:Key="MediaType" MethodName="GetValues" ObjectType="{x:Type System:Enum}">
+                <ObjectDataProvider.MethodParameters>
+                    <x:Type TypeName="Common:MediaType"/>
+                </ObjectDataProvider.MethodParameters>
+            </ObjectDataProvider>
+
+            <ObjectDataProvider x:Key="ProcessType" MethodName="GetValues" ObjectType="{x:Type System:Enum}">
+                <ObjectDataProvider.MethodParameters>
+                    <x:Type TypeName="Common:ProcessType"/>
+                </ObjectDataProvider.MethodParameters>
+            </ObjectDataProvider>
+
+            <ObjectDataProvider x:Key="ModelSourceType" MethodName="GetValues" ObjectType="{x:Type System:Enum}">
+                <ObjectDataProvider.MethodParameters>
+                    <x:Type TypeName="Common:ModelSourceType"/>
+                </ObjectDataProvider.MethodParameters>
+            </ObjectDataProvider>
+
+            <ObjectDataProvider x:Key="QuantizationType" MethodName="GetValues" ObjectType="{x:Type System:Enum}">
+                <ObjectDataProvider.MethodParameters>
+                    <x:Type TypeName="PythonOptions:QuantizationType"/>
+                </ObjectDataProvider.MethodParameters>
+            </ObjectDataProvider>
+
+            <ObjectDataProvider x:Key="DataType" MethodName="GetValues" ObjectType="{x:Type System:Enum}">
+                <ObjectDataProvider.MethodParameters>
+                    <x:Type TypeName="PythonOptions:DataType"/>
+                </ObjectDataProvider.MethodParameters>
+            </ObjectDataProvider>
+
+            <ObjectDataProvider x:Key="SchedulerType" MethodName="GetValues" ObjectType="{x:Type System:Enum}">
+                <ObjectDataProvider.MethodParameters>
+                    <x:Type TypeName="PythonScheduler:SchedulerType"/>
+                </ObjectDataProvider.MethodParameters>
+            </ObjectDataProvider>
+
+            <ObjectDataProvider x:Key="TimestepSpacingType" MethodName="GetValues" ObjectType="{x:Type System:Enum}">
+                <ObjectDataProvider.MethodParameters>
+                    <x:Type TypeName="PythonScheduler:TimestepSpacingType"/>
+                </ObjectDataProvider.MethodParameters>
+            </ObjectDataProvider>
+
+            <ObjectDataProvider x:Key="AlgorithmType" MethodName="GetValues" ObjectType="{x:Type System:Enum}">
+                <ObjectDataProvider.MethodParameters>
+                    <x:Type TypeName="PythonScheduler:AlgorithmType"/>
+                </ObjectDataProvider.MethodParameters>
+            </ObjectDataProvider>
+
+            <ObjectDataProvider x:Key="SolverType" MethodName="GetValues" ObjectType="{x:Type System:Enum}">
+                <ObjectDataProvider.MethodParameters>
+                    <x:Type TypeName="PythonScheduler:SolverType"/>
+                </ObjectDataProvider.MethodParameters>
+            </ObjectDataProvider>
+
+            <ObjectDataProvider x:Key="BetaScheduleType" MethodName="GetValues" ObjectType="{x:Type System:Enum}">
+                <ObjectDataProvider.MethodParameters>
+                    <x:Type TypeName="PythonScheduler:BetaScheduleType"/>
+                </ObjectDataProvider.MethodParameters>
+            </ObjectDataProvider>
+
+            <ObjectDataProvider x:Key="PredictionType" MethodName="GetValues" ObjectType="{x:Type System:Enum}">
+                <ObjectDataProvider.MethodParameters>
+                    <x:Type TypeName="PythonScheduler:PredictionType"/>
+                </ObjectDataProvider.MethodParameters>
+            </ObjectDataProvider>
+
+            <ObjectDataProvider x:Key="VarianceType" MethodName="GetValues" ObjectType="{x:Type System:Enum}">
+                <ObjectDataProvider.MethodParameters>
+                    <x:Type TypeName="PythonScheduler:VarianceType"/>
+                </ObjectDataProvider.MethodParameters>
+            </ObjectDataProvider>
+
+            <ObjectDataProvider x:Key="FinalSigmasType" MethodName="GetValues" ObjectType="{x:Type System:Enum}">
+                <ObjectDataProvider.MethodParameters>
+                    <x:Type TypeName="PythonScheduler:FinalSigmasType"/>
+                </ObjectDataProvider.MethodParameters>
+            </ObjectDataProvider>
+
+            <ObjectDataProvider x:Key="TimestepType" MethodName="GetValues" ObjectType="{x:Type System:Enum}">
+                <ObjectDataProvider.MethodParameters>
+                    <x:Type TypeName="PythonScheduler:TimestepType"/>
+                </ObjectDataProvider.MethodParameters>
+            </ObjectDataProvider>
+
+            <ObjectDataProvider x:Key="InterpolationType" MethodName="GetValues" ObjectType="{x:Type System:Enum}">
+                <ObjectDataProvider.MethodParameters>
+                    <x:Type TypeName="PythonScheduler:InterpolationType"/>
+                </ObjectDataProvider.MethodParameters>
+            </ObjectDataProvider>
+
+            <ObjectDataProvider x:Key="TimeShiftType" MethodName="GetValues" ObjectType="{x:Type System:Enum}">
+                <ObjectDataProvider.MethodParameters>
+                    <x:Type TypeName="PythonScheduler:TimeShiftType"/>
+                </ObjectDataProvider.MethodParameters>
+            </ObjectDataProvider>
+
+            <ObjectDataProvider x:Key="SigmaScheduleType" MethodName="GetValues" ObjectType="{x:Type System:Enum}">
+                <ObjectDataProvider.MethodParameters>
+                    <x:Type TypeName="PythonScheduler:SigmaScheduleType"/>
+                </ObjectDataProvider.MethodParameters>
+            </ObjectDataProvider>
+
+            <ObjectDataProvider x:Key="UpscaleModeType" MethodName="GetValues" ObjectType="{x:Type System:Enum}">
+                <ObjectDataProvider.MethodParameters>
+                    <x:Type TypeName="PythonScheduler:UpscaleModeType"/>
+                </ObjectDataProvider.MethodParameters>
+            </ObjectDataProvider>
+
+            <ObjectDataProvider x:Key="BackgroundMode" MethodName="GetValues" ObjectType="{x:Type System:Enum}">
+                <ObjectDataProvider.MethodParameters>
+                    <x:Type TypeName="Extractors:BackgroundMode"/>
+                </ObjectDataProvider.MethodParameters>
+            </ObjectDataProvider>
+
+            <ObjectDataProvider x:Key="TaskType" MethodName="GetValues" ObjectType="{x:Type System:Enum}">
+                <ObjectDataProvider.MethodParameters>
+                    <x:Type TypeName="Whisper:TaskType"/>
+                </ObjectDataProvider.MethodParameters>
+            </ObjectDataProvider>
+
+            <ObjectDataProvider x:Key="LanguageType" MethodName="GetValues" ObjectType="{x:Type System:Enum}">
+                <ObjectDataProvider.MethodParameters>
+                    <x:Type TypeName="Whisper:LanguageType"/>
+                </ObjectDataProvider.MethodParameters>
+            </ObjectDataProvider>
+
+            <ObjectDataProvider x:Key="EarlyStopping" MethodName="GetValues" ObjectType="{x:Type System:Enum}">
+                <ObjectDataProvider.MethodParameters>
+                    <x:Type TypeName="TextGeneration:EarlyStopping"/>
+                </ObjectDataProvider.MethodParameters>
+            </ObjectDataProvider>
+
+
+            <Style x:Key="ImageDropZoneStyle" TargetType="{x:Type Border}">
+                <Setter Property="AllowDrop" Value="False"/>
+                <Setter Property="Background" Value="Transparent"/>
+                <Setter Property="BorderBrush" Value="Transparent"/>
+                <Setter Property="BorderThickness" Value="1"/>
+                <Style.Triggers>
+                    <MultiDataTrigger>
+                        <MultiDataTrigger.Conditions>
+                            <Condition Binding="{Binding IsEnabled, RelativeSource={RelativeSource Self}}" Value="True" />
+                            <Condition Binding="{Binding IsDragDrop, RelativeSource={RelativeSource AncestorType=CommonControls:ViewControl}}" Value="True" />
+                            <Condition Binding="{Binding DragDropType, RelativeSource={RelativeSource AncestorType=CommonControls:ViewControl}}" Value="Image" />
+                        </MultiDataTrigger.Conditions>
+                        <MultiDataTrigger.Setters>
+                            <Setter Property="AllowDrop" Value="True"/>
+                            <Setter Property="Background" Value="#20000000"/>
+                            <Setter Property="BorderBrush" Value="{StaticResource AccentColour2}"/>
+                        </MultiDataTrigger.Setters>
+                    </MultiDataTrigger>
+                </Style.Triggers>
+            </Style>
+
+
+            <Style x:Key="ImageDropTextStyle" TargetType="{x:Type TextBlock}">
+                <Setter Property="VerticalAlignment" Value="Center"/>
+                <Setter Property="HorizontalAlignment" Value="Center"/>
+                <Setter Property="Visibility" Value="Collapsed"/>
+                <Setter Property="Foreground" Value="{StaticResource AccentColour2}"/>
+                <Style.Triggers>
+                    <MultiDataTrigger>
+                        <MultiDataTrigger.Conditions>
+                            <Condition Binding="{Binding IsEnabled, RelativeSource={RelativeSource Self}}" Value="True" />
+                            <Condition Binding="{Binding IsDragDrop, RelativeSource={RelativeSource AncestorType=CommonControls:ViewControl}}" Value="True" />
+                            <Condition Binding="{Binding DragDropType, RelativeSource={RelativeSource AncestorType=CommonControls:ViewControl}}" Value="Image" />
+                        </MultiDataTrigger.Conditions>
+                        <MultiDataTrigger.Setters>
+                            <Setter Property="Visibility" Value="Visible"/>
+                        </MultiDataTrigger.Setters>
+                    </MultiDataTrigger>
+                </Style.Triggers>
+            </Style>
+
+
+            <Style x:Key="VideoDropZoneStyle" TargetType="{x:Type Border}">
+                <Setter Property="AllowDrop" Value="False"/>
+                <Setter Property="BorderBrush" Value="Transparent"/>
+                <Setter Property="BorderThickness" Value="1"/>
+                <Style.Triggers>
+                    <MultiDataTrigger>
+                        <MultiDataTrigger.Conditions>
+                            <Condition Binding="{Binding IsEnabled, RelativeSource={RelativeSource Self}}" Value="True" />
+                            <Condition Binding="{Binding IsDragDrop, RelativeSource={RelativeSource AncestorType=CommonControls:ViewControl}}" Value="True" />
+                            <Condition Binding="{Binding DragDropType, RelativeSource={RelativeSource AncestorType=CommonControls:ViewControl}}" Value="Video" />
+                        </MultiDataTrigger.Conditions>
+                        <MultiDataTrigger.Setters>
+                            <Setter Property="AllowDrop" Value="True"/>
+                            <Setter Property="BorderBrush" Value="{StaticResource AccentColour2}"/>
+                        </MultiDataTrigger.Setters>
+                    </MultiDataTrigger>
+                </Style.Triggers>
+            </Style>
+
+
+            <Style x:Key="AudioDropZoneStyle" TargetType="{x:Type Border}">
+                <Setter Property="AllowDrop" Value="False"/>
+                <Setter Property="BorderBrush" Value="Transparent"/>
+                <Setter Property="BorderThickness" Value="1"/>
+                <Style.Triggers>
+                    <MultiDataTrigger>
+                        <MultiDataTrigger.Conditions>
+                            <Condition Binding="{Binding IsEnabled, RelativeSource={RelativeSource Self}}" Value="True" />
+                            <Condition Binding="{Binding IsDragDrop, RelativeSource={RelativeSource AncestorType=CommonControls:ViewControl}}" Value="True" />
+                            <Condition Binding="{Binding DragDropType, RelativeSource={RelativeSource AncestorType=CommonControls:ViewControl}}" Value="Audio" />
+                        </MultiDataTrigger.Conditions>
+                        <MultiDataTrigger.Setters>
+                            <Setter Property="AllowDrop" Value="True"/>
+                            <Setter Property="BorderBrush" Value="{StaticResource AccentColour2}"/>
+                        </MultiDataTrigger.Setters>
+                    </MultiDataTrigger>
+                </Style.Triggers>
+            </Style>
+
+
+            <Style x:Key="TextDropZoneStyle" TargetType="{x:Type Border}">
+                <Setter Property="AllowDrop" Value="False"/>
+                <Setter Property="BorderBrush" Value="Transparent"/>
+                <Setter Property="BorderThickness" Value="1"/>
+                <Style.Triggers>
+                    <MultiDataTrigger>
+                        <MultiDataTrigger.Conditions>
+                            <Condition Binding="{Binding IsEnabled, RelativeSource={RelativeSource Self}}" Value="True" />
+                            <Condition Binding="{Binding IsDragDrop, RelativeSource={RelativeSource AncestorType=CommonControls:ViewControl}}" Value="True" />
+                            <Condition Binding="{Binding DragDropType, RelativeSource={RelativeSource AncestorType=CommonControls:ViewControl}}" Value="Text" />
+                        </MultiDataTrigger.Conditions>
+                        <MultiDataTrigger.Setters>
+                            <Setter Property="AllowDrop" Value="True"/>
+                            <Setter Property="BorderBrush" Value="{StaticResource AccentColour2}"/>
+                        </MultiDataTrigger.Setters>
+                    </MultiDataTrigger>
+                </Style.Triggers>
+            </Style>
+
+
+            <Style x:Key="ToggleButtonBasic" TargetType="{x:Type ToggleButton}">
+                <Setter Property="FocusVisualStyle" Value="{StaticResource FocusVisual}"/>
+                <Setter Property="Background" Value="{StaticResource ComboBoxBackground}"/>
+                <Setter Property="BorderBrush" Value="{StaticResource ComboBoxBorder}"/>
+                <Setter Property="Foreground" Value="{StaticResource ButtonForeground}"/>
+                <Setter Property="BorderThickness" Value="0"/>
+                <Setter Property="HorizontalContentAlignment" Value="Center"/>
+                <Setter Property="VerticalContentAlignment" Value="Center"/>
+                <Setter Property="Padding" Value="1"/>
+                <Setter Property="Template">
+                    <Setter.Value>
+                        <ControlTemplate TargetType="{x:Type ToggleButton}">
+                            <Border x:Name="border" Background="{TemplateBinding Background}" BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="1" SnapsToDevicePixels="true">
+                                <ContentPresenter x:Name="contentPresenter" Opacity="0.7" Focusable="False" HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}" Margin="{TemplateBinding Padding}" RecognizesAccessKey="True" SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}" VerticalAlignment="{TemplateBinding VerticalContentAlignment}"/>
+                            </Border>
+                            <ControlTemplate.Triggers>
+                                <Trigger Property="Button.IsDefaulted" Value="true">
+                                    <Setter Property="BorderBrush" TargetName="border" Value="{StaticResource ButtonBorderDefault}"/>
+                                </Trigger>
+                                <Trigger Property="IsMouseOver" Value="true">
+                                    <Setter Property="BorderBrush" TargetName="border" Value="{StaticResource ButtonBorderMouseOver}"/>
+                                    <Setter Property="ContentPresenter.Opacity" TargetName="contentPresenter" Value="1"/>
+                                </Trigger>
+
+                                <Trigger Property="IsEnabled" Value="false">
+                                    <Setter Property="Opacity" Value="0.3" />
+                                    <Setter Property="BorderBrush" TargetName="border" Value="{StaticResource ButtonBorderDisabled}"/>
+                                    <Setter Property="TextElement.Foreground" TargetName="contentPresenter" Value="{StaticResource ButtonForegroundDisabled}"/>
+                                </Trigger>
+                                <Trigger Property="IsChecked" Value="false">
+                                    <Setter Property="ContentPresenter.Opacity" TargetName="contentPresenter" Value="1"/>
+                                </Trigger>
+                            </ControlTemplate.Triggers>
+                        </ControlTemplate>
+                    </Setter.Value>
+                </Setter>
+            </Style>
+
+
+            <Style x:Key="TransparentListBoxItem" TargetType="ListBoxItem">
+                <Setter Property="Padding" Value="0"/>
+                <Setter Property="Margin" Value="0"/>
+                <Setter Property="Background" Value="Transparent"/>
+                <Setter Property="BorderThickness" Value="0"/>
+                <Setter Property="FocusVisualStyle" Value="{x:Null}"/>
+                <Setter Property="Template">
+                    <Setter.Value>
+                        <ControlTemplate TargetType="ListBoxItem">
+                            <Border x:Name="Bd" Background="Transparent" BorderThickness="0" Padding="{TemplateBinding Padding}">
+                                <ContentPresenter />
+                            </Border>
+                            <ControlTemplate.Triggers>
+                                <Trigger Property="IsSelected" Value="True">
+                                    <Setter TargetName="Bd" Property="Background" Value="Transparent"/>
+                                </Trigger>
+                                <Trigger Property="IsMouseOver" Value="True">
+                                    <Setter TargetName="Bd" Property="Background" Value="Transparent"/>
+                                </Trigger>
+                                <Trigger Property="IsEnabled" Value="False">
+                                    <Setter Property="Opacity" Value="0.6"/>
+                                </Trigger>
+                            </ControlTemplate.Triggers>
+                        </ControlTemplate>
+                    </Setter.Value>
+                </Setter>
+            </Style>
+
+
+            <Style x:Key="MenuIconButton" TargetType="{x:Type CommonControls:IconButton}" BasedOn="{StaticResource {x:Type CommonControls:IconButton}}">
+                <Setter Property="Width" Value="250"/>
+                <Setter Property="Orientation" Value="Horizontal"/>
+                <Setter Property="Placement" Value="Bottom"/>
+                <Setter Property="FontSize" Value="14"/>
+                <Setter Property="IconSize" Value="17"/>
+                <Setter Property="IconStyle" Value="SharpLight"/>
+                <Setter Property="FontWeight" Value="Bold"/>
+                <Setter Property="TextOpacity" Value=".8"/>
+                <Setter Property="TextMargin" Value="1,-3,0,0"/>
+                <Setter Property="IconColor" Value="{StaticResource AccentColour2}"/>
+            </Style>
+
+
+            <Style x:Key="SubmenuIconButton" TargetType="{x:Type CommonControls:IconButton}" BasedOn="{StaticResource {x:Type CommonControls:IconButton}}">
+                <Setter Property="Height" Value="60"/>
+                <Setter Property="Width" Value="120"/>
+                <Setter Property="LineHeight" Value="14"/>
+                <Setter Property="Orientation" Value="Vertical"/>
+                <Setter Property="Placement" Value="Right"/>
+                <Setter Property="FontSize" Value="12"/>
+                <Setter Property="FontWeight" Value="Bold"/>
+                <Setter Property="TextOpacity" Value=".8"/>
+                <Setter Property="IconSize" Value="20"/>
+                <Setter Property="IconStyle" Value="SharpLight"/>
+                <Setter Property="IconColor" Value="{StaticResource AccentColour2}"/>
+            </Style>
+
+
+            <DataTemplate x:Key="ComboBoxDataTemplateModel">
+                <DockPanel>
+                    <UniformGrid DockPanel.Dock="Right"  Columns="2">
+
+                        <!--IsGated-->
+                        <CommonControls:FontAwesome Icon="f084" Size="10" IconStyle="Solid" Opacity=".6"  Width="15" ToolTipService.InitialShowDelay="200">
+                            <CommonControls:FontAwesome.Style>
+                                <Style TargetType="{x:Type CommonControls:FontAwesome}" BasedOn="{StaticResource {x:Type CommonControls:FontAwesome}}">
+                                    <Setter Property="ToolTip" Value="{x:Null}"/>
+                                    <Setter Property="Color" Value="#10FFFFFF"/>
+                                    <Style.Triggers>
+                                        <DataTrigger Binding="{Binding IsGated}" Value="True">
+                                            <Setter Property="Color" Value="{StaticResource AccentColour2}"/>
+                                            <Setter Property="ToolTip" Value="Gated Model - HuggingFace Authentication Required."/>
+                                        </DataTrigger>
+                                    </Style.Triggers>
+                                </Style>
+                            </CommonControls:FontAwesome.Style>
+                        </CommonControls:FontAwesome>
+
+                        <!--Installed | Downloading-->
+                        <CommonControls:FontAwesome Size="10" IconStyle="Solid" Opacity=".6"  ToolTipService.InitialShowDelay="200">
+                            <CommonControls:FontAwesome.Style>
+                                <Style TargetType="{x:Type CommonControls:FontAwesome}" BasedOn="{StaticResource {x:Type CommonControls:FontAwesome}}">
+                                    <Setter Property="Icon" Value="f00c"/>
+                                    <Setter Property="Color" Value="#10FFFFFF"/>
+                                    <Setter Property="ToolTip" Value="Model Not Installed"/>
+                                    <Style.Triggers>
+                                        <DataTrigger Binding="{Binding Status}" Value="Installed">
+                                            <Setter Property="Icon" Value="f00c"/>
+                                            <Setter Property="Color" Value="{StaticResource SuccessColour}"/>
+                                            <Setter Property="ToolTip" Value="Installed"/>
+                                        </DataTrigger>
+                                        <DataTrigger Binding="{Binding Status}" Value="Unknown">
+                                            <Setter Property="Icon" Value="21"/>
+                                            <Setter Property="Color" Value="{StaticResource WarningColour}"/>
+                                            <Setter Property="ToolTip" Value="Unknown State"/>
+                                        </DataTrigger>
+                                        <DataTrigger Binding="{Binding Status}" Value="Verifying">
+                                            <Setter Property="Icon" Value="21"/>
+                                            <Setter Property="Color" Value="{StaticResource InfoColour}"/>
+                                            <Setter Property="ToolTip" Value="Verifying..."/>
+                                        </DataTrigger>
+                                        <DataTrigger Binding="{Binding Status}" Value="DownloadQueue">
+                                            <Setter Property="Icon" Value="f0ed"/>
+                                            <Setter Property="Color" Value="{StaticResource InfoColour}"/>
+                                            <Setter Property="ToolTip" Value="Download Queued..."/>
+                                        </DataTrigger>
+                                        <DataTrigger Binding="{Binding Status}" Value="Downloading">
+                                            <Setter Property="Icon" Value="f0ed"/>
+                                            <Setter Property="Color" Value="{StaticResource SuccessColour}"/>
+                                            <Setter Property="ToolTip" Value="Downloading..."/>
+                                        </DataTrigger>
+                                        <DataTrigger Binding="{Binding Status}" Value="DownloadFailed">
+                                            <Setter Property="Icon" Value="f0ed"/>
+                                            <Setter Property="Color" Value="{StaticResource DangerColour}"/>
+                                            <Setter Property="ToolTip" Value="Download Failed"/>
+                                        </DataTrigger>
+                                    </Style.Triggers>
+                                </Style>
+                            </CommonControls:FontAwesome.Style>
+                        </CommonControls:FontAwesome>
+                    </UniformGrid>
+
+                    <TextBlock Text="{Binding Name}" />
+                </DockPanel>
+            </DataTemplate>
+
+
+            <DataTemplate DataType="{x:Type Common:DiffusionHistory}">
+                <DockPanel Margin="10,0,0,0">
+                    <TextBlock DockPanel.Dock="Top" Text="{Binding MediaType, StringFormat={}Diffusion {0}}" FontSize="20"/>
+                    <StackPanel>
+                        <Separator Opacity=".7"/>
+
+                        <!--Models-->
+                        <StackPanel Margin="0,4,0,0">
+                            <TextBlock DockPanel.Dock="Left"  Text="Model" Style="{StaticResource FieldTextBlockStyle}" />
+                            <TextBox Text="{Binding Model}" Style="{StaticResource TextBlockStyle}" IsReadOnly="True" />
+                        </StackPanel>
+                        <StackPanel Margin="0,4,0,0" Visibility="{Binding LoraModels, Converter={StaticResource NullVisibilityConverter}, Mode=OneWay}">
+                            <TextBlock DockPanel.Dock="Left"  Text="Lora Model" Style="{StaticResource FieldTextBlockStyle}" />
+                            <ItemsControl ItemsSource="{Binding LoraModels, Mode=OneWay}">
+                                <ItemsControl.ItemsPanel>
+                                    <ItemsPanelTemplate>
+                                        <StackPanel IsItemsHost="True" Orientation="Horizontal" />
+                                    </ItemsPanelTemplate>
+                                </ItemsControl.ItemsPanel>
+                                <ItemsControl.ItemTemplate>
+                                    <DataTemplate>
+                                        <TextBox Text="{Binding ., Mode=OneWay}" Style="{StaticResource TextBlockStyle}" IsReadOnly="True" Margin="0,0,4,0" />
+                                    </DataTemplate>
+                                </ItemsControl.ItemTemplate>
+                            </ItemsControl>
+                        </StackPanel>
+                        <StackPanel Margin="0,4,0,0" Visibility="{Binding ControlNetModel, Converter={StaticResource NullOrEmptyVisibilityConverter}}">
+                            <TextBlock DockPanel.Dock="Left"  Text="ControlNet Model" Style="{StaticResource FieldTextBlockStyle}" />
+                            <TextBox Text="{Binding ControlNetModel}" Style="{StaticResource TextBlockStyle}" IsReadOnly="True" />
+                        </StackPanel>
+                        <UniformGrid Columns="3" Margin="0,4,0,0">
+                            <StackPanel>
+                                <TextBlock Text="{Binding MediaType, StringFormat={}{0} Size}" Style="{StaticResource FieldTextBlockStyle}" />
+                                <TextBlock>
+                                   <Run Text="{Binding Width}" />
+                                   <Run Text="x" />
+                                   <Run Text="{Binding Height}" />
+                                   <Run Text="px" />
+                                </TextBlock>
+                            </StackPanel>
+                            <StackPanel Visibility="{Binding MediaType, Converter={StaticResource EnumToVisibilityConverter}, ConverterParameter=Video}">
+                                <TextBlock Text="Frame Rate" Style="{StaticResource FieldTextBlockStyle}" />
+                                <TextBlock>
+                                   <Run Text="{Binding FrameRate}" />
+                                   <Run Text="fps" />
+                                </TextBlock>
+                            </StackPanel>
+                            <StackPanel Visibility="{Binding MediaType, Converter={StaticResource EnumToVisibilityConverter}, ConverterParameter=Video}">
+                                <TextBlock Text="Frames" Style="{StaticResource FieldTextBlockStyle}" />
+                                <TextBlock Text="{Binding FrameCount}" />
+                            </StackPanel>
+                        </UniformGrid>
+
+                        <!--Prompts-->
+                        <StackPanel Margin="0,4,0,0">
+                            <TextBlock Text="Prompt" Style="{StaticResource FieldTextBlockStyle}" />
+                            <TextBox Text="{Binding Options.Prompt}" Style="{StaticResource TextBlockStyle}" TextWrapping="Wrap" />
+                        </StackPanel>
+                        <StackPanel Margin="0,4,0,0" Visibility="{Binding Options.NegativePrompt, Converter={StaticResource NullOrEmptyVisibilityConverter}}">
+                            <TextBlock Text="Negative Prompt" Style="{StaticResource FieldTextBlockStyle}" />
+                            <TextBox Text="{Binding Options.NegativePrompt}" Style="{StaticResource TextBlockStyle}" TextWrapping="Wrap" />
+                        </StackPanel>
+
+                        <!--Scheduler Settings-->
+                        <UniformGrid Columns="3" Margin="0,4,0,0">
+                            <StackPanel>
+                                <TextBlock Text="Seed" Style="{StaticResource FieldTextBlockStyle}" />
+                                <TextBox Text="{Binding Options.Seed}" Style="{StaticResource TextBlockStyle}" />
+                            </StackPanel>
+                            <StackPanel>
+                                <TextBlock Text="Scheduler" Style="{StaticResource FieldTextBlockStyle}" />
+                                <TextBlock Text="{Binding Options.SchedulerOptions.Scheduler, Converter={StaticResource EnumDisplayNameConverter}}" />
+                            </StackPanel>
+                            <StackPanel Margin="0,3,0,0">
+                                <TextBlock Text="Steps" Style="{StaticResource FieldTextBlockStyle}" />
+                                <TextBlock Text="{Binding Options.Steps}" />
+                            </StackPanel>
+                            <StackPanel>
+                                <TextBlock Text="Guidance" Style="{StaticResource FieldTextBlockStyle}" />
+                                <TextBlock Text="{Binding Options.GuidanceScale}" />
+                            </StackPanel>
+                            <StackPanel>
+                                <TextBlock Text="Input Image Count" Style="{StaticResource FieldTextBlockStyle}" />
+                                <TextBlock Text="{Binding Options.InputImageCount}" />
+                            </StackPanel>
+                            <StackPanel Margin="0,3,0,0">
+                                <TextBlock Text="Strength" Style="{StaticResource FieldTextBlockStyle}" />
+                                <TextBlock Text="{Binding Options.Strength}" />
+                            </StackPanel>
+                            <StackPanel Visibility="{Binding LoraModels, Converter={StaticResource NullVisibilityConverter}}">
+                                <TextBlock Text="Lora Strength" Style="{StaticResource FieldTextBlockStyle}" />
+                                <ItemsControl ItemsSource="{Binding Options.LoraOptions}">
+                                    <ItemsControl.ItemsPanel>
+                                        <ItemsPanelTemplate>
+                                            <StackPanel IsItemsHost="True" Orientation="Horizontal" />
+                                        </ItemsPanelTemplate>
+                                    </ItemsControl.ItemsPanel>
+                                    <ItemsControl.ItemTemplate>
+                                        <DataTemplate>
+                                            <TextBox Text="{Binding Strength, Mode=OneWay}" Style="{StaticResource TextBlockStyle}" IsReadOnly="True" Margin="0,0,4,0" />
+                                        </DataTemplate>
+                                    </ItemsControl.ItemTemplate>
+                                </ItemsControl>
+                            </StackPanel>
+                            <StackPanel Visibility="{Binding ControlNetModel, Converter={StaticResource NullOrEmptyVisibilityConverter}}">
+                                <TextBlock Text="ControlNet Strength" Style="{StaticResource FieldTextBlockStyle}" />
+                                <TextBlock Text="{Binding Options.ControlNetStrength}" />
+                            </StackPanel>
+                        </UniformGrid>
+
+                        <!--Extract Settings-->
+                        <StackPanel Margin="0,10,0,0" Visibility="{Binding ExtractModel, Converter={StaticResource NullVisibilityConverter}}">
+                            <TextBlock Text="Extract Settings"  FontSize="13" />
+                            <Separator Opacity=".7"/>
+                            <StackPanel Margin="0,3,0,0">
+                                <TextBlock DockPanel.Dock="Left"  Text="Model" Style="{StaticResource FieldTextBlockStyle}" />
+                                <TextBox Text="{Binding ExtractModel}" Style="{StaticResource TextBlockStyle}" IsReadOnly="True" />
+                            </StackPanel>
+                            <UniformGrid Columns="3" Visibility="{Binding ExtractorType, Converter={StaticResource EnumToVisibilityConverter}, ConverterParameter=Default}">
+                                <StackPanel>
+                                    <TextBlock Text="Tiled" Style="{StaticResource FieldTextBlockStyle}" />
+                                    <TextBlock Text="{Binding ExtractOptions.IsTileEnabled}" />
+                                </StackPanel>
+                                <StackPanel>
+                                    <TextBlock Text="Tile Size" Style="{StaticResource FieldTextBlockStyle}" />
+                                    <TextBlock Text="{Binding ExtractOptions.TileSize, StringFormat={}{0} px}" />
+                                </StackPanel>
+                                <StackPanel>
+                                    <TextBlock Text="Tile Overlap" Style="{StaticResource FieldTextBlockStyle}" />
+                                    <TextBlock Text="{Binding ExtractOptions.TileOverlap, StringFormat={}{0} px}" />
+                                </StackPanel>
+                            </UniformGrid>
+                            <UniformGrid Columns="3" Visibility="{Binding ExtractorType, Converter={StaticResource EnumToVisibilityConverter}, ConverterParameter=Background}">
+                                <StackPanel>
+                                    <TextBlock Text="Background Mode" Style="{StaticResource FieldTextBlockStyle}" />
+                                    <TextBlock Text="{Binding ExtractOptions.Mode, Converter={StaticResource EnumDisplayNameConverter}}" />
+                                </StackPanel>
+                            </UniformGrid>
+                            <UniformGrid Columns="3" Visibility="{Binding ExtractorType, Converter={StaticResource EnumToVisibilityConverter}, ConverterParameter=Pose}">
+                                <StackPanel>
+                                    <TextBlock Text="Detections" Style="{StaticResource FieldTextBlockStyle}" />
+                                    <TextBlock Text="{Binding ExtractOptions.Detections}" />
+                                </StackPanel>
+                                <StackPanel>
+                                    <TextBlock Text="Joint Confidence" Style="{StaticResource FieldTextBlockStyle}" />
+                                    <TextBlock Text="{Binding ExtractOptions.JointConfidence, StringFormat={}{0:N2}}" />
+                                </StackPanel>
+                                <StackPanel>
+                                    <TextBlock Text="Joint Radius" Style="{StaticResource FieldTextBlockStyle}" />
+                                    <TextBlock Text="{Binding ExtractOptions.JointRadius, StringFormat={}{0:N2}}" />
+                                </StackPanel>
+                                <StackPanel>
+                                    <TextBlock Text="Body Confidence" Style="{StaticResource FieldTextBlockStyle}" />
+                                    <TextBlock Text="{Binding ExtractOptions.BodyConfidence, StringFormat={}{0:N2}}" />
+                                </StackPanel>
+                                <StackPanel>
+                                    <TextBlock Text="Bone Radius" Style="{StaticResource FieldTextBlockStyle}" />
+                                    <TextBlock Text="{Binding ExtractOptions.BoneRadius, StringFormat={}{0:N2} px}" />
+                                </StackPanel>
+                                <StackPanel>
+                                    <TextBlock Text="Bone Thickness" Style="{StaticResource FieldTextBlockStyle}" />
+                                    <TextBlock Text="{Binding ExtractOptions.BoneThickness, StringFormat={}{0:N2} px}" />
+                                </StackPanel>
+                            </UniformGrid>
+                        </StackPanel>
+
+                        <!--Upscale Settings-->
+                        <StackPanel Margin="0,10,0,0" Visibility="{Binding UpscaleModel, Converter={StaticResource NullVisibilityConverter}}">
+                            <TextBlock Text="Upscale Settings"  FontSize="13" />
+                            <Separator Opacity=".7"/>
+                            <StackPanel Margin="0,3,0,0">
+                                <TextBlock DockPanel.Dock="Left"  Text="Model" Style="{StaticResource FieldTextBlockStyle}" />
+                                <TextBox Text="{Binding UpscaleModel}" Style="{StaticResource TextBlockStyle}" IsReadOnly="True" />
+                            </StackPanel>
+                            <UniformGrid Columns="3" Margin="0,0,0,0">
+                                <StackPanel>
+                                    <TextBlock Text="Tiled" Style="{StaticResource FieldTextBlockStyle}" />
+                                    <TextBlock Text="{Binding UpscaleOptions.IsTileEnabled}" />
+                                </StackPanel>
+                                <StackPanel>
+                                    <TextBlock Text="Tile Size" Style="{StaticResource FieldTextBlockStyle}" />
+                                    <TextBlock Text="{Binding UpscaleOptions.TileSize, StringFormat={}{0} px}" />
+                                </StackPanel>
+                                <StackPanel>
+                                    <TextBlock Text="Tile Overlap" Style="{StaticResource FieldTextBlockStyle}" />
+                                    <TextBlock Text="{Binding UpscaleOptions.TileOverlap, StringFormat={}{0} px}" />
+                                </StackPanel>
+                            </UniformGrid>
+                        </StackPanel>
+
+                        <!--General-->
+                        <StackPanel Margin="0,6,0,0" >
+                            <TextBlock Text="Created" Style="{StaticResource FieldTextBlockStyle}" />
+                            <TextBlock Text="{Binding Timestamp}" />
+                        </StackPanel>
+                        <UniformGrid Columns="2" Margin="0,6,0,0">
+                            <StackPanel>
+                                <TextBlock Text="{Binding MediaType, StringFormat={}{0} Path}" Style="{StaticResource FieldTextBlockStyle}" />
+                                <CommonControls:HyperlinkControl Label="{Binding MediaPath, Converter={StaticResource FullPathToFileNameConverter}}" Link="{Binding MediaPath, Converter={StaticResource FullPathToFolderConverter}}" IsUnderlineEnabled="False" />
+                            </StackPanel>
+                            <StackPanel>
+                                <TextBlock Text="Info Path" Style="{StaticResource FieldTextBlockStyle}" />
+                                <CommonControls:HyperlinkControl Label="{Binding FilePath, Converter={StaticResource FullPathToFileNameConverter}}" Link="{Binding FilePath}" IsUnderlineEnabled="False" />
+                            </StackPanel>
+                        </UniformGrid>
+
+                    </StackPanel>
+                </DockPanel>
+            </DataTemplate>
+
+
+            <DataTemplate DataType="{x:Type Common:ExtractHistory}">
+                <DockPanel Margin="10,0,0,0">
+                    <TextBlock DockPanel.Dock="Top" Text="{Binding MediaType, StringFormat={}Extracted {0}}" FontSize="20"/>
+                    <StackPanel>
+                        <Separator Opacity=".7"/>
+                        <StackPanel Margin="0,3,0,0">
+                            <TextBlock DockPanel.Dock="Left"  Text="Model" Style="{StaticResource FieldTextBlockStyle}" />
+                            <TextBox Text="{Binding Model}" Style="{StaticResource TextBlockStyle}" IsReadOnly="True" />
+                        </StackPanel>
+
+                        <UniformGrid Columns="3" Margin="0,6,0,0">
+                            <StackPanel>
+                                <TextBlock Text="{Binding MediaType, StringFormat={}{0} Size}" Style="{StaticResource FieldTextBlockStyle}" />
+                                <TextBlock>
+                           <Run Text="{Binding Width}" />
+                           <Run Text="x" />
+                           <Run Text="{Binding Height}" />
+                           <Run Text="px" />
+                                </TextBlock>
+                            </StackPanel>
+                            <StackPanel Visibility="{Binding MediaType, Converter={StaticResource EnumToVisibilityConverter}, ConverterParameter=Video}">
+                                <TextBlock Text="Frame Rate" Style="{StaticResource FieldTextBlockStyle}" />
+                                <TextBlock>
+                          <Run Text="{Binding FrameRate}" />
+                          <Run Text="fps" />
+                                </TextBlock>
+                            </StackPanel>
+                            <StackPanel Visibility="{Binding MediaType, Converter={StaticResource EnumToVisibilityConverter}, ConverterParameter=Video}">
+                                <TextBlock Text="Frames" Style="{StaticResource FieldTextBlockStyle}" />
+                                <TextBlock Text="{Binding FrameCount}" />
+                            </StackPanel>
+                        </UniformGrid>
+
+                        <StackPanel Margin="0,10,0,0">
+                            <TextBlock Text="Extract Options" />
+                            <Separator Opacity=".7"/>
+                            <UniformGrid Columns="3" Visibility="{Binding ExtractorType, Converter={StaticResource EnumToVisibilityConverter}, ConverterParameter=Default}">
+                                <StackPanel>
+                                    <TextBlock Text="Tiled" Style="{StaticResource FieldTextBlockStyle}" />
+                                    <TextBlock Text="{Binding Options.IsTileEnabled}" />
+                                </StackPanel>
+                                <StackPanel>
+                                    <TextBlock Text="Tile Size" Style="{StaticResource FieldTextBlockStyle}" />
+                                    <TextBlock Text="{Binding Options.TileSize, StringFormat={}{0} px}" />
+                                </StackPanel>
+                                <StackPanel>
+                                    <TextBlock Text="Tile Overlap" Style="{StaticResource FieldTextBlockStyle}" />
+                                    <TextBlock Text="{Binding Options.TileOverlap, StringFormat={}{0} px}" />
+                                </StackPanel>
+                            </UniformGrid>
+                            <UniformGrid Columns="3" Visibility="{Binding ExtractorType, Converter={StaticResource EnumToVisibilityConverter}, ConverterParameter=Background}">
+                                <StackPanel>
+                                    <TextBlock Text="Background Mode" Style="{StaticResource FieldTextBlockStyle}" />
+                                    <TextBlock Text="{Binding Options.Mode, Converter={StaticResource EnumDisplayNameConverter}}" />
+                                </StackPanel>
+                            </UniformGrid>
+                            <UniformGrid Columns="3" Visibility="{Binding ExtractorType, Converter={StaticResource EnumToVisibilityConverter}, ConverterParameter=Pose}">
+                                <StackPanel>
+                                    <TextBlock Text="Detections" Style="{StaticResource FieldTextBlockStyle}" />
+                                    <TextBlock Text="{Binding Options.Detections}" />
+                                </StackPanel>
+                                <StackPanel>
+                                    <TextBlock Text="Joint Confidence" Style="{StaticResource FieldTextBlockStyle}" />
+                                    <TextBlock Text="{Binding Options.JointConfidence, StringFormat={}{0:N2}}" />
+                                </StackPanel>
+                                <StackPanel>
+                                    <TextBlock Text="Joint Radius" Style="{StaticResource FieldTextBlockStyle}" />
+                                    <TextBlock Text="{Binding Options.JointRadius, StringFormat={}{0:N2}}" />
+                                </StackPanel>
+                                <StackPanel>
+                                    <TextBlock Text="Body Confidence" Style="{StaticResource FieldTextBlockStyle}" />
+                                    <TextBlock Text="{Binding Options.BodyConfidence, StringFormat={}{0:N2}}" />
+                                </StackPanel>
+                                <StackPanel>
+                                    <TextBlock Text="Bone Radius" Style="{StaticResource FieldTextBlockStyle}" />
+                                    <TextBlock Text="{Binding Options.BoneRadius, StringFormat={}{0:N2} px}" />
+                                </StackPanel>
+                                <StackPanel>
+                                    <TextBlock Text="Bone Thickness" Style="{StaticResource FieldTextBlockStyle}" />
+                                    <TextBlock Text="{Binding Options.BoneThickness, StringFormat={}{0:N2} px}" />
+                                </StackPanel>
+                            </UniformGrid>
+                        </StackPanel>
+                        <StackPanel Margin="0,6,0,0" >
+                            <TextBlock Text="Created" Style="{StaticResource FieldTextBlockStyle}" />
+                            <TextBlock Text="{Binding Timestamp}" />
+                        </StackPanel>
+                        <UniformGrid Columns="2" Margin="0,6,0,0">
+                            <StackPanel>
+                                <TextBlock Text="{Binding MediaType, StringFormat={}{0} Path}" Style="{StaticResource FieldTextBlockStyle}" />
+                                <CommonControls:HyperlinkControl Label="{Binding MediaPath, Converter={StaticResource FullPathToFileNameConverter}}" Link="{Binding MediaPath, Converter={StaticResource FullPathToFolderConverter}}" IsUnderlineEnabled="False" />
+                            </StackPanel>
+                            <StackPanel>
+                                <TextBlock Text="Info Path" Style="{StaticResource FieldTextBlockStyle}" />
+                                <CommonControls:HyperlinkControl Label="{Binding FilePath, Converter={StaticResource FullPathToFileNameConverter}}" Link="{Binding FilePath}" IsUnderlineEnabled="False" />
+                            </StackPanel>
+                        </UniformGrid>
+                    </StackPanel>
+                </DockPanel>
+            </DataTemplate>
+
+
+            <DataTemplate DataType="{x:Type Common:UpscaleHistory}">
+                <DockPanel Margin="10,0,0,0">
+                    <TextBlock DockPanel.Dock="Top" Text="{Binding MediaType, StringFormat={}Upscaled {0}}" FontSize="20"/>
+                    <StackPanel>
+                        <Separator Opacity=".7"/>
+                        <StackPanel Margin="0,3,0,0">
+                            <TextBlock DockPanel.Dock="Left"  Text="Model" Style="{StaticResource FieldTextBlockStyle}" />
+                            <TextBox Text="{Binding Model}" Style="{StaticResource TextBlockStyle}" IsReadOnly="True" />
+                        </StackPanel>
+
+                        <UniformGrid Columns="3" Margin="0,6,0,0">
+                            <StackPanel>
+                                <TextBlock Text="{Binding MediaType, StringFormat={}{0} Size}" Style="{StaticResource FieldTextBlockStyle}" />
+                                <TextBlock>
+                                    <Run Text="{Binding Width}" />
+                                    <Run Text="x" />
+                                    <Run Text="{Binding Height}" />
+                                    <Run Text="px" />
+                                </TextBlock>
+                            </StackPanel>
+                            <StackPanel Visibility="{Binding MediaType, Converter={StaticResource EnumToVisibilityConverter}, ConverterParameter=Video}">
+                                <TextBlock Text="Frame Rate" Style="{StaticResource FieldTextBlockStyle}" />
+                                <TextBlock>
+                                   <Run Text="{Binding FrameRate}" />
+                                   <Run Text="fps" />
+                                </TextBlock>
+                            </StackPanel>
+                            <StackPanel Visibility="{Binding MediaType, Converter={StaticResource EnumToVisibilityConverter}, ConverterParameter=Video}">
+                                <TextBlock Text="Frames" Style="{StaticResource FieldTextBlockStyle}" />
+                                <TextBlock Text="{Binding FrameCount}" />
+                            </StackPanel>
+                        </UniformGrid>
+
+                        <UniformGrid Columns="3" Margin="0,6,0,0">
+                            <StackPanel>
+                                <TextBlock Text="Original Size" Style="{StaticResource FieldTextBlockStyle}" />
+                                <TextBlock>
+                                    <Run Text="{Binding OriginalWidth}" />
+                                    <Run Text="x" />
+                                    <Run Text="{Binding OriginalHeight}" /> 
+                                    <Run Text="px" />
+                                </TextBlock>
+                            </StackPanel>
+                            <StackPanel>
+                                <TextBlock Text="Scale Factor" Style="{StaticResource FieldTextBlockStyle}" />
+                                <TextBlock Text="{Binding ScaleFactor, StringFormat={}{0}x}" />
+                            </StackPanel>
+                        </UniformGrid>
+                        <StackPanel Margin="0,10,0,0">
+                            <TextBlock Text="Upscale Options" />
+                            <Separator Opacity=".7"/>
+                            <UniformGrid Columns="3" Margin="0,0,0,0">
+                                <StackPanel>
+                                    <TextBlock Text="Tiled" Style="{StaticResource FieldTextBlockStyle}" />
+                                    <TextBlock Text="{Binding Options.IsTileEnabled}" />
+                                </StackPanel>
+                                <StackPanel>
+                                    <TextBlock Text="Tile Size" Style="{StaticResource FieldTextBlockStyle}" />
+                                    <TextBlock Text="{Binding Options.TileSize, StringFormat={}{0} px}" />
+                                </StackPanel>
+                                <StackPanel>
+                                    <TextBlock Text="Tile Overlap" Style="{StaticResource FieldTextBlockStyle}" />
+                                    <TextBlock Text="{Binding Options.TileOverlap, StringFormat={}{0} px}" />
+                                </StackPanel>
+                            </UniformGrid>
+                        </StackPanel>
+                        <StackPanel Margin="0,6,0,0" >
+                            <TextBlock Text="Created" Style="{StaticResource FieldTextBlockStyle}" />
+                            <TextBlock Text="{Binding Timestamp}" />
+                        </StackPanel>
+                        <UniformGrid Columns="2" Margin="0,6,0,0">
+                            <StackPanel>
+                                <TextBlock Text="{Binding MediaType, StringFormat={}{0} Path}" Style="{StaticResource FieldTextBlockStyle}" />
+                                <CommonControls:HyperlinkControl Label="{Binding MediaPath, Converter={StaticResource FullPathToFileNameConverter}}" Link="{Binding MediaPath, Converter={StaticResource FullPathToFolderConverter}}" IsUnderlineEnabled="False" />
+                            </StackPanel>
+                            <StackPanel>
+                                <TextBlock Text="Info Path" Style="{StaticResource FieldTextBlockStyle}" />
+                                <CommonControls:HyperlinkControl Label="{Binding FilePath, Converter={StaticResource FullPathToFileNameConverter}}" Link="{Binding FilePath}" IsUnderlineEnabled="False" />
+                            </StackPanel>
+                        </UniformGrid>
+                    </StackPanel>
+                </DockPanel>
+            </DataTemplate>
+
+
+            <DataTemplate DataType="{x:Type Common:InterpolateHistory}">
+                <DockPanel Margin="10,0,0,0">
+                    <TextBlock DockPanel.Dock="Top" Text="{Binding MediaType, StringFormat={}Interpolated {0}}" FontSize="20"/>
+                    <StackPanel>
+                        <Separator Opacity=".7"/>
+                        <UniformGrid Columns="3" Margin="0,6,0,0">
+                            <StackPanel>
+                                <TextBlock Text="{Binding MediaType, StringFormat={}{0} Size}" Style="{StaticResource FieldTextBlockStyle}" />
+                                <TextBlock>
+                                    <Run Text="{Binding Width}" />
+                                    <Run Text="x" />
+                                    <Run Text="{Binding Height}" />
+                                    <Run Text="px" />
+                                </TextBlock>
+                            </StackPanel>
+                            <StackPanel Visibility="{Binding MediaType, Converter={StaticResource EnumToVisibilityConverter}, ConverterParameter=Video}">
+                                <TextBlock Text="Frame Rate" Style="{StaticResource FieldTextBlockStyle}" />
+                                <TextBlock>
+                                    <Run Text="{Binding FrameRate}" />
+                                    <Run Text="fps" />
+                                </TextBlock>
+                            </StackPanel>
+                            <StackPanel Visibility="{Binding MediaType, Converter={StaticResource EnumToVisibilityConverter}, ConverterParameter=Video}">
+                                <TextBlock Text="Frames" Style="{StaticResource FieldTextBlockStyle}" />
+                                <TextBlock Text="{Binding FrameCount}" />
+                            </StackPanel>
+                        </UniformGrid>
+                        <UniformGrid Columns="3" Margin="0,6,0,0">
+                            <StackPanel>
+                                <TextBlock Text="Original" Style="{StaticResource FieldTextBlockStyle}" />
+                                <TextBlock>
+                                    <Run Text="{Binding OriginalFrameRate}" />
+                                    <Run Text="fps" />
+                                </TextBlock>
+                            </StackPanel>
+                            <StackPanel>
+                                <TextBlock Text="Multiplier" Style="{StaticResource FieldTextBlockStyle}" />
+                                <TextBlock Text="{Binding Multiplier, StringFormat={}{0}x}" />
+                            </StackPanel>
+                            <TextBlock />
+                        </UniformGrid>
+                        <StackPanel Margin="0,6,0,0" >
+                            <TextBlock Text="Created" Style="{StaticResource FieldTextBlockStyle}" />
+                            <TextBlock Text="{Binding Timestamp}" />
+                        </StackPanel>
+                        <UniformGrid Columns="2" Margin="0,6,0,0">
+                            <StackPanel>
+                                <TextBlock Text="{Binding MediaType, StringFormat={}{0} Path}" Style="{StaticResource FieldTextBlockStyle}" />
+                                <CommonControls:HyperlinkControl Label="{Binding MediaPath, Converter={StaticResource FullPathToFileNameConverter}}" Link="{Binding MediaPath, Converter={StaticResource FullPathToFolderConverter}}" IsUnderlineEnabled="False" />
+                            </StackPanel>
+                            <StackPanel>
+                                <TextBlock Text="Info Path" Style="{StaticResource FieldTextBlockStyle}" />
+                                <CommonControls:HyperlinkControl Label="{Binding FilePath, Converter={StaticResource FullPathToFileNameConverter}}" Link="{Binding FilePath}" IsUnderlineEnabled="False" />
+                            </StackPanel>
+                        </UniformGrid>
+                    </StackPanel>
+                </DockPanel>
+            </DataTemplate>
+
+
+            <DataTemplate DataType="{x:Type Common:AudioHistory}">
+                <DockPanel Margin="10,0,0,0">
+                    <TextBlock DockPanel.Dock="Top" Text="{Binding MediaType, StringFormat={}Generated {0}}" FontSize="20"/>
+                    <StackPanel>
+                        <Separator Opacity=".7"/>
+                        <UniformGrid Columns="3" Margin="0,6,0,0">
+                            <StackPanel>
+                                <TextBlock Text="Voice Style" Style="{StaticResource FieldTextBlockStyle}" />
+                                <TextBlock>
+                                    <Run Text="{Binding Options.VoiceStyle}" />
+                                </TextBlock>
+                            </StackPanel>
+                            <StackPanel>
+                                <TextBlock Text="Speed" Style="{StaticResource FieldTextBlockStyle}" />
+                                <TextBlock>
+                                    <Run Text="{Binding  Options.Speed}" />
+                                    <Run Text="x" />
+                                </TextBlock>
+                            </StackPanel>
+                            <StackPanel>
+                                <TextBlock Text="Duration" Style="{StaticResource FieldTextBlockStyle}" />
+                                <TextBlock>
+                                    <Run Text="{Binding Duration, FallbackValue=00:00:00, StringFormat={}mm\\:ss\\.ff}" />
+                                    <Run Text="ms" />
+                                </TextBlock>
+                            </StackPanel>
+                            <StackPanel>
+                                <TextBlock Text="Seed" Style="{StaticResource FieldTextBlockStyle}" />
+                                <TextBlock>
+                                    <Run Text="{Binding Options.Seed}" />
+                                </TextBlock>
+                            </StackPanel>
+                            <StackPanel>
+                                <TextBlock Text="Steps" Style="{StaticResource FieldTextBlockStyle}" />
+                                <TextBlock>
+                                    <Run Text="{Binding Options.Steps}" />
+                                </TextBlock>
+                            </StackPanel>
+                            <StackPanel>
+                                <TextBlock Text="Sample Rate" Style="{StaticResource FieldTextBlockStyle}" />
+                                <TextBlock>
+                                    <Run Text="{Binding SampleRate}" />
+                                    <Run Text="hz" />
+                                </TextBlock>
+                            </StackPanel>
+                        </UniformGrid>
+
+                        <StackPanel Margin="0,6,0,0" >
+                            <TextBlock Text="Created" Style="{StaticResource FieldTextBlockStyle}" />
+                            <TextBlock Text="{Binding Timestamp}" />
+                        </StackPanel>
+                        <UniformGrid Columns="2" Margin="0,6,0,0">
+                            <StackPanel>
+                                <TextBlock Text="{Binding MediaType, StringFormat={}{0} Path}" Style="{StaticResource FieldTextBlockStyle}" />
+                                <CommonControls:HyperlinkControl Label="{Binding MediaPath, Converter={StaticResource FullPathToFileNameConverter}}" Link="{Binding MediaPath, Converter={StaticResource FullPathToFolderConverter}}" IsUnderlineEnabled="False" />
+                            </StackPanel>
+                            <StackPanel>
+                                <TextBlock Text="Info Path" Style="{StaticResource FieldTextBlockStyle}" />
+                                <CommonControls:HyperlinkControl Label="{Binding FilePath, Converter={StaticResource FullPathToFileNameConverter}}" Link="{Binding FilePath}" IsUnderlineEnabled="False" />
+                            </StackPanel>
+                        </UniformGrid>
+                    </StackPanel>
+                </DockPanel>
+            </DataTemplate>
+
+
+            <DataTemplate DataType="{x:Type Common:TextHistory}">
+                <DockPanel Margin="10,0,0,0">
+                    <TextBlock DockPanel.Dock="Top" Text="{Binding MediaType, StringFormat={}Generated {0}}" FontSize="20"/>
+                    <StackPanel>
+                        <Separator Opacity=".7"/>
+                        <UniformGrid Columns="3" Margin="0,6,0,0">
+                            <StackPanel>
+                                <TextBlock Text="Length" Style="{StaticResource FieldTextBlockStyle}" />
+                                <TextBlock>
+                                    <Run Text="{Binding InputLength}" />
+                                </TextBlock>
+                            </StackPanel>
+                        </UniformGrid>
+
+                        <StackPanel Margin="0,6,0,0" >
+                            <TextBlock Text="Created" Style="{StaticResource FieldTextBlockStyle}" />
+                            <TextBlock Text="{Binding Timestamp}" />
+                        </StackPanel>
+                        <UniformGrid Columns="2" Margin="0,6,0,0">
+                            <StackPanel>
+                                <TextBlock Text="{Binding MediaType, StringFormat={}{0} Path}" Style="{StaticResource FieldTextBlockStyle}" />
+                                <CommonControls:HyperlinkControl Label="{Binding MediaPath, Converter={StaticResource FullPathToFileNameConverter}}" Link="{Binding MediaPath, Converter={StaticResource FullPathToFolderConverter}}" IsUnderlineEnabled="False" />
+                            </StackPanel>
+                            <StackPanel>
+                                <TextBlock Text="Info Path" Style="{StaticResource FieldTextBlockStyle}" />
+                                <CommonControls:HyperlinkControl Label="{Binding FilePath, Converter={StaticResource FullPathToFileNameConverter}}" Link="{Binding FilePath}" IsUnderlineEnabled="False" />
+                            </StackPanel>
+                        </UniformGrid>
+                    </StackPanel>
+                </DockPanel>
+            </DataTemplate>
+
+
+            <DataTemplate DataType="{x:Type Common:ImageLayerHistory}">
+                <DockPanel Margin="10,0,0,0">
+                    <TextBlock DockPanel.Dock="Top" Text="{Binding MediaType, StringFormat={}Composed {0}}" FontSize="20"/>
+                    <StackPanel>
+                        <Separator Opacity=".7"/>
+
+                        <UniformGrid Columns="3" Margin="0,6,0,0">
+                            <StackPanel>
+                                <TextBlock Text="{Binding MediaType, StringFormat={}{0} Size}" Style="{StaticResource FieldTextBlockStyle}" />
+                                <TextBlock>
+                                    <Run Text="{Binding Width}" />
+                                    <Run Text="x" />
+                                    <Run Text="{Binding Height}" />
+                                    <Run Text="px" />
+                                </TextBlock>
+                            </StackPanel>
+                        </UniformGrid>
+
+                        <StackPanel Margin="0,6,0,0" >
+                            <TextBlock Text="Created" Style="{StaticResource FieldTextBlockStyle}" />
+                            <TextBlock Text="{Binding Timestamp}" />
+                        </StackPanel>
+                        <UniformGrid Columns="2" Margin="0,6,0,0">
+                            <StackPanel>
+                                <TextBlock Text="{Binding MediaType, StringFormat={}{0} Path}" Style="{StaticResource FieldTextBlockStyle}" />
+                                <CommonControls:HyperlinkControl Label="{Binding MediaPath, Converter={StaticResource FullPathToFileNameConverter}}" Link="{Binding MediaPath, Converter={StaticResource FullPathToFolderConverter}}" IsUnderlineEnabled="False" />
+                            </StackPanel>
+                            <StackPanel>
+                                <TextBlock Text="Info Path" Style="{StaticResource FieldTextBlockStyle}" />
+                                <CommonControls:HyperlinkControl Label="{Binding FilePath, Converter={StaticResource FullPathToFileNameConverter}}" Link="{Binding FilePath}" IsUnderlineEnabled="False" />
+                            </StackPanel>
+                        </UniformGrid>
+                    </StackPanel>
+                </DockPanel>
+            </DataTemplate>
+
+
+            <Style x:Key="SettingsListBoxItem" TargetType="{x:Type ListBoxItem}">
+                <Setter Property="Padding" Value="0" />
+                <Setter Property="Margin" Value="0"/>
+                <Setter Property="BorderThickness" Value="1" />
+                <Setter Property="BorderBrush" Value="{StaticResource ControlBrightDefaultBorderBrush }" />
+                <Setter Property="HorizontalContentAlignment" Value="Stretch"></Setter>
+                <Setter Property="Template">
+                    <Setter.Value>
+                        <ControlTemplate TargetType="{x:Type ListBoxItem}">
+                            <Border Name="Border" BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="{TemplateBinding BorderThickness}" Background="{TemplateBinding Background}">
+                                <ContentPresenter Content="{TemplateBinding Content}" ContentTemplate="{TemplateBinding ContentTemplate}" Margin="{TemplateBinding Padding}" />
+                            </Border>
+                        </ControlTemplate>
+                    </Setter.Value>
+                </Setter>
+                <Style.Triggers>
+                    <Trigger  Property="IsSelected" Value="True" >
+                        <Setter Property="Background" Value="{StaticResource ControlMouseOverBackground}" />
+                        <Setter Property="BorderBrush" Value="{StaticResource AccentColour2}" />
+                    </Trigger>
+                </Style.Triggers>
+            </Style>
+
+        </ResourceDictionary>
+    </Application.Resources>
+</Application>

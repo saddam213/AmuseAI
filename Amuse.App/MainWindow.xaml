@@ -1,0 +1,509 @@
+﻿<CommonControls:WindowMainBase x:Class="Amuse.App.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:Amuse.App"
+        xmlns:CommonControls="clr-namespace:TensorStack.WPF.Controls;assembly=TensorStack.WPF"
+        xmlns:Views="clr-namespace:Amuse.App.Views"
+        xmlns:Controls="clr-namespace:Amuse.App.Controls"
+        RenderOptions.BitmapScalingMode="Fant"
+        RenderOptions.ClearTypeHint="Enabled"
+        TextOptions.TextFormattingMode="Display"
+        TextOptions.TextRenderingMode="ClearType"
+        TextOptions.TextHintingMode="Fixed"
+        SnapsToDevicePixels="True"
+        Style="{StaticResource WindowHeadless}"
+        Title="{x:Static local:App.AppDisplayName}"
+        mc:Ignorable="d"
+        x:Name="UI">
+    <DockPanel DataContext="{Binding ElementName=UI}">
+
+        <DockPanel.LayoutTransform>
+            <ScaleTransform ScaleX="{Binding Settings.UIScale}" ScaleY="{Binding Settings.UIScale}" />
+        </DockPanel.LayoutTransform>
+
+        <!--Main Menu-->
+        <Grid DockPanel.Dock="Top" WindowChrome.IsHitTestVisibleInChrome="True">
+            <DockPanel  Height="34" Margin="0,0,1,0">
+
+                <!--Logo-->
+                <Grid DockPanel.Dock="Left" IsHitTestVisible="False" >
+                    <StackPanel Orientation="Horizontal">
+                        <Image Source="/Images/Amuse-Logo-Long-256.png" Stretch="Uniform"  HorizontalAlignment="Left" Margin="4,2,0,2" />
+                        <TextBlock Text="{x:Static local:App.AppVersionDisplay}" Style="{StaticResource FieldTextBlockStyle}" FontSize="10" Margin="2,14,0,0" Opacity=".7"/>
+                    </StackPanel>
+                </Grid>
+
+                <!--Window Options-->
+                <Grid DockPanel.Dock="Right">
+                    <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" >
+
+                        <Button Margin="0,0,5,0" ToolTip="Update Available" Command="{Binding UpdateCommand, Source={x:Static Application.Current}}" Style="{StaticResource TransparentButton}" Visibility="{Binding Settings.IsUpdateAvailable, Converter={StaticResource BooleanToHiddenConverter}}">
+                            <StackPanel Orientation="Horizontal" Opacity=".8">
+                                <CommonControls:FontAwesome Icon="&#xf30f;" IconStyle="Light" Color="{StaticResource SuccessColour}" Margin="3,0" Size="14" />
+                                <TextBlock Text="Update" Foreground="{StaticResource SuccessColour}" Margin="1,0,0,0" FontSize="11"/>
+                            </StackPanel>
+                        </Button>
+
+                        <CommonControls:IconButton 
+                            Width="100"
+                            Text="Settings"
+                            Icon="f013" 
+                            IconStyle="Solid"
+                            FontWeight="Bold"
+                            TextOpacity=".8"
+                            IconColor="{StaticResource AccentColour2}"
+                            Command="{Binding NavigateCategoryCommand}" 
+                            CommandParameter="{x:Static Views:ViewCategory.Settings}" 
+                            IsSelected="{Binding ViewCategory, Converter={StaticResource EnumToBooleanConverter}, ConverterParameter=Settings}">
+                        </CommonControls:IconButton>
+                        <UniformGrid  Columns="3" >
+                            <Button Command="{Binding MinimizeCommand}" Padding="10,1" >
+                                <CommonControls:FontAwesome Icon="&#xf2d1;" />
+                            </Button>
+                            <Grid>
+                                <Button Command="{Binding RestoreCommand}" Padding="10,1" Visibility="{Binding WindowState, Converter={StaticResource EnumToVisibilityConverter}, ConverterParameter=Maximized}">
+                                    <CommonControls:FontAwesome Icon="&#xf2d2;" />
+                                </Button>
+                                <Button Command="{Binding MaximizeCommand}" Padding="10,1" Visibility="{Binding WindowState, Converter={StaticResource InverseEnumToVisibilityConverter}, ConverterParameter=Maximized}">
+                                    <CommonControls:FontAwesome Icon="&#xf2d0;" />
+                                </Button>
+                            </Grid>
+                            <Button x:Name="CloseButton" Command="{Binding CloseCommand}" Padding="12,0" >
+                                <CommonControls:FontAwesome Icon="&#xf00d;" />
+                            </Button>
+                        </UniformGrid>
+                    </StackPanel>
+                </Grid>
+
+                <!--Categories-->
+                <UniformGrid Rows="1" HorizontalAlignment="Center">
+                    <CommonControls:IconButton 
+                        Text="Image" 
+                        Icon="f03e" 
+                        IconMargin="0,-3,0,0"
+                        Style="{StaticResource MenuIconButton}"
+                        Command="{Binding NavigateCategoryCommand}" 
+                        CommandParameter="{x:Static Views:ViewCategory.Image}" 
+                        IsSelected="{Binding ViewCategory, Converter={StaticResource EnumToBooleanConverter}, ConverterParameter=Image}">
+                    </CommonControls:IconButton>
+                    <CommonControls:IconButton 
+                        Text="Video" 
+                        Icon="f008" 
+                        IconMargin="0,-3,0,0"
+                        Style="{StaticResource MenuIconButton}"
+                        Command="{Binding NavigateCategoryCommand}" 
+                        CommandParameter="{x:Static Views:ViewCategory.Video}" 
+                        IsSelected="{Binding ViewCategory, Converter={StaticResource EnumToBooleanConverter}, ConverterParameter=Video}">
+                    </CommonControls:IconButton>
+                    <CommonControls:IconButton 
+                        Text="Audio" 
+                        Icon="f001" 
+                        IconMargin="0,-1,0,0"
+                        Style="{StaticResource MenuIconButton}"
+                        Command="{Binding NavigateCategoryCommand}" 
+                        CommandParameter="{x:Static Views:ViewCategory.Audio}" 
+                        IsSelected="{Binding ViewCategory, Converter={StaticResource EnumToBooleanConverter}, ConverterParameter=Audio}">
+                    </CommonControls:IconButton>
+                    <CommonControls:IconButton 
+                        Text="Gallery" 
+                        Icon="e228" 
+                        IconMargin="0,-2,0,0"
+                        Style="{StaticResource MenuIconButton}"
+                        Command="{Binding NavigateCommand}" 
+                        CommandParameter="{x:Static Views:View.Gallery}" 
+                        IsSelected="{Binding View, Converter={StaticResource EnumToBooleanConverter}, ConverterParameter=Gallery}">
+                    </CommonControls:IconButton>
+                </UniformGrid>
+
+            </DockPanel>
+        </Grid>
+
+
+        <!--Sub Menu-->
+        <Border  DockPanel.Dock="Left"  Margin="4,8,0,0" >
+            <DockPanel>
+
+                <!--SystemInfo-->
+                <Grid  DockPanel.Dock="Bottom" Margin="0,0,0,4">
+                    <Controls:SystemInfoControl />
+                    <Grid.Style>
+                        <Style TargetType="{x:Type Grid}">
+                            <Setter Property="Visibility" Value="Visible"/>
+                            <Style.Triggers>
+                                <DataTrigger Binding="{Binding ViewCategory}" Value="Settings">
+                                    <Setter Property="Visibility" Value="Collapsed"/>
+                                </DataTrigger>
+                                <DataTrigger Binding="{Binding ViewCategory}" Value="Other">
+                                    <Setter Property="Visibility" Value="Collapsed"/>
+                                </DataTrigger>
+                            </Style.Triggers>
+                        </Style>
+                    </Grid.Style>
+                </Grid>
+
+                <Grid>
+
+                    <!--Settings-->
+                    <Grid Visibility="{Binding ViewCategory, Converter={StaticResource EnumToVisibilityConverter}, ConverterParameter=Settings}">
+                        <UniformGrid Columns="1" VerticalAlignment="Top" Margin="20,20,0,20">
+                            <CommonControls:IconButton 
+                                Height="40"
+                                Icon="f1de"
+                                Text="General" 
+                                IconSize="18"
+                                FontSize="14"
+                                FontWeight="SemiBold"
+                                Orientation="Horizontal"
+                                Alignment="Left"
+                                Placement="Right"
+                                TextOpacity=".9"
+                                IconMargin="20,0,4,0"
+                                IconColor="{StaticResource AccentColour2}"
+                                Command="{Binding NavigateCommand}" 
+                                CommandParameter="{x:Static Views:View.General}" 
+                                IsSelected="{Binding View, Converter={StaticResource EnumToBooleanConverter}, ConverterParameter=General}">
+                            </CommonControls:IconButton>
+                            <CommonControls:IconButton 
+                                Text="Environment" 
+                                Icon="f233"
+                                IconSize="18"
+                                FontSize="14"
+                                FontWeight="SemiBold"
+                                Orientation="Horizontal"
+                                Alignment="Left"
+                                Placement="Right"
+                                TextOpacity=".9"
+                                IconMargin="20,0,4,0"
+                                IconColor="{StaticResource AccentColour2}"
+                                Command="{Binding NavigateCommand}" 
+                                CommandParameter="{x:Static Views:View.Environment}" 
+                                IsSelected="{Binding View, Converter={StaticResource EnumToBooleanConverter}, ConverterParameter=Environment}">
+                            </CommonControls:IconButton>
+                            <CommonControls:IconButton 
+                                Text="Diffusion" 
+                                Icon="e4e2"
+                                IconSize="18"
+                                FontSize="14"
+                                FontWeight="SemiBold"
+                                Orientation="Horizontal"
+                                Alignment="Left"
+                                Placement="Right"
+                                TextOpacity=".9"
+                                IconMargin="20,0,5,0"
+                                IconColor="{StaticResource AccentColour2}"
+                                Command="{Binding NavigateCommand}" 
+                                CommandParameter="{x:Static Views:View.Diffusion}" 
+                                IsSelected="{Binding View, Converter={StaticResource EnumToBooleanConverter}, ConverterParameter=Diffusion}">
+                            </CommonControls:IconButton>
+                            <CommonControls:IconButton 
+                                Text="Lora Adapter" 
+                                Icon="f1e0"
+                                IconSize="18"
+                                FontSize="14"
+                                FontWeight="SemiBold"
+                                Orientation="Horizontal"
+                                Alignment="Left"
+                                Placement="Right"
+                                TextOpacity=".9"
+                                IconMargin="20,0,8,0"
+                                IconColor="{StaticResource AccentColour2}"
+                                Command="{Binding NavigateCommand}" 
+                                CommandParameter="{x:Static Views:View.LoraAdapter}" 
+                                IsSelected="{Binding View, Converter={StaticResource EnumToBooleanConverter}, ConverterParameter=LoraAdapter}">
+                            </CommonControls:IconButton>
+                            <CommonControls:IconButton 
+                                Text="ControlNet" 
+                                Icon="f78a"
+                                IconSize="18"
+                                FontSize="14"
+                                FontWeight="SemiBold"
+                                Orientation="Horizontal"
+                                Alignment="Left"
+                                Placement="Right"
+                                TextOpacity=".9"
+                                IconMargin="20,0,2,0"
+                                IconColor="{StaticResource AccentColour2}"
+                                Command="{Binding NavigateCommand}" 
+                                CommandParameter="{x:Static Views:View.ControlNet}" 
+                                IsSelected="{Binding View, Converter={StaticResource EnumToBooleanConverter}, ConverterParameter=ControlNet}">
+                            </CommonControls:IconButton>
+                            <CommonControls:IconButton 
+                                Text="Extractor" 
+                                Icon="f302"
+                                IconSize="18"
+                                FontSize="14"
+                                FontWeight="SemiBold"
+                                Orientation="Horizontal"
+                                Alignment="Left"
+                                Placement="Right"
+                                TextOpacity=".9"
+                                IconMargin="20,0,5,0"
+                                IconColor="{StaticResource AccentColour2}"
+                                Command="{Binding NavigateCommand}" 
+                                CommandParameter="{x:Static Views:View.Extract}" 
+                                IsSelected="{Binding View, Converter={StaticResource EnumToBooleanConverter}, ConverterParameter=Extract}">
+                            </CommonControls:IconButton>
+                            <CommonControls:IconButton 
+                                Text="Upscaler" 
+                                Icon="f424"
+                                IconSize="18"
+                                FontSize="14"
+                                FontWeight="SemiBold"
+                                Orientation="Horizontal"
+                                Alignment="Left"
+                                Placement="Right"
+                                TextOpacity=".8"
+                                IconMargin="20,0,6,0"
+                                IconColor="{StaticResource AccentColour2}"
+                                Command="{Binding NavigateCommand}" 
+                                CommandParameter="{x:Static Views:View.Upscale}" 
+                                IsSelected="{Binding View, Converter={StaticResource EnumToBooleanConverter}, ConverterParameter=Upscale}">
+                            </CommonControls:IconButton>
+                            <CommonControls:IconButton 
+                                Text="Downloads" 
+                                Icon="f57d"
+                                IconSize="18"
+                                FontSize="14"
+                                FontWeight="SemiBold"
+                                Orientation="Horizontal"
+                                Alignment="Left"
+                                Placement="Right"
+                                TextOpacity=".8"
+                                IconMargin="20,0,6,0"
+                                IconColor="{StaticResource AccentColour2}"
+                                Command="{Binding NavigateCommand}" 
+                                CommandParameter="{x:Static Views:View.Downloads}" 
+                                IsSelected="{Binding View, Converter={StaticResource EnumToBooleanConverter}, ConverterParameter=Downloads}">
+                            </CommonControls:IconButton>
+                        </UniformGrid>
+
+                        <Grid Width="180" VerticalAlignment="Bottom" HorizontalAlignment="Left" Margin="20,0,0,20">
+                            <DockPanel Opacity=".7">
+                                <CommonControls:FontAwesome DockPanel.Dock="Top" Icon="&#xf535;" Size="35" IconStyle="SharpThin" HorizontalAlignment="Left" />
+                                <TextBlock DockPanel.Dock="Top" Text="Made in New Zealand" />
+                                <StackPanel HorizontalAlignment="Left" VerticalAlignment="Bottom"  UseLayoutRounding="True" Orientation="Horizontal">
+                                    <TextBlock Text="Created By: " FontStyle="Italic"  FontSize="10" VerticalAlignment="Center" Margin="0,2,0,0" />
+                                    <CommonControls:HyperlinkControl Label="TensorStack Ltd" Link="https://www.tensorstack.ai" Foreground="{StaticResource AccentColour2}"/>
+                                </StackPanel>
+                            </DockPanel>
+                        </Grid>
+                    </Grid>
+
+                    <!--Image-->
+                    <Grid Visibility="{Binding ViewCategory, Converter={StaticResource EnumToVisibilityConverter}, ConverterParameter=Image}">
+                        <UniformGrid Columns="1" VerticalAlignment="Top" >
+                            <CommonControls:IconButton 
+                                Text="Text To Image" 
+                                Icon="f894"
+                                Style="{StaticResource SubmenuIconButton}"
+                                Command="{Binding NavigateCommand}" 
+                                CommandParameter="{x:Static Views:View.TextToImage}" 
+                                IsSelected="{Binding View, Converter={StaticResource EnumToBooleanConverter}, ConverterParameter=TextToImage}">
+                            </CommonControls:IconButton>
+                            <CommonControls:IconButton 
+                                Text="Image To Image" 
+                                Icon="f03e"
+                                Style="{StaticResource SubmenuIconButton}"
+                                Command="{Binding NavigateCommand}" 
+                                CommandParameter="{x:Static Views:View.ImageToImage}" 
+                                IsSelected="{Binding View, Converter={StaticResource EnumToBooleanConverter}, ConverterParameter=ImageToImage}">
+                            </CommonControls:IconButton>
+                            <CommonControls:IconButton 
+                                Text="Image Edit" 
+                                Icon="f4a4"
+                                Style="{StaticResource SubmenuIconButton}"
+                                Command="{Binding NavigateCommand}" 
+                                CommandParameter="{x:Static Views:View.ImageEdit}" 
+                                IsSelected="{Binding View, Converter={StaticResource EnumToBooleanConverter}, ConverterParameter=ImageEdit}">
+                            </CommonControls:IconButton>
+                            <CommonControls:IconButton 
+                                Text="Image Inpaint" 
+                                Icon="f044"
+                                Style="{StaticResource SubmenuIconButton}"
+                                Command="{Binding NavigateCommand}" 
+                                CommandParameter="{x:Static Views:View.ImageInpaint}" 
+                                IsSelected="{Binding View, Converter={StaticResource EnumToBooleanConverter}, ConverterParameter=ImageInpaint}">
+                            </CommonControls:IconButton>
+                            <CommonControls:IconButton 
+                                Text="Image Extract" 
+                                Icon="f302"
+                                Style="{StaticResource SubmenuIconButton}"
+                                Command="{Binding NavigateCommand}" 
+                                CommandParameter="{x:Static Views:View.ImageExtract}" 
+                                IsSelected="{Binding View, Converter={StaticResource EnumToBooleanConverter}, ConverterParameter=ImageExtract}">
+                            </CommonControls:IconButton>
+                            <CommonControls:IconButton 
+                                Text="Image Upscale" 
+                                Icon="f424"
+                                Style="{StaticResource SubmenuIconButton}"
+                                Command="{Binding NavigateCommand}" 
+                                CommandParameter="{x:Static Views:View.ImageUpscale}" 
+                                IsSelected="{Binding View, Converter={StaticResource EnumToBooleanConverter}, ConverterParameter=ImageUpscale}">
+                            </CommonControls:IconButton>
+                            <CommonControls:IconButton 
+                                Text="Image Compose" 
+                                Icon="f5fd"
+                                Style="{StaticResource SubmenuIconButton}"
+                                Command="{Binding NavigateCommand}" 
+                                CommandParameter="{x:Static Views:View.ImageCompose}" 
+                                IsSelected="{Binding View, Converter={StaticResource EnumToBooleanConverter}, ConverterParameter=ImageCompose}">
+                            </CommonControls:IconButton>
+                        </UniformGrid>
+                    </Grid>
+
+                    <!--Video-->
+                    <Grid Visibility="{Binding ViewCategory, Converter={StaticResource EnumToVisibilityConverter}, ConverterParameter=Video}">
+                        <UniformGrid Columns="1" VerticalAlignment="Top" >
+                            <CommonControls:IconButton 
+                                Text="Text To Video" 
+                                Icon="f894"
+                                Style="{StaticResource SubmenuIconButton}"
+                                Command="{Binding NavigateCommand}" 
+                                CommandParameter="{x:Static Views:View.TextToVideo}" 
+                                IsSelected="{Binding View, Converter={StaticResource EnumToBooleanConverter}, ConverterParameter=TextToVideo}">
+                            </CommonControls:IconButton>
+                            <CommonControls:IconButton 
+                                Text="Image To Video" 
+                                Icon="f03e"
+                                Style="{StaticResource SubmenuIconButton}"
+                                Command="{Binding NavigateCommand}" 
+                                CommandParameter="{x:Static Views:View.ImageToVideo}" 
+                                IsSelected="{Binding View, Converter={StaticResource EnumToBooleanConverter}, ConverterParameter=ImageToVideo}">
+                            </CommonControls:IconButton>
+                            <CommonControls:IconButton 
+                                Text="Video To Video" 
+                                Icon="f008"
+                                Style="{StaticResource SubmenuIconButton}"
+                                Command="{Binding NavigateCommand}" 
+                                CommandParameter="{x:Static Views:View.VideoToVideo}" 
+                                IsSelected="{Binding View, Converter={StaticResource EnumToBooleanConverter}, ConverterParameter=VideoToVideo}">
+                            </CommonControls:IconButton>
+                            <CommonControls:IconButton 
+                                Text="Video Extract" 
+                                Icon="f302"
+                                Style="{StaticResource SubmenuIconButton}"
+                                Command="{Binding NavigateCommand}" 
+                                CommandParameter="{x:Static Views:View.VideoExtract}" 
+                                IsSelected="{Binding View, Converter={StaticResource EnumToBooleanConverter}, ConverterParameter=VideoExtract}">
+                            </CommonControls:IconButton>
+                            <CommonControls:IconButton 
+                                Text="Video Upscale" 
+                                Icon="f424"
+                                Style="{StaticResource SubmenuIconButton}"
+                                Command="{Binding NavigateCommand}" 
+                                CommandParameter="{x:Static Views:View.VideoUpscale}" 
+                                IsSelected="{Binding View, Converter={StaticResource EnumToBooleanConverter}, ConverterParameter=VideoUpscale}">
+                            </CommonControls:IconButton>
+                            <CommonControls:IconButton 
+                                Text="Video Interpolate" 
+                                Icon="e4a2"
+                                Style="{StaticResource SubmenuIconButton}"
+                                Command="{Binding NavigateCommand}" 
+                                CommandParameter="{x:Static Views:View.VideoInterpolate}" 
+                                IsSelected="{Binding View, Converter={StaticResource EnumToBooleanConverter}, ConverterParameter=VideoInterpolate}">
+                            </CommonControls:IconButton>
+                        </UniformGrid>
+                    </Grid>
+
+
+                    <!--Audio-->
+                    <Grid Visibility="{Binding ViewCategory, Converter={StaticResource EnumToVisibilityConverter}, ConverterParameter=Audio}">
+                        <UniformGrid Columns="1" VerticalAlignment="Top" >
+                            <CommonControls:IconButton 
+                                Text="Text To Audio" 
+                                Icon="f894"
+                                Style="{StaticResource SubmenuIconButton}"
+                                Command="{Binding NavigateCommand}" 
+                                CommandParameter="{x:Static Views:View.TextToAudio}" 
+                                IsSelected="{Binding View, Converter={StaticResource EnumToBooleanConverter}, ConverterParameter=TextToAudio}">
+                            </CommonControls:IconButton>
+                            <CommonControls:IconButton 
+                                Text="Audio To Text" 
+                                Icon="f001"
+                                Style="{StaticResource SubmenuIconButton}"
+                                Command="{Binding NavigateCommand}" 
+                                CommandParameter="{x:Static Views:View.AudioToText}" 
+                                IsSelected="{Binding View, Converter={StaticResource EnumToBooleanConverter}, ConverterParameter=AudioToText}">
+                            </CommonControls:IconButton>
+                        </UniformGrid>
+                    </Grid>
+
+                </Grid>
+            </DockPanel>
+
+            <Border.Style>
+                <Style TargetType="{x:Type Border}">
+                    <Setter Property="Visibility" Value="Visible"/>
+                    <Style.Triggers>
+                        <DataTrigger Binding="{Binding ViewCategory}" Value="Other">
+                            <Setter Property="Visibility" Value="Collapsed"/>
+                        </DataTrigger>
+                    </Style.Triggers>
+                </Style>
+            </Border.Style>
+        </Border>
+
+
+        <!--History-->
+        <!--<Border Panel.ZIndex="0" DockPanel.Dock="Bottom" BorderThickness="0,2,0,0" BorderBrush="{StaticResource DefaultBorderColor}" Opacity=".8" Margin="7,0,0,0">
+            <Controls:HistoryControl 
+                Orientation="Horizontal"
+                ItemSource="{Binding HistoryService.HistoryCollection}"
+                RemoveItemCommand="{Binding RemoveHistoryItemCommand}" 
+                PreviewItemCommand="{Binding PreviewHistoryItemCommand}"/>
+            <Border.Style>
+                <Style TargetType="{x:Type Border}">
+                    <Setter Property="Visibility" Value="Visible"/>
+                    <Style.Triggers>
+                        <DataTrigger Binding="{Binding ViewCategory}" Value="Settings">
+                            <Setter Property="Visibility" Value="Collapsed"/>
+                        </DataTrigger>
+                        <DataTrigger Binding="{Binding ViewCategory}" Value="Other">
+                            <Setter Property="Visibility" Value="Collapsed"/>
+                        </DataTrigger>
+                    </Style.Triggers>
+                </Style>
+            </Border.Style>
+        </Border>-->
+
+
+        <Border Panel.ZIndex="0" BorderBrush="{StaticResource DefaultBorderColor}" Opacity=".8" >
+            <Controls:HistoryControl 
+            
+                Orientation="{Binding Settings.HistoryOrientation}"
+                ItemSource="{Binding HistoryService.HistoryCollection}"
+                RemoveItemCommand="{Binding RemoveHistoryItemCommand}" 
+                PreviewItemCommand="{Binding PreviewHistoryItemCommand}"/>
+            <Border.Style>
+                <Style TargetType="{x:Type Border}">
+                    <Setter Property="Margin" Value="7,0,0,0"/>
+                    <Setter Property="BorderThickness" Value="0,2,0,0"/>
+                    <Setter Property="DockPanel.Dock" Value="Bottom"/>
+                    <Setter Property="Visibility" Value="Visible"/>
+                    <Style.Triggers>
+                        <DataTrigger Binding="{Binding Settings.HistoryOrientation, ElementName=UI}" Value="Vertical">
+                            <Setter Property="Width" Value="122"/>
+                            <Setter Property="Margin" Value="0,12,0,0"/>
+                            <Setter Property="DockPanel.Dock" Value="Right"/>
+                            <Setter Property="BorderThickness" Value="0,0,0,0"/>
+                        </DataTrigger>
+                        <DataTrigger Binding="{Binding ViewCategory, ElementName=UI}" Value="Settings">
+                            <Setter Property="Visibility" Value="Collapsed"/>
+                        </DataTrigger>
+                        <DataTrigger Binding="{Binding ViewCategory, ElementName=UI}" Value="Other">
+                            <Setter Property="Visibility" Value="Collapsed"/>
+                        </DataTrigger>
+                    </Style.Triggers>
+                </Style>
+            </Border.Style>
+        </Border>
+
+
+
+        <!--View Container-->
+        <CommonControls:ViewContainer Navigation="{Binding Navigation}" NavigationUIVisibility="Hidden" />
+
+    </DockPanel>
+</CommonControls:WindowMainBase>

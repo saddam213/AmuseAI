@@ -1,0 +1,113 @@
+﻿<CommonControls:DialogControl x:Class="Amuse.App.Dialogs.ExtractModelDialog"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:Amuse.App.Dialogs"
+        xmlns:CommonControls="clr-namespace:TensorStack.WPF.Controls;assembly=TensorStack.WPF"
+        xmlns:Controls="clr-namespace:Amuse.App.Controls"
+        mc:Ignorable="d"
+        MinWidth="600"
+        MaxWidth="600"
+        Title="Extractor"
+        Icon="/Images/Icon.ico"
+        Style="{StaticResource {x:Type CommonControls:DialogControl}}">
+    <DockPanel DataContext="{Binding RelativeSource={RelativeSource AncestorType={x:Type local:ExtractModelDialog}}}" Margin="15, 15, 15, 10">
+
+        <GroupBox DockPanel.Dock="Top" Header="Model Settings">
+            <DockPanel>
+                <!--Model Settings-->
+                <UniformGrid DockPanel.Dock="Top" Columns="3">
+                    <StackPanel>
+                        <TextBlock Text="Name" Style="{StaticResource FieldTextBlockStyle}"/>
+                        <TextBox Text="{Binding ExtractModel.Name, UpdateSourceTrigger=PropertyChanged}" />
+                    </StackPanel>
+                    <StackPanel DockPanel.Dock="Right" Margin="1,0,0,0" >
+                        <TextBlock Text="Type" Style="{StaticResource FieldTextBlockStyle}"/>
+                        <ComboBox x:Name="ComboBoxExtractorType" ItemsSource="{Binding Source={StaticResource ExtractorType}}" SelectedItem="{Binding ExtractModel.Type}" SelectedIndex="0" />
+                    </StackPanel>
+                    <CheckBox DockPanel.Dock="Right" Content="Default" IsChecked="{Binding ExtractModel.IsDefault}" VerticalAlignment="Bottom" Margin="10,0,0,2"/>
+                </UniformGrid>
+
+                <!--Model Settings-->
+                <UniformGrid DockPanel.Dock="Top" Columns="3">
+                    <StackPanel Margin="0,0,1,0">
+                        <TextBlock Text="Channels" Style="{StaticResource FieldTextBlockStyle}"/>
+                        <TextBox Text="{Binding ExtractModel.Channels, UpdateSourceTrigger=PropertyChanged}" />
+                    </StackPanel>
+                    <StackPanel Margin="1,0,0,0">
+                        <TextBlock Text="Sample Size" Style="{StaticResource FieldTextBlockStyle}"/>
+                        <TextBox Text="{Binding ExtractModel.SampleSize, UpdateSourceTrigger=PropertyChanged}" />
+                    </StackPanel>
+                    <StackPanel Margin="1,0,0,0">
+                        <TextBlock Text="Output Channels" Style="{StaticResource FieldTextBlockStyle}"/>
+                        <TextBox Text="{Binding ExtractModel.OutputChannels, UpdateSourceTrigger=PropertyChanged}" />
+                    </StackPanel>
+                    <StackPanel Margin="0,0,1,0">
+                        <TextBlock Text="Input Normalization" Style="{StaticResource FieldTextBlockStyle}"/>
+                        <ComboBox ItemsSource="{Binding Source={StaticResource NormalizationType}}" SelectedItem="{Binding ExtractModel.Normalization}" SelectedIndex="0" />
+                    </StackPanel>
+                    <StackPanel Margin="1,0,0,0">
+                        <TextBlock Text="Output Normalization" Style="{StaticResource FieldTextBlockStyle}"/>
+                        <ComboBox ItemsSource="{Binding Source={StaticResource NormalizationType}}" SelectedItem="{Binding ExtractModel.OutputNormalization}" SelectedIndex="0" />
+                    </StackPanel>
+                    <CheckBox DockPanel.Dock="Right" Content="Dynamic Output Shape" IsChecked="{Binding ExtractModel.IsDynamicOutput}" VerticalAlignment="Bottom" Margin="10,0,0,2"/>
+                </UniformGrid>
+            </DockPanel>
+        </GroupBox>
+
+        <!--Default Options-->
+        <GroupBox DockPanel.Dock="Top" Header="Default Options" Margin="0,10,0,0">
+            <Controls:ExtractInputControl Options="{Binding ExtractModel.DefaultOptions, Mode=TwoWay}" ExtractorType="{Binding SelectedItem, ElementName=ComboBoxExtractorType}" />
+        </GroupBox>
+
+
+        <!--Save/Cancel/Errors-->
+        <DockPanel DockPanel.Dock="Bottom" Height="30" Margin="0,15,0,0">
+            <UniformGrid DockPanel.Dock="Right" Columns="2" >
+                <Button Content="Save" Command="{Binding SaveCommand}" Width="100" IsDefault="True"/>
+                <Button Content="Cancel" Command="{Binding CancelCommand}"/>
+            </UniformGrid>
+            <ItemsControl ItemsSource="{Binding Errors}">
+                <ItemsControl.ItemTemplate>
+                    <DataTemplate>
+                        <TextBlock Text="{Binding}" Foreground="IndianRed" TextWrapping="Wrap" FontSize="11"/>
+                    </DataTemplate>
+                </ItemsControl.ItemTemplate>
+            </ItemsControl>
+        </DockPanel>
+
+        
+        <!--Files-->
+        <GroupBox  Header="Model Files" Margin="0,10,0,0">
+            <DockPanel>
+                <DockPanel DockPanel.Dock="Top">
+                    <Button DockPanel.Dock="Right" Command="{Binding AddFileCommand}" Height="22" Width="40" VerticalAlignment="Bottom" HorizontalAlignment="Right">
+                        <CommonControls:FontAwesome Icon="2b" IconStyle="Light" Color="{StaticResource SuccessColour}"/>
+                    </Button>
+                    <StackPanel Margin="0,3,3,0">
+                        <TextBlock Text="Model Urls" Style="{StaticResource FieldTextBlockStyle}"/>
+                        <TextBox Text="{Binding SelectedFile, UpdateSourceTrigger=PropertyChanged}"/>
+                    </StackPanel>
+                </DockPanel>
+                <ListBox ItemsSource="{Binding Files}" SelectedItem="{Binding SelectedFile}" ItemContainerStyle="{StaticResource TransparentListBoxItem}" ScrollViewer.HorizontalScrollBarVisibility="Disabled" Margin="0,3,0,0" Background="Transparent">
+                    <ListBox.ItemTemplate>
+                        <DataTemplate>
+                            <Border Background="{StaticResource ButtonBackgroundDisabled}" Margin="2">
+                                <DockPanel>
+                                    <Button DockPanel.Dock="Right" Command="{Binding RemoveFileCommand, RelativeSource={RelativeSource AncestorType={x:Type local:ExtractModelDialog}}}" CommandParameter="{Binding}" Style="{StaticResource TransparentButton}">
+                                        <CommonControls:FontAwesome Icon="f00d" Color="{StaticResource DangerColour}" />
+                                    </Button>
+                                    <StackPanel Orientation="Horizontal" VerticalAlignment="Center" Margin="4,0,2,0">
+                                        <TextBlock Text="{Binding}"/>
+                                    </StackPanel>
+                                </DockPanel>
+                            </Border>
+                        </DataTemplate>
+                    </ListBox.ItemTemplate>
+                </ListBox>
+            </DockPanel>
+        </GroupBox>
+
+    </DockPanel>
+</CommonControls:DialogControl>

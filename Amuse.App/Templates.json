@@ -1,0 +1,5833 @@
+{
+  "DiffusionTemplates": [
+    {
+      "Backend": "Pytorch",
+      "Name": "Chroma_Base",
+      "Pipeline": "ChromaPipeline",
+      "Path": "lodestones/Chroma1-HD",
+      "Variant": null,
+      "Source": "Folder",
+      "IsDefault": false,
+      "IsGated": false,
+      "Status": "Pending",
+      "Link": "https://huggingface.co/lodestones/Chroma1-HD",
+      "MemoryProfile": [
+        {
+          "QualityMode": "Draft",
+          "MemoryModes": [ 2, 8, 14 ]
+        },
+        {
+          "QualityMode": "Standard",
+          "MemoryModes": [ 2, 13, 20 ]
+        },
+        {
+          "QualityMode": "Production",
+          "MemoryModes": [ 2, 23, 32 ]
+        }
+      ],
+      "BaseType": "bfloat16",
+      "ProcessTypes": [ "TextToImage", "ImageToImage" ],
+      "Resolutions": [
+        {
+          "Width": 1024,
+          "Height": 1536
+        },
+        {
+          "Width": 768,
+          "Height": 1344
+        },
+        {
+          "Width": 832,
+          "Height": 1216
+        },
+        {
+          "Width": 1024,
+          "Height": 1024,
+          "IsDefault": true
+        },
+        {
+          "Width": 1216,
+          "Height": 832
+        },
+        {
+          "Width": 1344,
+          "Height": 768
+        },
+        {
+          "Width": 1536,
+          "Height": 1024
+        }
+      ],
+      "DefaultOptions": {
+        "GuidanceScale": 4,
+        "GuidanceScale2": 0,
+        "Steps": 30,
+        "Steps2": 0,
+        "Height": 1024,
+        "Width": 1024,
+        "Frames": 0,
+        "FrameRate": 16,
+        "FrameChunk": 0,
+        "FrameChunkOverlap": 0,
+        "NoiseCondition": 0,
+        "Strength": 1,
+        "Scheduler": "FlowMatchEuler",
+        "Schedulers": {
+          "FlowMatchEuler": {
+            "Scheduler": "FlowMatchEuler",
+            "num_train_timesteps": 1000,
+            "shift": 3,
+            "use_dynamic_shifting": true,
+            "base_shift": 0.5,
+            "max_shift": 1.15,
+            "base_image_seq_len": 256,
+            "max_image_seq_len": 4096,
+            "invert_sigmas": false,
+            "shift_terminal": null,
+            "use_karras_sigmas": false,
+            "use_exponential_sigmas": false,
+            "use_beta_sigmas": false,
+            "time_shift_type": "exponential",
+            "stochastic_sampling": false
+          },
+          "UniPCMultistep": {
+            "Scheduler": "UniPCMultistep",
+            "num_train_timesteps": 1000,
+            "beta_start": 0.0001,
+            "beta_end": 0.02,
+            "beta_schedule": "linear",
+            "trained_betas": null,
+            "solver_order": 2,
+            "prediction_type": "flow_prediction",
+            "thresholding": false,
+            "dynamic_thresholding_ratio": 0.995,
+            "sample_max_value": 1,
+            "predict_x0": true,
+            "solver_type": "bh2",
+            "lower_order_final": true,
+            "use_karras_sigmas": false,
+            "use_exponential_sigmas": false,
+            "use_beta_sigmas": false,
+            "use_flow_sigmas": true,
+            "flow_shift": 3,
+            "timestep_spacing": "linspace",
+            "steps_offset": 0,
+            "final_sigmas_type": "zero",
+            "rescale_betas_zero_snr": false,
+            "use_dynamic_shifting": true,
+            "time_shift_type": "exponential",
+            "sigma_min": null,
+            "sigma_max": null,
+            "shift_terminal": null
+          },
+          "DPMSolverMultistep": {
+            "Scheduler": "DPMSolverMultistep",
+            "num_train_timesteps": 1000,
+            "beta_start": 0.0001,
+            "beta_end": 0.02,
+            "beta_schedule": "scaled_linear",
+            "trained_betas": null,
+            "solver_order": 2,
+            "prediction_type": "flow_prediction",
+            "thresholding": false,
+            "dynamic_thresholding_ratio": 0.995,
+            "sample_max_value": 1,
+            "algorithm_type": "dpmsolver\u002B\u002B",
+            "solver_type": "midpoint",
+            "euler_at_final": false,
+            "lower_order_final": true,
+            "use_karras_sigmas": false,
+            "use_exponential_sigmas": false,
+            "use_beta_sigmas": false,
+            "use_flow_sigmas": true,
+            "use_lu_lambdas": false,
+            "flow_shift": 3,
+            "timestep_spacing": "linspace",
+            "steps_offset": 0,
+            "final_sigmas_type": "zero",
+            "rescale_betas_zero_snr": false,
+            "use_dynamic_shifting": true,
+            "time_shift_type": "exponential"
+          }
+        },
+        "SampleRate": 24000,
+        "FrameOptions": null
+      }
+    },
+    {
+      "Backend": "Pytorch",
+      "Name": "CogVideoX_T2V_2B",
+      "Pipeline": "CogVideoXPipeline",
+      "Path": "zai-org/CogVideoX-5b-I2V",
+      "Variant": null,
+      "Source": "Folder",
+      "IsDefault": false,
+      "IsGated": false,
+      "Status": "Pending",
+      "Link": "https://huggingface.co/zai-org/CogVideoX-2b",
+      "MemoryProfile": [
+        {
+          "QualityMode": "Draft",
+          "MemoryModes": [ 2, 8, 14 ]
+        },
+        {
+          "QualityMode": "Standard",
+          "MemoryModes": [ 2, 13, 20 ]
+        },
+        {
+          "QualityMode": "Production",
+          "MemoryModes": [ 2, 23, 32 ]
+        }
+      ],
+      "BaseType": "bfloat16",
+      "ProcessTypes": [ "TextToVideo" ],
+      "Vendor": [ "Nvidia" ],
+      "Resolutions": [
+        {
+          "Width": 720,
+          "Height": 480,
+          "IsDefault": true
+        }
+      ],
+      "DefaultOptions": {
+        "GuidanceScale": 6,
+        "GuidanceScale2": 0,
+        "Steps": 50,
+        "Steps2": 0,
+        "Height": 480,
+        "Width": 720,
+        "Frames": 49,
+        "FrameRate": 8,
+        "FrameChunk": 0,
+        "FrameChunkOverlap": 0,
+        "NoiseCondition": 0,
+        "Strength": 1,
+        "Scheduler": "CogVideoXDDIM",
+        "Schedulers": {
+          "CogVideoXDDIM": {
+            "num_train_timesteps": 1000,
+            "beta_start": 0.00085,
+            "beta_end": 0.012,
+            "beta_schedule": "scaled_linear",
+            "trained_betas": null,
+            "set_alpha_to_one": true,
+            "prediction_type": "v_prediction",
+            "clip_sample": true,
+            "clip_sample_range": 1,
+            "sample_max_value": 1,
+            "timestep_spacing": "trailing",
+            "steps_offset": 0,
+            "rescale_betas_zero_snr": false,
+            "snr_shift_scale": 3
+          },
+          "CogVideoXDPM": {
+            "num_train_timesteps": 1000,
+            "beta_start": 0.00085,
+            "beta_end": 0.012,
+            "beta_schedule": "scaled_linear",
+            "trained_betas": null,
+            "set_alpha_to_one": false,
+            "clip_sample": true,
+            "clip_sample_range": 1,
+            "sample_max_value": 1,
+            "prediction_type": "v_prediction",
+            "timestep_spacing": "trailing",
+            "steps_offset": 0,
+            "rescale_betas_zero_snr": false,
+            "snr_shift_scale": 3
+          }
+        },
+        "SampleRate": 24000,
+        "FrameOptions": [ 17, 33, 49, 81, 161 ]
+      }
+    },
+    {
+      "Backend": "Pytorch",
+      "Name": "CogVideoX_T2V_5B",
+      "Pipeline": "CogVideoXPipeline",
+      "Path": "zai-org/CogVideoX-5b-I2V",
+      "Variant": null,
+      "Source": "Folder",
+      "IsDefault": false,
+      "IsGated": false,
+      "Status": "Pending",
+      "Link": "https://huggingface.co/zai-org/CogVideoX-5b",
+      "MemoryProfile": [
+        {
+          "QualityMode": "Draft",
+          "MemoryModes": [ 2, 8, 14 ]
+        },
+        {
+          "QualityMode": "Standard",
+          "MemoryModes": [ 2, 13, 20 ]
+        },
+        {
+          "QualityMode": "Production",
+          "MemoryModes": [ 2, 23, 32 ]
+        }
+      ],
+      "BaseType": "bfloat16",
+      "ProcessTypes": [ "TextToVideo" ],
+      "Vendor": [ "Nvidia" ],
+      "Resolutions": [
+        {
+          "Width": 720,
+          "Height": 480,
+          "IsDefault": true
+        }
+      ],
+      "DefaultOptions": {
+        "GuidanceScale": 6,
+        "GuidanceScale2": 0,
+        "Steps": 50,
+        "Steps2": 0,
+        "Height": 480,
+        "Width": 720,
+        "Frames": 49,
+        "FrameRate": 8,
+        "FrameChunk": 0,
+        "FrameChunkOverlap": 0,
+        "NoiseCondition": 0,
+        "Strength": 1,
+        "Scheduler": "CogVideoXDDIM",
+        "Schedulers": {
+          "CogVideoXDDIM": {
+            "num_train_timesteps": 1000,
+            "beta_start": 0.00085,
+            "beta_end": 0.012,
+            "beta_schedule": "scaled_linear",
+            "trained_betas": null,
+            "set_alpha_to_one": true,
+            "prediction_type": "v_prediction",
+            "clip_sample": true,
+            "clip_sample_range": 1,
+            "sample_max_value": 1,
+            "timestep_spacing": "trailing",
+            "steps_offset": 0,
+            "rescale_betas_zero_snr": false,
+            "snr_shift_scale": 3
+          },
+          "CogVideoXDPM": {
+            "num_train_timesteps": 1000,
+            "beta_start": 0.00085,
+            "beta_end": 0.012,
+            "beta_schedule": "scaled_linear",
+            "trained_betas": null,
+            "set_alpha_to_one": false,
+            "clip_sample": true,
+            "clip_sample_range": 1,
+            "sample_max_value": 1,
+            "prediction_type": "v_prediction",
+            "timestep_spacing": "trailing",
+            "steps_offset": 0,
+            "rescale_betas_zero_snr": false,
+            "snr_shift_scale": 3
+          }
+        },
+        "SampleRate": 24000,
+        "FrameOptions": [ 17, 33, 49, 81, 161 ]
+      }
+    },
+    {
+      "Backend": "Pytorch",
+      "Name": "CogVideoX_I2V_5B",
+      "Pipeline": "CogVideoXPipeline",
+      "Path": "zai-org/CogVideoX-5b-I2V",
+      "Variant": null,
+      "Source": "Folder",
+      "IsDefault": false,
+      "IsGated": false,
+      "Status": "Pending",
+      "Link": "https://huggingface.co/zai-org/CogVideoX-5b-I2V",
+      "MemoryProfile": [
+        {
+          "QualityMode": "Draft",
+          "MemoryModes": [ 2, 8, 14 ]
+        },
+        {
+          "QualityMode": "Standard",
+          "MemoryModes": [ 2, 13, 20 ]
+        },
+        {
+          "QualityMode": "Production",
+          "MemoryModes": [ 2, 23, 32 ]
+        }
+      ],
+      "BaseType": "bfloat16",
+      "ProcessTypes": [ "ImageToVideo" ],
+      "Vendor": [ "Nvidia" ],
+      "Resolutions": [
+        {
+          "Width": 720,
+          "Height": 480,
+          "IsDefault": true
+        }
+      ],
+      "DefaultOptions": {
+        "GuidanceScale": 6,
+        "GuidanceScale2": 0,
+        "Steps": 50,
+        "Steps2": 0,
+        "Height": 480,
+        "Width": 720,
+        "Frames": 49,
+        "FrameRate": 8,
+        "FrameChunk": 0,
+        "FrameChunkOverlap": 0,
+        "NoiseCondition": 0,
+        "Strength": 1,
+        "Scheduler": "CogVideoXDDIM",
+        "Schedulers": {
+          "CogVideoXDDIM": {
+            "num_train_timesteps": 1000,
+            "beta_start": 0.00085,
+            "beta_end": 0.012,
+            "beta_schedule": "scaled_linear",
+            "trained_betas": null,
+            "set_alpha_to_one": true,
+            "prediction_type": "v_prediction",
+            "clip_sample": true,
+            "clip_sample_range": 1,
+            "sample_max_value": 1,
+            "timestep_spacing": "trailing",
+            "steps_offset": 0,
+            "rescale_betas_zero_snr": false,
+            "snr_shift_scale": 3
+          },
+          "CogVideoXDPM": {
+            "num_train_timesteps": 1000,
+            "beta_start": 0.00085,
+            "beta_end": 0.012,
+            "beta_schedule": "scaled_linear",
+            "trained_betas": null,
+            "set_alpha_to_one": false,
+            "clip_sample": true,
+            "clip_sample_range": 1,
+            "sample_max_value": 1,
+            "prediction_type": "v_prediction",
+            "timestep_spacing": "trailing",
+            "steps_offset": 0,
+            "rescale_betas_zero_snr": false,
+            "snr_shift_scale": 3
+          }
+        },
+        "SampleRate": 24000,
+        "FrameOptions": [ 17, 33, 49, 81, 161 ]
+      }
+    },
+    {
+      "Backend": "Pytorch",
+      "Name": "CogVideoX_15_T2V_5B",
+      "Pipeline": "CogVideoXPipeline",
+      "Path": "zai-org/CogVideoX1.5-5B-I2V",
+      "Variant": null,
+      "Source": "Folder",
+      "IsDefault": false,
+      "IsGated": false,
+      "Status": "Pending",
+      "Link": "https://huggingface.co/zai-org/CogVideoX1.5-5B",
+      "MemoryProfile": [
+        {
+          "QualityMode": "Draft",
+          "MemoryModes": [ 2, 8, 14 ]
+        },
+        {
+          "QualityMode": "Standard",
+          "MemoryModes": [ 2, 13, 20 ]
+        },
+        {
+          "QualityMode": "Production",
+          "MemoryModes": [ 2, 23, 32 ]
+        }
+      ],
+      "BaseType": "bfloat16",
+      "ProcessTypes": [ "TextToVideo" ],
+      "Vendor": [ "Nvidia" ],
+      "Resolutions": [
+        {
+          "Width": 1360,
+          "Height": 768,
+          "IsDefault": true
+        }
+      ],
+      "DefaultOptions": {
+        "GuidanceScale": 5,
+        "GuidanceScale2": 0,
+        "Steps": 50,
+        "Steps2": 0,
+        "Height": 768,
+        "Width": 1360,
+        "Frames": 81,
+        "FrameRate": 16,
+        "FrameChunk": 0,
+        "FrameChunkOverlap": 0,
+        "NoiseCondition": 0,
+        "Strength": 1,
+        "Scheduler": "CogVideoXDDIM",
+        "Schedulers": {
+          "CogVideoXDDIM": {
+            "num_train_timesteps": 1000,
+            "beta_start": 0.00085,
+            "beta_end": 0.012,
+            "beta_schedule": "scaled_linear",
+            "trained_betas": null,
+            "set_alpha_to_one": true,
+            "prediction_type": "v_prediction",
+            "clip_sample": true,
+            "clip_sample_range": 1,
+            "sample_max_value": 1,
+            "timestep_spacing": "trailing",
+            "steps_offset": 0,
+            "rescale_betas_zero_snr": false,
+            "snr_shift_scale": 3
+          },
+          "CogVideoXDPM": {
+            "num_train_timesteps": 1000,
+            "beta_start": 0.00085,
+            "beta_end": 0.012,
+            "beta_schedule": "scaled_linear",
+            "trained_betas": null,
+            "set_alpha_to_one": false,
+            "clip_sample": true,
+            "clip_sample_range": 1,
+            "sample_max_value": 1,
+            "prediction_type": "v_prediction",
+            "timestep_spacing": "trailing",
+            "steps_offset": 0,
+            "rescale_betas_zero_snr": false,
+            "snr_shift_scale": 3
+          }
+        },
+        "SampleRate": 24000,
+        "FrameOptions": [ 17, 33, 49, 81, 161 ]
+      }
+    },
+    {
+      "Backend": "Pytorch",
+      "Name": "CogVideoX_15_I2V_5B",
+      "Pipeline": "CogVideoXPipeline",
+      "Path": "zai-org/CogVideoX1.5-5B-I2V",
+      "Variant": null,
+      "Source": "Folder",
+      "IsDefault": false,
+      "IsGated": false,
+      "Status": "Pending",
+      "Link": "https://huggingface.co/zai-org/CogVideoX1.5-5B-I2V",
+      "MemoryProfile": [
+        {
+          "QualityMode": "Draft",
+          "MemoryModes": [ 2, 8, 14 ]
+        },
+        {
+          "QualityMode": "Standard",
+          "MemoryModes": [ 2, 13, 20 ]
+        },
+        {
+          "QualityMode": "Production",
+          "MemoryModes": [ 2, 23, 32 ]
+        }
+      ],
+      "BaseType": "bfloat16",
+      "ProcessTypes": [ "ImageToVideo" ],
+      "Vendor": [ "Nvidia" ],
+      "Resolutions": [
+        {
+          "Width": 832,
+          "Height": 480,
+          "IsDefault": true
+        }
+      ],
+      "DefaultOptions": {
+        "GuidanceScale": 5,
+        "GuidanceScale2": 0,
+        "Steps": 50,
+        "Steps2": 0,
+        "Height": 768,
+        "Width": 1360,
+        "Frames": 81,
+        "FrameRate": 16,
+        "FrameChunk": 0,
+        "FrameChunkOverlap": 0,
+        "NoiseCondition": 0,
+        "Strength": 1,
+        "Scheduler": "CogVideoXDDIM",
+        "Schedulers": {
+          "CogVideoXDDIM": {
+            "num_train_timesteps": 1000,
+            "beta_start": 0.00085,
+            "beta_end": 0.012,
+            "beta_schedule": "scaled_linear",
+            "trained_betas": null,
+            "set_alpha_to_one": true,
+            "prediction_type": "v_prediction",
+            "clip_sample": true,
+            "clip_sample_range": 1,
+            "sample_max_value": 1,
+            "timestep_spacing": "trailing",
+            "steps_offset": 0,
+            "rescale_betas_zero_snr": false,
+            "snr_shift_scale": 3
+          },
+          "CogVideoXDPM": {
+            "num_train_timesteps": 1000,
+            "beta_start": 0.00085,
+            "beta_end": 0.012,
+            "beta_schedule": "scaled_linear",
+            "trained_betas": null,
+            "set_alpha_to_one": false,
+            "clip_sample": true,
+            "clip_sample_range": 1,
+            "sample_max_value": 1,
+            "prediction_type": "v_prediction",
+            "timestep_spacing": "trailing",
+            "steps_offset": 0,
+            "rescale_betas_zero_snr": false,
+            "snr_shift_scale": 3
+          }
+        },
+        "SampleRate": 24000,
+        "FrameOptions": [ 17, 33, 49, 81, 161 ]
+      }
+    },
+    {
+      "Backend": "Pytorch",
+      "Name": "Flux1_Dev",
+      "Pipeline": "FluxPipeline",
+      "Path": "TensorStack/FLUX.1-schnell-ts",
+      "Variant": null,
+      "Source": "Folder",
+      "IsDefault": false,
+      "IsGated": false,
+      "Status": "Pending",
+      "Link": "https://huggingface.co/TensorStack/FLUX.1-schnell-ts",
+      "MemoryProfile": [
+        {
+          "QualityMode": "Draft",
+          "MemoryModes": [ 2, 8, 14 ]
+        },
+        {
+          "QualityMode": "Standard",
+          "MemoryModes": [ 2, 13, 20 ]
+        },
+        {
+          "QualityMode": "Production",
+          "MemoryModes": [ 2, 23, 32 ]
+        }
+      ],
+      "BaseType": "bfloat16",
+      "ProcessTypes": [ "TextToImage", "ImageToImage", "ImageInpaint", "ImageControlNet" ],
+      "Resolutions": [
+        {
+          "Width": 1024,
+          "Height": 1536
+        },
+        {
+          "Width": 768,
+          "Height": 1344
+        },
+        {
+          "Width": 832,
+          "Height": 1216
+        },
+        {
+          "Width": 1024,
+          "Height": 1024,
+          "IsDefault": true
+        },
+        {
+          "Width": 1216,
+          "Height": 832
+        },
+        {
+          "Width": 1344,
+          "Height": 768
+        },
+        {
+          "Width": 1536,
+          "Height": 1024
+        }
+      ],
+      "DefaultOptions": {
+        "GuidanceScale": 0,
+        "GuidanceScale2": 3.5,
+        "Steps": 30,
+        "Steps2": 0,
+        "Height": 1024,
+        "Width": 1024,
+        "Frames": 0,
+        "FrameRate": 16,
+        "FrameChunk": 0,
+        "FrameChunkOverlap": 0,
+        "NoiseCondition": 0,
+        "Strength": 1,
+        "Scheduler": "FlowMatchEuler",
+        "Schedulers": {
+          "FlowMatchEuler": {
+            "Scheduler": "FlowMatchEuler",
+            "num_train_timesteps": 1000,
+            "shift": 3,
+            "use_dynamic_shifting": true,
+            "base_shift": 0.5,
+            "max_shift": 1.15,
+            "base_image_seq_len": 256,
+            "max_image_seq_len": 4096,
+            "invert_sigmas": false,
+            "shift_terminal": null,
+            "use_karras_sigmas": false,
+            "use_exponential_sigmas": false,
+            "use_beta_sigmas": false,
+            "time_shift_type": "exponential",
+            "stochastic_sampling": false
+          },
+          "UniPCMultistep": {
+            "Scheduler": "UniPCMultistep",
+            "num_train_timesteps": 1000,
+            "beta_start": 0.0001,
+            "beta_end": 0.02,
+            "beta_schedule": "linear",
+            "trained_betas": null,
+            "solver_order": 2,
+            "prediction_type": "flow_prediction",
+            "thresholding": false,
+            "dynamic_thresholding_ratio": 0.995,
+            "sample_max_value": 1,
+            "predict_x0": true,
+            "solver_type": "bh2",
+            "lower_order_final": true,
+            "use_karras_sigmas": false,
+            "use_exponential_sigmas": false,
+            "use_beta_sigmas": false,
+            "use_flow_sigmas": true,
+            "flow_shift": 3,
+            "timestep_spacing": "linspace",
+            "steps_offset": 0,
+            "final_sigmas_type": "zero",
+            "rescale_betas_zero_snr": false,
+            "use_dynamic_shifting": true,
+            "time_shift_type": "exponential",
+            "sigma_min": null,
+            "sigma_max": null,
+            "shift_terminal": null
+          },
+          "DPMSolverMultistep": {
+            "Scheduler": "DPMSolverMultistep",
+            "num_train_timesteps": 1000,
+            "beta_start": 0.0001,
+            "beta_end": 0.02,
+            "beta_schedule": "scaled_linear",
+            "trained_betas": null,
+            "solver_order": 2,
+            "prediction_type": "flow_prediction",
+            "thresholding": false,
+            "dynamic_thresholding_ratio": 0.995,
+            "sample_max_value": 1,
+            "algorithm_type": "dpmsolver\u002B\u002B",
+            "solver_type": "midpoint",
+            "euler_at_final": false,
+            "lower_order_final": true,
+            "use_karras_sigmas": false,
+            "use_exponential_sigmas": false,
+            "use_beta_sigmas": false,
+            "use_flow_sigmas": true,
+            "use_lu_lambdas": false,
+            "flow_shift": 3,
+            "timestep_spacing": "linspace",
+            "steps_offset": 0,
+            "final_sigmas_type": "zero",
+            "rescale_betas_zero_snr": false,
+            "use_dynamic_shifting": true,
+            "time_shift_type": "exponential"
+          }
+        },
+        "SampleRate": 24000,
+        "FrameOptions": null
+      }
+    },
+    {
+      "Backend": "Pytorch",
+      "Name": "Flux1_Schnell",
+      "Pipeline": "FluxPipeline",
+      "Path": "TensorStack/FLUX.1-dev-ts",
+      "Variant": null,
+      "Source": "Folder",
+      "IsDefault": false,
+      "IsGated": false,
+      "Status": "Pending",
+      "Link": "https://huggingface.co/TensorStack/FLUX.1-dev-ts",
+      "MemoryProfile": [
+        {
+          "QualityMode": "Draft",
+          "MemoryModes": [ 2, 8, 14 ]
+        },
+        {
+          "QualityMode": "Standard",
+          "MemoryModes": [ 2, 13, 20 ]
+        },
+        {
+          "QualityMode": "Production",
+          "MemoryModes": [ 2, 23, 32 ]
+        }
+      ],
+      "BaseType": "bfloat16",
+      "ProcessTypes": [ "TextToImage", "ImageToImage", "ImageInpaint" ],
+      "Resolutions": [
+        {
+          "Width": 1024,
+          "Height": 1536
+        },
+        {
+          "Width": 768,
+          "Height": 1344
+        },
+        {
+          "Width": 832,
+          "Height": 1216
+        },
+        {
+          "Width": 1024,
+          "Height": 1024,
+          "IsDefault": true
+        },
+        {
+          "Width": 1216,
+          "Height": 832
+        },
+        {
+          "Width": 1344,
+          "Height": 768
+        },
+        {
+          "Width": 1536,
+          "Height": 1024
+        }
+      ],
+      "DefaultOptions": {
+        "GuidanceScale": 0,
+        "GuidanceScale2": 0,
+        "Steps": 4,
+        "Steps2": 0,
+        "Height": 1024,
+        "Width": 1024,
+        "Frames": 0,
+        "FrameRate": 16,
+        "FrameChunk": 0,
+        "FrameChunkOverlap": 0,
+        "NoiseCondition": 0,
+        "Strength": 1,
+        "Scheduler": "FlowMatchEuler",
+        "Schedulers": {
+          "FlowMatchEuler": {
+            "Scheduler": "FlowMatchEuler",
+            "num_train_timesteps": 1000,
+            "shift": 3,
+            "use_dynamic_shifting": true,
+            "base_shift": 0.5,
+            "max_shift": 1.15,
+            "base_image_seq_len": 256,
+            "max_image_seq_len": 4096,
+            "invert_sigmas": false,
+            "shift_terminal": null,
+            "use_karras_sigmas": false,
+            "use_exponential_sigmas": false,
+            "use_beta_sigmas": false,
+            "time_shift_type": "exponential",
+            "stochastic_sampling": false
+          },
+          "UniPCMultistep": {
+            "Scheduler": "UniPCMultistep",
+            "num_train_timesteps": 1000,
+            "beta_start": 0.0001,
+            "beta_end": 0.02,
+            "beta_schedule": "linear",
+            "trained_betas": null,
+            "solver_order": 2,
+            "prediction_type": "flow_prediction",
+            "thresholding": false,
+            "dynamic_thresholding_ratio": 0.995,
+            "sample_max_value": 1,
+            "predict_x0": true,
+            "solver_type": "bh2",
+            "lower_order_final": true,
+            "use_karras_sigmas": false,
+            "use_exponential_sigmas": false,
+            "use_beta_sigmas": false,
+            "use_flow_sigmas": true,
+            "flow_shift": 3,
+            "timestep_spacing": "linspace",
+            "steps_offset": 0,
+            "final_sigmas_type": "zero",
+            "rescale_betas_zero_snr": false,
+            "use_dynamic_shifting": true,
+            "time_shift_type": "exponential",
+            "sigma_min": null,
+            "sigma_max": null,
+            "shift_terminal": null
+          },
+          "DPMSolverMultistep": {
+            "Scheduler": "DPMSolverMultistep",
+            "num_train_timesteps": 1000,
+            "beta_start": 0.0001,
+            "beta_end": 0.02,
+            "beta_schedule": "scaled_linear",
+            "trained_betas": null,
+            "solver_order": 2,
+            "prediction_type": "flow_prediction",
+            "thresholding": false,
+            "dynamic_thresholding_ratio": 0.995,
+            "sample_max_value": 1,
+            "algorithm_type": "dpmsolver\u002B\u002B",
+            "solver_type": "midpoint",
+            "euler_at_final": false,
+            "lower_order_final": true,
+            "use_karras_sigmas": false,
+            "use_exponential_sigmas": false,
+            "use_beta_sigmas": false,
+            "use_flow_sigmas": true,
+            "use_lu_lambdas": false,
+            "flow_shift": 3,
+            "timestep_spacing": "linspace",
+            "steps_offset": 0,
+            "final_sigmas_type": "zero",
+            "rescale_betas_zero_snr": false,
+            "use_dynamic_shifting": true,
+            "time_shift_type": "exponential"
+          }
+        },
+        "SampleRate": 24000,
+        "FrameOptions": null
+      }
+    },
+    {
+      "Backend": "Pytorch",
+      "Name": "Flux1_Kontext",
+      "Pipeline": "FluxPipeline",
+      "Path": "TensorStack/FLUX.1-Kontext-dev-ts",
+      "Variant": null,
+      "Source": "Folder",
+      "IsDefault": false,
+      "IsGated": false,
+      "Status": "Pending",
+      "Link": "https://huggingface.co/TensorStack/FLUX.1-Kontext-dev-ts",
+      "MemoryProfile": [
+        {
+          "QualityMode": "Draft",
+          "MemoryModes": [ 2, 8, 14 ]
+        },
+        {
+          "QualityMode": "Standard",
+          "MemoryModes": [ 2, 13, 20 ]
+        },
+        {
+          "QualityMode": "Production",
+          "MemoryModes": [ 2, 23, 32 ]
+        }
+      ],
+      "BaseType": "bfloat16",
+      "ProcessTypes": [ "ImageEdit" ],
+      "Resolutions": [
+        {
+          "Width": 1024,
+          "Height": 1536
+        },
+        {
+          "Width": 768,
+          "Height": 1344
+        },
+        {
+          "Width": 832,
+          "Height": 1216
+        },
+        {
+          "Width": 1024,
+          "Height": 1024,
+          "IsDefault": true
+        },
+        {
+          "Width": 1216,
+          "Height": 832
+        },
+        {
+          "Width": 1344,
+          "Height": 768
+        },
+        {
+          "Width": 1536,
+          "Height": 1024
+        }
+      ],
+      "DefaultOptions": {
+        "GuidanceScale": 0,
+        "GuidanceScale2": 3.5,
+        "Steps": 30,
+        "Steps2": 0,
+        "Height": 0,
+        "Width": 1024,
+        "Frames": 0,
+        "FrameRate": 16,
+        "FrameChunk": 0,
+        "FrameChunkOverlap": 0,
+        "NoiseCondition": 0,
+        "Strength": 1,
+        "Scheduler": "FlowMatchEuler",
+        "Schedulers": {
+          "FlowMatchEuler": {
+            "Scheduler": "FlowMatchEuler",
+            "num_train_timesteps": 1000,
+            "shift": 3,
+            "use_dynamic_shifting": true,
+            "base_shift": 0.5,
+            "max_shift": 1.15,
+            "base_image_seq_len": 256,
+            "max_image_seq_len": 4096,
+            "invert_sigmas": false,
+            "shift_terminal": null,
+            "use_karras_sigmas": false,
+            "use_exponential_sigmas": false,
+            "use_beta_sigmas": false,
+            "time_shift_type": "exponential",
+            "stochastic_sampling": false
+          },
+          "UniPCMultistep": {
+            "Scheduler": "UniPCMultistep",
+            "num_train_timesteps": 1000,
+            "beta_start": 0.0001,
+            "beta_end": 0.02,
+            "beta_schedule": "linear",
+            "trained_betas": null,
+            "solver_order": 2,
+            "prediction_type": "flow_prediction",
+            "thresholding": false,
+            "dynamic_thresholding_ratio": 0.995,
+            "sample_max_value": 1,
+            "predict_x0": true,
+            "solver_type": "bh2",
+            "lower_order_final": true,
+            "use_karras_sigmas": false,
+            "use_exponential_sigmas": false,
+            "use_beta_sigmas": false,
+            "use_flow_sigmas": true,
+            "flow_shift": 3,
+            "timestep_spacing": "linspace",
+            "steps_offset": 0,
+            "final_sigmas_type": "zero",
+            "rescale_betas_zero_snr": false,
+            "use_dynamic_shifting": true,
+            "time_shift_type": "exponential",
+            "sigma_min": null,
+            "sigma_max": null,
+            "shift_terminal": null
+          },
+          "DPMSolverMultistep": {
+            "Scheduler": "DPMSolverMultistep",
+            "num_train_timesteps": 1000,
+            "beta_start": 0.0001,
+            "beta_end": 0.02,
+            "beta_schedule": "scaled_linear",
+            "trained_betas": null,
+            "solver_order": 2,
+            "prediction_type": "flow_prediction",
+            "thresholding": false,
+            "dynamic_thresholding_ratio": 0.995,
+            "sample_max_value": 1,
+            "algorithm_type": "dpmsolver\u002B\u002B",
+            "solver_type": "midpoint",
+            "euler_at_final": false,
+            "lower_order_final": true,
+            "use_karras_sigmas": false,
+            "use_exponential_sigmas": false,
+            "use_beta_sigmas": false,
+            "use_flow_sigmas": true,
+            "use_lu_lambdas": false,
+            "flow_shift": 3,
+            "timestep_spacing": "linspace",
+            "steps_offset": 0,
+            "final_sigmas_type": "zero",
+            "rescale_betas_zero_snr": false,
+            "use_dynamic_shifting": true,
+            "time_shift_type": "exponential"
+          }
+        },
+        "SampleRate": 24000,
+        "FrameOptions": null
+      }
+    },
+    {
+      "Backend": "Pytorch",
+      "Name": "Flux2_Dev",
+      "Pipeline": "Flux2Pipeline",
+      "Path": "black-forest-labs/FLUX.2-dev",
+      "Variant": null,
+      "Source": "Folder",
+      "IsDefault": false,
+      "IsGated": false,
+      "Status": "Pending",
+      "Link": "https://huggingface.co/black-forest-labs/FLUX.2-dev",
+      "MemoryProfile": [
+        {
+          "QualityMode": "Draft",
+          "MemoryModes": [ 2, 4, 6 ]
+        },
+        {
+          "QualityMode": "Standard",
+          "MemoryModes": [ 2, 6, 10 ]
+        },
+        {
+          "QualityMode": "Production",
+          "MemoryModes": [ 2, 10, 16 ]
+        }
+      ],
+      "BaseType": "bfloat16",
+      "ProcessTypes": [ "TextToImage", "ImageEdit" ],
+      "Resolutions": [
+        {
+          "Width": 1024,
+          "Height": 1536
+        },
+        {
+          "Width": 768,
+          "Height": 1344
+        },
+        {
+          "Width": 832,
+          "Height": 1216
+        },
+        {
+          "Width": 1024,
+          "Height": 1024,
+          "IsDefault": true
+        },
+        {
+          "Width": 1216,
+          "Height": 832
+        },
+        {
+          "Width": 1344,
+          "Height": 768
+        },
+        {
+          "Width": 1536,
+          "Height": 1024
+        }
+      ],
+      "DefaultOptions": {
+        "GuidanceScale": 2.5,
+        "GuidanceScale2": 0,
+        "Steps": 4,
+        "Steps2": 0,
+        "Height": 1024,
+        "Width": 1024,
+        "Frames": 0,
+        "FrameRate": 16,
+        "FrameChunk": 0,
+        "FrameChunkOverlap": 0,
+        "NoiseCondition": 0,
+        "Strength": 1,
+        "Scheduler": "FlowMatchEuler",
+        "Schedulers": {
+          "FlowMatchEuler": {
+            "Scheduler": "FlowMatchEuler",
+            "num_train_timesteps": 1000,
+            "shift": 3,
+            "use_dynamic_shifting": true,
+            "base_shift": 0.5,
+            "max_shift": 1.15,
+            "base_image_seq_len": 256,
+            "max_image_seq_len": 4096,
+            "invert_sigmas": false,
+            "shift_terminal": null,
+            "use_karras_sigmas": false,
+            "use_exponential_sigmas": false,
+            "use_beta_sigmas": false,
+            "time_shift_type": "exponential",
+            "stochastic_sampling": false
+          },
+          "UniPCMultistep": {
+            "Scheduler": "UniPCMultistep",
+            "num_train_timesteps": 1000,
+            "beta_start": 0.0001,
+            "beta_end": 0.02,
+            "beta_schedule": "linear",
+            "trained_betas": null,
+            "solver_order": 2,
+            "prediction_type": "flow_prediction",
+            "thresholding": false,
+            "dynamic_thresholding_ratio": 0.995,
+            "sample_max_value": 1,
+            "predict_x0": true,
+            "solver_type": "bh2",
+            "lower_order_final": true,
+            "use_karras_sigmas": false,
+            "use_exponential_sigmas": false,
+            "use_beta_sigmas": false,
+            "use_flow_sigmas": true,
+            "flow_shift": 3,
+            "timestep_spacing": "linspace",
+            "steps_offset": 0,
+            "final_sigmas_type": "zero",
+            "rescale_betas_zero_snr": false,
+            "use_dynamic_shifting": true,
+            "time_shift_type": "exponential",
+            "sigma_min": null,
+            "sigma_max": null,
+            "shift_terminal": null
+          },
+          "DPMSolverMultistep": {
+            "Scheduler": "DPMSolverMultistep",
+            "num_train_timesteps": 1000,
+            "beta_start": 0.0001,
+            "beta_end": 0.02,
+            "beta_schedule": "scaled_linear",
+            "trained_betas": null,
+            "solver_order": 2,
+            "prediction_type": "flow_prediction",
+            "thresholding": false,
+            "dynamic_thresholding_ratio": 0.995,
+            "sample_max_value": 1,
+            "algorithm_type": "dpmsolver\u002B\u002B",
+            "solver_type": "midpoint",
+            "euler_at_final": false,
+            "lower_order_final": true,
+            "use_karras_sigmas": false,
+            "use_exponential_sigmas": false,
+            "use_beta_sigmas": false,
+            "use_flow_sigmas": true,
+            "use_lu_lambdas": false,
+            "flow_shift": 3,
+            "timestep_spacing": "linspace",
+            "steps_offset": 0,
+            "final_sigmas_type": "zero",
+            "rescale_betas_zero_snr": false,
+            "use_dynamic_shifting": true,
+            "time_shift_type": "exponential"
+          }
+        },
+        "SampleRate": 24000,
+        "FrameOptions": null
+      }
+    },
+    {
+      "Backend": "Pytorch",
+      "Name": "Flux2_Klein_4B",
+      "Pipeline": "Flux2KleinPipeline",
+      "Path": "black-forest-labs/FLUX.2-klein-base-4B",
+      "Variant": null,
+      "Source": "Folder",
+      "IsDefault": false,
+      "IsGated": false,
+      "Status": "Pending",
+      "Link": "https://huggingface.co/black-forest-labs/FLUX.2-klein-base-4B",
+      "MemoryProfile": [
+        {
+          "QualityMode": "Draft",
+          "MemoryModes": [ 2, 4, 6 ]
+        },
+        {
+          "QualityMode": "Standard",
+          "MemoryModes": [ 2, 6, 10 ]
+        },
+        {
+          "QualityMode": "Production",
+          "MemoryModes": [ 2, 10, 16 ]
+        }
+      ],
+      "BaseType": "bfloat16",
+      "ProcessTypes": [ "TextToImage", "ImageToImage", "ImageEdit" ],
+      "Resolutions": [
+        {
+          "Width": 1024,
+          "Height": 1536
+        },
+        {
+          "Width": 768,
+          "Height": 1344
+        },
+        {
+          "Width": 832,
+          "Height": 1216
+        },
+        {
+          "Width": 1024,
+          "Height": 1024,
+          "IsDefault": true
+        },
+        {
+          "Width": 1216,
+          "Height": 832
+        },
+        {
+          "Width": 1344,
+          "Height": 768
+        },
+        {
+          "Width": 1536,
+          "Height": 1024
+        }
+      ],
+      "DefaultOptions": {
+        "GuidanceScale": 4,
+        "GuidanceScale2": 0,
+        "Steps": 50,
+        "Steps2": 0,
+        "Height": 1024,
+        "Width": 1024,
+        "Frames": 0,
+        "FrameRate": 16,
+        "FrameChunk": 0,
+        "FrameChunkOverlap": 0,
+        "NoiseCondition": 0,
+        "Strength": 1,
+        "Scheduler": "FlowMatchEuler",
+        "Schedulers": {
+          "FlowMatchEuler": {
+            "Scheduler": "FlowMatchEuler",
+            "num_train_timesteps": 1000,
+            "shift": 3,
+            "use_dynamic_shifting": true,
+            "base_shift": 0.5,
+            "max_shift": 1.15,
+            "base_image_seq_len": 256,
+            "max_image_seq_len": 4096,
+            "invert_sigmas": false,
+            "shift_terminal": null,
+            "use_karras_sigmas": false,
+            "use_exponential_sigmas": false,
+            "use_beta_sigmas": false,
+            "time_shift_type": "exponential",
+            "stochastic_sampling": false
+          },
+          "UniPCMultistep": {
+            "Scheduler": "UniPCMultistep",
+            "num_train_timesteps": 1000,
+            "beta_start": 0.0001,
+            "beta_end": 0.02,
+            "beta_schedule": "linear",
+            "trained_betas": null,
+            "solver_order": 2,
+            "prediction_type": "flow_prediction",
+            "thresholding": false,
+            "dynamic_thresholding_ratio": 0.995,
+            "sample_max_value": 1,
+            "predict_x0": true,
+            "solver_type": "bh2",
+            "lower_order_final": true,
+            "use_karras_sigmas": false,
+            "use_exponential_sigmas": false,
+            "use_beta_sigmas": false,
+            "use_flow_sigmas": true,
+            "flow_shift": 3,
+            "timestep_spacing": "linspace",
+            "steps_offset": 0,
+            "final_sigmas_type": "zero",
+            "rescale_betas_zero_snr": false,
+            "use_dynamic_shifting": true,
+            "time_shift_type": "exponential",
+            "sigma_min": null,
+            "sigma_max": null,
+            "shift_terminal": null
+          },
+          "DPMSolverMultistep": {
+            "Scheduler": "DPMSolverMultistep",
+            "num_train_timesteps": 1000,
+            "beta_start": 0.0001,
+            "beta_end": 0.02,
+            "beta_schedule": "scaled_linear",
+            "trained_betas": null,
+            "solver_order": 2,
+            "prediction_type": "flow_prediction",
+            "thresholding": false,
+            "dynamic_thresholding_ratio": 0.995,
+            "sample_max_value": 1,
+            "algorithm_type": "dpmsolver\u002B\u002B",
+            "solver_type": "midpoint",
+            "euler_at_final": false,
+            "lower_order_final": true,
+            "use_karras_sigmas": false,
+            "use_exponential_sigmas": false,
+            "use_beta_sigmas": false,
+            "use_flow_sigmas": true,
+            "use_lu_lambdas": false,
+            "flow_shift": 3,
+            "timestep_spacing": "linspace",
+            "steps_offset": 0,
+            "final_sigmas_type": "zero",
+            "rescale_betas_zero_snr": false,
+            "use_dynamic_shifting": true,
+            "time_shift_type": "exponential"
+          }
+        },
+        "SampleRate": 24000,
+        "FrameOptions": null
+      }
+    },
+    {
+      "Backend": "Pytorch",
+      "Name": "Flux2_Klein_4B_D",
+      "Pipeline": "Flux2KleinPipeline",
+      "Path": "black-forest-labs/FLUX.2-klein-base-4B",
+      "Variant": null,
+      "Source": "Folder",
+      "IsDefault": false,
+      "IsGated": false,
+      "Status": "Pending",
+      "Link": "https://huggingface.co/black-forest-labs/FLUX.2-klein-4B",
+      "MemoryProfile": [
+        {
+          "QualityMode": "Draft",
+          "MemoryModes": [ 2, 4, 6 ]
+        },
+        {
+          "QualityMode": "Standard",
+          "MemoryModes": [ 2, 6, 10 ]
+        },
+        {
+          "QualityMode": "Production",
+          "MemoryModes": [ 2, 10, 16 ]
+        }
+      ],
+      "BaseType": "bfloat16",
+      "ProcessTypes": [ "TextToImage", "ImageToImage", "ImageEdit" ],
+      "Resolutions": [
+        {
+          "Width": 1024,
+          "Height": 1536
+        },
+        {
+          "Width": 768,
+          "Height": 1344
+        },
+        {
+          "Width": 832,
+          "Height": 1216
+        },
+        {
+          "Width": 1024,
+          "Height": 1024,
+          "IsDefault": true
+        },
+        {
+          "Width": 1216,
+          "Height": 832
+        },
+        {
+          "Width": 1344,
+          "Height": 768
+        },
+        {
+          "Width": 1536,
+          "Height": 1024
+        }
+      ],
+      "DefaultOptions": {
+        "GuidanceScale": 0,
+        "GuidanceScale2": 0,
+        "Steps": 4,
+        "Steps2": 0,
+        "Height": 1024,
+        "Width": 1024,
+        "Frames": 0,
+        "FrameRate": 16,
+        "FrameChunk": 0,
+        "FrameChunkOverlap": 0,
+        "NoiseCondition": 0,
+        "Strength": 1,
+        "Scheduler": "FlowMatchEuler",
+        "Schedulers": {
+          "FlowMatchEuler": {
+            "Scheduler": "FlowMatchEuler",
+            "num_train_timesteps": 1000,
+            "shift": 3,
+            "use_dynamic_shifting": true,
+            "base_shift": 0.5,
+            "max_shift": 1.15,
+            "base_image_seq_len": 256,
+            "max_image_seq_len": 4096,
+            "invert_sigmas": false,
+            "shift_terminal": null,
+            "use_karras_sigmas": false,
+            "use_exponential_sigmas": false,
+            "use_beta_sigmas": false,
+            "time_shift_type": "exponential",
+            "stochastic_sampling": false
+          },
+          "UniPCMultistep": {
+            "Scheduler": "UniPCMultistep",
+            "num_train_timesteps": 1000,
+            "beta_start": 0.0001,
+            "beta_end": 0.02,
+            "beta_schedule": "linear",
+            "trained_betas": null,
+            "solver_order": 2,
+            "prediction_type": "flow_prediction",
+            "thresholding": false,
+            "dynamic_thresholding_ratio": 0.995,
+            "sample_max_value": 1,
+            "predict_x0": true,
+            "solver_type": "bh2",
+            "lower_order_final": true,
+            "use_karras_sigmas": false,
+            "use_exponential_sigmas": false,
+            "use_beta_sigmas": false,
+            "use_flow_sigmas": true,
+            "flow_shift": 3,
+            "timestep_spacing": "linspace",
+            "steps_offset": 0,
+            "final_sigmas_type": "zero",
+            "rescale_betas_zero_snr": false,
+            "use_dynamic_shifting": true,
+            "time_shift_type": "exponential",
+            "sigma_min": null,
+            "sigma_max": null,
+            "shift_terminal": null
+          },
+          "DPMSolverMultistep": {
+            "Scheduler": "DPMSolverMultistep",
+            "num_train_timesteps": 1000,
+            "beta_start": 0.0001,
+            "beta_end": 0.02,
+            "beta_schedule": "scaled_linear",
+            "trained_betas": null,
+            "solver_order": 2,
+            "prediction_type": "flow_prediction",
+            "thresholding": false,
+            "dynamic_thresholding_ratio": 0.995,
+            "sample_max_value": 1,
+            "algorithm_type": "dpmsolver\u002B\u002B",
+            "solver_type": "midpoint",
+            "euler_at_final": false,
+            "lower_order_final": true,
+            "use_karras_sigmas": false,
+            "use_exponential_sigmas": false,
+            "use_beta_sigmas": false,
+            "use_flow_sigmas": true,
+            "use_lu_lambdas": false,
+            "flow_shift": 3,
+            "timestep_spacing": "linspace",
+            "steps_offset": 0,
+            "final_sigmas_type": "zero",
+            "rescale_betas_zero_snr": false,
+            "use_dynamic_shifting": true,
+            "time_shift_type": "exponential"
+          }
+        },
+        "SampleRate": 24000,
+        "FrameOptions": null
+      }
+    },
+    {
+      "Backend": "Pytorch",
+      "Name": "Flux2_Klein_9B",
+      "Pipeline": "Flux2KleinPipeline",
+      "Path": "black-forest-labs/FLUX.2-klein-base-9B",
+      "Variant": null,
+      "Source": "Folder",
+      "IsDefault": false,
+      "IsGated": false,
+      "Status": "Pending",
+      "Link": "https://huggingface.co/black-forest-labs/FLUX.2-klein-base-9B",
+      "MemoryProfile": [
+        {
+          "QualityMode": "Draft",
+          "MemoryModes": [ 4, 6, 12 ]
+        },
+        {
+          "QualityMode": "Standard",
+          "MemoryModes": [ 4, 10, 20 ]
+        },
+        {
+          "QualityMode": "Production",
+          "MemoryModes": [ 4, 20, 35 ]
+        }
+      ],
+      "BaseType": "bfloat16",
+      "ProcessTypes": [ "TextToImage", "ImageToImage", "ImageEdit" ],
+      "Resolutions": [
+        {
+          "Width": 1024,
+          "Height": 1536
+        },
+        {
+          "Width": 768,
+          "Height": 1344
+        },
+        {
+          "Width": 832,
+          "Height": 1216
+        },
+        {
+          "Width": 1024,
+          "Height": 1024,
+          "IsDefault": true
+        },
+        {
+          "Width": 1216,
+          "Height": 832
+        },
+        {
+          "Width": 1344,
+          "Height": 768
+        },
+        {
+          "Width": 1536,
+          "Height": 1024
+        }
+      ],
+      "DefaultOptions": {
+        "GuidanceScale": 4,
+        "GuidanceScale2": 0,
+        "Steps": 50,
+        "Steps2": 0,
+        "Height": 1024,
+        "Width": 1024,
+        "Frames": 0,
+        "FrameRate": 16,
+        "FrameChunk": 0,
+        "FrameChunkOverlap": 0,
+        "NoiseCondition": 0,
+        "Strength": 1,
+        "Scheduler": "FlowMatchEuler",
+        "Schedulers": {
+          "FlowMatchEuler": {
+            "Scheduler": "FlowMatchEuler",
+            "num_train_timesteps": 1000,
+            "shift": 3,
+            "use_dynamic_shifting": true,
+            "base_shift": 0.5,
+            "max_shift": 1.15,
+            "base_image_seq_len": 256,
+            "max_image_seq_len": 4096,
+            "invert_sigmas": false,
+            "shift_terminal": null,
+            "use_karras_sigmas": false,
+            "use_exponential_sigmas": false,
+            "use_beta_sigmas": false,
+            "time_shift_type": "exponential",
+            "stochastic_sampling": false
+          },
+          "UniPCMultistep": {
+            "Scheduler": "UniPCMultistep",
+            "num_train_timesteps": 1000,
+            "beta_start": 0.0001,
+            "beta_end": 0.02,
+            "beta_schedule": "linear",
+            "trained_betas": null,
+            "solver_order": 2,
+            "prediction_type": "flow_prediction",
+            "thresholding": false,
+            "dynamic_thresholding_ratio": 0.995,
+            "sample_max_value": 1,
+            "predict_x0": true,
+            "solver_type": "bh2",
+            "lower_order_final": true,
+            "use_karras_sigmas": false,
+            "use_exponential_sigmas": false,
+            "use_beta_sigmas": false,
+            "use_flow_sigmas": true,
+            "flow_shift": 3,
+            "timestep_spacing": "linspace",
+            "steps_offset": 0,
+            "final_sigmas_type": "zero",
+            "rescale_betas_zero_snr": false,
+            "use_dynamic_shifting": true,
+            "time_shift_type": "exponential",
+            "sigma_min": null,
+            "sigma_max": null,
+            "shift_terminal": null
+          },
+          "DPMSolverMultistep": {
+            "Scheduler": "DPMSolverMultistep",
+            "num_train_timesteps": 1000,
+            "beta_start": 0.0001,
+            "beta_end": 0.02,
+            "beta_schedule": "scaled_linear",
+            "trained_betas": null,
+            "solver_order": 2,
+            "prediction_type": "flow_prediction",
+            "thresholding": false,
+            "dynamic_thresholding_ratio": 0.995,
+            "sample_max_value": 1,
+            "algorithm_type": "dpmsolver\u002B\u002B",
+            "solver_type": "midpoint",
+            "euler_at_final": false,
+            "lower_order_final": true,
+            "use_karras_sigmas": false,
+            "use_exponential_sigmas": false,
+            "use_beta_sigmas": false,
+            "use_flow_sigmas": true,
+            "use_lu_lambdas": false,
+            "flow_shift": 3,
+            "timestep_spacing": "linspace",
+            "steps_offset": 0,
+            "final_sigmas_type": "zero",
+            "rescale_betas_zero_snr": false,
+            "use_dynamic_shifting": true,
+            "time_shift_type": "exponential"
+          }
+        },
+        "SampleRate": 24000,
+        "FrameOptions": null
+      }
+    },
+    {
+      "Backend": "Pytorch",
+      "Name": "Flux2_Klein_9B_D",
+      "Pipeline": "Flux2KleinPipeline",
+      "Path": "black-forest-labs/FLUX.2-klein-base-9B",
+      "Variant": null,
+      "Source": "Folder",
+      "IsDefault": false,
+      "IsGated": false,
+      "Status": "Pending",
+      "Link": "https://huggingface.co/black-forest-labs/FLUX.2-klein-9B",
+      "MemoryProfile": [
+        {
+          "QualityMode": "Draft",
+          "MemoryModes": [ 4, 6, 12 ]
+        },
+        {
+          "QualityMode": "Standard",
+          "MemoryModes": [ 4, 10, 20 ]
+        },
+        {
+          "QualityMode": "Production",
+          "MemoryModes": [ 4, 20, 35 ]
+        }
+      ],
+      "BaseType": "bfloat16",
+      "ProcessTypes": [ "TextToImage", "ImageToImage", "ImageEdit" ],
+      "Resolutions": [
+        {
+          "Width": 1024,
+          "Height": 1536
+        },
+        {
+          "Width": 768,
+          "Height": 1344
+        },
+        {
+          "Width": 832,
+          "Height": 1216
+        },
+        {
+          "Width": 1024,
+          "Height": 1024,
+          "IsDefault": true
+        },
+        {
+          "Width": 1216,
+          "Height": 832
+        },
+        {
+          "Width": 1344,
+          "Height": 768
+        },
+        {
+          "Width": 1536,
+          "Height": 1024
+        }
+      ],
+      "DefaultOptions": {
+        "GuidanceScale": 0,
+        "GuidanceScale2": 0,
+        "Steps": 4,
+        "Steps2": 0,
+        "Height": 1024,
+        "Width": 1024,
+        "Frames": 0,
+        "FrameRate": 16,
+        "FrameChunk": 0,
+        "FrameChunkOverlap": 0,
+        "NoiseCondition": 0,
+        "Strength": 1,
+        "Scheduler": "FlowMatchEuler",
+        "Schedulers": {
+          "FlowMatchEuler": {
+            "Scheduler": "FlowMatchEuler",
+            "num_train_timesteps": 1000,
+            "shift": 3,
+            "use_dynamic_shifting": true,
+            "base_shift": 0.5,
+            "max_shift": 1.15,
+            "base_image_seq_len": 256,
+            "max_image_seq_len": 4096,
+            "invert_sigmas": false,
+            "shift_terminal": null,
+            "use_karras_sigmas": false,
+            "use_exponential_sigmas": false,
+            "use_beta_sigmas": false,
+            "time_shift_type": "exponential",
+            "stochastic_sampling": false
+          },
+          "UniPCMultistep": {
+            "Scheduler": "UniPCMultistep",
+            "num_train_timesteps": 1000,
+            "beta_start": 0.0001,
+            "beta_end": 0.02,
+            "beta_schedule": "linear",
+            "trained_betas": null,
+            "solver_order": 2,
+            "prediction_type": "flow_prediction",
+            "thresholding": false,
+            "dynamic_thresholding_ratio": 0.995,
+            "sample_max_value": 1,
+            "predict_x0": true,
+            "solver_type": "bh2",
+            "lower_order_final": true,
+            "use_karras_sigmas": false,
+            "use_exponential_sigmas": false,
+            "use_beta_sigmas": false,
+            "use_flow_sigmas": true,
+            "flow_shift": 3,
+            "timestep_spacing": "linspace",
+            "steps_offset": 0,
+            "final_sigmas_type": "zero",
+            "rescale_betas_zero_snr": false,
+            "use_dynamic_shifting": true,
+            "time_shift_type": "exponential",
+            "sigma_min": null,
+            "sigma_max": null,
+            "shift_terminal": null
+          },
+          "DPMSolverMultistep": {
+            "Scheduler": "DPMSolverMultistep",
+            "num_train_timesteps": 1000,
+            "beta_start": 0.0001,
+            "beta_end": 0.02,
+            "beta_schedule": "scaled_linear",
+            "trained_betas": null,
+            "solver_order": 2,
+            "prediction_type": "flow_prediction",
+            "thresholding": false,
+            "dynamic_thresholding_ratio": 0.995,
+            "sample_max_value": 1,
+            "algorithm_type": "dpmsolver\u002B\u002B",
+            "solver_type": "midpoint",
+            "euler_at_final": false,
+            "lower_order_final": true,
+            "use_karras_sigmas": false,
+            "use_exponential_sigmas": false,
+            "use_beta_sigmas": false,
+            "use_flow_sigmas": true,
+            "use_lu_lambdas": false,
+            "flow_shift": 3,
+            "timestep_spacing": "linspace",
+            "steps_offset": 0,
+            "final_sigmas_type": "zero",
+            "rescale_betas_zero_snr": false,
+            "use_dynamic_shifting": true,
+            "time_shift_type": "exponential"
+          }
+        },
+        "SampleRate": 24000,
+        "FrameOptions": null
+      }
+    },
+    {
+      "Backend": "Pytorch",
+      "Name": "Kandinsky5_T2I_Lite",
+      "Pipeline": "Kandinsky5Pipeline",
+      "Path": "kandinskylab/Kandinsky-5.0-I2I-Lite-pretrain-Diffusers",
+      "Variant": null,
+      "Source": "Folder",
+      "IsDefault": false,
+      "IsGated": false,
+      "Status": "Pending",
+      "Link": "https://huggingface.co/kandinskylab",
+      "MemoryProfile": [
+        {
+          "QualityMode": "Draft",
+          "MemoryModes": [ 2, 8, 12 ]
+        },
+        {
+          "QualityMode": "Standard",
+          "MemoryModes": [ 2, 14, 18 ]
+        },
+        {
+          "QualityMode": "Production",
+          "MemoryModes": [ 2, 18, 32 ]
+        }
+      ],
+      "BaseType": "bfloat16",
+      "ProcessTypes": [ "TextToImage" ],
+      "Vendor": [ "Nvidia" ],
+      "Resolutions": [
+        {
+          "Width": 640,
+          "Height": 1408
+        },
+        {
+          "Width": 768,
+          "Height": 1280
+        },
+        {
+          "Width": 896,
+          "Height": 1152
+        },
+        {
+          "Width": 1024,
+          "Height": 1024,
+          "IsDefault": true
+        },
+        {
+          "Width": 1152,
+          "Height": 896
+        },
+        {
+          "Width": 1280,
+          "Height": 768
+        },
+        {
+          "Width": 1408,
+          "Height": 640
+        }
+      ],
+      "DefaultOptions": {
+        "GuidanceScale": 3.5,
+        "GuidanceScale2": 0,
+        "Steps": 50,
+        "Steps2": 0,
+        "Height": 1024,
+        "Width": 1024,
+        "Frames": 0,
+        "FrameRate": 16,
+        "FrameChunk": 0,
+        "FrameChunkOverlap": 0,
+        "NoiseCondition": 0,
+        "Strength": 1,
+        "Scheduler": "FlowMatchEuler",
+        "Schedulers": {
+          "FlowMatchEuler": {
+            "Scheduler": "FlowMatchEuler",
+            "num_train_timesteps": 1000,
+            "shift": 5,
+            "use_dynamic_shifting": false,
+            "base_shift": 0.5,
+            "max_shift": 1.15,
+            "base_image_seq_len": 256,
+            "max_image_seq_len": 4096,
+            "invert_sigmas": false,
+            "shift_terminal": null,
+            "use_karras_sigmas": false,
+            "use_exponential_sigmas": false,
+            "use_beta_sigmas": false,
+            "time_shift_type": "exponential",
+            "stochastic_sampling": false
+          }
+        },
+        "SampleRate": 24000,
+        "FrameOptions": null
+      }
+    },
+    {
+      "Backend": "Pytorch",
+      "Name": "Kandinsky5_I2I_Lite",
+      "Pipeline": "Kandinsky5Pipeline",
+      "Path": "kandinskylab/Kandinsky-5.0-I2I-Lite-pretrain-Diffusers",
+      "Variant": null,
+      "Source": "Folder",
+      "IsDefault": false,
+      "IsGated": false,
+      "Status": "Pending",
+      "Link": "https://huggingface.co/kandinskylab",
+      "MemoryProfile": [
+        {
+          "QualityMode": "Draft",
+          "MemoryModes": [ 2, 8, 12 ]
+        },
+        {
+          "QualityMode": "Standard",
+          "MemoryModes": [ 2, 14, 18 ]
+        },
+        {
+          "QualityMode": "Production",
+          "MemoryModes": [ 2, 18, 32 ]
+        }
+      ],
+      "BaseType": "bfloat16",
+      "ProcessTypes": [ "ImageEdit" ],
+      "Vendor": [ "Nvidia" ],
+      "Resolutions": [
+        {
+          "Width": 640,
+          "Height": 1408
+        },
+        {
+          "Width": 768,
+          "Height": 1280
+        },
+        {
+          "Width": 896,
+          "Height": 1152
+        },
+        {
+          "Width": 1024,
+          "Height": 1024,
+          "IsDefault": true
+        },
+        {
+          "Width": 1152,
+          "Height": 896
+        },
+        {
+          "Width": 1280,
+          "Height": 768
+        },
+        {
+          "Width": 1408,
+          "Height": 640
+        }
+      ],
+      "DefaultOptions": {
+        "GuidanceScale": 3.5,
+        "GuidanceScale2": 0,
+        "Steps": 50,
+        "Steps2": 0,
+        "Height": 1024,
+        "Width": 1024,
+        "Frames": 0,
+        "FrameRate": 16,
+        "FrameChunk": 0,
+        "FrameChunkOverlap": 0,
+        "NoiseCondition": 0,
+        "Strength": 1,
+        "Scheduler": "FlowMatchEuler",
+        "Schedulers": {
+          "FlowMatchEuler": {
+            "Scheduler": "FlowMatchEuler",
+            "num_train_timesteps": 1000,
+            "shift": 5,
+            "use_dynamic_shifting": false,
+            "base_shift": 0.5,
+            "max_shift": 1.15,
+            "base_image_seq_len": 256,
+            "max_image_seq_len": 4096,
+            "invert_sigmas": false,
+            "shift_terminal": null,
+            "use_karras_sigmas": false,
+            "use_exponential_sigmas": false,
+            "use_beta_sigmas": false,
+            "time_shift_type": "exponential",
+            "stochastic_sampling": false
+          }
+        },
+        "SampleRate": 24000,
+        "FrameOptions": null
+      }
+    },
+    {
+      "Backend": "Pytorch",
+      "Name": "Kandinsky5_T2V_Lite",
+      "Pipeline": "Kandinsky5Pipeline",
+      "Path": "Kandinsky-5.0-T2V-Lite-pretrain-10s-Diffusers",
+      "Variant": null,
+      "Source": "Folder",
+      "IsDefault": false,
+      "IsGated": false,
+      "Status": "Pending",
+      "Link": "https://huggingface.co/kandinskylab",
+      "MemoryProfile": [
+        {
+          "QualityMode": "Draft",
+          "MemoryModes": [ 4, 24, 28 ]
+        },
+        {
+          "QualityMode": "Standard",
+          "MemoryModes": [ 4, 24, 32 ]
+        },
+        {
+          "QualityMode": "Production",
+          "MemoryModes": [ 4, 24, 68 ]
+        }
+      ],
+      "BaseType": "bfloat16",
+      "ProcessTypes": [ "TextToVideo" ],
+      "Vendor": [ "Nvidia" ],
+      "Resolutions": [
+        {
+          "Width": 768,
+          "Height": 512,
+          "IsDefault": true
+        }
+      ],
+      "DefaultOptions": {
+        "GuidanceScale": 5,
+        "GuidanceScale2": 0,
+        "Steps": 50,
+        "Steps2": 0,
+        "Height": 512,
+        "Width": 768,
+        "Frames": 121,
+        "FrameRate": 24,
+        "FrameChunk": 0,
+        "FrameChunkOverlap": 0,
+        "NoiseCondition": 0,
+        "Strength": 1,
+        "Scheduler": "FlowMatchEuler",
+        "Schedulers": {
+          "FlowMatchEuler": {
+            "Scheduler": "FlowMatchEuler",
+            "num_train_timesteps": 1000,
+            "shift": 5,
+            "use_dynamic_shifting": false,
+            "base_shift": 0.5,
+            "max_shift": 1.15,
+            "base_image_seq_len": 256,
+            "max_image_seq_len": 4096,
+            "invert_sigmas": false,
+            "shift_terminal": null,
+            "use_karras_sigmas": false,
+            "use_exponential_sigmas": false,
+            "use_beta_sigmas": false,
+            "time_shift_type": "exponential",
+            "stochastic_sampling": false
+          }
+        },
+        "SampleRate": 24000,
+        "FrameOptions": [ 65, 97, 121, 137, 161, 257 ]
+      }
+    },
+    {
+      "Backend": "Pytorch",
+      "Name": "Kandinsky5_T2V_Lite_D",
+      "Pipeline": "Kandinsky5Pipeline",
+      "Path": "Kandinsky-5.0-T2V-Lite-pretrain-10s-Diffusers",
+      "Variant": null,
+      "Source": "Folder",
+      "IsDefault": false,
+      "IsGated": false,
+      "Status": "Pending",
+      "Link": "https://huggingface.co/kandinskylab",
+      "MemoryProfile": [
+        {
+          "QualityMode": "Draft",
+          "MemoryModes": [ 4, 24, 28 ]
+        },
+        {
+          "QualityMode": "Standard",
+          "MemoryModes": [ 4, 24, 32 ]
+        },
+        {
+          "QualityMode": "Production",
+          "MemoryModes": [ 4, 24, 68 ]
+        }
+      ],
+      "BaseType": "bfloat16",
+      "ProcessTypes": [ "TextToVideo" ],
+      "Vendor": [ "Nvidia" ],
+      "Resolutions": [
+        {
+          "Width": 768,
+          "Height": 512,
+          "IsDefault": true
+        }
+      ],
+      "DefaultOptions": {
+        "GuidanceScale": 5,
+        "GuidanceScale2": 0,
+        "Steps": 16,
+        "Steps2": 0,
+        "Height": 512,
+        "Width": 768,
+        "Frames": 121,
+        "FrameRate": 24,
+        "FrameChunk": 0,
+        "FrameChunkOverlap": 0,
+        "NoiseCondition": 0,
+        "Strength": 1,
+        "Scheduler": "FlowMatchEuler",
+        "Schedulers": {
+          "FlowMatchEuler": {
+            "Scheduler": "FlowMatchEuler",
+            "num_train_timesteps": 1000,
+            "shift": 5,
+            "use_dynamic_shifting": false,
+            "base_shift": 0.5,
+            "max_shift": 1.15,
+            "base_image_seq_len": 256,
+            "max_image_seq_len": 4096,
+            "invert_sigmas": false,
+            "shift_terminal": null,
+            "use_karras_sigmas": false,
+            "use_exponential_sigmas": false,
+            "use_beta_sigmas": false,
+            "time_shift_type": "exponential",
+            "stochastic_sampling": false
+          }
+        },
+        "SampleRate": 24000,
+        "FrameOptions": [ 65, 97, 121, 137, 161, 257 ]
+      }
+    },
+    {
+      "Backend": "Pytorch",
+      "Name": "Kandinsky5_T2V_Lite_10",
+      "Pipeline": "Kandinsky5Pipeline",
+      "Path": "Kandinsky-5.0-T2V-Lite-pretrain-10s-Diffusers",
+      "Variant": null,
+      "Source": "Folder",
+      "IsDefault": false,
+      "IsGated": false,
+      "Status": "Pending",
+      "Link": "https://huggingface.co/kandinskylab",
+      "MemoryProfile": [
+        {
+          "QualityMode": "Draft",
+          "MemoryModes": [ 4, 24, 28 ]
+        },
+        {
+          "QualityMode": "Standard",
+          "MemoryModes": [ 4, 24, 32 ]
+        },
+        {
+          "QualityMode": "Production",
+          "MemoryModes": [ 4, 24, 68 ]
+        }
+      ],
+      "BaseType": "bfloat16",
+      "ProcessTypes": [ "TextToVideo" ],
+      "Vendor": [ "Nvidia" ],
+      "Resolutions": [
+        {
+          "Width": 768,
+          "Height": 512,
+          "IsDefault": true
+        }
+      ],
+      "DefaultOptions": {
+        "GuidanceScale": 5,
+        "GuidanceScale2": 0,
+        "Steps": 50,
+        "Steps2": 0,
+        "Height": 512,
+        "Width": 768,
+        "Frames": 241,
+        "FrameRate": 24,
+        "FrameChunk": 0,
+        "FrameChunkOverlap": 0,
+        "NoiseCondition": 0,
+        "Strength": 1,
+        "Scheduler": "FlowMatchEuler",
+        "Schedulers": {
+          "FlowMatchEuler": {
+            "Scheduler": "FlowMatchEuler",
+            "num_train_timesteps": 1000,
+            "shift": 5,
+            "use_dynamic_shifting": false,
+            "base_shift": 0.5,
+            "max_shift": 1.15,
+            "base_image_seq_len": 256,
+            "max_image_seq_len": 4096,
+            "invert_sigmas": false,
+            "shift_terminal": null,
+            "use_karras_sigmas": false,
+            "use_exponential_sigmas": false,
+            "use_beta_sigmas": false,
+            "time_shift_type": "exponential",
+            "stochastic_sampling": false
+          }
+        },
+        "SampleRate": 24000,
+        "FrameOptions": [ 65, 97, 121, 137, 161, 241 ]
+      }
+    },
+    {
+      "Backend": "Pytorch",
+      "Name": "Kandinsky5_T2V_Lite 10_D",
+      "Pipeline": "Kandinsky5Pipeline",
+      "Path": "Kandinsky-5.0-T2V-Lite-pretrain-10s-Diffusers",
+      "Variant": null,
+      "Source": "Folder",
+      "IsDefault": false,
+      "IsGated": false,
+      "Status": "Pending",
+      "Link": "https://huggingface.co/kandinskylab",
+      "MemoryProfile": [
+        {
+          "QualityMode": "Draft",
+          "MemoryModes": [ 4, 24, 28 ]
+        },
+        {
+          "QualityMode": "Standard",
+          "MemoryModes": [ 4, 24, 32 ]
+        },
+        {
+          "QualityMode": "Production",
+          "MemoryModes": [ 4, 24, 68 ]
+        }
+      ],
+      "BaseType": "bfloat16",
+      "ProcessTypes": [ "TextToVideo" ],
+      "Vendor": [ "Nvidia" ],
+      "Resolutions": [
+        {
+          "Width": 768,
+          "Height": 512,
+          "IsDefault": true
+        }
+      ],
+      "DefaultOptions": {
+        "GuidanceScale": 5,
+        "GuidanceScale2": 0,
+        "Steps": 16,
+        "Steps2": 0,
+        "Height": 512,
+        "Width": 768,
+        "Frames": 241,
+        "FrameRate": 24,
+        "FrameChunk": 0,
+        "FrameChunkOverlap": 0,
+        "NoiseCondition": 0,
+        "Strength": 1,
+        "Scheduler": "FlowMatchEuler",
+        "Schedulers": {
+          "FlowMatchEuler": {
+            "Scheduler": "FlowMatchEuler",
+            "num_train_timesteps": 1000,
+            "shift": 5,
+            "use_dynamic_shifting": false,
+            "base_shift": 0.5,
+            "max_shift": 1.15,
+            "base_image_seq_len": 256,
+            "max_image_seq_len": 4096,
+            "invert_sigmas": false,
+            "shift_terminal": null,
+            "use_karras_sigmas": false,
+            "use_exponential_sigmas": false,
+            "use_beta_sigmas": false,
+            "time_shift_type": "exponential",
+            "stochastic_sampling": false
+          }
+        },
+        "SampleRate": 24000,
+        "FrameOptions": [ 65, 97, 121, 137, 161, 241 ]
+      }
+    },
+    {
+      "Backend": "Pytorch",
+      "Name": "Kandinsky5_T2V_Pro",
+      "Pipeline": "Kandinsky5Pipeline",
+      "Path": "kandinskylab/Kandinsky-5.0-I2V-Pro-sft-5s-Diffusers",
+      "Variant": null,
+      "Source": "Folder",
+      "IsDefault": false,
+      "IsGated": false,
+      "Status": "Pending",
+      "Link": "https://huggingface.co/kandinskylab",
+      "MemoryProfile": [
+        {
+          "QualityMode": "Draft",
+          "MemoryModes": [ 4, 24, 28 ]
+        },
+        {
+          "QualityMode": "Standard",
+          "MemoryModes": [ 4, 24, 32 ]
+        },
+        {
+          "QualityMode": "Production",
+          "MemoryModes": [ 4, 24, 68 ]
+        }
+      ],
+      "BaseType": "bfloat16",
+      "ProcessTypes": [ "TextToVideo" ],
+      "Vendor": [ "Nvidia" ],
+      "Resolutions": [
+        {
+          "Width": 1024,
+          "Height": 768,
+          "IsDefault": true
+        }
+      ],
+      "DefaultOptions": {
+        "GuidanceScale": 5,
+        "GuidanceScale2": 0,
+        "Steps": 50,
+        "Steps2": 0,
+        "Height": 768,
+        "Width": 1024,
+        "Frames": 121,
+        "FrameRate": 24,
+        "FrameChunk": 0,
+        "FrameChunkOverlap": 0,
+        "NoiseCondition": 0,
+        "Strength": 1,
+        "Scheduler": "FlowMatchEuler",
+        "Schedulers": {
+          "FlowMatchEuler": {
+            "Scheduler": "FlowMatchEuler",
+            "num_train_timesteps": 1000,
+            "shift": 5,
+            "use_dynamic_shifting": false,
+            "base_shift": 0.5,
+            "max_shift": 1.15,
+            "base_image_seq_len": 256,
+            "max_image_seq_len": 4096,
+            "invert_sigmas": false,
+            "shift_terminal": null,
+            "use_karras_sigmas": false,
+            "use_exponential_sigmas": false,
+            "use_beta_sigmas": false,
+            "time_shift_type": "exponential",
+            "stochastic_sampling": false
+          }
+        },
+        "SampleRate": 24000,
+        "FrameOptions": [ 65, 97, 121, 137, 161, 257 ]
+      }
+    },
+    {
+      "Backend": "Pytorch",
+      "Name": "Kandinsky5_T2V_Pro_D",
+      "Pipeline": "Kandinsky5Pipeline",
+      "Path": "kandinskylab/Kandinsky-5.0-I2V-Pro-sft-5s-Diffusers",
+      "Variant": null,
+      "Source": "Folder",
+      "IsDefault": false,
+      "IsGated": false,
+      "Status": "Pending",
+      "Link": "https://huggingface.co/kandinskylab",
+      "MemoryProfile": [
+        {
+          "QualityMode": "Draft",
+          "MemoryModes": [ 4, 24, 28 ]
+        },
+        {
+          "QualityMode": "Standard",
+          "MemoryModes": [ 4, 24, 32 ]
+        },
+        {
+          "QualityMode": "Production",
+          "MemoryModes": [ 4, 24, 68 ]
+        }
+      ],
+      "BaseType": "bfloat16",
+      "ProcessTypes": [ "TextToVideo" ],
+      "Vendor": [ "Nvidia" ],
+      "Resolutions": [
+        {
+          "Width": 1024,
+          "Height": 768,
+          "IsDefault": true
+        }
+      ],
+      "DefaultOptions": {
+        "GuidanceScale": 5,
+        "GuidanceScale2": 0,
+        "Steps": 16,
+        "Steps2": 0,
+        "Height": 768,
+        "Width": 1024,
+        "Frames": 121,
+        "FrameRate": 24,
+        "FrameChunk": 0,
+        "FrameChunkOverlap": 0,
+        "NoiseCondition": 0,
+        "Strength": 1,
+        "Scheduler": "FlowMatchEuler",
+        "Schedulers": {
+          "FlowMatchEuler": {
+            "Scheduler": "FlowMatchEuler",
+            "num_train_timesteps": 1000,
+            "shift": 5,
+            "use_dynamic_shifting": false,
+            "base_shift": 0.5,
+            "max_shift": 1.15,
+            "base_image_seq_len": 256,
+            "max_image_seq_len": 4096,
+            "invert_sigmas": false,
+            "shift_terminal": null,
+            "use_karras_sigmas": false,
+            "use_exponential_sigmas": false,
+            "use_beta_sigmas": false,
+            "time_shift_type": "exponential",
+            "stochastic_sampling": false
+          }
+        },
+        "SampleRate": 24000,
+        "FrameOptions": [ 65, 97, 121, 137, 161, 257 ]
+      }
+    },
+    {
+      "Backend": "Pytorch",
+      "Name": "Kandinsky5_I2V_Pro",
+      "Pipeline": "Kandinsky5Pipeline",
+      "Path": "kandinskylab/Kandinsky-5.0-I2V-Pro-sft-5s-Diffusers",
+      "Variant": null,
+      "Source": "Folder",
+      "IsDefault": false,
+      "IsGated": false,
+      "Status": "Pending",
+      "Link": "https://huggingface.co/kandinskylab",
+      "MemoryProfile": [
+        {
+          "QualityMode": "Draft",
+          "MemoryModes": [ 4, 24, 28 ]
+        },
+        {
+          "QualityMode": "Standard",
+          "MemoryModes": [ 4, 24, 32 ]
+        },
+        {
+          "QualityMode": "Production",
+          "MemoryModes": [ 4, 24, 68 ]
+        }
+      ],
+      "BaseType": "bfloat16",
+      "ProcessTypes": [ "ImageToVideo" ],
+      "Vendor": [ "Nvidia" ],
+      "Resolutions": [
+        {
+          "Width": 1024,
+          "Height": 768,
+          "IsDefault": true
+        }
+      ],
+      "DefaultOptions": {
+        "GuidanceScale": 5,
+        "GuidanceScale2": 0,
+        "Steps": 50,
+        "Steps2": 0,
+        "Height": 768,
+        "Width": 1024,
+        "Frames": 121,
+        "FrameRate": 24,
+        "FrameChunk": 0,
+        "FrameChunkOverlap": 0,
+        "NoiseCondition": 0,
+        "Strength": 1,
+        "Scheduler": "FlowMatchEuler",
+        "Schedulers": {
+          "FlowMatchEuler": {
+            "Scheduler": "FlowMatchEuler",
+            "num_train_timesteps": 1000,
+            "shift": 5,
+            "use_dynamic_shifting": false,
+            "base_shift": 0.5,
+            "max_shift": 1.15,
+            "base_image_seq_len": 256,
+            "max_image_seq_len": 4096,
+            "invert_sigmas": false,
+            "shift_terminal": null,
+            "use_karras_sigmas": false,
+            "use_exponential_sigmas": false,
+            "use_beta_sigmas": false,
+            "time_shift_type": "exponential",
+            "stochastic_sampling": false
+          }
+        },
+        "SampleRate": 24000,
+        "FrameOptions": [ 65, 97, 121, 137, 161, 257 ]
+      }
+    },
+    {
+      "Backend": "Pytorch",
+      "Name": "Kandinsky5_I2V_Pro_d",
+      "Pipeline": "Kandinsky5Pipeline",
+      "Path": "kandinskylab/Kandinsky-5.0-I2V-Pro-sft-5s-Diffusers",
+      "Variant": null,
+      "Source": "Folder",
+      "IsDefault": false,
+      "IsGated": false,
+      "Status": "Pending",
+      "Link": "https://huggingface.co/kandinskylab",
+      "MemoryProfile": [
+        {
+          "QualityMode": "Draft",
+          "MemoryModes": [ 4, 24, 28 ]
+        },
+        {
+          "QualityMode": "Standard",
+          "MemoryModes": [ 4, 24, 32 ]
+        },
+        {
+          "QualityMode": "Production",
+          "MemoryModes": [ 4, 24, 68 ]
+        }
+      ],
+      "BaseType": "bfloat16",
+      "ProcessTypes": [ "ImageToVideo" ],
+      "Vendor": [ "Nvidia" ],
+      "Resolutions": [
+        {
+          "Width": 1024,
+          "Height": 768,
+          "IsDefault": true
+        }
+      ],
+      "DefaultOptions": {
+        "GuidanceScale": 5,
+        "GuidanceScale2": 0,
+        "Steps": 16,
+        "Steps2": 0,
+        "Height": 768,
+        "Width": 1024,
+        "Frames": 121,
+        "FrameRate": 24,
+        "FrameChunk": 0,
+        "FrameChunkOverlap": 0,
+        "NoiseCondition": 0,
+        "Strength": 1,
+        "Scheduler": "FlowMatchEuler",
+        "Schedulers": {
+          "FlowMatchEuler": {
+            "Scheduler": "FlowMatchEuler",
+            "num_train_timesteps": 1000,
+            "shift": 5,
+            "use_dynamic_shifting": false,
+            "base_shift": 0.5,
+            "max_shift": 1.15,
+            "base_image_seq_len": 256,
+            "max_image_seq_len": 4096,
+            "invert_sigmas": false,
+            "shift_terminal": null,
+            "use_karras_sigmas": false,
+            "use_exponential_sigmas": false,
+            "use_beta_sigmas": false,
+            "time_shift_type": "exponential",
+            "stochastic_sampling": false
+          }
+        },
+        "SampleRate": 24000,
+        "FrameOptions": [ 65, 97, 121, 137, 161, 257 ]
+      }
+    },
+    {
+      "Backend": "Pytorch",
+      "Name": "LTX_2B",
+      "Pipeline": "LTXPipeline",
+      "Path": "Lightricks/LTX-Video",
+      "Variant": null,
+      "Source": "Folder",
+      "IsDefault": false,
+      "IsGated": false,
+      "Status": "Pending",
+      "Link": "https://huggingface.co/Lightricks/LTX-Video",
+      "MemoryProfile": [
+        {
+          "QualityMode": "Draft",
+          "MemoryModes": [ 12, 35, 74 ]
+        },
+        {
+          "QualityMode": "Standard",
+          "MemoryModes": [ 12, 35, 74 ]
+        },
+        {
+          "QualityMode": "Production",
+          "MemoryModes": [ 12, 42, 92 ]
+        }
+      ],
+      "BaseType": "bfloat16",
+      "ProcessTypes": [ "TextToVideo", "ImageToVideo", "VideoToVideo" ],
+      "Resolutions": [
+        {
+          "Width": 736,
+          "Height": 1280
+        },
+        {
+          "Width": 768,
+          "Height": 1152
+        },
+        {
+          "Width": 544,
+          "Height": 960
+        },
+        {
+          "Width": 512,
+          "Height": 768
+        },
+        {
+          "Width": 480,
+          "Height": 736
+        },
+        {
+          "Width": 640,
+          "Height": 640
+        },
+        {
+          "Width": 736,
+          "Height": 480
+        },
+        {
+          "Width": 768,
+          "Height": 512,
+          "IsDefault": true
+        },
+        {
+          "Width": 960,
+          "Height": 544
+        },
+        {
+          "Width": 1152,
+          "Height": 768
+        },
+        {
+          "Width": 1280,
+          "Height": 736
+        }
+      ],
+      "DefaultOptions": {
+        "GuidanceScale": 3,
+        "GuidanceScale2": 0,
+        "Steps": 50,
+        "Steps2": 0,
+        "Height": 480,
+        "Width": 704,
+        "Frames": 161,
+        "FrameRate": 24,
+        "FrameChunk": 0,
+        "FrameChunkOverlap": 0,
+        "NoiseCondition": 0,
+        "Strength": 1,
+        "Scheduler": "FlowMatchEuler",
+        "Schedulers": {
+          "FlowMatchEuler": {
+            "Scheduler": "FlowMatchEuler",
+            "num_train_timesteps": 1000,
+            "shift": 1,
+            "use_dynamic_shifting": true,
+            "base_shift": 0.95,
+            "max_shift": 2.05,
+            "base_image_seq_len": 1024,
+            "max_image_seq_len": 4096,
+            "invert_sigmas": false,
+            "shift_terminal": null,
+            "use_karras_sigmas": false,
+            "use_exponential_sigmas": false,
+            "use_beta_sigmas": false,
+            "time_shift_type": "exponential",
+            "stochastic_sampling": false
+          }
+        },
+        "SampleRate": 24000,
+        "FrameOptions": [ 65, 97, 121, 137, 161, 257 ]
+      }
+    },
+    {
+      "Backend": "Pytorch",
+      "Name": "LTX_2B_D",
+      "Pipeline": "LTXPipeline",
+      "Path": "Lightricks/LTX-Video",
+      "Variant": null,
+      "Source": "Folder",
+      "IsDefault": false,
+      "IsGated": false,
+      "Status": "Pending",
+      "Link": "https://huggingface.co/Lightricks/LTX-Video",
+      "MemoryProfile": [
+        {
+          "QualityMode": "Draft",
+          "MemoryModes": [ 12, 35, 74 ]
+        },
+        {
+          "QualityMode": "Standard",
+          "MemoryModes": [ 12, 35, 74 ]
+        },
+        {
+          "QualityMode": "Production",
+          "MemoryModes": [ 12, 42, 92 ]
+        }
+      ],
+      "BaseType": "bfloat16",
+      "ProcessTypes": [ "TextToVideo", "ImageToVideo", "VideoToVideo" ],
+      "Resolutions": [
+        {
+          "Width": 736,
+          "Height": 1280
+        },
+        {
+          "Width": 768,
+          "Height": 1152
+        },
+        {
+          "Width": 544,
+          "Height": 960
+        },
+        {
+          "Width": 512,
+          "Height": 768
+        },
+        {
+          "Width": 480,
+          "Height": 736
+        },
+        {
+          "Width": 640,
+          "Height": 640
+        },
+        {
+          "Width": 736,
+          "Height": 480
+        },
+        {
+          "Width": 768,
+          "Height": 512,
+          "IsDefault": true
+        },
+        {
+          "Width": 960,
+          "Height": 544
+        },
+        {
+          "Width": 1152,
+          "Height": 768
+        },
+        {
+          "Width": 1280,
+          "Height": 736
+        }
+      ],
+      "DefaultOptions": {
+        "GuidanceScale": 3,
+        "GuidanceScale2": 0,
+        "Steps": 50,
+        "Steps2": 0,
+        "Height": 480,
+        "Width": 704,
+        "Frames": 161,
+        "FrameRate": 24,
+        "FrameChunk": 0,
+        "FrameChunkOverlap": 0,
+        "NoiseCondition": 0,
+        "Strength": 1,
+        "Scheduler": "FlowMatchEuler",
+        "Schedulers": {
+          "FlowMatchEuler": {
+            "Scheduler": "FlowMatchEuler",
+            "num_train_timesteps": 1000,
+            "shift": 1,
+            "use_dynamic_shifting": true,
+            "base_shift": 0.95,
+            "max_shift": 2.05,
+            "base_image_seq_len": 1024,
+            "max_image_seq_len": 4096,
+            "invert_sigmas": false,
+            "shift_terminal": null,
+            "use_karras_sigmas": false,
+            "use_exponential_sigmas": false,
+            "use_beta_sigmas": false,
+            "time_shift_type": "exponential",
+            "stochastic_sampling": false
+          }
+        },
+        "SampleRate": 24000,
+        "FrameOptions": [ 65, 97, 121, 137, 161, 257 ]
+      }
+    },
+    {
+      "Backend": "Pytorch",
+      "Name": "LTX_13B",
+      "Pipeline": "LTXPipeline",
+      "Path": "Lightricks/LTX-Video",
+      "Variant": null,
+      "Source": "Folder",
+      "IsDefault": false,
+      "IsGated": false,
+      "Status": "Pending",
+      "Link": "https://huggingface.co/Lightricks/LTX-Video",
+      "MemoryProfile": [
+        {
+          "QualityMode": "Draft",
+          "MemoryModes": [ 16, 23, 48 ]
+        },
+        {
+          "QualityMode": "Standard",
+          "MemoryModes": [ 16, 23, 48 ]
+        },
+        {
+          "QualityMode": "Production",
+          "MemoryModes": [ 16, 32, 48 ]
+        }
+      ],
+      "BaseType": "bfloat16",
+      "ProcessTypes": [ "TextToVideo", "ImageToVideo", "VideoToVideo" ],
+      "Resolutions": [
+        {
+          "Width": 736,
+          "Height": 1280
+        },
+        {
+          "Width": 768,
+          "Height": 1152
+        },
+        {
+          "Width": 544,
+          "Height": 960
+        },
+        {
+          "Width": 512,
+          "Height": 768
+        },
+        {
+          "Width": 480,
+          "Height": 736
+        },
+        {
+          "Width": 640,
+          "Height": 640
+        },
+        {
+          "Width": 736,
+          "Height": 480
+        },
+        {
+          "Width": 768,
+          "Height": 512,
+          "IsDefault": true
+        },
+        {
+          "Width": 960,
+          "Height": 544
+        },
+        {
+          "Width": 1152,
+          "Height": 768
+        },
+        {
+          "Width": 1280,
+          "Height": 736
+        }
+      ],
+      "DefaultOptions": {
+        "GuidanceScale": 3,
+        "GuidanceScale2": 0,
+        "Steps": 50,
+        "Steps2": 0,
+        "Height": 480,
+        "Width": 704,
+        "Frames": 161,
+        "FrameRate": 24,
+        "FrameChunk": 0,
+        "FrameChunkOverlap": 0,
+        "NoiseCondition": 0,
+        "Strength": 1,
+        "Scheduler": "FlowMatchEuler",
+        "Schedulers": {
+          "FlowMatchEuler": {
+            "Scheduler": "FlowMatchEuler",
+            "num_train_timesteps": 1000,
+            "shift": 1,
+            "use_dynamic_shifting": true,
+            "base_shift": 0.95,
+            "max_shift": 2.05,
+            "base_image_seq_len": 1024,
+            "max_image_seq_len": 4096,
+            "invert_sigmas": false,
+            "shift_terminal": null,
+            "use_karras_sigmas": false,
+            "use_exponential_sigmas": false,
+            "use_beta_sigmas": false,
+            "time_shift_type": "exponential",
+            "stochastic_sampling": false
+          }
+        },
+        "SampleRate": 24000,
+        "FrameOptions": [ 65, 97, 121, 137, 161, 257 ]
+      }
+    },
+    {
+      "Backend": "Pytorch",
+      "Name": "LTX_13B_D",
+      "Pipeline": "LTXPipeline",
+      "Path": "Lightricks/LTX-Video",
+      "Variant": null,
+      "Source": "Folder",
+      "IsDefault": false,
+      "IsGated": false,
+      "Status": "Pending",
+      "Link": "https://huggingface.co/Lightricks/LTX-Video",
+      "MemoryProfile": [
+        {
+          "QualityMode": "Draft",
+          "MemoryModes": [ 16, 23, 48 ]
+        },
+        {
+          "QualityMode": "Standard",
+          "MemoryModes": [ 16, 23, 48 ]
+        },
+        {
+          "QualityMode": "Production",
+          "MemoryModes": [ 16, 32, 48 ]
+        }
+      ],
+      "BaseType": "bfloat16",
+      "ProcessTypes": [ "TextToVideo", "ImageToVideo", "VideoToVideo" ],
+      "Resolutions": [
+        {
+          "Width": 736,
+          "Height": 1280
+        },
+        {
+          "Width": 768,
+          "Height": 1152
+        },
+        {
+          "Width": 544,
+          "Height": 960
+        },
+        {
+          "Width": 512,
+          "Height": 768
+        },
+        {
+          "Width": 480,
+          "Height": 736
+        },
+        {
+          "Width": 640,
+          "Height": 640
+        },
+        {
+          "Width": 736,
+          "Height": 480
+        },
+        {
+          "Width": 768,
+          "Height": 512,
+          "IsDefault": true
+        },
+        {
+          "Width": 960,
+          "Height": 544
+        },
+        {
+          "Width": 1152,
+          "Height": 768
+        },
+        {
+          "Width": 1280,
+          "Height": 736
+        }
+      ],
+      "DefaultOptions": {
+        "GuidanceScale": 3,
+        "GuidanceScale2": 0,
+        "Steps": 50,
+        "Steps2": 0,
+        "Height": 480,
+        "Width": 704,
+        "Frames": 161,
+        "FrameRate": 24,
+        "FrameChunk": 0,
+        "FrameChunkOverlap": 0,
+        "NoiseCondition": 0,
+        "Strength": 1,
+        "Scheduler": "FlowMatchEuler",
+        "Schedulers": {
+          "FlowMatchEuler": {
+            "Scheduler": "FlowMatchEuler",
+            "num_train_timesteps": 1000,
+            "shift": 1,
+            "use_dynamic_shifting": true,
+            "base_shift": 0.95,
+            "max_shift": 2.05,
+            "base_image_seq_len": 1024,
+            "max_image_seq_len": 4096,
+            "invert_sigmas": false,
+            "shift_terminal": null,
+            "use_karras_sigmas": false,
+            "use_exponential_sigmas": false,
+            "use_beta_sigmas": false,
+            "time_shift_type": "exponential",
+            "stochastic_sampling": false
+          }
+        },
+        "SampleRate": 24000,
+        "FrameOptions": [ 65, 97, 121, 137, 161, 257 ]
+      }
+    },
+    {
+      "Backend": "Pytorch",
+      "Name": "LTX2_19B",
+      "Pipeline": "LTX20Pipeline",
+      "Path": "Lightricks/LTX-2",
+      "Variant": null,
+      "Source": "Folder",
+      "IsDefault": false,
+      "IsGated": false,
+      "Status": "Pending",
+      "Link": "https://huggingface.co/Lightricks/LTX-2",
+      "MemoryProfile": [
+        {
+          "QualityMode": "Draft",
+          "MemoryModes": [ 12, 35, 74 ]
+        },
+        {
+          "QualityMode": "Standard",
+          "MemoryModes": [ 12, 35, 74 ]
+        },
+        {
+          "QualityMode": "Production",
+          "MemoryModes": [ 12, 42, 92 ]
+        }
+      ],
+      "BaseType": "bfloat16",
+      "ProcessTypes": [ "TextToVideo", "ImageToVideo" ],
+      "Vendor": [ "Nvidia" ],
+      "Resolutions": [
+        {
+          "Width": 2176,
+          "Height": 3840
+        },
+        {
+          "Width": 864,
+          "Height": 2048
+        },
+        {
+          "Width": 1088,
+          "Height": 1920
+        },
+        {
+          "Width": 736,
+          "Height": 1280
+        },
+        {
+          "Width": 768,
+          "Height": 1152
+        },
+        {
+          "Width": 544,
+          "Height": 960
+        },
+        {
+          "Width": 512,
+          "Height": 768
+        },
+        {
+          "Width": 480,
+          "Height": 736
+        },
+        {
+          "Width": 640,
+          "Height": 640
+        },
+        {
+          "Width": 736,
+          "Height": 480
+        },
+        {
+          "Width": 768,
+          "Height": 512,
+          "IsDefault": true
+        },
+        {
+          "Width": 960,
+          "Height": 544
+        },
+        {
+          "Width": 1152,
+          "Height": 768
+        },
+        {
+          "Width": 1280,
+          "Height": 736
+        },
+        {
+          "Width": 1920,
+          "Height": 1088
+        },
+        {
+          "Width": 2048,
+          "Height": 864
+        },
+        {
+          "Width": 3840,
+          "Height": 2176
+        }
+      ],
+      "DefaultOptions": {
+        "GuidanceScale": 4,
+        "GuidanceScale2": 0,
+        "Steps": 40,
+        "Steps2": 0,
+        "Height": 512,
+        "Width": 768,
+        "Frames": 121,
+        "FrameRate": 25,
+        "FrameChunk": 0,
+        "FrameChunkOverlap": 0,
+        "NoiseCondition": 0,
+        "Strength": 1,
+        "Scheduler": "FlowMatchEuler",
+        "Schedulers": {
+          "FlowMatchEuler": {
+            "Scheduler": "FlowMatchEuler",
+            "num_train_timesteps": 1000,
+            "shift": 1,
+            "use_dynamic_shifting": true,
+            "base_shift": 0.95,
+            "max_shift": 2.05,
+            "base_image_seq_len": 1024,
+            "max_image_seq_len": 4096,
+            "invert_sigmas": false,
+            "shift_terminal": null,
+            "use_karras_sigmas": false,
+            "use_exponential_sigmas": false,
+            "use_beta_sigmas": false,
+            "time_shift_type": "exponential",
+            "stochastic_sampling": false
+          }
+        },
+        "SampleRate": 24000,
+        "FrameOptions": [ 65, 97, 121, 137, 161, 257 ]
+      }
+    },
+    {
+      "Backend": "Pytorch",
+      "Name": "LTX2_19B_D",
+      "Pipeline": "LTX20Pipeline",
+      "Path": "Lightricks/LTX-2",
+      "Variant": null,
+      "Source": "Folder",
+      "IsDefault": false,
+      "IsGated": false,
+      "Status": "Pending",
+      "Link": "https://huggingface.co/Lightricks/LTX-2",
+      "MemoryProfile": [
+        {
+          "QualityMode": "Draft",
+          "MemoryModes": [ 12, 35, 74 ]
+        },
+        {
+          "QualityMode": "Standard",
+          "MemoryModes": [ 12, 35, 74 ]
+        },
+        {
+          "QualityMode": "Production",
+          "MemoryModes": [ 12, 42, 92 ]
+        }
+      ],
+      "BaseType": "bfloat16",
+      "ProcessTypes": [ "TextToVideo", "ImageToVideo" ],
+      "Vendor": [ "Nvidia" ],
+      "Resolutions": [
+        {
+          "Width": 2176,
+          "Height": 3840
+        },
+        {
+          "Width": 864,
+          "Height": 2048
+        },
+        {
+          "Width": 1088,
+          "Height": 1920
+        },
+        {
+          "Width": 736,
+          "Height": 1280
+        },
+        {
+          "Width": 768,
+          "Height": 1152
+        },
+        {
+          "Width": 544,
+          "Height": 960
+        },
+        {
+          "Width": 512,
+          "Height": 768
+        },
+        {
+          "Width": 480,
+          "Height": 736
+        },
+        {
+          "Width": 640,
+          "Height": 640
+        },
+        {
+          "Width": 736,
+          "Height": 480
+        },
+        {
+          "Width": 768,
+          "Height": 512,
+          "IsDefault": true
+        },
+        {
+          "Width": 960,
+          "Height": 544
+        },
+        {
+          "Width": 1152,
+          "Height": 768
+        },
+        {
+          "Width": 1280,
+          "Height": 736
+        },
+        {
+          "Width": 1920,
+          "Height": 1088
+        },
+        {
+          "Width": 2048,
+          "Height": 864
+        },
+        {
+          "Width": 3840,
+          "Height": 2176
+        }
+      ],
+      "DefaultOptions": {
+        "GuidanceScale": 0,
+        "GuidanceScale2": 0,
+        "Steps": 8,
+        "Steps2": 0,
+        "Height": 512,
+        "Width": 768,
+        "Frames": 121,
+        "FrameRate": 25,
+        "FrameChunk": 0,
+        "FrameChunkOverlap": 0,
+        "NoiseCondition": 0,
+        "Strength": 1,
+        "Scheduler": "FlowMatchEuler",
+        "Schedulers": {
+          "FlowMatchEuler": {
+            "Scheduler": "FlowMatchEuler",
+            "num_train_timesteps": 1000,
+            "shift": 1,
+            "use_dynamic_shifting": true,
+            "base_shift": 0.95,
+            "max_shift": 2.05,
+            "base_image_seq_len": 1024,
+            "max_image_seq_len": 4096,
+            "invert_sigmas": false,
+            "shift_terminal": null,
+            "use_karras_sigmas": false,
+            "use_exponential_sigmas": false,
+            "use_beta_sigmas": false,
+            "time_shift_type": "exponential",
+            "stochastic_sampling": false
+          }
+        },
+        "SampleRate": 24000,
+        "FrameOptions": [ 65, 97, 121, 137, 161, 257 ]
+      }
+    },
+    {
+      "Backend": "Pytorch",
+      "Name": "Qwen_Base",
+      "Pipeline": "QwenImagePipeline",
+      "Path": "Qwen/Qwen-Image-2512",
+      "Variant": null,
+      "Source": "Folder",
+      "IsDefault": false,
+      "IsGated": false,
+      "Status": "Pending",
+      "Link": "https://huggingface.co/Qwen/Qwen-Image-2512",
+      "MemoryProfile": [
+        {
+          "QualityMode": "Draft",
+          "MemoryModes": [ 2, 12, 18 ]
+        },
+        {
+          "QualityMode": "Standard",
+          "MemoryModes": [ 2, 22, 32 ]
+        },
+        {
+          "QualityMode": "Production",
+          "MemoryModes": [ 2, 40, 60 ]
+        }
+      ],
+      "BaseType": "bfloat16",
+      "ProcessTypes": [ "TextToImage", "ImageToImage", "ImageInpaint", "ImageControlNet" ],
+      "Vendor": [ "Nvidia" ],
+      "Resolutions": [
+        {
+          "Width": 1664,
+          "Height": 928
+        },
+        {
+          "Width": 1584,
+          "Height": 1056
+        },
+        {
+          "Width": 1472,
+          "Height": 1104
+        },
+        {
+          "Width": 1328,
+          "Height": 1328,
+          "IsDefault": true
+        },
+        {
+          "Width": 1104,
+          "Height": 1472
+        },
+        {
+          "Width": 1056,
+          "Height": 1584
+        },
+        {
+          "Width": 928,
+          "Height": 1664
+        }
+      ],
+      "DefaultOptions": {
+        "GuidanceScale": 1,
+        "GuidanceScale2": 1,
+        "Steps": 30,
+        "Steps2": 0,
+        "Height": 1328,
+        "Width": 1328,
+        "Frames": 0,
+        "FrameRate": 16,
+        "FrameChunk": 0,
+        "FrameChunkOverlap": 0,
+        "NoiseCondition": 0,
+        "Strength": 1,
+        "Scheduler": "FlowMatchEuler",
+        "Schedulers": {
+          "FlowMatchEuler": {
+            "Scheduler": "FlowMatchEuler",
+            "num_train_timesteps": 1000,
+            "shift": 1,
+            "use_dynamic_shifting": true,
+            "base_shift": 0.5,
+            "max_shift": 0.9,
+            "base_image_seq_len": 256,
+            "max_image_seq_len": 8192,
+            "invert_sigmas": false,
+            "shift_terminal": null,
+            "use_karras_sigmas": false,
+            "use_exponential_sigmas": false,
+            "use_beta_sigmas": false,
+            "time_shift_type": "exponential",
+            "stochastic_sampling": false
+          },
+          "UniPCMultistep": {
+            "Scheduler": "UniPCMultistep",
+            "num_train_timesteps": 1000,
+            "beta_start": 0.0001,
+            "beta_end": 0.02,
+            "beta_schedule": "linear",
+            "trained_betas": null,
+            "solver_order": 2,
+            "prediction_type": "flow_prediction",
+            "thresholding": false,
+            "dynamic_thresholding_ratio": 0.995,
+            "sample_max_value": 1,
+            "predict_x0": true,
+            "solver_type": "bh2",
+            "lower_order_final": true,
+            "use_karras_sigmas": false,
+            "use_exponential_sigmas": false,
+            "use_beta_sigmas": false,
+            "use_flow_sigmas": true,
+            "flow_shift": 1,
+            "timestep_spacing": "linspace",
+            "steps_offset": 0,
+            "final_sigmas_type": "zero",
+            "rescale_betas_zero_snr": false,
+            "use_dynamic_shifting": true,
+            "time_shift_type": "exponential",
+            "sigma_min": null,
+            "sigma_max": null,
+            "shift_terminal": null
+          }
+        },
+        "SampleRate": 24000,
+        "FrameOptions": null
+      }
+    },
+    {
+      "Backend": "Pytorch",
+      "Name": "Qwen_Edit",
+      "Pipeline": "QwenImagePipeline",
+      "Path": "Qwen/Qwen-Image-Edit-2512",
+      "Variant": null,
+      "Source": "Folder",
+      "IsDefault": false,
+      "IsGated": false,
+      "Status": "Pending",
+      "Link": "https://huggingface.co/Qwen/Qwen-Image-Edit-2512",
+      "MemoryProfile": [
+        {
+          "QualityMode": "Draft",
+          "MemoryModes": [ 2, 12, 18 ]
+        },
+        {
+          "QualityMode": "Standard",
+          "MemoryModes": [ 2, 22, 32 ]
+        },
+        {
+          "QualityMode": "Production",
+          "MemoryModes": [ 2, 40, 60 ]
+        }
+      ],
+      "BaseType": "bfloat16",
+      "ProcessTypes": [ "ImageEdit" ],
+      "Vendor": [ "Nvidia" ],
+      "Resolutions": [
+        {
+          "Width": 1664,
+          "Height": 928
+        },
+        {
+          "Width": 1584,
+          "Height": 1056
+        },
+        {
+          "Width": 1472,
+          "Height": 1104
+        },
+        {
+          "Width": 1328,
+          "Height": 1328,
+          "IsDefault": true
+        },
+        {
+          "Width": 1104,
+          "Height": 1472
+        },
+        {
+          "Width": 1056,
+          "Height": 1584
+        },
+        {
+          "Width": 928,
+          "Height": 1664
+        }
+      ],
+      "DefaultOptions": {
+        "GuidanceScale": 1,
+        "GuidanceScale2": 1,
+        "Steps": 30,
+        "Steps2": 0,
+        "Height": 1024,
+        "Width": 1024,
+        "Frames": 0,
+        "FrameRate": 16,
+        "FrameChunk": 0,
+        "FrameChunkOverlap": 0,
+        "NoiseCondition": 0,
+        "Strength": 1,
+        "Scheduler": "FlowMatchEuler",
+        "Schedulers": {
+          "FlowMatchEuler": {
+            "Scheduler": "FlowMatchEuler",
+            "num_train_timesteps": 1000,
+            "shift": 1,
+            "use_dynamic_shifting": true,
+            "base_shift": 0.5,
+            "max_shift": 0.9,
+            "base_image_seq_len": 256,
+            "max_image_seq_len": 8192,
+            "invert_sigmas": false,
+            "shift_terminal": null,
+            "use_karras_sigmas": false,
+            "use_exponential_sigmas": false,
+            "use_beta_sigmas": false,
+            "time_shift_type": "exponential",
+            "stochastic_sampling": false
+          },
+          "UniPCMultistep": {
+            "Scheduler": "UniPCMultistep",
+            "num_train_timesteps": 1000,
+            "beta_start": 0.0001,
+            "beta_end": 0.02,
+            "beta_schedule": "linear",
+            "trained_betas": null,
+            "solver_order": 2,
+            "prediction_type": "flow_prediction",
+            "thresholding": false,
+            "dynamic_thresholding_ratio": 0.995,
+            "sample_max_value": 1,
+            "predict_x0": true,
+            "solver_type": "bh2",
+            "lower_order_final": true,
+            "use_karras_sigmas": false,
+            "use_exponential_sigmas": false,
+            "use_beta_sigmas": false,
+            "use_flow_sigmas": true,
+            "flow_shift": 1,
+            "timestep_spacing": "linspace",
+            "steps_offset": 0,
+            "final_sigmas_type": "zero",
+            "rescale_betas_zero_snr": false,
+            "use_dynamic_shifting": true,
+            "time_shift_type": "exponential",
+            "sigma_min": null,
+            "sigma_max": null,
+            "shift_terminal": null
+          }
+        },
+        "SampleRate": 24000,
+        "FrameOptions": null
+      }
+    },
+    {
+      "Backend": "Pytorch",
+      "Name": "StableDiffusionXL_Base",
+      "Pipeline": "StableDiffusionXLPipeline",
+      "Path": "stabilityai/stable-diffusion-xl-base-1.0",
+      "Variant": null,
+      "Source": "Folder",
+      "IsDefault": false,
+      "IsGated": false,
+      "Status": "Pending",
+      "Link": "https://huggingface.co/stabilityai/stable-diffusion-xl-base-1.0",
+      "MemoryProfile": [
+        {
+          "QualityMode": "Draft",
+          "MemoryModes": [ 2, 4, 8 ]
+        },
+        {
+          "QualityMode": "Standard",
+          "MemoryModes": [ 2, 6, 10 ]
+        },
+        {
+          "QualityMode": "Production",
+          "MemoryModes": [ 2, 8, 16 ]
+        }
+      ],
+      "BaseType": "bfloat16",
+      "ProcessTypes": [ "TextToImage", "ImageToImage", "ImageInpaint", "ImageControlNet", "ImageToImageControlNet" ],
+      "Resolutions": [
+        {
+          "Width": 640,
+          "Height": 1536
+        },
+        {
+          "Width": 768,
+          "Height": 1344
+        },
+        {
+          "Width": 832,
+          "Height": 1280
+        },
+        {
+          "Width": 896,
+          "Height": 1152
+        },
+        {
+          "Width": 768,
+          "Height": 768
+        },
+        {
+          "Width": 1024,
+          "Height": 1024,
+          "IsDefault": true
+        },
+        {
+          "Width": 1152,
+          "Height": 896
+        },
+        {
+          "Width": 1280,
+          "Height": 832
+        },
+        {
+          "Width": 1344,
+          "Height": 768
+        },
+        {
+          "Width": 1536,
+          "Height": 640
+        }
+      ],
+      "DefaultOptions": {
+        "GuidanceScale": 7.5,
+        "GuidanceScale2": 0,
+        "Steps": 30,
+        "Steps2": 0,
+        "Height": 1024,
+        "Width": 1024,
+        "Frames": 0,
+        "FrameRate": 16,
+        "FrameChunk": 0,
+        "FrameChunkOverlap": 0,
+        "NoiseCondition": 0,
+        "Strength": 1,
+        "Scheduler": "DDPM",
+        "Schedulers": {
+          "LMS": {
+            "Scheduler": "LMS",
+            "num_train_timesteps": 1000,
+            "beta_start": 0.00085,
+            "beta_end": 0.012,
+            "beta_schedule": "scaled_linear",
+            "trained_betas": null,
+            "use_karras_sigmas": false,
+            "use_exponential_sigmas": false,
+            "use_beta_sigmas": false,
+            "prediction_type": "epsilon",
+            "timestep_spacing": "linspace",
+            "steps_offset": 0
+          },
+          "Euler": {
+            "Scheduler": "Euler",
+            "num_train_timesteps": 1000,
+            "beta_start": 0.00085,
+            "beta_end": 0.012,
+            "beta_schedule": "scaled_linear",
+            "trained_betas": null,
+            "interpolation_type": "linear",
+            "use_karras_sigmas": false,
+            "use_exponential_sigmas": false,
+            "use_beta_sigmas": false,
+            "prediction_type": "epsilon",
+            "sigma_min": null,
+            "sigma_max": null,
+            "timestep_spacing": "linspace",
+            "timestep_type": "discrete",
+            "steps_offset": 0,
+            "rescale_betas_zero_snr": false,
+            "final_sigmas_type": "zero"
+          },
+          "EulerAncestral": {
+            "Scheduler": "EulerAncestral",
+            "num_train_timesteps": 1000,
+            "beta_start": 0.00085,
+            "beta_end": 0.012,
+            "beta_schedule": "scaled_linear",
+            "trained_betas": null,
+            "prediction_type": "epsilon",
+            "timestep_spacing": "linspace",
+            "steps_offset": 0,
+            "rescale_betas_zero_snr": false
+          },
+          "DDPM": {
+            "Scheduler": "DDPM",
+            "num_train_timesteps": 1000,
+            "beta_start": 0.00085,
+            "beta_end": 0.012,
+            "beta_schedule": "scaled_linear",
+            "trained_betas": null,
+            "variance_type": "fixed_small",
+            "prediction_type": "epsilon",
+            "thresholding": false,
+            "dynamic_thresholding_ratio": 0.995,
+            "clip_sample": false,
+            "clip_sample_range": 1,
+            "sample_max_value": 1,
+            "timestep_spacing": "leading",
+            "steps_offset": 0,
+            "rescale_betas_zero_snr": false
+          },
+          "DDIM": {
+            "Scheduler": "DDIM",
+            "num_train_timesteps": 1000,
+            "beta_start": 0.00085,
+            "beta_end": 0.012,
+            "beta_schedule": "scaled_linear",
+            "trained_betas": null,
+            "set_alpha_to_one": true,
+            "prediction_type": "epsilon",
+            "thresholding": false,
+            "dynamic_thresholding_ratio": 0.995,
+            "clip_sample": false,
+            "clip_sample_range": 1,
+            "sample_max_value": 1,
+            "timestep_spacing": "leading",
+            "steps_offset": 0,
+            "rescale_betas_zero_snr": false
+          },
+          "KDPM2": {
+            "Scheduler": "KDPM2",
+            "num_train_timesteps": 1000,
+            "beta_start": 0.00085,
+            "beta_end": 0.012,
+            "beta_schedule": "scaled_linear",
+            "trained_betas": null,
+            "use_karras_sigmas": false,
+            "use_exponential_sigmas": false,
+            "use_beta_sigmas": false,
+            "prediction_type": "epsilon",
+            "timestep_spacing": "trailing",
+            "steps_offset": 0
+          },
+          "KDPM2Ancestral": {
+            "Scheduler": "KDPM2Ancestral",
+            "num_train_timesteps": 1000,
+            "beta_start": 0.00085,
+            "beta_end": 0.012,
+            "beta_schedule": "scaled_linear",
+            "trained_betas": null,
+            "use_karras_sigmas": false,
+            "use_exponential_sigmas": false,
+            "use_beta_sigmas": false,
+            "prediction_type": "epsilon",
+            "timestep_spacing": "trailing",
+            "steps_offset": 0
+          },
+          "DPMSolverMultistep": {
+            "Scheduler": "DPMSolverMultistep",
+            "num_train_timesteps": 1000,
+            "beta_start": 0.00085,
+            "beta_end": 0.012,
+            "beta_schedule": "scaled_linear",
+            "trained_betas": null,
+            "solver_order": 2,
+            "prediction_type": "epsilon",
+            "thresholding": false,
+            "dynamic_thresholding_ratio": 0.995,
+            "sample_max_value": 1,
+            "algorithm_type": "dpmsolver\u002B\u002B",
+            "solver_type": "midpoint",
+            "euler_at_final": false,
+            "lower_order_final": true,
+            "use_karras_sigmas": false,
+            "use_exponential_sigmas": false,
+            "use_beta_sigmas": false,
+            "use_flow_sigmas": false,
+            "use_lu_lambdas": false,
+            "flow_shift": 1,
+            "timestep_spacing": "linspace",
+            "steps_offset": 0,
+            "final_sigmas_type": "zero",
+            "rescale_betas_zero_snr": false,
+            "use_dynamic_shifting": false,
+            "time_shift_type": "exponential"
+          },
+          "DPMSolverSinglestep": {
+            "Scheduler": "DPMSolverSinglestep",
+            "num_train_timesteps": 1000,
+            "beta_start": 0.00085,
+            "beta_end": 0.012,
+            "beta_schedule": "scaled_linear",
+            "trained_betas": null,
+            "solver_order": 2,
+            "prediction_type": "epsilon",
+            "thresholding": false,
+            "dynamic_thresholding_ratio": 0.995,
+            "sample_max_value": 1,
+            "algorithm_type": "dpmsolver\u002B\u002B",
+            "solver_type": "midpoint",
+            "lower_order_final": false,
+            "use_karras_sigmas": false,
+            "use_exponential_sigmas": false,
+            "use_beta_sigmas": false,
+            "use_flow_sigmas": false,
+            "flow_shift": 1,
+            "final_sigmas_type": "zero",
+            "timestep_spacing": "linspace",
+            "steps_offset": 0,
+            "variance_type": null
+          },
+          "DPMSolverSDE": {
+            "Scheduler": "DPMSolverSDE",
+            "num_train_timesteps": 1000,
+            "beta_start": 0.00085,
+            "beta_end": 0.012,
+            "beta_schedule": "scaled_linear",
+            "trained_betas": null,
+            "prediction_type": "epsilon",
+            "use_karras_sigmas": false,
+            "use_exponential_sigmas": false,
+            "use_beta_sigmas": false,
+            "noise_sampler_seed": null,
+            "timestep_spacing": "linspace",
+            "steps_offset": 0
+          },
+          "DEISMultistep": {
+            "Scheduler": "DEISMultistep",
+            "num_train_timesteps": 1000,
+            "beta_start": 0.00085,
+            "beta_end": 0.012,
+            "beta_schedule": "scaled_linear",
+            "trained_betas": null,
+            "solver_order": 2,
+            "prediction_type": "epsilon",
+            "thresholding": false,
+            "dynamic_thresholding_ratio": 0.995,
+            "sample_max_value": 1,
+            "algorithm_type": "deis",
+            "solver_type": "logrho",
+            "lower_order_final": true,
+            "use_karras_sigmas": false,
+            "use_exponential_sigmas": false,
+            "use_beta_sigmas": false,
+            "use_flow_sigmas": false,
+            "flow_shift": 1,
+            "timestep_spacing": "linspace",
+            "steps_offset": 0,
+            "use_dynamic_shifting": false,
+            "time_shift_type": "exponential"
+          },
+          "PNDM": {
+            "Scheduler": "PNDM",
+            "num_train_timesteps": 1000,
+            "beta_start": 0.00085,
+            "beta_end": 0.012,
+            "beta_schedule": "scaled_linear",
+            "trained_betas": null,
+            "skip_prk_steps": false,
+            "set_alpha_to_one": false,
+            "prediction_type": "epsilon",
+            "timestep_spacing": "leading",
+            "steps_offset": 0
+          },
+          "Heun": {
+            "Scheduler": "Heun",
+            "num_train_timesteps": 1000,
+            "beta_start": 0.00085,
+            "beta_end": 0.012,
+            "beta_schedule": "scaled_linear",
+            "trained_betas": null,
+            "prediction_type": "epsilon",
+            "use_karras_sigmas": false,
+            "use_exponential_sigmas": false,
+            "use_beta_sigmas": false,
+            "clip_sample": false,
+            "clip_sample_range": 1,
+            "timestep_spacing": "trailing",
+            "steps_offset": 0
+          },
+          "UniPCMultistep": {
+            "Scheduler": "UniPCMultistep",
+            "num_train_timesteps": 1000,
+            "beta_start": 0.00085,
+            "beta_end": 0.012,
+            "beta_schedule": "scaled_linear",
+            "trained_betas": null,
+            "solver_order": 2,
+            "prediction_type": "epsilon",
+            "thresholding": false,
+            "dynamic_thresholding_ratio": 0.995,
+            "sample_max_value": 1,
+            "predict_x0": true,
+            "solver_type": "bh2",
+            "lower_order_final": true,
+            "use_karras_sigmas": false,
+            "use_exponential_sigmas": false,
+            "use_beta_sigmas": false,
+            "use_flow_sigmas": false,
+            "flow_shift": 1,
+            "timestep_spacing": "linspace",
+            "steps_offset": 0,
+            "final_sigmas_type": "zero",
+            "rescale_betas_zero_snr": false,
+            "use_dynamic_shifting": false,
+            "time_shift_type": "exponential",
+            "sigma_min": null,
+            "sigma_max": null,
+            "shift_terminal": null
+          },
+          "TCD": {
+            "Scheduler": "TCD",
+            "num_train_timesteps": 1000,
+            "beta_start": 0.00085,
+            "beta_end": 0.012,
+            "beta_schedule": "scaled_linear",
+            "trained_betas": null,
+            "original_inference_steps": 50,
+            "clip_sample": true,
+            "clip_sample_range": 1,
+            "set_alpha_to_one": true,
+            "steps_offset": 0,
+            "prediction_type": "epsilon",
+            "thresholding": false,
+            "dynamic_thresholding_ratio": 0.995,
+            "sample_max_value": 1,
+            "timestep_spacing": "leading",
+            "timestep_scaling": 10,
+            "rescale_betas_zero_snr": false
+          },
+          "SASolver": {
+            "Scheduler": "SASolver",
+            "num_train_timesteps": 1000,
+            "beta_start": 0.00085,
+            "beta_end": 0.012,
+            "beta_schedule": "scaled_linear",
+            "trained_betas": null,
+            "predictor_order": 2,
+            "corrector_order": 2,
+            "prediction_type": "epsilon",
+            "thresholding": false,
+            "dynamic_thresholding_ratio": 0.995,
+            "sample_max_value": 1,
+            "algorithm_type": "data_prediction",
+            "lower_order_final": true,
+            "use_karras_sigmas": false,
+            "use_exponential_sigmas": false,
+            "use_beta_sigmas": false,
+            "use_flow_sigmas": false,
+            "flow_shift": 1,
+            "variance_type": null,
+            "timestep_spacing": "linspace",
+            "steps_offset": 0
+          }
+        },
+        "SampleRate": 24000,
+        "FrameOptions": null
+      }
+    },
+    {
+      "Backend": "Pytorch",
+      "Name": "StableDiffusionXL_Turbo",
+      "Pipeline": "StableDiffusionXLPipeline",
+      "Path": "stabilityai/sdxl-turbo",
+      "Variant": null,
+      "Source": "Folder",
+      "IsDefault": false,
+      "IsGated": false,
+      "Status": "Pending",
+      "Link": "https://huggingface.co/stabilityai/sdxl-turbo",
+      "MemoryProfile": [
+        {
+          "QualityMode": "Draft",
+          "MemoryModes": [ 2, 4, 8 ]
+        },
+        {
+          "QualityMode": "Standard",
+          "MemoryModes": [ 2, 6, 10 ]
+        },
+        {
+          "QualityMode": "Production",
+          "MemoryModes": [ 2, 8, 16 ]
+        }
+      ],
+      "BaseType": "bfloat16",
+      "ProcessTypes": [ "TextToImage" ],
+      "Resolutions": [
+        {
+          "Width": 648,
+          "Height": 1152
+        },
+        {
+          "Width": 768,
+          "Height": 1024
+        },
+        {
+          "Width": 512,
+          "Height": 896
+        },
+        {
+          "Width": 1152,
+          "Height": 768
+        },
+        {
+          "Width": 576,
+          "Height": 768
+        },
+        {
+          "Width": 512,
+          "Height": 512,
+          "IsDefault": true
+        },
+        {
+          "Width": 768,
+          "Height": 768
+        },
+        {
+          "Width": 768,
+          "Height": 576
+        },
+        {
+          "Width": 768,
+          "Height": 1152
+        },
+        {
+          "Width": 896,
+          "Height": 512
+        },
+        {
+          "Width": 1024,
+          "Height": 768
+        },
+        {
+          "Width": 1152,
+          "Height": 648
+        }
+      ],
+      "DefaultOptions": {
+        "GuidanceScale": 0,
+        "GuidanceScale2": 0,
+        "Steps": 4,
+        "Steps2": 0,
+        "Height": 512,
+        "Width": 512,
+        "Frames": 0,
+        "FrameRate": 16,
+        "FrameChunk": 0,
+        "FrameChunkOverlap": 0,
+        "NoiseCondition": 0,
+        "Strength": 1,
+        "Scheduler": "EulerAncestral",
+        "Schedulers": {
+          "LMS": {
+            "Scheduler": "LMS",
+            "num_train_timesteps": 1000,
+            "beta_start": 0.00085,
+            "beta_end": 0.012,
+            "beta_schedule": "scaled_linear",
+            "trained_betas": null,
+            "use_karras_sigmas": false,
+            "use_exponential_sigmas": false,
+            "use_beta_sigmas": false,
+            "prediction_type": "epsilon",
+            "timestep_spacing": "linspace",
+            "steps_offset": 0
+          },
+          "Euler": {
+            "Scheduler": "Euler",
+            "num_train_timesteps": 1000,
+            "beta_start": 0.00085,
+            "beta_end": 0.012,
+            "beta_schedule": "scaled_linear",
+            "trained_betas": null,
+            "interpolation_type": "linear",
+            "use_karras_sigmas": false,
+            "use_exponential_sigmas": false,
+            "use_beta_sigmas": false,
+            "prediction_type": "epsilon",
+            "sigma_min": null,
+            "sigma_max": null,
+            "timestep_spacing": "linspace",
+            "timestep_type": "discrete",
+            "steps_offset": 0,
+            "rescale_betas_zero_snr": false,
+            "final_sigmas_type": "zero"
+          },
+          "EulerAncestral": {
+            "Scheduler": "EulerAncestral",
+            "num_train_timesteps": 1000,
+            "beta_start": 0.00085,
+            "beta_end": 0.012,
+            "beta_schedule": "scaled_linear",
+            "trained_betas": null,
+            "prediction_type": "epsilon",
+            "timestep_spacing": "linspace",
+            "steps_offset": 0,
+            "rescale_betas_zero_snr": false
+          },
+          "DDPM": {
+            "Scheduler": "DDPM",
+            "num_train_timesteps": 1000,
+            "beta_start": 0.00085,
+            "beta_end": 0.012,
+            "beta_schedule": "scaled_linear",
+            "trained_betas": null,
+            "variance_type": "fixed_small",
+            "prediction_type": "epsilon",
+            "thresholding": false,
+            "dynamic_thresholding_ratio": 0.995,
+            "clip_sample": false,
+            "clip_sample_range": 1,
+            "sample_max_value": 1,
+            "timestep_spacing": "leading",
+            "steps_offset": 0,
+            "rescale_betas_zero_snr": false
+          },
+          "DDIM": {
+            "Scheduler": "DDIM",
+            "num_train_timesteps": 1000,
+            "beta_start": 0.00085,
+            "beta_end": 0.012,
+            "beta_schedule": "scaled_linear",
+            "trained_betas": null,
+            "set_alpha_to_one": true,
+            "prediction_type": "epsilon",
+            "thresholding": false,
+            "dynamic_thresholding_ratio": 0.995,
+            "clip_sample": false,
+            "clip_sample_range": 1,
+            "sample_max_value": 1,
+            "timestep_spacing": "leading",
+            "steps_offset": 0,
+            "rescale_betas_zero_snr": false
+          },
+          "KDPM2": {
+            "Scheduler": "KDPM2",
+            "num_train_timesteps": 1000,
+            "beta_start": 0.00085,
+            "beta_end": 0.012,
+            "beta_schedule": "scaled_linear",
+            "trained_betas": null,
+            "use_karras_sigmas": false,
+            "use_exponential_sigmas": false,
+            "use_beta_sigmas": false,
+            "prediction_type": "epsilon",
+            "timestep_spacing": "trailing",
+            "steps_offset": 0
+          },
+          "KDPM2Ancestral": {
+            "Scheduler": "KDPM2Ancestral",
+            "num_train_timesteps": 1000,
+            "beta_start": 0.00085,
+            "beta_end": 0.012,
+            "beta_schedule": "scaled_linear",
+            "trained_betas": null,
+            "use_karras_sigmas": false,
+            "use_exponential_sigmas": false,
+            "use_beta_sigmas": false,
+            "prediction_type": "epsilon",
+            "timestep_spacing": "trailing",
+            "steps_offset": 0
+          },
+          "DPMSolverMultistep": {
+            "Scheduler": "DPMSolverMultistep",
+            "num_train_timesteps": 1000,
+            "beta_start": 0.00085,
+            "beta_end": 0.012,
+            "beta_schedule": "scaled_linear",
+            "trained_betas": null,
+            "solver_order": 2,
+            "prediction_type": "epsilon",
+            "thresholding": false,
+            "dynamic_thresholding_ratio": 0.995,
+            "sample_max_value": 1,
+            "algorithm_type": "dpmsolver\u002B\u002B",
+            "solver_type": "midpoint",
+            "euler_at_final": false,
+            "lower_order_final": true,
+            "use_karras_sigmas": false,
+            "use_exponential_sigmas": false,
+            "use_beta_sigmas": false,
+            "use_flow_sigmas": false,
+            "use_lu_lambdas": false,
+            "flow_shift": 1,
+            "timestep_spacing": "linspace",
+            "steps_offset": 0,
+            "final_sigmas_type": "zero",
+            "rescale_betas_zero_snr": false,
+            "use_dynamic_shifting": false,
+            "time_shift_type": "exponential"
+          },
+          "DPMSolverSinglestep": {
+            "Scheduler": "DPMSolverSinglestep",
+            "num_train_timesteps": 1000,
+            "beta_start": 0.00085,
+            "beta_end": 0.012,
+            "beta_schedule": "scaled_linear",
+            "trained_betas": null,
+            "solver_order": 2,
+            "prediction_type": "epsilon",
+            "thresholding": false,
+            "dynamic_thresholding_ratio": 0.995,
+            "sample_max_value": 1,
+            "algorithm_type": "dpmsolver\u002B\u002B",
+            "solver_type": "midpoint",
+            "lower_order_final": false,
+            "use_karras_sigmas": false,
+            "use_exponential_sigmas": false,
+            "use_beta_sigmas": false,
+            "use_flow_sigmas": false,
+            "flow_shift": 1,
+            "final_sigmas_type": "zero",
+            "timestep_spacing": "linspace",
+            "steps_offset": 0,
+            "variance_type": null
+          },
+          "DPMSolverSDE": {
+            "Scheduler": "DPMSolverSDE",
+            "num_train_timesteps": 1000,
+            "beta_start": 0.00085,
+            "beta_end": 0.012,
+            "beta_schedule": "scaled_linear",
+            "trained_betas": null,
+            "prediction_type": "epsilon",
+            "use_karras_sigmas": false,
+            "use_exponential_sigmas": false,
+            "use_beta_sigmas": false,
+            "noise_sampler_seed": null,
+            "timestep_spacing": "linspace",
+            "steps_offset": 0
+          },
+          "DEISMultistep": {
+            "Scheduler": "DEISMultistep",
+            "num_train_timesteps": 1000,
+            "beta_start": 0.00085,
+            "beta_end": 0.012,
+            "beta_schedule": "scaled_linear",
+            "trained_betas": null,
+            "solver_order": 2,
+            "prediction_type": "epsilon",
+            "thresholding": false,
+            "dynamic_thresholding_ratio": 0.995,
+            "sample_max_value": 1,
+            "algorithm_type": "deis",
+            "solver_type": "logrho",
+            "lower_order_final": true,
+            "use_karras_sigmas": false,
+            "use_exponential_sigmas": false,
+            "use_beta_sigmas": false,
+            "use_flow_sigmas": false,
+            "flow_shift": 1,
+            "timestep_spacing": "linspace",
+            "steps_offset": 0,
+            "use_dynamic_shifting": false,
+            "time_shift_type": "exponential"
+          },
+          "PNDM": {
+            "Scheduler": "PNDM",
+            "num_train_timesteps": 1000,
+            "beta_start": 0.00085,
+            "beta_end": 0.012,
+            "beta_schedule": "scaled_linear",
+            "trained_betas": null,
+            "skip_prk_steps": false,
+            "set_alpha_to_one": false,
+            "prediction_type": "epsilon",
+            "timestep_spacing": "leading",
+            "steps_offset": 0
+          },
+          "Heun": {
+            "Scheduler": "Heun",
+            "num_train_timesteps": 1000,
+            "beta_start": 0.00085,
+            "beta_end": 0.012,
+            "beta_schedule": "scaled_linear",
+            "trained_betas": null,
+            "prediction_type": "epsilon",
+            "use_karras_sigmas": false,
+            "use_exponential_sigmas": false,
+            "use_beta_sigmas": false,
+            "clip_sample": false,
+            "clip_sample_range": 1,
+            "timestep_spacing": "trailing",
+            "steps_offset": 0
+          },
+          "UniPCMultistep": {
+            "Scheduler": "UniPCMultistep",
+            "num_train_timesteps": 1000,
+            "beta_start": 0.00085,
+            "beta_end": 0.012,
+            "beta_schedule": "scaled_linear",
+            "trained_betas": null,
+            "solver_order": 2,
+            "prediction_type": "epsilon",
+            "thresholding": false,
+            "dynamic_thresholding_ratio": 0.995,
+            "sample_max_value": 1,
+            "predict_x0": true,
+            "solver_type": "bh2",
+            "lower_order_final": true,
+            "use_karras_sigmas": false,
+            "use_exponential_sigmas": false,
+            "use_beta_sigmas": false,
+            "use_flow_sigmas": false,
+            "flow_shift": 1,
+            "timestep_spacing": "linspace",
+            "steps_offset": 0,
+            "final_sigmas_type": "zero",
+            "rescale_betas_zero_snr": false,
+            "use_dynamic_shifting": false,
+            "time_shift_type": "exponential",
+            "sigma_min": null,
+            "sigma_max": null,
+            "shift_terminal": null
+          },
+          "TCD": {
+            "Scheduler": "TCD",
+            "num_train_timesteps": 1000,
+            "beta_start": 0.00085,
+            "beta_end": 0.012,
+            "beta_schedule": "scaled_linear",
+            "trained_betas": null,
+            "original_inference_steps": 50,
+            "clip_sample": true,
+            "clip_sample_range": 1,
+            "set_alpha_to_one": true,
+            "steps_offset": 0,
+            "prediction_type": "epsilon",
+            "thresholding": false,
+            "dynamic_thresholding_ratio": 0.995,
+            "sample_max_value": 1,
+            "timestep_spacing": "leading",
+            "timestep_scaling": 10,
+            "rescale_betas_zero_snr": false
+          },
+          "SASolver": {
+            "Scheduler": "SASolver",
+            "num_train_timesteps": 1000,
+            "beta_start": 0.00085,
+            "beta_end": 0.012,
+            "beta_schedule": "scaled_linear",
+            "trained_betas": null,
+            "predictor_order": 2,
+            "corrector_order": 2,
+            "prediction_type": "epsilon",
+            "thresholding": false,
+            "dynamic_thresholding_ratio": 0.995,
+            "sample_max_value": 1,
+            "algorithm_type": "data_prediction",
+            "lower_order_final": true,
+            "use_karras_sigmas": false,
+            "use_exponential_sigmas": false,
+            "use_beta_sigmas": false,
+            "use_flow_sigmas": false,
+            "flow_shift": 1,
+            "variance_type": null,
+            "timestep_spacing": "linspace",
+            "steps_offset": 0
+          }
+        },
+        "SampleRate": 24000,
+        "FrameOptions": null
+      }
+    },
+    {
+      "Backend": "Pytorch",
+      "Name": "StableDiffusionXL_Lightning",
+      "Pipeline": "StableDiffusionXLPipeline",
+      "Path": "stabilityai/stable-diffusion-xl-base-1.0",
+      "Variant": null,
+      "Source": "Folder",
+      "IsDefault": false,
+      "IsGated": false,
+      "Status": "Pending",
+      "Link": "https://huggingface.co/stabilityai/stable-diffusion-xl-base-1.0",
+      "MemoryProfile": [
+        {
+          "QualityMode": "Draft",
+          "MemoryModes": [ 2, 4, 8 ]
+        },
+        {
+          "QualityMode": "Standard",
+          "MemoryModes": [ 2, 6, 10 ]
+        },
+        {
+          "QualityMode": "Production",
+          "MemoryModes": [ 2, 8, 16 ]
+        }
+      ],
+      "BaseType": "bfloat16",
+      "ProcessTypes": [ "TextToImage", "ImageToImage", "ImageControlNet", "ImageToImageControlNet" ],
+      "Resolutions": [
+        {
+          "Width": 640,
+          "Height": 1536
+        },
+        {
+          "Width": 768,
+          "Height": 1344
+        },
+        {
+          "Width": 832,
+          "Height": 1280
+        },
+        {
+          "Width": 896,
+          "Height": 1152
+        },
+        {
+          "Width": 768,
+          "Height": 768
+        },
+        {
+          "Width": 1024,
+          "Height": 1024,
+          "IsDefault": true
+        },
+        {
+          "Width": 1152,
+          "Height": 896
+        },
+        {
+          "Width": 1280,
+          "Height": 832
+        },
+        {
+          "Width": 1344,
+          "Height": 768
+        },
+        {
+          "Width": 1536,
+          "Height": 640
+        }
+      ],
+      "DefaultOptions": {
+        "GuidanceScale": 2,
+        "GuidanceScale2": 0,
+        "Steps": 8,
+        "Steps2": 0,
+        "Height": 1024,
+        "Width": 1024,
+        "Frames": 0,
+        "FrameRate": 16,
+        "FrameChunk": 0,
+        "FrameChunkOverlap": 0,
+        "NoiseCondition": 0,
+        "Strength": 1,
+        "Scheduler": "DDPM",
+        "Schedulers": {
+          "LMS": {
+            "Scheduler": "LMS",
+            "num_train_timesteps": 1000,
+            "beta_start": 0.00085,
+            "beta_end": 0.012,
+            "beta_schedule": "scaled_linear",
+            "trained_betas": null,
+            "use_karras_sigmas": false,
+            "use_exponential_sigmas": false,
+            "use_beta_sigmas": false,
+            "prediction_type": "epsilon",
+            "timestep_spacing": "linspace",
+            "steps_offset": 0
+          },
+          "Euler": {
+            "Scheduler": "Euler",
+            "num_train_timesteps": 1000,
+            "beta_start": 0.00085,
+            "beta_end": 0.012,
+            "beta_schedule": "scaled_linear",
+            "trained_betas": null,
+            "interpolation_type": "linear",
+            "use_karras_sigmas": false,
+            "use_exponential_sigmas": false,
+            "use_beta_sigmas": false,
+            "prediction_type": "epsilon",
+            "sigma_min": null,
+            "sigma_max": null,
+            "timestep_spacing": "linspace",
+            "timestep_type": "discrete",
+            "steps_offset": 0,
+            "rescale_betas_zero_snr": false,
+            "final_sigmas_type": "zero"
+          },
+          "EulerAncestral": {
+            "Scheduler": "EulerAncestral",
+            "num_train_timesteps": 1000,
+            "beta_start": 0.00085,
+            "beta_end": 0.012,
+            "beta_schedule": "scaled_linear",
+            "trained_betas": null,
+            "prediction_type": "epsilon",
+            "timestep_spacing": "linspace",
+            "steps_offset": 0,
+            "rescale_betas_zero_snr": false
+          },
+          "DDPM": {
+            "Scheduler": "DDPM",
+            "num_train_timesteps": 1000,
+            "beta_start": 0.00085,
+            "beta_end": 0.012,
+            "beta_schedule": "scaled_linear",
+            "trained_betas": null,
+            "variance_type": "fixed_small",
+            "prediction_type": "epsilon",
+            "thresholding": false,
+            "dynamic_thresholding_ratio": 0.995,
+            "clip_sample": false,
+            "clip_sample_range": 1,
+            "sample_max_value": 1,
+            "timestep_spacing": "leading",
+            "steps_offset": 0,
+            "rescale_betas_zero_snr": false
+          },
+          "DDIM": {
+            "Scheduler": "DDIM",
+            "num_train_timesteps": 1000,
+            "beta_start": 0.00085,
+            "beta_end": 0.012,
+            "beta_schedule": "scaled_linear",
+            "trained_betas": null,
+            "set_alpha_to_one": true,
+            "prediction_type": "epsilon",
+            "thresholding": false,
+            "dynamic_thresholding_ratio": 0.995,
+            "clip_sample": false,
+            "clip_sample_range": 1,
+            "sample_max_value": 1,
+            "timestep_spacing": "leading",
+            "steps_offset": 0,
+            "rescale_betas_zero_snr": false
+          },
+          "KDPM2": {
+            "Scheduler": "KDPM2",
+            "num_train_timesteps": 1000,
+            "beta_start": 0.00085,
+            "beta_end": 0.012,
+            "beta_schedule": "scaled_linear",
+            "trained_betas": null,
+            "use_karras_sigmas": false,
+            "use_exponential_sigmas": false,
+            "use_beta_sigmas": false,
+            "prediction_type": "epsilon",
+            "timestep_spacing": "trailing",
+            "steps_offset": 0
+          },
+          "KDPM2Ancestral": {
+            "Scheduler": "KDPM2Ancestral",
+            "num_train_timesteps": 1000,
+            "beta_start": 0.00085,
+            "beta_end": 0.012,
+            "beta_schedule": "scaled_linear",
+            "trained_betas": null,
+            "use_karras_sigmas": false,
+            "use_exponential_sigmas": false,
+            "use_beta_sigmas": false,
+            "prediction_type": "epsilon",
+            "timestep_spacing": "trailing",
+            "steps_offset": 0
+          },
+          "DPMSolverMultistep": {
+            "Scheduler": "DPMSolverMultistep",
+            "num_train_timesteps": 1000,
+            "beta_start": 0.00085,
+            "beta_end": 0.012,
+            "beta_schedule": "scaled_linear",
+            "trained_betas": null,
+            "solver_order": 2,
+            "prediction_type": "epsilon",
+            "thresholding": false,
+            "dynamic_thresholding_ratio": 0.995,
+            "sample_max_value": 1,
+            "algorithm_type": "dpmsolver\u002B\u002B",
+            "solver_type": "midpoint",
+            "euler_at_final": false,
+            "lower_order_final": true,
+            "use_karras_sigmas": false,
+            "use_exponential_sigmas": false,
+            "use_beta_sigmas": false,
+            "use_flow_sigmas": false,
+            "use_lu_lambdas": false,
+            "flow_shift": 1,
+            "timestep_spacing": "linspace",
+            "steps_offset": 0,
+            "final_sigmas_type": "zero",
+            "rescale_betas_zero_snr": false,
+            "use_dynamic_shifting": false,
+            "time_shift_type": "exponential"
+          },
+          "DPMSolverSinglestep": {
+            "Scheduler": "DPMSolverSinglestep",
+            "num_train_timesteps": 1000,
+            "beta_start": 0.00085,
+            "beta_end": 0.012,
+            "beta_schedule": "scaled_linear",
+            "trained_betas": null,
+            "solver_order": 2,
+            "prediction_type": "epsilon",
+            "thresholding": false,
+            "dynamic_thresholding_ratio": 0.995,
+            "sample_max_value": 1,
+            "algorithm_type": "dpmsolver\u002B\u002B",
+            "solver_type": "midpoint",
+            "lower_order_final": false,
+            "use_karras_sigmas": false,
+            "use_exponential_sigmas": false,
+            "use_beta_sigmas": false,
+            "use_flow_sigmas": false,
+            "flow_shift": 1,
+            "final_sigmas_type": "zero",
+            "timestep_spacing": "linspace",
+            "steps_offset": 0,
+            "variance_type": null
+          },
+          "DPMSolverSDE": {
+            "Scheduler": "DPMSolverSDE",
+            "num_train_timesteps": 1000,
+            "beta_start": 0.00085,
+            "beta_end": 0.012,
+            "beta_schedule": "scaled_linear",
+            "trained_betas": null,
+            "prediction_type": "epsilon",
+            "use_karras_sigmas": false,
+            "use_exponential_sigmas": false,
+            "use_beta_sigmas": false,
+            "noise_sampler_seed": null,
+            "timestep_spacing": "linspace",
+            "steps_offset": 0
+          },
+          "DEISMultistep": {
+            "Scheduler": "DEISMultistep",
+            "num_train_timesteps": 1000,
+            "beta_start": 0.00085,
+            "beta_end": 0.012,
+            "beta_schedule": "scaled_linear",
+            "trained_betas": null,
+            "solver_order": 2,
+            "prediction_type": "epsilon",
+            "thresholding": false,
+            "dynamic_thresholding_ratio": 0.995,
+            "sample_max_value": 1,
+            "algorithm_type": "deis",
+            "solver_type": "logrho",
+            "lower_order_final": true,
+            "use_karras_sigmas": false,
+            "use_exponential_sigmas": false,
+            "use_beta_sigmas": false,
+            "use_flow_sigmas": false,
+            "flow_shift": 1,
+            "timestep_spacing": "linspace",
+            "steps_offset": 0,
+            "use_dynamic_shifting": false,
+            "time_shift_type": "exponential"
+          },
+          "PNDM": {
+            "Scheduler": "PNDM",
+            "num_train_timesteps": 1000,
+            "beta_start": 0.00085,
+            "beta_end": 0.012,
+            "beta_schedule": "scaled_linear",
+            "trained_betas": null,
+            "skip_prk_steps": false,
+            "set_alpha_to_one": false,
+            "prediction_type": "epsilon",
+            "timestep_spacing": "leading",
+            "steps_offset": 0
+          },
+          "Heun": {
+            "Scheduler": "Heun",
+            "num_train_timesteps": 1000,
+            "beta_start": 0.00085,
+            "beta_end": 0.012,
+            "beta_schedule": "scaled_linear",
+            "trained_betas": null,
+            "prediction_type": "epsilon",
+            "use_karras_sigmas": false,
+            "use_exponential_sigmas": false,
+            "use_beta_sigmas": false,
+            "clip_sample": false,
+            "clip_sample_range": 1,
+            "timestep_spacing": "trailing",
+            "steps_offset": 0
+          },
+          "UniPCMultistep": {
+            "Scheduler": "UniPCMultistep",
+            "num_train_timesteps": 1000,
+            "beta_start": 0.00085,
+            "beta_end": 0.012,
+            "beta_schedule": "scaled_linear",
+            "trained_betas": null,
+            "solver_order": 2,
+            "prediction_type": "epsilon",
+            "thresholding": false,
+            "dynamic_thresholding_ratio": 0.995,
+            "sample_max_value": 1,
+            "predict_x0": true,
+            "solver_type": "bh2",
+            "lower_order_final": true,
+            "use_karras_sigmas": false,
+            "use_exponential_sigmas": false,
+            "use_beta_sigmas": false,
+            "use_flow_sigmas": false,
+            "flow_shift": 1,
+            "timestep_spacing": "linspace",
+            "steps_offset": 0,
+            "final_sigmas_type": "zero",
+            "rescale_betas_zero_snr": false,
+            "use_dynamic_shifting": false,
+            "time_shift_type": "exponential",
+            "sigma_min": null,
+            "sigma_max": null,
+            "shift_terminal": null
+          },
+          "TCD": {
+            "Scheduler": "TCD",
+            "num_train_timesteps": 1000,
+            "beta_start": 0.00085,
+            "beta_end": 0.012,
+            "beta_schedule": "scaled_linear",
+            "trained_betas": null,
+            "original_inference_steps": 50,
+            "clip_sample": true,
+            "clip_sample_range": 1,
+            "set_alpha_to_one": true,
+            "steps_offset": 0,
+            "prediction_type": "epsilon",
+            "thresholding": false,
+            "dynamic_thresholding_ratio": 0.995,
+            "sample_max_value": 1,
+            "timestep_spacing": "leading",
+            "timestep_scaling": 10,
+            "rescale_betas_zero_snr": false
+          },
+          "SASolver": {
+            "Scheduler": "SASolver",
+            "num_train_timesteps": 1000,
+            "beta_start": 0.00085,
+            "beta_end": 0.012,
+            "beta_schedule": "scaled_linear",
+            "trained_betas": null,
+            "predictor_order": 2,
+            "corrector_order": 2,
+            "prediction_type": "epsilon",
+            "thresholding": false,
+            "dynamic_thresholding_ratio": 0.995,
+            "sample_max_value": 1,
+            "algorithm_type": "data_prediction",
+            "lower_order_final": true,
+            "use_karras_sigmas": false,
+            "use_exponential_sigmas": false,
+            "use_beta_sigmas": false,
+            "use_flow_sigmas": false,
+            "flow_shift": 1,
+            "variance_type": null,
+            "timestep_spacing": "linspace",
+            "steps_offset": 0
+          }
+        },
+        "SampleRate": 24000,
+        "FrameOptions": null
+      }
+    },
+    {
+      "Backend": "Pytorch",
+      "Name": "Wan21_T2V_1B",
+      "Pipeline": "WanPipeline",
+      "Path": "Wan-AI/Wan2.1-I2V-14B-480P-Diffusers",
+      "Variant": null,
+      "Source": "Folder",
+      "IsDefault": false,
+      "IsGated": false,
+      "Status": "Pending",
+      "Link": "https://huggingface.co/Wan-AI",
+      "MemoryProfile": [
+        {
+          "QualityMode": "Draft",
+          "MemoryModes": [ 2, 6, 10 ]
+        },
+        {
+          "QualityMode": "Standard",
+          "MemoryModes": [ 2, 8, 12 ]
+        },
+        {
+          "QualityMode": "Production",
+          "MemoryModes": [ 2, 12, 18 ]
+        }
+      ],
+      "BaseType": "bfloat16",
+      "ProcessTypes": [ "TextToVideo" ],
+      "Vendor": [ "Nvidia" ],
+      "Resolutions": [
+        {
+          "Width": 832,
+          "Height": 480,
+          "IsDefault": true
+        }
+      ],
+      "DefaultOptions": {
+        "GuidanceScale": 5,
+        "GuidanceScale2": 0,
+        "Steps": 50,
+        "Steps2": 0,
+        "Height": 480,
+        "Width": 832,
+        "Frames": 81,
+        "FrameRate": 16,
+        "FrameChunk": 0,
+        "FrameChunkOverlap": 0,
+        "NoiseCondition": 0,
+        "Strength": 1,
+        "Scheduler": "UniPCMultistep",
+        "Schedulers": {
+          "FlowMatchEuler": {
+            "Scheduler": "FlowMatchEuler",
+            "num_train_timesteps": 1000,
+            "shift": 3,
+            "use_dynamic_shifting": false,
+            "base_shift": 0.5,
+            "max_shift": 1.15,
+            "base_image_seq_len": 256,
+            "max_image_seq_len": 4096,
+            "invert_sigmas": false,
+            "shift_terminal": null,
+            "use_karras_sigmas": false,
+            "use_exponential_sigmas": false,
+            "use_beta_sigmas": false,
+            "time_shift_type": "exponential",
+            "stochastic_sampling": false
+          },
+          "UniPCMultistep": {
+            "Scheduler": "UniPCMultistep",
+            "num_train_timesteps": 1000,
+            "beta_start": 0.0001,
+            "beta_end": 0.02,
+            "beta_schedule": "linear",
+            "trained_betas": null,
+            "solver_order": 2,
+            "prediction_type": "flow_prediction",
+            "thresholding": false,
+            "dynamic_thresholding_ratio": 0.995,
+            "sample_max_value": 1,
+            "predict_x0": true,
+            "solver_type": "bh2",
+            "lower_order_final": true,
+            "use_karras_sigmas": false,
+            "use_exponential_sigmas": false,
+            "use_beta_sigmas": false,
+            "use_flow_sigmas": true,
+            "flow_shift": 3,
+            "timestep_spacing": "linspace",
+            "steps_offset": 0,
+            "final_sigmas_type": "zero",
+            "rescale_betas_zero_snr": false,
+            "use_dynamic_shifting": false,
+            "time_shift_type": "exponential",
+            "sigma_min": null,
+            "sigma_max": null,
+            "shift_terminal": null
+          },
+          "DPMSolverMultistep": {
+            "Scheduler": "DPMSolverMultistep",
+            "num_train_timesteps": 1000,
+            "beta_start": 0.0001,
+            "beta_end": 0.02,
+            "beta_schedule": "scaled_linear",
+            "trained_betas": null,
+            "solver_order": 2,
+            "prediction_type": "flow_prediction",
+            "thresholding": false,
+            "dynamic_thresholding_ratio": 0.995,
+            "sample_max_value": 1,
+            "algorithm_type": "dpmsolver\u002B\u002B",
+            "solver_type": "midpoint",
+            "euler_at_final": false,
+            "lower_order_final": true,
+            "use_karras_sigmas": false,
+            "use_exponential_sigmas": false,
+            "use_beta_sigmas": false,
+            "use_flow_sigmas": true,
+            "use_lu_lambdas": false,
+            "flow_shift": 3,
+            "timestep_spacing": "linspace",
+            "steps_offset": 0,
+            "final_sigmas_type": "zero",
+            "rescale_betas_zero_snr": false,
+            "use_dynamic_shifting": true,
+            "time_shift_type": "exponential"
+          }
+        },
+        "SampleRate": 24000,
+        "FrameOptions": [ 17, 33, 49, 81, 161 ]
+      }
+    },
+    {
+      "Backend": "Pytorch",
+      "Name": "Wan21_T2V_14B",
+      "Pipeline": "WanPipeline",
+      "Path": "Wan-AI/Wan2.1-I2V-14B-480P-Diffusers",
+      "Variant": null,
+      "Source": "Folder",
+      "IsDefault": false,
+      "IsGated": false,
+      "Status": "Pending",
+      "Link": "https://huggingface.co/Wan-AI",
+      "MemoryProfile": [
+        {
+          "QualityMode": "Draft",
+          "MemoryModes": [ 8, 21, 38 ]
+        },
+        {
+          "QualityMode": "Standard",
+          "MemoryModes": [ 8, 21, 38 ]
+        },
+        {
+          "QualityMode": "Production",
+          "MemoryModes": [ 8, 34, 52 ]
+        }
+      ],
+      "BaseType": "bfloat16",
+      "ProcessTypes": [ "TextToVideo" ],
+      "Vendor": [ "Nvidia" ],
+      "Resolutions": [
+        {
+          "Width": 832,
+          "Height": 480,
+          "IsDefault": true
+        },
+        {
+          "Width": 1280,
+          "Height": 720
+        }
+      ],
+      "DefaultOptions": {
+        "GuidanceScale": 5,
+        "GuidanceScale2": 0,
+        "Steps": 50,
+        "Steps2": 0,
+        "Height": 480,
+        "Width": 832,
+        "Frames": 81,
+        "FrameRate": 16,
+        "FrameChunk": 0,
+        "FrameChunkOverlap": 0,
+        "NoiseCondition": 0,
+        "Strength": 1,
+        "Scheduler": "UniPCMultistep",
+        "Schedulers": {
+          "FlowMatchEuler": {
+            "Scheduler": "FlowMatchEuler",
+            "num_train_timesteps": 1000,
+            "shift": 3,
+            "use_dynamic_shifting": false,
+            "base_shift": 0.5,
+            "max_shift": 1.15,
+            "base_image_seq_len": 256,
+            "max_image_seq_len": 4096,
+            "invert_sigmas": false,
+            "shift_terminal": null,
+            "use_karras_sigmas": false,
+            "use_exponential_sigmas": false,
+            "use_beta_sigmas": false,
+            "time_shift_type": "exponential",
+            "stochastic_sampling": false
+          },
+          "UniPCMultistep": {
+            "Scheduler": "UniPCMultistep",
+            "num_train_timesteps": 1000,
+            "beta_start": 0.0001,
+            "beta_end": 0.02,
+            "beta_schedule": "linear",
+            "trained_betas": null,
+            "solver_order": 2,
+            "prediction_type": "flow_prediction",
+            "thresholding": false,
+            "dynamic_thresholding_ratio": 0.995,
+            "sample_max_value": 1,
+            "predict_x0": true,
+            "solver_type": "bh2",
+            "lower_order_final": true,
+            "use_karras_sigmas": false,
+            "use_exponential_sigmas": false,
+            "use_beta_sigmas": false,
+            "use_flow_sigmas": true,
+            "flow_shift": 3,
+            "timestep_spacing": "linspace",
+            "steps_offset": 0,
+            "final_sigmas_type": "zero",
+            "rescale_betas_zero_snr": false,
+            "use_dynamic_shifting": false,
+            "time_shift_type": "exponential",
+            "sigma_min": null,
+            "sigma_max": null,
+            "shift_terminal": null
+          },
+          "DPMSolverMultistep": {
+            "Scheduler": "DPMSolverMultistep",
+            "num_train_timesteps": 1000,
+            "beta_start": 0.0001,
+            "beta_end": 0.02,
+            "beta_schedule": "scaled_linear",
+            "trained_betas": null,
+            "solver_order": 2,
+            "prediction_type": "flow_prediction",
+            "thresholding": false,
+            "dynamic_thresholding_ratio": 0.995,
+            "sample_max_value": 1,
+            "algorithm_type": "dpmsolver\u002B\u002B",
+            "solver_type": "midpoint",
+            "euler_at_final": false,
+            "lower_order_final": true,
+            "use_karras_sigmas": false,
+            "use_exponential_sigmas": false,
+            "use_beta_sigmas": false,
+            "use_flow_sigmas": true,
+            "use_lu_lambdas": false,
+            "flow_shift": 3,
+            "timestep_spacing": "linspace",
+            "steps_offset": 0,
+            "final_sigmas_type": "zero",
+            "rescale_betas_zero_snr": false,
+            "use_dynamic_shifting": true,
+            "time_shift_type": "exponential"
+          }
+        },
+        "SampleRate": 24000,
+        "FrameOptions": [ 17, 33, 49, 81, 161 ]
+      }
+    },
+    {
+      "Backend": "Pytorch",
+      "Name": "Wan21_I2V_14B_480",
+      "Pipeline": "WanPipeline",
+      "Path": "Wan-AI/Wan2.1-I2V-14B-480P-Diffusers",
+      "Variant": null,
+      "Source": "Folder",
+      "IsDefault": false,
+      "IsGated": false,
+      "Status": "Pending",
+      "Link": "https://huggingface.co/Wan-AI",
+      "MemoryProfile": [
+        {
+          "QualityMode": "Draft",
+          "MemoryModes": [ 8, 21, 38 ]
+        },
+        {
+          "QualityMode": "Standard",
+          "MemoryModes": [ 8, 21, 38 ]
+        },
+        {
+          "QualityMode": "Production",
+          "MemoryModes": [ 8, 34, 52 ]
+        }
+      ],
+      "BaseType": "bfloat16",
+      "ProcessTypes": [ "ImageToVideo" ],
+      "Vendor": [ "Nvidia" ],
+      "Resolutions": [
+        {
+          "Width": 832,
+          "Height": 480,
+          "IsDefault": true
+        }
+      ],
+      "DefaultOptions": {
+        "GuidanceScale": 5,
+        "GuidanceScale2": 0,
+        "Steps": 50,
+        "Steps2": 0,
+        "Height": 480,
+        "Width": 832,
+        "Frames": 81,
+        "FrameRate": 16,
+        "FrameChunk": 0,
+        "FrameChunkOverlap": 0,
+        "NoiseCondition": 0,
+        "Strength": 1,
+        "Scheduler": "UniPCMultistep",
+        "Schedulers": {
+          "FlowMatchEuler": {
+            "Scheduler": "FlowMatchEuler",
+            "num_train_timesteps": 1000,
+            "shift": 3,
+            "use_dynamic_shifting": false,
+            "base_shift": 0.5,
+            "max_shift": 1.15,
+            "base_image_seq_len": 256,
+            "max_image_seq_len": 4096,
+            "invert_sigmas": false,
+            "shift_terminal": null,
+            "use_karras_sigmas": false,
+            "use_exponential_sigmas": false,
+            "use_beta_sigmas": false,
+            "time_shift_type": "exponential",
+            "stochastic_sampling": false
+          },
+          "UniPCMultistep": {
+            "Scheduler": "UniPCMultistep",
+            "num_train_timesteps": 1000,
+            "beta_start": 0.0001,
+            "beta_end": 0.02,
+            "beta_schedule": "linear",
+            "trained_betas": null,
+            "solver_order": 2,
+            "prediction_type": "flow_prediction",
+            "thresholding": false,
+            "dynamic_thresholding_ratio": 0.995,
+            "sample_max_value": 1,
+            "predict_x0": true,
+            "solver_type": "bh2",
+            "lower_order_final": true,
+            "use_karras_sigmas": false,
+            "use_exponential_sigmas": false,
+            "use_beta_sigmas": false,
+            "use_flow_sigmas": true,
+            "flow_shift": 3,
+            "timestep_spacing": "linspace",
+            "steps_offset": 0,
+            "final_sigmas_type": "zero",
+            "rescale_betas_zero_snr": false,
+            "use_dynamic_shifting": false,
+            "time_shift_type": "exponential",
+            "sigma_min": null,
+            "sigma_max": null,
+            "shift_terminal": null
+          },
+          "DPMSolverMultistep": {
+            "Scheduler": "DPMSolverMultistep",
+            "num_train_timesteps": 1000,
+            "beta_start": 0.0001,
+            "beta_end": 0.02,
+            "beta_schedule": "scaled_linear",
+            "trained_betas": null,
+            "solver_order": 2,
+            "prediction_type": "flow_prediction",
+            "thresholding": false,
+            "dynamic_thresholding_ratio": 0.995,
+            "sample_max_value": 1,
+            "algorithm_type": "dpmsolver\u002B\u002B",
+            "solver_type": "midpoint",
+            "euler_at_final": false,
+            "lower_order_final": true,
+            "use_karras_sigmas": false,
+            "use_exponential_sigmas": false,
+            "use_beta_sigmas": false,
+            "use_flow_sigmas": true,
+            "use_lu_lambdas": false,
+            "flow_shift": 3,
+            "timestep_spacing": "linspace",
+            "steps_offset": 0,
+            "final_sigmas_type": "zero",
+            "rescale_betas_zero_snr": false,
+            "use_dynamic_shifting": true,
+            "time_shift_type": "exponential"
+          }
+        },
+        "SampleRate": 24000,
+        "FrameOptions": [ 17, 33, 49, 81, 161 ]
+      }
+    },
+    {
+      "Backend": "Pytorch",
+      "Name": "Wan21_I2V_14B_720",
+      "Pipeline": "WanPipeline",
+      "Path": "Wan-AI/Wan2.1-I2V-14B-480P-Diffusers",
+      "Variant": null,
+      "Source": "Folder",
+      "IsDefault": false,
+      "IsGated": false,
+      "Status": "Pending",
+      "Link": "https://huggingface.co/Wan-AI",
+      "MemoryProfile": [
+        {
+          "QualityMode": "Draft",
+          "MemoryModes": [ 8, 21, 38 ]
+        },
+        {
+          "QualityMode": "Standard",
+          "MemoryModes": [ 8, 21, 38 ]
+        },
+        {
+          "QualityMode": "Production",
+          "MemoryModes": [ 8, 34, 52 ]
+        }
+      ],
+      "BaseType": "bfloat16",
+      "ProcessTypes": [ "ImageToVideo" ],
+      "Vendor": [ "Nvidia" ],
+      "Resolutions": [
+        {
+          "Width": 1280,
+          "Height": 720,
+          "IsDefault": true
+        }
+      ],
+      "DefaultOptions": {
+        "GuidanceScale": 5,
+        "GuidanceScale2": 0,
+        "Steps": 50,
+        "Steps2": 0,
+        "Height": 720,
+        "Width": 1280,
+        "Frames": 81,
+        "FrameRate": 16,
+        "FrameChunk": 0,
+        "FrameChunkOverlap": 0,
+        "NoiseCondition": 0,
+        "Strength": 1,
+        "Scheduler": "UniPCMultistep",
+        "Schedulers": {
+          "FlowMatchEuler": {
+            "Scheduler": "FlowMatchEuler",
+            "num_train_timesteps": 1000,
+            "shift": 3,
+            "use_dynamic_shifting": false,
+            "base_shift": 0.5,
+            "max_shift": 1.15,
+            "base_image_seq_len": 256,
+            "max_image_seq_len": 4096,
+            "invert_sigmas": false,
+            "shift_terminal": null,
+            "use_karras_sigmas": false,
+            "use_exponential_sigmas": false,
+            "use_beta_sigmas": false,
+            "time_shift_type": "exponential",
+            "stochastic_sampling": false
+          },
+          "UniPCMultistep": {
+            "Scheduler": "UniPCMultistep",
+            "num_train_timesteps": 1000,
+            "beta_start": 0.0001,
+            "beta_end": 0.02,
+            "beta_schedule": "linear",
+            "trained_betas": null,
+            "solver_order": 2,
+            "prediction_type": "flow_prediction",
+            "thresholding": false,
+            "dynamic_thresholding_ratio": 0.995,
+            "sample_max_value": 1,
+            "predict_x0": true,
+            "solver_type": "bh2",
+            "lower_order_final": true,
+            "use_karras_sigmas": false,
+            "use_exponential_sigmas": false,
+            "use_beta_sigmas": false,
+            "use_flow_sigmas": true,
+            "flow_shift": 3,
+            "timestep_spacing": "linspace",
+            "steps_offset": 0,
+            "final_sigmas_type": "zero",
+            "rescale_betas_zero_snr": false,
+            "use_dynamic_shifting": false,
+            "time_shift_type": "exponential",
+            "sigma_min": null,
+            "sigma_max": null,
+            "shift_terminal": null
+          },
+          "DPMSolverMultistep": {
+            "Scheduler": "DPMSolverMultistep",
+            "num_train_timesteps": 1000,
+            "beta_start": 0.0001,
+            "beta_end": 0.02,
+            "beta_schedule": "scaled_linear",
+            "trained_betas": null,
+            "solver_order": 2,
+            "prediction_type": "flow_prediction",
+            "thresholding": false,
+            "dynamic_thresholding_ratio": 0.995,
+            "sample_max_value": 1,
+            "algorithm_type": "dpmsolver\u002B\u002B",
+            "solver_type": "midpoint",
+            "euler_at_final": false,
+            "lower_order_final": true,
+            "use_karras_sigmas": false,
+            "use_exponential_sigmas": false,
+            "use_beta_sigmas": false,
+            "use_flow_sigmas": true,
+            "use_lu_lambdas": false,
+            "flow_shift": 3,
+            "timestep_spacing": "linspace",
+            "steps_offset": 0,
+            "final_sigmas_type": "zero",
+            "rescale_betas_zero_snr": false,
+            "use_dynamic_shifting": true,
+            "time_shift_type": "exponential"
+          }
+        },
+        "SampleRate": 24000,
+        "FrameOptions": [ 17, 33, 49, 81, 161 ]
+      }
+    },
+    {
+      "Backend": "Pytorch",
+      "Name": "ZImage_Base",
+      "Pipeline": "ZImagePipeline",
+      "Path": "Tongyi-MAI/Z-Image",
+      "Variant": null,
+      "Source": "Folder",
+      "IsDefault": false,
+      "IsGated": false,
+      "Status": "Pending",
+      "Link": "https://huggingface.co/Tongyi-MAI/Z-Image",
+      "MemoryProfile": [
+        {
+          "QualityMode": "Draft",
+          "MemoryModes": [ 2, 6, 8 ]
+        },
+        {
+          "QualityMode": "Standard",
+          "MemoryModes": [ 2, 9, 14 ]
+        },
+        {
+          "QualityMode": "Production",
+          "MemoryModes": [ 2, 14, 24 ]
+        }
+      ],
+      "BaseType": "bfloat16",
+      "ProcessTypes": [ "TextToImage", "ImageToImage", "ImageInpaint", "ImageControlNet" ],
+      "Resolutions": [
+        {
+          "Width": 1664,
+          "Height": 928
+        },
+        {
+          "Width": 1584,
+          "Height": 1056
+        },
+        {
+          "Width": 1472,
+          "Height": 1104
+        },
+        {
+          "Width": 1024,
+          "Height": 1024,
+          "IsDefault": true
+        },
+        {
+          "Width": 1328,
+          "Height": 1328
+        },
+        {
+          "Width": 1408,
+          "Height": 1408
+        },
+        {
+          "Width": 1104,
+          "Height": 1472
+        },
+        {
+          "Width": 1056,
+          "Height": 1584
+        },
+        {
+          "Width": 928,
+          "Height": 1664
+        }
+      ],
+      "DefaultOptions": {
+        "GuidanceScale": 4,
+        "GuidanceScale2": 0,
+        "Steps": 30,
+        "Steps2": 0,
+        "Height": 1024,
+        "Width": 1024,
+        "Frames": 0,
+        "FrameRate": 16,
+        "FrameChunk": 0,
+        "FrameChunkOverlap": 0,
+        "NoiseCondition": 0,
+        "Strength": 1,
+        "Scheduler": "FlowMatchEuler",
+        "Schedulers": {
+          "FlowMatchEuler": {
+            "Scheduler": "FlowMatchEuler",
+            "num_train_timesteps": 1000,
+            "shift": 6,
+            "use_dynamic_shifting": false,
+            "base_shift": 0.5,
+            "max_shift": 1.15,
+            "base_image_seq_len": 256,
+            "max_image_seq_len": 4096,
+            "invert_sigmas": false,
+            "shift_terminal": null,
+            "use_karras_sigmas": false,
+            "use_exponential_sigmas": false,
+            "use_beta_sigmas": false,
+            "time_shift_type": "exponential",
+            "stochastic_sampling": false
+          },
+          "UniPCMultistep": {
+            "Scheduler": "UniPCMultistep",
+            "num_train_timesteps": 1000,
+            "beta_start": 0.0001,
+            "beta_end": 0.02,
+            "beta_schedule": "linear",
+            "trained_betas": null,
+            "solver_order": 2,
+            "prediction_type": "flow_prediction",
+            "thresholding": false,
+            "dynamic_thresholding_ratio": 0.995,
+            "sample_max_value": 1,
+            "predict_x0": true,
+            "solver_type": "bh2",
+            "lower_order_final": true,
+            "use_karras_sigmas": false,
+            "use_exponential_sigmas": false,
+            "use_beta_sigmas": false,
+            "use_flow_sigmas": true,
+            "flow_shift": 6,
+            "timestep_spacing": "linspace",
+            "steps_offset": 0,
+            "final_sigmas_type": "zero",
+            "rescale_betas_zero_snr": false,
+            "use_dynamic_shifting": false,
+            "time_shift_type": "exponential",
+            "sigma_min": null,
+            "sigma_max": null,
+            "shift_terminal": null
+          },
+          "DPMSolverMultistep": {
+            "Scheduler": "DPMSolverMultistep",
+            "num_train_timesteps": 1000,
+            "beta_start": 0.0001,
+            "beta_end": 0.02,
+            "beta_schedule": "scaled_linear",
+            "trained_betas": null,
+            "solver_order": 2,
+            "prediction_type": "flow_prediction",
+            "thresholding": false,
+            "dynamic_thresholding_ratio": 0.995,
+            "sample_max_value": 1,
+            "algorithm_type": "dpmsolver\u002B\u002B",
+            "solver_type": "midpoint",
+            "euler_at_final": false,
+            "lower_order_final": true,
+            "use_karras_sigmas": false,
+            "use_exponential_sigmas": false,
+            "use_beta_sigmas": false,
+            "use_flow_sigmas": true,
+            "use_lu_lambdas": false,
+            "flow_shift": 6,
+            "timestep_spacing": "linspace",
+            "steps_offset": 0,
+            "final_sigmas_type": "zero",
+            "rescale_betas_zero_snr": false,
+            "use_dynamic_shifting": false,
+            "time_shift_type": "exponential"
+          }
+        },
+        "SampleRate": 24000,
+        "FrameOptions": null
+      }
+    },
+    {
+      "Backend": "Pytorch",
+      "Name": "ZImage_Turbo",
+      "Pipeline": "ZImagePipeline",
+      "Path": "Tongyi-MAI/Z-Image-Turbo",
+      "Variant": null,
+      "Source": "Folder",
+      "IsDefault": false,
+      "IsGated": false,
+      "Status": "Pending",
+      "Link": "https://huggingface.co/Tongyi-MAI/Z-Image-Turbo",
+      "MemoryProfile": [
+        {
+          "QualityMode": "Draft",
+          "MemoryModes": [ 2, 6, 8 ]
+        },
+        {
+          "QualityMode": "Standard",
+          "MemoryModes": [ 2, 9, 14 ]
+        },
+        {
+          "QualityMode": "Production",
+          "MemoryModes": [ 2, 14, 24 ]
+        }
+      ],
+      "BaseType": "bfloat16",
+      "ProcessTypes": [ "TextToImage", "ImageToImage", "ImageInpaint", "ImageControlNet" ],
+      "Resolutions": [
+        {
+          "Width": 1664,
+          "Height": 928
+        },
+        {
+          "Width": 1584,
+          "Height": 1056
+        },
+        {
+          "Width": 1472,
+          "Height": 1104
+        },
+        {
+          "Width": 1024,
+          "Height": 1024,
+          "IsDefault": true
+        },
+        {
+          "Width": 1328,
+          "Height": 1328
+        },
+        {
+          "Width": 1408,
+          "Height": 1408
+        },
+        {
+          "Width": 1104,
+          "Height": 1472
+        },
+        {
+          "Width": 1056,
+          "Height": 1584
+        },
+        {
+          "Width": 928,
+          "Height": 1664
+        }
+      ],
+      "DefaultOptions": {
+        "GuidanceScale": 0,
+        "GuidanceScale2": 0,
+        "Steps": 9,
+        "Steps2": 0,
+        "Height": 1024,
+        "Width": 1024,
+        "Frames": 0,
+        "FrameRate": 16,
+        "FrameChunk": 0,
+        "FrameChunkOverlap": 0,
+        "NoiseCondition": 0,
+        "Strength": 1,
+        "Scheduler": "FlowMatchEuler",
+        "Schedulers": {
+          "FlowMatchEuler": {
+            "Scheduler": "FlowMatchEuler",
+            "num_train_timesteps": 1000,
+            "shift": 6,
+            "use_dynamic_shifting": false,
+            "base_shift": 0.5,
+            "max_shift": 1.15,
+            "base_image_seq_len": 256,
+            "max_image_seq_len": 4096,
+            "invert_sigmas": false,
+            "shift_terminal": null,
+            "use_karras_sigmas": false,
+            "use_exponential_sigmas": false,
+            "use_beta_sigmas": false,
+            "time_shift_type": "exponential",
+            "stochastic_sampling": false
+          },
+          "UniPCMultistep": {
+            "Scheduler": "UniPCMultistep",
+            "num_train_timesteps": 1000,
+            "beta_start": 0.0001,
+            "beta_end": 0.02,
+            "beta_schedule": "linear",
+            "trained_betas": null,
+            "solver_order": 2,
+            "prediction_type": "flow_prediction",
+            "thresholding": false,
+            "dynamic_thresholding_ratio": 0.995,
+            "sample_max_value": 1,
+            "predict_x0": true,
+            "solver_type": "bh2",
+            "lower_order_final": true,
+            "use_karras_sigmas": false,
+            "use_exponential_sigmas": false,
+            "use_beta_sigmas": false,
+            "use_flow_sigmas": true,
+            "flow_shift": 6,
+            "timestep_spacing": "linspace",
+            "steps_offset": 0,
+            "final_sigmas_type": "zero",
+            "rescale_betas_zero_snr": false,
+            "use_dynamic_shifting": false,
+            "time_shift_type": "exponential",
+            "sigma_min": null,
+            "sigma_max": null,
+            "shift_terminal": null
+          },
+          "DPMSolverMultistep": {
+            "Scheduler": "DPMSolverMultistep",
+            "num_train_timesteps": 1000,
+            "beta_start": 0.0001,
+            "beta_end": 0.02,
+            "beta_schedule": "scaled_linear",
+            "trained_betas": null,
+            "solver_order": 2,
+            "prediction_type": "flow_prediction",
+            "thresholding": false,
+            "dynamic_thresholding_ratio": 0.995,
+            "sample_max_value": 1,
+            "algorithm_type": "dpmsolver\u002B\u002B",
+            "solver_type": "midpoint",
+            "euler_at_final": false,
+            "lower_order_final": true,
+            "use_karras_sigmas": false,
+            "use_exponential_sigmas": false,
+            "use_beta_sigmas": false,
+            "use_flow_sigmas": true,
+            "use_lu_lambdas": false,
+            "flow_shift": 6,
+            "timestep_spacing": "linspace",
+            "steps_offset": 0,
+            "final_sigmas_type": "zero",
+            "rescale_betas_zero_snr": false,
+            "use_dynamic_shifting": false,
+            "time_shift_type": "exponential"
+          }
+        },
+        "SampleRate": 24000,
+        "FrameOptions": null
+      }
+    }
+  ],
+  "DiffusionTemplateMap": [
+    {
+      "Name": "Chroma",
+      "Options": [
+        {
+          "Name": "Base",
+          "Template": "Chroma_Base"
+        }
+      ]
+    },
+    {
+      "Name": "CogVideoX",
+      "Options": [
+        {
+          "Name": "T2V 2B",
+          "Template": "CogVideoX_T2V_2B"
+        },
+        {
+          "Name": "T2V 5B",
+          "Template": "CogVideoX_T2V_5B"
+        },
+        {
+          "Name": "I2V 5B",
+          "Template": "CogVideoX_I2V_5B"
+        },
+        {
+          "Name": "v1.5 T2V 5B",
+          "Template": "CogVideoX_15_T2V_5B"
+        },
+        {
+          "Name": "v1.5 I2V 5B",
+          "Template": "CogVideoX_15_I2V_5B"
+        }
+      ]
+    },
+    {
+      "Name": "FLUX.1",
+      "Options": [
+        {
+          "Name": "Dev",
+          "Template": "Flux1_Dev"
+        },
+        {
+          "Name": "Schnell",
+          "Template": "Flux1_Schnell"
+        },
+        {
+          "Name": "Kontext",
+          "Template": "Flux1_Kontext"
+        }
+      ]
+    },
+    {
+      "Name": "FLUX.2",
+      "Options": [
+        {
+          "Name": "Dev",
+          "Template": "Flux2_Dev"
+        },
+        {
+          "Name": "Klein 4B",
+          "Template": "Flux2_Klein_4B_D"
+        },
+        {
+          "Name": "Klein 4B Base",
+          "Template": "Flux2_Klein_4B"
+        },
+        {
+          "Name": "Klein 9B",
+          "Template": "Flux2_Klein_9B_D"
+        },
+        {
+          "Name": "Klein 9B Base",
+          "Template": "Flux2_Klein_9B"
+        }
+      ]
+    },
+    {
+      "Name": "Kandinsky5",
+      "Options": [
+        {
+          "Name": "T2I Lite",
+          "Template": "Kandinsky5_T2I_Lite"
+        },
+        {
+          "Name": "I2I Lite",
+          "Template": "Kandinsky5_I2I_Lite"
+        },
+        {
+          "Name": "T2V Lite",
+          "Template": "Kandinsky5_T2V_Lite"
+        },
+        {
+          "Name": "T2V Lite (distilled)",
+          "Template": "Kandinsky5_T2V_Lite_D"
+        },
+        {
+          "Name": "T2V Lite 10s",
+          "Template": "Kandinsky5_T2V_Lite_10"
+        },
+        {
+          "Name": "T2V Lite 10s (distilled)",
+          "Template": "Kandinsky5_T2V_Lite 10_D"
+        },
+        {
+          "Name": "T2V Pro",
+          "Template": "Kandinsky5_T2V_Pro"
+        },
+        {
+          "Name": "T2V Pro (distilled)",
+          "Template": "Kandinsky5_T2V_Pro_D"
+        },
+        {
+          "Name": "I2V Pro",
+          "Template": "Kandinsky5_I2V_Pro"
+        },
+        {
+          "Name": "I2V Pro (distilled)",
+          "Template": "Kandinsky5_I2V_Pro_D"
+        }
+      ]
+    },
+    {
+      "Name": "LTX",
+      "Options": [
+        {
+          "Name": "2B",
+          "Template": "LTX_2B"
+        },
+        {
+          "Name": "2B (distilled)",
+          "Template": "LTX_2B_D"
+        },
+        {
+          "Name": "13B",
+          "Template": "LTX_13B"
+        },
+        {
+          "Name": "13B (distilled)",
+          "Template": "LTX_13B_D"
+        }
+      ]
+    },
+    {
+      "Name": "LTX-2",
+      "Options": [
+        {
+          "Name": "19B",
+          "Template": "LTX2_19B"
+        },
+        {
+          "Name": "19B (distilled)",
+          "Template": "LTX2_19B_D"
+        }
+      ]
+    },
+    {
+      "Name": "Qwen Image",
+      "Options": [
+        {
+          "Name": "Base",
+          "Template": "Qwen_Base"
+        },
+        {
+          "Name": "Edit",
+          "Template": "Qwen_Edit"
+        }
+      ]
+    },
+    {
+      "Name": "StableDiffusion XL",
+      "Options": [
+        {
+          "Name": "Base",
+          "Template": "StableDiffusionXL_Base"
+        },
+        {
+          "Name": "Turbo",
+          "Template": "StableDiffusionXL_Turbo"
+        },
+        {
+          "Name": "Lightning",
+          "Template": "StableDiffusionXL_Lightning"
+        }
+      ]
+    },
+    {
+      "Name": "WAN 2.1",
+      "Options": [
+        {
+          "Name": "T2V (1B)",
+          "Template": "Wan21_T2V_1B"
+        },
+        {
+          "Name": "T2V (14B)",
+          "Template": "Wan21_T2V_14B"
+        },
+        {
+          "Name": "I2V (14B) 480p",
+          "Template": "Wan21_I2V_14B_480"
+        },
+        {
+          "Name": "I2V (14B) 720p",
+          "Template": "Wan21_I2V_14B_720"
+        }
+      ]
+    },
+    {
+      "Name": "Z-Image",
+      "Options": [
+        {
+          "Name": "Base",
+          "Template": "ZImage_Base"
+        },
+        {
+          "Name": "Turbo",
+          "Template": "ZImage_Turbo"
+        }
+      ]
+    }
+  ]
+}

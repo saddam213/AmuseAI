@@ -1,0 +1,119 @@
+﻿<CommonControls:DialogControl x:Class="Amuse.App.Dialogs.EnvironmentModelDialog"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:Amuse.App.Dialogs"
+        xmlns:CommonControls="clr-namespace:TensorStack.WPF.Controls;assembly=TensorStack.WPF"
+        mc:Ignorable="d"
+        MinWidth="900"
+        MaxWidth="900"
+        MinHeight="560"
+        Title="Environment"
+        Icon="/Images/Icon.ico"
+        Style="{StaticResource {x:Type CommonControls:DialogControl}}">
+    <DockPanel DataContext="{Binding RelativeSource={RelativeSource AncestorType={x:Type local:EnvironmentModelDialog}}}" Margin="15, 15, 15, 10">
+
+        <StackPanel DockPanel.Dock="Top" Visibility="{Binding IsFixedEnvironment, Converter={StaticResource BooleanToVisibilityConverter}}">
+            <TextBlock Text="To maintain operational stability and debug accuracy, core settings in this default environment are read-only" Foreground="{StaticResource WarningColour}" HorizontalAlignment="Center" Margin="0,0,0,0" Opacity=".9"/>
+            <TextBlock Text="Feel free to create a copy of this environment to safely experiment with different configurations" Foreground="{StaticResource WarningColour}" HorizontalAlignment="Center" Margin="0,0,0,10" Opacity=".9"/>
+        </StackPanel>
+
+        <!--Environment Settings-->
+        <UniformGrid DockPanel.Dock="Top" Columns="3" >
+            <StackPanel Margin="0,0,2,0" IsEnabled="{Binding IsFixedEnvironment, Converter={StaticResource InverseBoolConverter}}">
+                <TextBlock Text="Name" Style="{StaticResource FieldTextBlockStyle}"/>
+                <TextBox Text="{Binding EnvironmentModel.Name, UpdateSourceTrigger=PropertyChanged}" />
+            </StackPanel>
+            <StackPanel Margin="2,0,2,0" IsEnabled="{Binding IsFixedEnvironment, Converter={StaticResource InverseBoolConverter}}">
+                <TextBlock Text="Environment" Style="{StaticResource FieldTextBlockStyle}"/>
+                <TextBox Text="{Binding EnvironmentModel.Environment, UpdateSourceTrigger=PropertyChanged}" />
+            </StackPanel>
+            <StackPanel Margin="2,0,0,0" VerticalAlignment="Bottom" >
+                <CheckBox Content="Default" IsChecked="{Binding EnvironmentModel.IsDefault}" Margin="10,0,0,2"/>
+            </StackPanel>
+            <StackPanel Margin="0,0,2,0" IsEnabled="{Binding IsFixedEnvironment, Converter={StaticResource InverseBoolConverter}}">
+                <TextBlock Text="Vendor" Style="{StaticResource FieldTextBlockStyle}"/>
+                <ComboBox ItemsSource="{Binding Settings.Vendors}" SelectedItem="{Binding EnvironmentModel.Vendor}" SelectedIndex="0" />
+            </StackPanel>
+            <StackPanel Margin="2,0,2,0" IsEnabled="{Binding IsFixedEnvironment, Converter={StaticResource InverseBoolConverter}}">
+                <TextBlock Text="Type" Style="{StaticResource FieldTextBlockStyle}" IsEnabled="{Binding IsFixedEnvironment, Converter={StaticResource InverseBoolConverter}}"/>
+                <ComboBox ItemsSource="{Binding Source={StaticResource EnvironmentType}}" SelectedItem="{Binding EnvironmentModel.Type}" SelectedIndex="0" />
+            </StackPanel>
+            <Grid Margin="2,0,0,0" IsEnabled="{Binding IsFixedEnvironment, Converter={StaticResource InverseBoolConverter}}">
+                <StackPanel Visibility="{Binding  EnvironmentModel.Type, Converter={StaticResource EnumToVisibilityConverter}, ConverterParameter=Device}">
+                    <TextBlock Text="Device" Style="{StaticResource FieldTextBlockStyle}"/>
+                    <ComboBox ItemsSource="{Binding Settings.Devices}" SelectedItem="{Binding EnvironmentModel.Device}" DisplayMemberPath="Name" SelectedValuePath="HardwareID" SelectedIndex="0" />
+                </StackPanel>
+                <StackPanel Visibility="{Binding  EnvironmentModel.Type, Converter={StaticResource EnumToVisibilityConverter}, ConverterParameter=Pipeline}">
+                    <TextBlock Text="Pipeline" Style="{StaticResource FieldTextBlockStyle}"/>
+                    <ComboBox ItemsSource="{Binding Pipelines}" SelectedItem="{Binding EnvironmentModel.Pipeline}" SelectedIndex="0" />
+                </StackPanel>
+            </Grid>
+        </UniformGrid>
+
+
+        <!--Save/Cancel/Errors-->
+        <DockPanel DockPanel.Dock="Bottom" Height="30" Margin="0,15,0,0">
+            <UniformGrid DockPanel.Dock="Right" Columns="2" >
+                <Button Content="Save" Command="{Binding SaveCommand}" Width="100" IsDefault="True"/>
+                <Button Content="Cancel" Command="{Binding CancelCommand}"/>
+            </UniformGrid>
+            <ItemsControl ItemsSource="{Binding Errors}">
+                <ItemsControl.ItemTemplate>
+                    <DataTemplate>
+                        <TextBlock Text="{Binding}" Foreground="IndianRed" TextWrapping="Wrap" FontSize="11"/>
+                    </DataTemplate>
+                </ItemsControl.ItemTemplate>
+            </ItemsControl>
+        </DockPanel>
+
+
+        <UniformGrid Columns="2" Margin="0,6,0,0">
+
+            <!--Requirements-->
+            <DockPanel Margin="0,0,4,0" IsEnabled="{Binding IsFixedEnvironment, Converter={StaticResource InverseBoolConverter}}">
+                <TextBlock DockPanel.Dock="Top" Text="Requirements" Style="{StaticResource FieldTextBlockStyle}"/>
+                <TextBox Text="{Binding Requirements, UpdateSourceTrigger=PropertyChanged}" AcceptsReturn="True"/>
+            </DockPanel>
+
+            <!--Environment Variables-->
+            <DockPanel Margin="4,0,0,0">
+                <DockPanel DockPanel.Dock="Top">
+                    <Button DockPanel.Dock="Right" Command="{Binding AddVariableCommand}" Height="22" Width="30" VerticalAlignment="Bottom" HorizontalAlignment="Right" Margin="0,0,2,0">
+                        <CommonControls:FontAwesome Icon="2b" IconStyle="Light" Color="{StaticResource SuccessColour}"/>
+                    </Button>
+                    <StackPanel>
+                        <TextBlock Text="Environment Variables" Style="{StaticResource FieldTextBlockStyle}"/>
+                        <UniformGrid Columns="2" >
+                            <TextBox Text="{Binding CurrentVariable.Name, UpdateSourceTrigger=PropertyChanged}" Margin="0,0,0,0"/>
+                            <TextBox Text="{Binding CurrentVariable.Value, UpdateSourceTrigger=PropertyChanged}" Margin="2,0,2,0"/>
+                        </UniformGrid>
+                    </StackPanel>
+                </DockPanel>
+                <ListBox ItemsSource="{Binding Variables}" SelectedItem="{Binding SelectedVariable}" ItemContainerStyle="{StaticResource TransparentListBoxItem}" ScrollViewer.HorizontalScrollBarVisibility="Disabled" Margin="0,3,0,0" Background="Transparent" >
+                    <ListBox.ItemTemplate>
+                        <DataTemplate>
+                            <Border Background="{StaticResource ButtonBackgroundDisabled}" Margin="2">
+                                <DockPanel>
+                                    <Button DockPanel.Dock="Right" Command="{Binding RemoveVariableCommand, RelativeSource={RelativeSource AncestorType={x:Type local:EnvironmentModelDialog}}}" CommandParameter="{Binding}" Style="{StaticResource TransparentButton}" Width="28">
+                                        <CommonControls:FontAwesome Icon="f00d" Color="{StaticResource DangerColour}" />
+                                    </Button>
+                                    <UniformGrid Columns="2" TextBlock.FontSize="10">
+                                        <Grid Background="{StaticResource ContainerBackground}"  Margin="0,0,1,0">
+                                            <TextBlock Text="{Binding Name}" Margin="4,4,2,0" />
+                                        </Grid>
+                                        <Grid Background="{StaticResource ContainerBackground}">
+                                            <TextBlock  Text="{Binding Value}" Margin="4,4,2,0" />
+                                        </Grid>
+                                    </UniformGrid>
+                                </DockPanel>
+                            </Border>
+                        </DataTemplate>
+                    </ListBox.ItemTemplate>
+                </ListBox>
+            </DockPanel>
+
+        </UniformGrid>
+    </DockPanel>
+</CommonControls:DialogControl>

@@ -1,0 +1,86 @@
+﻿<CommonControls:BaseControl x:Class="Amuse.App.Controls.LoraAdapterControl"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:i="http://schemas.microsoft.com/xaml/behaviors"
+             xmlns:scm="clr-namespace:System.ComponentModel;assembly=WindowsBase"
+             xmlns:base="clr-namespace:Amuse.App"
+             xmlns:local="clr-namespace:Amuse.App.Controls"
+             xmlns:Behaviors="clr-namespace:TensorStack.WPF.Behaviors;assembly=TensorStack.WPF"
+             xmlns:CommonControls="clr-namespace:TensorStack.WPF.Controls;assembly=TensorStack.WPF"
+             xmlns:CommonConverters="clr-namespace:TensorStack.WPF.Converters;assembly=TensorStack.WPF"
+             xmlns:Controls="clr-namespace:Amuse.App.Controls"
+             xmlns:Common="clr-namespace:Amuse.App.Common"
+             xmlns:Views="clr-namespace:Amuse.App.Views">
+    <Grid DataContext="{Binding RelativeSource={RelativeSource AncestorType={x:Type local:LoraAdapterControl}}}">
+
+        <!--Dummy View-->
+        <DockPanel Visibility="{Binding LoraCollectionView.IsEmpty, Converter={StaticResource BooleanToVisibilityConverter}}">
+            <Grid DockPanel.Dock="Right" Width="20" IsEnabled="False">
+                <Button>
+                    <CommonControls:FontAwesome Icon="2b" Size="9" Margin="0,1,0,0"/>
+                </Button>
+            </Grid>
+            <Grid>
+                <ComboBox ItemTemplate="{StaticResource ComboBoxDataTemplateModel}" HorizontalContentAlignment="Stretch"/>
+                <Grid IsHitTestVisible="False">
+                    <TextBlock Text="No models found." FontStyle="Italic" Opacity=".4" Margin="5,2,0,0" />
+                </Grid>
+            </Grid>
+        </DockPanel>
+
+        <!--LoraAdapters-->
+        <ItemsControl ItemsSource="{Binding LoraAdapters}" Visibility="{Binding LoraCollectionView.IsEmpty, Converter={StaticResource InverseBooleanToVisibilityConverter}}" AlternationCount="1000000">
+            <ItemsControl.ItemTemplate>
+                <DataTemplate>
+                    <DockPanel>
+                        <Grid DockPanel.Dock="Right" Width="20">
+
+                            <!--Add Button-->
+                            <Button x:Name="ButtonAdd" Command="{Binding AddCommand, RelativeSource={RelativeSource AncestorType={x:Type local:LoraAdapterControl}}}" >
+                                <CommonControls:FontAwesome Icon="2b" Size="9" Margin="0,1,0,0"/>
+                                <Button.Style>
+                                    <Style TargetType="{x:Type Button}" BasedOn="{StaticResource {x:Type Button}}">
+                                        <Setter Property="Visibility" Value="Collapsed"/>
+                                        <Style.Triggers>
+                                            <DataTrigger Binding="{Binding RelativeSource={RelativeSource AncestorType=ContentPresenter}, Path=(ItemsControl.AlternationIndex)}" Value="0">
+                                                <Setter Property="Visibility" Value="Visible"/>
+                                            </DataTrigger>
+                                        </Style.Triggers>
+                                    </Style>
+                                </Button.Style>
+                            </Button>
+
+                            <!--Remove Button-->
+                            <Button 
+                                CommandParameter="{Binding}" 
+                                Command="{Binding RemoveCommand, RelativeSource={RelativeSource AncestorType={x:Type local:LoraAdapterControl}}}" 
+                                Visibility="{Binding IsVisible, ElementName=ButtonAdd, Converter={StaticResource InverseBooleanToVisibilityConverter}}">
+                                <CommonControls:FontAwesome Icon="f00d" Size="9" Margin="0,1,0,0"/>
+                            </Button>
+                        </Grid>
+
+                        <!--Lora Collection-->
+                        <Grid>
+                            <ComboBox x:Name="ComboBoxLora"
+                                Tag="{Binding RelativeSource={RelativeSource AncestorType=ContentPresenter}, Path=(ItemsControl.AlternationIndex)}"
+                                SelectedItem="{Binding ., Mode=TwoWay}"
+                                ItemsSource="{Binding LoraCollectionView, RelativeSource={RelativeSource AncestorType={x:Type local:LoraAdapterControl}}}"
+                                ItemTemplate="{StaticResource ComboBoxDataTemplateModel}"
+                                HorizontalContentAlignment="Stretch"
+                                IsSynchronizedWithCurrentItem="False"
+                                SelectionChanged="ComboBoxLora_SelectionChanged"/>
+                            <Grid IsHitTestVisible="False" Margin="5,2,0,0" Opacity=".4" Visibility="{Binding SelectedItem, ElementName=ComboBoxLora, Converter={StaticResource InverseNullVisibilityConverter}}">
+                                <TextBlock Text="No models found." FontStyle="Italic" Visibility="{Binding IsVisible, ElementName=ButtonAdd, Converter={StaticResource BooleanToVisibilityConverter}}"/>
+                                <TextBlock Text="Please Select Lora..." FontStyle="Italic" Visibility="{Binding IsVisible, ElementName=ButtonAdd, Converter={StaticResource InverseBooleanToVisibilityConverter}}"/>
+                            </Grid>
+                        </Grid>
+
+                    </DockPanel>
+                </DataTemplate>
+            </ItemsControl.ItemTemplate>
+        </ItemsControl>
+
+    </Grid>
+</CommonControls:BaseControl>

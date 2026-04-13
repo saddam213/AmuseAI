@@ -1,0 +1,116 @@
+﻿<Views:ViewBase x:Class="Amuse.App.Views.SettingsEnvironmentView"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+    xmlns:local="clr-namespace:Amuse.App.Views"
+    xmlns:CommonControls="clr-namespace:TensorStack.WPF.Controls;assembly=TensorStack.WPF"
+    xmlns:Controls="clr-namespace:Amuse.App.Controls"
+    xmlns:Views="clr-namespace:Amuse.App.Views">
+    <GroupBox DataContext="{Binding RelativeSource={RelativeSource AncestorType={x:Type local:SettingsEnvironmentView}}}" Margin="10, 20, 20, 20" Header="Environment Settings" Padding="4">
+
+        <Grid >
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="1*" />
+                <ColumnDefinition Width="2*" />
+            </Grid.ColumnDefinitions>
+
+            <!--Environments-->
+            <DockPanel Grid.Column="0" >
+
+                <DockPanel DockPanel.Dock="Top" Margin="0,0,0,6">
+                    <Border DockPanel.Dock="Left" Width="26" BorderThickness="1" BorderBrush="{StaticResource DefaultBorderColor}">
+                        <CommonControls:FontAwesome Icon="f002" Size="12"/>
+                    </Border>
+                    <CommonControls:IconButton DockPanel.Dock="Right" Icon="f00d" IconSize="12" IconColor="{StaticResource DangerColour}" Width="23" Command="{Binding FilterClearCommand}"/>
+                    <CommonControls:PlaceholderTextBox Text="{Binding FilterText, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Placeholder="Search Environments" PlaceholderOpacity=".5"/>
+                </DockPanel>
+
+                <StackPanel DockPanel.Dock="Bottom">
+                    <!--<CommonControls:IconButton Text="Add Environment Wizard" FontSize="13" Icon="e2ca" IconStyle="Light" IconColor="{StaticResource SuccessColour}" Command="{Binding AddEnvironmentWizardCommand}" Height="40"  />-->
+                    <UniformGrid  Columns="3" Height="50">
+                        <CommonControls:IconButton Text="Add" FontSize="13" Icon="2b" IconStyle="Light" IconColor="{StaticResource SuccessColour}" Command="{Binding AddEnvironmentCommand}"  />
+                      
+                        <CommonControls:IconButton Text="Copy" FontSize="13" Icon="f24d" IconStyle="Light" IconColor="{StaticResource InfoColour}" Command="{Binding CopyEnvironmentCommand}"  />
+                        <CommonControls:IconButton Text="Edit" FontSize="13" Icon="f0ad" IconStyle="Light" IconColor="{StaticResource InfoColour}" Command="{Binding UpdateEnvironmentCommand}"  />
+                        <CommonControls:IconButton Text="Import" FontSize="13" Icon="f56f" IconStyle="Light" IconColor="{StaticResource InfoColour}" Command="{Binding ImportEnvironmentCommand}"  />
+                        <CommonControls:IconButton Text="Export" FontSize="13" Icon="f56e" IconStyle="Light" IconColor="{StaticResource InfoColour}" Command="{Binding ExportEnvironmentCommand}"  />
+                        <CommonControls:IconButton Text="Delete" FontSize="13" Icon="f2ed" IconStyle="Light" IconColor="{StaticResource DangerColour}" Command="{Binding RemoveEnvironmentCommand}"  />
+                    </UniformGrid>
+                </StackPanel>
+
+                <ListBox ItemsSource="{Binding ModelCollection}" SelectedItem="{Binding SelectedEnvironment}" ItemContainerStyle="{StaticResource SettingsListBoxItem}" ScrollViewer.HorizontalScrollBarVisibility="Disabled">
+                    <ListBox.ItemTemplate>
+                        <DataTemplate>
+                            <DockPanel DockPanel.Dock="Left">
+                                <TextBlock DockPanel.Dock="Left" Text="{Binding Name}" FontSize="12" Margin="3,0,0,0" FontWeight="Medium" TextTrimming="CharacterEllipsis"/>
+                                <StackPanel>
+                                    <TextBlock Text="{Binding Pipeline}" TextAlignment="Right" Margin="0,0,2,2" Opacity=".7" FontSize="11"/>
+                                    <TextBlock Text="{Binding Vendor}" TextAlignment="Right" Margin="0,0,2,2" Opacity=".7" FontSize="11"/>
+                                </StackPanel>
+                            </DockPanel>
+                        </DataTemplate>
+                    </ListBox.ItemTemplate>
+                </ListBox>
+            </DockPanel>
+            <DockPanel Grid.Column="1"  Margin="10, 0,0,0">
+                <DockPanel DockPanel.Dock="Top">
+
+                    <!--Actions-->
+                    <DockPanel DockPanel.Dock="Right"  >
+                        <TextBlock DockPanel.Dock="Top" Text="Actions" Style="{StaticResource FieldTextBlockStyle}" />
+                        <UniformGrid  Columns="2" VerticalAlignment="Top" Width="200">
+                            <Button Content="Create" Command="{Binding EnvironmentServiceCreateCommand}" Height="32"/>
+                            <Button Content="Update" Command="{Binding EnvironmentServiceUpdateCommand}"/>
+                            <Button Content="Rebuild" Command="{Binding EnvironmentServiceRebuildCommand}"/>
+                            <Button Content="Delete" Command="{Binding EnvironmentServiceDeleteCommand}"/>
+                        </UniformGrid>
+                    </DockPanel>
+
+                    <!--Environment-->
+                    <UniformGrid Columns="3" Margin="0,0,100,0">
+                        <StackPanel Margin="0,0,2,0">
+                            <TextBlock Text="Name" Style="{StaticResource FieldTextBlockStyle}" />
+                            <TextBox Text="{Binding SelectedEnvironment.Name}" IsReadOnly="True"/>
+                        </StackPanel>
+                        <StackPanel Margin="2,0,2,0">
+                            <TextBlock Text="Environment" Style="{StaticResource FieldTextBlockStyle}" />
+                            <TextBox Text="{Binding SelectedEnvironment.Environment}" IsReadOnly="True"/>
+                        </StackPanel>
+                        <StackPanel Margin="2,0,0,0">
+                            <CheckBox Content="Default" IsChecked="{Binding SelectedEnvironment.IsDefault}" Margin="10,18,0,2" IsHitTestVisible="False"/>
+                        </StackPanel>
+
+                        <StackPanel Margin="2,0,2,0">
+                            <TextBlock Text="Vendor" Style="{StaticResource FieldTextBlockStyle}" />
+                            <TextBox Text="{Binding SelectedEnvironment.Vendor}" IsReadOnly="True"/>
+                        </StackPanel>
+                        <StackPanel Margin="2,0,2,0">
+                            <TextBlock Text="Type" Style="{StaticResource FieldTextBlockStyle}" />
+                            <TextBox Text="{Binding SelectedEnvironment.Type}" IsReadOnly="True"/>
+                        </StackPanel>
+                        <Grid Margin="2,0,0,0" IsHitTestVisible="False">
+                            <StackPanel Visibility="{Binding  SelectedEnvironment.Type, Converter={StaticResource EnumToVisibilityConverter}, ConverterParameter=Device}">
+                                <TextBlock Text="Device" Style="{StaticResource FieldTextBlockStyle}"/>
+                                <ComboBox ItemsSource="{Binding Settings.Devices}" SelectedItem="{Binding SelectedEnvironment.Device}" DisplayMemberPath="Name" SelectedValuePath="HardwareID" SelectedIndex="0"/>
+                            </StackPanel>
+                            <StackPanel Visibility="{Binding  SelectedEnvironment.Type, Converter={StaticResource EnumToVisibilityConverter}, ConverterParameter=Pipeline}">
+                                <TextBlock Text="Pipeline" Style="{StaticResource FieldTextBlockStyle}"/>
+                                <TextBox Text="{Binding SelectedEnvironment.Pipeline}" IsReadOnly="True" />
+                            </StackPanel>
+                        </Grid>
+                    </UniformGrid>
+                </DockPanel>
+                <StackPanel DockPanel.Dock="Bottom">
+                    <TextBlock Text="Environment Variables" Style="{StaticResource FieldTextBlockStyle}" />
+                    <ListBox ItemsSource="{Binding SelectedEnvironment.Variables}"  ScrollViewer.HorizontalScrollBarVisibility="Disabled" MinHeight="100"/>
+                </StackPanel>
+                <DockPanel>
+                    <TextBlock  DockPanel.Dock="Top" Text="Requirements" Style="{StaticResource FieldTextBlockStyle}" />
+                    <ListBox ItemsSource="{Binding SelectedEnvironment.Requirements}"  ScrollViewer.HorizontalScrollBarVisibility="Disabled"/>
+                </DockPanel>
+            </DockPanel>
+        </Grid>
+
+    </GroupBox>
+</Views:ViewBase>

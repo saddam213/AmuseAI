@@ -1,0 +1,665 @@
+﻿<CommonControls:BaseControl x:Class="Amuse.App.Controls.HistoryControl"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:i="http://schemas.microsoft.com/xaml/behaviors"
+             xmlns:scm="clr-namespace:System.ComponentModel;assembly=WindowsBase"
+             xmlns:base="clr-namespace:Amuse.App"
+             xmlns:local="clr-namespace:Amuse.App.Controls"
+             xmlns:Behaviors="clr-namespace:TensorStack.WPF.Behaviors;assembly=TensorStack.WPF"
+             xmlns:CommonControls="clr-namespace:TensorStack.WPF.Controls;assembly=TensorStack.WPF"
+             xmlns:CommonConverters="clr-namespace:TensorStack.WPF.Converters;assembly=TensorStack.WPF"
+             xmlns:Controls="clr-namespace:Amuse.App.Controls"
+             xmlns:Common="clr-namespace:Amuse.App.Common"
+             xmlns:Views="clr-namespace:Amuse.App.Views">
+
+    <CommonControls:BaseControl.Resources>
+
+
+        <Style x:Key="HistoryPopup" TargetType="{x:Type Popup}">
+            <Setter Property="StaysOpen" Value="True"/>
+            <Setter Property="PopupAnimation" Value="Fade"/>
+            <Setter Property="AllowsTransparency" Value="True"/>
+            <Setter Property="Width" Value="230"/>
+            <Setter Property="Height" Value="100"/>
+            <Setter Property="Placement" Value="Top"/>
+            <Setter Property="VerticalOffset" Value="16"/>
+            <Setter Property="HorizontalOffset" Value="-2"/>
+            <Style.Triggers>
+                <DataTrigger Binding="{Binding Orientation, RelativeSource={RelativeSource AncestorType={x:Type local:HistoryControl}}}" Value="Vertical">
+                    <Setter Property="Placement" Value="Left"/>
+                    <Setter Property="VerticalOffset" Value="-2"/>
+                    <Setter Property="HorizontalOffset" Value="0"/>
+                </DataTrigger>
+            </Style.Triggers>
+        </Style>
+
+        <Style x:Key="HistoryContainer" TargetType="{x:Type Border}">
+            <Setter Property="Margin" Value="0,0,0,18"/>
+            <Setter Property="CornerRadius" Value="6,6,0,0"/>
+            <Setter Property="BorderThickness" Value="1,1,1,0"/>
+            <Setter Property="Background" Value="#80000000"/>
+            <Setter Property="BorderBrush" Value="{StaticResource ContainerBorder}"/>
+            <Style.Triggers>
+                <DataTrigger Binding="{Binding Orientation, RelativeSource={RelativeSource AncestorType={x:Type local:HistoryControl}}}" Value="Vertical">
+                    <Setter Property="Margin" Value="0,0,0,0"/>
+                    <Setter Property="CornerRadius" Value="6,0,0,6"/>
+                    <Setter Property="BorderThickness" Value="1,1,0,1"/>
+                </DataTrigger>
+            </Style.Triggers>
+        </Style>
+
+
+        <!--DiffusionHistory-->
+        <DataTemplate  DataType="{x:Type Common:DiffusionHistory}">
+            <Grid x:Name="Root" Background="Transparent" >
+                <DockPanel Height="134" Width="100" >
+                    <Grid DockPanel.Dock="Top">
+                        <CommonControls:TransparentImageElement 
+                            Height="100" 
+                            Stretch="Uniform" 
+                            DecodePixelHeight="100"
+                            UriSource="{Binding ThumbPath, Converter={StaticResource StringToUriConverter}}" />
+
+                        <UniformGrid Columns="2" Height="24" VerticalAlignment="Bottom" Visibility="{Binding IsMouseOver, ElementName=Root, Converter={StaticResource BooleanToHiddenConverter}}" Background="#8F000000">
+                            <Button
+                                Style="{StaticResource TransparentButton}"
+                                Command="{Binding PreviewItemCommand, RelativeSource={RelativeSource AncestorType=Controls:HistoryControl}}"
+                                CommandParameter="{Binding}">
+                                <CommonControls:FontAwesome Icon="f08e" IconStyle="Solid" Size="16" Color="{StaticResource InfoColour}"  />
+                            </Button>
+                            <Button
+                                Style="{StaticResource TransparentButton}"
+                                Command="{Binding RemoveItemCommand, RelativeSource={RelativeSource AncestorType=Controls:HistoryControl}}"
+                                CommandParameter="{Binding}">
+                                <CommonControls:FontAwesome Icon="e2b4" IconStyle="Solid" Size="16" Color="{StaticResource DangerColour}"  />
+                            </Button>
+                        </UniformGrid>
+                    </Grid>
+                    <StackPanel Margin="0,3,0,0">
+                        <TextBlock TextAlignment="Center" LineHeight="14" LineStackingStrategy="BlockLineHeight">
+                            <Run Text="{Binding Width}" />
+                            <Run Text="x" />
+                            <Run Text="{Binding Height}" />
+                            <LineBreak/>
+                            <Run Text="{Binding Source}" />
+                        </TextBlock>
+                    </StackPanel>
+                </DockPanel>
+
+
+                <!-- Popup card -->
+                <Popup x:Name="CardPopup" Style="{StaticResource HistoryPopup}">
+                    <Border Background="#01000000">
+                        <Border Style="{StaticResource HistoryContainer}" >
+                            <StackPanel Margin="6,4,6,6">
+                                <TextBlock Text="{Binding Source}" />
+                                <TextBlock Text="{Binding Width, StringFormat={}Width: {0}}" />
+                                <TextBlock Text="{Binding Height, StringFormat={}Height: {0}}" />
+                                <TextBlock Text="{Binding Model, StringFormat={}Model: {0}}" />
+                                <TextBlock Text="{Binding MediaPath}" />
+                            </StackPanel>
+                        </Border>
+                    </Border>
+                </Popup>
+
+
+                <!-- Hover triggers -->
+                <Grid.Triggers>
+                    <EventTrigger RoutedEvent="MouseEnter">
+                        <BeginStoryboard>
+                            <Storyboard>
+                                <BooleanAnimationUsingKeyFrames Storyboard.TargetName="CardPopup" Storyboard.TargetProperty="IsOpen">
+                                    <DiscreteBooleanKeyFrame KeyTime="0:0:0" Value="True"/>
+                                </BooleanAnimationUsingKeyFrames>
+                            </Storyboard>
+                        </BeginStoryboard>
+                    </EventTrigger>
+                    <EventTrigger RoutedEvent="MouseLeave">
+                        <BeginStoryboard>
+                            <Storyboard>
+                                <BooleanAnimationUsingKeyFrames Storyboard.TargetName="CardPopup" Storyboard.TargetProperty="IsOpen">
+                                    <DiscreteBooleanKeyFrame KeyTime="0:0:0" Value="False"/>
+                                </BooleanAnimationUsingKeyFrames>
+                            </Storyboard>
+                        </BeginStoryboard>
+                    </EventTrigger>
+                </Grid.Triggers>
+
+
+            </Grid>
+        </DataTemplate>
+
+
+        <!--UpscaleHistory-->
+        <DataTemplate  DataType="{x:Type Common:UpscaleHistory}">
+            <Grid x:Name="Root" Background="Transparent" >
+                <DockPanel Height="134" Width="100" >
+                    <Grid DockPanel.Dock="Top">
+                        <CommonControls:TransparentImageElement 
+                           Height="100" 
+                           Stretch="Uniform" 
+                           DecodePixelHeight="100"
+                           UriSource="{Binding ThumbPath, Converter={StaticResource StringToUriConverter}}" />
+
+                        <UniformGrid Columns="2" Height="24" VerticalAlignment="Bottom" Visibility="{Binding IsMouseOver, ElementName=Root, Converter={StaticResource BooleanToHiddenConverter}}" Background="#8F000000">
+                            <Button
+                                Style="{StaticResource TransparentButton}"
+                                Command="{Binding PreviewItemCommand, RelativeSource={RelativeSource AncestorType=Controls:HistoryControl}}"
+                                CommandParameter="{Binding}">
+                                <CommonControls:FontAwesome Icon="f08e" IconStyle="Solid" Size="16" Color="{StaticResource InfoColour}"  />
+                            </Button>
+                            <Button
+                                Style="{StaticResource TransparentButton}"
+                                Command="{Binding RemoveItemCommand, RelativeSource={RelativeSource AncestorType=Controls:HistoryControl}}"
+                                CommandParameter="{Binding}">
+                                <CommonControls:FontAwesome Icon="e2b4" IconStyle="Solid" Size="16" Color="{StaticResource DangerColour}"  />
+                            </Button>
+                        </UniformGrid>
+                    </Grid>
+                    <StackPanel Margin="0,3,0,0">
+                        <TextBlock TextAlignment="Center" LineHeight="14" LineStackingStrategy="BlockLineHeight">
+                            <Run Text="{Binding Width}" />
+                            <Run Text="x" />
+                            <Run Text="{Binding Height}" />
+                            <LineBreak/>
+                            <Run Text="{Binding Source}" />
+                        </TextBlock>
+                    </StackPanel>
+                </DockPanel>
+
+
+                <!-- Popup card -->
+                <Popup x:Name="CardPopup" Style="{StaticResource HistoryPopup}">
+                    <Border Background="#01000000">
+                        <Border Style="{StaticResource HistoryContainer}" >
+                            <StackPanel Margin="6,4,6,6">
+                                <TextBlock Text="{Binding Source}" />
+                                <TextBlock Text="{Binding Width, StringFormat={}Width: {0}}" />
+                                <TextBlock Text="{Binding Height, StringFormat={}Height: {0}}" />
+                                <TextBlock Text="{Binding Model, StringFormat={}Model: {0}}" />
+                                <TextBlock Text="{Binding MediaPath}" />
+                            </StackPanel>
+                        </Border>
+                    </Border>
+                </Popup>
+
+
+                <!-- Hover triggers -->
+                <Grid.Triggers>
+                    <EventTrigger RoutedEvent="MouseEnter">
+                        <BeginStoryboard>
+                            <Storyboard>
+                                <BooleanAnimationUsingKeyFrames Storyboard.TargetName="CardPopup" Storyboard.TargetProperty="IsOpen">
+                                    <DiscreteBooleanKeyFrame KeyTime="0:0:0" Value="True"/>
+                                </BooleanAnimationUsingKeyFrames>
+                            </Storyboard>
+                        </BeginStoryboard>
+                    </EventTrigger>
+                    <EventTrigger RoutedEvent="MouseLeave">
+                        <BeginStoryboard>
+                            <Storyboard>
+                                <BooleanAnimationUsingKeyFrames Storyboard.TargetName="CardPopup" Storyboard.TargetProperty="IsOpen">
+                                    <DiscreteBooleanKeyFrame KeyTime="0:0:0" Value="False"/>
+                                </BooleanAnimationUsingKeyFrames>
+                            </Storyboard>
+                        </BeginStoryboard>
+                    </EventTrigger>
+                </Grid.Triggers>
+
+            </Grid>
+        </DataTemplate>
+
+
+        <!--ExtractHistory-->
+        <DataTemplate  DataType="{x:Type Common:ExtractHistory}">
+            <Grid x:Name="Root" Background="Transparent" >
+                <DockPanel Height="134" Width="100" >
+                    <Grid DockPanel.Dock="Top">
+                        <CommonControls:TransparentImageElement 
+                            Height="100" 
+                            Stretch="Uniform" 
+                            DecodePixelHeight="100"
+                            UriSource="{Binding ThumbPath, Converter={StaticResource StringToUriConverter}}" />
+
+                        <UniformGrid Columns="2" Height="24" VerticalAlignment="Bottom" Visibility="{Binding IsMouseOver, ElementName=Root, Converter={StaticResource BooleanToHiddenConverter}}" Background="#8F000000">
+                            <Button
+                                Style="{StaticResource TransparentButton}"
+                                Command="{Binding PreviewItemCommand, RelativeSource={RelativeSource AncestorType=Controls:HistoryControl}}"
+                                CommandParameter="{Binding}">
+                                <CommonControls:FontAwesome Icon="f08e" IconStyle="Solid" Size="16" Color="{StaticResource InfoColour}"  />
+                            </Button>
+                            <Button
+                                Style="{StaticResource TransparentButton}"
+                                Command="{Binding RemoveItemCommand, RelativeSource={RelativeSource AncestorType=Controls:HistoryControl}}"
+                                CommandParameter="{Binding}">
+                                <CommonControls:FontAwesome Icon="e2b4" IconStyle="Solid" Size="16" Color="{StaticResource DangerColour}"  />
+                            </Button>
+                        </UniformGrid>
+                    </Grid>
+                    <StackPanel Margin="0,3,0,0">
+                        <TextBlock TextAlignment="Center" LineHeight="14" LineStackingStrategy="BlockLineHeight">
+                            <Run Text="{Binding Width}" />
+                            <Run Text="x" />
+                            <Run Text="{Binding Height}" />
+                            <LineBreak/>
+                            <Run Text="{Binding Source}" />
+                        </TextBlock>
+                    </StackPanel>
+                </DockPanel>
+
+
+                <!-- Popup card -->
+                <Popup x:Name="CardPopup" Style="{StaticResource HistoryPopup}">
+                    <Border Background="#01000000">
+                        <Border Style="{StaticResource HistoryContainer}" >
+                            <StackPanel Margin="6,4,6,6">
+                                <TextBlock Text="{Binding Source}" />
+                                <TextBlock Text="{Binding Width, StringFormat={}Width: {0}}" />
+                                <TextBlock Text="{Binding Height, StringFormat={}Height: {0}}" />
+                                <TextBlock Text="{Binding Model, StringFormat={}Model: {0}}" />
+                                <TextBlock Text="{Binding MediaPath}" />
+                            </StackPanel>
+                        </Border>
+                    </Border>
+                </Popup>
+
+
+                <!-- Hover triggers -->
+                <Grid.Triggers>
+                    <EventTrigger RoutedEvent="MouseEnter">
+                        <BeginStoryboard>
+                            <Storyboard>
+                                <BooleanAnimationUsingKeyFrames Storyboard.TargetName="CardPopup" Storyboard.TargetProperty="IsOpen">
+                                    <DiscreteBooleanKeyFrame KeyTime="0:0:0" Value="True"/>
+                                </BooleanAnimationUsingKeyFrames>
+                            </Storyboard>
+                        </BeginStoryboard>
+                    </EventTrigger>
+                    <EventTrigger RoutedEvent="MouseLeave">
+                        <BeginStoryboard>
+                            <Storyboard>
+                                <BooleanAnimationUsingKeyFrames Storyboard.TargetName="CardPopup" Storyboard.TargetProperty="IsOpen">
+                                    <DiscreteBooleanKeyFrame KeyTime="0:0:0" Value="False"/>
+                                </BooleanAnimationUsingKeyFrames>
+                            </Storyboard>
+                        </BeginStoryboard>
+                    </EventTrigger>
+                </Grid.Triggers>
+
+            </Grid>
+        </DataTemplate>
+
+
+        <!--InterpolateHistory-->
+        <DataTemplate  DataType="{x:Type Common:InterpolateHistory}">
+            <Grid x:Name="Root" Background="Transparent" >
+                <DockPanel Height="134" Width="100" >
+                    <Grid DockPanel.Dock="Top">
+                        <CommonControls:TransparentImageElement 
+                           Height="100" 
+                           Stretch="Uniform" 
+                           DecodePixelHeight="100"
+                           UriSource="{Binding ThumbPath, Converter={StaticResource StringToUriConverter}}" />
+
+                        <UniformGrid Columns="2" Height="24" VerticalAlignment="Bottom" Visibility="{Binding IsMouseOver, ElementName=Root, Converter={StaticResource BooleanToHiddenConverter}}" Background="#8F000000">
+                            <Button
+                                Style="{StaticResource TransparentButton}"
+                                Command="{Binding PreviewItemCommand, RelativeSource={RelativeSource AncestorType=Controls:HistoryControl}}"
+                                CommandParameter="{Binding}">
+                                <CommonControls:FontAwesome Icon="f08e" IconStyle="Solid" Size="16" Color="{StaticResource InfoColour}"  />
+                            </Button>
+                            <Button
+                                Style="{StaticResource TransparentButton}"
+                                Command="{Binding RemoveItemCommand, RelativeSource={RelativeSource AncestorType=Controls:HistoryControl}}"
+                                CommandParameter="{Binding}">
+                                <CommonControls:FontAwesome Icon="e2b4" IconStyle="Solid" Size="16" Color="{StaticResource DangerColour}"  />
+                            </Button>
+                        </UniformGrid>
+                    </Grid>
+                    <StackPanel Margin="0,3,0,0">
+                        <TextBlock TextAlignment="Center" LineHeight="14" LineStackingStrategy="BlockLineHeight">
+                            <Run Text="{Binding Width}" />
+                            <Run Text="x" />
+                            <Run Text="{Binding Height}" />
+                            <LineBreak/>
+                            <Run Text="{Binding Source}" />
+                        </TextBlock>
+                    </StackPanel>
+                </DockPanel>
+
+
+                <!-- Popup card -->
+                <Popup x:Name="CardPopup" Style="{StaticResource HistoryPopup}">
+                    <Border Background="#01000000">
+                        <Border Style="{StaticResource HistoryContainer}" >
+                            <StackPanel Margin="6,4,6,6">
+                                <TextBlock Text="{Binding Source}" />
+                                <TextBlock Text="{Binding Width, StringFormat={}Width: {0}}" />
+                                <TextBlock Text="{Binding Height, StringFormat={}Height: {0}}" />
+                                <TextBlock Text="{Binding MediaPath}" />
+                            </StackPanel>
+                        </Border>
+                    </Border>
+                </Popup>
+
+
+                <!-- Hover triggers -->
+                <Grid.Triggers>
+                    <EventTrigger RoutedEvent="MouseEnter">
+                        <BeginStoryboard>
+                            <Storyboard>
+                                <BooleanAnimationUsingKeyFrames Storyboard.TargetName="CardPopup" Storyboard.TargetProperty="IsOpen">
+                                    <DiscreteBooleanKeyFrame KeyTime="0:0:0" Value="True"/>
+                                </BooleanAnimationUsingKeyFrames>
+                            </Storyboard>
+                        </BeginStoryboard>
+                    </EventTrigger>
+                    <EventTrigger RoutedEvent="MouseLeave">
+                        <BeginStoryboard>
+                            <Storyboard>
+                                <BooleanAnimationUsingKeyFrames Storyboard.TargetName="CardPopup" Storyboard.TargetProperty="IsOpen">
+                                    <DiscreteBooleanKeyFrame KeyTime="0:0:0" Value="False"/>
+                                </BooleanAnimationUsingKeyFrames>
+                            </Storyboard>
+                        </BeginStoryboard>
+                    </EventTrigger>
+                </Grid.Triggers>
+
+            </Grid>
+        </DataTemplate>
+
+
+        <!--AudioHistory-->
+        <DataTemplate  DataType="{x:Type Common:AudioHistory}">
+            <Grid x:Name="Root" Background="Transparent" >
+                <DockPanel Height="134" Width="100" >
+                    <Grid DockPanel.Dock="Top">
+
+                        <Grid Width="100" Height="100">
+                            <CommonControls:FontAwesome Icon="f001" IconStyle="Solid" Size="70" Color="{StaticResource DefaultForeground}" Opacity=".2" />
+                        </Grid>
+
+                        <UniformGrid Columns="2" Height="24" VerticalAlignment="Bottom" Visibility="{Binding IsMouseOver, ElementName=Root, Converter={StaticResource BooleanToHiddenConverter}}" Background="#8F000000">
+                            <Button
+                                Style="{StaticResource TransparentButton}"
+                                Command="{Binding PreviewItemCommand, RelativeSource={RelativeSource AncestorType=Controls:HistoryControl}}"
+                                CommandParameter="{Binding}">
+                                <CommonControls:FontAwesome Icon="f08e" IconStyle="Solid" Size="16" Color="{StaticResource InfoColour}"  />
+                            </Button>
+                            <Button
+                                Style="{StaticResource TransparentButton}"
+                                Command="{Binding RemoveItemCommand, RelativeSource={RelativeSource AncestorType=Controls:HistoryControl}}"
+                                CommandParameter="{Binding}">
+                                <CommonControls:FontAwesome Icon="e2b4" IconStyle="Solid" Size="16" Color="{StaticResource DangerColour}"  />
+                            </Button>
+                        </UniformGrid>
+                    </Grid>
+
+                    <StackPanel Margin="0,3,0,0">
+                        <TextBlock TextAlignment="Center" LineHeight="14" LineStackingStrategy="BlockLineHeight">
+                            <Run Text="{Binding Duration, FallbackValue=00:00:00, StringFormat={}mm\\:ss\\.ff}" />
+                            <LineBreak/>
+                            <Run Text="{Binding Source}" />
+                        </TextBlock>
+                    </StackPanel>
+                </DockPanel>
+
+
+                <!-- Popup card -->
+                <Popup x:Name="CardPopup" Style="{StaticResource HistoryPopup}">
+                    <Border Background="#01000000">
+                        <Border Style="{StaticResource HistoryContainer}" >
+                            <StackPanel Margin="6,4,6,6">
+                                <TextBlock Text="{Binding Source}" />
+                                <TextBlock Text="{Binding Model, StringFormat={}Model: {0}}" />
+                                <TextBlock Text="{Binding Options.VoiceStyle, StringFormat={}Voice: {0}}" />
+                                <TextBlock Text="{Binding Options.Seed, StringFormat={}Seed: {0}}" />
+                                <TextBlock Text="{Binding Options.Speed, StringFormat={}Speed: {0}}" />
+                                <TextBlock Text="{Binding Options.Steps, StringFormat={}Steps: {0}}" />
+                                <TextBlock Text="{Binding Channels, StringFormat={}Channels: {0}}" />
+                                <TextBlock Text="{Binding SampleRate, StringFormat={}SampleRate: {0}}" />
+                                <TextBlock Text="{Binding Duration, FallbackValue=00:00:00, StringFormat={}mm\\:ss\\.ff}" />
+                                <TextBlock Text="{Binding MediaPath}" />
+                            </StackPanel>
+                        </Border>
+                    </Border>
+                </Popup>
+
+
+                <!-- Hover triggers -->
+                <Grid.Triggers>
+                    <EventTrigger RoutedEvent="MouseEnter">
+                        <BeginStoryboard>
+                            <Storyboard>
+                                <BooleanAnimationUsingKeyFrames Storyboard.TargetName="CardPopup" Storyboard.TargetProperty="IsOpen">
+                                    <DiscreteBooleanKeyFrame KeyTime="0:0:0" Value="True"/>
+                                </BooleanAnimationUsingKeyFrames>
+                            </Storyboard>
+                        </BeginStoryboard>
+                    </EventTrigger>
+                    <EventTrigger RoutedEvent="MouseLeave">
+                        <BeginStoryboard>
+                            <Storyboard>
+                                <BooleanAnimationUsingKeyFrames Storyboard.TargetName="CardPopup" Storyboard.TargetProperty="IsOpen">
+                                    <DiscreteBooleanKeyFrame KeyTime="0:0:0" Value="False"/>
+                                </BooleanAnimationUsingKeyFrames>
+                            </Storyboard>
+                        </BeginStoryboard>
+                    </EventTrigger>
+                </Grid.Triggers>
+
+            </Grid>
+        </DataTemplate>
+
+        <!--TextHistory-->
+        <DataTemplate  DataType="{x:Type Common:TextHistory}">
+            <Grid x:Name="Root" Background="Transparent" >
+                <DockPanel Height="134" Width="100" >
+                    <Grid DockPanel.Dock="Top">
+
+                        <Grid Width="100" Height="100">
+                            <CommonControls:FontAwesome Icon="f894" IconStyle="Solid" Size="70" Color="{StaticResource DefaultForeground}" Opacity=".2" />
+                        </Grid>
+
+                        <UniformGrid Columns="2" Height="24" VerticalAlignment="Bottom" Visibility="{Binding IsMouseOver, ElementName=Root, Converter={StaticResource BooleanToHiddenConverter}}" Background="#8F000000">
+                            <Button
+                                Style="{StaticResource TransparentButton}"
+                                Command="{Binding PreviewItemCommand, RelativeSource={RelativeSource AncestorType=Controls:HistoryControl}}"
+                                CommandParameter="{Binding}">
+                                <CommonControls:FontAwesome Icon="f08e" IconStyle="Solid" Size="16" Color="{StaticResource InfoColour}"  />
+                            </Button>
+                            <Button
+                                Style="{StaticResource TransparentButton}"
+                                Command="{Binding RemoveItemCommand, RelativeSource={RelativeSource AncestorType=Controls:HistoryControl}}"
+                                CommandParameter="{Binding}">
+                                <CommonControls:FontAwesome Icon="e2b4" IconStyle="Solid" Size="16" Color="{StaticResource DangerColour}"  />
+                            </Button>
+                        </UniformGrid>
+                    </Grid>
+
+                    <StackPanel Margin="0,3,0,0">
+                        <TextBlock TextAlignment="Center" LineHeight="14" LineStackingStrategy="BlockLineHeight">
+                            <Run Text="{Binding InputLength}" />
+                            <LineBreak/>
+                            <Run Text="{Binding Source}" />
+                        </TextBlock>
+                    </StackPanel>
+                </DockPanel>
+
+
+                <!-- Popup card -->
+                <Popup x:Name="CardPopup" Style="{StaticResource HistoryPopup}">
+                    <Border Background="#01000000">
+                        <Border Style="{StaticResource HistoryContainer}" >
+                            <StackPanel Margin="6,4,6,6">
+                                <TextBlock Text="{Binding Source}" />
+                                <TextBlock Text="{Binding Model, StringFormat={}Model: {0}}" />
+                                <TextBlock Text="{Binding InputLength, StringFormat={}Length: {0}}" />
+                                <TextBlock Text="{Binding MediaPath}" />
+                            </StackPanel>
+                        </Border>
+                    </Border>
+                </Popup>
+
+
+                <!-- Hover triggers -->
+                <Grid.Triggers>
+                    <EventTrigger RoutedEvent="MouseEnter">
+                        <BeginStoryboard>
+                            <Storyboard>
+                                <BooleanAnimationUsingKeyFrames Storyboard.TargetName="CardPopup" Storyboard.TargetProperty="IsOpen">
+                                    <DiscreteBooleanKeyFrame KeyTime="0:0:0" Value="True"/>
+                                </BooleanAnimationUsingKeyFrames>
+                            </Storyboard>
+                        </BeginStoryboard>
+                    </EventTrigger>
+                    <EventTrigger RoutedEvent="MouseLeave">
+                        <BeginStoryboard>
+                            <Storyboard>
+                                <BooleanAnimationUsingKeyFrames Storyboard.TargetName="CardPopup" Storyboard.TargetProperty="IsOpen">
+                                    <DiscreteBooleanKeyFrame KeyTime="0:0:0" Value="False"/>
+                                </BooleanAnimationUsingKeyFrames>
+                            </Storyboard>
+                        </BeginStoryboard>
+                    </EventTrigger>
+                </Grid.Triggers>
+
+            </Grid>
+        </DataTemplate>
+
+
+        <!--ImageLayerHistory-->
+        <DataTemplate  DataType="{x:Type Common:ImageLayerHistory}">
+            <Grid x:Name="Root" Background="Transparent" >
+                <DockPanel Height="134" Width="100" >
+                    <Grid DockPanel.Dock="Top">
+                        <CommonControls:TransparentImageElement 
+                            Height="100" 
+                            Stretch="Uniform" 
+                            DecodePixelHeight="100"
+                            UriSource="{Binding ThumbPath, Converter={StaticResource StringToUriConverter}}" />
+
+                        <UniformGrid Columns="2" Height="24" VerticalAlignment="Bottom" Visibility="{Binding IsMouseOver, ElementName=Root, Converter={StaticResource BooleanToHiddenConverter}}" Background="#8F000000">
+                            <Button
+                                Style="{StaticResource TransparentButton}"
+                                Command="{Binding PreviewItemCommand, RelativeSource={RelativeSource AncestorType=Controls:HistoryControl}}"
+                                CommandParameter="{Binding}">
+                                <CommonControls:FontAwesome Icon="f08e" IconStyle="Solid" Size="16" Color="{StaticResource InfoColour}"  />
+                            </Button>
+                            <Button
+                                Style="{StaticResource TransparentButton}"
+                                Command="{Binding RemoveItemCommand, RelativeSource={RelativeSource AncestorType=Controls:HistoryControl}}"
+                                CommandParameter="{Binding}">
+                                <CommonControls:FontAwesome Icon="e2b4" IconStyle="Solid" Size="16" Color="{StaticResource DangerColour}"  />
+                            </Button>
+                        </UniformGrid>
+                    </Grid>
+                    <StackPanel Margin="0,3,0,0">
+                        <TextBlock TextAlignment="Center" LineHeight="14" LineStackingStrategy="BlockLineHeight">
+                           <Run Text="{Binding Width}" />
+                           <Run Text="x" />
+                           <Run Text="{Binding Height}" />
+                           <LineBreak/>
+                           <Run Text="{Binding Source}" />
+                        </TextBlock>
+                    </StackPanel>
+                </DockPanel>
+
+
+                <!-- Popup card -->
+                <Popup x:Name="CardPopup" Style="{StaticResource HistoryPopup}">
+                    <Border Background="#01000000">
+                        <Border Style="{StaticResource HistoryContainer}" >
+                            <StackPanel Margin="6,4,6,6">
+                                <TextBlock Text="{Binding Source}" />
+                                <TextBlock Text="{Binding Width, StringFormat={}Width: {0}}" />
+                                <TextBlock Text="{Binding Height, StringFormat={}Height: {0}}" />
+                                <TextBlock Text="{Binding MediaPath}" />
+                            </StackPanel>
+                        </Border>
+                    </Border>
+                </Popup>
+
+
+                <!-- Hover triggers -->
+                <Grid.Triggers>
+                    <EventTrigger RoutedEvent="MouseEnter">
+                        <BeginStoryboard>
+                            <Storyboard>
+                                <BooleanAnimationUsingKeyFrames Storyboard.TargetName="CardPopup" Storyboard.TargetProperty="IsOpen">
+                                    <DiscreteBooleanKeyFrame KeyTime="0:0:0" Value="True"/>
+                                </BooleanAnimationUsingKeyFrames>
+                            </Storyboard>
+                        </BeginStoryboard>
+                    </EventTrigger>
+                    <EventTrigger RoutedEvent="MouseLeave">
+                        <BeginStoryboard>
+                            <Storyboard>
+                                <BooleanAnimationUsingKeyFrames Storyboard.TargetName="CardPopup" Storyboard.TargetProperty="IsOpen">
+                                    <DiscreteBooleanKeyFrame KeyTime="0:0:0" Value="False"/>
+                                </BooleanAnimationUsingKeyFrames>
+                            </Storyboard>
+                        </BeginStoryboard>
+                    </EventTrigger>
+                </Grid.Triggers>
+
+            </Grid>
+        </DataTemplate>
+
+
+    </CommonControls:BaseControl.Resources>
+
+    <Grid  DataContext="{Binding RelativeSource={RelativeSource AncestorType={x:Type local:HistoryControl}}}">
+
+        <!--<TextBlock 
+            Text="No History Items Found" 
+            Opacity=".5" 
+            FontSize="15"
+            HorizontalAlignment="Center" 
+            VerticalAlignment="Center"
+            Visibility="{Binding CollectionView, Converter={StaticResource EmptyToVisibilityConverter}}" />-->
+
+        <ScrollViewer 
+            PanningMode="HorizontalOnly"
+            PreviewMouseWheel="ScrollViewer_PreviewMouseWheel"
+            HorizontalScrollBarVisibility="{Binding HorizontalScrollBarVisibility}" 
+            VerticalScrollBarVisibility="{Binding VerticalScrollBarVisibility}" >
+            <ListBox x:Name="ListBoxControl" 
+                ItemsSource="{Binding CollectionView}" 
+                VerticalAlignment="Top"
+                SelectedItem="{Binding SelectedItem, Mode=TwoWay}"
+                ItemTemplate="{Binding ItemTemplate}"
+                ItemsPanel="{Binding ItemsPanelTemplate}"
+                IsSynchronizedWithCurrentItem="True"
+                ScrollViewer.VerticalScrollBarVisibility="Disabled" 
+                ScrollViewer.HorizontalScrollBarVisibility="Disabled"
+                RequestBringIntoView="ListBox_RequestBringIntoView" 
+                Background="{StaticResource TransparentBrush}"
+                BorderThickness="0,0,0,0"
+                Padding="0"
+                PreviewMouseMove="ListBoxPreviewMouseMove">
+                <ListBox.ItemContainerStyle>
+                    <Style TargetType="{x:Type ListBoxItem}">
+                        <Setter Property="Padding" Value="0"/>
+                        <Setter Property="Margin" Value="0,1,3,1"/>
+                        <Setter Property="BorderThickness" Value="1" />
+                        <Setter Property="BorderBrush" Value="{StaticResource ContainerBorder}" />
+                        <Setter Property="Background" Value="{StaticResource TransparentBrush}"/>
+                        <Setter Property="HorizontalContentAlignment" Value="Stretch" />
+                        <Setter Property="Template">
+                            <Setter.Value>
+                                <ControlTemplate TargetType="{x:Type ListBoxItem}">
+                                    <Border Name="Border" BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="{TemplateBinding BorderThickness}" Background="{TemplateBinding Background}">
+                                        <ContentPresenter Content="{TemplateBinding Content}" ContentTemplate="{TemplateBinding ContentTemplate}" Margin="{TemplateBinding Padding}" />
+                                    </Border>
+                                </ControlTemplate>
+                            </Setter.Value>
+                        </Setter>
+                    </Style>
+                </ListBox.ItemContainerStyle>
+            </ListBox>
+        </ScrollViewer>
+    </Grid>
+</CommonControls:BaseControl>

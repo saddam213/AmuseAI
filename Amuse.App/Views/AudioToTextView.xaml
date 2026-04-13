@@ -1,0 +1,180 @@
+﻿<Views:ViewBaseModel x:Class="Amuse.App.Views.AudioToTextView"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+    xmlns:local="clr-namespace:Amuse.App.Views"
+    xmlns:CommonControls="clr-namespace:TensorStack.WPF.Controls;assembly=TensorStack.WPF"
+    xmlns:Controls="clr-namespace:Amuse.App.Controls"
+    xmlns:Views="clr-namespace:Amuse.App.Views">
+    <Grid DataContext="{Binding RelativeSource={RelativeSource AncestorType={x:Type local:AudioToTextView}}}" >
+        <Grid.RowDefinitions>
+            <RowDefinition Height="1*" />
+        </Grid.RowDefinitions>
+
+        <Grid Grid.Row="0" >
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition MinWidth="380"/>
+                <ColumnDefinition Width="5" />
+                <ColumnDefinition Width="4*" />
+            </Grid.ColumnDefinitions>
+
+
+            <!--***Left Panel***-->
+            <Grid Grid.Column="0">
+                <Border Margin="4">
+                    <DockPanel x:Name="LeftPanelContainer" Margin="4" IsEnabled="{Binding IsViewBusy, Converter={StaticResource InverseBoolConverter}}">
+
+                        <StackPanel DockPanel.Dock="Top" IsEnabled="{Binding AudioService.IsLoading, Converter={StaticResource InverseBoolConverter}}">
+
+                            <!--ModelControl-->
+                            <StackPanel DockPanel.Dock="Top" >
+                                <Grid IsEnabled="{Binding AudioService.IsExecuting, Converter={StaticResource InverseBoolConverter}}">
+                                    <Controls:ModelControl
+                                        x:Name="ModelControl"
+                                        ViewType="AudioToText"
+                                        IsAudioEnabled="True"
+                                        Settings="{Binding Settings, Mode=OneWay}" 
+                                        IsPipelineLoaded="{Binding IsPipelineLoaded, Mode=OneWay}"
+                                        SelectionChanged="OnSelectedModelChanged"/>
+                                </Grid>
+                            </StackPanel>
+
+                        </StackPanel>
+
+                        <!--Execute/Cancel-->
+                        <UniformGrid DockPanel.Dock="Bottom" Columns="2" Height="30">
+                            <Button Content="Cancel" Command="{Binding CancelCommand}" />
+                            <Grid IsEnabled="{Binding IsSelectionValid, ElementName=ModelControl}">
+                                <Button Content="Generate" Command="{Binding ExecuteCommand}" />
+                            </Grid>
+                        </UniformGrid>
+
+
+                        <StackPanel IsEnabled="{Binding IsPipelineLoaded}">
+
+                            <!--Input Audio-->
+                            <StackPanel>
+                                <TextBlock Text="Audio Input" Style="{StaticResource FieldTextBlockStyle}" />
+                                <Border Style="{StaticResource AudioDropZoneStyle}">
+                                    <CommonControls:AudioElement 
+                                        Source="{Binding SourceAudio, Mode=TwoWay}" 
+                                        Configuration="{Binding Settings}" 
+                                        Volume="{Binding Settings.VolumeInput, Mode=TwoWay}"
+                                        IsVolumeMute="{Binding Settings.IsVolumeInputMute, Mode=TwoWay}"
+                                        IsReplayEnabled="False" />
+                                </Border>
+                            </StackPanel>
+
+                            <!--Options-->
+                            <StackPanel  Margin="0,15,0,0">
+                                <UniformGrid Columns="2" >
+                                    <DockPanel>
+                                        <StackPanel DockPanel.Dock="Right" Width="60" Margin="0,0,2,0">
+                                            <TextBlock Text="Language" Style="{StaticResource FieldTextBlockStyle}" />
+                                            <ComboBox ItemsSource="{Binding Source={StaticResource LanguageType}}" SelectedItem="{Binding Options.Language}" />
+                                        </StackPanel>
+                                        <StackPanel>
+                                            <TextBlock Text="Task" Style="{StaticResource FieldTextBlockStyle}" />
+                                            <ComboBox ItemsSource="{Binding Source={StaticResource TaskType}}" SelectedItem="{Binding Options.Task}" />
+                                        </StackPanel>
+                                    </DockPanel>
+                                
+                                  
+                                    <StackPanel Margin="2,0,0,0">
+                                        <TextBlock Text="Seed" Style="{StaticResource FieldTextBlockStyle}" />
+                                        <Controls:SeedControl Seed="{Binding Options.Seed}" />
+                                    </StackPanel>
+                                </UniformGrid>
+
+
+                                <UniformGrid Columns="2" Margin="0,4,0,0">
+                                  
+                                    <CommonControls:SliderControl Text="Beams" Value="{Binding Options.Beams}" Minimum="0" Maximum="20" TickFrequency="1" />
+                                    <CommonControls:SliderControl Text="Temperature" Value="{Binding Options.Temperature}" Minimum="0.1" Maximum="5" TickFrequency="0.01" ValueFormat="N2"/>
+                                    <CommonControls:SliderControl Text="TopK" Value="{Binding Options.TopK}" Minimum="1" Maximum="100" TickFrequency="1" />
+                                    <CommonControls:SliderControl Text="TopP" Value="{Binding Options.TopP}" Minimum="0.1" Maximum="1" TickFrequency="0.01" ValueFormat="N2"/>
+                                    <CommonControls:SliderControl Text="Min Length" Value="{Binding Options.MinLength}" Minimum="{Binding CurrentPipeline.AudioModel.MinLength}" Maximum="{Binding CurrentPipeline.AudioModel.MaxLength}" TickFrequency="1" />
+                                    <CommonControls:SliderControl Text="Max Length" Value="{Binding Options.MaxLength}" Minimum="{Binding CurrentPipeline.AudioModel.MinLength}" Maximum="{Binding CurrentPipeline.AudioModel.MaxLength}" TickFrequency="1" />
+                                    <CommonControls:SliderControl Text="Length Penalty" Value="{Binding Options.LengthPenalty}" Minimum="-5" Maximum="5" TickFrequency="0.05" ValueFormat="N2" />
+                                    <CommonControls:SliderControl Text="Chunk Size" Value="{Binding Options.ChunkSize}" Minimum="2" Maximum="30" TickFrequency="1" />
+                                    <!--<CommonControls:SliderControl Text="Diversity Length" Value="{Binding Options.DiversityLength}" Minimum="1" Maximum="{Binding CurrentPipeline.AudioModel.MaxLength}" TickFrequency="1" />-->
+                                
+                                    <!--<StackPanel>
+                                            <TextBlock Text="DiversityLength" Style="{StaticResource FieldTextBlockStyle}" />
+                                            <TextBox Text="{Binding DiversityLength}" />
+                                        </StackPanel>-->
+                                </UniformGrid>
+
+
+                                <UniformGrid Columns="2"  Margin="0,4,0,0">
+                                    <StackPanel>
+                                        <TextBlock Text="Early Stopping" Style="{StaticResource FieldTextBlockStyle}" />
+                                        <ComboBox ItemsSource="{Binding Source={StaticResource EarlyStopping}}" SelectedItem="{Binding Options.EarlyStopping}" />
+                                    </StackPanel>
+                                    <CheckBox Content="All Beams Results" IsChecked="{Binding IsMultipleResult}" Margin="0,21,0,0" HorizontalAlignment="Right"/>
+                                </UniformGrid>
+
+                            </StackPanel>
+
+                        </StackPanel>
+                    </DockPanel>
+                </Border>
+            </Grid>
+
+
+            <!--GridSplitter-->
+            <GridSplitter Grid.Column="1" HorizontalAlignment="Stretch" Width="5" Opacity=".4" Margin="0,20" />
+
+
+            <!--***Right Panel***-->
+            <Grid Grid.Column="2" Grid.Row="0" >
+
+                <!--Content-->
+                <DockPanel>
+
+                    <!--Statistics-->
+                    <Controls:StatisticsControl 
+                        DockPanel.Dock="Bottom"
+                        Margin="14,0,14,8"
+                        Statistics="{Binding Statistics}"
+                        Progress="{Binding Progress}" />
+
+                    <Border Margin="4" IsEnabled="{Binding IsViewBusy, Converter={StaticResource InverseBoolConverter}}">
+                        <Grid Margin="10,10,10,2" >
+                            <Grid Visibility="{Binding AudioService.IsExecuting, Converter={StaticResource InverseBooleanToHiddenConverter}}">
+                                <TabControl ItemsSource="{Binding Results}" SelectedIndex="{Binding SelectedBeam}" Visibility="{Binding IsMultipleResult, Converter={StaticResource BooleanToHiddenConverter}}">
+                                    <TabControl.ItemTemplate>
+                                        <DataTemplate>
+                                            <StackPanel>
+                                                <TextBlock Text="{Binding Beam, StringFormat={}Beam {0}}" MinWidth="100"/>
+                                                <TextBlock Text="{Binding Score, StringFormat={}Score: {0:F4}}" FontSize="8" FontStyle="Italic" Opacity=".6" />
+                                            </StackPanel>
+                                        </DataTemplate>
+                                    </TabControl.ItemTemplate>
+                                    <TabControl.ContentTemplate>
+                                        <DataTemplate>
+                                            <CommonControls:TextElement TextSource="{Binding ., Mode=TwoWay}" TextWrapping="Wrap" IsReadOnly="True" BorderThickness="0" IsLoadEnabled="False"/>
+                                        </DataTemplate>
+                                    </TabControl.ContentTemplate>
+                                </TabControl>
+
+                                <DockPanel Margin="0,3,0,0" Visibility="{Binding IsMultipleResult, Converter={StaticResource InverseBooleanToHiddenConverter}, FallbackValue=Visible}">
+                                    <TextBlock DockPanel.Dock="Top" Text="{Binding Options.Task, StringFormat={}{0} Result}" Style="{StaticResource FieldTextBlockStyle}" />
+                                    <CommonControls:TextElement TextSource="{Binding Result}" TextWrapping="Wrap" IsReadOnly="True" Margin="0,2,0,0" IsLoadEnabled="False"/>
+                                </DockPanel>
+                            </Grid>
+
+                            <DockPanel Margin="0,3,0,0" Visibility="{Binding AudioService.IsExecuting, Converter={StaticResource BooleanToHiddenConverter}}">
+                                <TextBlock DockPanel.Dock="Top" Text="{Binding Options.Task, StringFormat={}{0} Result}" Style="{StaticResource FieldTextBlockStyle}" />
+                                <TextBox Text="{Binding PreviewResult}" TextWrapping="Wrap" IsReadOnly="True" Margin="0,2,0,0" />
+                            </DockPanel>
+                        </Grid>
+                    </Border>
+                </DockPanel>
+
+            </Grid>
+        </Grid>
+
+    </Grid>
+</Views:ViewBaseModel>

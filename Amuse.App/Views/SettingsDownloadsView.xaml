@@ -1,0 +1,66 @@
+﻿<Views:ViewBase x:Class="Amuse.App.Views.SettingsDownloadsView"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+    xmlns:local="clr-namespace:Amuse.App.Views"
+    xmlns:CommonControls="clr-namespace:TensorStack.WPF.Controls;assembly=TensorStack.WPF"
+    xmlns:Controls="clr-namespace:Amuse.App.Controls"
+    xmlns:Views="clr-namespace:Amuse.App.Views">
+    <GroupBox DataContext="{Binding RelativeSource={RelativeSource AncestorType={x:Type local:SettingsDownloadsView}}}" Margin="10, 20, 20, 20" Header="Downloads" Padding="4">
+        <Grid >
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="1*" />
+                <ColumnDefinition Width="2*" />
+            </Grid.ColumnDefinitions>
+
+            <DockPanel Grid.Column="0">
+
+                <DockPanel DockPanel.Dock="Top" Margin="0,0,0,6">
+                    <Border DockPanel.Dock="Left" Width="26" BorderThickness="1" BorderBrush="{StaticResource DefaultBorderColor}">
+                        <CommonControls:FontAwesome Icon="f002" Size="12"/>
+                    </Border>
+                    <CommonControls:IconButton DockPanel.Dock="Right" Icon="f00d" IconSize="12" IconColor="{StaticResource DangerColour}" Width="23" Command="{Binding FilterClearCommand}"/>
+                    <CommonControls:PlaceholderTextBox Text="{Binding FilterText, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Placeholder="Search Downloads" PlaceholderOpacity=".5"/>
+                </DockPanel>
+
+                <StackPanel DockPanel.Dock="Bottom">
+                    <!--<CommonControls:IconButton Text="Add Model Wizard" FontSize="13" Icon="e2ca" IconStyle="Light" IconColor="{StaticResource SuccessColour}" Command="{Binding AddExtractModelWizardCommand}" Height="40"  />-->
+                    <UniformGrid  Columns="2" Height="32">
+                        <CommonControls:IconButton Text="Cancel" FontSize="13" Icon="f05e" IconStyle="Light" IconColor="{StaticResource DangerColour}" Command="{Binding CancelCommand}" />
+                        <CommonControls:IconButton Text="Cancel All" FontSize="13" Icon="f05e" IconStyle="Light" IconColor="{StaticResource DangerColour}" Command="{Binding CancelAllCommand}" />
+                    </UniformGrid>
+                </StackPanel>
+
+                <ListBox ItemsSource="{Binding ModelCollection}" SelectedItem="{Binding SelectedModel}" ItemContainerStyle="{StaticResource SettingsListBoxItem}" ScrollViewer.HorizontalScrollBarVisibility="Disabled">
+                    <ListBox.ItemTemplate>
+                        <DataTemplate>
+                            <DockPanel Margin="4">
+                                <UniformGrid DockPanel.Dock="Bottom" Rows="2" >
+                                    <CommonControls:ProgressElement Progress="{Binding Progress}" Height="8"/>
+                                    <CommonControls:ProgressElement Progress="{Binding TotalProgress}" Height="8"/>
+                                </UniformGrid>
+                                <DockPanel>
+                                    <StackPanel DockPanel.Dock="Right">
+                                        <Grid Margin="0,0,2,2">
+                                            <TextBlock Text="Verifying" TextAlignment="Right"  Opacity=".7" FontSize="11" Visibility="{Binding Status, Converter={StaticResource EnumToVisibilityConverter}, ConverterParameter=Verifying}"/>
+                                            <TextBlock Text="Queued" TextAlignment="Right"  Opacity=".7" FontSize="11" Visibility="{Binding Status, Converter={StaticResource EnumToVisibilityConverter}, ConverterParameter=DownloadQueue}"/>
+                                            <TextBlock Text="Downloading" TextAlignment="Right"  Opacity=".7" FontSize="11" Visibility="{Binding Status, Converter={StaticResource EnumToVisibilityConverter}, ConverterParameter=Downloading}"/>
+                                            <TextBlock Text="Failed" TextAlignment="Right"  Opacity=".7" FontSize="11" Visibility="{Binding Status, Converter={StaticResource EnumToVisibilityConverter}, ConverterParameter=DownloadFailed}"/>
+                                        </Grid>
+                                        <TextBlock Text="{Binding Speed, StringFormat={}Speed: {0:N2} MB/s}" TextAlignment="Right" Margin="0,0,2,2" Opacity=".7" FontSize="11"/>
+                                    </StackPanel>
+
+                                    <StackPanel>
+                                        <TextBlock Text="{Binding Name}" FontSize="12" Margin="3,0,0,0" FontWeight="Medium" TextTrimming="CharacterEllipsis"/>
+                                        <TextBlock Text="{Binding Pipeline}"  Margin="3,0,0,0" Opacity=".7" FontSize="11"/>
+                                    </StackPanel>
+                                </DockPanel>
+                            </DockPanel>
+                        </DataTemplate>
+                    </ListBox.ItemTemplate>
+                </ListBox>
+            </DockPanel>
+        </Grid>
+    </GroupBox>
+</Views:ViewBase>
