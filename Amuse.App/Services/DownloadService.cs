@@ -126,7 +126,7 @@ namespace Amuse.App.Services
                     BaseModelPath = model.Path,
                     Pipeline = model.Pipeline,
                     DataType = model.BaseType,
-                    CacheDirectory = Path.GetFullPath(_settings.DirectoryCache),
+                    CacheDirectory = Path.GetFullPath(_settings.DirectoryModel),
                     SecureToken = _settings.SecureToken,
                     MemoryMode = MemoryModeType.OffloadCPU,
                     CheckpointConfig = model.Checkpoint.ToConfig(),

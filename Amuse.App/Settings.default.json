@@ -14,7 +14,7 @@
       "IsDefault": true,
       "Variables": {
         "CUDA_VISIBLE_DEVICES": "0,1",
-        "DIFFUSERS_GGUF_CUDA_KERNELS": "true"
+        "DIFFUSERS_GGUF_CUDA_KERNELS": "1"
       },
       "Requirements": [
         "--extra-index-url https://download.pytorch.org/whl/cu128",

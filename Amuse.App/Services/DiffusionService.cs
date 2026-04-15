@@ -130,7 +130,7 @@ namespace Amuse.App.Services
                         IsOptimizeDeviceEnabled = _settings.IsOptimizeDeviceEnabled,
                         IsOptimizeChannelsEnabled = _settings.IsOptimizeChannelsEnabled,
                         IsDeviceQuantizationEnabled = _settings.IsDeviceQuantizationEnabled,
-                        CacheDirectory = Path.GetFullPath(_settings.DirectoryCache),
+                        CacheDirectory = Path.GetFullPath(_settings.DirectoryModel),
                         SecureToken = _settings.SecureToken,
                         LoraAdapters = GetLoraAdapters(_currentPipeline.LoraAdapterModel),
                         ControlNet = GetControlNet(controlNet),

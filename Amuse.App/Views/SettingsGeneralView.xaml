@@ -24,25 +24,17 @@
 
                 <StackPanel >
 
-
-
                     <!--Model Settings-->
                     <GroupBox Header="Model Settings">
                         <StackPanel Margin="6">
-
                             <StackPanel>
                                 <TextBlock Text="Model Directory" Style="{StaticResource FieldTextBlockStyle}"/>
                                 <CommonControls:FilePickerTextBox FileName="{Binding Settings.DirectoryModel, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" IsFolderPicker="True" />
                             </StackPanel>
                             <StackPanel>
-                                <TextBlock Text="HuggingFace Model Cache" Style="{StaticResource FieldTextBlockStyle}"/>
-                                <CommonControls:FilePickerTextBox FileName="{Binding Settings.DirectoryCache, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" IsFolderPicker="True" />
-                            </StackPanel>
-                            <StackPanel>
                                 <TextBlock Text="HuggingFace Access Token" Style="{StaticResource FieldTextBlockStyle}"/>
                                 <TextBox  Text="{Binding Settings.SecureToken}" />
                             </StackPanel>
-
                         </StackPanel>
                     </GroupBox>
 

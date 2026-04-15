@@ -7,23 +7,13 @@
     <PlatformTarget>x64</PlatformTarget>
     <UseWPF>true</UseWPF>
     <ApplicationIcon>Images\Icon.ico</ApplicationIcon>
-    <Configurations>Debug;Release;Release-Installer</Configurations>
+    <Configurations>Debug;Release;Release_Installer</Configurations>
     <ErrorOnDuplicatePublishOutputFiles>false</ErrorOnDuplicatePublishOutputFiles>
   </PropertyGroup>
 
   <!--Projects-->
   <ItemGroup>
     <ProjectReference Include="..\Amuse.Common\Amuse.Common.csproj" />
-  </ItemGroup>
-
-  <!--TensorStack-->
-  <ItemGroup>
-    <PackageReference Include="TensorStack.WPF" Version="0.6.11" />
-    <PackageReference Include="TensorStack.Python" Version="0.6.11" />
-    <PackageReference Include="TensorStack.Upscaler" Version="0.6.11" />
-    <PackageReference Include="TensorStack.Extractors" Version="0.6.11" />
-    <PackageReference Include="TensorStack.TextGeneration" Version="0.6.11" />
-    <PackageReference Include="TensorStack.Providers.DML" Version="0.6.11" />
   </ItemGroup>
 
   <!--Common-->
@@ -33,6 +23,32 @@
     <PackageReference Include="Microsoft.Extensions.Hosting" Version="10.0.2" />
     <PackageReference Include="Serilog.Extensions.Logging" Version="10.0.0" />
     <PackageReference Include="Serilog.Sinks.File" Version="7.0.0" />
+  </ItemGroup>
+
+  <!--Debug-->
+  <ItemGroup Condition="'$(Configuration)' == 'Debug'">
+    <ProjectReference Include="..\..\TensorStack.Common\TensorStack.Common.csproj" />
+    <ProjectReference Include="..\..\TensorStack.Image.BitmapImage\TensorStack.Image.BitmapImage.csproj" />
+    <ProjectReference Include="..\..\TensorStack.Upscaler\TensorStack.Upscaler.csproj" />
+    <ProjectReference Include="..\..\TensorStack.Extractors\TensorStack.Extractors.csproj" />
+    <ProjectReference Include="..\..\TensorStack.TextGeneration\TensorStack.TextGeneration.csproj" />
+    <ProjectReference Include="..\..\TensorStack.Audio.Windows\TensorStack.Audio.Windows.csproj" />
+    <ProjectReference Include="..\..\TensorStack.Python\TensorStack.Python.csproj" />
+    <ProjectReference Include="..\..\TensorStack.WPF\TensorStack.WPF.csproj" />
+    <ProjectReference Include="..\..\TensorStack.Providers.DML\TensorStack.Providers.DML.csproj" />
+    <ProjectReference Include="..\..\TensorStack.Audio\TensorStack.Audio.csproj" />
+    <ProjectReference Include="..\..\TensorStack.Image\TensorStack.Image.csproj" />
+    <ProjectReference Include="..\..\TensorStack.Video.Windows\TensorStack.Video.Windows.csproj" />
+  </ItemGroup>
+
+  <!--Release-->
+  <ItemGroup Condition="'$(Configuration)' == 'Release' OR '$(Configuration)' == 'Release_Installer'">
+    <PackageReference Include="TensorStack.WPF" Version="$(PackageVersion)" />
+    <PackageReference Include="TensorStack.Python" Version="$(PackageVersion)" />
+    <PackageReference Include="TensorStack.Upscaler" Version="$(PackageVersion)" />
+    <PackageReference Include="TensorStack.Extractors" Version="$(PackageVersion)" />
+    <PackageReference Include="TensorStack.TextGeneration" Version="$(PackageVersion)" />
+    <PackageReference Include="TensorStack.Providers.DML" Version="$(PackageVersion)" />
   </ItemGroup>
 
   <!--Binaries-->

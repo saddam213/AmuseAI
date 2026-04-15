@@ -6,7 +6,7 @@
     <TargetFramework>net10.0-windows10.0.17763.0</TargetFramework>
     <PlatformTarget>x64</PlatformTarget>
     <ApplicationIcon>Icon.ico</ApplicationIcon>
-    <Configurations>Debug;Release;Release-Installer</Configurations>
+    <Configurations>Debug;Release;Release_Installer</Configurations>
     <ErrorOnDuplicatePublishOutputFiles>false</ErrorOnDuplicatePublishOutputFiles>
   </PropertyGroup>
 
@@ -15,15 +15,20 @@
     <ProjectReference Include="..\Amuse.Common\Amuse.Common.csproj" />
   </ItemGroup>
 
-  <!--TensorStack-->
-  <ItemGroup>
-    <PackageReference Include="TensorStack.Python" Version="0.6.11" />
-  </ItemGroup>
-
   <!--Common-->
   <ItemGroup>
     <PackageReference Include="Serilog.Extensions.Logging" Version="10.0.0" />
     <PackageReference Include="Serilog.Sinks.File" Version="7.0.0" />
+  </ItemGroup>
+
+  <!--Debug-->
+  <ItemGroup Condition="'$(Configuration)' == 'Debug'">
+    <ProjectReference Include="..\..\TensorStack.Python\TensorStack.Python.csproj" />
+  </ItemGroup>
+
+  <!--Release-->
+  <ItemGroup Condition="'$(Configuration)' == 'Release' OR '$(Configuration)' == 'Release_Installer'">
+    <PackageReference Include="TensorStack.Python" Version="$(PackageVersion)" />
   </ItemGroup>
 
   <!--Binaries-->

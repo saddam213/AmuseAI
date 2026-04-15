@@ -3,20 +3,26 @@
   <PropertyGroup>
     <TargetFramework>net10.0-windows10.0.17763.0</TargetFramework>
     <PlatformTarget>x64</PlatformTarget>
-    <Configurations>Debug;Release;Release-Installer</Configurations>
+    <Configurations>Debug;Release;Release_Installer</Configurations>
     <ErrorOnDuplicatePublishOutputFiles>false</ErrorOnDuplicatePublishOutputFiles>
   </PropertyGroup>
-
-  <!--TensorStack-->
-  <ItemGroup>
-    <PackageReference Include="TensorStack.Python" Version="0.6.11" />
-  </ItemGroup>
 
   <!--Common-->
   <ItemGroup>
     <PackageReference Include="CommunityToolkit.HighPerformance" Version="8.4.0" />
     <PackageReference Include="Microsoft.Extensions.Hosting" Version="10.0.2" />
     <PackageReference Include="ZstdSharp.Port" Version="0.8.7" />
+  </ItemGroup>
+
+  <!--Debug-->
+  <ItemGroup Condition="'$(Configuration)' == 'Debug'">
+    <ProjectReference Include="..\..\TensorStack.Common\TensorStack.Common.csproj" />
+    <ProjectReference Include="..\..\TensorStack.Python\TensorStack.Python.csproj" />
+  </ItemGroup>
+
+  <!--Release-->
+  <ItemGroup Condition="'$(Configuration)' == 'Release' OR '$(Configuration)' == 'Release_Installer'">
+    <PackageReference Include="TensorStack.Python" Version="$(PackageVersion)" />
   </ItemGroup>
 
   <!--Binaries-->

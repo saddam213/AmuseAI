@@ -21,7 +21,7 @@ namespace Amuse.App
         private double _volumeOutput = 0.1;
         private bool _isVolumeInputMute;
         private bool _isVolumeOutputMute;
-        private bool _isUpdateEnabled = true;
+        private bool _isUpdateEnabled = false;
         private bool _isUpdateAvailable;
 
         [AppDefault]
@@ -30,7 +30,6 @@ namespace Amuse.App
         public int DefaultDeviceId { get; set; }
         public string DirectoryTemp { get; set; }
         public string DirectoryModel { get; set; }
-        public string DirectoryCache { get; set; }
         public string DirectoryHistory { get; set; }
         public string SecureToken { get; set; }
         public int ReadBuffer { get; set; } = 32;
@@ -133,16 +132,6 @@ namespace Amuse.App
                 DirectoryModel = Path.Combine(directoryData, "Models");
             if (string.IsNullOrEmpty(DirectoryHistory) || !Path.Exists(DirectoryHistory))
                 DirectoryHistory = Path.Combine(directoryData, "History");
-            if (string.IsNullOrEmpty(DirectoryCache) || !Path.Exists(DirectoryCache))
-            {
-                var huggingfaceCache = Environment.GetEnvironmentVariable("HUGGINGFACE_HUB_CACHE");
-                if (!Directory.Exists(huggingfaceCache))
-                    huggingfaceCache = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.UserProfile), ".cache", "huggingface", "hub");
-
-                DirectoryCache = Directory.Exists(huggingfaceCache)
-                    ? huggingfaceCache
-                    : Path.Combine(directoryData, "Models");
-            }
 
             var templateSettings = Path.Combine(App.DirectoryData, "Templates.json");
             if (File.Exists(templateSettings))
@@ -152,7 +141,6 @@ namespace Amuse.App
 
             Directory.CreateDirectory(DirectoryTemp);
             Directory.CreateDirectory(DirectoryModel);
-            Directory.CreateDirectory(DirectoryCache);
             Directory.CreateDirectory(DirectoryHistory);
 
             ScanModels();
@@ -258,11 +246,11 @@ namespace Amuse.App
             foreach (var audioModel in AudioModels)
                 audioModel.Initialize(audioDirectory);
             foreach (var diffusionModel in DiffusionModels)
-                diffusionModel.Initialize(DirectoryCache);
+                diffusionModel.Initialize(DirectoryModel);
             foreach (var loraAdapterModel in LoraAdapterModels)
-                loraAdapterModel.Initialize(DirectoryCache);
+                loraAdapterModel.Initialize(DirectoryModel);
             foreach (var controlNetModel in ControlNetModels)
-                controlNetModel.Initialize(DirectoryCache);
+                controlNetModel.Initialize(DirectoryModel);
         }
     }
 }

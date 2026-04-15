@@ -352,7 +352,7 @@ namespace Amuse.App.Dialogs
 
         private bool IsCheckpointValid(string checkpoint)
         {
-            return File.Exists(checkpoint) || Utils.IsCheckpointInstalled(Settings.DirectoryCache, checkpoint) || Utils.IsHuggingFaceLink(checkpoint);
+            return File.Exists(checkpoint) || Utils.IsCheckpointInstalled(Settings.DirectoryModel, checkpoint) || Utils.IsHuggingFaceLink(checkpoint);
         }
 
 
