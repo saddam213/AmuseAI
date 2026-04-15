@@ -6,6 +6,11 @@
    <h2><a href="https://github.com/TensorStack-AI/AmuseAI/releases/download/v3.2.0/Amuse_v3.2.0.exe">Download Amuse v3.2.0</a></h2>
 </div>
 
+
+[![GitHub Release](https://img.shields.io/github/v/release/TensorStack-AI/AmuseAI?label=version&color=%2344cc11)](https://github.com/TensorStack-AI/AmuseAI/releases)
+[![GitHub last commit](https://img.shields.io/github/last-commit/TensorStack-AI/AmuseAI)](https://github.com/TensorStack-AI/AmuseAI/commits/master/)
+[![Discord](https://img.shields.io/discord/1457477275246268451?label=Discord&)]([https://discord.gg/ptgMMv36Xu](https://discord.gg/ptgMMv36Xu))
+
 ## Amuse Roadmap
 * ~~**.NET 10 + OnnxRuntime Latest:** Migration to the .NET 10 framework and integration of the latest OnnxRuntime for optimized hardware acceleration.~~ (v3.2.0)
 * ~~**Python Inference Runtime:** Implementation of a dedicated Python backend to provide seamless interop with the broader machine learning ecosystem.~~ (v3.3.0)
