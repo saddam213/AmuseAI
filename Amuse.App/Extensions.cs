@@ -6,6 +6,8 @@ using System.Linq;
 using System.Text.RegularExpressions;
 using System.Windows;
 using System.Windows.Media;
+using TensorStack.Common;
+using TensorStack.Python.Common;
 using TensorStack.Python.Config;
 
 namespace Amuse.App
@@ -84,111 +86,54 @@ namespace Amuse.App
             };
         }
 
+
+
+        public static List<LoraConfig> GetLoraAdapters(this LoraAdapterModel[] loraAdapterModel)
+        {
+            if (loraAdapterModel.IsNullOrEmpty())
+                return default;
+
+            return [.. loraAdapterModel.Select(lora => new LoraConfig
+            {
+                Path = lora.Path,
+                Weights = lora.Weights,
+                Name = lora.Key,
+                IsOfflineMode = lora.Status == ModelStatusType.Installed
+            })];
+        }
+
+
+        public static List<LoraOptions> GetLoraOptions(this DiffusionInputOptions options)
+        {
+            if (options.LoraOptions.IsNullOrEmpty())
+                return default;
+
+            return [.. options.LoraOptions.Select(x => new LoraOptions
+            {
+                Name = x.Key,
+                Strength = x.Strength
+            })];
+        }
+
+
+        public static ControlNetConfig GetControlNet(this ControlNetModel controlNetModel)
+        {
+            if (controlNetModel is null)
+                return null;
+
+            return new ControlNetConfig
+            {
+                Name = controlNetModel.Name,
+                Path = controlNetModel.Path,
+                IsOfflineMode = controlNetModel.Status == ModelStatusType.Installed
+            };
+        }
+
     }
 
     public static partial class Utils
     {
         public const int FixedIdRange = 1000;
-
-        public static string GetHuggingFaceCacheId(string repositoryUrl)
-        {
-            return $"models--{repositoryUrl.Replace("/", "--")}";
-        }
-
-        public static bool IsCheckpointInstalled(string modelDirectory, string checkpoint)
-        {
-            if (string.IsNullOrEmpty(checkpoint))
-                return false;
-
-            if (File.Exists(checkpoint))
-                return true;
-
-            if (!TryParseHuggingFaceRepo(checkpoint, out var repositoryId))
-                return false;
-
-            var directory = Path.Combine(modelDirectory, GetHuggingFaceCacheId(repositoryId));
-            if (!Directory.Exists(directory))
-                return false;
-
-            var filename = Path.GetFileName(checkpoint);
-            return Directory.EnumerateFiles(directory, filename, SearchOption.AllDirectories).Any();
-        }
-
-
-        public static bool IsLoraAdapterInstalled(string modelDirectory, string path, string weights)
-        {
-            if (string.IsNullOrEmpty(path) || string.IsNullOrEmpty(weights))
-                return false;
-
-            var adapter = Path.Combine(path, weights);
-            if (File.Exists(adapter))
-                return true;
-
-            if (!TryParseHuggingFaceRepo(path, out var repositoryId))
-                return false;
-
-            var directory = Path.Combine(modelDirectory, GetHuggingFaceCacheId(repositoryId));
-            if (!Directory.Exists(directory))
-                return false;
-
-            return Directory.EnumerateFiles(directory, weights, SearchOption.AllDirectories).Any();
-        }
-
-
-        public static bool IsControlNetInstalled(string modelDirectory, string path)
-        {
-            if (string.IsNullOrEmpty(path))
-                return false;
-
-            if (File.Exists(path))
-                return true;
-
-            if (!TryParseHuggingFaceRepo(path, out var repositoryId))
-                return false;
-
-            var directory = Path.Combine(modelDirectory, GetHuggingFaceCacheId(repositoryId));
-            return Directory.Exists(directory);
-        }
-
-
-        public static bool IsHuggingFaceLink(string url)
-        {
-            if (string.IsNullOrWhiteSpace(url))
-                return false;
-
-            if (url.Split('/', StringSplitOptions.RemoveEmptyEntries).Length == 2)
-                return true; // username/repository
-
-            return HuggingFaceLinkRegex.IsMatch(url);
-        }
-
-
-        public static bool TryParseHuggingFaceRepo(string input, out string repoId)
-        {
-            repoId = null;
-
-            if (string.IsNullOrWhiteSpace(input))
-                return false;
-
-            if (input.Contains("/blob/main/"))
-                input = input.Split("/blob/main/").FirstOrDefault();
-
-            var match = HuggingFaceRepoRegex.Match(input.Trim());
-            if (!match.Success)
-                return false;
-
-            repoId = match.Groups["repo"].Value;
-            return true;
-        }
-
-        private static readonly Regex HuggingFaceLinkRegex = CreateHuggingFaceLinkRegex();
-        private static readonly Regex HuggingFaceRepoRegex = CreateHuggingFaceRepoRegex();
-
-        [GeneratedRegex(@"^https?:\/\/(www\.)?huggingface\.co\/(datasets\/|spaces\/)?[\w.-]+\/[\w.-]+", RegexOptions.IgnoreCase | RegexOptions.Compiled, "en-NZ")]
-        private static partial Regex CreateHuggingFaceLinkRegex();
-
-        [GeneratedRegex(@"^(?:https?:\/\/)?(?:www\.)?huggingface\.co\/(?<repo>[^\/\s]+\/[^\/\s]+)$|^(?<repo>[^\/\s]+\/[^\/\s]+)$", RegexOptions.IgnoreCase | RegexOptions.Compiled, "en-NZ")]
-        private static partial Regex CreateHuggingFaceRepoRegex();
     }
 
 

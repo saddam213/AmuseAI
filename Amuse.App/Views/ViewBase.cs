@@ -15,7 +15,7 @@ namespace Amuse.App.Views
         /// <summary>
         /// Initializes a new instance of the <see cref="ViewBase"/> class.
         /// </summary>
-        public ViewBase(Settings settings, NavigationService navigationService, IEnvironmentService environmentService, IDownloadService downloadService, IHistoryService historyService, ILogger logger)
+        public ViewBase(Settings settings, NavigationService navigationService, IEnvironmentService environmentService, IModelDownloadService downloadService, IHistoryService historyService, ILogger logger)
             : base(navigationService)
         {
             Logger = logger;
@@ -70,7 +70,7 @@ namespace Amuse.App.Views
         /// <summary>
         /// Gets the download service.
         /// </summary>
-        public IDownloadService DownloadService { get; }
+        public IModelDownloadService DownloadService { get; }
 
         /// <summary>
         /// Gets or sets a value indicating whether this view busy.

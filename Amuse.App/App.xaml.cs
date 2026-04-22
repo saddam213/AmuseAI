@@ -82,7 +82,7 @@ namespace Amuse.App
             builder.Services.AddSingleton<IEnvironmentService, EnvironmentService>();
             builder.Services.AddSingleton<IInterpolationService, InterpolationService>();
             builder.Services.AddSingleton<IAudioService, AudioService>();
-            builder.Services.AddSingleton<IDownloadService, Services.DownloadService>();
+            builder.Services.AddSingleton<IModelDownloadService, ModelDownloadService>();
 
             // Build
             _appHost = builder.Build();

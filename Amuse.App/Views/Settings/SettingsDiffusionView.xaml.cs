@@ -4,7 +4,6 @@ using Amuse.App.Services;
 using Microsoft.Extensions.Logging;
 using System;
 using System.ComponentModel;
-using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Windows.Data;
@@ -19,47 +18,49 @@ namespace Amuse.App.Views
     /// </summary>
     public partial class SettingsDiffusionView : ViewBase
     {
-        private DiffusionModel _selectedDiffusionModel;
+        private DiffusionModel _selectedModel;
         private string _filterText;
 
-
-
-        public SettingsDiffusionView(Settings settings, NavigationService navigationService, IEnvironmentService environmentService, IDownloadService downloadService, IHistoryService historyService, ILogger<SettingsDiffusionView> logger)
+        public SettingsDiffusionView(Settings settings, NavigationService navigationService, IEnvironmentService environmentService, IModelDownloadService downloadService, IHistoryService historyService, ILogger<SettingsDiffusionView> logger)
             : base(settings, navigationService, environmentService, downloadService, historyService, logger)
         {
             SaveCommand = new AsyncRelayCommand(SaveAsync);
-            AddDiffusionModelWizardCommand = new AsyncRelayCommand(AddDiffusionModelWizardAsync);
-            CopyDiffusionModelCommand = new AsyncRelayCommand(CopyDiffusionModelAsync, () => SelectedDiffusionModel is not null);
-            UpdateDiffusionModelCommand = new AsyncRelayCommand(UpdateDiffusionModelAsync, () => SelectedDiffusionModel?.Id > Utils.FixedIdRange);
-            RemoveDiffusionModelCommand = new AsyncRelayCommand(RemoveDiffusionModelAsync, () => SelectedDiffusionModel?.Id > Utils.FixedIdRange);
-            ImportDiffusionModelCommand = new AsyncRelayCommand(ImportDiffusionModelAsync);
-            ExportDiffusionModelCommand = new AsyncRelayCommand(ExportDiffusionModelAsync, () => SelectedDiffusionModel is not null);
-            DownloadDiffusionModelCommand = new AsyncRelayCommand(DownloadDiffusionModelAsync);
-            DownloadDiffusionModelCancelCommand = new AsyncRelayCommand(DownloadDiffusionModelCancelAsync);
+            AddModelWizardCommand = new AsyncRelayCommand(AddModelWizardAsync);
+            CopyModelCommand = new AsyncRelayCommand(CopyModelAsync, () => SelectedModel is not null);
+            UpdateModelCommand = new AsyncRelayCommand(UpdateModelAsync, () => SelectedModel?.Id > Utils.FixedIdRange);
+            RemoveModelCommand = new AsyncRelayCommand(RemoveModelAsync, () => SelectedModel?.Id > Utils.FixedIdRange);
+            ImportModelCommand = new AsyncRelayCommand(ImportModelAsync);
+            ExportModelCommand = new AsyncRelayCommand(ExportModelAsync, () => SelectedModel is not null);
+            DeleteModelCommand = new AsyncRelayCommand(DeleteModelAsync, () => SelectedModel is not null);
+            OpenModelCommand = new AsyncRelayCommand(OpenModelAsync, () => SelectedModel is not null);
+            DownloadModelCommand = new AsyncRelayCommand(DownloadModelAsync);
+            DownloadModelCancelCommand = new AsyncRelayCommand(DownloadModelCancelAsync);
             FilterClearCommand = new AsyncRelayCommand(FilterClearAsync, CanClearFilter);
             ModelCollection = new ListCollectionView(settings.DiffusionModels) { Filter = CollectionFilter(), IsLiveSorting = true };
             ModelCollection.SortDescriptions.Add(new SortDescription(nameof(DiffusionModel.Name), ListSortDirection.Ascending));
-            SelectedDiffusionModel = settings.DiffusionModels.FirstOrDefault();
+            SelectedModel = settings.DiffusionModels.FirstOrDefault();
             InitializeComponent();
         }
 
         public override View View => View.Diffusion;
         public AsyncRelayCommand SaveCommand { get; }
-        public AsyncRelayCommand AddDiffusionModelWizardCommand { get; }
-        public AsyncRelayCommand CopyDiffusionModelCommand { get; }
-        public AsyncRelayCommand UpdateDiffusionModelCommand { get; }
-        public AsyncRelayCommand RemoveDiffusionModelCommand { get; }
-        public AsyncRelayCommand ImportDiffusionModelCommand { get; }
-        public AsyncRelayCommand ExportDiffusionModelCommand { get; }
-        public AsyncRelayCommand DownloadDiffusionModelCommand { get; }
-        public AsyncRelayCommand DownloadDiffusionModelCancelCommand { get; }
+        public AsyncRelayCommand AddModelWizardCommand { get; }
+        public AsyncRelayCommand CopyModelCommand { get; }
+        public AsyncRelayCommand UpdateModelCommand { get; }
+        public AsyncRelayCommand RemoveModelCommand { get; }
+        public AsyncRelayCommand ImportModelCommand { get; }
+        public AsyncRelayCommand ExportModelCommand { get; }
+        public AsyncRelayCommand DeleteModelCommand { get; }
+        public AsyncRelayCommand OpenModelCommand { get; }
+        public AsyncRelayCommand DownloadModelCommand { get; }
+        public AsyncRelayCommand DownloadModelCancelCommand { get; }
         public AsyncRelayCommand FilterClearCommand { get; }
         public ListCollectionView ModelCollection { get; }
 
-        public DiffusionModel SelectedDiffusionModel
+        public DiffusionModel SelectedModel
         {
-            get { return _selectedDiffusionModel; }
-            set { SetProperty(ref _selectedDiffusionModel, value); }
+            get { return _selectedModel; }
+            set { SetProperty(ref _selectedModel, value); }
         }
 
         public string FilterText
@@ -105,51 +106,51 @@ namespace Amuse.App.Views
         }
 
 
-        private async Task AddDiffusionModelWizardAsync()
+        private async Task AddModelWizardAsync()
         {
             var dialog = DialogService.GetDialog<DiffusionModelWizardDialog>();
             if (await dialog.ShowDialogAsync())
             {
                 await SaveAsync();
-                SelectedDiffusionModel = dialog.SelectedTemplate;
+                SelectedModel = dialog.SelectedTemplate;
             }
         }
 
 
-        private async Task CopyDiffusionModelAsync()
+        private async Task CopyModelAsync()
         {
             var dialog = DialogService.GetDialog<DiffusionModelDialog>();
-            if (await dialog.CopyAsync(SelectedDiffusionModel))
+            if (await dialog.CopyAsync(SelectedModel))
             {
                 await SaveAsync();
-                SelectedDiffusionModel = dialog.DiffusionModel;
+                SelectedModel = dialog.DiffusionModel;
             }
         }
 
 
-        private async Task UpdateDiffusionModelAsync()
+        private async Task UpdateModelAsync()
         {
             var dialog = DialogService.GetDialog<DiffusionModelDialog>();
-            if (await dialog.UpdateAsync(SelectedDiffusionModel))
+            if (await dialog.UpdateAsync(SelectedModel))
             {
                 await SaveAsync();
-                SelectedDiffusionModel = dialog.DiffusionModel;
+                SelectedModel = dialog.DiffusionModel;
             }
         }
 
 
-        private async Task RemoveDiffusionModelAsync()
+        private async Task RemoveModelAsync()
         {
             if (await DialogService.ShowMessageAsync("Delete Model", $"Are you sure you want to delete this model?", TensorStack.WPF.Dialogs.MessageDialogType.YesNo, TensorStack.WPF.Dialogs.MessageBoxIconType.Warning, TensorStack.WPF.Dialogs.MessageBoxStyleType.Danger))
             {
-                Settings.DiffusionModels.Remove(SelectedDiffusionModel);
-                SelectedDiffusionModel = Settings.DiffusionModels.FirstOrDefault();
+                Settings.DiffusionModels.Remove(SelectedModel);
+                SelectedModel = Settings.DiffusionModels.FirstOrDefault();
                 await SaveAsync();
             }
         }
 
 
-        private async Task ImportDiffusionModelAsync()
+        private async Task ImportModelAsync()
         {
             var importPath = await DialogService.OpenFileAsync("Import Model", filter: "JSON |*.json;", defualtExt: "json");
             if (!string.IsNullOrEmpty(importPath))
@@ -170,26 +171,44 @@ namespace Amuse.App.Views
         }
 
 
-        private async Task ExportDiffusionModelAsync()
+        private async Task ExportModelAsync()
         {
-            var existingId = _selectedDiffusionModel.Id;
+            var existingId = _selectedModel.Id;
             try
             {
-                _selectedDiffusionModel.Id = 0;
-                var exportPath = await DialogService.SaveFileAsync("Export Model", $"{_selectedDiffusionModel.Name}.json", filter: "JSON |*.json;", defualtExt: "json");
+                _selectedModel.Id = 0;
+                var exportPath = await DialogService.SaveFileAsync("Export Model", $"{_selectedModel.Name}.json", filter: "JSON |*.json;", defualtExt: "json");
                 if (!string.IsNullOrEmpty(exportPath))
                 {
-                    await Json.SaveAsync<DiffusionModel>(exportPath, _selectedDiffusionModel);
+                    await Json.SaveAsync<DiffusionModel>(exportPath, _selectedModel);
                 }
             }
             finally
             {
-                _selectedDiffusionModel.Id = existingId;
+                _selectedModel.Id = existingId;
             }
         }
 
 
-        private async Task DownloadDiffusionModelAsync()
+        private Task OpenModelAsync()
+        {
+            URL.NavigateToUrl(_selectedModel.GetDirectory(Settings.DirectoryModel));
+            return Task.CompletedTask;
+        }
+
+
+        private async Task DeleteModelAsync()
+        {
+            if (await DialogService.ShowMessageAsync("Delete Model", $"Are you sure you want to delete this model?", TensorStack.WPF.Dialogs.MessageDialogType.YesNo, TensorStack.WPF.Dialogs.MessageBoxIconType.Warning, TensorStack.WPF.Dialogs.MessageBoxStyleType.Danger))
+            {
+                await Task.Run(() => _selectedModel.Delete(Settings.DirectoryModel));
+                _selectedModel.Status = ModelStatusType.Pending;
+                await SaveAsync();
+            }
+        }
+
+
+        private async Task DownloadModelAsync()
         {
             var isEnvironmentInstalled = EnvironmentService.IsInstalled();
             if (!isEnvironmentInstalled)
@@ -197,13 +216,13 @@ namespace Amuse.App.Views
                 await DialogService.ShowErrorAsync("Environment Error", "No Environment Found, Please setup an environment and try again.");
                 return;
             }
-            await DownloadService.QueueAsync(_selectedDiffusionModel, false);
+            await DownloadService.QueueAsync(_selectedModel, false);
         }
 
 
-        private async Task DownloadDiffusionModelCancelAsync()
+        private async Task DownloadModelCancelAsync()
         {
-            await DownloadService.CancelAsync(_selectedDiffusionModel);
+            await DownloadService.CancelAsync(_selectedModel);
         }
 
 

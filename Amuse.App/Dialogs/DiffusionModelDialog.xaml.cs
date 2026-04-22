@@ -127,7 +127,7 @@ namespace Amuse.App.Dialogs
             DiffusionModel.DefaultOptions.Height = defaultSize.Height; ;
             DiffusionModel.DefaultOptions.FrameOptions = GetFrameOptions(FrameOptions);
 
-            if ((DiffusionModel.Source == ModelSourceType.HuggingFace || DiffusionModel.Source == ModelSourceType.Checkpoint || DiffusionModel.Source == ModelSourceType.SingleFile) && Utils.TryParseHuggingFaceRepo(DiffusionModel.Path, out var huggingfacePath))
+            if ((DiffusionModel.Source == ModelSourceType.HuggingFace || DiffusionModel.Source == ModelSourceType.Checkpoint || DiffusionModel.Source == ModelSourceType.SingleFile) && HuggingFace.TryParseRepo(DiffusionModel.Path, out var huggingfacePath))
                 DiffusionModel.Path = huggingfacePath;
 
             if (DiffusionModel.Source == ModelSourceType.SingleFile)
@@ -285,7 +285,7 @@ namespace Amuse.App.Dialogs
                     yield return "Model folder not found";
                 else if (DiffusionModel.Source == ModelSourceType.SingleFile && (string.IsNullOrEmpty(CheckpointModel.SingleFile) || !IsCheckpointValid(CheckpointModel.SingleFile)))
                     yield return "Model file not found";
-                else if ((DiffusionModel.Source == ModelSourceType.HuggingFace || DiffusionModel.Source == ModelSourceType.Checkpoint) && !Utils.TryParseHuggingFaceRepo(DiffusionModel.Path, out _))
+                else if ((DiffusionModel.Source == ModelSourceType.HuggingFace || DiffusionModel.Source == ModelSourceType.Checkpoint) && !HuggingFace.TryParseRepo(DiffusionModel.Path, out _))
                     yield return "HuggingFace repository not found";
 
                 if (DiffusionModel.Source == ModelSourceType.Checkpoint)
@@ -351,7 +351,7 @@ namespace Amuse.App.Dialogs
 
         private bool IsCheckpointValid(string checkpoint)
         {
-            return File.Exists(checkpoint) || Utils.IsCheckpointInstalled(Settings.DirectoryModel, checkpoint) || Utils.IsHuggingFaceLink(checkpoint);
+            return File.Exists(checkpoint) || HuggingFace.IsCheckpointInstalled(Settings.DirectoryModel, checkpoint) || HuggingFace.IsValidLink(checkpoint);
         }
 
 

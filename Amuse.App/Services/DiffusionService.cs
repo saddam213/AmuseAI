@@ -132,8 +132,8 @@ namespace Amuse.App.Services
                         IsDeviceQuantizationEnabled = _settings.IsDeviceQuantizationEnabled,
                         CacheDirectory = Path.GetFullPath(_settings.DirectoryModel),
                         SecureToken = _settings.SecureToken,
-                        LoraAdapters = GetLoraAdapters(_currentPipeline.LoraAdapterModel),
-                        ControlNet = GetControlNet(controlNet),
+                        LoraAdapters = _currentPipeline.LoraAdapterModel.GetLoraAdapters(),
+                        ControlNet = controlNet.GetControlNet(),
                         MemoryMode = GetMemoryMode(_currentPipeline),
                         QuantType = GetQuantizationType(_currentPipeline),
                         CheckpointConfig = model.Checkpoint.ToConfig(),
@@ -181,8 +181,8 @@ namespace Amuse.App.Services
                     _progressCallback = progressCallback;
                     var reloadOptions = new PipelineReloadOptions
                     {
-                        ControlNet = GetControlNet(pipeline.ControlNetModel),
-                        LoraAdapters = GetLoraAdapters(pipeline.LoraAdapterModel),
+                        ControlNet = pipeline.ControlNetModel.GetControlNet(),
+                        LoraAdapters = pipeline.LoraAdapterModel.GetLoraAdapters(),
                         ProcessType = pipeline.ProcessType,
                     };
 
@@ -244,7 +244,7 @@ namespace Amuse.App.Services
                     InputImages = options.InputImages,
                     InputControlImages = options.InputControlImages,
                     SchedulerOptions = options.SchedulerOptions.ToOptions(),
-                    LoraOptions = GetLoraOptions(options),
+                    LoraOptions = options.GetLoraOptions(),
                     TempFileName = imageFileName,
                     NoiseCondition = options.NoiseCondition,
                     EnableVaeSlicing = options.IsVaeSlicingEnabled,
@@ -294,7 +294,7 @@ namespace Amuse.App.Services
                     InputImages = options.InputImages,
                     InputControlImages = options.InputControlImages,
                     SchedulerOptions = options.SchedulerOptions.ToOptions(),
-                    LoraOptions = GetLoraOptions(options),
+                    LoraOptions = options.GetLoraOptions(),
                     TempFileName = videoFileName,
                     NoiseCondition = options.NoiseCondition,
                     FrameChunk = options.FrameChunk,
@@ -402,46 +402,7 @@ namespace Amuse.App.Services
         }
 
 
-        private static List<LoraConfig> GetLoraAdapters(LoraAdapterModel[] loraAdapterModel)
-        {
-            if (loraAdapterModel.IsNullOrEmpty())
-                return default;
 
-            return [.. loraAdapterModel.Select(lora => new LoraConfig
-            {
-                Path = lora.Path,
-                Weights = lora.Weights,
-                Name = lora.Key,
-                IsOfflineMode = lora.Status == ModelStatusType.Installed
-            })];
-        }
-
-
-        private static List<LoraOptions> GetLoraOptions(DiffusionInputOptions options)
-        {
-            if (options.LoraOptions.IsNullOrEmpty())
-                return default;
-
-            return [.. options.LoraOptions.Select(x => new LoraOptions
-            {
-                Name = x.Key,
-                Strength = x.Strength
-            })];
-        }
-
-
-        private static ControlNetConfig GetControlNet(ControlNetModel controlNetModel)
-        {
-            if (controlNetModel is null)
-                return null;
-
-            return new ControlNetConfig
-            {
-                Name = controlNetModel.Name,
-                Path = controlNetModel.Path,
-                IsOfflineMode = controlNetModel.Status == ModelStatusType.Installed
-            };
-        }
 
 
         private static MemoryModeType GetMemoryMode(PipelineModel pipeline)

@@ -1,5 +1,4 @@
 ﻿using Amuse.App.Views;
-using System.IO;
 using System.Linq;
 using System.Text.Json.Serialization;
 using TensorStack.Common.Common;
@@ -7,7 +6,7 @@ using TensorStack.WPF;
 
 namespace Amuse.App.Common
 {
-    public class ControlNetModel : BaseModel
+    public class ControlNetModel : BaseModel, IDownloadModel
     {
         private ModelStatusType _status;
 
@@ -32,24 +31,19 @@ namespace Amuse.App.Common
 
         public void Initialize(string modelDirectory)
         {
-            var isValid = false;
-            if (Source == ModelSourceType.Folder)
-                isValid = Directory.Exists(Path);
-            else if (Source == ModelSourceType.SingleFile)
-            {
-                isValid = Utils.IsControlNetInstalled(modelDirectory, Path);
-            }
-            else if (Source == ModelSourceType.HuggingFace)
-            {
-                isValid = Utils.IsControlNetInstalled(modelDirectory, Path);
-            }
+            Status = HuggingFace.ModelStatus(this, modelDirectory);
+        }
 
-            if (Status == ModelStatusType.Pending && isValid)
-                Status = ModelStatusType.Installed;
-            else if (Status == ModelStatusType.Installed && !isValid)
-                Status = ModelStatusType.Pending;
-            else if (Status == ModelStatusType.Downloading || Status == ModelStatusType.DownloadQueue || Status == ModelStatusType.DownloadFailed || Status == ModelStatusType.Verifying)
-                Status = ModelStatusType.Pending;
+
+        public void Delete(string modelDirectory)
+        {
+            HuggingFace.ModelDelete(this, modelDirectory);
+        }
+
+
+        public string GetDirectory(string modelDirectory)
+        {
+            return HuggingFace.ModelDirectory(this, modelDirectory);
         }
 
 

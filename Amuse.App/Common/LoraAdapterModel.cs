@@ -1,5 +1,4 @@
 ﻿using Amuse.App.Views;
-using System.IO;
 using System.Linq;
 using System.Text.Json.Serialization;
 using TensorStack.Common.Common;
@@ -7,7 +6,7 @@ using TensorStack.WPF;
 
 namespace Amuse.App.Common
 {
-    public class LoraAdapterModel : BaseModel
+    public class LoraAdapterModel : BaseModel, IDownloadModel
     {
         private string _weights;
         private ModelStatusType _status;
@@ -38,26 +37,22 @@ namespace Amuse.App.Common
         }
         public string Link { get; set; }
 
+
         public void Initialize(string modelDirectory)
         {
-            var isValid = false;
-            if (Source == ModelSourceType.Folder)
-                isValid = Directory.Exists(Path);
-            else if (Source == ModelSourceType.SingleFile)
-            {
-                isValid = Utils.IsLoraAdapterInstalled(modelDirectory, Path, Weights);
-            }
-            else if (Source == ModelSourceType.HuggingFace)
-            {
-                isValid = Utils.IsLoraAdapterInstalled(modelDirectory, Path, Weights);
-            }
+            Status = HuggingFace.ModelStatus(this, modelDirectory);
+        }
 
-            if (Status == ModelStatusType.Pending && isValid)
-                Status = ModelStatusType.Installed;
-            else if (Status == ModelStatusType.Installed && !isValid)
-                Status = ModelStatusType.Pending;
-            else if (Status == ModelStatusType.Downloading || Status == ModelStatusType.DownloadQueue || Status == ModelStatusType.DownloadFailed || Status == ModelStatusType.Verifying)
-                Status = ModelStatusType.Pending;
+
+        public void Delete(string modelDirectory)
+        {
+            HuggingFace.ModelDelete(this, modelDirectory);
+        }
+
+
+        public string GetDirectory(string modelDirectory)
+        {
+            return HuggingFace.ModelDirectory(this, modelDirectory);
         }
 
 

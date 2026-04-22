@@ -21,7 +21,7 @@ namespace Amuse.App.Views
         private ImageInput _sourceImage;
         private ImageInput _sourceImageMask;
 
-        public ImageInpaintView(Settings settings, NavigationService navigationService, IEnvironmentService environmentService, IDownloadService downloadService, IDiffusionService diffusionService, IExtractService extractService, IUpscaleService upscaleService, IHistoryService historyService, ILogger<ImageInpaintView> logger)
+        public ImageInpaintView(Settings settings, NavigationService navigationService, IEnvironmentService environmentService, IModelDownloadService downloadService, IDiffusionService diffusionService, IExtractService extractService, IUpscaleService upscaleService, IHistoryService historyService, ILogger<ImageInpaintView> logger)
             : base(settings, navigationService, environmentService, downloadService, diffusionService, extractService, upscaleService, historyService, logger)
         {
             InitializeComponent();

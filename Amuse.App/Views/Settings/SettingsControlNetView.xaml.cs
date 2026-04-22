@@ -18,43 +18,51 @@ namespace Amuse.App.Views
     /// </summary>
     public partial class SettingsControlNetView : ViewBase
     {
-        private ControlNetModel _selectedControlNetModel;
+        private ControlNetModel _selectedModel;
         private string _filterText;
 
-        public SettingsControlNetView(Settings settings, NavigationService navigationService, IEnvironmentService environmentService, IDownloadService downloadService, IHistoryService historyService, ILogger<SettingsControlNetView> logger)
+        public SettingsControlNetView(Settings settings, NavigationService navigationService, IEnvironmentService environmentService, IModelDownloadService downloadService, IHistoryService historyService, ILogger<SettingsControlNetView> logger)
             : base(settings, navigationService, environmentService, downloadService, historyService, logger)
         {
             SaveCommand = new AsyncRelayCommand(SaveAsync);
-            AddControlNetModelCommand = new AsyncRelayCommand(AddControlNetModelAsync);
-            AddControlNetModelWizardCommand = new AsyncRelayCommand(AddControlNetModelWizardAsync);
-            CopyControlNetModelCommand = new AsyncRelayCommand(CopyControlNetModelAsync, () => SelectedControlNetModel is not null);
-            UpdateControlNetModelCommand = new AsyncRelayCommand(UpdateControlNetModelAsync, () => SelectedControlNetModel?.Id > Utils.FixedIdRange);
-            RemoveControlNetModelCommand = new AsyncRelayCommand(RemoveControlNetModelAsync, () => SelectedControlNetModel?.Id > Utils.FixedIdRange);
-            ImportControlNetModelCommand = new AsyncRelayCommand(ImportControlNetModelAsync);
-            ExportControlNetModelCommand = new AsyncRelayCommand(ExportControlNetModelAsync, () => SelectedControlNetModel is not null);
+            AddModelCommand = new AsyncRelayCommand(AddModelAsync);
+            AddModelWizardCommand = new AsyncRelayCommand(AddModelWizardAsync);
+            CopyModelCommand = new AsyncRelayCommand(CopyModelAsync, () => SelectedModel is not null);
+            UpdateModelCommand = new AsyncRelayCommand(UpdateModelAsync, () => SelectedModel?.Id > Utils.FixedIdRange);
+            RemoveModelCommand = new AsyncRelayCommand(RemoveModelAsync, () => SelectedModel?.Id > Utils.FixedIdRange);
+            ImportModelCommand = new AsyncRelayCommand(ImportModelAsync);
+            ExportModelCommand = new AsyncRelayCommand(ExportModelAsync, () => SelectedModel is not null);
+            DeleteModelCommand = new AsyncRelayCommand(DeleteModelAsync, () => SelectedModel is not null);
+            OpenModelCommand = new AsyncRelayCommand(OpenModelAsync, () => SelectedModel is not null);
+            DownloadModelCommand = new AsyncRelayCommand(DownloadModelAsync);
+            DownloadModelCancelCommand = new AsyncRelayCommand(DownloadModelCancelAsync);
             FilterClearCommand = new AsyncRelayCommand(FilterClearAsync, CanClearFilter);
             ModelCollection = new ListCollectionView(settings.ControlNetModels) { Filter = CollectionFilter() };
             ModelCollection.SortDescriptions.Add(new SortDescription(nameof(ControlNetModel.Name), ListSortDirection.Ascending));
-            SelectedControlNetModel = settings.ControlNetModels.FirstOrDefault();
+            SelectedModel = settings.ControlNetModels.FirstOrDefault();
             InitializeComponent();
         }
 
         public override View View => View.ControlNet;
         public AsyncRelayCommand SaveCommand { get; }
-        public AsyncRelayCommand AddControlNetModelCommand { get; }
-        public AsyncRelayCommand AddControlNetModelWizardCommand { get; }
-        public AsyncRelayCommand CopyControlNetModelCommand { get; }
-        public AsyncRelayCommand UpdateControlNetModelCommand { get; }
-        public AsyncRelayCommand RemoveControlNetModelCommand { get; }
-        public AsyncRelayCommand ImportControlNetModelCommand { get; }
-        public AsyncRelayCommand ExportControlNetModelCommand { get; }
+        public AsyncRelayCommand AddModelCommand { get; }
+        public AsyncRelayCommand AddModelWizardCommand { get; }
+        public AsyncRelayCommand CopyModelCommand { get; }
+        public AsyncRelayCommand UpdateModelCommand { get; }
+        public AsyncRelayCommand RemoveModelCommand { get; }
+        public AsyncRelayCommand ImportModelCommand { get; }
+        public AsyncRelayCommand ExportModelCommand { get; }
+        public AsyncRelayCommand DeleteModelCommand { get; }
+        public AsyncRelayCommand OpenModelCommand { get; }
+        public AsyncRelayCommand DownloadModelCommand { get; }
+        public AsyncRelayCommand DownloadModelCancelCommand { get; }
         public AsyncRelayCommand FilterClearCommand { get; }
         public ListCollectionView ModelCollection { get; }
 
-        public ControlNetModel SelectedControlNetModel
+        public ControlNetModel SelectedModel
         {
-            get { return _selectedControlNetModel; }
-            set { SetProperty(ref _selectedControlNetModel, value); }
+            get { return _selectedModel; }
+            set { SetProperty(ref _selectedModel, value); }
         }
 
         public string FilterText
@@ -100,7 +108,7 @@ namespace Amuse.App.Views
         }
 
 
-        private async Task AddControlNetModelAsync()
+        private async Task AddModelAsync()
         {
             var dialog = DialogService.GetDialog<ControlNetModelDialog>();
             if (await dialog.AddAsync())
@@ -110,44 +118,44 @@ namespace Amuse.App.Views
         }
 
 
-        private Task AddControlNetModelWizardAsync()
+        private Task AddModelWizardAsync()
         {
             return Task.CompletedTask; //TODO: Model Wizard
         }
 
 
-        private async Task CopyControlNetModelAsync()
+        private async Task CopyModelAsync()
         {
             var dialog = DialogService.GetDialog<ControlNetModelDialog>();
-            if (await dialog.CopyAsync(SelectedControlNetModel))
+            if (await dialog.CopyAsync(SelectedModel))
             {
                 await SaveAsync();
             }
         }
 
 
-        private async Task UpdateControlNetModelAsync()
+        private async Task UpdateModelAsync()
         {
             var dialog = DialogService.GetDialog<ControlNetModelDialog>();
-            if (await dialog.UpdateAsync(SelectedControlNetModel))
+            if (await dialog.UpdateAsync(SelectedModel))
             {
                 await SaveAsync();
             }
         }
 
 
-        private async Task RemoveControlNetModelAsync()
+        private async Task RemoveModelAsync()
         {
             if (await DialogService.ShowMessageAsync("Delete Model", $"Are you sure you want to delete this model?", TensorStack.WPF.Dialogs.MessageDialogType.YesNo, TensorStack.WPF.Dialogs.MessageBoxIconType.Warning, TensorStack.WPF.Dialogs.MessageBoxStyleType.Danger))
             {
-                Settings.ControlNetModels.Remove(SelectedControlNetModel);
-                SelectedControlNetModel = default;
+                Settings.ControlNetModels.Remove(SelectedModel);
+                SelectedModel = default;
                 await SaveAsync();
             }
         }
 
 
-        private async Task ImportControlNetModelAsync()
+        private async Task ImportModelAsync()
         {
             var importPath = await DialogService.OpenFileAsync("Import Model", filter: "JSON |*.json;", defualtExt: "json");
             if (!string.IsNullOrEmpty(importPath))
@@ -168,22 +176,58 @@ namespace Amuse.App.Views
         }
 
 
-        private async Task ExportControlNetModelAsync()
+        private async Task ExportModelAsync()
         {
-            var existingId = _selectedControlNetModel.Id;
+            var existingId = _selectedModel.Id;
             try
             {
-                _selectedControlNetModel.Id = 0;
-                var exportPath = await DialogService.SaveFileAsync("Export Model", $"{_selectedControlNetModel.Name}.json", filter: "JSON |*.json;", defualtExt: "json");
+                _selectedModel.Id = 0;
+                var exportPath = await DialogService.SaveFileAsync("Export Model", $"{_selectedModel.Name}.json", filter: "JSON |*.json;", defualtExt: "json");
                 if (!string.IsNullOrEmpty(exportPath))
                 {
-                    await Json.SaveAsync<ControlNetModel>(exportPath, _selectedControlNetModel);
+                    await Json.SaveAsync<ControlNetModel>(exportPath, _selectedModel);
                 }
             }
             finally
             {
-                _selectedControlNetModel.Id = existingId;
+                _selectedModel.Id = existingId;
             }
+        }
+
+
+        private Task OpenModelAsync()
+        {
+            URL.NavigateToUrl(_selectedModel.GetDirectory(Settings.DirectoryModel));
+            return Task.CompletedTask;
+        }
+
+
+        private async Task DeleteModelAsync()
+        {
+            if (await DialogService.ShowMessageAsync("Delete Model", $"Are you sure you want to delete this model?", TensorStack.WPF.Dialogs.MessageDialogType.YesNo, TensorStack.WPF.Dialogs.MessageBoxIconType.Warning, TensorStack.WPF.Dialogs.MessageBoxStyleType.Danger))
+            {
+                await Task.Run(() => _selectedModel.Delete(Settings.DirectoryModel));
+                _selectedModel.Status = ModelStatusType.Pending;
+                await SaveAsync();
+            }
+        }
+
+
+        private async Task DownloadModelAsync()
+        {
+            var isEnvironmentInstalled = EnvironmentService.IsInstalled();
+            if (!isEnvironmentInstalled)
+            {
+                await DialogService.ShowErrorAsync("Environment Error", "No Environment Found, Please setup an environment and try again.");
+                return;
+            }
+            await DownloadService.QueueAsync(_selectedModel, false);
+        }
+
+
+        private async Task DownloadModelCancelAsync()
+        {
+            await DownloadService.CancelAsync(_selectedModel);
         }
 
 

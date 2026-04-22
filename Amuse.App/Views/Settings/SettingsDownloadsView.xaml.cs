@@ -18,11 +18,11 @@ namespace Amuse.App.Views
     /// </summary>
     public partial class SettingsDownloadsView : ViewBase
     {
-        private readonly IDownloadService _downloadService;
+        private readonly IModelDownloadService _downloadService;
         private DownloadQueueItem _selectedModel;
         private string _filterText;
 
-        public SettingsDownloadsView(Settings settings, NavigationService navigationService, IEnvironmentService environmentService, IHistoryService historyService, IDownloadService downloadService, ILogger<SettingsDownloadsView> logger)
+        public SettingsDownloadsView(Settings settings, NavigationService navigationService, IEnvironmentService environmentService, IHistoryService historyService, IModelDownloadService downloadService, ILogger<SettingsDownloadsView> logger)
             : base(settings, navigationService, environmentService, downloadService, historyService, logger)
         {
             _downloadService = downloadService;

@@ -24,7 +24,7 @@ namespace Amuse.App.Views
         private ImageInput _sourceImage3;
         private ImageInput _sourceImage4;
 
-        public ImageEditView(Settings settings, NavigationService navigationService, IEnvironmentService environmentService, IDownloadService downloadService, IDiffusionService diffusionService, IExtractService extractService, IUpscaleService upscaleService, IHistoryService historyService, ILogger<ImageEditView> logger)
+        public ImageEditView(Settings settings, NavigationService navigationService, IEnvironmentService environmentService, IModelDownloadService downloadService, IDiffusionService diffusionService, IExtractService extractService, IUpscaleService upscaleService, IHistoryService historyService, ILogger<ImageEditView> logger)
             : base(settings, navigationService, environmentService, downloadService, diffusionService, extractService, upscaleService, historyService, logger)
         {
             InitializeComponent();

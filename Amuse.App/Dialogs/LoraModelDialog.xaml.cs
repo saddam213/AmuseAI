@@ -254,7 +254,7 @@ namespace Amuse.App.Dialogs
 
         private bool IsLoraAdapterValid(string loraAdapterPath, string loraWeightsPath)
         {
-            return File.Exists(loraAdapterPath) || Utils.IsLoraAdapterInstalled(Settings.DirectoryModel, loraAdapterPath, loraWeightsPath) || Utils.IsHuggingFaceLink(loraAdapterPath);
+            return File.Exists(loraAdapterPath) || HuggingFace.IsLoraAdapterInstalled(Settings.DirectoryModel, loraAdapterPath, loraWeightsPath) || HuggingFace.IsValidLink(loraAdapterPath);
         }
 
     }

@@ -22,7 +22,7 @@ namespace Amuse.App
         private View _view;
         private ViewCategory _viewCategory;
 
-        public MainWindow(Settings settings, NavigationService navigation, IHistoryService historyService, IDownloadService downloadService)
+        public MainWindow(Settings settings, NavigationService navigation, IHistoryService historyService, IModelDownloadService downloadService)
         {
             Settings = settings;
             Navigation = navigation;
@@ -47,7 +47,7 @@ namespace Amuse.App
         public AsyncRelayCommand<IHistoryItem> RemoveHistoryItemCommand { get; }
         public AsyncRelayCommand<IHistoryItem> PreviewHistoryItemCommand { get; }
         public IHistoryService HistoryService { get; }
-        public IDownloadService DownloadService { get; }
+        public IModelDownloadService DownloadService { get; }
 
         public View View
         {

@@ -155,7 +155,7 @@ namespace Amuse.App.Dialogs
 
         private bool IsLControlNetValid(string controlNetPath)
         {
-            return File.Exists(controlNetPath) || Utils.IsCheckpointInstalled(Settings.DirectoryModel, controlNetPath) || Utils.IsHuggingFaceLink(controlNetPath);
+            return File.Exists(controlNetPath) || HuggingFace.IsCheckpointInstalled(Settings.DirectoryModel, controlNetPath) || HuggingFace.IsValidLink(controlNetPath);
         }
 
     }

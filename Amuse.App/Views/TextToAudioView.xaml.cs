@@ -25,7 +25,7 @@ namespace Amuse.App.Views
         /// <summary>
         /// Initializes a new instance of the <see cref="TextToAudioView"/> class.
         /// </summary>
-        public TextToAudioView(Settings settings, NavigationService navigationService, IEnvironmentService environmentService, IDownloadService downloadService, IHistoryService historyService, Services.IAudioService audioService, ILogger<TextToAudioView> logger)
+        public TextToAudioView(Settings settings, NavigationService navigationService, IEnvironmentService environmentService, IModelDownloadService downloadService, IHistoryService historyService, Services.IAudioService audioService, ILogger<TextToAudioView> logger)
             : base(settings, navigationService, environmentService, downloadService, historyService, logger)
         {
             AudioService = audioService;

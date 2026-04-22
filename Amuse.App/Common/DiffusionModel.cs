@@ -1,6 +1,5 @@
 ﻿using Amuse.App.Views;
 using System.Collections.Generic;
-using System.IO;
 using System.Linq;
 using System.Text.Json.Serialization;
 using TensorStack.Common;
@@ -10,7 +9,7 @@ using TensorStack.WPF;
 
 namespace Amuse.App.Common
 {
-    public class DiffusionModel : BaseModel
+    public class DiffusionModel : BaseModel, IDownloadModel
     {
         private ModelStatusType _status;
 
@@ -52,43 +51,19 @@ namespace Amuse.App.Common
 
         public void Initialize(string modelDirectory)
         {
-            var isValid = false;
-            if (Source == ModelSourceType.Folder)
-                isValid = Directory.Exists(Path);
-            else if (Source == ModelSourceType.HuggingFace)
-                isValid = Directory.Exists(System.IO.Path.Combine(modelDirectory, Utils.GetHuggingFaceCacheId(Path)));
-            else if (Source == ModelSourceType.SingleFile)
-            {
-                isValid = Checkpoint is not null && Utils.IsCheckpointInstalled(modelDirectory, Checkpoint.SingleFile);
-            }
-            else if (Source == ModelSourceType.Checkpoint)
-            {
-                isValid = Checkpoint is not null
-                    && Utils.TryParseHuggingFaceRepo(Path, out _)
-                    && (string.IsNullOrEmpty(Checkpoint.TextEncoder) || Utils.IsCheckpointInstalled(modelDirectory, Checkpoint.TextEncoder))
-                    && (string.IsNullOrEmpty(Checkpoint.TextEncoder2) || Utils.IsCheckpointInstalled(modelDirectory, Checkpoint.TextEncoder2))
-                    && (string.IsNullOrEmpty(Checkpoint.TextEncoder3) || Utils.IsCheckpointInstalled(modelDirectory, Checkpoint.TextEncoder3))
-                    && (string.IsNullOrEmpty(Checkpoint.Transformer) || Utils.IsCheckpointInstalled(modelDirectory, Checkpoint.Transformer))
-                    && (string.IsNullOrEmpty(Checkpoint.Transformer2) || Utils.IsCheckpointInstalled(modelDirectory, Checkpoint.Transformer2))
-                    && (string.IsNullOrEmpty(Checkpoint.Vae) || Utils.IsCheckpointInstalled(modelDirectory, Checkpoint.Vae))
-                    && (string.IsNullOrEmpty(Checkpoint.AudioVae) || Utils.IsCheckpointInstalled(modelDirectory, Checkpoint.AudioVae))
-                    && (string.IsNullOrEmpty(Checkpoint.Vocoder) || Utils.IsCheckpointInstalled(modelDirectory, Checkpoint.Vocoder))
-                    && (string.IsNullOrEmpty(Checkpoint.Connectors) || Utils.IsCheckpointInstalled(modelDirectory, Checkpoint.Connectors));
-            }
+            Status = HuggingFace.ModelStatus(this, modelDirectory);
+        }
 
-            if (!isValid)
-            {
-                // Files not found
-                Status = ModelStatusType.Pending;
-            }
-            else
-            {
-                // Files found
-                if (Status == ModelStatusType.Pending || Status == ModelStatusType.Verifying)
-                    Status = ModelStatusType.Unknown;
-                else if (Status == ModelStatusType.Downloading || Status == ModelStatusType.DownloadQueue || Status == ModelStatusType.DownloadFailed)
-                    Status = ModelStatusType.Pending;
-            }
+
+        public void Delete(string modelDirectory)
+        {
+            HuggingFace.ModelDelete(this, modelDirectory);
+        }
+
+
+        public string GetDirectory(string modelDirectory)
+        {
+            return HuggingFace.ModelDirectory(this, modelDirectory);
         }
 
 

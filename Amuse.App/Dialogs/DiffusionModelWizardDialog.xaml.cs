@@ -133,7 +133,7 @@ namespace Amuse.App.Dialogs
             _selectedTemplate.Path = _selectedModelPath;
             _selectedTemplate.Variant = SelectedVariant;
             _selectedTemplate.Backend = _selectedbackend;
-            if ((_selectedSource == ModelSourceType.HuggingFace || _selectedSource == ModelSourceType.Checkpoint) && Utils.TryParseHuggingFaceRepo(_selectedModelPath, out var huggingfacePath))
+            if ((_selectedSource == ModelSourceType.HuggingFace || _selectedSource == ModelSourceType.Checkpoint) && HuggingFace.TryParseRepo(_selectedModelPath, out var huggingfacePath))
                 _selectedTemplate.Path = huggingfacePath;
 
             if (_selectedSource == ModelSourceType.SingleFile)
@@ -197,7 +197,7 @@ namespace Amuse.App.Dialogs
                     yield return "Model folder not found";
                 else if (_selectedSource == ModelSourceType.SingleFile && (string.IsNullOrEmpty(CheckpointModel.SingleFile) || !IsCheckpointValid(CheckpointModel.SingleFile)))
                     yield return "Model file not found";
-                else if ((_selectedSource == ModelSourceType.HuggingFace || _selectedSource == ModelSourceType.Checkpoint) && !Utils.TryParseHuggingFaceRepo(_selectedModelPath, out _))
+                else if ((_selectedSource == ModelSourceType.HuggingFace || _selectedSource == ModelSourceType.Checkpoint) && !HuggingFace.TryParseRepo(_selectedModelPath, out _))
                     yield return "HuggingFace repository not found";
 
                 if (_selectedSource == ModelSourceType.Checkpoint)
@@ -238,7 +238,7 @@ namespace Amuse.App.Dialogs
 
         private bool IsCheckpointValid(string checkpoint)
         {
-            return File.Exists(checkpoint) || Utils.IsCheckpointInstalled(Settings.DirectoryModel, checkpoint) || Utils.IsHuggingFaceLink(checkpoint);
+            return File.Exists(checkpoint) || HuggingFace.IsCheckpointInstalled(Settings.DirectoryModel, checkpoint) || HuggingFace.IsValidLink(checkpoint);
         }
 
 

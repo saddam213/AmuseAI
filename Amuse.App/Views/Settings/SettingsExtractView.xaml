@@ -36,7 +36,7 @@
                     </UniformGrid>
                 </StackPanel>
 
-                <ListBox ItemsSource="{Binding ModelCollection}" SelectedItem="{Binding SelectedExtractModel}" ItemContainerStyle="{StaticResource SettingsListBoxItem}" ScrollViewer.HorizontalScrollBarVisibility="Disabled">
+                <ListBox ItemsSource="{Binding ModelCollection}" SelectedItem="{Binding SelectedModel}" ItemContainerStyle="{StaticResource SettingsListBoxItem}" ScrollViewer.HorizontalScrollBarVisibility="Disabled">
                     <ListBox.ItemTemplate>
                         <DataTemplate>
                             <DockPanel DockPanel.Dock="Left">
@@ -49,6 +49,56 @@
                         </DataTemplate>
                     </ListBox.ItemTemplate>
                 </ListBox>
+            </DockPanel>
+
+            <DockPanel Grid.Column="1" Margin="10,0,0,0">
+
+                <DockPanel DockPanel.Dock="Top">
+
+                    <!--Actions-->
+                    <DockPanel DockPanel.Dock="Right"  >
+                        <TextBlock DockPanel.Dock="Top" Text="Actions" Style="{StaticResource FieldTextBlockStyle}" />
+                        <StackPanel   VerticalAlignment="Top" Width="200">
+                            <Button Content="Download Model" Command="{Binding DownloadModelCommand}" Height="32" Visibility="{Binding SelectedModel.Status, Converter={StaticResource EnumToVisibilityConverter}, ConverterParameter=Pending}"/>
+                            <Button Content="Retry Download" Command="{Binding DownloadModelCommand}"  Height="32" Visibility="{Binding SelectedModel.Status, Converter={StaticResource EnumToVisibilityConverter}, ConverterParameter=DownloadFailed}"/>
+                            <Button Content="Update Download" Command="{Binding DownloadModelCommand}" Height="32" Visibility="{Binding SelectedModel.Status, Converter={StaticResource EnumToVisibilityConverter}, ConverterParameter=Installed|Unknown}"/>
+                            <Button Content="Cancel Download" Command="{Binding DownloadModelCancelCommand}" Height="32" Visibility="{Binding SelectedModel.Status, Converter={StaticResource EnumToVisibilityConverter}, ConverterParameter=Downloading|DownloadQueue|Verifying}"/>
+                            <Button Content="Open Folder" Command="{Binding OpenModelCommand}" Height="32" Visibility="{Binding SelectedModel.Status, Converter={StaticResource EnumToVisibilityConverter}, ConverterParameter=Installed|Unknown|DownloadFailed}"/>
+                            <Button Content="Delete Files" Command="{Binding DeleteModelCommand}" Height="32" Visibility="{Binding SelectedModel.Status, Converter={StaticResource EnumToVisibilityConverter}, ConverterParameter=Installed|Unknown|DownloadFailed}"/>
+                        </StackPanel>
+                    </DockPanel>
+
+                    <!--ExtractModel-->
+                    <StackPanel>
+                        <UniformGrid Columns="4" >
+                            <StackPanel Margin="0,0,2,0">
+                                <TextBlock Text="Name" Style="{StaticResource FieldTextBlockStyle}" />
+                                <TextBox Text="{Binding SelectedModel.Name}" IsReadOnly="True"/>
+                            </StackPanel>
+                            <StackPanel Margin="2,0,2,0">
+                                <TextBlock Text="Pipeline" Style="{StaticResource FieldTextBlockStyle}" />
+                                <TextBox Text="{Binding SelectedModel.Pipeline}" IsReadOnly="True"/>
+                            </StackPanel>
+                            <StackPanel Margin="2,0,2,0">
+                                <TextBlock Text="Status" Style="{StaticResource FieldTextBlockStyle}" />
+                                <TextBlock Text="{Binding SelectedModel.Status}" FontWeight="Bold" FontSize="14" Margin="3,1,0,0"/>
+                            </StackPanel>
+                        </UniformGrid>
+
+                        <UniformGrid Columns="2">
+                            <StackPanel Margin="2,6,2,0">
+                                <TextBlock Text="Model Link" Style="{StaticResource FieldTextBlockStyle}" />
+                                <CommonControls:HyperlinkControl Label="{Binding SelectedModel.Link}" Link="{Binding SelectedModel.Link}" />
+                            </StackPanel>
+                            <StackPanel Margin="2,0,0,0">
+                                <CheckBox Content="Gated Access" IsChecked="{Binding SelectedModel.IsGated}" Margin="0,22,0,2" IsHitTestVisible="False"/>
+                            </StackPanel>
+                        </UniformGrid>
+
+
+                    </StackPanel>
+
+                </DockPanel>
             </DockPanel>
         </Grid>
     </GroupBox>

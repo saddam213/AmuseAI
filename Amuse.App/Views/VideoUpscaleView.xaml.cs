@@ -24,7 +24,7 @@ namespace Amuse.App.Views
         /// <summary>
         /// Initializes a new instance of the <see cref="VideoUpscaleView"/> class.
         /// </summary>
-        public VideoUpscaleView(Settings settings, NavigationService navigationService, IEnvironmentService environmentService, IDownloadService downloadService, IHistoryService historyService, IUpscaleService upscaleService, ILogger<VideoUpscaleView> logger)
+        public VideoUpscaleView(Settings settings, NavigationService navigationService, IEnvironmentService environmentService, IModelDownloadService downloadService, IHistoryService historyService, IUpscaleService upscaleService, ILogger<VideoUpscaleView> logger)
             : base(settings, navigationService, environmentService, downloadService, historyService, logger)
         {
             UpscaleService = upscaleService;

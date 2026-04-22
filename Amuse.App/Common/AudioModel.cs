@@ -8,7 +8,7 @@ using TensorStack.WPF.Services;
 
 namespace Amuse.App.Common
 {
-    public class AudioModel : BaseModel
+    public class AudioModel : BaseModel, IDownloadModel
     {
         private ModelStatusType _status;
 
@@ -16,6 +16,7 @@ namespace Amuse.App.Common
         public int Id { get; set; }
         public BackendType Backend { get; set; }
         public string Name { get; set; }
+        public string Pipeline { get; set; } = "OnnxRuntime";
         public bool IsDefault { get; set; }
         public bool IsGated { get; set; }
         public ModelStatusType Status
@@ -52,6 +53,18 @@ namespace Amuse.App.Common
                 Status = ModelStatusType.Pending;
             else if (Status == ModelStatusType.Downloading || Status == ModelStatusType.DownloadQueue || Status == ModelStatusType.DownloadFailed || Status == ModelStatusType.Verifying)
                 Status = ModelStatusType.Pending;
+        }
+
+
+        public void Delete(string modelDirectory)
+        {
+            FileHelper.DeleteDirectory(System.IO.Path.GetDirectoryName(Path));
+        }
+
+
+        public string GetDirectory(string modelDirectory)
+        {
+            return System.IO.Path.GetDirectoryName(Path);
         }
 
 

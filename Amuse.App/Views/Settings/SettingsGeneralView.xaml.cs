@@ -13,7 +13,7 @@ namespace Amuse.App.Views
     /// </summary>
     public partial class SettingsGeneralView : ViewBase
     {
-        public SettingsGeneralView(Settings settings, NavigationService navigationService, IEnvironmentService environmentService, IDownloadService downloadService, IHistoryService historyService, ILogger<SettingsGeneralView> logger)
+        public SettingsGeneralView(Settings settings, NavigationService navigationService, IEnvironmentService environmentService, IModelDownloadService downloadService, IHistoryService historyService, ILogger<SettingsGeneralView> logger)
             : base(settings, navigationService, environmentService, downloadService, historyService, logger)
         {
             SaveCommand = new AsyncRelayCommand(SaveAsync);

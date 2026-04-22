@@ -18,43 +18,51 @@ namespace Amuse.App.Views
     /// </summary>
     public partial class SettingsExtractView : ViewBase
     {
-        private ExtractModel _selectedExtractModel;
+        private ExtractModel _selectedModel;
         private string _filterText;
 
-        public SettingsExtractView(Settings settings, NavigationService navigationService, IEnvironmentService environmentService, IDownloadService downloadService, IHistoryService historyService, ILogger<SettingsExtractView> logger)
+        public SettingsExtractView(Settings settings, NavigationService navigationService, IEnvironmentService environmentService, IModelDownloadService downloadService, IHistoryService historyService, ILogger<SettingsExtractView> logger)
             : base(settings, navigationService, environmentService, downloadService, historyService, logger)
         {
             SaveCommand = new AsyncRelayCommand(SaveAsync);
-            AddExtractModelCommand = new AsyncRelayCommand(AddExtractModelAsync);
-            AddExtractModelWizardCommand = new AsyncRelayCommand(AddExtractModelWizardAsync);
-            CopyExtractModelCommand = new AsyncRelayCommand(CopyExtractModelAsync, () => SelectedExtractModel is not null);
-            UpdateExtractModelCommand = new AsyncRelayCommand(UpdateExtractModelAsync, () => SelectedExtractModel?.Id > Utils.FixedIdRange);
-            RemoveExtractModelCommand = new AsyncRelayCommand(RemoveExtractModelAsync, () => SelectedExtractModel?.Id > Utils.FixedIdRange);
-            ImportExtractModelCommand = new AsyncRelayCommand(ImportExtractModelAsync);
-            ExportExtractModelCommand = new AsyncRelayCommand(ExportExtractModelAsync, () => SelectedExtractModel is not null);
+            AddModelCommand = new AsyncRelayCommand(AddModelAsync);
+            AddModelWizardCommand = new AsyncRelayCommand(AddModelWizardAsync);
+            CopyModelCommand = new AsyncRelayCommand(CopyModelAsync, () => SelectedModel is not null);
+            UpdateModelCommand = new AsyncRelayCommand(UpdateModelAsync, () => SelectedModel?.Id > Utils.FixedIdRange);
+            RemoveModelCommand = new AsyncRelayCommand(RemoveModelAsync, () => SelectedModel?.Id > Utils.FixedIdRange);
+            ImportModelCommand = new AsyncRelayCommand(ImportModelAsync);
+            ExportModelCommand = new AsyncRelayCommand(ExportModelAsync, () => SelectedModel is not null);
+            DeleteModelCommand = new AsyncRelayCommand(DeleteModelAsync, () => SelectedModel is not null);
+            OpenModelCommand = new AsyncRelayCommand(OpenModelAsync, () => SelectedModel is not null);
+            DownloadModelCommand = new AsyncRelayCommand(DownloadModelAsync);
+            DownloadModelCancelCommand = new AsyncRelayCommand(DownloadModelCancelAsync);
             FilterClearCommand = new AsyncRelayCommand(FilterClearAsync, CanClearFilter);
             ModelCollection = new ListCollectionView(settings.ExtractModels) { Filter = CollectionFilter(), IsLiveSorting = true };
             ModelCollection.SortDescriptions.Add(new SortDescription(nameof(ExtractModel.Name), ListSortDirection.Ascending));
-            SelectedExtractModel = settings.ExtractModels.FirstOrDefault();
+            SelectedModel = settings.ExtractModels.FirstOrDefault();
             InitializeComponent();
         }
 
         public override View View => View.Extract;
         public AsyncRelayCommand SaveCommand { get; }
-        public AsyncRelayCommand AddExtractModelCommand { get; }
-        public AsyncRelayCommand AddExtractModelWizardCommand { get; }
-        public AsyncRelayCommand CopyExtractModelCommand { get; }
-        public AsyncRelayCommand UpdateExtractModelCommand { get; }
-        public AsyncRelayCommand RemoveExtractModelCommand { get; }
-        public AsyncRelayCommand ImportExtractModelCommand { get; }
-        public AsyncRelayCommand ExportExtractModelCommand { get; }
+        public AsyncRelayCommand AddModelCommand { get; }
+        public AsyncRelayCommand AddModelWizardCommand { get; }
+        public AsyncRelayCommand CopyModelCommand { get; }
+        public AsyncRelayCommand UpdateModelCommand { get; }
+        public AsyncRelayCommand RemoveModelCommand { get; }
+        public AsyncRelayCommand ImportModelCommand { get; }
+        public AsyncRelayCommand ExportModelCommand { get; }
+        public AsyncRelayCommand DeleteModelCommand { get; }
+        public AsyncRelayCommand OpenModelCommand { get; }
+        public AsyncRelayCommand DownloadModelCommand { get; }
+        public AsyncRelayCommand DownloadModelCancelCommand { get; }
         public AsyncRelayCommand FilterClearCommand { get; }
         public ListCollectionView ModelCollection { get; }
 
-        public ExtractModel SelectedExtractModel
+        public ExtractModel SelectedModel
         {
-            get { return _selectedExtractModel; }
-            set { SetProperty(ref _selectedExtractModel, value); }
+            get { return _selectedModel; }
+            set { SetProperty(ref _selectedModel, value); }
         }
 
 
@@ -100,7 +108,7 @@ namespace Amuse.App.Views
         }
 
 
-        private async Task AddExtractModelAsync()
+        private async Task AddModelAsync()
         {
             var dialog = DialogService.GetDialog<ExtractModelDialog>();
             if (await dialog.AddAsync())
@@ -110,44 +118,44 @@ namespace Amuse.App.Views
         }
 
 
-        private Task AddExtractModelWizardAsync()
+        private Task AddModelWizardAsync()
         {
             return Task.CompletedTask; // TODO: Extract Wizard
         }
 
 
-        private async Task CopyExtractModelAsync()
+        private async Task CopyModelAsync()
         {
             var dialog = DialogService.GetDialog<ExtractModelDialog>();
-            if (await dialog.CopyAsync(SelectedExtractModel))
+            if (await dialog.CopyAsync(SelectedModel))
             {
                 await SaveAsync();
             }
         }
 
 
-        private async Task UpdateExtractModelAsync()
+        private async Task UpdateModelAsync()
         {
             var dialog = DialogService.GetDialog<ExtractModelDialog>();
-            if (await dialog.UpdateAsync(SelectedExtractModel))
+            if (await dialog.UpdateAsync(SelectedModel))
             {
                 await SaveAsync();
             }
         }
 
 
-        private async Task RemoveExtractModelAsync()
+        private async Task RemoveModelAsync()
         {
             if (await DialogService.ShowMessageAsync("Delete Model", $"Are you sure you want to delete this model?", TensorStack.WPF.Dialogs.MessageDialogType.YesNo, TensorStack.WPF.Dialogs.MessageBoxIconType.Warning, TensorStack.WPF.Dialogs.MessageBoxStyleType.Danger))
             {
-                Settings.ExtractModels.Remove(SelectedExtractModel);
-                SelectedExtractModel = default;
+                Settings.ExtractModels.Remove(SelectedModel);
+                SelectedModel = default;
                 await SaveAsync();
             }
         }
 
 
-        private async Task ImportExtractModelAsync()
+        private async Task ImportModelAsync()
         {
             var importPath = await DialogService.OpenFileAsync("Import Model", filter: "JSON |*.json;", defualtExt: "json");
             if (!string.IsNullOrEmpty(importPath))
@@ -168,22 +176,58 @@ namespace Amuse.App.Views
         }
 
 
-        private async Task ExportExtractModelAsync()
+        private async Task ExportModelAsync()
         {
-            var existingId = _selectedExtractModel.Id;
+            var existingId = _selectedModel.Id;
             try
             {
-                _selectedExtractModel.Id = 0;
-                var exportPath = await DialogService.SaveFileAsync("Export Model", $"{_selectedExtractModel.Name}.json", filter: "JSON |*.json;", defualtExt: "json");
+                _selectedModel.Id = 0;
+                var exportPath = await DialogService.SaveFileAsync("Export Model", $"{_selectedModel.Name}.json", filter: "JSON |*.json;", defualtExt: "json");
                 if (!string.IsNullOrEmpty(exportPath))
                 {
-                    await Json.SaveAsync<ExtractModel>(exportPath, _selectedExtractModel);
+                    await Json.SaveAsync<ExtractModel>(exportPath, _selectedModel);
                 }
             }
             finally
             {
-                _selectedExtractModel.Id = existingId;
+                _selectedModel.Id = existingId;
             }
+        }
+
+
+        private Task OpenModelAsync()
+        {
+            URL.NavigateToUrl(_selectedModel.GetDirectory(Settings.DirectoryModel));
+            return Task.CompletedTask;
+        }
+
+
+        private async Task DeleteModelAsync()
+        {
+            if (await DialogService.ShowMessageAsync("Delete Model", $"Are you sure you want to delete this model?", TensorStack.WPF.Dialogs.MessageDialogType.YesNo, TensorStack.WPF.Dialogs.MessageBoxIconType.Warning, TensorStack.WPF.Dialogs.MessageBoxStyleType.Danger))
+            {
+                await Task.Run(() => _selectedModel.Delete(Settings.DirectoryModel));
+                _selectedModel.Status = ModelStatusType.Pending;
+                await SaveAsync();
+            }
+        }
+
+
+        private async Task DownloadModelAsync()
+        {
+            var isEnvironmentInstalled = EnvironmentService.IsInstalled();
+            if (!isEnvironmentInstalled)
+            {
+                await DialogService.ShowErrorAsync("Environment Error", "No Environment Found, Please setup an environment and try again.");
+                return;
+            }
+            await DownloadService.QueueAsync(_selectedModel, false);
+        }
+
+
+        private async Task DownloadModelCancelAsync()
+        {
+            await DownloadService.CancelAsync(_selectedModel);
         }
 
 

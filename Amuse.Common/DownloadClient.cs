@@ -39,6 +39,11 @@ namespace Amuse.Common
                 await KillServerAsync();
                 throw;
             }
+            catch (Exception)
+            {
+                await KillServerAsync();
+                throw;
+            }
         }
     }
 }

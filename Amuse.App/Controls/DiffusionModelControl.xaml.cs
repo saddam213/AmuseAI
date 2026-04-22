@@ -84,7 +84,7 @@ namespace Amuse.App.Controls
         public static readonly DependencyProperty SettingsProperty = DependencyProperty.Register(nameof(Settings), typeof(Settings), typeof(DiffusionModelControl), new PropertyMetadata<DiffusionModelControl>((c) => c.OnSettingsChanged()));
         public static readonly DependencyProperty IsPipelineLoadedProperty = DependencyProperty.Register(nameof(IsPipelineLoaded), typeof(bool), typeof(DiffusionModelControl), new PropertyMetadata<DiffusionModelControl>((c) => c.OnIsPipelineLoadedChanged()));
         public static readonly DependencyProperty IsSelectionValidProperty = DependencyProperty.Register(nameof(IsSelectionValid), typeof(bool), typeof(DiffusionModelControl));
-        public static readonly DependencyProperty DownloadServiceProperty = DependencyProperty.Register(nameof(DownloadService), typeof(IDownloadService), typeof(DiffusionModelControl));
+        public static readonly DependencyProperty DownloadServiceProperty = DependencyProperty.Register(nameof(DownloadService), typeof(IModelDownloadService), typeof(DiffusionModelControl));
         public static readonly DependencyProperty EnvironmentServiceProperty = DependencyProperty.Register(nameof(EnvironmentService), typeof(IEnvironmentService), typeof(DiffusionModelControl));
         public static readonly DependencyProperty NavigationServiceProperty = DependencyProperty.Register(nameof(NavigationService), typeof(NavigationService), typeof(DiffusionModelControl));
 
@@ -113,9 +113,9 @@ namespace Amuse.App.Controls
             set { SetValue(IsSelectionValidProperty, value); }
         }
 
-        public IDownloadService DownloadService
+        public IModelDownloadService DownloadService
         {
-            get { return (IDownloadService)GetValue(DownloadServiceProperty); }
+            get { return (IModelDownloadService)GetValue(DownloadServiceProperty); }
             set { SetValue(DownloadServiceProperty, value); }
         }
 

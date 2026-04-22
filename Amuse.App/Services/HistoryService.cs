@@ -86,7 +86,7 @@ namespace Amuse.App.Services
         public Task DeleteAsync(IHistoryItem historyItem)
         {
             _historyCollection.Remove(historyItem);
-            FileHelper.DeleteFiles(historyItem.FilePath, historyItem.MediaPath, historyItem.ThumbPath);
+            FileHelper.QueueDeleteFiles(historyItem.FilePath, historyItem.MediaPath, historyItem.ThumbPath);
             return Task.CompletedTask;
         }
 
