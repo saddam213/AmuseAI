@@ -345,6 +345,112 @@
                 </Setter>
             </Style>
 
+            <Style x:Key="ModelStatusFontAwesome" TargetType="{x:Type CommonControls:FontAwesome}" BasedOn="{StaticResource {x:Type CommonControls:FontAwesome}}">
+                <Setter Property="Icon" Value="f00c"/>
+                <Setter Property="Color" Value="#10FFFFFF"/>
+                <Setter Property="ToolTip" Value="Model Not Installed"/>
+                <Style.Triggers>
+                    <DataTrigger Binding="{Binding Tag, RelativeSource={RelativeSource Self}}" Value="Installed">
+                        <Setter Property="Icon" Value="f00c"/>
+                        <Setter Property="Color" Value="{StaticResource SuccessColour}"/>
+                        <Setter Property="ToolTip" Value="Installed"/>
+                    </DataTrigger>
+                    <DataTrigger Binding="{Binding Tag, RelativeSource={RelativeSource Self}}" Value="Unknown">
+                        <Setter Property="Icon" Value="21"/>
+                        <Setter Property="Color" Value="{StaticResource WarningColour}"/>
+                        <Setter Property="ToolTip" Value="Unknown State"/>
+                    </DataTrigger>
+                    <DataTrigger Binding="{Binding Tag, RelativeSource={RelativeSource Self}}" Value="Verifying">
+                        <Setter Property="Icon" Value="21"/>
+                        <Setter Property="Color" Value="{StaticResource InfoColour}"/>
+                        <Setter Property="ToolTip" Value="Verifying..."/>
+                    </DataTrigger>
+                    <DataTrigger Binding="{Binding Tag, RelativeSource={RelativeSource Self}}" Value="DownloadQueue">
+                        <Setter Property="Icon" Value="f0ed"/>
+                        <Setter Property="Color" Value="{StaticResource WarningColour}"/>
+                        <Setter Property="ToolTip" Value="Download Queued..."/>
+                    </DataTrigger>
+                    <DataTrigger Binding="{Binding Tag, RelativeSource={RelativeSource Self}}" Value="Downloading">
+                        <Setter Property="Icon" Value="f0ed"/>
+                        <Setter Property="Color" Value="{StaticResource InfoColour}"/>
+                        <Setter Property="ToolTip" Value="Downloading..."/>
+                    </DataTrigger>
+                    <DataTrigger Binding="{Binding Tag, RelativeSource={RelativeSource Self}}" Value="DownloadFailed">
+                        <Setter Property="Icon" Value="f0ed"/>
+                        <Setter Property="Color" Value="{StaticResource DangerColour}"/>
+                        <Setter Property="ToolTip" Value="Download Failed"/>
+                    </DataTrigger>
+                </Style.Triggers>
+            </Style>
+
+            <Style x:Key="ModelStatusTextBlock" TargetType="{x:Type TextBlock}" BasedOn="{StaticResource {x:Type TextBlock}}">
+                <Setter Property="Foreground" Value="{StaticResource DefaultForeground}"/>
+                <Setter Property="ToolTip" Value="Model Not Installed"/>
+                <Style.Triggers>
+                    <DataTrigger Binding="{Binding Tag, RelativeSource={RelativeSource Self}}"  Value="Installed">
+                        <Setter Property="Foreground" Value="{StaticResource SuccessColour}"/>
+                        <Setter Property="ToolTip" Value="Installed"/>
+                    </DataTrigger>
+                    <DataTrigger Binding="{Binding Tag, RelativeSource={RelativeSource Self}}" Value="Unknown">
+                        <Setter Property="Foreground" Value="{StaticResource WarningColour}"/>
+                        <Setter Property="ToolTip" Value="Unknown State"/>
+                    </DataTrigger>
+                    <DataTrigger Binding="{Binding Tag, RelativeSource={RelativeSource Self}}" Value="Verifying">
+                        <Setter Property="Foreground" Value="{StaticResource InfoColour}"/>
+                        <Setter Property="ToolTip" Value="Verifying..."/>
+                    </DataTrigger>
+                    <DataTrigger Binding="{Binding Tag, RelativeSource={RelativeSource Self}}" Value="DownloadQueue">
+                        <Setter Property="Foreground" Value="{StaticResource WarningColour}"/>
+                        <Setter Property="ToolTip" Value="Download Queued..."/>
+                    </DataTrigger>
+                    <DataTrigger Binding="{Binding Tag, RelativeSource={RelativeSource Self}}" Value="Downloading">
+                        <Setter Property="Foreground" Value="{StaticResource InfoColour}"/>
+                        <Setter Property="ToolTip" Value="Downloading..."/>
+                    </DataTrigger>
+                    <DataTrigger Binding="{Binding Tag, RelativeSource={RelativeSource Self}}" Value="DownloadFailed">
+                        <Setter Property="Foreground" Value="{StaticResource DangerColour}"/>
+                        <Setter Property="ToolTip" Value="Download Failed"/>
+                    </DataTrigger>
+                </Style.Triggers>
+            </Style>
+
+            <Style x:Key="ModelStatusBorder" TargetType="{x:Type Border}">
+                <Setter Property="Background" Value="{StaticResource DefaultForeground}"/>
+                <Setter Property="BorderBrush" Value="{StaticResource DefaultBackgroundColor}"/>
+                <Setter Property="ToolTip" Value="Model Not Installed"/>
+                <Style.Triggers>
+                    <DataTrigger Binding="{Binding Tag, RelativeSource={RelativeSource Self}}"  Value="Installed">
+                        <Setter Property="Background" Value="{StaticResource SuccessColour}"/>
+                        <Setter Property="BorderBrush" Value="{StaticResource SuccessColour}"/>
+                        <Setter Property="ToolTip" Value="Installed"/>
+                    </DataTrigger>
+                    <DataTrigger Binding="{Binding Tag, RelativeSource={RelativeSource Self}}" Value="Unknown">
+                        <Setter Property="Background" Value="{StaticResource WarningColour}"/>
+                        <Setter Property="BorderBrush" Value="{StaticResource WarningColour}"/>
+                        <Setter Property="ToolTip" Value="Unknown State"/>
+                    </DataTrigger>
+                    <DataTrigger Binding="{Binding Tag, RelativeSource={RelativeSource Self}}" Value="Verifying">
+                        <Setter Property="Background" Value="{StaticResource InfoColour}"/>
+                        <Setter Property="BorderBrush" Value="{StaticResource InfoColour}"/>
+                        <Setter Property="ToolTip" Value="Verifying..."/>
+                    </DataTrigger>
+                    <DataTrigger Binding="{Binding Tag, RelativeSource={RelativeSource Self}}" Value="DownloadQueue">
+                        <Setter Property="Background" Value="{StaticResource WarningColour}"/>
+                        <Setter Property="BorderBrush" Value="{StaticResource WarningColour}"/>
+                        <Setter Property="ToolTip" Value="Download Queued..."/>
+                    </DataTrigger>
+                    <DataTrigger Binding="{Binding Tag, RelativeSource={RelativeSource Self}}" Value="Downloading">
+                        <Setter Property="Background" Value="{StaticResource InfoColour}"/>
+                        <Setter Property="BorderBrush" Value="{StaticResource InfoColour}"/>
+                        <Setter Property="ToolTip" Value="Downloading..."/>
+                    </DataTrigger>
+                    <DataTrigger Binding="{Binding Tag, RelativeSource={RelativeSource Self}}" Value="DownloadFailed">
+                        <Setter Property="Background" Value="{StaticResource DangerColour}"/>
+                        <Setter Property="BorderBrush" Value="{StaticResource DangerColour}"/>
+                        <Setter Property="ToolTip" Value="Download Failed"/>
+                    </DataTrigger>
+                </Style.Triggers>
+            </Style>
 
             <Style x:Key="TransparentListBoxItem" TargetType="ListBoxItem">
                 <Setter Property="Padding" Value="0"/>
@@ -425,47 +531,7 @@
                         </CommonControls:FontAwesome>
 
                         <!--Installed | Downloading-->
-                        <CommonControls:FontAwesome Size="10" IconStyle="Solid" Opacity=".6"  ToolTipService.InitialShowDelay="200">
-                            <CommonControls:FontAwesome.Style>
-                                <Style TargetType="{x:Type CommonControls:FontAwesome}" BasedOn="{StaticResource {x:Type CommonControls:FontAwesome}}">
-                                    <Setter Property="Icon" Value="f00c"/>
-                                    <Setter Property="Color" Value="#10FFFFFF"/>
-                                    <Setter Property="ToolTip" Value="Model Not Installed"/>
-                                    <Style.Triggers>
-                                        <DataTrigger Binding="{Binding Status}" Value="Installed">
-                                            <Setter Property="Icon" Value="f00c"/>
-                                            <Setter Property="Color" Value="{StaticResource SuccessColour}"/>
-                                            <Setter Property="ToolTip" Value="Installed"/>
-                                        </DataTrigger>
-                                        <DataTrigger Binding="{Binding Status}" Value="Unknown">
-                                            <Setter Property="Icon" Value="21"/>
-                                            <Setter Property="Color" Value="{StaticResource WarningColour}"/>
-                                            <Setter Property="ToolTip" Value="Unknown State"/>
-                                        </DataTrigger>
-                                        <DataTrigger Binding="{Binding Status}" Value="Verifying">
-                                            <Setter Property="Icon" Value="21"/>
-                                            <Setter Property="Color" Value="{StaticResource InfoColour}"/>
-                                            <Setter Property="ToolTip" Value="Verifying..."/>
-                                        </DataTrigger>
-                                        <DataTrigger Binding="{Binding Status}" Value="DownloadQueue">
-                                            <Setter Property="Icon" Value="f0ed"/>
-                                            <Setter Property="Color" Value="{StaticResource InfoColour}"/>
-                                            <Setter Property="ToolTip" Value="Download Queued..."/>
-                                        </DataTrigger>
-                                        <DataTrigger Binding="{Binding Status}" Value="Downloading">
-                                            <Setter Property="Icon" Value="f0ed"/>
-                                            <Setter Property="Color" Value="{StaticResource SuccessColour}"/>
-                                            <Setter Property="ToolTip" Value="Downloading..."/>
-                                        </DataTrigger>
-                                        <DataTrigger Binding="{Binding Status}" Value="DownloadFailed">
-                                            <Setter Property="Icon" Value="f0ed"/>
-                                            <Setter Property="Color" Value="{StaticResource DangerColour}"/>
-                                            <Setter Property="ToolTip" Value="Download Failed"/>
-                                        </DataTrigger>
-                                    </Style.Triggers>
-                                </Style>
-                            </CommonControls:FontAwesome.Style>
-                        </CommonControls:FontAwesome>
+                        <CommonControls:FontAwesome Size="10" IconStyle="Solid" Opacity=".6"  ToolTipService.InitialShowDelay="200" Style="{StaticResource ModelStatusFontAwesome}" Tag="{Binding Status}" />
                     </UniformGrid>
 
                     <TextBlock Text="{Binding Name}" />

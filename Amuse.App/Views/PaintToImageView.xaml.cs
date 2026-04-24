@@ -118,10 +118,8 @@ namespace Amuse.App.Views
 
                 var inputImage = PaintSurface.GetInputImage();
 
-                AutomationProgress.Indeterminate($"Loading Automations...");
-                var automationJobs = await AutomationManager.CreateJobsAsync(AutomationOptions, Options, MediaType.Image, MediaType.Image);
-                AutomationProgress.Update(0, automationJobs.Count, $"Automation: {0}/{automationJobs.Count}");
-                foreach (var automationJob in automationJobs)
+                AutomationProgress.Indeterminate($"Automation Started");
+                await foreach (var automationJob in AutomationManager.CreateJobsAsync(AutomationOptions, Options, MediaType.Image, MediaType.Image))
                 {
                     // Images
                     if (CurrentPipeline.ProcessType == ProcessType.ImageToImage)
@@ -146,7 +144,7 @@ namespace Amuse.App.Views
                     }
 
                     await automationJob.SaveAsync(ResultImage);
-                    AutomationProgress.Update(automationJob.Id, automationJobs.Count, $"Automation: {automationJob.Id}/{automationJobs.Count}");
+                    AutomationProgress.Update(automationJob.Id, automationJob.Count, $"Automation: {automationJob.Id}/{automationJob.Count}");
                 }
 
                 Statistics.Stop();

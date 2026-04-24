@@ -112,10 +112,8 @@ namespace Amuse.App.Views
                 CompareImage = default;
                 Statistics.Start();
 
-                AutomationProgress.Indeterminate($"Loading Automations...");
-                var automationJobs = await AutomationManager.CreateJobsAsync(AutomationOptions, Options, MediaType.Video, MediaType.Text);
-                AutomationProgress.Update(0, automationJobs.Count, $"Automation: {0}/{automationJobs.Count}");
-                foreach (var automationJob in automationJobs)
+                AutomationProgress.Indeterminate($"Automation Started");
+                await foreach (var automationJob in AutomationManager.CreateJobsAsync(AutomationOptions, Options, MediaType.Video, MediaType.Text))
                 {
                     // Diffusion
                     var resultTensor = await ExecuteVideoDiffusionAsync(automationJob.DiffusionOptions);
@@ -124,12 +122,12 @@ namespace Amuse.App.Views
                     resultTensor = await ExecuteVideoUpscaleAsync(resultTensor);
 
                     // Result
-                    ResultVideo = !AutomationOptions.IsHistoryEnabled 
+                    ResultVideo = !AutomationOptions.IsHistoryEnabled
                         ? resultTensor
                         : await SaveHistoryAsync(automationJob.DiffusionOptions, resultTensor);
 
                     await automationJob.SaveAsync(ResultVideo);
-                    AutomationProgress.Update(automationJob.Id, automationJobs.Count, $"Automation: {automationJob.Id}/{automationJobs.Count}");
+                    AutomationProgress.Update(automationJob.Id, automationJob.Count, $"Automation: {automationJob.Id}/{automationJob.Count}");
                 }
 
                 Statistics.Stop();

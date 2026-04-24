@@ -37,6 +37,7 @@ namespace Amuse.App.Views
             DownloadModelCancelCommand = new AsyncRelayCommand(DownloadModelCancelAsync);
             FilterClearCommand = new AsyncRelayCommand(FilterClearAsync, CanClearFilter);
             ModelCollection = new ListCollectionView(settings.DiffusionModels) { Filter = CollectionFilter(), IsLiveSorting = true };
+            ModelCollection.SortDescriptions.Add(new SortDescription(nameof(DiffusionModel.Pipeline), ListSortDirection.Ascending));
             ModelCollection.SortDescriptions.Add(new SortDescription(nameof(DiffusionModel.Name), ListSortDirection.Ascending));
             SelectedModel = settings.DiffusionModels.FirstOrDefault();
             InitializeComponent();
@@ -141,7 +142,7 @@ namespace Amuse.App.Views
 
         private async Task RemoveModelAsync()
         {
-            if (await DialogService.ShowMessageAsync("Delete Model", $"Are you sure you want to delete this model?", TensorStack.WPF.Dialogs.MessageDialogType.YesNo, TensorStack.WPF.Dialogs.MessageBoxIconType.Warning, TensorStack.WPF.Dialogs.MessageBoxStyleType.Danger))
+            if (await DialogService.ShowMessageAsync("Remove Model", $"Are you sure you want to remove this model?", TensorStack.WPF.Dialogs.MessageDialogType.YesNo, TensorStack.WPF.Dialogs.MessageBoxIconType.Warning, TensorStack.WPF.Dialogs.MessageBoxStyleType.Danger))
             {
                 Settings.DiffusionModels.Remove(SelectedModel);
                 SelectedModel = Settings.DiffusionModels.FirstOrDefault();

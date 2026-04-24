@@ -8,6 +8,7 @@ namespace Amuse.App.Common
     public record AutomationJob
     {
         public int Id { get; init; }
+        public int Count { get; init; }
         public DiffusionInputOptions DiffusionOptions { get; init; }
         public UpscaleInputOptions UpscaleOptions { get; init; }
         public ExtractInputOptions ExtractOptions { get; init; }

@@ -119,12 +119,22 @@ namespace Amuse.App
             }
             else if (model.Source == ModelSourceType.HuggingFace)
             {
-                var cacheId = GetCacheId(model.Path);
-                DeleteCacheDirectory(modelDirectory, cacheId);
+                DeleteCacheDirectory(modelDirectory, GetCacheId(model.Path));
             }
             else if (model.Source == ModelSourceType.Checkpoint)
             {
-
+                if (!string.IsNullOrEmpty(model.Checkpoint?.SingleFile))
+                {
+                    DeleteCacheFile(model.Checkpoint.SingleFile);
+                }
+                else if (!string.IsNullOrEmpty(model.Checkpoint?.Transformer))
+                {
+                    DeleteCacheFile(model.Checkpoint.Transformer);
+                }
+                else if (!string.IsNullOrEmpty(model.Checkpoint?.Transformer2))
+                {
+                    DeleteCacheFile(model.Checkpoint.Transformer2);
+                }
             }
         }
 
@@ -137,14 +147,13 @@ namespace Amuse.App
             }
             else if (model.Source == ModelSourceType.SingleFile)
             {
-                FileHelper.DeleteFile(model.Path);
+                DeleteCacheFile(Path.Combine(model.Path, model.Weights));
             }
             else if (model.Source == ModelSourceType.HuggingFace)
             {
                 var cacheId = GetCacheId(model.Path);
                 var cachePath = Path.Combine(modelDirectory, cacheId);
                 var snapshotsPath = Path.Combine(modelDirectory, cacheId, "snapshots");
-
                 var weightsFile = FileHelper.FindFile(cachePath, model.Weights);
                 if (weightsFile?.Exists == true)
                 {
@@ -153,11 +162,11 @@ namespace Amuse.App
                     var snapshot = weightsFile.DirectoryName;
                     if (FileHelper.IsDirectoryEmpty(snapshot))
                         FileHelper.DeleteDirectory(snapshot);
+                }
 
-                    if (FileHelper.IsDirectoryEmpty(snapshotsPath))
-                    {
-                        DeleteCacheDirectory(modelDirectory, cacheId);
-                    }
+                if (FileHelper.IsDirectoryEmpty(snapshotsPath))
+                {
+                    DeleteCacheDirectory(modelDirectory, cacheId);
                 }
             }
         }
@@ -165,17 +174,19 @@ namespace Amuse.App
 
         public static void ModelDelete(ControlNetModel model, string modelDirectory)
         {
-            if (model.Source == ModelSourceType.SingleFile)
+            if (model.Source == ModelSourceType.Folder)
+            {
+                FileHelper.DeleteDirectory(model.Path);
+            }
+            else if (model.Source == ModelSourceType.SingleFile)
             {
                 DeleteCacheFile(model.Path);
             }
             else if (model.Source == ModelSourceType.HuggingFace || model.Source == ModelSourceType.Checkpoint)
             {
-                var cacheId = GetCacheId(model.Path);
-                DeleteCacheDirectory(modelDirectory, cacheId);
+                DeleteCacheDirectory(modelDirectory, GetCacheId(model.Path));
             }
         }
-
 
 
         public static string ModelDirectory(DiffusionModel model, string modelDirectory)

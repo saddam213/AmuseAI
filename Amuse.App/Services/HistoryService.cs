@@ -37,6 +37,7 @@ namespace Amuse.App.Services
 
         public async Task InitializeAsync()
         {
+            _historyCollection.Clear();
             var historyFiles = Directory.EnumerateFiles(_settings.DirectoryHistory, "*.json", SearchOption.TopDirectoryOnly)
                 .Select(x => new FileInfo(x))
                 .OrderByDescending(x => x.CreationTimeUtc)

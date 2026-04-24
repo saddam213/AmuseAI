@@ -38,7 +38,8 @@ namespace Amuse.App.Views
             EnvironmentServiceDeleteCommand = new AsyncRelayCommand(EnvironmentDeleteAsync, CanEnvironmentUpdate);
             FilterClearCommand = new AsyncRelayCommand(FilterClearAsync, CanClearFilter);
             ModelCollection = new ListCollectionView(settings.Environments) { Filter = CollectionFilter(), IsLiveSorting = true };
-            ModelCollection.SortDescriptions.Add(new SortDescription(nameof(EnvironmentModel.Id), ListSortDirection.Ascending));
+            ModelCollection.SortDescriptions.Add(new SortDescription(nameof(EnvironmentModel.Vendor), ListSortDirection.Ascending));
+            ModelCollection.SortDescriptions.Add(new SortDescription(nameof(EnvironmentModel.Name), ListSortDirection.Ascending));
             SelectedEnvironment = settings.Environments.FirstOrDefault();
             InitializeComponent();
         }
@@ -148,7 +149,7 @@ namespace Amuse.App.Views
 
         private async Task RemoveEnvironmentAsync()
         {
-            if (await DialogService.ShowMessageAsync("Delete Environment", $"Are you sure you want to delete this environment?", TensorStack.WPF.Dialogs.MessageDialogType.YesNo, TensorStack.WPF.Dialogs.MessageBoxIconType.Warning, TensorStack.WPF.Dialogs.MessageBoxStyleType.Danger))
+            if (await DialogService.ShowMessageAsync("Remove Environment", $"Are you sure you want to remove this environment?", TensorStack.WPF.Dialogs.MessageDialogType.YesNo, TensorStack.WPF.Dialogs.MessageBoxIconType.Warning, TensorStack.WPF.Dialogs.MessageBoxStyleType.Danger))
             {
                 await EnvironmentService.DeleteAsync(_selectedEnvironment);
                 Settings.Environments.Remove(_selectedEnvironment);

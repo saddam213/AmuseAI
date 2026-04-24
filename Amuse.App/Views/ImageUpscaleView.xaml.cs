@@ -227,10 +227,8 @@ namespace Amuse.App.Views
                 CompareImage = default;
                 Statistics.Start();
 
-                AutomationProgress.Indeterminate($"Loading Automations...");
-                var automationJobs = await AutomationManager.CreateJobsAsync(AutomationOptions, Options, MediaType.Image, MediaType.Image);
-                AutomationProgress.Update(0, automationJobs.Count, $"Automation: {0}/{automationJobs.Count}");
-                foreach (var automationJob in automationJobs)
+                AutomationProgress.Indeterminate($"Automation Started");
+                await foreach (var automationJob in AutomationManager.CreateJobsAsync(AutomationOptions, Options, MediaType.Image, MediaType.Image))
                 {
                     // Source
                     SourceImage = automationJob.InputImages[0];
@@ -262,7 +260,7 @@ namespace Amuse.App.Views
 
                     // Output
                     await automationJob.SaveAsync(ResultImage);
-                    AutomationProgress.Update(automationJob.Id, automationJobs.Count, $"Automation: {automationJob.Id}/{automationJobs.Count}");
+                    AutomationProgress.Update(automationJob.Id, automationJob.Count, $"Automation: {automationJob.Id}/{automationJob.Count}");
                 }
 
                 Statistics.Stop();

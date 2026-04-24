@@ -27,10 +27,16 @@
                     <!--Model Settings-->
                     <GroupBox Header="Model Settings">
                         <StackPanel Margin="6">
-                            <StackPanel>
-                                <TextBlock Text="Model Directory" Style="{StaticResource FieldTextBlockStyle}"/>
-                                <CommonControls:FilePickerTextBox FileName="{Binding Settings.DirectoryModel, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" IsFolderPicker="True" />
-                            </StackPanel>
+                            <DockPanel>
+                                <UniformGrid DockPanel.Dock="Right" Columns="2" Width="150" Height="22" VerticalAlignment="Bottom" >
+                                    <Button Content="Open" Command="{Binding OpenDirectoryCommand}" CommandParameter="{Binding Settings.DirectoryModel}" />
+                                    <Button Content="Move" Command="{Binding MoveModelDirectoryCommand}" />
+                                </UniformGrid>
+                                <StackPanel>
+                                    <TextBlock Text="Model Directory" Style="{StaticResource FieldTextBlockStyle}"/>
+                                    <TextBox Text="{Binding Settings.DirectoryModel}" IsReadOnly="True" />
+                                </StackPanel>
+                            </DockPanel>
                             <StackPanel>
                                 <TextBlock Text="HuggingFace Access Token" Style="{StaticResource FieldTextBlockStyle}"/>
                                 <TextBox  Text="{Binding Settings.SecureToken}" />
@@ -42,10 +48,17 @@
                     <GroupBox Header="History Settings" Margin="0,20,0,0">
                         <StackPanel Margin="6">
 
-                            <StackPanel >
-                                <TextBlock Text="Directory" Style="{StaticResource FieldTextBlockStyle}"/>
-                                <CommonControls:FilePickerTextBox FileName="{Binding Settings.DirectoryHistory, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" IsFolderPicker="True" />
-                            </StackPanel>
+                            <DockPanel>
+                                <UniformGrid DockPanel.Dock="Right" Columns="2" Width="150" Height="22" VerticalAlignment="Bottom" >
+                                    <Button Content="Open" Command="{Binding OpenDirectoryCommand}" CommandParameter="{Binding Settings.DirectoryHistory}" />
+                                    <Button Content="Move" Command="{Binding MoveHistoryDirectoryCommand}" />
+                                </UniformGrid>
+                                <StackPanel >
+                                    <TextBlock Text="Directory" Style="{StaticResource FieldTextBlockStyle}"/>
+                                    <TextBox Text="{Binding Settings.DirectoryHistory}"/>
+                                </StackPanel>
+                            </DockPanel>
+
                             <UniformGrid Columns="2">
                                 <StackPanel Margin="0,0,4,0" >
                                     <TextBlock Text="Orientation" Style="{StaticResource FieldTextBlockStyle}"/>
@@ -72,10 +85,17 @@
                                 <!--<CheckBox Content="Check For Updates" IsChecked="{Binding Settings.IsUpdateEnabled}" Margin="22,20,0,0"/>-->
                             </UniformGrid>
 
-                            <StackPanel Margin="0,4,0,0">
-                                <TextBlock Text="Temp Directory" Style="{StaticResource FieldTextBlockStyle}"/>
-                                <CommonControls:FilePickerTextBox FileName="{Binding Settings.DirectoryTemp, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" IsFolderPicker="True" />
-                            </StackPanel>
+                            <DockPanel>
+                                <UniformGrid DockPanel.Dock="Right" Columns="2" Width="150" Height="22" VerticalAlignment="Bottom" >
+                                    <Button Content="Open" Command="{Binding OpenDirectoryCommand}" CommandParameter="{Binding Settings.DirectoryTemp}" />
+                                    <Button Content="Move" Command="{Binding MoveTempDirectoryCommand}" />
+                                </UniformGrid>
+                                <StackPanel Margin="0,4,0,0">
+                                    <TextBlock Text="Temp Directory" Style="{StaticResource FieldTextBlockStyle}"/>
+                                    <TextBox Text="{Binding Settings.DirectoryTemp}" />
+                                </StackPanel>
+                            </DockPanel>
+                         
 
                         </StackPanel>
                     </GroupBox>

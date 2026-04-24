@@ -38,6 +38,7 @@ namespace Amuse.App.Views
             DownloadModelCancelCommand = new AsyncRelayCommand(DownloadModelCancelAsync);
             FilterClearCommand = new AsyncRelayCommand(FilterClearAsync, CanClearFilter);
             ModelCollection = new ListCollectionView(settings.ControlNetModels) { Filter = CollectionFilter() };
+            ModelCollection.SortDescriptions.Add(new SortDescription(nameof(ControlNetModel.Pipeline), ListSortDirection.Ascending));
             ModelCollection.SortDescriptions.Add(new SortDescription(nameof(ControlNetModel.Name), ListSortDirection.Ascending));
             SelectedModel = settings.ControlNetModels.FirstOrDefault();
             InitializeComponent();
@@ -146,7 +147,7 @@ namespace Amuse.App.Views
 
         private async Task RemoveModelAsync()
         {
-            if (await DialogService.ShowMessageAsync("Delete Model", $"Are you sure you want to delete this model?", TensorStack.WPF.Dialogs.MessageDialogType.YesNo, TensorStack.WPF.Dialogs.MessageBoxIconType.Warning, TensorStack.WPF.Dialogs.MessageBoxStyleType.Danger))
+            if (await DialogService.ShowMessageAsync("Remove Model", $"Are you sure you want to remove this model?", TensorStack.WPF.Dialogs.MessageDialogType.YesNo, TensorStack.WPF.Dialogs.MessageBoxIconType.Warning, TensorStack.WPF.Dialogs.MessageBoxStyleType.Danger))
             {
                 Settings.ControlNetModels.Remove(SelectedModel);
                 SelectedModel = default;

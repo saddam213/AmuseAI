@@ -3,7 +3,6 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Threading.Tasks;
 using TensorStack.Image;
 using TensorStack.Video;
 
@@ -18,21 +17,21 @@ namespace Amuse.App.Services
         /// <param name="diffusionOptions">The diffusion options.</param>
         /// <param name="outputMediaType">Type of the output media.</param>
         /// <param name="inputMediaType">Type of the input media.</param>
-        public static async Task<IReadOnlyList<AutomationJob>> CreateJobsAsync(AutomationOptions automationOptions, DiffusionInputOptions diffusionOptions, MediaType outputMediaType, MediaType inputMediaType)
+        public static async IAsyncEnumerable<AutomationJob> CreateJobsAsync(AutomationOptions automationOptions, DiffusionInputOptions diffusionOptions, MediaType outputMediaType, MediaType inputMediaType)
         {
-            var output = new List<AutomationJob>();
             if (automationOptions.Type == AutomationType.Seed)
             {
                 var seeds = GetSeeds(0, automationOptions.Count, diffusionOptions.Seed);
                 foreach (var (index, seed) in seeds.Index())
                 {
                     var options = diffusionOptions with { Seed = seed };
-                    output.Add(new AutomationJob
+                    yield return new AutomationJob
                     {
                         Id = index + 1,
+                        Count = seeds.Length,
                         DiffusionOptions = options,
                         OutputFile = GetOutputFile(automationOptions, outputMediaType, $"Diffusion_{seed}")
-                    });
+                    };
                 }
             }
             else if (automationOptions.Type == AutomationType.PromptLines)
@@ -51,12 +50,13 @@ namespace Amuse.App.Services
                         Seed = seed,
                         Prompt = $"{prompt} {diffusionOptions.Prompt}"
                     };
-                    output.Add(new AutomationJob
+                    yield return new AutomationJob
                     {
                         Id = index + 1,
+                        Count = seeds.Length,
                         DiffusionOptions = options,
                         OutputFile = GetOutputFile(automationOptions, outputMediaType, $"Diffusion_{name}_{seed}")
-                    });
+                    };
                 }
             }
             else if (automationOptions.Type == AutomationType.PromptFiles)
@@ -76,12 +76,13 @@ namespace Amuse.App.Services
                         Seed = seed,
                         Prompt = $"{prompt} {diffusionOptions.Prompt}"
                     };
-                    output.Add(new AutomationJob
+                    yield return new AutomationJob
                     {
                         Id = index + 1,
+                        Count = seeds.Length,
                         DiffusionOptions = options,
                         OutputFile = GetOutputFile(automationOptions, outputMediaType, $"Diffusion_{name}_{seed}")
-                    });
+                    };
                 }
             }
             else if (automationOptions.Type == AutomationType.InputFiles)
@@ -102,13 +103,14 @@ namespace Amuse.App.Services
                             options.Height = image.Height;
                         }
 
-                        output.Add(new AutomationJob
+                        yield return new AutomationJob
                         {
                             Id = index + 1,
+                            Count = seeds.Length,
                             DiffusionOptions = options,
                             InputImages = [image],
                             OutputFile = GetOutputFile(automationOptions, outputMediaType, $"Diffusion_{name}_{seed}")
-                        });
+                        };
                     }
                 }
                 else if (inputMediaType == MediaType.Video)
@@ -120,17 +122,17 @@ namespace Amuse.App.Services
                         var seed = seeds[index];
                         var name = Path.GetFileNameWithoutExtension(filename);
                         var videoStream = await VideoInputStream.CreateAsync(filename);
-                        output.Add(new AutomationJob
+                        yield return new AutomationJob
                         {
                             Id = index + 1,
+                            Count = seeds.Length,
                             DiffusionOptions = diffusionOptions with { Seed = seed },
                             VideoStreams = [videoStream],
                             OutputFile = GetOutputFile(automationOptions, outputMediaType, $"Diffusion_{name}_{seed}")
-                        });
+                        };
                     }
                 }
             }
-            return output;
         }
 
 
@@ -141,9 +143,8 @@ namespace Amuse.App.Services
         /// <param name="upscaleOptions">The upscale options.</param>
         /// <param name="outputMediaType">Type of the output media.</param>
         /// <param name="inputMediaType">Type of the input media.</param>
-        public static async Task<IReadOnlyList<AutomationJob>> CreateJobsAsync(AutomationOptions automationOptions, UpscaleInputOptions upscaleOptions, MediaType outputMediaType, MediaType inputMediaType)
+        public static async IAsyncEnumerable<AutomationJob> CreateJobsAsync(AutomationOptions automationOptions, UpscaleInputOptions upscaleOptions, MediaType outputMediaType, MediaType inputMediaType)
         {
-            var output = new List<AutomationJob>();
             if (automationOptions.Type == AutomationType.InputFiles)
             {
                 if (inputMediaType == MediaType.Image)
@@ -153,13 +154,14 @@ namespace Amuse.App.Services
                     {
                         var name = Path.GetFileNameWithoutExtension(filename);
                         var image = await ImageInput.CreateAsync(filename);
-                        output.Add(new AutomationJob
+                        yield return new AutomationJob
                         {
                             Id = index + 1,
+                            Count = imageFiles.Length,
                             InputImages = [image],
                             UpscaleOptions = upscaleOptions with { },
                             OutputFile = GetOutputFile(automationOptions, outputMediaType, $"Upscale_{name}")
-                        });
+                        };
                     }
                 }
                 else if (inputMediaType == MediaType.Video)
@@ -169,17 +171,17 @@ namespace Amuse.App.Services
                     {
                         var name = Path.GetFileNameWithoutExtension(filename);
                         var videoStream = await VideoInputStream.CreateAsync(filename);
-                        output.Add(new AutomationJob
+                        yield return new AutomationJob
                         {
                             Id = index + 1,
+                            Count = videoFiles.Length,
                             VideoStreams = [videoStream],
                             UpscaleOptions = upscaleOptions with { },
                             OutputFile = GetOutputFile(automationOptions, outputMediaType, $"Upscale_{name}")
-                        });
+                        };
                     }
                 }
             }
-            return output;
         }
 
 
@@ -190,9 +192,8 @@ namespace Amuse.App.Services
         /// <param name="extractOptions">The extract options.</param>
         /// <param name="outputMediaType">Type of the output media.</param>
         /// <param name="inputMediaType">Type of the input media.</param>
-        public static async Task<IReadOnlyList<AutomationJob>> CreateJobsAsync(AutomationOptions automationOptions, ExtractInputOptions extractOptions, MediaType outputMediaType, MediaType inputMediaType)
+        public static async IAsyncEnumerable<AutomationJob> CreateJobsAsync(AutomationOptions automationOptions, ExtractInputOptions extractOptions, MediaType outputMediaType, MediaType inputMediaType)
         {
-            var output = new List<AutomationJob>();
             if (automationOptions.Type == AutomationType.InputFiles)
             {
                 if (inputMediaType == MediaType.Image)
@@ -202,13 +203,14 @@ namespace Amuse.App.Services
                     {
                         var name = Path.GetFileNameWithoutExtension(filename);
                         var image = await ImageInput.CreateAsync(filename);
-                        output.Add(new AutomationJob
+                        yield return new AutomationJob
                         {
                             Id = index + 1,
+                            Count = imageFiles.Length,
                             InputImages = [image],
                             ExtractOptions = extractOptions with { },
                             OutputFile = GetOutputFile(automationOptions, outputMediaType, $"Extract_{name}")
-                        });
+                        };
                     }
                 }
                 else if (inputMediaType == MediaType.Video)
@@ -218,17 +220,17 @@ namespace Amuse.App.Services
                     {
                         var name = Path.GetFileNameWithoutExtension(filename);
                         var videoStream = await VideoInputStream.CreateAsync(filename);
-                        output.Add(new AutomationJob
+                        yield return new AutomationJob
                         {
                             Id = index + 1,
+                            Count = videoFiles.Length,
                             VideoStreams = [videoStream],
                             ExtractOptions = extractOptions with { },
                             OutputFile = GetOutputFile(automationOptions, outputMediaType, $"Extract_{name}")
-                        });
+                        };
                     }
                 }
             }
-            return output;
         }
 
 
@@ -240,9 +242,8 @@ namespace Amuse.App.Services
         /// <param name="outputMediaType">Type of the output media.</param>
         /// <param name="inputMediaType">Type of the input media.</param>
         /// <returns>A Task&lt;IReadOnlyList`1&gt; representing the asynchronous operation.</returns>
-        public static async Task<IReadOnlyList<AutomationJob>> CreateJobsAsync(AutomationOptions automationOptions, InterpolateInputOptions interpolateOptions, MediaType outputMediaType, MediaType inputMediaType)
+        public static async IAsyncEnumerable<AutomationJob> CreateJobsAsync(AutomationOptions automationOptions, InterpolateInputOptions interpolateOptions, MediaType outputMediaType, MediaType inputMediaType)
         {
-            var output = new List<AutomationJob>();
             if (automationOptions.Type == AutomationType.InputFiles)
             {
                 if (inputMediaType == MediaType.Video)
@@ -252,17 +253,17 @@ namespace Amuse.App.Services
                     {
                         var name = Path.GetFileNameWithoutExtension(filename);
                         var videoStream = await VideoInputStream.CreateAsync(filename);
-                        output.Add(new AutomationJob
+                        yield return new AutomationJob
                         {
                             Id = index + 1,
+                            Count = videoFiles.Length,
                             VideoStreams = [videoStream],
                             InterpolateOptions = interpolateOptions with{ },
                             OutputFile = GetOutputFile(automationOptions, outputMediaType, $"Interpolate_{name}")
-                        });
+                        };
                     }
                 }
             }
-            return output;
         }
 
 

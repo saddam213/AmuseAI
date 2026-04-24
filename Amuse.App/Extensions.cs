@@ -129,6 +129,20 @@ namespace Amuse.App
             };
         }
 
+
+
+        public static bool Add<TSource>(this IList<TSource> source, TSource item, int maxItems)
+        {
+            if (item is null)
+                return false;
+
+            if (source.Count >= maxItems)
+                return false;
+
+            source.Add(item);
+            return true;
+        }
+
     }
 
     public static partial class Utils

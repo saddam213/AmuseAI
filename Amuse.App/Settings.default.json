@@ -6300,6 +6300,128 @@
       "Pipeline": "LTX20Pipeline",
       "Source": "HuggingFace",
       "Link": "https://huggingface.co/Lightricks/LTX-2-19b-IC-LoRA-Detailer"
+    },
+    {
+      "Id": 209,
+      "Backend": "Pytorch",
+      "Name": "Hyper-SDXL-8steps-CFG",
+      "Key": "hypersdxl8stepscfg",
+      "Path": "ByteDance/Hyper-SD",
+      "Weights": "Hyper-SDXL-8steps-CFG-lora.safetensors",
+      "Pipeline": "StableDiffusionXLPipeline",
+      "Source": "HuggingFace",
+      "Link": "https://huggingface.co/ByteDance/Hyper-SD"
+    },
+    {
+      "Id": 210,
+      "Backend": "Pytorch",
+      "Name": "Hyper-SD3-8steps-CFG",
+      "Key": "hypersd38stepscfg",
+      "Path": "ByteDance/Hyper-SD",
+      "Weights": "Hyper-SD3-8steps-CFG-lora.safetensors",
+      "Pipeline": "StableDiffusion3Pipeline",
+      "Source": "HuggingFace",
+      "Link": "https://huggingface.co/ByteDance/Hyper-SD"
+    },
+    {
+      "Id": 211,
+      "Backend": "Pytorch",
+      "Name": "Hyper-FLUX.1-dev-8steps",
+      "Key": "hyperflux1dev8steps",
+      "Path": "ByteDance/Hyper-SD",
+      "Weights": "Hyper-FLUX.1-dev-8steps-lora.safetensors",
+      "Pipeline": "FluxPipeline",
+      "Source": "HuggingFace",
+      "Link": "https://huggingface.co/ByteDance/Hyper-SD"
+    },
+    {
+      "Id": 212,
+      "Backend": "Pytorch",
+      "Name": "Sprite Sheet 4B",
+      "Key": "spritesheet4b",
+      "Path": "fal/flux-2-klein-4b-spritesheet-lora",
+      "Weights": "flux-spritesheet-lora.safetensors",
+      "Triggers": [ "2x2 sprite sheet" ],
+      "Pipeline": "Flux2KleinPipeline",
+      "Source": "HuggingFace",
+      "Link": "https://huggingface.co/fal/flux-2-klein-4b-spritesheet-lora"
+    },
+    {
+      "Id": 213,
+      "Backend": "Pytorch",
+      "Name": "Background Remove 4B",
+      "Key": "backgroundremove4b",
+      "Path": "fal/flux-2-klein-4B-background-remove-lora",
+      "Weights": "flux-background-remove-lora.safetensors",
+      "Pipeline": "Flux2KleinPipeline",
+      "Source": "HuggingFace",
+      "Link": "https://huggingface.co/fal/flux-2-klein-4B-background-remove-lora"
+    },
+    {
+      "Id": 214,
+      "Backend": "Pytorch",
+      "Name": "Redbox Zoom 4B",
+      "Key": "rtedboxzoom4b",
+      "Path": "fal/flux-2-klein-4B-zoom-lora",
+      "Weights": "flux-red-zoom-lora.safetensors",
+      "Pipeline": "Flux2KleinPipeline",
+      "Source": "HuggingFace",
+      "Link": "https://huggingface.co/fal/flux-2-klein-4B-zoom-lora"
+    },
+    {
+      "Id": 215,
+      "Backend": "Pytorch",
+      "Name": "Redbox Remove 4B",
+      "Key": "redboxremove4b",
+      "Path": "fal/flux-2-klein-4B-object-remove-lora",
+      "Weights": "flux-object-remove-lora.safetensors",
+      "Pipeline": "Flux2KleinPipeline",
+      "Source": "HuggingFace",
+      "Link": "https://huggingface.co/fal/flux-2-klein-4B-object-remove-lora"
+    },
+    {
+      "Id": 216,
+      "Backend": "Pytorch",
+      "Name": "Outpaint 4B",
+      "Key": "outpaint4b",
+      "Path": "fal/flux-2-klein-4B-outpaint-lora",
+      "Weights": "flux-outpaint-lora.safetensors",
+      "Pipeline": "Flux2KleinPipeline",
+      "Source": "HuggingFace",
+      "Link": "https://huggingface.co/fal/flux-2-klein-4B-outpaint-lora"
+    },
+    {
+      "Id": 217,
+      "Backend": "Pytorch",
+      "Name": "Virtual Try-On 9B",
+      "Key": "virtualtryon9b",
+      "Path": "fal/flux-klein-9b-virtual-tryon-lora",
+      "Weights": "flux-klein-tryon.safetensors",
+      "Pipeline": "Flux2KleinPipeline",
+      "Source": "HuggingFace",
+      "Link": "https://huggingface.co/fal/flux-klein-9b-virtual-tryon-lora"
+    },
+    {
+      "Id": 218,
+      "Backend": "Pytorch",
+      "Name": "Consistency 9B",
+      "Key": "consistency9b",
+      "Path": "dx8152/Flux2-Klein-9B-Consistency",
+      "Weights": "Flux2-Klein-9B-consistency-V2.safetensors",
+      "Pipeline": "Flux2KleinPipeline",
+      "Source": "HuggingFace",
+      "Link": "https://huggingface.co/dx8152/Flux2-Klein-9B-Consistency"
+    },
+    {
+      "Id": 219,
+      "Backend": "Pytorch",
+      "Name": "Enhanced Details 9B",
+      "Key": "enhanceddetails9b",
+      "Path": "dx8152/Flux2-Klein-9B-Enhanced-Details",
+      "Weights": "realistic.safetensors",
+      "Pipeline": "Flux2KleinPipeline",
+      "Source": "HuggingFace",
+      "Link": "https://huggingface.co/dx8152/Flux2-Klein-9B-Enhanced-Details"
     }
   ],
   "ControlNetModels": [

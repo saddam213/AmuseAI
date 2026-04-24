@@ -389,6 +389,14 @@
                                 IsSelected="{Binding View, Converter={StaticResource EnumToBooleanConverter}, ConverterParameter=VideoToVideo}">
                             </CommonControls:IconButton>
                             <CommonControls:IconButton 
+                                Text="Frame To Frame" 
+                                Icon="e17a"
+                                Style="{StaticResource SubmenuIconButton}"
+                                Command="{Binding NavigateCommand}" 
+                                CommandParameter="{x:Static Views:View.FrameToFrame}" 
+                                IsSelected="{Binding View, Converter={StaticResource EnumToBooleanConverter}, ConverterParameter=FrameToFrame}">
+                            </CommonControls:IconButton>
+                            <CommonControls:IconButton 
                                 Text="Video Extract" 
                                 Icon="f302"
                                 Style="{StaticResource SubmenuIconButton}"

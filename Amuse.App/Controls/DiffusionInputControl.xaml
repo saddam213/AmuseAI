@@ -251,7 +251,7 @@
                                 <DataTemplate>
                                     <Grid>
                                         <TextBlock Text="{Binding Name, StringFormat={}({0})}" FontSize="8" Margin="0,6,0,0" Opacity=".9" HorizontalAlignment="Center"/>
-                                        <CommonControls:SliderControl Text="Lora"  IsPercent="True" Minimum="0.01" Maximum="1" TickFrequency="0.01" Value="{Binding Strength}"/>
+                                        <CommonControls:SliderControl Text="Lora"  IsPercent="True" Minimum="0.01" Maximum="2" TickFrequency="0.01" Value="{Binding Strength}"/>
                                     </Grid>
                                 </DataTemplate>
                             </ItemsControl.ItemTemplate>

@@ -1,0 +1,48 @@
+﻿<CommonControls:DialogControl x:Class="Amuse.App.Dialogs.MoveFolderDialog"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:Amuse.App.Dialogs"
+        xmlns:CommonControls="clr-namespace:TensorStack.WPF.Controls;assembly=TensorStack.WPF"
+        mc:Ignorable="d"
+        MinWidth="600"
+        MaxWidth="600"
+        Icon="{DynamicResource ImageIcon}"
+        Style="{StaticResource {x:Type CommonControls:DialogControl}}">
+    <DockPanel DataContext="{Binding RelativeSource={RelativeSource AncestorType={x:Type local:MoveFolderDialog}}}"  Margin="15, 15, 15, 10">
+
+        <StackPanel DockPanel.Dock="Top" VerticalAlignment="Bottom" Margin="0,0,0,4">
+            <StackPanel IsEnabled="{Binding IsMoving, Converter={StaticResource InverseBoolConverter}}">
+                <TextBlock Text="Directory" Style="{StaticResource FieldTextBlockStyle}"/>
+                <CommonControls:FilePickerTextBox FileName="{Binding UserDirectory, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" IsFolderPicker="True" IsRequired="True" />
+            </StackPanel>
+
+            <DockPanel Margin="0, 10">
+                <TextBlock DockPanel.Dock="Left" Text="New Location: " Opacity=".78" Margin="0,0,3,0" />
+                <TextBlock Text="{Binding DestinationDirectory}" FontSize="13" FontWeight="DemiBold" Opacity=".9"/>
+            </DockPanel>
+
+            <CommonControls:ProgressElement Progress="{Binding Progress}" Height="22" />
+
+            <DockPanel Opacity=".8" Margin="0,2,0,0">
+                <UniformGrid DockPanel.Dock="Left" Columns="2" Margin="2,0,0,0">
+                    <TextBlock Text="{Binding MovedFiles, StringFormat={}{0} /}" />
+                    <TextBlock Text="{Binding TotalFiles, StringFormat={}{0}}" />
+                </UniformGrid>
+                <UniformGrid DockPanel.Dock="Right" Columns="2">
+                    <TextBlock Text="{Binding MovedSize, StringFormat={}{0:N2} GB /}" />
+                    <TextBlock Text="{Binding TotalSize, StringFormat={}{0:N2} GB}" />
+                </UniformGrid>
+                <TextBlock/>
+            </DockPanel>
+        </StackPanel>
+
+        <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" Margin="0,20,0,0"  Height="30">
+            <UniformGrid Columns="2">
+                <Button Content="Move" Command="{Binding MoveCommand}" Width="100" IsDefault="True"/>
+                <Button Content="Cancel" Command="{Binding CancelCommand}"/>
+            </UniformGrid>
+        </StackPanel>
+    </DockPanel>
+</CommonControls:DialogControl>

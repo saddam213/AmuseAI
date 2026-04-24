@@ -38,6 +38,7 @@ namespace Amuse.App.Views
             DownloadModelCancelCommand = new AsyncRelayCommand(DownloadModelCancelAsync);
             FilterClearCommand = new AsyncRelayCommand(FilterClearAsync, CanClearFilter);
             ModelCollection = new ListCollectionView(settings.UpscaleModels) { Filter = CollectionFilter(), IsLiveSorting = true };
+            ModelCollection.SortDescriptions.Add(new SortDescription(nameof(UpscaleModel.Pipeline), ListSortDirection.Ascending));
             ModelCollection.SortDescriptions.Add(new SortDescription(nameof(UpscaleModel.Name), ListSortDirection.Ascending));
             SelectedModel = settings.UpscaleModels.FirstOrDefault();
             InitializeComponent();

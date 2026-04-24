@@ -98,17 +98,17 @@ namespace Amuse.App.Views
                 Statistics.Start();
 
                 // Images
-                var images = new List<ImageTensor>
+                var inputImages = new List<ImageTensor>
                 {
-                    _sourceImage1,
-                    _sourceImage2,
-                    _sourceImage3,
-                    _sourceImage4
+                    { _sourceImage1, Options.InputImageCount },
+                    { _sourceImage2, Options.InputImageCount },
+                    { _sourceImage3, Options.InputImageCount },
+                    { _sourceImage4, Options.InputImageCount }
                 };
 
                 // Options
                 var options = Options with { };
-                options.InputImages = [.. images.Where(x => x != null).Take(Options.InputImageCount)];
+                options.InputImages = inputImages;
 
                 // Execute
                 var resultTensor = await ExecuteImageDiffusionAsync(options);
@@ -163,10 +163,8 @@ namespace Amuse.App.Views
                 CompareImage = default;
                 Statistics.Start();
 
-                AutomationProgress.Indeterminate($"Loading Automations...");
-                var automationJobs = await AutomationManager.CreateJobsAsync(AutomationOptions, Options, MediaType.Image, MediaType.Image);
-                AutomationProgress.Update(0, automationJobs.Count, $"Automation: {0}/{automationJobs.Count}");
-                foreach (var automationJob in automationJobs)
+                AutomationProgress.Indeterminate($"Automation Started");
+                await foreach (var automationJob in AutomationManager.CreateJobsAsync(AutomationOptions, Options, MediaType.Image, MediaType.Image))
                 {
                     // Source
                     if (!automationJob.InputImages.IsNullOrEmpty())
@@ -175,10 +173,10 @@ namespace Amuse.App.Views
                     // Images
                     var inputImages = new List<ImageTensor>
                     {
-                        _sourceImage1,
-                        _sourceImage2,
-                        _sourceImage3,
-                        _sourceImage4
+                        { _sourceImage1, Options.InputImageCount },
+                        { _sourceImage2, Options.InputImageCount },
+                        { _sourceImage3, Options.InputImageCount },
+                        { _sourceImage4, Options.InputImageCount }
                     };
 
                     // Diffusion
@@ -201,7 +199,7 @@ namespace Amuse.App.Views
                     }
 
                     await automationJob.SaveAsync(ResultImage);
-                    AutomationProgress.Update(automationJob.Id, automationJobs.Count, $"Automation: {automationJob.Id}/{automationJobs.Count}");
+                    AutomationProgress.Update(automationJob.Id, automationJob.Count, $"Automation: {automationJob.Id}/{automationJob.Count}");
                 }
 
                 Statistics.Stop();
