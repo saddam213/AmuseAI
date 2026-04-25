@@ -9,7 +9,7 @@
       "Type": "Vendor",
       "Vendor": "Nvidia",
       "Environment": "cuda-128",
-      "Version": 0,
+      "Version": 1,
       "Status": "Create",
       "IsDefault": true,
       "Variables": {
@@ -25,7 +25,7 @@
         "wheel==0.46.3",
         "transformers==4.57.6",
         "accelerate==1.13.0",
-        "diffusers@https://github.com/huggingface/diffusers/archive/8070f6ec54a7699d5ee285090d9735d9c9b205d7.zip",
+        "diffusers@https://github.com/huggingface/diffusers/archive/d0c9cbad28d7d3bba28db94622e13500c4179075.zip",
         "protobuf==7.34.1",
         "sentencepiece==0.2.1",
         "ftfy==6.3.1",
@@ -45,7 +45,7 @@
       "Type": "Vendor",
       "Vendor": "AMD",
       "Environment": "rocm-721",
-      "Version": 0,
+      "Version": 1,
       "Status": "Create",
       "IsDefault": true,
       "Variables": {
@@ -65,7 +65,7 @@
         "wheel==0.46.3",
         "transformers==4.57.6",
         "accelerate==1.13.0",
-        "diffusers@https://github.com/huggingface/diffusers/archive/8070f6ec54a7699d5ee285090d9735d9c9b205d7.zip",
+        "diffusers@https://github.com/huggingface/diffusers/archive/d0c9cbad28d7d3bba28db94622e13500c4179075.zip",
         "protobuf==7.34.1",
         "sentencepiece==0.2.1",
         "ftfy==6.3.1",
@@ -2941,7 +2941,7 @@
       ],
       "BaseType": "bfloat16",
       "IsDefault": true,
-      "ProcessTypes": [ "TextToImage", "ImageToImage", "ImageEdit" ],
+      "ProcessTypes": [ "TextToImage", "ImageEdit", "ImageInpaint" ],
       "Link": "https://huggingface.co/black-forest-labs/FLUX.2-klein-4B",
       "DefaultOptions": {
         "Steps": 4,
@@ -3094,7 +3094,7 @@
         }
       ],
       "BaseType": "bfloat16",
-      "ProcessTypes": [ "TextToImage", "ImageToImage", "ImageEdit" ],
+      "ProcessTypes": [ "TextToImage", "ImageEdit", "ImageInpaint" ],
       "Link": "https://huggingface.co/black-forest-labs/FLUX.2-klein-base-4B",
       "DefaultOptions": {
         "Steps": 50,
@@ -3247,7 +3247,7 @@
         }
       ],
       "BaseType": "bfloat16",
-      "ProcessTypes": [ "TextToImage", "ImageToImage", "ImageEdit" ],
+      "ProcessTypes": [ "TextToImage", "ImageEdit", "ImageInpaint" ],
       "IsGated": true,
       "Link": "https://huggingface.co/black-forest-labs/FLUX.2-klein-9B",
       "DefaultOptions": {
@@ -3401,7 +3401,7 @@
         }
       ],
       "BaseType": "bfloat16",
-      "ProcessTypes": [ "TextToImage", "ImageToImage", "ImageEdit" ],
+      "ProcessTypes": [ "TextToImage", "ImageEdit", "ImageInpaint" ],
       "IsGated": true,
       "Link": "https://huggingface.co/black-forest-labs/FLUX.2-klein-base-9B",
       "DefaultOptions": {
@@ -6367,17 +6367,6 @@
       "Pipeline": "Flux2KleinPipeline",
       "Source": "HuggingFace",
       "Link": "https://huggingface.co/fal/flux-2-klein-4B-zoom-lora"
-    },
-    {
-      "Id": 215,
-      "Backend": "Pytorch",
-      "Name": "Redbox Remove 4B",
-      "Key": "redboxremove4b",
-      "Path": "fal/flux-2-klein-4B-object-remove-lora",
-      "Weights": "flux-object-remove-lora.safetensors",
-      "Pipeline": "Flux2KleinPipeline",
-      "Source": "HuggingFace",
-      "Link": "https://huggingface.co/fal/flux-2-klein-4B-object-remove-lora"
     },
     {
       "Id": 216,

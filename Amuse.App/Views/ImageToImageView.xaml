@@ -153,14 +153,16 @@
                                 </Grid>
                             </Border>
                             <Grid Margin="10,10,10,2" >
-                                <CommonControls:ImageElement 
-                                    SplitterVisibility="Auto"
-                                    SplitterPosition="Source"
-                                    SplitterDirection="LeftToRight"
-                                    Source="{Binding ResultImage, Mode=TwoWay}" 
-                                    OverlaySource="{Binding CompareImage, Mode=TwoWay}" 
-                                    IsLoadEnabled="False" 
-                                    IsLoadOverlayEnabled="False"/>
+                                <Border BorderThickness="1">
+                                    <CommonControls:ImageElement 
+                                        SplitterVisibility="Auto"
+                                        SplitterPosition="Source"
+                                        SplitterDirection="LeftToRight"
+                                        Source="{Binding ResultImage, Mode=TwoWay}" 
+                                        OverlaySource="{Binding CompareImage, Mode=TwoWay}" 
+                                        IsLoadEnabled="False" 
+                                        IsLoadOverlayEnabled="False"/>
+                                </Border>
                             </Grid>
                         </UniformGrid>
                     </Border>

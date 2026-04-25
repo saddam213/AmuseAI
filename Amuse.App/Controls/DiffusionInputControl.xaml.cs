@@ -186,12 +186,12 @@ namespace Amuse.App.Controls
             var newModel = newPipeline?.DiffusionModel;
             var newOptions = newModel?.DefaultOptions;
 
-            //if (oldModel == newModel)
-            //{
-            //    // TODO if has lora changed
-            //    Options.LoraOptions = newPipeline.LoraAdapterModel?.Select(x => new LoraOptionModel { Name = x.Name, Key = x.Key, Strength = 1f }).ToList();
-            //    return Task.CompletedTask;
-            //}
+            if (oldModel == newModel)
+            {
+                // TODO if has lora changed
+                Options.LoraOptions = newPipeline.LoraAdapterModel?.Select(x => new LoraOptionModel { Name = x.Name, Key = x.Key, Strength = 1f }).ToList();
+                return Task.CompletedTask;
+            }
 
             // UI Flags
             IsSteps2Enabled = newPipeline.DiffusionModel.DefaultOptions.Steps2 > 0;

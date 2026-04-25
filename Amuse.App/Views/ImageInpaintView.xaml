@@ -35,7 +35,7 @@
                                         ProcessType="ImageInpaint"
                                         IsLoraSupported="True"
                                         IsUpscalerSupported="True"
-                                        IsExtractorSupported="True"
+                                        IsExtractorSupported="False"
                                         IsControlNetSupported="False"
                                         Settings="{Binding Settings, Mode=OneWay}" 
                                         IsPipelineLoaded="{Binding IsPipelineLoaded, Mode=OneWay}"
@@ -122,17 +122,23 @@
                         <UniformGrid Columns="2" >
                             <Border Margin="10,10,10,2" Style="{StaticResource ImageDropZoneStyle}" BorderThickness="0"  IsEnabled="{Binding IsPipelineLoaded}">
                                 <Grid>
-                                    <CommonControls:ImageMaskElement 
+                                    <CommonControls:ImageEditElement 
+                                        x:Name="ImageEditControl"
+                                        IsMaskEnabled="True"
+                                        IsResizeEnabled="True"
+                                        IsSelectEnabled="True"
+                                        SelectedEditMode="Draw"
+                                        IsSelectionFilled="True"
+                                        SelectionColor="#80FF0000"
+                                        CropWidth="{Binding Options.Width}"
+                                        CropHeight="{Binding Options.Height}"
                                         Source="{Binding SourceImage, Mode=OneWay}"
                                         SourceMask="{Binding SourceImageMask, Mode=OneWay}"
                                         CanvasWidth="{Binding Options.Width, Mode=OneWay}"
                                         CanvasHeight="{Binding Options.Height, Mode=OneWay}"
-                                        OutputImage="{Binding OutputImage, Mode=TwoWay}" 
-                                        OutputImageMask="{Binding OutputImageMask, Mode=TwoWay}"
                                         IsLoadEnabled="True" 
                                         IsSaveEnabled="False"
                                         IsLoadMaskEnabled="True"
-                                        SourceChanged="OnSourceImageChanged"
                                         IsEnabled="{Binding DiffusionService.IsExecuting, Converter={StaticResource InverseBoolConverter}}"/>
                                     <UniformGrid Columns="2" IsHitTestVisible="False" Margin="0,0,0,60">
                                         <Border Style="{StaticResource ImageDropZoneStyle}" >

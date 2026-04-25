@@ -98,9 +98,10 @@ namespace Amuse.App.Views
                 Statistics.Start();
 
                 // Images
+                var inputImage = ImageEditControl.GetImageCanvas();
                 var inputImages = new List<ImageTensor>
                 {
-                    { _sourceImage1, Options.InputImageCount },
+                    { inputImage, Options.InputImageCount },
                     { _sourceImage2, Options.InputImageCount },
                     { _sourceImage3, Options.InputImageCount },
                     { _sourceImage4, Options.InputImageCount }
@@ -119,7 +120,7 @@ namespace Amuse.App.Views
                 // Result
                 Statistics.Stop();
                 ResultImage = await resultTensor.ToImageInputAsync();
-                CompareImage = previousImage;
+                CompareImage = _sourceImage1;
 
                 // History
                 await SaveHistoryAsync(options);
@@ -171,9 +172,10 @@ namespace Amuse.App.Views
                         SourceImage1 = automationJob.InputImages[0];
 
                     // Images
+                    var inputImage = ImageEditControl.GetImageCanvas();
                     var inputImages = new List<ImageTensor>
                     {
-                        { _sourceImage1, Options.InputImageCount },
+                        { inputImage, Options.InputImageCount },
                         { _sourceImage2, Options.InputImageCount },
                         { _sourceImage3, Options.InputImageCount },
                         { _sourceImage4, Options.InputImageCount }
@@ -190,7 +192,7 @@ namespace Amuse.App.Views
 
                     // Result
                     ResultImage = await resultTensor.ToImageInputAsync();
-                    CompareImage = SourceImage1;
+                    CompareImage = _sourceImage1;
 
                     // History
                     if (AutomationOptions.IsHistoryEnabled)

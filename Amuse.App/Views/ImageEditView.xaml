@@ -122,16 +122,22 @@
                                 <UniformGrid IsEnabled="{Binding DiffusionService.IsExecuting, Converter={StaticResource InverseBoolConverter}}">
                                     <Border>
                                         <Grid>
-                                            <CommonControls:ImageElement 
+                                            <CommonControls:ImageEditElement 
+                                                x:Name="ImageEditControl"
+                                                IsMaskEnabled="False"
+                                                IsResizeEnabled="True"
+                                                IsSelectEnabled="True"
+                                                SelectedEditMode="None"
+                                                CanvasColor="Lime"
+                                                MaskColor="#FF272727"
                                                 CropWidth="{Binding Options.Width}"
                                                 CropHeight="{Binding Options.Height}"
-                                                SplitterVisibility="Auto"
-                                                SplitterPosition="Source"
-                                                SplitterDirection="LeftToRight"
                                                 Source="{Binding SourceImage1, Mode=TwoWay}" 
+                                                CanvasWidth="{Binding Options.Width, Mode=OneWay}"
+                                                CanvasHeight="{Binding Options.Height, Mode=OneWay}"
                                                 IsLoadEnabled="True" 
                                                 IsSaveEnabled="False"
-                                                IsLoadOverlayEnabled="False"/>
+                                                IsLoadMaskEnabled="False"/>
                                             <Grid.Style>
                                                 <Style TargetType="{x:Type Grid}">
                                                     <Style.Triggers>
@@ -278,14 +284,16 @@
                             </Grid>
 
                             <Grid Margin="10,10,10,2" >
-                                <CommonControls:ImageElement 
-                                    SplitterVisibility="Auto"
-                                    SplitterPosition="Source"
-                                    SplitterDirection="LeftToRight"
-                                    Source="{Binding ResultImage, Mode=TwoWay}" 
-                                    OverlaySource="{Binding CompareImage, Mode=TwoWay}" 
-                                    IsLoadEnabled="False" 
-                                    IsLoadOverlayEnabled="False"/>
+                                <Border BorderThickness="1">
+                                    <CommonControls:ImageElement 
+                                        SplitterVisibility="Auto"
+                                        SplitterPosition="Source"
+                                        SplitterDirection="LeftToRight"
+                                        Source="{Binding ResultImage, Mode=TwoWay}" 
+                                        OverlaySource="{Binding CompareImage, Mode=TwoWay}" 
+                                        IsLoadEnabled="False" 
+                                        IsLoadOverlayEnabled="False"/>
+                                </Border>
                             </Grid>
                         </UniformGrid>
                     </Border>

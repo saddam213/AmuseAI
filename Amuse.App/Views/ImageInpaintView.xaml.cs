@@ -16,8 +16,6 @@ namespace Amuse.App.Views
     /// </summary>
     public partial class ImageInpaintView : ViewBaseDiffusion
     {
-        private ImageInput _outputImage;
-        private ImageInput _outputImageMask;
         private ImageInput _sourceImage;
         private ImageInput _sourceImageMask;
 
@@ -45,24 +43,6 @@ namespace Amuse.App.Views
         {
             get { return _sourceImageMask; }
             set { SetProperty(ref _sourceImageMask, value); }
-        }
-
-        /// <summary>
-        /// Gets or sets the output image.
-        /// </summary>
-        public ImageInput OutputImage
-        {
-            get { return _outputImage; }
-            set { SetProperty(ref _outputImage, value); }
-        }
-
-        /// <summary>
-        /// Gets or sets the output image mask.
-        /// </summary>
-        public ImageInput OutputImageMask
-        {
-            get { return _outputImageMask; }
-            set { SetProperty(ref _outputImageMask, value); }
         }
 
 
@@ -93,9 +73,13 @@ namespace Amuse.App.Views
                 CompareImage = default;
                 Statistics.Start();
 
+                // Images
+                var inputImage = ImageEditControl.GetImage();
+                var inputImageMask = ImageEditControl.GetImageMask();
+
                 // Options
                 var options = Options with { };
-                options.InputImages = [_outputImage, _outputImageMask];
+                options.InputImages = [inputImage, inputImageMask];
 
                 // Execute
                 var resultTensor = await ExecuteImageDiffusionAsync(options);
@@ -106,7 +90,7 @@ namespace Amuse.App.Views
                 // Result
                 Statistics.Stop();
                 ResultImage = await resultTensor.ToImageInputAsync();
-                CompareImage = _outputImage;
+                CompareImage = inputImage;
 
                 // History
                 await SaveHistoryAsync(options);
@@ -152,10 +136,14 @@ namespace Amuse.App.Views
                 AutomationProgress.Indeterminate($"Automation Started");
                 await foreach (var automationJob in AutomationManager.CreateJobsAsync(AutomationOptions, Options, MediaType.Image, MediaType.Image))
                 {
+                    // Images
+                    var inputImage = ImageEditControl.GetImage();
+                    var inputImageMask = ImageEditControl.GetImageMask();
+
                     // Diffusion
                     var resultTensor = await ExecuteImageDiffusionAsync(automationJob.DiffusionOptions with
                     {
-                        InputImages = [_outputImage, _outputImageMask]
+                        InputImages = [inputImage, inputImageMask]
                     });
 
                     // Upscale
@@ -163,7 +151,7 @@ namespace Amuse.App.Views
 
                     // Result
                     ResultImage = await resultTensor.ToImageInputAsync();
-                    CompareImage = _outputImage;
+                    CompareImage = inputImage;
 
                     // History
                     if (AutomationOptions.IsHistoryEnabled)
@@ -206,37 +194,7 @@ namespace Amuse.App.Views
         {
             return DiffusionService.IsLoaded
                 && !DiffusionService.IsExecuting
-                && _outputImage is not null
-                && _outputImageMask is not null;
-        }
-
-
-        /// <summary>
-        /// Called when SourceImage changed.
-        /// </summary>
-        /// <param name="sender">The sender.</param>
-        /// <param name="image">The image.</param>
-        protected async void OnSourceImageChanged(object sender, ImageInput image)
-        {
-            try
-            {
-                if (CurrentPipeline?.ExtractModel == null)
-                    return;
-
-                IsViewBusy = true;
-                if (_sourceImage == null)
-                {
-                    SourceImageMask = null;
-                    return;
-                }
-
-                SourceImageMask = await ExecuteImageExtractAsync(_sourceImage);
-            }
-            finally
-            {
-                Progress.Clear();
-                IsViewBusy = false;
-            }
+                && ImageEditControl.HasImage;
         }
 
 
