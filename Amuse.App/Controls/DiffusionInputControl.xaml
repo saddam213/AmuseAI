@@ -241,9 +241,12 @@
                             <CommonControls:SliderControl Text="Strength" Value="{Binding Options.Strength}"  IsPercent="True"  Minimum="0.01" Maximum="1" TickFrequency="0.01"/>
                         </StackPanel>
 
-
-
-
+                        <!--IsFirstFrameLastFrame-->
+                        <StackPanel Visibility="{Binding ProcessType, Converter={StaticResource EnumToVisibilityConverter}, ConverterParameter=ImageToVideo}">
+                            <StackPanel Visibility="{Binding Pipeline.DiffusionModel.DefaultOptions.IsFirstFrameLastFrameEnabled, Converter={StaticResource BooleanToVisibilityConverter}, FallbackValue=Collapsed}" Margin="-1,8,0,0">
+                                <CheckBox Content="First-Frame Last-Frame" IsChecked="{Binding Options.IsFirstFrameLastFrame}" />
+                            </StackPanel>
+                        </StackPanel>
 
                         <!--Lora Strength-->
                         <ItemsControl ItemsSource="{Binding Options.LoraOptions}">

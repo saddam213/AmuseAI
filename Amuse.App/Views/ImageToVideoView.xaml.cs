@@ -2,10 +2,12 @@
 using Amuse.App.Services;
 using Microsoft.Extensions.Logging;
 using System;
+using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
 using TensorStack.Common;
+using TensorStack.Common.Tensor;
 using TensorStack.Image;
 using TensorStack.Video;
 using TensorStack.WPF.Controls;
@@ -18,7 +20,8 @@ namespace Amuse.App.Views
     /// </summary>
     public partial class ImageToVideoView : ViewBaseDiffusion
     {
-        private ImageInput _sourceImage;
+        private ImageInput _sourceImage1;
+        private ImageInput _sourceImage2;
         private ImageInput _extractImage;
 
         /// <summary>
@@ -38,12 +41,20 @@ namespace Amuse.App.Views
         /// <summary>
         /// Gets or sets the source image.
         /// </summary>
-        public ImageInput SourceImage
+        public ImageInput SourceImage1
         {
-            get { return _sourceImage; }
-            set { SetProperty(ref _sourceImage, value); }
+            get { return _sourceImage1; }
+            set { SetProperty(ref _sourceImage1, value); }
         }
 
+        /// <summary>
+        /// Gets or sets the source image.
+        /// </summary>
+        public ImageInput SourceImage2
+        {
+            get { return _sourceImage2; }
+            set { SetProperty(ref _sourceImage2, value); }
+        }
 
         /// <summary>
         /// On View Open
@@ -74,9 +85,16 @@ namespace Amuse.App.Views
                 CompareVideo = default;
                 Statistics.Start();
 
+                // Images
+                var imageCount = Options.IsFirstFrameLastFrame ? 2 : 1;
+                var inputImages = new List<ImageTensor>
+                {
+                    { _sourceImage1, imageCount },
+                    { _sourceImage2, imageCount }
+                };
+
                 // Options
-                var options = Options with { };
-                options.InputImages = [_sourceImage];
+                var options = Options with { InputImages = inputImages };
 
                 // Execute
                 var resultTensor = await ExecuteVideoDiffusionAsync(options);
@@ -133,13 +151,21 @@ namespace Amuse.App.Views
                 {
                     // Source
                     if (!automationJob.InputImages.IsNullOrEmpty())
-                        SourceImage = automationJob.InputImages[0];
+                        SourceImage1 = automationJob.InputImages[0];
+
+                    // Images
+                    var imageCount = Options.IsFirstFrameLastFrame ? 2 : 1;
+                    var inputImages = new List<ImageTensor>
+                    {
+                        { _sourceImage1, imageCount },
+                        { _sourceImage2, imageCount }
+                    };
+
+                    // Options
+                    var options = automationJob.DiffusionOptions with { InputImages = inputImages };
 
                     // Diffusion
-                    var resultTensor = await ExecuteVideoDiffusionAsync(automationJob.DiffusionOptions with
-                    {
-                        InputImages = [SourceImage]
-                    });
+                    var resultTensor = await ExecuteVideoDiffusionAsync(options);
 
                     // Upscale
                     resultTensor = await ExecuteVideoUpscaleAsync(resultTensor);
@@ -148,7 +174,7 @@ namespace Amuse.App.Views
                     ResultVideo = !AutomationOptions.IsHistoryEnabled
                         ? resultTensor
                         : await SaveHistoryAsync(automationJob.DiffusionOptions, resultTensor);
-                    CompareImage = SourceImage;
+                    CompareImage = SourceImage1;
 
                     await automationJob.SaveAsync(ResultVideo);
                     AutomationProgress.Update(automationJob.Id, automationJob.Count, $"Automation: {automationJob.Id}/{automationJob.Count}");
@@ -201,11 +227,11 @@ namespace Amuse.App.Views
                     return;
 
                 IsViewBusy = true;
-                if (_sourceImage == null || _extractImage == _sourceImage)
+                if (_sourceImage1 == null || _extractImage == _sourceImage1)
                     return;
 
-                _extractImage = await ExecuteImageExtractAsync(_sourceImage);
-                SourceImage = _extractImage;
+                _extractImage = await ExecuteImageExtractAsync(_sourceImage1);
+                SourceImage1 = _extractImage;
             }
             finally
             {

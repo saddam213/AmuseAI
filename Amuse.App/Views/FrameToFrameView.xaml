@@ -11,7 +11,6 @@
         <Grid.RowDefinitions>
             <RowDefinition Height="1*" />
         </Grid.RowDefinitions>
-
         <Grid Grid.Row="0" >
             <Grid.ColumnDefinitions>
                 <ColumnDefinition MinWidth="380"/>
@@ -19,14 +18,13 @@
                 <ColumnDefinition Width="4*" />
             </Grid.ColumnDefinitions>
 
-
             <!--***Left Panel***-->
             <Grid Grid.Column="0">
                 <Border Margin="4">
                     <DockPanel x:Name="LeftPanelContainer" Margin="4" IsEnabled="{Binding IsViewBusy, Converter={StaticResource InverseBoolConverter}}">
 
                         <!--ModelControl-->
-                        <StackPanel DockPanel.Dock="Top" IsEnabled="{Binding DiffusionService.IsLoading, Converter={StaticResource InverseBoolConverter}}">
+                        <Grid DockPanel.Dock="Top" IsEnabled="{Binding DiffusionService.IsLoading, Converter={StaticResource InverseBoolConverter}}">
                             <Grid IsEnabled="{Binding DiffusionService.IsExecuting, Converter={StaticResource InverseBoolConverter}}">
                                 <Grid IsEnabled="{Binding IsAutomating, Converter={StaticResource InverseBoolConverter}}">
                                     <Controls:DiffusionModelControl
@@ -43,8 +41,7 @@
                                         SelectionChanged="SelectedPipelineChanged"/>
                                 </Grid>
                             </Grid>
-
-                        </StackPanel>
+                        </Grid>
 
                         <DockPanel DockPanel.Dock="Bottom" >
 
@@ -124,155 +121,174 @@
                     <Border Margin="4" IsEnabled="{Binding IsViewBusy, Converter={StaticResource InverseBoolConverter}}">
                         <UniformGrid Columns="2">
 
-                            <Grid Margin="10,10,10,2" IsEnabled="{Binding IsPipelineLoaded}">
-                                <UniformGrid IsEnabled="{Binding DiffusionService.IsExecuting, Converter={StaticResource InverseBoolConverter}}">
-                                    <Border>
-                                        <Grid>
-                                            <CommonControls:VideoStreamElement 
-                                                SplitterVisibility="Auto"
-                                                SplitterPosition="Source"
-                                                SplitterDirection="LeftToRight"
-                                                Source="{Binding SourceVideo, Mode=TwoWay}" 
-                                                ImageFrame="{Binding SourceImage1.Image}"
-                                                IsLoadEnabled="True" 
-                                                IsSaveEnabled="False"
-                                                IsLoadOverlayEnabled="False"
-                                                Volume="{Binding Settings.VolumeInput, Mode=TwoWay}"
-                                                IsVolumeMute="{Binding Settings.IsVolumeInputMute, Mode=TwoWay}"
-                                                IsEnabled="{Binding IsAutomating, Converter={StaticResource InverseBoolConverter}}"/>
+                            <!--Inputs-->
+                            <UniformGrid Margin="10,10,10,2">
 
-                                            <Grid.Style>
-                                                <Style TargetType="{x:Type Grid}">
-                                                    <Style.Triggers>
-                                                        <MultiDataTrigger>
-                                                            <MultiDataTrigger.Conditions>
-                                                                <Condition Binding="{Binding SelectedOption, Mode=OneWay, ElementName=InputControl, Converter={StaticResource EnumToBooleanConverter}, ConverterParameter=Automation}" Value="True"/>
-                                                                <Condition Binding="{Binding AutomationOptions.Type, Mode=OneWay, ElementName=InputControl, Converter={StaticResource EnumToBooleanConverter}, ConverterParameter=InputFiles}" Value="True"/>
-                                                            </MultiDataTrigger.Conditions>
-                                                            <MultiDataTrigger.Setters>
-                                                                <Setter Property="IsEnabled" Value="False" />
-                                                            </MultiDataTrigger.Setters>
-                                                        </MultiDataTrigger>
-                                                    </Style.Triggers>
-                                                </Style>
-                                            </Grid.Style>
-                                        </Grid>
-                                    </Border>
-                                    <Border>
-                                        <CommonControls:ImageElement 
-                                            CropWidth="{Binding Options.Width}"
-                                            CropHeight="{Binding Options.Height}"
-                                            SplitterVisibility="Auto"
-                                            SplitterPosition="Source"
-                                            SplitterDirection="LeftToRight"
-                                            Source="{Binding SourceImage2, Mode=TwoWay}" 
-                                            IsLoadEnabled="True" 
-                                            IsSaveEnabled="False"
-                                            IsLoadOverlayEnabled="False"/>
-                                        <Border.Style>
-                                            <Style TargetType="{x:Type Border}" BasedOn="{StaticResource ImageDropZoneStyle}">
-                                                <Setter Property="Margin" Value="0,0,0,0"/>
-                                                <Setter Property="Visibility" Value="Collapsed"></Setter>
-                                                <Style.Triggers>
-                                                    <DataTrigger Binding="{Binding Options.InputImageCount, ElementName=InputControl, Converter={StaticResource GreaterOrEqualThanToBooleanConverter}, ConverterParameter=2}" Value="True">
-                                                        <Setter Property="Margin" Value="0,4,0,0"/>
-                                                        <Setter Property="Visibility" Value="Visible"/>
-                                                    </DataTrigger>
-                                                    <DataTrigger Binding="{Binding Options.InputImageCount, ElementName=InputControl, Converter={StaticResource GreaterOrEqualThanToBooleanConverter}, ConverterParameter=3}" Value="True">
-                                                        <Setter Property="Margin" Value="4,0,0,4"/>
-                                                        <Setter Property="Visibility" Value="Visible"/>
-                                                    </DataTrigger>
-                                                </Style.Triggers>
-                                            </Style>
-                                        </Border.Style>
-                                    </Border>
-                                    <Border>
-                                        <CommonControls:ImageElement 
-                                            CropWidth="{Binding Options.Width}"
-                                            CropHeight="{Binding Options.Height}"
-                                            SplitterVisibility="Auto"
-                                            SplitterPosition="Source"
-                                            SplitterDirection="LeftToRight"
-                                            Source="{Binding SourceImage3, Mode=TwoWay}" 
-                                            IsLoadEnabled="True" 
-                                            IsSaveEnabled="False"
-                                            IsLoadOverlayEnabled="False"/>
-                                        <Border.Style>
-                                            <Style TargetType="{x:Type Border}" BasedOn="{StaticResource ImageDropZoneStyle}">
-                                                <Setter Property="Margin" Value="0,4,4,0"/>
-                                                <Setter Property="Visibility" Value="Collapsed"/>
-                                                <Style.Triggers>
-                                                    <DataTrigger Binding="{Binding Options.InputImageCount, ElementName=InputControl, Converter={StaticResource GreaterOrEqualThanToBooleanConverter}, ConverterParameter=3}" Value="True">
-                                                        <Setter Property="Visibility" Value="Visible"/>
-                                                    </DataTrigger>
-                                                </Style.Triggers>
-                                            </Style>
-                                        </Border.Style>
-                                    </Border>
-                                    <Border>
-                                        <CommonControls:ImageElement 
-                                            CropWidth="{Binding Options.Width}"
-                                            CropHeight="{Binding Options.Height}"
-                                            SplitterVisibility="Auto"
-                                            SplitterPosition="Source"
-                                            SplitterDirection="LeftToRight"
-                                            Source="{Binding SourceImage4, Mode=TwoWay}" 
-                                            IsLoadEnabled="True" 
-                                            IsSaveEnabled="False"
-                                            IsLoadOverlayEnabled="False"/>
-                                        <Border.Style>
-                                            <Style TargetType="{x:Type Border}" BasedOn="{StaticResource ImageDropZoneStyle}">
-                                                <Setter Property="Margin" Value="4,4,0,0"/>
-                                                <Setter Property="Visibility" Value="Collapsed"></Setter>
-                                                <Style.Triggers>
-                                                    <DataTrigger Binding="{Binding Options.InputImageCount, ElementName=InputControl, Converter={StaticResource GreaterOrEqualThanToBooleanConverter}, ConverterParameter=4}" Value="True">
-                                                        <Setter Property="Visibility" Value="Visible"></Setter>
-                                                    </DataTrigger>
-                                                </Style.Triggers>
-                                            </Style>
-                                        </Border.Style>
-                                    </Border>
-
-                                    <UniformGrid.Style>
-                                        <Style TargetType="{x:Type UniformGrid}">
-                                            <Setter Property="Rows" Value="1"></Setter>
-                                            <Setter Property="Columns" Value="1"></Setter>
+                                <!--SourceVideo/SourceImage1-->
+                                <Grid>
+                                    <CommonControls:VideoStreamElement 
+                                        SplitterVisibility="Auto"
+                                        SplitterPosition="Source"
+                                        SplitterDirection="LeftToRight"
+                                        IsLoadEnabled="True" 
+                                        IsSaveEnabled="False"
+                                        IsLoadOverlayEnabled="False"
+                                        Source="{Binding SourceVideo, Mode=TwoWay}" 
+                                        ImageFrame="{Binding SourceImage1.Image}"
+                                        Volume="{Binding Settings.VolumeInput, Mode=TwoWay}"
+                                        IsVolumeMute="{Binding Settings.IsVolumeInputMute, Mode=TwoWay}"
+                                        IsInputEnabled="{Binding IsPipelineLoaded}"
+                                        IsEnabled="{Binding IsAutomating, Converter={StaticResource InverseBoolConverter}}"/>
+                                    <Grid.Style>
+                                        <Style TargetType="{x:Type Grid}">
+                                            <Setter Property="Margin" Value="0,0,0,0"/>
                                             <Style.Triggers>
-                                                <DataTrigger Binding="{Binding Options.InputImageCount, ElementName=InputControl}" Value="1">
-                                                    <Setter Property="Rows" Value="1"></Setter>
-                                                    <Setter Property="Columns" Value="1"></Setter>
+                                                <DataTrigger Binding="{Binding Options.InputImageCount, ElementName=InputControl, Converter={StaticResource GreaterOrEqualThanToBooleanConverter}, ConverterParameter=2}" Value="True">
+                                                    <Setter Property="Margin" Value="0,0,0,4"/>
+                                                    <Setter Property="Visibility" Value="Visible"/>
                                                 </DataTrigger>
-                                                <DataTrigger Binding="{Binding Options.InputImageCount, ElementName=InputControl}" Value="2">
-                                                    <Setter Property="Rows" Value="2"></Setter>
-                                                    <Setter Property="Columns" Value="1"></Setter>
+                                                <DataTrigger Binding="{Binding Options.InputImageCount, ElementName=InputControl, Converter={StaticResource GreaterOrEqualThanToBooleanConverter}, ConverterParameter=3}" Value="True">
+                                                    <Setter Property="Margin" Value="0,0,4,4"/>
+                                                    <Setter Property="Visibility" Value="Visible"/>
                                                 </DataTrigger>
-                                                <DataTrigger Binding="{Binding Options.InputImageCount, ElementName=InputControl}" Value="3">
-                                                    <Setter Property="Rows" Value="2"></Setter>
-                                                    <Setter Property="Columns" Value="2"></Setter>
+                                                <MultiDataTrigger>
+                                                    <MultiDataTrigger.Conditions>
+                                                        <Condition Binding="{Binding SelectedOption, Mode=OneWay, ElementName=InputControl, Converter={StaticResource EnumToBooleanConverter}, ConverterParameter=Automation}" Value="True"/>
+                                                        <Condition Binding="{Binding AutomationOptions.Type, Mode=OneWay, ElementName=InputControl, Converter={StaticResource EnumToBooleanConverter}, ConverterParameter=InputFiles}" Value="True"/>
+                                                    </MultiDataTrigger.Conditions>
+                                                    <MultiDataTrigger.Setters>
+                                                        <Setter Property="IsEnabled" Value="False" />
+                                                    </MultiDataTrigger.Setters>
+                                                </MultiDataTrigger>
+                                            </Style.Triggers>
+                                        </Style>
+                                    </Grid.Style>
+                                </Grid>
+
+                                <!--SourceImage2-->
+                                <Grid>
+                                    <CommonControls:ImageElement 
+                                        SplitterVisibility="Auto"
+                                        SplitterPosition="Source"
+                                        SplitterDirection="LeftToRight"
+                                        IsLoadEnabled="True" 
+                                        IsSaveEnabled="False"
+                                        IsLoadOverlayEnabled="False"   
+                                        CropWidth="{Binding Options.Width, Mode=OneWay}"
+                                        CropHeight="{Binding Options.Height, Mode=OneWay}"
+                                        Source="{Binding SourceImage2, Mode=TwoWay}" 
+                                        IsInputEnabled="{Binding IsPipelineLoaded}"/>
+                                    <Grid.Style>
+                                        <Style TargetType="{x:Type Grid}">
+                                            <Setter Property="Margin" Value="0,0,0,0"/>
+                                            <Setter Property="Visibility" Value="Collapsed"></Setter>
+                                            <Style.Triggers>
+                                                <DataTrigger Binding="{Binding Options.InputImageCount, ElementName=InputControl, Converter={StaticResource GreaterOrEqualThanToBooleanConverter}, ConverterParameter=2}" Value="True">
+                                                    <Setter Property="Margin" Value="0,4,0,0"/>
+                                                    <Setter Property="Visibility" Value="Visible"/>
                                                 </DataTrigger>
-                                                <DataTrigger Binding="{Binding Options.InputImageCount, ElementName=InputControl}" Value="4">
-                                                    <Setter Property="Rows" Value="2"></Setter>
-                                                    <Setter Property="Columns" Value="2"></Setter>
+                                                <DataTrigger Binding="{Binding Options.InputImageCount, ElementName=InputControl, Converter={StaticResource GreaterOrEqualThanToBooleanConverter}, ConverterParameter=3}" Value="True">
+                                                    <Setter Property="Margin" Value="4,0,0,4"/>
+                                                    <Setter Property="Visibility" Value="Visible"/>
                                                 </DataTrigger>
                                             </Style.Triggers>
                                         </Style>
-                                    </UniformGrid.Style>
-                                </UniformGrid>
-                            </Grid>
+                                    </Grid.Style>
+                                </Grid>
 
+                                <!--SourceImage3-->
+                                <Grid>
+                                    <CommonControls:ImageElement 
+                                        SplitterVisibility="Auto"
+                                        SplitterPosition="Source"
+                                        SplitterDirection="LeftToRight"
+                                        IsLoadEnabled="True" 
+                                        IsSaveEnabled="False"
+                                        IsLoadOverlayEnabled="False"  
+                                        CropWidth="{Binding Options.Width}"
+                                        CropHeight="{Binding Options.Height}"
+                                        Source="{Binding SourceImage3, Mode=TwoWay}" 
+                                        IsInputEnabled="{Binding IsPipelineLoaded}"/>
+                                    <Grid.Style>
+                                        <Style TargetType="{x:Type Grid}">
+                                            <Setter Property="Margin" Value="0,4,4,0"/>
+                                            <Setter Property="Visibility" Value="Collapsed"/>
+                                            <Style.Triggers>
+                                                <DataTrigger Binding="{Binding Options.InputImageCount, ElementName=InputControl, Converter={StaticResource GreaterOrEqualThanToBooleanConverter}, ConverterParameter=3}" Value="True">
+                                                    <Setter Property="Visibility" Value="Visible"/>
+                                                </DataTrigger>
+                                            </Style.Triggers>
+                                        </Style>
+                                    </Grid.Style>
+                                </Grid>
+
+                                <!--SourceImage4-->
+                                <Grid>
+                                    <CommonControls:ImageElement 
+                                        SplitterVisibility="Auto"
+                                        SplitterPosition="Source"
+                                        SplitterDirection="LeftToRight" 
+                                        IsLoadEnabled="True" 
+                                        IsSaveEnabled="False"
+                                        IsLoadOverlayEnabled="False"  
+                                        CropWidth="{Binding Options.Width}"
+                                        CropHeight="{Binding Options.Height}"
+                                        Source="{Binding SourceImage4, Mode=TwoWay}" 
+                                        IsInputEnabled="{Binding IsPipelineLoaded}"/>
+                                    <Grid.Style>
+                                        <Style TargetType="{x:Type Grid}">
+                                            <Setter Property="Margin" Value="4,4,0,0"/>
+                                            <Setter Property="Visibility" Value="Collapsed"></Setter>
+                                            <Style.Triggers>
+                                                <DataTrigger Binding="{Binding Options.InputImageCount, ElementName=InputControl, Converter={StaticResource GreaterOrEqualThanToBooleanConverter}, ConverterParameter=4}" Value="True">
+                                                    <Setter Property="Visibility" Value="Visible"></Setter>
+                                                </DataTrigger>
+                                            </Style.Triggers>
+                                        </Style>
+                                    </Grid.Style>
+                                </Grid>
+
+                                <UniformGrid.Style>
+                                    <Style TargetType="{x:Type UniformGrid}">
+                                        <Setter Property="Rows" Value="1"></Setter>
+                                        <Setter Property="Columns" Value="1"></Setter>
+                                        <Style.Triggers>
+                                            <DataTrigger Binding="{Binding Options.InputImageCount, ElementName=InputControl}" Value="1">
+                                                <Setter Property="Rows" Value="1"></Setter>
+                                                <Setter Property="Columns" Value="1"></Setter>
+                                            </DataTrigger>
+                                            <DataTrigger Binding="{Binding Options.InputImageCount, ElementName=InputControl}" Value="2">
+                                                <Setter Property="Rows" Value="2"></Setter>
+                                                <Setter Property="Columns" Value="1"></Setter>
+                                            </DataTrigger>
+                                            <DataTrigger Binding="{Binding Options.InputImageCount, ElementName=InputControl}" Value="3">
+                                                <Setter Property="Rows" Value="2"></Setter>
+                                                <Setter Property="Columns" Value="2"></Setter>
+                                            </DataTrigger>
+                                            <DataTrigger Binding="{Binding Options.InputImageCount, ElementName=InputControl}" Value="4">
+                                                <Setter Property="Rows" Value="2"></Setter>
+                                                <Setter Property="Columns" Value="2"></Setter>
+                                            </DataTrigger>
+                                        </Style.Triggers>
+                                    </Style>
+                                </UniformGrid.Style>
+                            </UniformGrid>
+
+                            <!--Output-->
                             <Grid Margin="10,10,10,2" >
                                 <CommonControls:VideoStreamElement 
                                     x:Name="ResultControl" 
                                     SplitterVisibility="Auto"
                                     SplitterPosition="Source"
                                     SplitterDirection="LeftToRight"
+                                    IsLoadEnabled="False" 
+                                    IsLoadOverlayEnabled="False"
+                                    IsFrameViewerEnabled="True"
                                     Source="{Binding ResultVideo, Mode=TwoWay}" 
                                     ImageFrame="{Binding ResultImage.Image}"
                                     OverlaySource="{Binding CompareVideo, Mode=TwoWay}" 
                                     Volume="{Binding Settings.VolumeOutput, Mode=TwoWay}"
-                                    IsVolumeMute="{Binding Settings.IsVolumeOutputMute, Mode=TwoWay}"
-                                    IsLoadEnabled="False" 
-                                    IsLoadOverlayEnabled="False"/>
+                                    IsVolumeMute="{Binding Settings.IsVolumeOutputMute, Mode=TwoWay}"/>
                             </Grid>
                         </UniformGrid>
                     </Border>
@@ -280,6 +296,5 @@
 
             </Grid>
         </Grid>
-
     </Grid>
 </Views:ViewBaseDiffusion>

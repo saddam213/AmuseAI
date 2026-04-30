@@ -8,14 +8,46 @@
              xmlns:CommonControls="clr-namespace:TensorStack.WPF.Controls;assembly=TensorStack.WPF"
              xmlns:CommonConverters="clr-namespace:TensorStack.WPF.Converters;assembly=TensorStack.WPF"
              AllowDrop="True" Focusable="True" >
-    <Grid DataContext="{Binding RelativeSource={RelativeSource AncestorType={x:Type local:LayerControl}}}"  Background="{StaticResource CheckerBrush}" ClipToBounds="True" >
-        <Viewbox Margin="4">
-            <Grid>
-                <Canvas x:Name="Surface" Width="{Binding FrameWidth}" Height="{Binding FrameHeight}"/>
-                <Border BorderBrush="Black" BorderThickness="1" >
-                    <Rectangle Width="{Binding FrameWidth}" Height="{Binding FrameHeight}" IsHitTestVisible="False" />
-                </Border>
+    <Border x:Name="DragDropContainer" DataContext="{Binding RelativeSource={RelativeSource AncestorType={x:Type local:LayerControl}}}"  Background="{StaticResource CheckerBrush}" ClipToBounds="True" >
+        <Grid>
+
+            <!--Layer Surface-->
+            <Viewbox Margin="4">
+                <Grid>
+                    <Canvas x:Name="Surface" Width="{Binding FrameWidth}" Height="{Binding FrameHeight}"/>
+                    <Border BorderBrush="Black" BorderThickness="1" >
+                        <Rectangle Width="{Binding FrameWidth}" Height="{Binding FrameHeight}" IsHitTestVisible="False" />
+                    </Border>
+                </Grid>
+            </Viewbox>
+
+            <!--DragDrop Notification-->
+            <Grid Visibility="{Binding AllowDrop, ElementName=DragDropContainer, Converter={StaticResource BooleanToVisibilityConverter}}" IsHitTestVisible="False" Background="#B0000000">
+                <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center" >
+                    <CommonControls:FontAwesome Icon="e74c" Size="30" IconStyle="SharpLight" Color="{StaticResource AccentColour2}"/>
+                    <TextBlock Text="Drag &amp; Drop Image Here" Foreground="{StaticResource AccentColour2}" FontSize="13" FontWeight="DemiBold" Margin="0,6,0,0"/>
+                </StackPanel>
             </Grid>
-        </Viewbox>
-    </Grid>
+        </Grid>
+
+        <Border.Style>
+            <Style TargetType="{x:Type Border}">
+                <Setter Property="AllowDrop" Value="False"/>
+                <Setter Property="BorderBrush" Value="Transparent"/>
+                <Setter Property="BorderThickness" Value="1"/>
+                <Style.Triggers>
+                    <MultiDataTrigger>
+                        <MultiDataTrigger.Conditions>
+                            <Condition Binding="{Binding IsDragDrop, RelativeSource={RelativeSource AncestorType=CommonControls:ViewControl}}" Value="True" />
+                            <Condition Binding="{Binding DragDropType, RelativeSource={RelativeSource AncestorType=CommonControls:ViewControl}}" Value="Image" />
+                        </MultiDataTrigger.Conditions>
+                        <MultiDataTrigger.Setters>
+                            <Setter Property="AllowDrop" Value="True"/>
+                            <Setter Property="BorderBrush" Value="{StaticResource AccentColour2}"/>
+                        </MultiDataTrigger.Setters>
+                    </MultiDataTrigger>
+                </Style.Triggers>
+            </Style>
+        </Border.Style>
+    </Border>
 </CommonControls:BaseControl>

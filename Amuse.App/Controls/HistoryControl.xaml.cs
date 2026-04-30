@@ -152,7 +152,7 @@ namespace Amuse.App.Controls
             {
                 // check if drag threshold is passed
                 var diff = e.GetPosition(null) - _dragStartPoint;
-                if (Math.Abs(diff.X) > SystemParameters.MinimumHorizontalDragDistance || Math.Abs(diff.Y) > SystemParameters.MinimumVerticalDragDistance)
+                if (Math.Abs(diff.X) > TensorStack.WPF.Common.DragDistance || Math.Abs(diff.Y) > TensorStack.WPF.Common.DragDistance)
                 {
                     if (SelectedItem is not null)
                     {

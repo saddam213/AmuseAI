@@ -165,7 +165,7 @@ namespace Amuse.App.Controls
             get { return _isImageToImageControlNetSupported; }
             set { SetProperty(ref _isImageToImageControlNetSupported, value); }
         }
-  
+
         public DiffusionInputOption SelectedOption
         {
             get { return _selectedOption; }
@@ -194,8 +194,8 @@ namespace Amuse.App.Controls
             }
 
             // UI Flags
-            IsSteps2Enabled = newPipeline.DiffusionModel.DefaultOptions.Steps2 > 0;
-            IsGuidance2Enabled = newPipeline.DiffusionModel.DefaultOptions.GuidanceScale2 > 0;
+            IsSteps2Enabled = newOptions.Steps2 > 0;
+            IsGuidance2Enabled = newOptions.GuidanceScale2 > 0;
             IsModelOptionsVisible = newPipeline.UpscaleModel is not null || newPipeline.ExtractModel is not null;
             IsImageControlNetSupported = newPipeline.DiffusionModel.ProcessTypes.Contains(ProcessType.ImageControlNet);
             IsImageToImageControlNetSupported = newPipeline.DiffusionModel.ProcessTypes.Contains(ProcessType.ImageToImageControlNet);
@@ -207,19 +207,17 @@ namespace Amuse.App.Controls
                 Prompt = previousOptions?.Prompt,
                 NegativePrompt = previousOptions?.NegativePrompt,
                 Seed = previousOptions?.Seed ?? 0,
+                IsFirstFrameLastFrame = newOptions.IsFirstFrameLastFrameEnabled && (previousOptions?.IsFirstFrameLastFrame ?? false),
                 LoraOptions = newPipeline.LoraAdapterModel?.Select(x => new LoraOptionModel { Name = x.Name, Key = x.Key, Strength = 1f }).ToList(),
                 InputImageCount = ProcessType == ProcessType.ImageEdit ? (previousOptions?.InputImageCount ?? 1) : 0,
-
-                // Update
                 Strength = ProcessType == ProcessType.ImageToImage && !IsImageControlNetSupported ? (previousOptions?.Strength ?? 0.7f) : 1f,
                 ControlNetStrength = IsImageControlNetSupported ? (previousOptions?.ControlNetStrength ?? 0.7f) : 1f,
 
+                // Update
                 Steps = newOptions.Steps,
                 Steps2 = newOptions.Steps2,
-
                 GuidanceScale = newOptions.GuidanceScale,
                 GuidanceScale2 = newOptions.GuidanceScale2,
-
                 Frames = newOptions.Frames,
                 FrameRate = newOptions.FrameRate,
                 FrameChunk = newOptions.FrameChunk,

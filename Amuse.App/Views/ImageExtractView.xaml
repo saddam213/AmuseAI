@@ -11,7 +11,6 @@
         <Grid.RowDefinitions>
             <RowDefinition Height="1*" />
         </Grid.RowDefinitions>
-
         <Grid Grid.Row="0" >
             <Grid.ColumnDefinitions>
                 <ColumnDefinition MinWidth="380"/>
@@ -19,29 +18,24 @@
                 <ColumnDefinition Width="4*" />
             </Grid.ColumnDefinitions>
 
-
             <!--***Left Panel***-->
             <Grid Grid.Column="0">
                 <Border Margin="4">
                     <DockPanel x:Name="LeftPanelContainer" Margin="4" IsEnabled="{Binding IsViewBusy, Converter={StaticResource InverseBoolConverter}}">
 
-                        <StackPanel DockPanel.Dock="Top" IsEnabled="{Binding ExtractService.IsLoading, Converter={StaticResource InverseBoolConverter}}">
-
-                            <!--ModelControl-->
-                            <StackPanel DockPanel.Dock="Top" >
-                                <Grid IsEnabled="{Binding ExtractService.IsExecuting, Mode=OneWay, Converter={StaticResource InverseBoolConverter}}">
-                                    <Grid IsEnabled="{Binding IsAutomating, Mode=OneWay, Converter={StaticResource InverseBoolConverter}}">
-                                        <Controls:ModelControl
-                                            x:Name="ModelControl"
-                                            IsExtractorEnabled="True"
-                                            Settings="{Binding Settings, Mode=OneWay}" 
-                                            IsPipelineLoaded="{Binding IsPipelineLoaded, Mode=OneWay}"
-                                            SelectionChanged="SelectedExtractorChanged"/>
-                                    </Grid>
+                        <!--ModelControl-->
+                        <Grid DockPanel.Dock="Top" IsEnabled="{Binding ExtractService.IsLoading, Converter={StaticResource InverseBoolConverter}}">
+                            <Grid IsEnabled="{Binding ExtractService.IsExecuting, Mode=OneWay, Converter={StaticResource InverseBoolConverter}}">
+                                <Grid IsEnabled="{Binding IsAutomating, Mode=OneWay, Converter={StaticResource InverseBoolConverter}}">
+                                    <Controls:ModelControl
+                                        x:Name="ModelControl"
+                                        IsExtractorEnabled="True"
+                                        Settings="{Binding Settings, Mode=OneWay}" 
+                                        IsPipelineLoaded="{Binding IsPipelineLoaded, Mode=OneWay}"
+                                        SelectionChanged="SelectedExtractorChanged"/>
                                 </Grid>
-                            </StackPanel>
-
-                        </StackPanel>
+                            </Grid>
+                        </Grid>
 
                         <!--Execute/Cancel-->
                         <UniformGrid DockPanel.Dock="Bottom" Columns="2" Height="30">
@@ -53,12 +47,11 @@
                         </UniformGrid>
 
 
-                        <DockPanel IsEnabled="{Binding ExtractService.IsLoaded}">
+                        <DockPanel>
 
                             <!--Input Image-->
-                            <Border DockPanel.Dock="Top" Margin="0,10,0,5"
+                            <Grid DockPanel.Dock="Top" Margin="0,10,0,5"
                                 VerticalAlignment="Top"
-                                Style="{StaticResource ImageDropZoneStyle}"
                                 Width="{Binding ActualWidth,ElementName=LeftPanelContainer}"
                                 Height="{Binding ActualWidth,ElementName=LeftPanelContainer}"
                                 MaxHeight="{Binding ActualWidth,ElementName=LeftPanelContainer}"
@@ -67,8 +60,9 @@
                                     Source="{Binding SourceImage, Mode=TwoWay}"
                                     IsLoadEnabled="True"
                                     IsLoadOverlayEnabled="False" 
-                                    IsSaveEnabled="False" />
-                            </Border>
+                                    IsSaveEnabled="False"
+                                    IsInputEnabled="{Binding ExtractService.IsLoaded}"/>
+                            </Grid>
 
                             <!--Options-->
                             <Controls:ExtractInputControl
@@ -79,7 +73,8 @@
                                 IsAutomating="{Binding IsAutomating, Mode=OneWay}"
                                 Options="{Binding Options, Mode=OneWayToSource}"
                                 AutomationOptions="{Binding AutomationOptions, Mode=OneWayToSource}"
-                                AutomationProgress="{Binding AutomationProgress, Mode=OneWay}"/>
+                                AutomationProgress="{Binding AutomationProgress, Mode=OneWay}"
+                                IsEnabled="{Binding ExtractService.IsLoaded}"/>
 
                         </DockPanel>
                     </DockPanel>
@@ -105,6 +100,8 @@
                         Progress="{Binding Progress}" />
 
                     <Border Margin="4" IsEnabled="{Binding IsViewBusy, Converter={StaticResource InverseBoolConverter}}">
+
+                        <!--Output-->
                         <Grid Margin="10,10,10,2" >
                             <CommonControls:ImageElement 
                                 SplitterVisibility="Auto"
@@ -120,6 +117,5 @@
 
             </Grid>
         </Grid>
-
     </Grid>
 </Views:ViewBaseModel>

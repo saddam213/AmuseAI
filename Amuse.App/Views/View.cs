@@ -31,6 +31,7 @@ namespace Amuse.App.Views
         VideoUpscale = 250,
         VideoExtract = 251,
         VideoInterpolate = 252,
+        VideoCompose = 253,
 
         TextToAudio = 300,
         AudioToText = 301,
@@ -94,7 +95,8 @@ namespace Amuse.App.Views
             { View.FrameToFrame, ViewCategory.Video  },
             { View.VideoExtract, ViewCategory.Video  },
             { View.VideoUpscale, ViewCategory.Video  },
-            { View.VideoInterpolate, ViewCategory.Video  },
+            { View.VideoInterpolate, ViewCategory.Video },
+            { View.VideoCompose, ViewCategory.Video  },
 
              // Audio
             { View.TextToAudio, ViewCategory.Audio  },

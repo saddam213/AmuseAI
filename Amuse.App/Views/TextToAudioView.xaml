@@ -11,7 +11,6 @@
         <Grid.RowDefinitions>
             <RowDefinition Height="1*" />
         </Grid.RowDefinitions>
-
         <Grid Grid.Row="0" >
             <Grid.ColumnDefinitions>
                 <ColumnDefinition MinWidth="380"/>
@@ -24,22 +23,18 @@
                 <Border Margin="4">
                     <DockPanel x:Name="LeftPanelContainer" Margin="4" IsEnabled="{Binding IsViewBusy, Converter={StaticResource InverseBoolConverter}}">
 
-                        <StackPanel DockPanel.Dock="Top" IsEnabled="{Binding AudioService.IsLoading, Converter={StaticResource InverseBoolConverter}}">
-
-                            <!--ModelControl-->
-                            <StackPanel DockPanel.Dock="Top" >
-                                <Grid IsEnabled="{Binding AudioService.IsExecuting, Converter={StaticResource InverseBoolConverter}}">
-                                    <Controls:ModelControl
-                                        x:Name="ModelControl"
-                                        IsAudioEnabled="True"
-                                        ViewType="TextToAudio"
-                                        Settings="{Binding Settings, Mode=OneWay}" 
-                                        IsPipelineLoaded="{Binding IsPipelineLoaded, Mode=OneWay}"
-                                        SelectionChanged="OnSelectedModelChanged"/>
-                                </Grid>
-                            </StackPanel>
-
-                        </StackPanel>
+                        <!--ModelControl-->
+                        <Grid DockPanel.Dock="Top" IsEnabled="{Binding AudioService.IsLoading, Converter={StaticResource InverseBoolConverter}}">
+                            <Grid IsEnabled="{Binding AudioService.IsExecuting, Converter={StaticResource InverseBoolConverter}}">
+                                <Controls:ModelControl
+                                    x:Name="ModelControl"
+                                    IsAudioEnabled="True"
+                                    ViewType="TextToAudio"
+                                    Settings="{Binding Settings, Mode=OneWay}" 
+                                    IsPipelineLoaded="{Binding IsPipelineLoaded, Mode=OneWay}"
+                                    SelectionChanged="OnSelectedModelChanged"/>
+                            </Grid>
+                        </Grid>
 
                         <!--Execute/Cancel-->
                         <UniformGrid DockPanel.Dock="Bottom" Columns="2" Height="30">
@@ -94,28 +89,30 @@
                         Progress="{Binding Progress}" />
 
                     <Border Margin="4" IsEnabled="{Binding IsViewBusy, Converter={StaticResource InverseBoolConverter}}">
+
+                        <!--Output-->
                         <Grid Margin="10,10,10,2" >
-                            <Grid  DockPanel.Dock="Bottom" >
-                                <DockPanel Margin="0,3,0,0" >
-                                    <StackPanel DockPanel.Dock="Top">
-                                        <TextBlock Text="Audio Result" Style="{StaticResource FieldTextBlockStyle}" />
-                                        <CommonControls:AudioElement 
+
+                            <DockPanel Margin="0,3,0,0" >
+                                <StackPanel DockPanel.Dock="Top">
+                                    <TextBlock Text="Audio Result" Style="{StaticResource FieldTextBlockStyle}" />
+                                    <CommonControls:AudioElement 
                                             Source="{Binding ResultAudio, Mode=TwoWay}" 
                                             Configuration="{Binding Settings}" 
                                             IsLoadEnabled="False" 
                                             Volume="{Binding Settings.VolumeOutput, Mode=TwoWay}"
                                             IsVolumeMute="{Binding Settings.IsVolumeOutputMute, Mode=TwoWay}"
                                             IsReplayEnabled="False" />
-                                    </StackPanel>
+                                </StackPanel>
 
-                                    <DockPanel Margin="0,10,0,0">
-                                        <TextBlock DockPanel.Dock="Top" Text="Text Input" Style="{StaticResource FieldTextBlockStyle}" />
-                                        <Border Style="{StaticResource TextDropZoneStyle}">
-                                            <CommonControls:TextElement TextSource="{Binding SourceText, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
-                                        </Border>
-                                    </DockPanel>
+                                <DockPanel Margin="0,10,0,0">
+                                    <TextBlock DockPanel.Dock="Top" Text="Text Input" Style="{StaticResource FieldTextBlockStyle}" />
+                                    <Border Style="{StaticResource TextDropZoneStyle}">
+                                        <CommonControls:TextElement TextSource="{Binding SourceText, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+                                    </Border>
                                 </DockPanel>
-                            </Grid>
+                            </DockPanel>
+
                         </Grid>
                     </Border>
 

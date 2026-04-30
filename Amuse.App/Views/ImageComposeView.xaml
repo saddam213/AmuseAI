@@ -14,14 +14,12 @@
         <Grid.RowDefinitions>
             <RowDefinition Height="1*" />
         </Grid.RowDefinitions>
-
         <Grid Grid.Row="0" >
             <Grid.ColumnDefinitions>
                 <ColumnDefinition MinWidth="380"/>
                 <ColumnDefinition Width="5" />
                 <ColumnDefinition Width="4*" />
             </Grid.ColumnDefinitions>
-
 
             <!--***Left Panel***-->
             <Grid Grid.Column="0" >
@@ -286,15 +284,13 @@
 
             <!--***Right Panel***-->
             <Grid Grid.Column="2" Grid.Row="0" >
-              
+
                 <!--Content-->
                 <DockPanel>
                     <Border Margin="4">
-                        <Border Margin="4" Style="{StaticResource ImageDropZoneStyle}">
-                            <Grid Margin="10" HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
-                                <Controls:LayerControl x:Name="LayerControl" ImageGenerated="LayerControl_ImageGenerated" />
-                            </Grid>
-                        </Border>
+                        <Grid Margin="10" HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
+                            <Controls:LayerControl x:Name="LayerControl" ImageGenerated="LayerControl_ImageGenerated" />
+                        </Grid>
                     </Border>
                 </DockPanel>
 

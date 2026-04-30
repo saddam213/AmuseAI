@@ -7,11 +7,10 @@
     xmlns:CommonControls="clr-namespace:TensorStack.WPF.Controls;assembly=TensorStack.WPF"
     xmlns:Controls="clr-namespace:Amuse.App.Controls"
     xmlns:Views="clr-namespace:Amuse.App.Views">
-    <Grid DataContext="{Binding RelativeSource={RelativeSource AncestorType={x:Type local:ImageToVideoView}}}" >
+    <Grid DataContext="{Binding RelativeSource={RelativeSource AncestorType={x:Type local:ImageToVideoView}}, Mode=OneTime}" >
         <Grid.RowDefinitions>
             <RowDefinition Height="1*" />
         </Grid.RowDefinitions>
-
         <Grid Grid.Row="0" >
             <Grid.ColumnDefinitions>
                 <ColumnDefinition MinWidth="380"/>
@@ -19,16 +18,15 @@
                 <ColumnDefinition Width="4*" />
             </Grid.ColumnDefinitions>
 
-
             <!--***Left Panel***-->
             <Grid Grid.Column="0">
                 <Border Margin="4">
-                    <DockPanel x:Name="LeftPanelContainer" Margin="4" IsEnabled="{Binding IsViewBusy, Converter={StaticResource InverseBoolConverter}}">
+                    <DockPanel x:Name="LeftPanelContainer" Margin="4" IsEnabled="{Binding IsViewBusy, Mode=OneWay, Converter={StaticResource InverseBoolConverter}}">
 
                         <!--ModelControl-->
-                        <StackPanel DockPanel.Dock="Top" IsEnabled="{Binding DiffusionService.IsLoading, Converter={StaticResource InverseBoolConverter}}">
-                            <Grid IsEnabled="{Binding DiffusionService.IsExecuting, Converter={StaticResource InverseBoolConverter}}">
-                                <Grid IsEnabled="{Binding IsAutomating, Converter={StaticResource InverseBoolConverter}}">
+                        <Grid DockPanel.Dock="Top" IsEnabled="{Binding DiffusionService.IsLoading, Mode=OneWay, Converter={StaticResource InverseBoolConverter}}">
+                            <Grid IsEnabled="{Binding DiffusionService.IsExecuting, Mode=OneWay, Converter={StaticResource InverseBoolConverter}}">
+                                <Grid IsEnabled="{Binding IsAutomating, Mode=OneWay, Converter={StaticResource InverseBoolConverter}}">
                                     <Controls:DiffusionModelControl
                                         x:Name="ModelControl"
                                         ViewType="ImageToVideo"
@@ -44,23 +42,23 @@
                                         SelectionChanged="SelectedPipelineChanged"/>
                                 </Grid>
                             </Grid>
-                        </StackPanel>
+                        </Grid>
 
                         <DockPanel DockPanel.Dock="Bottom">
 
                             <!--Execute/Cancel-->
                             <UniformGrid DockPanel.Dock="Bottom" Columns="2" Height="30" >
                                 <DockPanel>
-                                    <Button DockPanel.Dock="Left" Width="30" Command="{Binding StopCommand}" Visibility="{Binding DiffusionService.IsCanceling, Converter={StaticResource BooleanToVisibilityConverter}}" ToolTip="Immediately stops generation by closing the backend process." ToolTipService.InitialShowDelay="200">
+                                    <Button DockPanel.Dock="Left" Width="30" Command="{Binding StopCommand, Mode=OneWay}" Visibility="{Binding DiffusionService.IsCanceling, Mode=OneWay, Converter={StaticResource BooleanToVisibilityConverter}}" ToolTip="Immediately stops generation by closing the backend process." ToolTipService.InitialShowDelay="200">
                                         <CommonControls:FontAwesome Icon="f00d" Color="{StaticResource DangerColour}" />
                                     </Button>
-                                    <Grid IsEnabled="{Binding DiffusionService.IsCanceling, Converter={StaticResource InverseBoolConverter}}">
-                                        <Button Command="{Binding CancelCommand}" >
+                                    <Grid IsEnabled="{Binding DiffusionService.IsCanceling, Mode=OneWay, Converter={StaticResource InverseBoolConverter}}">
+                                        <Button Command="{Binding CancelCommand, Mode=OneWay}" >
                                             <Button.Style>
                                                 <Style TargetType="{x:Type Button}" BasedOn="{StaticResource {x:Type Button}}">
                                                     <Setter Property="Content" Value="Cancel" />
                                                     <Style.Triggers>
-                                                        <DataTrigger Binding="{Binding DiffusionService.IsCanceling}" Value="True">
+                                                        <DataTrigger Binding="{Binding DiffusionService.IsCanceling, Mode=OneWay}" Value="True">
                                                             <Setter Property="Content" Value="Canceling" />
                                                         </DataTrigger>
                                                     </Style.Triggers>
@@ -70,8 +68,8 @@
                                     </Grid>
                                 </DockPanel>
                                 <Grid IsEnabled="{Binding IsSelectionValid, ElementName=ModelControl}">
-                                    <Button Content="Generate" Command="{Binding ExecuteCommand}" Visibility="{Binding SelectedOption, ElementName=InputControl, Converter={StaticResource InverseEnumToVisibilityConverter}, ConverterParameter=Automation}"/>
-                                    <Button Content="Automate" Command="{Binding ExecuteAutomationCommand}" Visibility="{Binding SelectedOption, ElementName=InputControl, Converter={StaticResource EnumToVisibilityConverter}, ConverterParameter=Automation}"/>
+                                    <Button Content="Generate" Command="{Binding ExecuteCommand, Mode=OneWay}" Visibility="{Binding SelectedOption, Mode=OneWay, ElementName=InputControl, Converter={StaticResource InverseEnumToVisibilityConverter}, ConverterParameter=Automation}"/>
+                                    <Button Content="Automate" Command="{Binding ExecuteAutomationCommand, Mode=OneWay}" Visibility="{Binding SelectedOption, Mode=OneWay, ElementName=InputControl, Converter={StaticResource EnumToVisibilityConverter}, ConverterParameter=Automation}"/>
                                 </Grid>
                             </UniformGrid>
 
@@ -80,7 +78,9 @@
                                 <Controls:DiffusionInputControl 
                                     x:Name="InputControl"
                                     ViewType="ImageToVideo"
-                                    ProcessType="ImageToVideo"
+                                    ProcessType="ImageToVideo" 
+                                    IsImageInputEnabled="True"
+                                    IsControlNetEnabled="False"
                                     Options="{Binding Options, Mode=OneWayToSource}"
                                     UpscaleOptions="{Binding UpscaleOptions, Mode=OneWayToSource}"
                                     ExtractOptions="{Binding ExtractOptions, Mode=OneWayToSource}"
@@ -89,8 +89,6 @@
                                     Pipeline="{Binding CurrentPipeline, Mode=OneWay}" 
                                     IsExecuting="{Binding DiffusionService.IsExecuting, Mode=OneWay}"
                                     IsAutomating="{Binding IsAutomating, Mode=OneWay}"
-                                    IsImageInputEnabled="True"
-                                    IsControlNetEnabled="False"
                                     IsEnabled="{Binding CurrentPipeline, Mode=OneWay, Converter={StaticResource InverseNullBooleanConverter}}"/>
                             </Grid>
 
@@ -114,25 +112,29 @@
                     <Controls:StatisticsControl 
                         DockPanel.Dock="Bottom"
                         Margin="14,0,14,8"
-                        Statistics="{Binding Statistics}"
-                        Progress="{Binding Progress}" />
+                        Statistics="{Binding Statistics, Mode=OneWay}"
+                        Progress="{Binding Progress, Mode=OneWay}" />
 
-                    <Border Margin="4" IsEnabled="{Binding IsViewBusy, Converter={StaticResource InverseBoolConverter}}">
-                        <UniformGrid Columns="2">
-                            <Border Margin="10,10,10,2" Style="{StaticResource ImageDropZoneStyle}" IsEnabled="{Binding IsPipelineLoaded}">
-                                <Grid>
+                    <Border Margin="4" IsEnabled="{Binding IsViewBusy, Mode=OneWay, Converter={StaticResource InverseBoolConverter}}">
+                        <UniformGrid Columns="2" IsEnabled="{Binding DiffusionService.IsExecuting, Mode=OneWay, Converter={StaticResource InverseBoolConverter}}">
+
+                            <!--Inputs-->
+                            <UniformGrid >
+
+                                <!--SourceImage1-->
+                                <Grid Margin="10,10,10,2" >
                                     <CommonControls:ImageElement 
-                                        CropWidth="{Binding Options.Width}"
-                                        CropHeight="{Binding Options.Height}"
                                         SplitterVisibility="Auto"
                                         SplitterPosition="Source"
-                                        SplitterDirection="LeftToRight"
-                                        Source="{Binding SourceImage, Mode=TwoWay}" 
+                                        SplitterDirection="LeftToRight" 
                                         IsLoadEnabled="True" 
                                         IsSaveEnabled="False"
-                                        IsLoadOverlayEnabled="False"
+                                        IsLoadOverlayEnabled="False"  
                                         SourceChanged="OnSourceImageChanged"
-                                        IsEnabled="{Binding DiffusionService.IsExecuting, Converter={StaticResource InverseBoolConverter}}"/>
+                                        CropWidth="{Binding Options.Width, Mode=OneWay}"
+                                        CropHeight="{Binding Options.Height, Mode=OneWay}"
+                                        Source="{Binding SourceImage1, Mode=TwoWay}" 
+                                        IsInputEnabled="{Binding IsPipelineLoaded, Mode=OneWay}"/>
                                     <Grid.Style>
                                         <Style TargetType="{x:Type Grid}">
                                             <Style.Triggers>
@@ -149,21 +151,50 @@
                                         </Style>
                                     </Grid.Style>
                                 </Grid>
-                            </Border>
-                            <Grid Margin="10,10,10,2" >
-                                <Border BorderThickness="1">
-                                    <CommonControls:VideoStreamElement 
-                                        x:Name="ResultControl" 
+
+                                <!--SourceImage2-->
+                                <Grid Margin="10,10,10,2" Visibility="{Binding Options.IsFirstFrameLastFrame, Mode=OneWay, Converter={StaticResource BooleanToVisibilityConverter}, FallbackValue=Collapsed}">
+                                    <CommonControls:ImageElement 
                                         SplitterVisibility="Auto"
                                         SplitterPosition="Source"
-                                        SplitterDirection="LeftToRight"
-                                        Source="{Binding ResultVideo, Mode=TwoWay}" 
-                                        OverlaySource="{Binding CompareVideo, Mode=TwoWay}" 
-                                        Volume="{Binding Settings.VolumeOutput, Mode=TwoWay}"
-                                        IsVolumeMute="{Binding Settings.IsVolumeOutputMute, Mode=TwoWay}"
-                                        IsLoadEnabled="False" 
-                                        IsLoadOverlayEnabled="False"/>
-                                </Border>
+                                        SplitterDirection="LeftToRight" 
+                                        IsLoadEnabled="True" 
+                                        IsSaveEnabled="False"
+                                        IsLoadOverlayEnabled="False"
+                                        CropWidth="{Binding Options.Width, Mode=OneWay}"
+                                        CropHeight="{Binding Options.Height, Mode=OneWay}"
+                                        Source="{Binding SourceImage2, Mode=TwoWay}" 
+                                        IsInputEnabled="{Binding IsPipelineLoaded, Mode=OneWay}"/>
+                                </Grid>
+
+                                <UniformGrid.Style>
+                                    <Style TargetType="{x:Type UniformGrid}">
+                                        <Setter Property="Rows" Value="1"></Setter>
+                                        <Setter Property="Columns" Value="1"></Setter>
+                                        <Style.Triggers>
+                                            <DataTrigger Binding="{Binding Options.IsFirstFrameLastFrame, Mode=OneWay}" Value="True">
+                                                <Setter Property="Rows" Value="2"></Setter>
+                                                <Setter Property="Columns" Value="1"></Setter>
+                                            </DataTrigger>
+                                        </Style.Triggers>
+                                    </Style>
+                                </UniformGrid.Style>
+                            </UniformGrid>
+
+                            <!--Output-->
+                            <Grid Margin="10,10,10,2" >
+                                <CommonControls:VideoStreamElement 
+                                    x:Name="ResultControl" 
+                                    SplitterVisibility="Auto"
+                                    SplitterPosition="Source"
+                                    SplitterDirection="LeftToRight"
+                                    IsLoadEnabled="False" 
+                                    IsLoadOverlayEnabled="False"
+                                    IsFrameViewerEnabled="True"
+                                    Source="{Binding ResultVideo, Mode=TwoWay}" 
+                                    OverlaySource="{Binding CompareVideo, Mode=TwoWay}" 
+                                    Volume="{Binding Settings.VolumeOutput, Mode=TwoWay}"
+                                    IsVolumeMute="{Binding Settings.IsVolumeOutputMute, Mode=TwoWay}"/>
                             </Grid>
                         </UniformGrid>
                     </Border>
@@ -171,6 +202,5 @@
 
             </Grid>
         </Grid>
-
     </Grid>
 </Views:ViewBaseDiffusion>

@@ -11,7 +11,6 @@
         <Grid.RowDefinitions>
             <RowDefinition Height="1*" />
         </Grid.RowDefinitions>
-
         <Grid Grid.Row="0" >
             <Grid.ColumnDefinitions>
                 <ColumnDefinition MinWidth="380"/>
@@ -19,14 +18,13 @@
                 <ColumnDefinition Width="4*" />
             </Grid.ColumnDefinitions>
 
-
             <!--***Left Panel***-->
             <Grid Grid.Column="0">
                 <Border Margin="4">
                     <DockPanel x:Name="LeftPanelContainer" Margin="4" IsEnabled="{Binding IsViewBusy, Converter={StaticResource InverseBoolConverter}}">
 
                         <!--ModelControl-->
-                        <StackPanel DockPanel.Dock="Top" IsEnabled="{Binding DiffusionService.IsLoading, Converter={StaticResource InverseBoolConverter}}">
+                        <Grid DockPanel.Dock="Top" IsEnabled="{Binding DiffusionService.IsLoading, Converter={StaticResource InverseBoolConverter}}">
                             <Grid IsEnabled="{Binding DiffusionService.IsExecuting, Converter={StaticResource InverseBoolConverter}}">
                                 <Grid IsEnabled="{Binding IsAutomating, Converter={StaticResource InverseBoolConverter}}">
                                     <Controls:DiffusionModelControl
@@ -45,7 +43,7 @@
                                         SelectionChanged="SelectedPipelineChanged"/>
                                 </Grid>
                             </Grid>
-                        </StackPanel>
+                        </Grid>
 
                         <DockPanel DockPanel.Dock="Bottom" >
 
@@ -118,6 +116,8 @@
                         Progress="{Binding Progress}" />
 
                     <Border Margin="4" IsEnabled="{Binding IsViewBusy, Converter={StaticResource InverseBoolConverter}}">
+
+                        <!--Output-->
                         <Grid Margin="10,10,10,2" >
                             <CommonControls:ImageElement 
                                 SplitterVisibility="Auto"

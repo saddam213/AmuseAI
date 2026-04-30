@@ -111,7 +111,7 @@
                         <BeginStoryboard>
                             <Storyboard>
                                 <BooleanAnimationUsingKeyFrames Storyboard.TargetName="CardPopup" Storyboard.TargetProperty="IsOpen">
-                                    <DiscreteBooleanKeyFrame KeyTime="0:0:0" Value="True"/>
+                                    <DiscreteBooleanKeyFrame KeyTime="0:0:0.4" Value="True"/>
                                 </BooleanAnimationUsingKeyFrames>
                             </Storyboard>
                         </BeginStoryboard>
@@ -192,7 +192,7 @@
                         <BeginStoryboard>
                             <Storyboard>
                                 <BooleanAnimationUsingKeyFrames Storyboard.TargetName="CardPopup" Storyboard.TargetProperty="IsOpen">
-                                    <DiscreteBooleanKeyFrame KeyTime="0:0:0" Value="True"/>
+                                    <DiscreteBooleanKeyFrame KeyTime="0:0:0.4" Value="True"/>
                                 </BooleanAnimationUsingKeyFrames>
                             </Storyboard>
                         </BeginStoryboard>
@@ -272,7 +272,7 @@
                         <BeginStoryboard>
                             <Storyboard>
                                 <BooleanAnimationUsingKeyFrames Storyboard.TargetName="CardPopup" Storyboard.TargetProperty="IsOpen">
-                                    <DiscreteBooleanKeyFrame KeyTime="0:0:0" Value="True"/>
+                                    <DiscreteBooleanKeyFrame KeyTime="0:0:0.4" Value="True"/>
                                 </BooleanAnimationUsingKeyFrames>
                             </Storyboard>
                         </BeginStoryboard>
@@ -351,7 +351,7 @@
                         <BeginStoryboard>
                             <Storyboard>
                                 <BooleanAnimationUsingKeyFrames Storyboard.TargetName="CardPopup" Storyboard.TargetProperty="IsOpen">
-                                    <DiscreteBooleanKeyFrame KeyTime="0:0:0" Value="True"/>
+                                    <DiscreteBooleanKeyFrame KeyTime="0:0:0.4" Value="True"/>
                                 </BooleanAnimationUsingKeyFrames>
                             </Storyboard>
                         </BeginStoryboard>
@@ -434,7 +434,7 @@
                         <BeginStoryboard>
                             <Storyboard>
                                 <BooleanAnimationUsingKeyFrames Storyboard.TargetName="CardPopup" Storyboard.TargetProperty="IsOpen">
-                                    <DiscreteBooleanKeyFrame KeyTime="0:0:0" Value="True"/>
+                                    <DiscreteBooleanKeyFrame KeyTime="0:0:0.4" Value="True"/>
                                 </BooleanAnimationUsingKeyFrames>
                             </Storyboard>
                         </BeginStoryboard>
@@ -510,7 +510,7 @@
                         <BeginStoryboard>
                             <Storyboard>
                                 <BooleanAnimationUsingKeyFrames Storyboard.TargetName="CardPopup" Storyboard.TargetProperty="IsOpen">
-                                    <DiscreteBooleanKeyFrame KeyTime="0:0:0" Value="True"/>
+                                    <DiscreteBooleanKeyFrame KeyTime="0:0:0.4" Value="True"/>
                                 </BooleanAnimationUsingKeyFrames>
                             </Storyboard>
                         </BeginStoryboard>
@@ -589,7 +589,7 @@
                         <BeginStoryboard>
                             <Storyboard>
                                 <BooleanAnimationUsingKeyFrames Storyboard.TargetName="CardPopup" Storyboard.TargetProperty="IsOpen">
-                                    <DiscreteBooleanKeyFrame KeyTime="0:0:0" Value="True"/>
+                                    <DiscreteBooleanKeyFrame KeyTime="0:0:0.4" Value="True"/>
                                 </BooleanAnimationUsingKeyFrames>
                             </Storyboard>
                         </BeginStoryboard>

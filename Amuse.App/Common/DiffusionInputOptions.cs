@@ -26,6 +26,7 @@ namespace Amuse.App.Common
         private int _noiseCondition;
         private int _frameChunkOverlap;
         private int _frameChunk;
+        private bool _isFirstFrameLastFrame;
         private bool _isVaeTilingEnabled;
         private bool _isVaeSlicingEnabled;
 
@@ -135,6 +136,13 @@ namespace Amuse.App.Common
         {
             get { return _frameChunkOverlap; }
             set { SetProperty(ref _frameChunkOverlap, value); }
+        }
+
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingDefault)]
+        public bool IsFirstFrameLastFrame
+        {
+            get { return _isFirstFrameLastFrame; }
+            set { SetProperty(ref _isFirstFrameLastFrame, value); }
         }
 
         [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingDefault)]

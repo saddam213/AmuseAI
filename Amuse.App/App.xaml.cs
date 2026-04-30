@@ -13,6 +13,7 @@ using System.Runtime.InteropServices;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
+using System.Windows.Media;
 using System.Windows.Threading;
 using TensorStack.Common.Common;
 using TensorStack.WPF;
@@ -53,6 +54,7 @@ namespace Amuse.App
             }
 
             RegisterExceptionHandlers();
+            RenderOptions.ProcessRenderMode = System.Windows.Interop.RenderMode.SoftwareOnly;
 
             // Paths
             _directoryBase = AppDomain.CurrentDomain.BaseDirectory;

@@ -305,6 +305,7 @@
                                 IsLoadOverlayEnabled="False" 
                                 IsSaveEnabled="False" 
                                 IsRemoveEnabled="False"
+                                IsFrameViewerEnabled="True"
                                 Source="{Binding CurrentVideoStream}" 
                                 Progress="{Binding Progress}"
                                 Volume="{Binding Settings.VolumeOutput, Mode=TwoWay}"

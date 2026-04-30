@@ -3798,6 +3798,9 @@
         "Width": 832,
         "Height": 480,
         "GuidanceScale": 5,
+        "IsVaeTilingEnabled": true,
+        "IsVaeSlicingEnabled": true,
+        "IsFirstFrameLastFrameEnabled": true,
         "Scheduler": "UniPCMultistep",
         "Schedulers": {
           "FlowMatchEuler": {
@@ -3897,6 +3900,7 @@
         "GuidanceScale": 5,
         "IsVaeTilingEnabled": true,
         "IsVaeSlicingEnabled": true,
+        "IsFirstFrameLastFrameEnabled": true,
         "Scheduler": "UniPCMultistep",
         "Schedulers": {
           "FlowMatchEuler": {
@@ -4946,6 +4950,7 @@
         "GuidanceScale": 4,
         "IsVaeTilingEnabled": true,
         "IsVaeSlicingEnabled": true,
+        "IsFirstFrameLastFrameEnabled": true,
         "Scheduler": "FlowMatchEuler",
         "Schedulers": {
           "FlowMatchEuler": {
@@ -5114,6 +5119,7 @@
         "GuidanceScale": 0,
         "IsVaeTilingEnabled": true,
         "IsVaeSlicingEnabled": true,
+        "IsFirstFrameLastFrameEnabled": true,
         "Scheduler": "FlowMatchEuler",
         "Schedulers": {
           "FlowMatchEuler": {
@@ -5279,6 +5285,7 @@
         "GuidanceScale": 3,
         "IsVaeTilingEnabled": true,
         "IsVaeSlicingEnabled": true,
+        "IsFirstFrameLastFrameEnabled": true,
         "Scheduler": "FlowMatchEuler",
         "Schedulers": {
           "FlowMatchEuler": {
@@ -5444,6 +5451,7 @@
         "GuidanceScale": 0,
         "IsVaeTilingEnabled": true,
         "IsVaeSlicingEnabled": true,
+        "IsFirstFrameLastFrameEnabled": true,
         "Scheduler": "FlowMatchEuler",
         "Schedulers": {
           "FlowMatchEuler": {
@@ -5609,6 +5617,7 @@
         "GuidanceScale": 0,
         "IsVaeTilingEnabled": true,
         "IsVaeSlicingEnabled": true,
+        "IsFirstFrameLastFrameEnabled": true,
         "Scheduler": "UniPCMultistep",
         "Schedulers": {
           "FlowMatchEuler": {
@@ -5717,6 +5726,7 @@
         "GuidanceScale": 0,
         "IsVaeTilingEnabled": true,
         "IsVaeSlicingEnabled": true,
+        "IsFirstFrameLastFrameEnabled": true,
         "Scheduler": "UniPCMultistep",
         "Schedulers": {
           "FlowMatchEuler": {

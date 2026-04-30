@@ -226,27 +226,6 @@
                 </Style.Triggers>
             </Style>
 
-
-            <Style x:Key="ImageDropTextStyle" TargetType="{x:Type TextBlock}">
-                <Setter Property="VerticalAlignment" Value="Center"/>
-                <Setter Property="HorizontalAlignment" Value="Center"/>
-                <Setter Property="Visibility" Value="Collapsed"/>
-                <Setter Property="Foreground" Value="{StaticResource AccentColour2}"/>
-                <Style.Triggers>
-                    <MultiDataTrigger>
-                        <MultiDataTrigger.Conditions>
-                            <Condition Binding="{Binding IsEnabled, RelativeSource={RelativeSource Self}}" Value="True" />
-                            <Condition Binding="{Binding IsDragDrop, RelativeSource={RelativeSource AncestorType=CommonControls:ViewControl}}" Value="True" />
-                            <Condition Binding="{Binding DragDropType, RelativeSource={RelativeSource AncestorType=CommonControls:ViewControl}}" Value="Image" />
-                        </MultiDataTrigger.Conditions>
-                        <MultiDataTrigger.Setters>
-                            <Setter Property="Visibility" Value="Visible"/>
-                        </MultiDataTrigger.Setters>
-                    </MultiDataTrigger>
-                </Style.Triggers>
-            </Style>
-
-
             <Style x:Key="VideoDropZoneStyle" TargetType="{x:Type Border}">
                 <Setter Property="AllowDrop" Value="False"/>
                 <Setter Property="BorderBrush" Value="Transparent"/>
@@ -265,7 +244,6 @@
                     </MultiDataTrigger>
                 </Style.Triggers>
             </Style>
-
 
             <Style x:Key="AudioDropZoneStyle" TargetType="{x:Type Border}">
                 <Setter Property="AllowDrop" Value="False"/>

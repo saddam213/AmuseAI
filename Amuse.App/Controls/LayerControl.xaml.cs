@@ -96,7 +96,7 @@ namespace Amuse.App.Controls
                         }
 
                         _moveResizeAdorner = new ResizeAdorner(_selectedLayer.Element, _selectedLayer.CanResize, _selectedLayer.UpdateLayer);
-                        AdornerLayer.GetAdornerLayer(_selectedLayer.Element).Add(_moveResizeAdorner);
+                        AdornerLayer.GetAdornerLayer(_selectedLayer.Element)?.Add(_moveResizeAdorner);
                     }
                     else
                     {
