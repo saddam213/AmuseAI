@@ -138,7 +138,8 @@
                                     SourceMask="{Binding SourceImageMask, Mode=OneWay}"
                                     CanvasWidth="{Binding Options.Width, Mode=OneWay}"
                                     CanvasHeight="{Binding Options.Height, Mode=OneWay}"
-                                    IsInputEnabled="{Binding IsPipelineLoaded}"/>
+                                    IsInputEnabled="{Binding IsPipelineLoaded}"
+                                    OnMediaImport="OnMediaImport"/>
                             </Grid>
 
                             <!--Output-->

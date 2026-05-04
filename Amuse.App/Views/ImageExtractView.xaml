@@ -61,7 +61,8 @@
                                     IsLoadEnabled="True"
                                     IsLoadOverlayEnabled="False" 
                                     IsSaveEnabled="False"
-                                    IsInputEnabled="{Binding ExtractService.IsLoaded}"/>
+                                    IsInputEnabled="{Binding ExtractService.IsLoaded}"
+                                    OnMediaImport="OnMediaImport"/>
                             </Grid>
 
                             <!--Options-->

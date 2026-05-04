@@ -1,9 +1,7 @@
 ﻿using Amuse.App.Common;
 using System;
 using System.Collections.Generic;
-using System.IO;
 using System.Linq;
-using System.Text.RegularExpressions;
 using System.Windows;
 using System.Windows.Media;
 using TensorStack.Common;
@@ -14,6 +12,23 @@ namespace Amuse.App
 {
     public static class Extensions
     {
+
+        /// <summary>
+        /// Gets the file extesnion.
+        /// </summary>
+        /// <param name="mediaType">Type of the media.</param>
+        public static string GetExtension(this MediaType mediaType)
+        {
+            return mediaType switch
+            {
+                MediaType.Text => "txt",
+                MediaType.Audio => "wav",
+                MediaType.Video => "mp4",
+                MediaType.Image => "png",
+                _ => throw new NotSupportedException()
+            };
+        }
+
 
         public static int GetIndex(this MemoryProfile profile, int deviceMemory)
         {

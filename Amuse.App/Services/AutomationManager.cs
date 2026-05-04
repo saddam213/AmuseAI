@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using TensorStack.Common;
 using TensorStack.Image;
 using TensorStack.Video;
 
@@ -281,7 +282,7 @@ namespace Amuse.App.Services
             if (string.IsNullOrWhiteSpace(options.OutputDirectory))
                 return null;
 
-            var ext = GetExtesnion(mediaType);
+            var ext = mediaType.GetExtension();
             var filename = $"{fileId}.{ext}";
             return Path.Combine(options.OutputDirectory, filename);
         }
@@ -302,23 +303,6 @@ namespace Amuse.App.Services
                 return [baseSeed, .. Enumerable.Range(0, count - 1).Select(i => random.Next())];
             }
             return Enumerable.Repeat(initialSeed, count).ToArray();
-        }
-
-
-        /// <summary>
-        /// Gets the file extesnion.
-        /// </summary>
-        /// <param name="mediaType">Type of the media.</param>
-        private static string GetExtesnion(MediaType mediaType)
-        {
-            return mediaType switch
-            {
-                MediaType.Text => "txt",
-                MediaType.Audio => "wav",
-                MediaType.Video => "mp4",
-                MediaType.Image => "png",
-                _ => throw new NotSupportedException()
-            };
         }
 
     }

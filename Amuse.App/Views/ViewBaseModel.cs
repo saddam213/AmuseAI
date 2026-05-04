@@ -172,5 +172,19 @@ namespace Amuse.App.Views
 
             Logger.LogDebug("[{View}] [OnProgress] Step: {Value}/{Max}, Elapsed: {Elapsed:c}", ViewName, progress.Value, progress.Maximum, progress.Elapsed);
         }
+
+
+        /// <summary>
+        /// Handles the <see cref="E:MediaImport" /> event.
+        /// </summary>
+        /// <param name="sender">The sender.</param>
+        /// <param name="args">The <see cref="MediaImportEventArgs"/> instance containing the event data.</param>
+        protected async void OnMediaImport(object sender, MediaImportEventArgs args)
+        {
+            if (IsAutomating)
+                return;
+
+            await HistoryService.AddAsync(args);
+        }
     }
 }

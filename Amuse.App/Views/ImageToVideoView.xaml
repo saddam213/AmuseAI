@@ -135,6 +135,7 @@
                                         CropHeight="{Binding Options.Height, Mode=OneWay}"
                                         Source="{Binding SourceImage1, Mode=TwoWay}" 
                                         IsInputEnabled="{Binding IsPipelineLoaded, Mode=OneWay}"
+                                        OnMediaImport="OnMediaImport"
                                         Title="First Frame"/>
                                     <Grid.Style>
                                         <Style TargetType="{x:Type Grid}">

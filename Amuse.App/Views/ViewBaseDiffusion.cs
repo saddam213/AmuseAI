@@ -664,5 +664,19 @@ namespace Amuse.App.Views
 
             }
         }
+
+
+        /// <summary>
+        /// Handles the <see cref="E:MediaImport" /> event.
+        /// </summary>
+        /// <param name="sender">The sender.</param>
+        /// <param name="args">The <see cref="MediaImportEventArgs"/> instance containing the event data.</param>
+        protected async void OnMediaImport(object sender, MediaImportEventArgs args)
+        {
+            if (IsAutomating)
+                return;
+
+            await HistoryService.AddAsync(args);
+        }
     }
 }

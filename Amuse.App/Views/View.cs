@@ -36,7 +36,7 @@ namespace Amuse.App.Views
         TextToAudio = 300,
         AudioToText = 301,
 
-        History = 1000,
+        Recent = 1000,
         Gallery = 1001
     }
 

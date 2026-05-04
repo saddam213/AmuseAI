@@ -2,6 +2,7 @@
 using System;
 using System.Runtime.CompilerServices;
 using System.Text.Json.Serialization;
+using TensorStack.Common;
 
 namespace Amuse.App.Common
 {
@@ -26,6 +27,7 @@ namespace Amuse.App.Common
         string FilePath { get; set; }
         string MediaPath { get; set; }
         string ThumbPath { get; set; }
+        DateTime LastAccess { get; set; }
     }
 
 
@@ -37,6 +39,7 @@ namespace Amuse.App.Common
         public View Source { get; init; }
         public MediaType MediaType { get; init; }
         public DateTime Timestamp { get; init; }
+        public DateTime LastAccess { get; set; }
         public string Extension { get; init; }
 
         [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingDefault)]
@@ -59,7 +62,7 @@ namespace Amuse.App.Common
 
 
         public string Model { get; init; }
-
+        public string OriginalPath { get; init; }
 
         [JsonIgnore]
         public string FilePath { get; set; }

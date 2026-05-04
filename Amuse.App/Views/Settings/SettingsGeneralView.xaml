@@ -60,7 +60,7 @@
                                 </StackPanel>
                             </DockPanel>
 
-                            <UniformGrid Columns="2">
+                            <UniformGrid Columns="4">
                                 <StackPanel Margin="0,0,4,0" >
                                     <TextBlock Text="Orientation" Style="{StaticResource FieldTextBlockStyle}"/>
                                     <ComboBox  SelectedItem="{Binding Settings.HistoryOrientation, Mode=TwoWay}" ItemsSource="{Binding Source={StaticResource Orientation}}"  />
@@ -68,6 +68,12 @@
                                 <StackPanel Margin="4,0,0,0" >
                                     <TextBlock Text="Max Items" Style="{StaticResource FieldTextBlockStyle}"/>
                                     <TextBox  Text="{Binding Settings.HistoryItems, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"  />
+                                </StackPanel>
+                                <StackPanel Margin="0,20,0,0" HorizontalAlignment="Center">
+                                    <CheckBox Content="Add Recent Items" IsChecked="{Binding Settings.IsHistoryRecentItemsEnabled}"/>
+                                </StackPanel>
+                                <StackPanel Margin="0,20,0,0" HorizontalAlignment="Center">
+                                    <CheckBox Content="Sort by Last Used" IsChecked="{Binding Settings.IsHistoryAutoSortEnabled}"/>
                                 </StackPanel>
                             </UniformGrid>
 

@@ -60,7 +60,8 @@
                                     IsLoadEnabled="True"
                                     IsLoadOverlayEnabled="False" 
                                     IsSaveEnabled="False"
-                                    IsInputEnabled="{Binding UpscaleService.IsLoaded}"/>
+                                    IsInputEnabled="{Binding UpscaleService.IsLoaded}"
+                                    OnMediaImport="OnMediaImport"/>
                             </Grid>
 
                             <!--Options-->

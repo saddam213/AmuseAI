@@ -16,10 +16,6 @@
         MaxWidth="1100"
         Style="{StaticResource {x:Type CommonControls:DialogControl}}">
     <DockPanel DataContext="{Binding RelativeSource={RelativeSource AncestorType={x:Type local:MediaPreviewDialog}}}" Margin="15, 15, 15, 10">
-        <DockPanel.Resources>
-
-         
-        </DockPanel.Resources>
 
         <Grid DockPanel.Dock="Bottom" Height="30"  Margin="0,20,0,0">
             <UniformGrid Columns="2" HorizontalAlignment="Left">

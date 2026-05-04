@@ -130,7 +130,8 @@
                                     Source="{Binding SourceVideo, Mode=TwoWay}"
                                     Volume="{Binding Settings.VolumeInput, Mode=TwoWay}"
                                     IsVolumeMute="{Binding Settings.IsVolumeInputMute, Mode=TwoWay}"
-                                    IsInputEnabled="{Binding IsPipelineLoaded}"/>
+                                    IsInputEnabled="{Binding IsPipelineLoaded}"
+                                    OnMediaImport="OnMediaImport"/>
                                 <Grid.Style>
                                     <Style TargetType="{x:Type Grid}">
                                         <Style.Triggers>

@@ -61,7 +61,8 @@
                                     Source="{Binding SourceVideo, Mode=TwoWay}"
                                     Volume="{Binding Settings.VolumeInput, Mode=TwoWay}"
                                     IsVolumeMute="{Binding Settings.IsVolumeInputMute, Mode=TwoWay}"
-                                    IsInputEnabled="{Binding InterpolationService.IsLoaded}"/>
+                                    IsInputEnabled="{Binding InterpolationService.IsLoaded}"
+                                    OnMediaImport="OnMediaImport"/>
                             </Grid>
 
                             <!--Options-->

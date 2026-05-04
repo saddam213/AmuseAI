@@ -132,7 +132,8 @@
                                     IsSaveEnabled="False"
                                     IsLoadOverlayEnabled="False"
                                     SourceChanged="OnSourceImageChanged"
-                                    IsInputEnabled="{Binding IsPipelineLoaded}" />
+                                    IsInputEnabled="{Binding IsPipelineLoaded}" 
+                                    OnMediaImport="OnMediaImport"/>
                                 <Grid.Style>
                                     <Style TargetType="{x:Type Grid}">
                                         <Style.Triggers>

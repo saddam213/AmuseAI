@@ -147,7 +147,8 @@
                                         Volume="{Binding Settings.VolumeInput, Mode=TwoWay}"
                                         IsVolumeMute="{Binding Settings.IsVolumeInputMute, Mode=TwoWay}"
                                         IsInputEnabled="{Binding IsPipelineLoaded}"
-                                        IsEnabled="{Binding IsAutomating, Converter={StaticResource InverseBoolConverter}}"/>
+                                        IsEnabled="{Binding IsAutomating, Converter={StaticResource InverseBoolConverter}}"
+                                        OnMediaImport="OnMediaImport"/>
                                     <Grid.Style>
                                         <Style TargetType="{x:Type Grid}">
                                             <Setter Property="Grid.Row" Value="0"/>
@@ -205,6 +206,7 @@
                                         CropHeight="{Binding Options.Height, Mode=OneWay}"
                                         Source="{Binding SourceImage2, Mode=TwoWay}" 
                                         IsInputEnabled="{Binding IsPipelineLoaded}"
+                                        OnMediaImport="OnMediaImport"
                                         Title="Image 1"/>
                                     <Grid.Style>
                                         <Style TargetType="{x:Type Grid}">
@@ -251,6 +253,7 @@
                                         CropHeight="{Binding Options.Height}"
                                         Source="{Binding SourceImage3, Mode=TwoWay}" 
                                         IsInputEnabled="{Binding IsPipelineLoaded}"
+                                        OnMediaImport="OnMediaImport"
                                         Title="Image 2"/>
                                     <Grid.Style>
                                         <Style TargetType="{x:Type Grid}">
@@ -287,6 +290,7 @@
                                         CropHeight="{Binding Options.Height}"
                                         Source="{Binding SourceImage4, Mode=TwoWay}" 
                                         IsInputEnabled="{Binding IsPipelineLoaded}"
+                                        OnMediaImport="OnMediaImport"
                                         Title="Image 3"/>
                                     <Grid.Style>
                                         <Style TargetType="{x:Type Grid}">

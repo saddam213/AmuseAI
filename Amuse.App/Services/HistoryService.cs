@@ -10,6 +10,7 @@ using TensorStack.Common;
 using TensorStack.Common.Common;
 using TensorStack.Image;
 using TensorStack.Video;
+using TensorStack.WPF.Controls;
 
 namespace Amuse.App.Services
 {
@@ -68,14 +69,26 @@ namespace Amuse.App.Services
                     historyItem = await Json.LoadAsync<TextHistory>(historyFile.FullName);
                 else if (historyFile.Name.StartsWith("LayerImage_"))
                     historyItem = await Json.LoadAsync<ImageLayerHistory>(historyFile.FullName);
+                else if (historyFile.Name.StartsWith("Recent_"))
+                    historyItem = await Json.LoadAsync<RecentHistory>(historyFile.FullName);
                 if (historyItem == null || historyItem.Version != HistoryVersion)
                     continue;
 
                 historyItem.FilePath = historyFile.FullName;
                 historyItem.MediaPath = Path.Combine(historyFile.DirectoryName, historyFile.Name.Replace(".json", $".{historyItem.Extension}"));
                 historyItem.ThumbPath = Path.Combine(historyFile.DirectoryName, historyFile.Name.Replace(".json", ".png"));
+                if (historyItem is RecentHistory recentHistory)
+                {
+                    historyItem.MediaPath = recentHistory.OriginalPath;
+                    if (historyItem.MediaType == MediaType.Image)
+                        historyItem.ThumbPath = recentHistory.OriginalPath;
+                }
+
                 if (!File.Exists(historyItem.MediaPath))
-                    continue; // Delete?
+                {
+                    FileHelper.DeleteFiles(historyItem.FilePath, historyItem.ThumbPath);
+                    continue;
+                }
 
                 _historyCollection.Add(historyItem);
                 if (_historyCollection.Count == _settings.HistoryItems)
@@ -87,33 +100,78 @@ namespace Amuse.App.Services
         public Task DeleteAsync(IHistoryItem historyItem)
         {
             _historyCollection.Remove(historyItem);
-            FileHelper.QueueDeleteFiles(historyItem.FilePath, historyItem.MediaPath, historyItem.ThumbPath);
+
+            if (historyItem is RecentHistory)
+            {
+                if (historyItem.MediaType == MediaType.Image)
+                {
+                    FileHelper.QueueDeleteFiles(historyItem.FilePath);
+                }
+                else
+                {
+                    FileHelper.QueueDeleteFiles(historyItem.FilePath, historyItem.ThumbPath);
+                }
+            }
+            else
+            {
+                FileHelper.QueueDeleteFiles(historyItem.FilePath, historyItem.MediaPath, historyItem.ThumbPath);
+            }
             return Task.CompletedTask;
         }
 
 
-        public async Task AddAsync(ImageInput image)
+        public async Task AddAsync(MediaImportEventArgs mediaImport)
         {
             if (_settings.HistoryItems <= 0)
                 return;
 
-            var key = GetRandomName();
-            var history = new RecentHistory
-            {
-                Id = key,
-                Version = HistoryVersion,
-                Extension = "png",
-                MediaType = MediaType.Image,
-                Timestamp = DateTime.Now,
-                Source = View.History,
-                FilePath = Path.Combine(_settings.DirectoryHistory, $"Recent_{key}.json"),
-                MediaPath = image.SourceFile,
-                Width = image.Width,
-                Height = image.Height,
-            };
+            if (!_settings.IsHistoryRecentItemsEnabled)
+                return;
 
-            await Json.SaveAsync(history.FilePath, history);
-            AddHistoryItem(history);
+            var existing = _historyCollection.FirstOrDefault(x => x.MediaPath == mediaImport.MediaFile);
+            if (existing != null)
+            {
+                if (_settings.IsHistoryAutoSortEnabled)
+                {
+                    existing.LastAccess = DateTime.Now;
+                    await Json.SaveAsync(existing.FilePath, existing);
+                    _historyCollection.Move(_historyCollection.IndexOf(existing), 0);
+                }
+            }
+            else
+            {
+                var key = GetRandomName();
+                var mediaType = mediaImport.MediaType;
+                var extension = mediaType.GetExtension();
+                var history = new RecentHistory
+                {
+                    Id = key,
+                    Version = HistoryVersion,
+                    Extension = extension,
+                    MediaType = mediaType,
+                    Timestamp = DateTime.Now,
+                    LastAccess = DateTime.Now,
+                    Source = View.Recent,
+                    FilePath = Path.Combine(_settings.DirectoryHistory, $"Recent_{key}.json"),
+                    MediaPath = mediaImport.MediaFile,
+                    ThumbPath = Path.Combine(_settings.DirectoryHistory, $"Recent_{key}.png"),
+                    OriginalPath = mediaImport.MediaFile,
+                    Width = mediaImport.Width,
+                    Height = mediaImport.Height,
+                    FrameRate = mediaImport.FrameRate,
+                    FrameCount = mediaImport.FrameCount,
+                    Duration = mediaImport.Duration,
+                    SampleRate = mediaImport.SampleRate
+                };
+
+                if (mediaImport.Thumbnail is not null)
+                    await mediaImport.Thumbnail.SaveAsync(history.ThumbPath);
+                else if (mediaType == MediaType.Image)
+                    history.ThumbPath = mediaImport.MediaFile;
+
+                await Json.SaveAsync(history.FilePath, history);
+                AddHistoryItem(history);
+            }
         }
 
 
@@ -130,6 +188,7 @@ namespace Amuse.App.Services
                 Extension = "png",
                 MediaType = MediaType.Image,
                 Timestamp = DateTime.Now,
+                LastAccess = DateTime.Now,
                 FilePath = Path.Combine(_settings.DirectoryHistory, $"GenerateImage_{key}.json"),
                 MediaPath = Path.Combine(_settings.DirectoryHistory, $"GenerateImage_{key}.png"),
                 ThumbPath = Path.Combine(_settings.DirectoryHistory, $"GenerateImage_{key}.png"),
@@ -153,6 +212,7 @@ namespace Amuse.App.Services
                 Extension = "png",
                 MediaType = MediaType.Image,
                 Timestamp = DateTime.Now,
+                LastAccess = DateTime.Now,
                 FilePath = Path.Combine(_settings.DirectoryHistory, $"ExtractImage_{key}.json"),
                 MediaPath = Path.Combine(_settings.DirectoryHistory, $"ExtractImage_{key}.png"),
                 ThumbPath = Path.Combine(_settings.DirectoryHistory, $"ExtractImage_{key}.png"),
@@ -177,6 +237,7 @@ namespace Amuse.App.Services
                 Extension = "png",
                 MediaType = MediaType.Image,
                 Timestamp = DateTime.Now,
+                LastAccess = DateTime.Now,
                 FilePath = Path.Combine(_settings.DirectoryHistory, $"UpscaleImage_{key}.json"),
                 MediaPath = Path.Combine(_settings.DirectoryHistory, $"UpscaleImage_{key}.png"),
                 ThumbPath = Path.Combine(_settings.DirectoryHistory, $"UpscaleImage_{key}.png"),
@@ -201,6 +262,7 @@ namespace Amuse.App.Services
                 Extension = "png",
                 MediaType = MediaType.Image,
                 Timestamp = DateTime.Now,
+                LastAccess = DateTime.Now,
                 FilePath = Path.Combine(_settings.DirectoryHistory, $"LayerImage_{key}.json"),
                 MediaPath = Path.Combine(_settings.DirectoryHistory, $"LayerImage_{key}.png"),
                 ThumbPath = Path.Combine(_settings.DirectoryHistory, $"LayerImage_{key}.png"),
@@ -209,83 +271,6 @@ namespace Amuse.App.Services
             };
 
             return await AddImageInternalAsync(image, history);
-        }
-
-
-
-        public async Task<VideoInputStream> AddAsync(VideoInputStream videoStream)
-        {
-            if (_settings.HistoryItems <= 0)
-                return videoStream;
-
-            var key = GetRandomName();
-            var history = new RecentHistory
-            {
-                Id = key,
-                Version = HistoryVersion,
-                Extension = "mp4",
-                MediaType = MediaType.Video,
-                Timestamp = DateTime.Now,
-                Source = View.History,
-                FilePath = Path.Combine(_settings.DirectoryHistory, $"Recent_{key}.json"),
-                MediaPath = videoStream.SourceFile,
-                ThumbPath = Path.Combine(_settings.DirectoryHistory, $"Recent_{key}.png"),
-                Width = videoStream.Width,
-                Height = videoStream.Height,
-                FrameRate = videoStream.FrameRate,
-                FrameCount = videoStream.FrameCount,
-                Duration = videoStream.Duration
-            };
-
-            return await AddVideoInternalAsync(videoStream, history);
-        }
-
-
-        public async Task<AudioInput> AddAsync(AudioInput audioInput)
-        {
-            if (_settings.HistoryItems <= 0)
-                return audioInput;
-
-            var key = GetRandomName();
-            var history = new RecentHistory
-            {
-                Id = key,
-                Version = HistoryVersion,
-                Extension = "wav",
-                MediaType = MediaType.Audio,
-                Timestamp = DateTime.Now,
-                Source = View.History,
-                FilePath = Path.Combine(_settings.DirectoryHistory, $"Recent_{key}.json"),
-                MediaPath = audioInput.SourceFile,
-                ThumbPath = Path.Combine(_settings.DirectoryHistory, $"Recent_{key}.png"),
-                Duration = audioInput.Duration,
-                SampleRate = audioInput.SampleRate,
-            };
-
-            return await AddAudioInternalAsync(audioInput, history);
-        }
-
-
-        public async Task<TextInput> AddAsync(TextInput textInput)
-        {
-            if (_settings.HistoryItems <= 0)
-                return textInput;
-
-            var key = GetRandomName();
-            var history = new RecentHistory
-            {
-                Id = key,
-                Version = HistoryVersion,
-                Extension = "txt",
-                MediaType = MediaType.Text,
-                Timestamp = DateTime.Now,
-                Source = View.History,
-                FilePath = Path.Combine(_settings.DirectoryHistory, $"Recent_{key}.json"),
-                MediaPath = textInput.SourceFile,
-                ThumbPath = Path.Combine(_settings.DirectoryHistory, $"Recent_{key}.txt"),
-            };
-
-            return await AddTextInternalAsync(textInput, history);
         }
 
 
@@ -302,6 +287,7 @@ namespace Amuse.App.Services
                 Extension = "mp4",
                 MediaType = MediaType.Video,
                 Timestamp = DateTime.Now,
+                LastAccess = DateTime.Now,
                 FilePath = Path.Combine(_settings.DirectoryHistory, $"GenerateVideo_{key}.json"),
                 MediaPath = Path.Combine(_settings.DirectoryHistory, $"GenerateVideo_{key}.mp4"),
                 ThumbPath = Path.Combine(_settings.DirectoryHistory, $"GenerateVideo_{key}.png"),
@@ -329,6 +315,7 @@ namespace Amuse.App.Services
                 Extension = "mp4",
                 MediaType = MediaType.Video,
                 Timestamp = DateTime.Now,
+                LastAccess = DateTime.Now,
                 FilePath = Path.Combine(_settings.DirectoryHistory, $"ExtractVideo_{key}.json"),
                 MediaPath = Path.Combine(_settings.DirectoryHistory, $"ExtractVideo_{key}.mp4"),
                 ThumbPath = Path.Combine(_settings.DirectoryHistory, $"ExtractVideo_{key}.png"),
@@ -356,6 +343,7 @@ namespace Amuse.App.Services
                 Extension = "mp4",
                 MediaType = MediaType.Video,
                 Timestamp = DateTime.Now,
+                LastAccess = DateTime.Now,
                 FilePath = Path.Combine(_settings.DirectoryHistory, $"UpscaleImage_{key}.json"),
                 MediaPath = Path.Combine(_settings.DirectoryHistory, $"UpscaleImage_{key}.mp4"),
                 ThumbPath = Path.Combine(_settings.DirectoryHistory, $"UpscaleImage_{key}.png"),
@@ -383,6 +371,7 @@ namespace Amuse.App.Services
                 Extension = "mp4",
                 MediaType = MediaType.Video,
                 Timestamp = DateTime.Now,
+                LastAccess = DateTime.Now,
                 FilePath = Path.Combine(_settings.DirectoryHistory, $"Interpolate_{key}.json"),
                 MediaPath = Path.Combine(_settings.DirectoryHistory, $"Interpolate_{key}.mp4"),
                 ThumbPath = Path.Combine(_settings.DirectoryHistory, $"Interpolate_{key}.png"),
@@ -410,6 +399,7 @@ namespace Amuse.App.Services
                 Extension = "wav",
                 MediaType = MediaType.Audio,
                 Timestamp = DateTime.Now,
+                LastAccess = DateTime.Now,
                 FilePath = Path.Combine(_settings.DirectoryHistory, $"GenerateAudio_{key}.json"),
                 MediaPath = Path.Combine(_settings.DirectoryHistory, $"GenerateAudio_{key}.wav"),
                 //ThumbPath = Path.Combine(_settings.DirectoryHistory, $"GenerateAudio_{key}.png"),
@@ -434,6 +424,7 @@ namespace Amuse.App.Services
                 Extension = "txt",
                 MediaType = MediaType.Text,
                 Timestamp = DateTime.Now,
+                LastAccess = DateTime.Now,
                 FilePath = Path.Combine(_settings.DirectoryHistory, $"GenerateText_{key}.json"),
                 MediaPath = Path.Combine(_settings.DirectoryHistory, $"GenerateText_{key}.txt"),
                 //ThumbPath = Path.Combine(_settings.DirectoryHistory, $"GenerateText_{key}.png"),
@@ -507,20 +498,21 @@ namespace Amuse.App.Services
         Task InitializeAsync();
         Task DeleteAsync(IHistoryItem historyItem);
 
-        Task AddAsync(ImageInput image);
-        Task<ImageInput> AddAsync(ImageInput image, DiffusionHistory diffusionHistory);
-        Task<ImageInput> AddAsync(ImageInput image, ExtractHistory extractHistory);
-        Task<ImageInput> AddAsync(ImageInput image, UpscaleHistory upscaleHistory);
-        Task<ImageInput> AddAsync(ImageInput image, ImageLayerHistory layerHistory);
+        Task AddAsync(MediaImportEventArgs mediaImport);
 
-        Task<VideoInputStream> AddAsync(VideoInputStream videoStream);
-        Task<VideoInputStream> AddAsync(VideoInputStream videoStream, DiffusionHistory diffusionHistory);
-        Task<VideoInputStream> AddAsync(VideoInputStream videoStream, ExtractHistory extractHistory);
-        Task<VideoInputStream> AddAsync(VideoInputStream videoStream, UpscaleHistory upscaleHistory);
-        Task<VideoInputStream> AddAsync(VideoInputStream videoStream, InterpolateHistory interpolateHistory);
+        Task<ImageInput> AddAsync(ImageInput image, DiffusionHistory history);
+        Task<ImageInput> AddAsync(ImageInput image, ExtractHistory history);
+        Task<ImageInput> AddAsync(ImageInput image, UpscaleHistory history);
+        Task<ImageInput> AddAsync(ImageInput image, ImageLayerHistory history);
 
-        Task<AudioInput> AddAsync(AudioInput image, AudioHistory upscaleHistory);
-        Task<TextInput> AddAsync(TextInput text, TextHistory upscaleHistory);
+
+        Task<VideoInputStream> AddAsync(VideoInputStream videoStream, DiffusionHistory history);
+        Task<VideoInputStream> AddAsync(VideoInputStream videoStream, ExtractHistory history);
+        Task<VideoInputStream> AddAsync(VideoInputStream videoStream, UpscaleHistory history);
+        Task<VideoInputStream> AddAsync(VideoInputStream videoStream, InterpolateHistory history);
+
+        Task<AudioInput> AddAsync(AudioInput audio, AudioHistory history);
+        Task<TextInput> AddAsync(TextInput text, TextHistory history);
     }
 
 }

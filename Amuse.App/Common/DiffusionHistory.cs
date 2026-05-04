@@ -2,6 +2,7 @@
 using System;
 using System.Runtime.CompilerServices;
 using System.Text.Json.Serialization;
+using TensorStack.Common;
 
 namespace Amuse.App.Common
 {
@@ -13,6 +14,7 @@ namespace Amuse.App.Common
         public View Source { get; init; }
         public MediaType MediaType { get; init; }
         public DateTime Timestamp { get; init; }
+        public DateTime LastAccess { get; set; }
         public string Extension { get; init; }
 
 

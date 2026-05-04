@@ -4,6 +4,7 @@ using Microsoft.Extensions.Logging;
 using System;
 using System.Diagnostics;
 using System.Threading.Tasks;
+using TensorStack.Common;
 using TensorStack.Common.Pipeline;
 using TensorStack.Video;
 using TensorStack.WPF.Controls;

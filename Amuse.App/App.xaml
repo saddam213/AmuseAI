@@ -42,6 +42,12 @@
                 </ObjectDataProvider.MethodParameters>
             </ObjectDataProvider>
 
+            <ObjectDataProvider x:Key="MediaType" MethodName="GetValues" ObjectType="{x:Type System:Enum}">
+                <ObjectDataProvider.MethodParameters>
+                    <x:Type TypeName="CoreCommon:MediaType"/>
+                </ObjectDataProvider.MethodParameters>
+            </ObjectDataProvider>
+
             <ObjectDataProvider x:Key="ExtractorType" MethodName="GetValues" ObjectType="{x:Type System:Enum}">
                 <ObjectDataProvider.MethodParameters>
                     <x:Type TypeName="Common:ExtractorType"/>
@@ -63,12 +69,6 @@
             <ObjectDataProvider x:Key="EnvironmentType" MethodName="GetValues" ObjectType="{x:Type System:Enum}">
                 <ObjectDataProvider.MethodParameters>
                     <x:Type TypeName="Common:EnvironmentType"/>
-                </ObjectDataProvider.MethodParameters>
-            </ObjectDataProvider>
-
-            <ObjectDataProvider x:Key="MediaType" MethodName="GetValues" ObjectType="{x:Type System:Enum}">
-                <ObjectDataProvider.MethodParameters>
-                    <x:Type TypeName="Common:MediaType"/>
                 </ObjectDataProvider.MethodParameters>
             </ObjectDataProvider>
 
@@ -1085,6 +1085,57 @@
                                     <Run Text="{Binding Height}" />
                                     <Run Text="px" />
                                 </TextBlock>
+                            </StackPanel>
+                        </UniformGrid>
+
+                        <StackPanel Margin="0,6,0,0" >
+                            <TextBlock Text="Created" Style="{StaticResource FieldTextBlockStyle}" />
+                            <TextBlock Text="{Binding Timestamp}" />
+                        </StackPanel>
+                        <UniformGrid Columns="2" Margin="0,6,0,0">
+                            <StackPanel>
+                                <TextBlock Text="{Binding MediaType, StringFormat={}{0} Path}" Style="{StaticResource FieldTextBlockStyle}" />
+                                <CommonControls:HyperlinkControl Label="{Binding MediaPath, Converter={StaticResource FullPathToFileNameConverter}}" Link="{Binding MediaPath, Converter={StaticResource FullPathToFolderConverter}}" IsUnderlineEnabled="False" />
+                            </StackPanel>
+                            <StackPanel>
+                                <TextBlock Text="Info Path" Style="{StaticResource FieldTextBlockStyle}" />
+                                <CommonControls:HyperlinkControl Label="{Binding FilePath, Converter={StaticResource FullPathToFileNameConverter}}" Link="{Binding FilePath}" IsUnderlineEnabled="False" />
+                            </StackPanel>
+                        </UniformGrid>
+                    </StackPanel>
+                </DockPanel>
+            </DataTemplate>
+
+
+            <DataTemplate DataType="{x:Type Common:RecentHistory}">
+                <DockPanel Margin="10,0,0,0">
+                    <TextBlock DockPanel.Dock="Top" Text="{Binding MediaType, StringFormat={}Recent {0}}" FontSize="20"/>
+                    <StackPanel>
+                        <Separator Opacity=".7"/>
+                        <UniformGrid Columns="3" Margin="0,3,0,0">
+                            <StackPanel Visibility="{Binding MediaType, Converter={StaticResource EnumToVisibilityConverter}, ConverterParameter=Image|Video}">
+                                <TextBlock Text="{Binding MediaType, StringFormat={}{0} Size}" Style="{StaticResource FieldTextBlockStyle}" />
+                                <TextBlock>
+                                   <Run Text="{Binding Width}" />
+                                   <Run Text="x" />
+                                   <Run Text="{Binding Height}" />
+                                   <Run Text="px" />
+                                </TextBlock>
+                            </StackPanel>
+                            <StackPanel Visibility="{Binding MediaType, Converter={StaticResource EnumToVisibilityConverter}, ConverterParameter=Video}">
+                                <TextBlock Text="Frame Rate" Style="{StaticResource FieldTextBlockStyle}" />
+                                <TextBlock>
+                                    <Run Text="{Binding FrameRate}" />
+                                    <Run Text="fps" />
+                                </TextBlock>
+                            </StackPanel>
+                            <StackPanel Visibility="{Binding MediaType, Converter={StaticResource EnumToVisibilityConverter}, ConverterParameter=Video}">
+                                <TextBlock Text="Frames" Style="{StaticResource FieldTextBlockStyle}" />
+                                <TextBlock Text="{Binding FrameCount}" />
+                            </StackPanel>
+                            <StackPanel Visibility="{Binding MediaType, Converter={StaticResource EnumToVisibilityConverter}, ConverterParameter=Audio}">
+                                <TextBlock Text="Sample Rate" Style="{StaticResource FieldTextBlockStyle}" />
+                                <TextBlock Text="{Binding SampleRate}" />
                             </StackPanel>
                         </UniformGrid>
 

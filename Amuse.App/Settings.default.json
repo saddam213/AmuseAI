@@ -6421,6 +6421,28 @@
       "Pipeline": "Flux2KleinPipeline",
       "Source": "HuggingFace",
       "Link": "https://huggingface.co/dx8152/Flux2-Klein-9B-Enhanced-Details"
+    },
+    {
+      "Id": 220,
+      "Backend": "Pytorch",
+      "Name": "Scribbly Doodle 4B",
+      "Key": "scribblydoodle4b",
+      "Path": "reverentelusarca/flux2-klein-9b-4b-scribbly-doodle-lora",
+      "Weights": "klein4b-doodle_v1.safetensors",
+      "Pipeline": "Flux2KleinPipeline",
+      "Source": "HuggingFace",
+      "Link": "https://huggingface.co/reverentelusarca/flux2-klein-9b-4b-scribbly-doodle-lora"
+    },
+    {
+      "Id": 221,
+      "Backend": "Pytorch",
+      "Name": "Scribbly Doodle 9B",
+      "Key": "scribblydoodle9b",
+      "Path": "reverentelusarca/flux2-klein-9b-4b-scribbly-doodle-lora",
+      "Weights": "klein9b-doodle_v2.safetensors",
+      "Pipeline": "Flux2KleinPipeline",
+      "Source": "HuggingFace",
+      "Link": "https://huggingface.co/reverentelusarca/flux2-klein-9b-4b-scribbly-doodle-lora"
     }
   ],
   "ControlNetModels": [

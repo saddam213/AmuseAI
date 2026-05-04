@@ -5,6 +5,7 @@ using System;
 using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
+using TensorStack.Common;
 using TensorStack.Image;
 using TensorStack.Python.Common;
 using TensorStack.WPF.Controls;

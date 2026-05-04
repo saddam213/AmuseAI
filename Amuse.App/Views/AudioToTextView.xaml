@@ -60,7 +60,8 @@
                                         Configuration="{Binding Settings}" 
                                         Volume="{Binding Settings.VolumeInput, Mode=TwoWay}"
                                         IsVolumeMute="{Binding Settings.IsVolumeInputMute, Mode=TwoWay}"
-                                        IsReplayEnabled="False" />
+                                        IsReplayEnabled="False"
+                                        OnMediaImport="OnMediaImport"/>
                                 </Border>
                             </StackPanel>
 

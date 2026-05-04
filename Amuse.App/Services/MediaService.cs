@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
 using TensorStack.Audio.Windows;
+using TensorStack.Common;
 using TensorStack.Common.Common;
 using TensorStack.Common.Video;
 using TensorStack.Video;
@@ -30,14 +31,7 @@ namespace Amuse.App.Services
         /// <returns>System.String.</returns>
         public string GetTempFile(MediaType mediaType)
         {
-            var extension = mediaType switch
-            {
-                MediaType.Text => "txt",
-                MediaType.Audio => "wav",
-                MediaType.Image => "png",
-                MediaType.Video => "mp4",
-                _ => throw new NotImplementedException()
-            };
+            var extension = mediaType.GetExtension();
             return FileHelper.RandomFileName(_settings.DirectoryTemp, extension);
         }
 
