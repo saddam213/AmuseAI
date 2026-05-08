@@ -155,6 +155,20 @@ namespace Amuse.App
             return true;
         }
 
+
+        public static int RemoveAll<T>(this IList<T> collection, Predicate<T> condition)
+        {
+            var removed = 0;
+            for (int i = collection.Count - 1; i >= 0; i--)
+            {
+                if (condition(collection[i]))
+                {
+                    collection.RemoveAt(i);
+                    removed++;
+                }
+            }
+            return removed;
+        }
     }
 
     public static partial class Utils

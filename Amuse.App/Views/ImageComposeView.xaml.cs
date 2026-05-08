@@ -27,11 +27,11 @@ namespace Amuse.App.Views
         protected async void LayerControl_ImageGenerated(object sender, BitmapSource image)
         {
             var inputImage = new ImageInput(image);
-            await HistoryService.AddAsync(inputImage, new ImageLayerHistory
+            await HistoryService.AddAsync(inputImage, new ComposeHistory
             {
                 Source = View.ImageCompose,
                 MediaType = MediaType.Image,
-                Model = "Layer",
+                Model = "None",
                 Width = inputImage.Width,
                 Height = inputImage.Height,
                 Timestamp = DateTime.UtcNow

@@ -420,14 +420,14 @@
                                 CommandParameter="{x:Static Views:View.VideoInterpolate}" 
                                 IsSelected="{Binding View, Converter={StaticResource EnumToBooleanConverter}, ConverterParameter=VideoInterpolate}">
                             </CommonControls:IconButton>
-                            <!--<CommonControls:IconButton 
+                            <CommonControls:IconButton 
                                 Text="Video Compose" 
                                 Icon="e131"
                                 Style="{StaticResource SubmenuIconButton}"
                                 Command="{Binding NavigateCommand}" 
                                 CommandParameter="{x:Static Views:View.VideoCompose}" 
                                 IsSelected="{Binding View, Converter={StaticResource EnumToBooleanConverter}, ConverterParameter=VideoCompose}">
-                            </CommonControls:IconButton>-->
+                            </CommonControls:IconButton>
                         </UniformGrid>
                     </Grid>
 

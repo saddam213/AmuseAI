@@ -67,8 +67,10 @@ namespace Amuse.App.Services
                     historyItem = await Json.LoadAsync<AudioHistory>(historyFile.FullName);
                 else if (historyFile.Name.StartsWith("GenerateText_"))
                     historyItem = await Json.LoadAsync<TextHistory>(historyFile.FullName);
-                else if (historyFile.Name.StartsWith("LayerImage_"))
-                    historyItem = await Json.LoadAsync<ImageLayerHistory>(historyFile.FullName);
+                else if (historyFile.Name.StartsWith("ImageCompose_"))
+                    historyItem = await Json.LoadAsync<ComposeHistory>(historyFile.FullName);
+                else if (historyFile.Name.StartsWith("VideoCompose_"))
+                    historyItem = await Json.LoadAsync<ComposeHistory>(historyFile.FullName);
                 else if (historyFile.Name.StartsWith("Recent_"))
                     historyItem = await Json.LoadAsync<RecentHistory>(historyFile.FullName);
                 if (historyItem == null || historyItem.Version != HistoryVersion)
@@ -249,13 +251,13 @@ namespace Amuse.App.Services
         }
 
 
-        public async Task<ImageInput> AddAsync(ImageInput image, ImageLayerHistory layerHistory)
+        public async Task<ImageInput> AddAsync(ImageInput image, ComposeHistory composeHistory)
         {
             if (_settings.HistoryItems <= 0)
                 return image;
 
             var key = GetRandomName();
-            var history = layerHistory with
+            var history = composeHistory with
             {
                 Id = key,
                 Version = HistoryVersion,
@@ -263,9 +265,9 @@ namespace Amuse.App.Services
                 MediaType = MediaType.Image,
                 Timestamp = DateTime.Now,
                 LastAccess = DateTime.Now,
-                FilePath = Path.Combine(_settings.DirectoryHistory, $"LayerImage_{key}.json"),
-                MediaPath = Path.Combine(_settings.DirectoryHistory, $"LayerImage_{key}.png"),
-                ThumbPath = Path.Combine(_settings.DirectoryHistory, $"LayerImage_{key}.png"),
+                FilePath = Path.Combine(_settings.DirectoryHistory, $"ImageCompose_{key}.json"),
+                MediaPath = Path.Combine(_settings.DirectoryHistory, $"ImageCompose_{key}.png"),
+                ThumbPath = Path.Combine(_settings.DirectoryHistory, $"ImageCompose_{key}.png"),
                 Width = image.Width,
                 Height = image.Height,
             };
@@ -380,6 +382,34 @@ namespace Amuse.App.Services
                 FrameRate = videoStream.FrameRate,
                 FrameCount = videoStream.FrameCount,
                 Duration = videoStream.Duration
+            };
+
+            return await AddVideoInternalAsync(videoStream, history);
+        }
+
+
+        public async Task<VideoInputStream> AddAsync(VideoInputStream videoStream, ComposeHistory composeHistory)
+        {
+            if (_settings.HistoryItems <= 0)
+                return videoStream;
+
+            var key = GetRandomName();
+            var history = composeHistory with
+            {
+                Id = key,
+                Version = HistoryVersion,
+                Extension = "mp4",
+                MediaType = MediaType.Video,
+                Timestamp = DateTime.Now,
+                LastAccess = DateTime.Now,
+                FilePath = Path.Combine(_settings.DirectoryHistory, $"VideoCompose_{key}.json"),
+                MediaPath = Path.Combine(_settings.DirectoryHistory, $"VideoCompose_{key}.mp4"),
+                ThumbPath = Path.Combine(_settings.DirectoryHistory, $"VideoCompose_{key}.png"),
+                Width = videoStream.Width,
+                Height = videoStream.Height,
+                FrameRate = videoStream.FrameRate,
+                FrameCount = videoStream.FrameCount,
+                Duration = videoStream.Duration,
             };
 
             return await AddVideoInternalAsync(videoStream, history);
@@ -503,13 +533,14 @@ namespace Amuse.App.Services
         Task<ImageInput> AddAsync(ImageInput image, DiffusionHistory history);
         Task<ImageInput> AddAsync(ImageInput image, ExtractHistory history);
         Task<ImageInput> AddAsync(ImageInput image, UpscaleHistory history);
-        Task<ImageInput> AddAsync(ImageInput image, ImageLayerHistory history);
+        Task<ImageInput> AddAsync(ImageInput image, ComposeHistory history);
 
 
         Task<VideoInputStream> AddAsync(VideoInputStream videoStream, DiffusionHistory history);
         Task<VideoInputStream> AddAsync(VideoInputStream videoStream, ExtractHistory history);
         Task<VideoInputStream> AddAsync(VideoInputStream videoStream, UpscaleHistory history);
         Task<VideoInputStream> AddAsync(VideoInputStream videoStream, InterpolateHistory history);
+        Task<VideoInputStream> AddAsync(VideoInputStream videoStream, ComposeHistory history);
 
         Task<AudioInput> AddAsync(AudioInput audio, AudioHistory history);
         Task<TextInput> AddAsync(TextInput text, TextHistory history);

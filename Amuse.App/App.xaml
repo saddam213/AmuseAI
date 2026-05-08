@@ -1070,7 +1070,7 @@
             </DataTemplate>
 
 
-            <DataTemplate DataType="{x:Type Common:ImageLayerHistory}">
+            <DataTemplate DataType="{x:Type Common:ComposeHistory}">
                 <DockPanel Margin="10,0,0,0">
                     <TextBlock DockPanel.Dock="Top" Text="{Binding MediaType, StringFormat={}Composed {0}}" FontSize="20"/>
                     <StackPanel>

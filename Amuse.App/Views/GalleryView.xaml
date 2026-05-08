@@ -201,7 +201,7 @@
                                         </DockPanel>
                                     </DataTemplate>
 
-                                    <DataTemplate DataType="{x:Type Common:ImageLayerHistory}">
+                                    <DataTemplate DataType="{x:Type Common:ComposeHistory}">
                                         <DockPanel Margin="3">
                                             <Grid DockPanel.Dock="Top">
                                                 <CommonControls:TransparentImageElement 

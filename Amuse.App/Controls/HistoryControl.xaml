@@ -541,8 +541,8 @@
         </DataTemplate>
 
 
-        <!--ImageLayerHistory-->
-        <DataTemplate  DataType="{x:Type Common:ImageLayerHistory}">
+        <!--ComposeHistory-->
+        <DataTemplate  DataType="{x:Type Common:ComposeHistory}">
             <Grid x:Name="Root" Background="Transparent" >
                 <DockPanel Height="134" Width="100" >
                     <Grid DockPanel.Dock="Top">
