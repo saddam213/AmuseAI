@@ -14,9 +14,9 @@
 ## Amuse Roadmap
 * ~~**.NET 10 + OnnxRuntime Latest:** Migration to the .NET 10 framework and integration of the latest OnnxRuntime for optimized hardware acceleration.~~ (v3.2.0)
 * ~~**Python Inference Runtime:** Implementation of a dedicated Python backend to provide seamless interop with the broader machine learning ecosystem.~~ (v3.3.0)
-* **LoRA Adapters:** Support for dynamic loading and blending of LoRA adapters for fine-tuned style and character control.
-* **Z-Image & FLUX2 Models:** Integration of next-generation transformer architectures, including Z-Image and FLUX2, for high-fidelity image synthesis.
-* **WAN & LTX-2 Video Models:** Expansion into generative video using WAN and LTX-2 architectures for advanced motion and temporal consistency.
+* ~~**LoRA Adapters:** Support for dynamic loading and blending of LoRA adapters for fine-tuned style and character control.~~ (v3.3.2)
+* ~~**Z-Image & FLUX2 Models:** Integration of next-generation transformer architectures, including Z-Image and FLUX2, for high-fidelity image synthesis.~~ (v3.3.4)
+* ~~**WAN & LTX-2 Video Models:** Expansion into generative video using WAN and LTX-2 architectures for advanced motion and temporal consistency.~~ (v3.3.5)
 * **STT + TTS Audio Models:** Deployment of Speech-to-Text for voice-driven prompting and Text-to-Speech for high-quality audio generation.
 ---
 
