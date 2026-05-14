@@ -56,6 +56,9 @@
             <Grid x:Name="Root" Background="Transparent" >
                 <DockPanel Height="134" Width="100" >
                     <Grid DockPanel.Dock="Top">
+                        <Grid Width="100" Height="100" Visibility="{Binding MediaType, Converter={StaticResource EnumToVisibilityConverter}, ConverterParameter=Audio}">
+                            <CommonControls:FontAwesome Icon="f001" IconStyle="Solid" Size="70" Color="{StaticResource DefaultForeground}" Opacity=".2" />
+                        </Grid>
                         <CommonControls:TransparentImageElement 
                             Height="100" 
                             Stretch="Uniform" 
@@ -77,15 +80,24 @@
                             </Button>
                         </UniformGrid>
                     </Grid>
-                    <StackPanel Margin="0,3,0,0">
-                        <TextBlock TextAlignment="Center" LineHeight="14" LineStackingStrategy="BlockLineHeight">
-                            <Run Text="{Binding Width}" />
-                            <Run Text="x" />
-                            <Run Text="{Binding Height}" />
-                            <LineBreak/>
-                            <Run Text="{Binding Source}" />
-                        </TextBlock>
-                    </StackPanel>
+                    <Grid Margin="0,3,0,0">
+                        <StackPanel Visibility="{Binding MediaType, Converter={StaticResource InverseEnumToVisibilityConverter}, ConverterParameter=Audio}">
+                            <TextBlock TextAlignment="Center" LineHeight="14" LineStackingStrategy="BlockLineHeight">
+                                <Run Text="{Binding Width}" />
+                                <Run Text="x" />
+                                <Run Text="{Binding Height}" />
+                                <LineBreak/>
+                                <Run Text="{Binding Source}" />
+                            </TextBlock>
+                        </StackPanel>
+                        <StackPanel Visibility="{Binding MediaType, Converter={StaticResource EnumToVisibilityConverter}, ConverterParameter=Audio}">
+                            <TextBlock TextAlignment="Center" LineHeight="14" LineStackingStrategy="BlockLineHeight">
+                                <Run Text="{Binding Duration, FallbackValue=00:00:00, StringFormat={}mm\\:ss\\.ff}" />
+                                <LineBreak/>
+                                <Run Text="{Binding Source}" />
+                            </TextBlock>
+                        </StackPanel>
+                    </Grid>
                 </DockPanel>
 
 
@@ -93,16 +105,25 @@
                 <Popup x:Name="CardPopup" Style="{StaticResource HistoryPopup}">
                     <Border Background="#01000000">
                         <Border Style="{StaticResource HistoryContainer}" >
-                            <StackPanel Margin="6,4,6,6">
-                                <TextBlock Text="{Binding Source}" />
-                                <TextBlock>
-                                    <Run Text="{Binding Width}" />
-                                    <Run Text="x" />
-                                    <Run Text="{Binding Height}" />
-                                </TextBlock>
-                                <TextBlock Text="{Binding Model, StringFormat={}Model: {0}}" />
-                                <TextBlock Text="{Binding MediaPath}" />
-                            </StackPanel>
+                            <Grid Margin="6,4,6,6">
+                                <StackPanel Visibility="{Binding MediaType, Converter={StaticResource InverseEnumToVisibilityConverter}, ConverterParameter=Audio}">
+                                    <TextBlock Text="{Binding Source}" />
+                                    <TextBlock>
+                                        <Run Text="{Binding Width}" />
+                                        <Run Text="x" />
+                                        <Run Text="{Binding Height}" />
+                                    </TextBlock>
+                                    <TextBlock Text="{Binding Model, StringFormat={}Model: {0}}" />
+                                    <TextBlock Text="{Binding MediaPath}" />
+                                </StackPanel>
+                                <StackPanel Visibility="{Binding MediaType, Converter={StaticResource EnumToVisibilityConverter}, ConverterParameter=Audio}">
+                                    <TextBlock Text="{Binding Source}" /> 
+                                    <TextBlock Text="{Binding Duration, FallbackValue=00:00:00, StringFormat={}mm\\:ss\\.ff}" />
+                                    <TextBlock Text="{Binding SampleRate, StringFormat={}SampleRate: {0}}" />
+                                    <TextBlock Text="{Binding Model, StringFormat={}Model: {0}}" />
+                                    <TextBlock Text="{Binding MediaPath}" />
+                                </StackPanel>
+                            </Grid>
                         </Border>
                     </Border>
                 </Popup>
@@ -627,6 +648,9 @@
             <Grid x:Name="Root" Background="Transparent" >
                 <DockPanel Height="134" Width="100" >
                     <Grid DockPanel.Dock="Top">
+                        <Grid Width="100" Height="100" Visibility="{Binding MediaType, Converter={StaticResource EnumToVisibilityConverter}, ConverterParameter=Audio}">
+                            <CommonControls:FontAwesome Icon="f001" IconStyle="Solid" Size="70" Color="{StaticResource DefaultForeground}" Opacity=".2" />
+                        </Grid>
                         <CommonControls:TransparentImageElement 
                            Height="100" 
                            Stretch="Uniform" 
@@ -648,16 +672,26 @@
                             </Button>
                         </UniformGrid>
                     </Grid>
-                    <StackPanel Margin="0,3,0,0">
-                        <TextBlock TextAlignment="Center" LineHeight="14" LineStackingStrategy="BlockLineHeight">
-                            <Run Text="{Binding Width}" />
-                            <Run Text="x" />
-                            <Run Text="{Binding Height}" />
-                            <LineBreak/>
-                            <Run Text="{Binding Source}" />
-                            <Run Text="{Binding MediaType}" />
-                        </TextBlock>
-                    </StackPanel>
+                    <Grid Margin="0,3,0,0">
+                        <StackPanel Visibility="{Binding MediaType, Converter={StaticResource InverseEnumToVisibilityConverter}, ConverterParameter=Audio}">
+                            <TextBlock TextAlignment="Center" LineHeight="14" LineStackingStrategy="BlockLineHeight">
+                                <Run Text="{Binding Width}" />
+                                <Run Text="x" />
+                                <Run Text="{Binding Height}" />
+                                <LineBreak/>
+                                <Run Text="{Binding Source}" />
+                                <Run Text="{Binding MediaType}" />
+                            </TextBlock>
+                        </StackPanel>
+                        <StackPanel Visibility="{Binding MediaType, Converter={StaticResource EnumToVisibilityConverter}, ConverterParameter=Audio}">
+                            <TextBlock TextAlignment="Center" LineHeight="14" LineStackingStrategy="BlockLineHeight">
+                                <Run Text="{Binding Duration, FallbackValue=00:00:00, StringFormat={}mm\\:ss\\.ff}" />
+                                <LineBreak/>
+                                <Run Text="{Binding Source}" />
+                            </TextBlock>
+                        </StackPanel>
+                    </Grid>
+                   
                 </DockPanel>
 
 
@@ -665,18 +699,28 @@
                 <Popup x:Name="CardPopup" Style="{StaticResource HistoryPopup}">
                     <Border Background="#01000000">
                         <Border Style="{StaticResource HistoryContainer}" >
-                            <StackPanel Margin="6,4,6,6">
-                                <TextBlock >
-                                    <Run Text="{Binding Source}" />
-                                    <Run Text="{Binding MediaType}" />
-                                </TextBlock>
-                                <TextBlock>
-                                    <Run Text="{Binding Width}" />
-                                    <Run Text="x" />
-                                    <Run Text="{Binding Height}" />
-                                </TextBlock>
-                                <TextBlock Text="{Binding MediaPath}" />
-                            </StackPanel>
+                            <Grid Margin="6,4,6,6">
+                                <StackPanel Visibility="{Binding MediaType, Converter={StaticResource InverseEnumToVisibilityConverter}, ConverterParameter=Audio}">
+                                    <TextBlock >
+                                        <Run Text="{Binding Source}" />
+                                        <Run Text="{Binding MediaType}" />
+                                    </TextBlock>
+                                    <TextBlock>
+                                        <Run Text="{Binding Width}" />
+                                        <Run Text="x" />
+                                        <Run Text="{Binding Height}" />
+                                    </TextBlock>
+                                    <TextBlock Text="{Binding MediaPath}" />
+                                </StackPanel>
+                                <StackPanel Visibility="{Binding MediaType, Converter={StaticResource EnumToVisibilityConverter}, ConverterParameter=Audio}">
+                                    <TextBlock Text="{Binding Source}" />
+                                    <TextBlock Text="{Binding Duration, FallbackValue=00:00:00, StringFormat={}mm\\:ss\\.ff}" />
+                                    <TextBlock Text="{Binding SampleRate, StringFormat={}SampleRate: {0}}" />
+                                    <TextBlock Text="{Binding Model, StringFormat={}Model: {0}}" />
+                                    <TextBlock Text="{Binding MediaPath}" />
+                                </StackPanel>
+                            </Grid>
+                         
                         </Border>
                     </Border>
                 </Popup>

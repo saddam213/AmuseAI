@@ -89,36 +89,33 @@
                         Progress="{Binding Progress}" />
 
                     <Border Margin="4" IsEnabled="{Binding IsViewBusy, Converter={StaticResource InverseBoolConverter}}">
+                        <DockPanel>
 
-                        <!--Output-->
-                        <Grid Margin="10,10,10,2" >
-
-                            <DockPanel Margin="0,3,0,0" >
-                                <StackPanel DockPanel.Dock="Top">
-                                    <TextBlock Text="Audio Result" Style="{StaticResource FieldTextBlockStyle}" />
-                                    <CommonControls:AudioElement 
-                                            Source="{Binding ResultAudio, Mode=TwoWay}" 
-                                            Configuration="{Binding Settings}" 
-                                            IsLoadEnabled="False" 
-                                            Volume="{Binding Settings.VolumeOutput, Mode=TwoWay}"
-                                            IsVolumeMute="{Binding Settings.IsVolumeOutputMute, Mode=TwoWay}"
-                                            IsReplayEnabled="False" 
-                                            OnMediaImport="OnMediaImport"/>
-                                </StackPanel>
-
-                                <DockPanel Margin="0,10,0,0">
-                                    <TextBlock DockPanel.Dock="Top" Text="Text Input" Style="{StaticResource FieldTextBlockStyle}" />
-                                    <Border Style="{StaticResource TextDropZoneStyle}">
-                                        <CommonControls:TextElement TextSource="{Binding SourceText, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
-                                    </Border>
-                                </DockPanel>
+                            <!--Output-->
+                            <DockPanel DockPanel.Dock="Bottom" Height="150" Margin="10,10,10,4">
+                                <TextBlock DockPanel.Dock="Top" Text="Audio Result" Style="{StaticResource FieldTextBlockStyle}" />
+                                <CommonControls:AudioStreamElement 
+                                    Source="{Binding ResultAudio, Mode=TwoWay}" 
+                                    Configuration="{Binding Settings}" 
+                                    IsLoadEnabled="False" 
+                                    Volume="{Binding Settings.VolumeOutput, Mode=TwoWay}"
+                                    IsVolumeMute="{Binding Settings.IsVolumeOutputMute, Mode=TwoWay}"
+                                    IsReplayEnabled="False" 
+                                    IsInputEnabled="{Binding IsPipelineLoaded}"
+                                    OnMediaImport="OnMediaImport"/>
                             </DockPanel>
 
-                        </Grid>
+                            <!--Prompt-->
+                            <DockPanel Margin="10,0,10,0">
+                                <TextBlock DockPanel.Dock="Top" Text="Text Input" Style="{StaticResource FieldTextBlockStyle}" />
+                                <Border Style="{StaticResource TextDropZoneStyle}">
+                                    <CommonControls:TextElement TextSource="{Binding SourceText, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+                                </Border>
+                            </DockPanel>
+                        </DockPanel>
                     </Border>
 
                 </DockPanel>
-
             </Grid>
         </Grid>
     </Grid>

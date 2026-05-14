@@ -4,6 +4,7 @@ using System;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
+using TensorStack.Audio;
 using TensorStack.Common;
 using TensorStack.Common.Pipeline;
 using TensorStack.Common.Tensor;
@@ -159,7 +160,7 @@ namespace Amuse.App.Services
                         LengthPenalty = options.LengthPenalty,
                         DiversityLength = options.DiversityLength,
                         EarlyStopping = options.EarlyStopping,
-                        AudioInput = options.AudioInput,
+                        AudioInput = await options.AudioInput.GetAsync(16000, 1),
                         Language = options.Language,
                         Task = options.Task,
                         ChunkSize = options.ChunkSize
@@ -194,13 +195,14 @@ namespace Amuse.App.Services
         }
 
 
-        public async Task<AudioTensor> ExecuteAsync(SupertonicRequest options, IProgress<RunProgress> progressCallback)
+        public async Task<AudioInputStream> ExecuteAsync(SupertonicRequest options, IProgress<RunProgress> progressCallback)
         {
             try
             {
                 IsExecuting = true;
                 using (_cancellationTokenSource = new CancellationTokenSource())
                 {
+                    var audioFileName = _mediaService.GetTempFile(MediaType.Audio);
                     var pipeline = _audioPipeline as IPipeline<AudioTensor, SupertonicOptions, RunProgress>;
                     var pipelineOptions = new SupertonicOptions
                     {
@@ -212,7 +214,10 @@ namespace Amuse.App.Services
                         Seed = options.Seed,
                     };
 
-                    return await pipeline.RunAsync(pipelineOptions, progressCallback, _cancellationTokenSource.Token);
+                    var tensorResult = await pipeline.RunAsync(pipelineOptions, progressCallback, _cancellationTokenSource.Token);
+                    var audioInput = new AudioInput(tensorResult);
+                    await audioInput.SaveAsync(audioFileName);
+                    return await AudioInputStream.CreateAsync(audioFileName);
                 }
             }
             finally
@@ -265,12 +270,12 @@ namespace Amuse.App.Services
         Task CancelAsync();
 
         Task<TextInput[]> ExecuteAsync(WhisperRequest options, IProgress<GenerateProgress> progressCallback);
-        Task<AudioTensor> ExecuteAsync(SupertonicRequest options, IProgress<RunProgress> progressCallback);
+        Task<AudioInputStream> ExecuteAsync(SupertonicRequest options, IProgress<RunProgress> progressCallback);
     }
 
     public record WhisperRequest
     {
-        public AudioTensor AudioInput { get; set; }
+        public AudioInputStream AudioInput { get; set; }
         public LanguageType Language { get; set; } = LanguageType.EN;
         public TaskType Task { get; set; } = TaskType.Transcribe;
 

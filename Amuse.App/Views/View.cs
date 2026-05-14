@@ -35,6 +35,7 @@ namespace Amuse.App.Views
 
         TextToAudio = 300,
         AudioToText = 301,
+        TextToMusic = 302,
 
         Recent = 1000,
         Gallery = 1001
@@ -101,6 +102,7 @@ namespace Amuse.App.Views
              // Audio
             { View.TextToAudio, ViewCategory.Audio  },
             { View.AudioToText, ViewCategory.Audio  },
+            { View.TextToMusic, ViewCategory.Audio  },
         };
 
 

@@ -29,7 +29,7 @@ namespace Amuse.App.Views
         private const string String_AllModels = "All Models";
         private IHistoryItem _selectedItem;
         private ImageInput _currentImage;
-        private AudioInput _currentAudio;
+        private AudioInputStream _currentAudioStream;
         private VideoInputStream _currentVideoStream;
         private string _filterText;
         private string _filterModelName;
@@ -74,10 +74,10 @@ namespace Amuse.App.Views
             set { SetProperty(ref _currentImage, value); }
         }
 
-        public AudioInput CurrentAudio
+        public AudioInputStream CurrentAudioStream
         {
-            get { return _currentAudio; }
-            set { SetProperty(ref _currentAudio, value); }
+            get { return _currentAudioStream; }
+            set { SetProperty(ref _currentAudioStream, value); }
         }
 
         public VideoInputStream CurrentVideoStream
@@ -133,14 +133,14 @@ namespace Amuse.App.Views
 
                 CurrentText= default;
                 CurrentImage = default;
-                CurrentAudio = default;
+                CurrentAudioStream = default;
                 CurrentVideoStream = default;
                 if (_selectedItem?.MediaType == MediaType.Text)
                     CurrentText = await TensorStack.Common.TextInput.CreateAsync(_selectedItem.MediaPath, Encoding.UTF8);
                 if (_selectedItem?.MediaType == MediaType.Image)
                     CurrentImage = await ImageInput.CreateAsync(_selectedItem.MediaPath);
                 if (_selectedItem?.MediaType == MediaType.Audio)
-                    CurrentAudio = await AudioInput.CreateAsync(_selectedItem.MediaPath);
+                    CurrentAudioStream = await AudioInputStream.CreateAsync(_selectedItem.MediaPath);
                 if (_selectedItem?.MediaType == MediaType.Video)
                     CurrentVideoStream = await VideoInputStream.CreateAsync(_selectedItem.MediaPath);
             }

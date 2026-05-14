@@ -6,103 +6,122 @@
              xmlns:i="http://schemas.microsoft.com/xaml/behaviors"
              xmlns:local="clr-namespace:Amuse.App.Controls"
              xmlns:CommonControls="clr-namespace:TensorStack.WPF.Controls;assembly=TensorStack.WPF" 
-             xmlns:CommonBehaviors="clr-namespace:TensorStack.WPF.Behaviors;assembly=TensorStack.WPF">
+             xmlns:CommonBehaviors="clr-namespace:TensorStack.WPF.Behaviors;assembly=TensorStack.WPF"
+             Foreground="{StaticResource DefaultForeground}">
     <DockPanel DataContext="{Binding RelativeSource={RelativeSource AncestorType={x:Type local:VideoTimelineControl}}}">
 
         <!--Details-->
-        <UniformGrid DockPanel.Dock="Bottom" Columns="2" Height="170" Margin="0,8,0,4">
+        <UniformGrid DockPanel.Dock="Bottom" Columns="3" Height="170" Margin="0,8,0,4">
 
             <!--Preview Frame-->
-            <DockPanel HorizontalAlignment="Left">
+            <DockPanel HorizontalAlignment="Left" >
                 <Border DockPanel.Dock="Left" BorderBrush="{StaticResource ContainerBorder}" BorderThickness="1">
                     <Viewbox>
                         <Grid>
                             <Image Stretch="Uniform" 
                                 MinWidth="384"
                                 MinHeight="256" 
-                                Width="{Binding TimelineThumbWidth}" 
+                                Width="{Binding TimelineThumbWidth, TargetNullValue=0}" 
                                 Height="{Binding TimelineThumbHeight}" 
                                 Source="{Binding PreviewFrame.Frame, Converter={StaticResource VideoFrameToBitmapConverter}, TargetNullValue={StaticResource PlaceholderVideo}, FallbackValue={StaticResource PlaceholderVideo}}">
                             </Image>
                             <Image Stretch="Uniform" 
                                 MinWidth="384"
                                 MinHeight="256" 
-                                Width="{Binding TimelineThumbWidth}" 
+                                Width="{Binding TimelineThumbWidth, TargetNullValue=0}" 
                                 Height="{Binding TimelineThumbHeight}" 
                                 Source="{Binding PreviewOverlay.Frame, Converter={StaticResource VideoFrameToBitmapConverter}, TargetNullValue={StaticResource PlaceholderVideo}, FallbackValue={StaticResource PlaceholderVideo}}">
                             </Image>
                         </Grid>
                     </Viewbox>
                 </Border>
-                <DockPanel Margin="4,0,0,0">
 
-                    <!--Import Buttons-->
-                    <UniformGrid DockPanel.Dock="Bottom" Columns="3" Height="30" Width="300">
-                        <Border Style="{StaticResource VideoDropZoneStyle}">
-                            <Button Content="Add Video" Command="{Binding LoadVideoCommand}" Drop="OnTimelineDrop"/>
-                        </Border>
-                        <Border>
-                            <Button Content="Add Image" Command="{Binding LoadImageCommand}" Drop="OnImageDrop"/>
-                            <Border.Style>
-                                <Style TargetType="{x:Type Border}" BasedOn="{StaticResource ImageDropZoneStyle}">
-                                    <Setter Property="IsEnabled" Value="True"/>
-                                    <Style.Triggers>
-                                        <DataTrigger Binding="{Binding TimelineFrameRate, RelativeSource={RelativeSource AncestorType={x:Type local:VideoTimelineControl}}}" Value="{x:Null}">
-                                            <Setter Property="IsEnabled" Value="False"/>
-                                        </DataTrigger>
-                                        <DataTrigger Binding="{Binding IsControlBusy, RelativeSource={RelativeSource AncestorType={x:Type local:VideoTimelineControl}}}" Value="True">
-                                            <Setter Property="IsEnabled" Value="False"/>
-                                        </DataTrigger>
-                                    </Style.Triggers>
-                                </Style>
-                            </Border.Style>
-                        </Border>
-                        <Border>
-                            <Button Content="Add Overlay" Command="{Binding LoadOverlayCommand}" Drop="OnOverlayDrop"/>
-                            <Border.Style>
-                                <Style TargetType="{x:Type Border}" BasedOn="{StaticResource ImageDropZoneStyle}">
-                                    <Setter Property="IsEnabled" Value="True"/>
-                                    <Style.Triggers>
-                                        <DataTrigger Binding="{Binding TimelineFrameRate, RelativeSource={RelativeSource AncestorType={x:Type local:VideoTimelineControl}}}" Value="{x:Null}">
-                                            <Setter Property="IsEnabled" Value="False"/>
-                                        </DataTrigger>
-                                        <DataTrigger Binding="{Binding IsControlBusy, RelativeSource={RelativeSource AncestorType={x:Type local:VideoTimelineControl}}}" Value="True">
-                                            <Setter Property="IsEnabled" Value="False"/>
-                                        </DataTrigger>
-                                    </Style.Triggers>
-                                </Style>
-                            </Border.Style>
-                        </Border>
+                <!--Timeline Details-->
+                <DockPanel Margin="4,0,0,0" >
+                    <UniformGrid DockPanel.Dock="Top" Columns="2">
+                        <TextBlock Text="Current Time:" Opacity=".7" VerticalAlignment="Center" FontStyle="Italic"/>
+                        <TextBlock Text="{Binding TimelinePositionTime, FallbackValue=00:00:00, StringFormat={}hh\\:mm\\:ss\\.ff}" FontSize="16" Opacity=".9"/>
+                        <TextBlock Text="Timeline Time:" Opacity=".7" VerticalAlignment="Center" FontStyle="Italic"/>
+                        <TextBlock Text="{Binding TimelineLengthTime, FallbackValue=00:00:00, StringFormat={}hh\\:mm\\:ss\\.ff}" FontSize="16" Opacity=".9"/>
                     </UniformGrid>
-
-                    <!--Timeline Details-->
-                    <StackPanel>
-                        <UniformGrid Columns="2">
-                            <TextBlock Text="Width:" Opacity=".7" FontStyle="Italic"/>
-                            <TextBlock Text="{Binding TimelineWidth, FallbackValue=0, TargetNullValue=0, StringFormat={}{0} px}" Opacity=".9"/>
-                            <TextBlock Text="Height:" Opacity=".7" FontStyle="Italic"/>
-                            <TextBlock Text="{Binding TimelineHeight, FallbackValue=0, TargetNullValue=0, StringFormat={}{0} px}" Opacity=".9"/>
-                            <TextBlock Text="FrameRate:" Opacity=".7" FontStyle="Italic"/>
-                            <TextBlock Text="{Binding TimelineFrameRate, FallbackValue=0, TargetNullValue=0, StringFormat={}{0:N0} fps}" Opacity=".9"/>
-                            <TextBlock Text="Segments:" Opacity=".7" FontStyle="Italic"/>
-                            <TextBlock Text="{Binding TimelineSegements.Count, Mode=OneWay}" Opacity=".9"/>
-                            <TextBlock Text="Timeline Frame:" Opacity=".7" FontStyle="Italic"/>
-                            <TextBlock Text="{Binding TimelinePosition}" Opacity=".9"/>
-                            <TextBlock Text="Timeline Frames:" Opacity=".7" FontStyle="Italic"/>
-                            <TextBlock Text="{Binding TimelineLength}" Opacity=".9"/>
-                        </UniformGrid>
-                        <UniformGrid Columns="2" Margin="0,6,0,0">
-                            <TextBlock Text="Current Time:" Opacity=".7" VerticalAlignment="Center" FontStyle="Italic"/>
-                            <TextBlock Text="{Binding TimelinePositionTime, FallbackValue=00:00:00, StringFormat={}hh\\:mm\\:ss\\.ff}" FontSize="14" Opacity=".9"/>
-                            <TextBlock Text="Timeline Time:" Opacity=".7" VerticalAlignment="Center" FontStyle="Italic"/>
-                            <TextBlock Text="{Binding TimelineLengthTime, FallbackValue=00:00:00, StringFormat={}hh\\:mm\\:ss\\.ff}" FontSize="14" Opacity=".9"/>
-                        </UniformGrid>
-                    </StackPanel>
+                    <UniformGrid Columns="2" VerticalAlignment="Bottom" MinWidth="200">
+                        <TextBlock Text="Segments:" Opacity=".7" FontStyle="Italic"/>
+                        <TextBlock Text="{Binding TimelineSegements.Count, Mode=OneWay}" Opacity=".9"/>
+                        <TextBlock Text="Timeline Frame:" Opacity=".7" FontStyle="Italic"/>
+                        <TextBlock Text="{Binding TimelinePosition}" Opacity=".9"/>
+                        <TextBlock Text="Timeline Frames:" Opacity=".7" FontStyle="Italic"/>
+                        <TextBlock Text="{Binding TimelineLength}" Opacity=".9"/>
+                        <TextBlock Text="Width:" Opacity=".7" FontStyle="Italic"/>
+                        <TextBlock Text="{Binding TimelineWidth, FallbackValue=0, TargetNullValue=0, StringFormat={}{0} px}" Opacity=".9"/>
+                        <TextBlock Text="Height:" Opacity=".7" FontStyle="Italic"/>
+                        <TextBlock Text="{Binding TimelineHeight, FallbackValue=0, TargetNullValue=0, StringFormat={}{0} px}" Opacity=".9"/>
+                        <TextBlock Text="FrameRate:" Opacity=".7" FontStyle="Italic"/>
+                        <TextBlock Text="{Binding TimelineFrameRate, FallbackValue=0, TargetNullValue=0, StringFormat={}{0:N0} fps}" Opacity=".9"/>
+                    </UniformGrid>
                 </DockPanel>
             </DockPanel>
 
+            <!--Import Buttons-->
+            <Grid>
+                <Grid.Resources>
+                    <Style x:Key="AllowDropButton" TargetType="{x:Type CommonControls:IconButton}">
+                        <Setter Property="IconSize" Value="18"/>
+                        <Setter Property="IconOpacity" Value=".8"/>
+                        <Setter Property="IconMargin" Value="0,6,0,0"/>
+                        <Setter Property="TextMargin" Value="0,-3,0,4"/>
+                        <Setter Property="Orientation" Value="Vertical"/>
+                        <Setter Property="IconColor" Value="{StaticResource DefaultForeground}"/>
+                        <Setter Property="Foreground" Value="{StaticResource DefaultForeground}"/>
+                        <Style.Triggers>
+                            <Trigger Property="AllowDrop" Value="True">
+                                <Setter Property="IconColor" Value="{StaticResource AccentColour2}"/>
+                                <Setter Property="Foreground" Value="{StaticResource AccentColour2}"/>
+                            </Trigger>
+                        </Style.Triggers>
+                    </Style>
+                </Grid.Resources>
+
+                <UniformGrid DockPanel.Dock="Bottom" Columns="3" Margin="40,20,40,0" VerticalAlignment="Top">
+                    <Border Style="{StaticResource VideoDropZoneStyle}" >
+                        <CommonControls:IconButton Text="Import Video" Icon="f008" Command="{Binding LoadVideoCommand}" Drop="OnTimelineDrop" Style="{StaticResource AllowDropButton}"/>
+                    </Border>
+                    <Border>
+                        <CommonControls:IconButton Text="Import Image" Icon="f03e" Command="{Binding LoadImageCommand}" Drop="OnImageDrop" Style="{StaticResource AllowDropButton}"/>
+                        <Border.Style>
+                            <Style TargetType="{x:Type Border}" BasedOn="{StaticResource ImageDropZoneStyle}">
+                                <Setter Property="IsEnabled" Value="True"/>
+                                <Style.Triggers>
+                                    <DataTrigger Binding="{Binding TimelineFrameRate, RelativeSource={RelativeSource AncestorType={x:Type local:VideoTimelineControl}}}" Value="{x:Null}">
+                                        <Setter Property="IsEnabled" Value="False"/>
+                                    </DataTrigger>
+                                    <DataTrigger Binding="{Binding IsControlBusy, RelativeSource={RelativeSource AncestorType={x:Type local:VideoTimelineControl}}}" Value="True">
+                                        <Setter Property="IsEnabled" Value="False"/>
+                                    </DataTrigger>
+                                </Style.Triggers>
+                            </Style>
+                        </Border.Style>
+                    </Border>
+                    <Border>
+                        <CommonControls:IconButton Text="Import Overlay" Icon="f302" Command="{Binding LoadOverlayCommand}" Drop="OnOverlayDrop" Style="{StaticResource AllowDropButton}"/>
+                        <Border.Style>
+                            <Style TargetType="{x:Type Border}" BasedOn="{StaticResource ImageDropZoneStyle}">
+                                <Setter Property="IsEnabled" Value="True"/>
+                                <Style.Triggers>
+                                    <DataTrigger Binding="{Binding TimelineFrameRate, RelativeSource={RelativeSource AncestorType={x:Type local:VideoTimelineControl}}}" Value="{x:Null}">
+                                        <Setter Property="IsEnabled" Value="False"/>
+                                    </DataTrigger>
+                                    <DataTrigger Binding="{Binding IsControlBusy, RelativeSource={RelativeSource AncestorType={x:Type local:VideoTimelineControl}}}" Value="True">
+                                        <Setter Property="IsEnabled" Value="False"/>
+                                    </DataTrigger>
+                                </Style.Triggers>
+                            </Style>
+                        </Border.Style>
+                    </Border>
+                </UniformGrid>
+            </Grid>
+
             <!--Preview Controls - Save/Cancel-->
-            <DockPanel Width="400" HorizontalAlignment="Right">
+            <DockPanel Width="400" HorizontalAlignment="Right" >
                 <DockPanel>
                     <UniformGrid DockPanel.Dock="Bottom" Columns="2" Height="30">
                         <Button Content="Cancel" Command="{Binding CancelCommand}"/>
@@ -153,8 +172,8 @@
 
                             <!--Timeline Controls-->
                             <UniformGrid DockPanel.Dock="Left" Rows="1">
-                                <Button Command="{Binding TimelineClearCommand}" Width="50" Style="{StaticResource OptionButton}" ToolTip="Clear Timeline">
-                                    <CommonControls:FontAwesome Icon="e2ab" Size="12"/>
+                                <Button Command="{Binding TimelineClearCommand}" Width="50" Style="{StaticResource OptionButton}" ToolTip="Clear Timeline" >
+                                    <CommonControls:FontAwesome Icon="e2ab" Size="12" Color="{StaticResource DangerColour}" Opacity=".8"/>
                                 </Button>
                                 <Button Command="{Binding SaveVideoCommand}" Style="{StaticResource OptionButton}" ToolTip="Save Video">
                                     <CommonControls:FontAwesome Icon="f0c7" Size="12"/>
@@ -194,8 +213,8 @@
                                 <Button Command="{Binding SegmentMoveDownCommand}" Style="{StaticResource OptionButton}" ToolTip="Move Segment Down">
                                     <CommonControls:FontAwesome Icon="f078" Size="12"/>
                                 </Button>
-                                <Button Command="{Binding SegmentRemoveCommand}" Style="{StaticResource OptionButton}" ToolTip="Remove Segment">
-                                    <CommonControls:FontAwesome Icon="f2ed" Size="12"/>
+                                <Button Command="{Binding SegmentRemoveCommand}" Style="{StaticResource OptionButton}" ToolTip="Remove Segment" >
+                                    <CommonControls:FontAwesome Icon="f2ed" Size="12" Color="{StaticResource DangerColour}" Opacity=".8"/>
                                 </Button>
                             </UniformGrid>
 
@@ -306,6 +325,11 @@
                             </ItemsControl>
                         </ScrollViewer>
                     </Border>
+
+                    <!--Placeholder-->
+                    <Grid Visibility="{Binding TimelineSegements.Count, Converter={StaticResource LessOrEqualThanToVisibilityConverter}, ConverterParameter=0}">
+                        <CommonControls:FontAwesome Icon="e76b" Size="200" Opacity=".06" Color="{StaticResource DefaultForeground}"/>
+                    </Grid>
 
                     <!--DragDrop Notification-->
                     <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center" Visibility="{Binding AllowDrop, ElementName=DragDropContainer, Converter={StaticResource BooleanToVisibilityConverter}}" IsHitTestVisible="False">

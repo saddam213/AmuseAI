@@ -228,7 +228,7 @@ namespace Amuse.App.Controls
 
             //Resolution
             SelectedResolution = newModel?.Resolutions.FirstOrDefault(x => x.Width == _selectedResolution?.Width && x.Height == _selectedResolution?.Height)
-                              ?? newModel?.Resolutions.OrderByDescending(x => x.IsDefault).First();
+                              ?? newModel?.Resolutions.OrderByDescending(x => x.IsDefault).FirstOrDefault();
 
             //Schedulers
             Schedulers = newOptions.Schedulers.GetSchedulers().Select(SchedulerInputOptions.Create).ToArray();

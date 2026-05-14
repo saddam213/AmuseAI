@@ -48,19 +48,21 @@
                     IsSaveEnabled="True" 
                     IsRemoveEnabled="False"
                     IsFrameViewerEnabled="True"
+                    IsInputEnabled="True"
                     Source="{Binding CurrentVideoStream}" 
                     Progress="{Binding Progress}"
                     Volume="{Binding Settings.VolumeOutput, Mode=TwoWay}"
                     IsVolumeMute="{Binding Settings.IsVolumeOutputMute, Mode=TwoWay}"
                     Visibility="{Binding HistoryCollection.CurrentItem.MediaType, Converter={StaticResource EnumToVisibilityConverter}, ConverterParameter=Video}"/>
 
-                <CommonControls:AudioElement
+                <CommonControls:AudioStreamElement
                     IsReplayEnabled="True"
                     IsAutoPlayEnabled="True"
                     IsLoadEnabled="False"
                     IsSaveEnabled="True" 
-                    Orientation="Vertical"
-                    Source="{Binding CurrentAudio}"
+                    IsRemoveEnabled="False"
+                    IsInputEnabled="True"
+                    Source="{Binding CurrentAudioStream}"
                     Volume="{Binding Settings.VolumeOutput, Mode=TwoWay}"
                     IsVolumeMute="{Binding Settings.IsVolumeOutputMute, Mode=TwoWay}"
                     Visibility="{Binding HistoryCollection.CurrentItem.MediaType, Converter={StaticResource EnumToVisibilityConverter}, ConverterParameter=Audio}"/>

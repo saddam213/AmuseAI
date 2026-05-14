@@ -4,6 +4,7 @@ using Microsoft.Extensions.Logging;
 using System;
 using System.Diagnostics;
 using System.Threading.Tasks;
+using TensorStack.Audio;
 using TensorStack.Common.Pipeline;
 using TensorStack.Common.Tensor;
 using TensorStack.Image;
@@ -23,6 +24,7 @@ namespace Amuse.App.Views
         private ImageInput _compareImage;
         private VideoInputStream _resultVideo;
         private VideoInputStream _compareVideo;
+        private AudioInputStream _resultAudio;
         private DiffusionInputOptions _options;
         private ExtractInputOptions _extractOptions;
         private UpscaleInputOptions _upscaleOptions;
@@ -154,6 +156,12 @@ namespace Amuse.App.Views
         {
             get { return _compareVideo; }
             set { SetProperty(ref _compareVideo, value); }
+        }
+
+        public AudioInputStream ResultAudio
+        {
+            get { return _resultAudio; }
+            set { SetProperty(ref _resultAudio, value); }
         }
 
         /// <summary>
@@ -411,6 +419,23 @@ namespace Amuse.App.Views
             var resultTensor = await DiffusionService.GenerateImageAsync(options);
 
             Logger.LogInformation("[{View}] [ExecuteImageDiffusion] Diffusion complete, Elapsed: {Elapsed:c}", ViewName, Stopwatch.GetElapsedTime(timestamp));
+            return resultTensor;
+        }
+
+
+
+        /// <summary>
+        /// Execute Audio diffusion
+        /// </summary>
+        /// <param name="options">The options.</param>
+        protected async Task<AudioInputStream> ExecuteAudioDiffusionAsync(DiffusionInputOptions options)
+        {
+            var timestamp = Stopwatch.GetTimestamp();
+            Logger.LogInformation("[{View}] [ExecuteAudioDiffusion] Executing diffusion...", ViewName);
+
+            var resultTensor = await DiffusionService.GenerateAudioAsync(options);
+
+            Logger.LogInformation("[{View}] [ExecuteAudioDiffusion] Diffusion complete, Elapsed: {Elapsed:c}", ViewName, Stopwatch.GetElapsedTime(timestamp));
             return resultTensor;
         }
 

@@ -31,6 +31,15 @@ namespace Amuse.App.Common
         private bool _isSource2Enabled;
         private bool _isSource3Enabled;
         private bool _isSource4Enabled;
+        private int _bpm = 80;
+        private string _instruction;
+        private string _keyscale;
+        private string _prompt2;
+        private string _task;
+        private string _timeSignature;
+        private string _trackName;
+        private string _vocalLanguage;
+        private float _duration = 0;
 
         public int Width
         {
@@ -68,6 +77,13 @@ namespace Amuse.App.Common
         {
             get { return _prompt; }
             set { SetProperty(ref _prompt, value); }
+        }
+
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingDefault)]
+        public string Prompt2
+        {
+            get { return _prompt2; }
+            set { SetProperty(ref _prompt2, value); }
         }
 
         [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingDefault)]
@@ -196,10 +212,70 @@ namespace Amuse.App.Common
             set { SetProperty(ref _isSource4Enabled, value); }
         }
 
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingDefault)]
+        public int Bpm
+        {
+            get { return _bpm; }
+            set { SetProperty(ref _bpm, value); }
+        }
+
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingDefault)]
+        public string Instruction
+        {
+            get { return _instruction; }
+            set { SetProperty(ref _instruction, value); }
+        }
+
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingDefault)]
+        public string Keyscale
+        {
+            get { return _keyscale; }
+            set { SetProperty(ref _keyscale, value); }
+        }
+
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingDefault)]
+        public string Task
+        {
+            get { return _task; }
+            set { SetProperty(ref _task, value); }
+        }
+
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingDefault)]
+        public string TimeSignature
+        {
+            get { return _timeSignature; }
+            set { SetProperty(ref _timeSignature, value); }
+        }
+
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingDefault)]
+        public string TrackName
+        {
+            get { return _trackName; }
+            set { SetProperty(ref _trackName, value); }
+        }
+
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingDefault)]
+        public string VocalLanguage
+        {
+            get { return _vocalLanguage; }
+            set { SetProperty(ref _vocalLanguage, value); }
+        }
+
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingDefault)]
+        public float Duration
+        {
+            get { return _duration; }
+            set { SetProperty(ref _duration, value); }
+        }
+
+
         [JsonIgnore]
         public List<ImageTensor> InputImages { get; set; } = [];
 
         [JsonIgnore]
         public List<ImageTensor> InputControlImages { get; set; } = [];
+
+        [JsonIgnore]
+        public List<AudioTensor> InputAudios { get; set; } = [];
     }
 }

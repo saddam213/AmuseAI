@@ -53,6 +53,8 @@ namespace Amuse.App.Services
                     historyItem = await Json.LoadAsync<DiffusionHistory>(historyFile.FullName);
                 else if (historyFile.Name.StartsWith("GenerateVideo_"))
                     historyItem = await Json.LoadAsync<DiffusionHistory>(historyFile.FullName);
+                else if (historyFile.Name.StartsWith("GenerateAudio_"))
+                    historyItem = await Json.LoadAsync<DiffusionHistory>(historyFile.FullName);
                 else if (historyFile.Name.StartsWith("ExtractImage_"))
                     historyItem = await Json.LoadAsync<ExtractHistory>(historyFile.FullName);
                 else if (historyFile.Name.StartsWith("ExtractVideo_"))
@@ -63,16 +65,14 @@ namespace Amuse.App.Services
                     historyItem = await Json.LoadAsync<UpscaleHistory>(historyFile.FullName);
                 else if (historyFile.Name.StartsWith("Interpolate_"))
                     historyItem = await Json.LoadAsync<InterpolateHistory>(historyFile.FullName);
-                else if (historyFile.Name.StartsWith("GenerateAudio_"))
+                else if (historyFile.Name.StartsWith("Audio_"))
                     historyItem = await Json.LoadAsync<AudioHistory>(historyFile.FullName);
-                else if (historyFile.Name.StartsWith("GenerateText_"))
+                else if (historyFile.Name.StartsWith("Text_"))
                     historyItem = await Json.LoadAsync<TextHistory>(historyFile.FullName);
                 else if (historyFile.Name.StartsWith("ImageCompose_"))
                     historyItem = await Json.LoadAsync<ComposeHistory>(historyFile.FullName);
                 else if (historyFile.Name.StartsWith("VideoCompose_"))
                     historyItem = await Json.LoadAsync<ComposeHistory>(historyFile.FullName);
-                else if (historyFile.Name.StartsWith("Recent_"))
-                    historyItem = await Json.LoadAsync<RecentHistory>(historyFile.FullName);
                 if (historyItem == null || historyItem.Version != HistoryVersion)
                     continue;
 
@@ -416,7 +416,7 @@ namespace Amuse.App.Services
         }
 
 
-        public async Task<AudioInput> AddAsync(AudioInput audio, AudioHistory audioHistory)
+        public async Task<AudioInputStream> AddAsync(AudioInputStream audio, AudioHistory audioHistory)
         {
             if (_settings.HistoryItems <= 0)
                 return audio;
@@ -430,11 +430,36 @@ namespace Amuse.App.Services
                 MediaType = MediaType.Audio,
                 Timestamp = DateTime.Now,
                 LastAccess = DateTime.Now,
+                FilePath = Path.Combine(_settings.DirectoryHistory, $"Audio_{key}.json"),
+                MediaPath = Path.Combine(_settings.DirectoryHistory, $"Audio_{key}.wav"),
+                //ThumbPath = Path.Combine(_settings.DirectoryHistory, $"Audio_{key}.png"),
+                Duration = audio.Duration,
+                SampleRate = audio.SampleRate
+            };
+
+            return await AddAudioInternalAsync(audio, history);
+        }
+
+
+        public async Task<AudioInputStream> AddAsync(AudioInputStream audio, DiffusionHistory diffusionHistory)
+        {
+            if (_settings.HistoryItems <= 0)
+                return audio;
+
+            var key = GetRandomName();
+            var history = diffusionHistory with
+            {
+                Id = key,
+                Version = HistoryVersion,
+                Extension = "wav",
+                MediaType = MediaType.Audio,
+                Timestamp = DateTime.Now,
+                LastAccess = DateTime.Now,
                 FilePath = Path.Combine(_settings.DirectoryHistory, $"GenerateAudio_{key}.json"),
                 MediaPath = Path.Combine(_settings.DirectoryHistory, $"GenerateAudio_{key}.wav"),
                 //ThumbPath = Path.Combine(_settings.DirectoryHistory, $"GenerateAudio_{key}.png"),
                 Duration = audio.Duration,
-                SampleRate = audio.SampleRate
+                SampleRate = audio.SampleRate,
             };
 
             return await AddAudioInternalAsync(audio, history);
@@ -485,18 +510,18 @@ namespace Amuse.App.Services
         {
             var newStream = await videoStream.MoveAsync(history.MediaPath);
             await videoStream.Thumbnail.SaveAsync(history.ThumbPath);
-            await Json.SaveAsync(history.FilePath, history);
+            await Json.SaveAsync<T>(history.FilePath, history);
             AddHistoryItem(history);
             return newStream;
         }
 
 
-        private async Task<AudioInput> AddAudioInternalAsync<T>(AudioInput audio, T history) where T : IHistoryItem
+        private async Task<AudioInputStream> AddAudioInternalAsync<T>(AudioInputStream audioStream, T history) where T : IHistoryItem
         {
-            await audio.SaveAsync(history.MediaPath);
+            var newStream = await audioStream.MoveAsync(history.MediaPath);
             await Json.SaveAsync<T>(history.FilePath, history);
             AddHistoryItem(history);
-            return audio;
+            return newStream;
         }
 
 
@@ -542,7 +567,11 @@ namespace Amuse.App.Services
         Task<VideoInputStream> AddAsync(VideoInputStream videoStream, InterpolateHistory history);
         Task<VideoInputStream> AddAsync(VideoInputStream videoStream, ComposeHistory history);
 
-        Task<AudioInput> AddAsync(AudioInput audio, AudioHistory history);
+
+        Task<AudioInputStream> AddAsync(AudioInputStream audio, AudioHistory history);
+        Task<AudioInputStream> AddAsync(AudioInputStream audio, DiffusionHistory history);
+
+     
         Task<TextInput> AddAsync(TextInput text, TextHistory history);
     }
 

@@ -24,6 +24,8 @@ namespace Amuse.App.Common
         public bool IsVaeTilingEnabled { get; set; }
         public bool IsVaeSlicingEnabled { get; set; }
         public bool IsFirstFrameLastFrameEnabled { get; set; }
+        public int MaxLength { get; set; }
+        public int MaxLength2 { get; set; }
 
         public virtual bool Equals(DiffusionDefaultOptions other) => ReferenceEquals(this, other);
         public override int GetHashCode() => RuntimeHelpers.GetHashCode(this);

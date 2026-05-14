@@ -7,6 +7,7 @@ using System.IO;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
+using TensorStack.Audio;
 using TensorStack.Common;
 using TensorStack.Common.Tensor;
 using TensorStack.Python.Common;
@@ -329,6 +330,61 @@ namespace Amuse.App.Services
         }
 
 
+        public async Task<AudioInputStream> GenerateAudioAsync(DiffusionInputOptions options)
+        {
+            IsExecuting = true;
+            IsCanceling = false;
+            try
+            {
+                var audioFileName = _mediaService.GetTempFile(MediaType.Audio);
+                options.Seed = options.Seed > 0 ? options.Seed : Random.Shared.Next();
+                var generateOptions = new PipelineOptions
+                {
+                    Seed = options.Seed,
+                    Steps = options.Steps,
+                    Steps2 = options.Steps2,
+                    GuidanceScale = options.GuidanceScale,
+                    GuidanceScale2 = options.GuidanceScale2,
+                    Prompt = options.Prompt,
+                    Prompt2 = options.Prompt2,
+                    NegativePrompt = options.NegativePrompt,
+                    Strength = options.Strength,
+                    Duration = options.Duration,
+                    Bpm = options.Bpm,
+                    Instruction = options.Instruction,
+                    Keyscale = options.Keyscale,
+                    MaxLength = _defaultOptions.MaxLength,
+                    MaxLength2 = _defaultOptions.MaxLength2,
+                    Task = options.Task,
+                    TimeSignature = options.TimeSignature,
+                    TrackName = options.TrackName,
+                    VocalLanguage = options.VocalLanguage,
+
+                    TempFileName = audioFileName,
+                    SchedulerOptions = options.SchedulerOptions.ToOptions(),
+                    LoraOptions = options.GetLoraOptions(),
+                    InputAudios = options.InputAudios
+                };
+
+                var tensorResult = await _pipelineClient.RunAsync(generateOptions);
+                if (!File.Exists(audioFileName))
+                    throw new Exception("Generated video result not found.");
+
+                return await AudioInputStream.CreateAsync(audioFileName);
+            }
+            catch (IOException ex)
+            {
+                HandleServerError(ex);
+                throw new Exception("Pipeline Closed Unexpectedly");
+            }
+            finally
+            {
+                IsExecuting = false;
+                IsCanceling = false;
+            }
+        }
+
+
         /// <summary>
         /// Cancel the running task (Load or Execute)
         /// </summary>
@@ -479,5 +535,6 @@ namespace Amuse.App.Services
         Task StopAsync();
         Task<ImageTensor> GenerateImageAsync(DiffusionInputOptions options);
         Task<VideoInputStream> GenerateVideoAsync(DiffusionInputOptions options);
+        Task<AudioInputStream> GenerateAudioAsync(DiffusionInputOptions options);
     }
 }

@@ -90,21 +90,33 @@
                                     <DataTemplate DataType="{x:Type Common:DiffusionHistory}">
                                         <DockPanel Margin="3">
                                             <Grid DockPanel.Dock="Top">
+                                                <Grid Width="120" Height="120" Visibility="{Binding MediaType, Converter={StaticResource EnumToVisibilityConverter}, ConverterParameter=Audio}">
+                                                    <CommonControls:FontAwesome Icon="f001" IconStyle="Solid" Size="96" Color="{StaticResource DefaultForeground}" Opacity=".2" />
+                                                </Grid>
                                                 <CommonControls:TransparentImageElement 
                                                     Height="120" 
                                                     Stretch="Uniform" 
                                                     DecodePixelHeight="80"
                                                     UriSource="{Binding ThumbPath, Converter={StaticResource StringToUriConverter}}" />
                                             </Grid>
-                                            <StackPanel Margin="0,3,0,0">
-                                                <TextBlock TextAlignment="Center" LineHeight="14" LineStackingStrategy="BlockLineHeight">
-                                                     <Run Text="{Binding Width}" />
-                                                     <Run Text="x" />
-                                                     <Run Text="{Binding Height}" />
-                                                     <LineBreak/>
-                                                     <Run Text="{Binding Source}" />
-                                                </TextBlock>
-                                            </StackPanel>
+                                            <Grid Margin="0,3,0,0">
+                                                <StackPanel Visibility="{Binding MediaType, Converter={StaticResource InverseEnumToVisibilityConverter}, ConverterParameter=Audio}">
+                                                    <TextBlock TextAlignment="Center" LineHeight="14" LineStackingStrategy="BlockLineHeight">
+                                                        <Run Text="{Binding Width}" />
+                                                        <Run Text="x" />
+                                                        <Run Text="{Binding Height}" />
+                                                        <LineBreak/>
+                                                        <Run Text="{Binding Source}" />
+                                                    </TextBlock>
+                                                </StackPanel>
+                                                <StackPanel Visibility="{Binding MediaType, Converter={StaticResource EnumToVisibilityConverter}, ConverterParameter=Audio}">
+                                                    <TextBlock TextAlignment="Center" LineHeight="14" LineStackingStrategy="BlockLineHeight">
+                                                        <Run Text="{Binding Duration, FallbackValue=00:00:00, StringFormat={}mm\\:ss\\.ff}" />
+                                                        <LineBreak/>
+                                                        <Run Text="{Binding Source}" />
+                                                    </TextBlock>
+                                                </StackPanel>
+                                            </Grid>
                                         </DockPanel>
                                     </DataTemplate>
 
@@ -295,6 +307,7 @@
                                 IsLoadOverlayEnabled="False" 
                                 IsSaveOverlayEnabled="False" 
                                 IsRemoveEnabled="False"
+                                IsContextMenuEnabled="True"
                                 Source="{Binding CurrentImage}"
                                 Progress="{Binding Progress}"
                                 Visibility="{Binding SelectedItem.MediaType, Converter={StaticResource EnumToVisibilityConverter}, ConverterParameter=Image}"/>
@@ -306,18 +319,22 @@
                                 IsSaveEnabled="False" 
                                 IsRemoveEnabled="False"
                                 IsFrameViewerEnabled="True"
+                                IsInputEnabled="True"
+                                IsContextMenuEnabled="True"
                                 Source="{Binding CurrentVideoStream}" 
                                 Progress="{Binding Progress}"
                                 Volume="{Binding Settings.VolumeOutput, Mode=TwoWay}"
                                 IsVolumeMute="{Binding Settings.IsVolumeOutputMute, Mode=TwoWay}"
                                 Visibility="{Binding SelectedItem.MediaType, Converter={StaticResource EnumToVisibilityConverter}, ConverterParameter=Video}"/>
-                            <CommonControls:AudioElement
+                            <CommonControls:AudioStreamElement
                                 IsReplayEnabled="True"
                                 IsAutoPlayEnabled="False"
                                 IsLoadEnabled="False"
-                                IsSaveEnabled="True" 
-                                Orientation="Vertical"
-                                Source="{Binding CurrentAudio}"
+                                IsSaveEnabled="True"
+                                IsRemoveEnabled="False"
+                                IsInputEnabled="True"
+                                IsContextMenuEnabled="True"
+                                Source="{Binding CurrentAudioStream}"
                                 Volume="{Binding Settings.VolumeOutput, Mode=TwoWay}"
                                 IsVolumeMute="{Binding Settings.IsVolumeOutputMute, Mode=TwoWay}"
                                 Visibility="{Binding SelectedItem.MediaType, Converter={StaticResource EnumToVisibilityConverter}, ConverterParameter=Audio}"/>

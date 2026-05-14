@@ -416,6 +416,15 @@ namespace Amuse.Common
                     .Select(x => x.AsImageTensor())
                     .ToList();
             }
+
+            if (pipelineRequest.AudioTensorCount > 0)
+            {
+                pipelineRequest.PipelineOptions.InputAudios = pipelineRequest.Tensors
+                    .Take(pipelineRequest.AudioTensorCount)
+                    .Select(x => x.AsAudioTensor(pipelineRequest.AudioSampleRate))
+                    .ToList();
+            }
+
         }
 
 

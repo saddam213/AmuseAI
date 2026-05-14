@@ -55,12 +55,13 @@
                             <StackPanel>
                                 <TextBlock Text="Audio Input" Style="{StaticResource FieldTextBlockStyle}" />
                                 <Border Style="{StaticResource AudioDropZoneStyle}">
-                                    <CommonControls:AudioElement 
+                                    <CommonControls:AudioStreamElement Height="120"
                                         Source="{Binding SourceAudio, Mode=TwoWay}" 
                                         Configuration="{Binding Settings}" 
                                         Volume="{Binding Settings.VolumeInput, Mode=TwoWay}"
                                         IsVolumeMute="{Binding Settings.IsVolumeInputMute, Mode=TwoWay}"
                                         IsReplayEnabled="False"
+                                        IsInputEnabled="{Binding IsPipelineLoaded}"
                                         OnMediaImport="OnMediaImport"/>
                                 </Border>
                             </StackPanel>

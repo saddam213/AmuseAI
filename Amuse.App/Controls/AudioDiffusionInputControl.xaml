@@ -1,0 +1,303 @@
+﻿<CommonControls:BaseControl x:Class="Amuse.App.Controls.AudioDiffusionInputControl"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:i="http://schemas.microsoft.com/xaml/behaviors"
+             xmlns:scm="clr-namespace:System.ComponentModel;assembly=WindowsBase"
+             xmlns:base="clr-namespace:Amuse.App"
+             xmlns:local="clr-namespace:Amuse.App.Controls"
+             xmlns:Behaviors="clr-namespace:TensorStack.WPF.Behaviors;assembly=TensorStack.WPF"
+             xmlns:CommonControls="clr-namespace:TensorStack.WPF.Controls;assembly=TensorStack.WPF"
+             xmlns:CommonConverters="clr-namespace:TensorStack.WPF.Converters;assembly=TensorStack.WPF"
+             xmlns:Controls="clr-namespace:Amuse.App.Controls"
+             xmlns:Common="clr-namespace:Amuse.App.Common"
+             xmlns:Views="clr-namespace:Amuse.App.Views">
+    <Grid  DataContext="{Binding RelativeSource={RelativeSource AncestorType={x:Type local:AudioDiffusionInputControl}}}">
+        <Grid.Resources>
+            <Style x:Key="DiffusionInputTab" TargetType="{x:Type TabItem}" BasedOn="{StaticResource {x:Type TabItem}}">
+                <Style.Triggers>
+                    <MultiDataTrigger>
+                        <MultiDataTrigger.Conditions>
+                            <Condition Binding="{Binding IsExecuting}" Value="True"/>
+                            <Condition Binding="{Binding IsSelected, RelativeSource={RelativeSource Self}}" Value="False"/>
+                        </MultiDataTrigger.Conditions>
+                        <MultiDataTrigger.Setters>
+                            <Setter Property="IsEnabled" Value="False"/>
+                        </MultiDataTrigger.Setters>
+                    </MultiDataTrigger>
+                    <MultiDataTrigger>
+                        <MultiDataTrigger.Conditions>
+                            <Condition Binding="{Binding IsAutomating}" Value="True"/>
+                            <Condition Binding="{Binding IsSelected, RelativeSource={RelativeSource Self}}" Value="False"/>
+                        </MultiDataTrigger.Conditions>
+                        <MultiDataTrigger.Setters>
+                            <Setter Property="IsEnabled" Value="False"/>
+                        </MultiDataTrigger.Setters>
+                    </MultiDataTrigger>
+                </Style.Triggers>
+            </Style>
+        </Grid.Resources>
+
+
+        <TabControl Margin="0,14,0,14" SelectedIndex="{Binding SelectedOption, Converter={StaticResource EnumToIntConverter}}">
+
+            <!--Options-->
+            <TabItem Style="{StaticResource DiffusionInputTab}">
+                <TabItem.Header>
+                    <StackPanel Orientation="Horizontal" Margin="3">
+                        <CommonControls:FontAwesome Icon="f1de" IconStyle="Solid" Color="{StaticResource AccentColour2}" Size="13"/>
+                        <TextBlock Text="Options" FontSize="11" FontWeight="DemiBold" Opacity=".9" Margin="5,0,0,0" />
+                    </StackPanel>
+                </TabItem.Header>
+                <DockPanel>
+
+                    <!--Input Options-->
+                    <StackPanel DockPanel.Dock="Top"  Margin="0,4,0,0" >
+
+                        <UniformGrid Columns="2">
+
+                            <!--Seed-->
+                            <StackPanel Margin="0,0,2,0">
+                                <TextBlock Text="Seed" Style="{StaticResource FieldTextBlockStyle}" />
+                                <Controls:SeedControl Seed="{Binding Options.Seed}"/>
+                            </StackPanel>
+
+                            <!--Scheduler-->
+                            <StackPanel Margin="2,0,0,0">
+                                <Controls:SchedulerControl Options="{Binding Schedulers}" SelectedOptions="{Binding Options.SchedulerOptions, Mode=TwoWay}" IsSelectorOnly="True"/>
+                            </StackPanel>
+
+                        </UniformGrid>
+
+                        <!--Steps-->
+                        <StackPanel>
+                            <CommonControls:SliderControl Text="Steps" Value="{Binding Options.Steps}" Minimum="1" Maximum="100" TickFrequency="1" />
+                        </StackPanel>
+
+                        <!--Guidance Scale-->
+                        <StackPanel>
+                            <CommonControls:SliderControl Text="Guidance" Value="{Binding Options.GuidanceScale}" Minimum="1" Maximum="20" TickFrequency="0.1" ValueFormat="F2"/>
+                        </StackPanel>
+
+                        <!--Strength-->
+                        <StackPanel>
+                            <CommonControls:SliderControl Text="Strength" Value="{Binding Options.Strength}"  IsPercent="True"  Minimum="0.01" Maximum="1" TickFrequency="0.01"/>
+                        </StackPanel>
+
+                        <!--BPM-->
+                        <StackPanel>
+                            <CommonControls:SliderControl Text="Bpm" Value="{Binding Options.Bpm, Mode=TwoWay}" Minimum="10" Maximum="300" TickFrequency="10" ValueFormat="N0"/>
+                        </StackPanel>
+
+
+                        <UniformGrid Columns="2">
+
+                            <StackPanel Margin="0,0,2,0">
+                                <TextBlock Text="Duration" Style="{StaticResource FieldTextBlockStyle}" />
+                                <ComboBox ItemsSource="{Binding Durations}" SelectedValue="{Binding Options.Duration}" SelectedValuePath="FloatValue" DisplayMemberPath="Label"/>
+                            </StackPanel>
+
+                            <StackPanel Margin="2,0,0,0">
+                                <TextBlock Text="Time Signature" Style="{StaticResource FieldTextBlockStyle}" />
+                                <ComboBox ItemsSource="{Binding TimeSignatures}" SelectedValue="{Binding Options.TimeSignature}" SelectedValuePath="Value" DisplayMemberPath="Label"/>
+                            </StackPanel>
+
+                            <StackPanel Margin="0,0,2,0">
+                                <TextBlock Text="Keyscale" Style="{StaticResource FieldTextBlockStyle}" />
+                                <ComboBox ItemsSource="{Binding KeyScales}" SelectedValue="{Binding Options.Keyscale}" SelectedValuePath="Value" DisplayMemberPath="Label" />
+                            </StackPanel>
+
+                            <StackPanel Margin="2,0,0,0">
+                                <TextBlock Text="Language" Style="{StaticResource FieldTextBlockStyle}" />
+                                <ComboBox ItemsSource="{Binding Languages}" SelectedValue="{Binding Options.VocalLanguage}" SelectedValuePath="Value" DisplayMemberPath="Label"/>
+                            </StackPanel>
+
+                        </UniformGrid>
+
+
+                        <!--Lora Strength-->
+                        <ItemsControl ItemsSource="{Binding Options.LoraOptions}">
+                            <ItemsControl.ItemTemplate>
+                                <DataTemplate>
+                                    <Grid>
+                                        <TextBlock Text="{Binding Name, StringFormat={}({0})}" FontSize="8" Margin="0,6,0,0" Opacity=".9" HorizontalAlignment="Center"/>
+                                        <CommonControls:SliderControl Text="Lora"  IsPercent="True" Minimum="0.01" Maximum="2" TickFrequency="0.01" Value="{Binding Strength}"/>
+                                    </Grid>
+                                </DataTemplate>
+                            </ItemsControl.ItemTemplate>
+                            <ItemsControl.ItemsPanel>
+                                <ItemsPanelTemplate>
+                                    <UniformGrid IsItemsHost="True">
+                                        <UniformGrid.Style>
+                                            <Style TargetType="{x:Type UniformGrid}">
+                                                <Setter Property="Columns" Value="2"/>
+                                                <Style.Triggers>
+                                                    <DataTrigger Binding="{Binding Options.LoraOptions.Count}" Value="1">
+                                                        <Setter Property="Columns" Value="1"/>
+                                                    </DataTrigger>
+                                                </Style.Triggers>
+                                            </Style>
+                                        </UniformGrid.Style>
+                                    </UniformGrid>
+                                </ItemsPanelTemplate>
+                            </ItemsControl.ItemsPanel>
+                        </ItemsControl>
+
+                    </StackPanel>
+
+                    <!--Prompt Options-->
+                    <DockPanel Margin="0,4,0,10">
+
+                        <!--LoRA Triggers-->
+                        <DockPanel DockPanel.Dock="Bottom" >
+                            <ItemsControl ItemsSource="{Binding Pipeline.LoraAdapterModel}">
+                                <ItemsControl.ItemTemplate>
+                                    <DataTemplate>
+                                        <ListBox ItemsSource="{Binding Triggers}" ItemContainerStyle="{StaticResource TransparentListBoxItem}" ScrollViewer.HorizontalScrollBarVisibility="Disabled" ScrollViewer.VerticalScrollBarVisibility="Disabled" Background="Transparent" BorderThickness="0" HorizontalAlignment="Left">
+                                            <ListBox.ItemsPanel>
+                                                <ItemsPanelTemplate>
+                                                    <WrapPanel IsItemsHost="True" />
+                                                </ItemsPanelTemplate>
+                                            </ListBox.ItemsPanel>
+                                            <ListBox.ItemTemplate>
+                                                <DataTemplate>
+                                                    <Button Content="{Binding}" Command="{Binding AddTriggerWordCommand, RelativeSource={RelativeSource AncestorType={x:Type local:AudioDiffusionInputControl}}}" CommandParameter="{Binding}" Background="{StaticResource ButtonBackgroundDisabled}" FontSize="9" Margin="0,2,3,0" Padding="3,0" ToolTip="Add LoRA Trigger word"/>
+                                                </DataTemplate>
+                                            </ListBox.ItemTemplate>
+                                        </ListBox>
+                                    </DataTemplate>
+                                </ItemsControl.ItemTemplate>
+                            </ItemsControl>
+                        </DockPanel>
+
+                    </DockPanel>
+
+                </DockPanel>
+
+            </TabItem>
+
+
+            <!--Advanced-->
+            <TabItem Style="{StaticResource DiffusionInputTab}">
+                <TabItem.Header>
+                    <StackPanel Orientation="Horizontal" Margin="3">
+                        <CommonControls:FontAwesome Icon="f085" IconStyle="Solid" Color="{StaticResource AccentColour2}" Size="12"/>
+                        <TextBlock Text="Advanced" FontSize="11" FontWeight="DemiBold" Opacity=".9" Margin="5,0,0,0"/>
+                    </StackPanel>
+                </TabItem.Header>
+                <StackPanel VerticalAlignment="Top" Margin="0,4,0,0">
+
+                    <!--SchedulerOptions-->
+                    <GroupBox Header="Scheduler Options" Margin="0,0,0,10">
+                        <Controls:SchedulerControl Options="{Binding Schedulers}" SelectedOptions="{Binding Options.SchedulerOptions, Mode=TwoWay}" IsSelectorOnly="False"/>
+                    </GroupBox>
+
+                </StackPanel>
+
+            </TabItem>
+
+
+            <!--Automation-->
+            <TabItem Style="{StaticResource DiffusionInputTab}">
+                <TabItem.Header>
+                    <StackPanel Orientation="Horizontal" Margin="3">
+                        <CommonControls:FontAwesome Icon="e0b6" IconStyle="Solid" Color="{StaticResource AccentColour2}" Size="12"/>
+                        <TextBlock Text="Automation" FontSize="11" FontWeight="DemiBold" Opacity=".9" Margin="5,0,0,0"/>
+                    </StackPanel>
+                </TabItem.Header>
+                <DockPanel>
+
+                    <!--Progress-->
+                    <CommonControls:ProgressElement DockPanel.Dock="Bottom" Progress="{Binding AutomationProgress}" />
+
+                    <StackPanel VerticalAlignment="Top" Margin="0,4,0,0">
+
+                        <StackPanel Margin="0,0,0,10">
+                            <TextBlock Text="Automation" Style="{StaticResource FieldTextBlockStyle}" />
+                            <ComboBox ItemsSource="{Binding AutomationOptions.Types}" SelectedItem="{Binding AutomationOptions.Type}" Style="{StaticResource EnumComboBox}" />
+                        </StackPanel>
+
+                        <!--Seed-->
+                        <Grid Visibility="{Binding AutomationOptions.Type, Converter={StaticResource EnumToVisibilityConverter}, ConverterParameter=Seed}">
+                            <UniformGrid Margin="0,0,0,0">
+                                <StackPanel>
+                                    <TextBlock Text="Image Count" Style="{StaticResource FieldTextBlockStyle}"/>
+                                    <TextBox Text="{Binding AutomationOptions.Count, UpdateSourceTrigger=PropertyChanged}" />
+                                </StackPanel>
+                            </UniformGrid>
+                        </Grid>
+
+                        <!--PromptFiles-->
+                        <Grid Visibility="{Binding AutomationOptions.Type, Converter={StaticResource EnumToVisibilityConverter}, ConverterParameter=PromptFiles}">
+                            <UniformGrid Margin="0,0,0,0" >
+                                <StackPanel>
+                                    <TextBlock Text="Prompt Folder" Style="{StaticResource FieldTextBlockStyle}"/>
+                                    <CommonControls:FilePickerTextBox FileName="{Binding AutomationOptions.InputDirectory, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" IsFolderPicker="True" IsRequired="True" />
+                                </StackPanel>
+                            </UniformGrid>
+                        </Grid>
+
+                        <!--PromptLines-->
+                        <Grid Visibility="{Binding AutomationOptions.Type, Converter={StaticResource EnumToVisibilityConverter}, ConverterParameter=PromptLines}">
+                            <UniformGrid Margin="0,0,0,0" >
+                                <StackPanel>
+                                    <TextBlock Text="Prompt File" Style="{StaticResource FieldTextBlockStyle}"/>
+                                    <CommonControls:FilePickerTextBox FileName="{Binding AutomationOptions.InputFile, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" IsRequired="True" Filter="Text Files|*.txt;" DefaultExt="txt"/>
+                                </StackPanel>
+                            </UniformGrid>
+                        </Grid>
+
+                        <!--ImageFiles-->
+                        <Grid Visibility="{Binding AutomationOptions.Type, Converter={StaticResource EnumToVisibilityConverter}, ConverterParameter=InputFiles}">
+                            <StackPanel Visibility="{Binding ProcessType, Converter={StaticResource EnumToVisibilityConverter}, ConverterParameter=ImageToImage|ImageEdit|ImageToVideo}">
+                                <UniformGrid Margin="0,0,0,0" >
+                                    <StackPanel>
+                                        <TextBlock Text="Image Folder" Style="{StaticResource FieldTextBlockStyle}"/>
+                                        <CommonControls:FilePickerTextBox FileName="{Binding AutomationOptions.InputDirectory, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" IsFolderPicker="True" IsRequired="True" />
+                                    </StackPanel>
+                                </UniformGrid>
+                                <CheckBox Content="Use Input Size" IsChecked="{Binding AutomationOptions.UseInputSize}" Margin="0,4,0,0"/>
+                            </StackPanel>
+                            <StackPanel  Visibility="{Binding ProcessType, Converter={StaticResource EnumToVisibilityConverter}, ConverterParameter=VideoToVideo}">
+                                <UniformGrid Margin="0,0,0,0" >
+                                    <StackPanel>
+                                        <TextBlock Text="Video Folder" Style="{StaticResource FieldTextBlockStyle}"/>
+                                        <CommonControls:FilePickerTextBox FileName="{Binding AutomationOptions.InputDirectory, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" IsFolderPicker="True" IsRequired="True" />
+                                    </StackPanel>
+                                </UniformGrid>
+                            </StackPanel>
+                        </Grid>
+
+
+                        <!--HistoryEnabled-->
+                        <CheckBox Content="Output History" IsChecked="{Binding AutomationOptions.IsHistoryEnabled}" Margin="0,4,0,0"/>
+
+
+                        <!--OutputDirectory-->
+                        <CheckBox  Content="Output Location" IsChecked="{Binding AutomationOptions.UseOutputDirectory}" Margin="0,4,0,0"/>
+                        <Grid Visibility="{Binding AutomationOptions.UseOutputDirectory,Converter={StaticResource BooleanToVisibilityConverter}}">
+                            <UniformGrid Margin="0,0,0,0" >
+                                <StackPanel>
+                                    <TextBlock Text="Output Folder" Style="{StaticResource FieldTextBlockStyle}"/>
+                                    <CommonControls:FilePickerTextBox FileName="{Binding AutomationOptions.OutputDirectory, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" IsFolderPicker="True" IsRequired="True" />
+                                </StackPanel>
+                            </UniformGrid>
+                        </Grid>
+                    </StackPanel>
+
+                </DockPanel>
+            </TabItem>
+
+
+            <TabControl.Template>
+                <ControlTemplate TargetType="TabControl">
+                    <DockPanel>
+                        <UniformGrid IsItemsHost="True" Rows="1" DockPanel.Dock="Top"></UniformGrid>
+                        <ContentPresenter ContentSource="SelectedContent"></ContentPresenter>
+                    </DockPanel>
+                </ControlTemplate>
+            </TabControl.Template>
+        </TabControl>
+    </Grid>
+</CommonControls:BaseControl>

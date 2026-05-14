@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using System.Text.Json.Serialization;
 using TensorStack.Common;
 using TensorStack.Common.Tensor;
@@ -42,6 +43,8 @@ namespace Amuse.Common.Message
             PipelineOptions = options;
             ImageTensorCount = options.InputImages?.Count ?? 0;
             ControlNetTensorCount = options.InputControlImages?.Count ?? 0;
+            AudioTensorCount = options.InputAudios?.Count ?? 0;
+            AudioSampleRate = options.InputAudios?.FirstOrDefault()?.SampleRate ?? 0;
             Tensors = GetInputTensors(options);
             Type = RequestType.PipelineRun;
         }
@@ -54,6 +57,8 @@ namespace Amuse.Common.Message
         public PipelineOptions PipelineOptions { get; set; }
         public int ImageTensorCount { get; set; }
         public int ControlNetTensorCount { get; set; }
+        public int AudioTensorCount { get; set; }
+        public int AudioSampleRate { get; set; }
 
         [JsonIgnore]
         public IReadOnlyList<Tensor<float>> Tensors { get; set; }
@@ -76,6 +81,7 @@ namespace Amuse.Common.Message
 
             AddTensors(options.InputImages);
             AddTensors(options.InputControlImages);
+            validTensors.AddRange(options.InputAudios);
             if (validTensors.Count == 0)
                 return default;
 

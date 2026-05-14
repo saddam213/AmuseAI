@@ -35,7 +35,7 @@ namespace Amuse.App.Common
         public MemoryProfile[] MemoryProfile { get; set; }
         public DataType BaseType { get; set; }
         public ProcessType[] ProcessTypes { get; set; }
-        public List<SizeOption> Resolutions { get; set; }
+        public List<SizeOption> Resolutions { get; set; } = [];
         public DiffusionDefaultOptions DefaultOptions { get; set; }
 
         [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]

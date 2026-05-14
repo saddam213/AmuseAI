@@ -22,7 +22,7 @@ namespace Amuse.App.Dialogs
     {
         private ImageInput _currentImage;
         private VideoInputStream _currentVideoStream;
-        private AudioInput _currentAudio;
+        private AudioInputStream _currentAudioStream;
         private TextInput _currentText;
 
         public MediaPreviewDialog(Settings settings, IHistoryService historyService)
@@ -61,10 +61,10 @@ namespace Amuse.App.Dialogs
             set { SetProperty(ref _currentImage, value); }
         }
 
-        public AudioInput CurrentAudio
+        public AudioInputStream CurrentAudioStream
         {
-            get { return _currentAudio; }
-            set { SetProperty(ref _currentAudio, value); }
+            get { return _currentAudioStream; }
+            set { SetProperty(ref _currentAudioStream, value); }
         }
 
         public TextInput CurrentText
@@ -134,14 +134,14 @@ namespace Amuse.App.Dialogs
 
                 CurrentText = default;
                 CurrentImage = default;
-                CurrentAudio = default;
+                CurrentAudioStream = default;
                 CurrentVideoStream = default;
                 if (currentItem.MediaType == MediaType.Text)
                     CurrentText = await TensorStack.Common.TextInput.CreateAsync(currentItem.MediaPath, Encoding.UTF8);
                 if (currentItem.MediaType == MediaType.Image)
                     CurrentImage = await ImageInput.CreateAsync(currentItem.MediaPath);
                 if (currentItem.MediaType == MediaType.Audio)
-                    CurrentAudio = await AudioInput.CreateAsync(currentItem.MediaPath);
+                    CurrentAudioStream = await AudioInputStream.CreateAsync(currentItem.MediaPath);
                 if (currentItem.MediaType == MediaType.Video)
                     CurrentVideoStream = await VideoInputStream.CreateAsync(currentItem.MediaPath);
             }
@@ -156,7 +156,7 @@ namespace Amuse.App.Dialogs
         {
             CurrentText = default;
             CurrentImage = default;
-            CurrentAudio = default;
+            CurrentAudioStream = default;
             CurrentVideoStream = default;
             return base.CloseAsync();
         }
@@ -166,7 +166,7 @@ namespace Amuse.App.Dialogs
         {
             CurrentText = default;
             CurrentImage = default;
-            CurrentAudio = default;
+            CurrentAudioStream = default;
             CurrentVideoStream = default;
             return base.CancelAsync();
         }

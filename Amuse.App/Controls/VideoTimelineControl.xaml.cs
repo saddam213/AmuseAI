@@ -306,6 +306,9 @@ namespace Amuse.App.Controls
 
         private async Task TimelineClearAsync()
         {
+            if (!await DialogService.ShowMessageAsync("Clear Timeline", "Are you sure you want to clear the timeline?", TensorStack.WPF.Dialogs.MessageDialogType.YesNo, TensorStack.WPF.Dialogs.MessageBoxIconType.Question, TensorStack.WPF.Dialogs.MessageBoxStyleType.Info))
+                return;
+
             await TimelineStopAsync();
             PreviewFrame = null;
             PreviewOverlay = null;
@@ -790,7 +793,7 @@ namespace Amuse.App.Controls
 
         private Task<AudioTimeline> CreateAudioTimeline()
         {
-            var audioTimeline = new AudioTimeline(_timelineLengthTime);
+            var audioTimeline = new AudioTimeline(_timelineLengthTime) { Overlap = TimeSpan.FromMilliseconds(_timelineInterval) };
             var segments = TimelineSegements.Where(x => x.IsAudioPresent).ToArray();
             foreach (var segement in segments)
             {
@@ -817,7 +820,8 @@ namespace Amuse.App.Controls
             double targetFrameCenter = targetFrameLeft + (_timelineFrameWidth / 2.0);
             double viewportCenter = (TimelineViewer.ViewportWidth / 2.0) - 2;
             double targetOffset = targetFrameCenter - viewportCenter;
-            TimelineViewer.ScrollToHorizontalOffset(Math.Max(0, targetOffset));
+            if (double.IsNormal(targetOffset))
+                TimelineViewer.ScrollToHorizontalOffset(Math.Max(0, targetOffset));
         }
 
 

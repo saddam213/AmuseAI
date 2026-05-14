@@ -181,7 +181,6 @@
       ],
       "BaseType": "bfloat16",
       "ProcessTypes": [ "TextToVideo" ],
-      "Vendor": [ "Nvidia" ],
       "Resolutions": [
         {
           "Width": 720,
@@ -268,7 +267,6 @@
       ],
       "BaseType": "bfloat16",
       "ProcessTypes": [ "TextToVideo" ],
-      "Vendor": [ "Nvidia" ],
       "Resolutions": [
         {
           "Width": 720,
@@ -355,7 +353,6 @@
       ],
       "BaseType": "bfloat16",
       "ProcessTypes": [ "ImageToVideo" ],
-      "Vendor": [ "Nvidia" ],
       "Resolutions": [
         {
           "Width": 720,
@@ -442,7 +439,6 @@
       ],
       "BaseType": "bfloat16",
       "ProcessTypes": [ "TextToVideo" ],
-      "Vendor": [ "Nvidia" ],
       "Resolutions": [
         {
           "Width": 1360,
@@ -529,7 +525,6 @@
       ],
       "BaseType": "bfloat16",
       "ProcessTypes": [ "ImageToVideo" ],
-      "Vendor": [ "Nvidia" ],
       "Resolutions": [
         {
           "Width": 832,
@@ -1822,6 +1817,396 @@
       }
     },
     {
+      "Backend": "PyTorch",
+      "Name": "Helios_Base",
+      "Pipeline": "HeliosPipeline",
+      "Path": "BestWishYsh/Helios-Base",
+      "Variant": null,
+      "Source": "Folder",
+      "IsDefault": false,
+      "IsGated": false,
+      "Status": "Pending",
+      "MemoryProfile": [
+        {
+          "QualityMode": "Draft",
+          "MemoryModes": [ 4, 20, 32 ]
+        },
+        {
+          "QualityMode": "Standard",
+          "MemoryModes": [ 4, 20, 32 ]
+        },
+        {
+          "QualityMode": "Production",
+          "MemoryModes": [ 4, 23, 32 ]
+        }
+      ],
+      "BaseType": "bfloat16",
+      "ProcessTypes": [ "TextToVideo", "ImageToVideo", "VideoToVideo" ],
+      "Link": "https://huggingface.co/BestWishYsh/Helios-Base",
+      "DefaultOptions": {
+        "Steps": 20,
+        "Width": 640,
+        "Height": 384,
+        "Frames": 132,
+        "FrameRate": 24,
+        "GuidanceScale": 5,
+        "IsVaeTilingEnabled": true,
+        "IsVaeSlicingEnabled": true,
+        "Scheduler": "Helios",
+        "Schedulers": {
+          "Helios": {
+            "Scheduler": "Helios",
+            "num_train_timesteps": 1000,
+            "shift": 1,
+            "stages": 3,
+            "stage_range": [
+              0,
+              0.33333334,
+              0.6666667,
+              1
+            ],
+            "gamma": 0.33333334,
+            "thresholding": false,
+            "prediction_type": "flow_prediction",
+            "solver_order": 2,
+            "predict_x0": true,
+            "solver_type": "bh2",
+            "lower_order_final": true,
+            "disable_corrector": [],
+            "use_flow_sigmas": true,
+            "use_dynamic_shifting": false,
+            "time_shift_type": "exponential"
+          }
+        },
+        "FrameOptions": [
+          33,
+          66,
+          132,
+          264,
+          528,
+          1056,
+          2112,
+          4224,
+          8448,
+          16896,
+          33792
+        ]
+      },
+      "Resolutions": [
+        {
+          "Width": 736,
+          "Height": 1280
+        },
+        {
+          "Width": 768,
+          "Height": 1152
+        },
+        {
+          "Width": 544,
+          "Height": 960
+        },
+        {
+          "Width": 512,
+          "Height": 768
+        },
+        {
+          "Width": 480,
+          "Height": 736
+        },
+        {
+          "Width": 384,
+          "Height": 640
+        },
+        {
+          "Width": 512,
+          "Height": 512
+        },
+        {
+          "Width": 640,
+          "Height": 384,
+          "IsDefault": true
+        },
+        {
+          "Width": 736,
+          "Height": 480
+        },
+        {
+          "Width": 768,
+          "Height": 512
+        },
+        {
+          "Width": 960,
+          "Height": 544
+        },
+        {
+          "Width": 1152,
+          "Height": 768
+        },
+        {
+          "Width": 1280,
+          "Height": 736
+        }
+      ]
+    },
+    {
+      "Backend": "PyTorch",
+      "Name": "Helios_Mid",
+      "Pipeline": "HeliosPipeline",
+      "Path": "BestWishYsh/Helios-Mid",
+      "Variant": null,
+      "Source": "Folder",
+      "IsDefault": false,
+      "IsGated": false,
+      "Status": "Pending",
+      "MemoryProfile": [
+        {
+          "QualityMode": "Draft",
+          "MemoryModes": [ 4, 20, 32 ]
+        },
+        {
+          "QualityMode": "Standard",
+          "MemoryModes": [ 4, 20, 32 ]
+        },
+        {
+          "QualityMode": "Production",
+          "MemoryModes": [ 4, 23, 32 ]
+        }
+      ],
+      "BaseType": "bfloat16",
+      "ProcessTypes": [ "TextToVideo", "ImageToVideo", "VideoToVideo" ],
+      "Link": "https://huggingface.co/BestWishYsh/Helios-Mid",
+      "DefaultOptions": {
+        "Steps": 20,
+        "Width": 640,
+        "Height": 384,
+        "Frames": 132,
+        "FrameRate": 24,
+        "GuidanceScale": 0,
+        "IsVaeTilingEnabled": true,
+        "IsVaeSlicingEnabled": true,
+        "Scheduler": "Helios",
+        "Schedulers": {
+          "Helios": {
+            "Scheduler": "Helios",
+            "num_train_timesteps": 1000,
+            "shift": 1,
+            "stages": 3,
+            "stage_range": [
+              0,
+              0.33333334,
+              0.6666667,
+              1
+            ],
+            "gamma": 0.33333334,
+            "thresholding": false,
+            "prediction_type": "flow_prediction",
+            "solver_order": 2,
+            "predict_x0": true,
+            "solver_type": "bh2",
+            "lower_order_final": true,
+            "disable_corrector": [],
+            "use_flow_sigmas": true,
+            "use_dynamic_shifting": false,
+            "time_shift_type": "exponential"
+          }
+        },
+        "FrameOptions": [
+          33,
+          66,
+          132,
+          264,
+          528,
+          1056,
+          2112,
+          4224,
+          8448,
+          16896,
+          33792
+        ]
+      },
+      "Resolutions": [
+        {
+          "Width": 736,
+          "Height": 1280
+        },
+        {
+          "Width": 768,
+          "Height": 1152
+        },
+        {
+          "Width": 544,
+          "Height": 960
+        },
+        {
+          "Width": 512,
+          "Height": 768
+        },
+        {
+          "Width": 480,
+          "Height": 736
+        },
+        {
+          "Width": 384,
+          "Height": 640
+        },
+        {
+          "Width": 512,
+          "Height": 512
+        },
+        {
+          "Width": 640,
+          "Height": 384,
+          "IsDefault": true
+        },
+        {
+          "Width": 736,
+          "Height": 480
+        },
+        {
+          "Width": 768,
+          "Height": 512
+        },
+        {
+          "Width": 960,
+          "Height": 544
+        },
+        {
+          "Width": 1152,
+          "Height": 768
+        },
+        {
+          "Width": 1280,
+          "Height": 736
+        }
+      ]
+    },
+    {
+      "Backend": "PyTorch",
+      "Name": "Helios_Distilled",
+      "Pipeline": "HeliosPipeline",
+      "Path": "BestWishYsh/Helios-Distilled",
+      "Variant": null,
+      "Source": "Folder",
+      "IsDefault": false,
+      "IsGated": false,
+      "Status": "Pending",
+      "MemoryProfile": [
+        {
+          "QualityMode": "Draft",
+          "MemoryModes": [ 4, 20, 32 ]
+        },
+        {
+          "QualityMode": "Standard",
+          "MemoryModes": [ 4, 20, 32 ]
+        },
+        {
+          "QualityMode": "Production",
+          "MemoryModes": [ 4, 23, 32 ]
+        }
+      ],
+      "BaseType": "bfloat16",
+      "ProcessTypes": [ "TextToVideo", "ImageToVideo", "VideoToVideo" ],
+      "Link": "https://huggingface.co/BestWishYsh/Helios-Distilled",
+      "DefaultOptions": {
+        "Steps": 3,
+        "Width": 640,
+        "Height": 384,
+        "Frames": 132,
+        "FrameRate": 24,
+        "GuidanceScale": 0,
+        "IsVaeTilingEnabled": true,
+        "IsVaeSlicingEnabled": true,
+        "Scheduler": "HeliosDMD",
+        "Schedulers": {
+          "HeliosDMD": {
+            "Scheduler": "HeliosDMD",
+            "num_train_timesteps": 1000,
+            "shift": 1,
+            "stages": 3,
+            "stage_range": [
+              0,
+              0.33333334,
+              0.6666667,
+              1
+            ],
+            "gamma": 0.33333334,
+            "prediction_type": "flow_prediction",
+            "use_flow_sigmas": true,
+            "use_dynamic_shifting": false,
+            "time_shift_type": "linear"
+          }
+        },
+        "FrameOptions": [
+          33,
+          66,
+          132,
+          264,
+          528,
+          1056,
+          2112,
+          4224,
+          8448,
+          16896,
+          33792
+        ]
+      },
+      "Resolutions": [
+        {
+          "Width": 736,
+          "Height": 1280
+        },
+        {
+          "Width": 768,
+          "Height": 1152
+        },
+        {
+          "Width": 544,
+          "Height": 960
+        },
+        {
+          "Width": 512,
+          "Height": 768
+        },
+        {
+          "Width": 480,
+          "Height": 736
+        },
+        {
+          "Width": 384,
+          "Height": 640
+        },
+        {
+          "Width": 512,
+          "Height": 512
+        },
+        {
+          "Width": 640,
+          "Height": 384,
+          "IsDefault": true
+        },
+        {
+          "Width": 736,
+          "Height": 480
+        },
+        {
+          "Width": 768,
+          "Height": 512
+        },
+        {
+          "Width": 960,
+          "Height": 544
+        },
+        {
+          "Width": 1152,
+          "Height": 768
+        },
+        {
+          "Width": 1280,
+          "Height": 736
+        }
+      ]
+    },
+    {
       "Backend": "Pytorch",
       "Name": "Kandinsky5_T2I_Lite",
       "Pipeline": "Kandinsky5Pipeline",
@@ -1848,7 +2233,6 @@
       ],
       "BaseType": "bfloat16",
       "ProcessTypes": [ "TextToImage" ],
-      "Vendor": [ "Nvidia" ],
       "Resolutions": [
         {
           "Width": 640,
@@ -1944,7 +2328,6 @@
       ],
       "BaseType": "bfloat16",
       "ProcessTypes": [ "ImageEdit" ],
-      "Vendor": [ "Nvidia" ],
       "Resolutions": [
         {
           "Width": 640,
@@ -2040,7 +2423,6 @@
       ],
       "BaseType": "bfloat16",
       "ProcessTypes": [ "TextToVideo" ],
-      "Vendor": [ "Nvidia" ],
       "Resolutions": [
         {
           "Width": 768,
@@ -2112,7 +2494,6 @@
       ],
       "BaseType": "bfloat16",
       "ProcessTypes": [ "TextToVideo" ],
-      "Vendor": [ "Nvidia" ],
       "Resolutions": [
         {
           "Width": 768,
@@ -2184,7 +2565,6 @@
       ],
       "BaseType": "bfloat16",
       "ProcessTypes": [ "TextToVideo" ],
-      "Vendor": [ "Nvidia" ],
       "Resolutions": [
         {
           "Width": 768,
@@ -2256,7 +2636,6 @@
       ],
       "BaseType": "bfloat16",
       "ProcessTypes": [ "TextToVideo" ],
-      "Vendor": [ "Nvidia" ],
       "Resolutions": [
         {
           "Width": 768,
@@ -2328,7 +2707,6 @@
       ],
       "BaseType": "bfloat16",
       "ProcessTypes": [ "TextToVideo" ],
-      "Vendor": [ "Nvidia" ],
       "Resolutions": [
         {
           "Width": 1024,
@@ -2400,7 +2778,6 @@
       ],
       "BaseType": "bfloat16",
       "ProcessTypes": [ "TextToVideo" ],
-      "Vendor": [ "Nvidia" ],
       "Resolutions": [
         {
           "Width": 1024,
@@ -2472,7 +2849,6 @@
       ],
       "BaseType": "bfloat16",
       "ProcessTypes": [ "ImageToVideo" ],
-      "Vendor": [ "Nvidia" ],
       "Resolutions": [
         {
           "Width": 1024,
@@ -2544,7 +2920,6 @@
       ],
       "BaseType": "bfloat16",
       "ProcessTypes": [ "ImageToVideo" ],
-      "Vendor": [ "Nvidia" ],
       "Resolutions": [
         {
           "Width": 1024,
@@ -3035,7 +3410,7 @@
     },
     {
       "Backend": "Pytorch",
-      "Name": "LTX2_19B",
+      "Name": "LTX20_Base",
       "Pipeline": "LTX20Pipeline",
       "Path": "Lightricks/LTX-2",
       "Variant": null,
@@ -3060,7 +3435,6 @@
       ],
       "BaseType": "bfloat16",
       "ProcessTypes": [ "TextToVideo", "ImageToVideo" ],
-      "Vendor": [ "Nvidia" ],
       "Resolutions": [
         {
           "Width": 2176,
@@ -3171,7 +3545,7 @@
     },
     {
       "Backend": "Pytorch",
-      "Name": "LTX2_19B_D",
+      "Name": "LTX20_Distilled",
       "Pipeline": "LTX20Pipeline",
       "Path": "Lightricks/LTX-2",
       "Variant": null,
@@ -3196,7 +3570,6 @@
       ],
       "BaseType": "bfloat16",
       "ProcessTypes": [ "TextToVideo", "ImageToVideo" ],
-      "Vendor": [ "Nvidia" ],
       "Resolutions": [
         {
           "Width": 2176,
@@ -3306,6 +3679,342 @@
       }
     },
     {
+      "Backend": "PyTorch",
+      "Name": "LTX23_Base",
+      "Pipeline": "LTX23Pipeline",
+      "Path": "dg845/LTX-2.3-Diffusers",
+      "Variant": null,
+      "Source": "Folder",
+      "IsDefault": false,
+      "IsGated": false,
+      "Status": "Pending",
+      "MemoryProfile": [
+        {
+          "QualityMode": "Draft",
+          "MemoryModes": [ 12, 20, 48 ]
+        },
+        {
+          "QualityMode": "Standard",
+          "MemoryModes": [ 12, 23, 64 ]
+        },
+        {
+          "QualityMode": "Production",
+          "MemoryModes": [ 12, 46, 92 ]
+        }
+      ],
+      "BaseType": "bfloat16",
+      "ProcessTypes": [ "TextToVideo", "ImageToVideo" ],
+      "Link": "https://huggingface.co/Lightricks/LTX-2",
+      "DefaultOptions": {
+        "Steps": 40,
+        "Width": 768,
+        "Height": 512,
+        "Frames": 121,
+        "FrameRate": 24,
+        "GuidanceScale": 3,
+        "IsVaeTilingEnabled": true,
+        "IsVaeSlicingEnabled": true,
+        "IsFirstFrameLastFrameEnabled": true,
+        "Scheduler": "FlowMatchEuler",
+        "Schedulers": {
+          "FlowMatchEuler": {
+            "Scheduler": "FlowMatchEuler",
+            "num_train_timesteps": 1000,
+            "shift": 1,
+            "use_dynamic_shifting": true,
+            "base_shift": 0.95,
+            "max_shift": 2.05,
+            "base_image_seq_len": 1024,
+            "max_image_seq_len": 4096,
+            "invert_sigmas": false,
+            "shift_terminal": 0.1,
+            "use_karras_sigmas": false,
+            "use_exponential_sigmas": false,
+            "use_beta_sigmas": false,
+            "time_shift_type": "exponential",
+            "stochastic_sampling": false
+          },
+          "UniPCMultistep": {
+            "Scheduler": "UniPCMultistep",
+            "num_train_timesteps": 1000,
+            "beta_start": 0.0001,
+            "beta_end": 0.02,
+            "beta_schedule": "linear",
+            "trained_betas": null,
+            "solver_order": 2,
+            "prediction_type": "flow_prediction",
+            "thresholding": false,
+            "dynamic_thresholding_ratio": 0.995,
+            "sample_max_value": 1,
+            "predict_x0": true,
+            "solver_type": "bh2",
+            "lower_order_final": true,
+            "use_karras_sigmas": false,
+            "use_exponential_sigmas": false,
+            "use_beta_sigmas": false,
+            "use_flow_sigmas": true,
+            "flow_shift": 1,
+            "timestep_spacing": "linspace",
+            "steps_offset": 0,
+            "final_sigmas_type": "zero",
+            "rescale_betas_zero_snr": false,
+            "use_dynamic_shifting": false,
+            "time_shift_type": "exponential",
+            "sigma_min": null,
+            "sigma_max": null,
+            "shift_terminal": null
+          }
+        },
+        "FrameOptions": [
+          65,
+          97,
+          121,
+          137,
+          161,
+          257
+        ]
+      },
+      "Resolutions": [
+        {
+          "Width": 2176,
+          "Height": 3840
+        },
+        {
+          "Width": 864,
+          "Height": 2048
+        },
+        {
+          "Width": 1088,
+          "Height": 1920
+        },
+        {
+          "Width": 736,
+          "Height": 1280
+        },
+        {
+          "Width": 768,
+          "Height": 1152
+        },
+        {
+          "Width": 544,
+          "Height": 960
+        },
+        {
+          "Width": 512,
+          "Height": 768
+        },
+        {
+          "Width": 480,
+          "Height": 736
+        },
+        {
+          "Width": 640,
+          "Height": 640
+        },
+        {
+          "Width": 736,
+          "Height": 480
+        },
+        {
+          "Width": 768,
+          "Height": 512,
+          "IsDefault": true
+        },
+        {
+          "Width": 960,
+          "Height": 544
+        },
+        {
+          "Width": 1152,
+          "Height": 768
+        },
+        {
+          "Width": 1280,
+          "Height": 736
+        },
+        {
+          "Width": 1920,
+          "Height": 1088
+        },
+        {
+          "Width": 2048,
+          "Height": 864
+        },
+        {
+          "Width": 3840,
+          "Height": 2176
+        }
+      ]
+    },
+    {
+      "Backend": "PyTorch",
+      "Name": "LTX23_Distilled",
+      "Pipeline": "LTX23Pipeline",
+      "Path": "dg845/LTX-2.3-Distilled-Diffusers",
+      "Variant": null,
+      "Source": "Folder",
+      "IsDefault": false,
+      "IsGated": false,
+      "Status": "Pending",
+      "MemoryProfile": [
+        {
+          "QualityMode": "Draft",
+          "MemoryModes": [ 12, 20, 48 ]
+        },
+        {
+          "QualityMode": "Standard",
+          "MemoryModes": [ 12, 23, 64 ]
+        },
+        {
+          "QualityMode": "Production",
+          "MemoryModes": [ 12, 46, 92 ]
+        }
+      ],
+      "BaseType": "bfloat16",
+      "ProcessTypes": [ "TextToVideo", "ImageToVideo" ],
+      "Link": "https://huggingface.co/Lightricks/LTX-2",
+      "DefaultOptions": {
+        "Steps": 8,
+        "Width": 768,
+        "Height": 512,
+        "Frames": 121,
+        "FrameRate": 24,
+        "GuidanceScale": 0,
+        "IsVaeTilingEnabled": true,
+        "IsVaeSlicingEnabled": true,
+        "IsFirstFrameLastFrameEnabled": true,
+        "Scheduler": "FlowMatchEuler",
+        "Schedulers": {
+          "FlowMatchEuler": {
+            "Scheduler": "FlowMatchEuler",
+            "num_train_timesteps": 1000,
+            "shift": 1,
+            "use_dynamic_shifting": true,
+            "base_shift": 0.95,
+            "max_shift": 2.05,
+            "base_image_seq_len": 1024,
+            "max_image_seq_len": 4096,
+            "invert_sigmas": false,
+            "shift_terminal": null,
+            "use_karras_sigmas": false,
+            "use_exponential_sigmas": false,
+            "use_beta_sigmas": false,
+            "time_shift_type": "exponential",
+            "stochastic_sampling": false
+          },
+          "UniPCMultistep": {
+            "Scheduler": "UniPCMultistep",
+            "num_train_timesteps": 1000,
+            "beta_start": 0.0001,
+            "beta_end": 0.02,
+            "beta_schedule": "linear",
+            "trained_betas": null,
+            "solver_order": 2,
+            "prediction_type": "flow_prediction",
+            "thresholding": false,
+            "dynamic_thresholding_ratio": 0.995,
+            "sample_max_value": 1,
+            "predict_x0": true,
+            "solver_type": "bh2",
+            "lower_order_final": true,
+            "use_karras_sigmas": false,
+            "use_exponential_sigmas": false,
+            "use_beta_sigmas": false,
+            "use_flow_sigmas": true,
+            "flow_shift": 1,
+            "timestep_spacing": "linspace",
+            "steps_offset": 0,
+            "final_sigmas_type": "zero",
+            "rescale_betas_zero_snr": false,
+            "use_dynamic_shifting": false,
+            "time_shift_type": "exponential",
+            "sigma_min": null,
+            "sigma_max": null,
+            "shift_terminal": null
+          }
+        },
+        "FrameOptions": [
+          65,
+          97,
+          121,
+          137,
+          161,
+          257
+        ]
+      },
+      "Resolutions": [
+        {
+          "Width": 2176,
+          "Height": 3840
+        },
+        {
+          "Width": 864,
+          "Height": 2048
+        },
+        {
+          "Width": 1088,
+          "Height": 1920
+        },
+        {
+          "Width": 736,
+          "Height": 1280
+        },
+        {
+          "Width": 768,
+          "Height": 1152
+        },
+        {
+          "Width": 544,
+          "Height": 960
+        },
+        {
+          "Width": 512,
+          "Height": 768
+        },
+        {
+          "Width": 480,
+          "Height": 736
+        },
+        {
+          "Width": 640,
+          "Height": 640
+        },
+        {
+          "Width": 736,
+          "Height": 480
+        },
+        {
+          "Width": 768,
+          "Height": 512,
+          "IsDefault": true
+        },
+        {
+          "Width": 960,
+          "Height": 544
+        },
+        {
+          "Width": 1152,
+          "Height": 768
+        },
+        {
+          "Width": 1280,
+          "Height": 736
+        },
+        {
+          "Width": 1920,
+          "Height": 1088
+        },
+        {
+          "Width": 2048,
+          "Height": 864
+        },
+        {
+          "Width": 3840,
+          "Height": 2176
+        }
+      ]
+    },
+    {
       "Backend": "Pytorch",
       "Name": "Qwen_Base",
       "Pipeline": "QwenImagePipeline",
@@ -3332,7 +4041,6 @@
       ],
       "BaseType": "bfloat16",
       "ProcessTypes": [ "TextToImage", "ImageToImage", "ImageInpaint", "ImageControlNet" ],
-      "Vendor": [ "Nvidia" ],
       "Resolutions": [
         {
           "Width": 1664,
@@ -3458,7 +4166,6 @@
       ],
       "BaseType": "bfloat16",
       "ProcessTypes": [ "ImageEdit" ],
-      "Vendor": [ "Nvidia" ],
       "Resolutions": [
         {
           "Width": 1664,
@@ -3556,6 +4263,230 @@
         "SampleRate": 24000,
         "FrameOptions": null
       }
+    },
+    {
+      "Backend": "PyTorch",
+      "Name": "SkyReels2_1B",
+      "Pipeline": "SkyReelsV2Pipeline",
+      "Path": "Skywork/SkyReels-V2-DF-1.3B-540P-Diffusers",
+      "Variant": null,
+      "Source": "Folder",
+      "IsDefault": false,
+      "IsGated": false,
+      "Status": "Pending",
+      "MemoryProfile": [
+        {
+          "QualityMode": "Draft",
+          "MemoryModes": [ 4, 20, 32 ]
+        },
+        {
+          "QualityMode": "Standard",
+          "MemoryModes": [ 4, 20, 32 ]
+        },
+        {
+          "QualityMode": "Production",
+          "MemoryModes": [ 4, 23, 32 ]
+        }
+      ],
+      "BaseType": "bfloat16",
+      "ProcessTypes": [ "TextToVideo", "ImageToVideo", "VideoToVideo" ],
+      "Vendor": [ "Nvidia", "AMD" ],
+      "Link": "https://huggingface.co/Skywork/SkyReels-V2-DF-1.3B-540P-Diffusers",
+      "DefaultOptions": {
+        "Steps": 30,
+        "Width": 960,
+        "Height": 544,
+        "Frames": 97,
+        "FrameRate": 24,
+        "GuidanceScale": 0,
+        "IsVaeTilingEnabled": true,
+        "IsVaeSlicingEnabled": true,
+        "IsFirstFrameLastFrameEnabled": true,
+        "Scheduler": "UniPCMultistep",
+        "Schedulers": {
+          "FlowMatchEuler": {
+            "Scheduler": "FlowMatchEuler",
+            "num_train_timesteps": 1000,
+            "shift": 3,
+            "use_dynamic_shifting": false,
+            "base_shift": 0.5,
+            "max_shift": 1.15,
+            "base_image_seq_len": 256,
+            "max_image_seq_len": 4096,
+            "invert_sigmas": false,
+            "shift_terminal": null,
+            "use_karras_sigmas": false,
+            "use_exponential_sigmas": false,
+            "use_beta_sigmas": false,
+            "time_shift_type": "exponential",
+            "stochastic_sampling": false
+          },
+          "UniPCMultistep": {
+            "Scheduler": "UniPCMultistep",
+            "num_train_timesteps": 1000,
+            "beta_start": 0.0001,
+            "beta_end": 0.02,
+            "beta_schedule": "linear",
+            "trained_betas": null,
+            "solver_order": 2,
+            "prediction_type": "flow_prediction",
+            "thresholding": false,
+            "dynamic_thresholding_ratio": 0.995,
+            "sample_max_value": 1,
+            "predict_x0": true,
+            "solver_type": "bh2",
+            "lower_order_final": true,
+            "use_karras_sigmas": false,
+            "use_exponential_sigmas": false,
+            "use_beta_sigmas": false,
+            "use_flow_sigmas": false,
+            "flow_shift": 1,
+            "timestep_spacing": "linspace",
+            "steps_offset": 0,
+            "final_sigmas_type": "zero",
+            "rescale_betas_zero_snr": false,
+            "use_dynamic_shifting": false,
+            "time_shift_type": "exponential",
+            "sigma_min": null,
+            "sigma_max": null,
+            "shift_terminal": null
+          }
+        },
+        "FrameChunk": 97,
+        "FrameChunkOverlap": 17,
+        "NoiseCondition": 20,
+        "FrameOptions": [
+          65,
+          97,
+          137,
+          257,
+          377,
+          737,
+          1457,
+          2897,
+          7217,
+          14417
+        ]
+      },
+      "Resolutions": [
+        {
+          "Width": 960,
+          "Height": 544,
+          "IsDefault": true
+        }
+      ]
+    },
+    {
+      "Backend": "PyTorch",
+      "Name": "SkyReels2_14B",
+      "Pipeline": "SkyReelsV2Pipeline",
+      "Path": "Skywork/SkyReels-V2-DF-14B-540P-Diffusers",
+      "Variant": null,
+      "Source": "Folder",
+      "IsDefault": false,
+      "IsGated": false,
+      "Status": "Pending",
+      "MemoryProfile": [
+        {
+          "QualityMode": "Draft",
+          "MemoryModes": [ 4, 20, 32 ]
+        },
+        {
+          "QualityMode": "Standard",
+          "MemoryModes": [ 4, 20, 32 ]
+        },
+        {
+          "QualityMode": "Production",
+          "MemoryModes": [ 4, 23, 32 ]
+        }
+      ],
+      "BaseType": "bfloat16",
+      "ProcessTypes": [ "TextToVideo", "ImageToVideo", "VideoToVideo" ],
+      "Vendor": [ "Nvidia", "AMD" ],
+      "Link": "https://huggingface.co/Skywork/SkyReels-V2-DF-14B-540P-Diffusers",
+      "DefaultOptions": {
+        "Steps": 30,
+        "Width": 960,
+        "Height": 544,
+        "Frames": 97,
+        "FrameRate": 24,
+        "GuidanceScale": 0,
+        "IsVaeTilingEnabled": true,
+        "IsVaeSlicingEnabled": true,
+        "IsFirstFrameLastFrameEnabled": true,
+        "Scheduler": "UniPCMultistep",
+        "Schedulers": {
+          "FlowMatchEuler": {
+            "Scheduler": "FlowMatchEuler",
+            "num_train_timesteps": 1000,
+            "shift": 3,
+            "use_dynamic_shifting": false,
+            "base_shift": 0.5,
+            "max_shift": 1.15,
+            "base_image_seq_len": 256,
+            "max_image_seq_len": 4096,
+            "invert_sigmas": false,
+            "shift_terminal": null,
+            "use_karras_sigmas": false,
+            "use_exponential_sigmas": false,
+            "use_beta_sigmas": false,
+            "time_shift_type": "exponential",
+            "stochastic_sampling": false
+          },
+          "UniPCMultistep": {
+            "Scheduler": "UniPCMultistep",
+            "num_train_timesteps": 1000,
+            "beta_start": 0.0001,
+            "beta_end": 0.02,
+            "beta_schedule": "linear",
+            "trained_betas": null,
+            "solver_order": 2,
+            "prediction_type": "flow_prediction",
+            "thresholding": false,
+            "dynamic_thresholding_ratio": 0.995,
+            "sample_max_value": 1,
+            "predict_x0": true,
+            "solver_type": "bh2",
+            "lower_order_final": true,
+            "use_karras_sigmas": false,
+            "use_exponential_sigmas": false,
+            "use_beta_sigmas": false,
+            "use_flow_sigmas": false,
+            "flow_shift": 1,
+            "timestep_spacing": "linspace",
+            "steps_offset": 0,
+            "final_sigmas_type": "zero",
+            "rescale_betas_zero_snr": false,
+            "use_dynamic_shifting": false,
+            "time_shift_type": "exponential",
+            "sigma_min": null,
+            "sigma_max": null,
+            "shift_terminal": null
+          }
+        },
+        "FrameChunk": 97,
+        "FrameChunkOverlap": 17,
+        "NoiseCondition": 20,
+        "FrameOptions": [
+          65,
+          97,
+          137,
+          257,
+          377,
+          737,
+          1457,
+          2897,
+          7217,
+          14417
+        ]
+      },
+      "Resolutions": [
+        {
+          "Width": 960,
+          "Height": 544,
+          "IsDefault": true
+        }
+      ]
     },
     {
       "Backend": "Pytorch",
@@ -4757,6 +5688,630 @@
       }
     },
     {
+      "Backend": "PyTorch",
+      "Name": "SD30_Medium",
+      "Pipeline": "StableDiffusion3Pipeline",
+      "Path": "stabilityai/stable-diffusion-3-medium-diffusers",
+      "Variant": null,
+      "Source": "Folder",
+      "IsDefault": false,
+      "IsGated": false,
+      "Status": "Pending",
+      "MemoryProfile": [
+        {
+          "QualityMode": "Draft",
+          "MemoryModes": [ 2, 4, 8 ]
+        },
+        {
+          "QualityMode": "Standard",
+          "MemoryModes": [ 2, 6, 10 ]
+        },
+        {
+          "QualityMode": "Production",
+          "MemoryModes": [ 2, 8, 16 ]
+        }
+      ],
+      "BaseType": "bfloat16",
+      "ProcessTypes": [ "TextToImage", "ImageToImage", "ImageInpaint", "ImageControlNet", "ImageToImageControlNet" ],
+      "Link": "https://huggingface.co/stabilityai/stable-diffusion-3-medium-diffusers",
+      "DefaultOptions": {
+        "Steps": 30,
+        "Width": 1024,
+        "Height": 1024,
+        "GuidanceScale": 7.0,
+        "Scheduler": "DPMSolverMultistep",
+        "Schedulers": {
+          "FlowMatchEuler": {
+            "Scheduler": "FlowMatchEuler",
+            "num_train_timesteps": 1000,
+            "shift": 3,
+            "use_dynamic_shifting": false,
+            "base_shift": 0.5,
+            "max_shift": 1.15,
+            "base_image_seq_len": 256,
+            "max_image_seq_len": 4096,
+            "invert_sigmas": false,
+            "shift_terminal": null,
+            "use_karras_sigmas": false,
+            "use_exponential_sigmas": false,
+            "use_beta_sigmas": false,
+            "time_shift_type": "exponential",
+            "stochastic_sampling": false
+          },
+          "UniPCMultistep": {
+            "Scheduler": "UniPCMultistep",
+            "num_train_timesteps": 1000,
+            "beta_start": 0.0001,
+            "beta_end": 0.02,
+            "beta_schedule": "linear",
+            "trained_betas": null,
+            "solver_order": 2,
+            "prediction_type": "flow_prediction",
+            "thresholding": false,
+            "dynamic_thresholding_ratio": 0.995,
+            "sample_max_value": 1,
+            "predict_x0": true,
+            "solver_type": "bh2",
+            "lower_order_final": true,
+            "use_karras_sigmas": false,
+            "use_exponential_sigmas": false,
+            "use_beta_sigmas": false,
+            "use_flow_sigmas": true,
+            "flow_shift": 3,
+            "timestep_spacing": "linspace",
+            "steps_offset": 0,
+            "final_sigmas_type": "zero",
+            "rescale_betas_zero_snr": false,
+            "use_dynamic_shifting": false,
+            "time_shift_type": "exponential",
+            "sigma_min": null,
+            "sigma_max": null,
+            "shift_terminal": null
+          },
+          "DPMSolverMultistep": {
+            "Scheduler": "DPMSolverMultistep",
+            "num_train_timesteps": 1000,
+            "beta_start": 0.0001,
+            "beta_end": 0.02,
+            "beta_schedule": "scaled_linear",
+            "trained_betas": null,
+            "solver_order": 2,
+            "prediction_type": "flow_prediction",
+            "thresholding": false,
+            "dynamic_thresholding_ratio": 0.995,
+            "sample_max_value": 1,
+            "algorithm_type": "dpmsolver\u002B\u002B",
+            "solver_type": "midpoint",
+            "euler_at_final": false,
+            "lower_order_final": true,
+            "use_karras_sigmas": false,
+            "use_exponential_sigmas": false,
+            "use_beta_sigmas": false,
+            "use_flow_sigmas": true,
+            "use_lu_lambdas": false,
+            "flow_shift": 3,
+            "timestep_spacing": "linspace",
+            "steps_offset": 0,
+            "final_sigmas_type": "zero",
+            "rescale_betas_zero_snr": false,
+            "use_dynamic_shifting": false,
+            "time_shift_type": "exponential"
+          }
+        }
+      },
+      "Resolutions": [
+        {
+          "Width": 640,
+          "Height": 1536
+        },
+        {
+          "Width": 768,
+          "Height": 1344
+        },
+        {
+          "Width": 832,
+          "Height": 1280
+        },
+        {
+          "Width": 896,
+          "Height": 1152
+        },
+        {
+          "Width": 768,
+          "Height": 768
+        },
+        {
+          "Width": 1024,
+          "Height": 1024,
+          "IsDefault": true
+        },
+        {
+          "Width": 1152,
+          "Height": 896
+        },
+        {
+          "Width": 1280,
+          "Height": 832
+        },
+        {
+          "Width": 1344,
+          "Height": 768
+        },
+        {
+          "Width": 1536,
+          "Height": 640
+        }
+      ]
+    },
+    {
+      "Backend": "PyTorch",
+      "Name": "SD35_Medium",
+      "Pipeline": "StableDiffusion3Pipeline",
+      "Path": "stabilityai/stable-diffusion-3.5-medium",
+      "Variant": null,
+      "Source": "Folder",
+      "IsDefault": false,
+      "IsGated": false,
+      "Status": "Pending",
+      "MemoryProfile": [
+        {
+          "QualityMode": "Draft",
+          "MemoryModes": [ 2, 8, 12 ]
+        },
+        {
+          "QualityMode": "Standard",
+          "MemoryModes": [ 2, 10, 18 ]
+        },
+        {
+          "QualityMode": "Production",
+          "MemoryModes": [ 2, 18, 28 ]
+        }
+      ],
+      "BaseType": "bfloat16",
+      "ProcessTypes": [ "TextToImage", "ImageToImage", "ImageInpaint", "ImageControlNet", "ImageToImageControlNet" ],
+      "Link": "https://huggingface.co/stabilityai/stable-diffusion-3.5-medium",
+      "DefaultOptions": {
+        "Steps": 30,
+        "Width": 1024,
+        "Height": 1024,
+        "GuidanceScale": 4.5,
+        "Scheduler": "DPMSolverMultistep",
+        "Schedulers": {
+          "FlowMatchEuler": {
+            "Scheduler": "FlowMatchEuler",
+            "num_train_timesteps": 1000,
+            "shift": 3,
+            "use_dynamic_shifting": false,
+            "base_shift": 0.5,
+            "max_shift": 1.15,
+            "base_image_seq_len": 256,
+            "max_image_seq_len": 4096,
+            "invert_sigmas": false,
+            "shift_terminal": null,
+            "use_karras_sigmas": false,
+            "use_exponential_sigmas": false,
+            "use_beta_sigmas": false,
+            "time_shift_type": "exponential",
+            "stochastic_sampling": false
+          },
+          "UniPCMultistep": {
+            "Scheduler": "UniPCMultistep",
+            "num_train_timesteps": 1000,
+            "beta_start": 0.0001,
+            "beta_end": 0.02,
+            "beta_schedule": "linear",
+            "trained_betas": null,
+            "solver_order": 2,
+            "prediction_type": "flow_prediction",
+            "thresholding": false,
+            "dynamic_thresholding_ratio": 0.995,
+            "sample_max_value": 1,
+            "predict_x0": true,
+            "solver_type": "bh2",
+            "lower_order_final": true,
+            "use_karras_sigmas": false,
+            "use_exponential_sigmas": false,
+            "use_beta_sigmas": false,
+            "use_flow_sigmas": true,
+            "flow_shift": 3,
+            "timestep_spacing": "linspace",
+            "steps_offset": 0,
+            "final_sigmas_type": "zero",
+            "rescale_betas_zero_snr": false,
+            "use_dynamic_shifting": false,
+            "time_shift_type": "exponential",
+            "sigma_min": null,
+            "sigma_max": null,
+            "shift_terminal": null
+          },
+          "DPMSolverMultistep": {
+            "Scheduler": "DPMSolverMultistep",
+            "num_train_timesteps": 1000,
+            "beta_start": 0.0001,
+            "beta_end": 0.02,
+            "beta_schedule": "scaled_linear",
+            "trained_betas": null,
+            "solver_order": 2,
+            "prediction_type": "flow_prediction",
+            "thresholding": false,
+            "dynamic_thresholding_ratio": 0.995,
+            "sample_max_value": 1,
+            "algorithm_type": "dpmsolver\u002B\u002B",
+            "solver_type": "midpoint",
+            "euler_at_final": false,
+            "lower_order_final": true,
+            "use_karras_sigmas": false,
+            "use_exponential_sigmas": false,
+            "use_beta_sigmas": false,
+            "use_flow_sigmas": true,
+            "use_lu_lambdas": false,
+            "flow_shift": 3,
+            "timestep_spacing": "linspace",
+            "steps_offset": 0,
+            "final_sigmas_type": "zero",
+            "rescale_betas_zero_snr": false,
+            "use_dynamic_shifting": false,
+            "time_shift_type": "exponential"
+          }
+        }
+      },
+      "Resolutions": [
+        {
+          "Width": 640,
+          "Height": 1536
+        },
+        {
+          "Width": 768,
+          "Height": 1344
+        },
+        {
+          "Width": 832,
+          "Height": 1280
+        },
+        {
+          "Width": 896,
+          "Height": 1152
+        },
+        {
+          "Width": 768,
+          "Height": 768
+        },
+        {
+          "Width": 1024,
+          "Height": 1024,
+          "IsDefault": true
+        },
+        {
+          "Width": 1152,
+          "Height": 896
+        },
+        {
+          "Width": 1280,
+          "Height": 832
+        },
+        {
+          "Width": 1344,
+          "Height": 768
+        },
+        {
+          "Width": 1536,
+          "Height": 640
+        }
+      ]
+    },
+    {
+      "Backend": "PyTorch",
+      "Name": "SD35_Large",
+      "Pipeline": "StableDiffusion3Pipeline",
+      "Path": "stabilityai/stable-diffusion-3.5-large",
+      "Variant": null,
+      "Source": "Folder",
+      "IsDefault": false,
+      "IsGated": false,
+      "Status": "Pending",
+      "MemoryProfile": [
+        {
+          "QualityMode": "Draft",
+          "MemoryModes": [ 2, 6, 10 ]
+        },
+        {
+          "QualityMode": "Standard",
+          "MemoryModes": [ 2, 8, 12 ]
+        },
+        {
+          "QualityMode": "Production",
+          "MemoryModes": [ 2, 10, 18 ]
+        }
+      ],
+      "BaseType": "bfloat16",
+      "ProcessTypes": [ "TextToImage", "ImageToImage", "ImageInpaint", "ImageControlNet", "ImageToImageControlNet" ],
+      "Link": "https://huggingface.co/stabilityai/stable-diffusion-3.5-large",
+      "DefaultOptions": {
+        "Steps": 30,
+        "Width": 1024,
+        "Height": 1024,
+        "GuidanceScale": 3.5,
+        "Scheduler": "DPMSolverMultistep",
+        "Schedulers": {
+          "FlowMatchEuler": {
+            "Scheduler": "FlowMatchEuler",
+            "num_train_timesteps": 1000,
+            "shift": 3,
+            "use_dynamic_shifting": false,
+            "base_shift": 0.5,
+            "max_shift": 1.15,
+            "base_image_seq_len": 256,
+            "max_image_seq_len": 4096,
+            "invert_sigmas": false,
+            "shift_terminal": null,
+            "use_karras_sigmas": false,
+            "use_exponential_sigmas": false,
+            "use_beta_sigmas": false,
+            "time_shift_type": "exponential",
+            "stochastic_sampling": false
+          },
+          "UniPCMultistep": {
+            "Scheduler": "UniPCMultistep",
+            "num_train_timesteps": 1000,
+            "beta_start": 0.0001,
+            "beta_end": 0.02,
+            "beta_schedule": "linear",
+            "trained_betas": null,
+            "solver_order": 2,
+            "prediction_type": "flow_prediction",
+            "thresholding": false,
+            "dynamic_thresholding_ratio": 0.995,
+            "sample_max_value": 1,
+            "predict_x0": true,
+            "solver_type": "bh2",
+            "lower_order_final": true,
+            "use_karras_sigmas": false,
+            "use_exponential_sigmas": false,
+            "use_beta_sigmas": false,
+            "use_flow_sigmas": true,
+            "flow_shift": 3,
+            "timestep_spacing": "linspace",
+            "steps_offset": 0,
+            "final_sigmas_type": "zero",
+            "rescale_betas_zero_snr": false,
+            "use_dynamic_shifting": false,
+            "time_shift_type": "exponential",
+            "sigma_min": null,
+            "sigma_max": null,
+            "shift_terminal": null
+          },
+          "DPMSolverMultistep": {
+            "Scheduler": "DPMSolverMultistep",
+            "num_train_timesteps": 1000,
+            "beta_start": 0.0001,
+            "beta_end": 0.02,
+            "beta_schedule": "scaled_linear",
+            "trained_betas": null,
+            "solver_order": 2,
+            "prediction_type": "flow_prediction",
+            "thresholding": false,
+            "dynamic_thresholding_ratio": 0.995,
+            "sample_max_value": 1,
+            "algorithm_type": "dpmsolver\u002B\u002B",
+            "solver_type": "midpoint",
+            "euler_at_final": false,
+            "lower_order_final": true,
+            "use_karras_sigmas": false,
+            "use_exponential_sigmas": false,
+            "use_beta_sigmas": false,
+            "use_flow_sigmas": true,
+            "use_lu_lambdas": false,
+            "flow_shift": 3,
+            "timestep_spacing": "linspace",
+            "steps_offset": 0,
+            "final_sigmas_type": "zero",
+            "rescale_betas_zero_snr": false,
+            "use_dynamic_shifting": false,
+            "time_shift_type": "exponential"
+          }
+        }
+      },
+      "Resolutions": [
+        {
+          "Width": 640,
+          "Height": 1536
+        },
+        {
+          "Width": 768,
+          "Height": 1344
+        },
+        {
+          "Width": 832,
+          "Height": 1280
+        },
+        {
+          "Width": 896,
+          "Height": 1152
+        },
+        {
+          "Width": 768,
+          "Height": 768
+        },
+        {
+          "Width": 1024,
+          "Height": 1024,
+          "IsDefault": true
+        },
+        {
+          "Width": 1152,
+          "Height": 896
+        },
+        {
+          "Width": 1280,
+          "Height": 832
+        },
+        {
+          "Width": 1344,
+          "Height": 768
+        },
+        {
+          "Width": 1536,
+          "Height": 640
+        }
+      ]
+    },
+    {
+      "Backend": "PyTorch",
+      "Name": "SD35_LargeTurbo",
+      "Pipeline": "StableDiffusion3Pipeline",
+      "Path": "stabilityai/stable-diffusion-3.5-large-turbo",
+      "Variant": null,
+      "Source": "Folder",
+      "IsDefault": false,
+      "IsGated": false,
+      "Status": "Pending",
+      "MemoryProfile": [
+        {
+          "QualityMode": "Draft",
+          "MemoryModes": [ 2, 8, 12 ]
+        },
+        {
+          "QualityMode": "Standard",
+          "MemoryModes": [ 2, 10, 18 ]
+        },
+        {
+          "QualityMode": "Production",
+          "MemoryModes": [ 2, 18, 28 ]
+        }
+      ],
+      "BaseType": "bfloat16",
+      "ProcessTypes": [ "TextToImage", "ImageToImage", "ImageInpaint", "ImageControlNet", "ImageToImageControlNet" ],
+      "Link": "https://huggingface.co/stabilityai/stable-diffusion-3.5-large-turbo",
+      "DefaultOptions": {
+        "Steps": 4,
+        "Width": 1024,
+        "Height": 1024,
+        "GuidanceScale": 0,
+        "Scheduler": "DPMSolverMultistep",
+        "Schedulers": {
+          "FlowMatchEuler": {
+            "Scheduler": "FlowMatchEuler",
+            "num_train_timesteps": 1000,
+            "shift": 3,
+            "use_dynamic_shifting": false,
+            "base_shift": 0.5,
+            "max_shift": 1.15,
+            "base_image_seq_len": 256,
+            "max_image_seq_len": 4096,
+            "invert_sigmas": false,
+            "shift_terminal": null,
+            "use_karras_sigmas": false,
+            "use_exponential_sigmas": false,
+            "use_beta_sigmas": false,
+            "time_shift_type": "exponential",
+            "stochastic_sampling": false
+          },
+          "UniPCMultistep": {
+            "Scheduler": "UniPCMultistep",
+            "num_train_timesteps": 1000,
+            "beta_start": 0.0001,
+            "beta_end": 0.02,
+            "beta_schedule": "linear",
+            "trained_betas": null,
+            "solver_order": 2,
+            "prediction_type": "flow_prediction",
+            "thresholding": false,
+            "dynamic_thresholding_ratio": 0.995,
+            "sample_max_value": 1,
+            "predict_x0": true,
+            "solver_type": "bh2",
+            "lower_order_final": true,
+            "use_karras_sigmas": false,
+            "use_exponential_sigmas": false,
+            "use_beta_sigmas": false,
+            "use_flow_sigmas": true,
+            "flow_shift": 3,
+            "timestep_spacing": "linspace",
+            "steps_offset": 0,
+            "final_sigmas_type": "zero",
+            "rescale_betas_zero_snr": false,
+            "use_dynamic_shifting": false,
+            "time_shift_type": "exponential",
+            "sigma_min": null,
+            "sigma_max": null,
+            "shift_terminal": null
+          },
+          "DPMSolverMultistep": {
+            "Scheduler": "DPMSolverMultistep",
+            "num_train_timesteps": 1000,
+            "beta_start": 0.0001,
+            "beta_end": 0.02,
+            "beta_schedule": "scaled_linear",
+            "trained_betas": null,
+            "solver_order": 2,
+            "prediction_type": "flow_prediction",
+            "thresholding": false,
+            "dynamic_thresholding_ratio": 0.995,
+            "sample_max_value": 1,
+            "algorithm_type": "dpmsolver\u002B\u002B",
+            "solver_type": "midpoint",
+            "euler_at_final": false,
+            "lower_order_final": true,
+            "use_karras_sigmas": false,
+            "use_exponential_sigmas": false,
+            "use_beta_sigmas": false,
+            "use_flow_sigmas": true,
+            "use_lu_lambdas": false,
+            "flow_shift": 3,
+            "timestep_spacing": "linspace",
+            "steps_offset": 0,
+            "final_sigmas_type": "zero",
+            "rescale_betas_zero_snr": false,
+            "use_dynamic_shifting": false,
+            "time_shift_type": "exponential"
+          }
+        }
+      },
+      "Resolutions": [
+        {
+          "Width": 640,
+          "Height": 1536
+        },
+        {
+          "Width": 768,
+          "Height": 1344
+        },
+        {
+          "Width": 832,
+          "Height": 1280
+        },
+        {
+          "Width": 896,
+          "Height": 1152
+        },
+        {
+          "Width": 768,
+          "Height": 768
+        },
+        {
+          "Width": 1024,
+          "Height": 1024,
+          "IsDefault": true
+        },
+        {
+          "Width": 1152,
+          "Height": 896
+        },
+        {
+          "Width": 1280,
+          "Height": 832
+        },
+        {
+          "Width": 1344,
+          "Height": 768
+        },
+        {
+          "Width": 1536,
+          "Height": 640
+        }
+      ]
+    },
+    {
       "Backend": "Pytorch",
       "Name": "Wan21_T2V_1B",
       "Pipeline": "WanPipeline",
@@ -4783,7 +6338,6 @@
       ],
       "BaseType": "bfloat16",
       "ProcessTypes": [ "TextToVideo" ],
-      "Vendor": [ "Nvidia" ],
       "Resolutions": [
         {
           "Width": 832,
@@ -4914,7 +6468,6 @@
       ],
       "BaseType": "bfloat16",
       "ProcessTypes": [ "TextToVideo" ],
-      "Vendor": [ "Nvidia" ],
       "Resolutions": [
         {
           "Width": 832,
@@ -5049,7 +6602,6 @@
       ],
       "BaseType": "bfloat16",
       "ProcessTypes": [ "ImageToVideo" ],
-      "Vendor": [ "Nvidia" ],
       "Resolutions": [
         {
           "Width": 832,
@@ -5180,7 +6732,6 @@
       ],
       "BaseType": "bfloat16",
       "ProcessTypes": [ "ImageToVideo" ],
-      "Vendor": [ "Nvidia" ],
       "Resolutions": [
         {
           "Width": 1280,
@@ -5687,6 +7238,23 @@
       ]
     },
     {
+      "Name": "Helios",
+      "Options": [
+        {
+          "Name": "Base",
+          "Template": "Helios_Base"
+        },
+        {
+          "Name": "Mid",
+          "Template": "Helios_Mid"
+        },
+        {
+          "Name": "Distilled",
+          "Template": "Helios_Distilled"
+        }
+      ]
+    },
+    {
       "Name": "Kandinsky5",
       "Options": [
         {
@@ -5756,12 +7324,20 @@
       "Name": "LTX-2",
       "Options": [
         {
-          "Name": "19B",
-          "Template": "LTX2_19B"
+          "Name": "2.0 Base",
+          "Template": "LTX20_Base"
         },
         {
-          "Name": "19B (distilled)",
-          "Template": "LTX2_19B_D"
+          "Name": "2.0 Distilled",
+          "Template": "LTX20_Distilled"
+        },
+        {
+          "Name": "2.3 Base",
+          "Template": "LTX23_Base"
+        },
+        {
+          "Name": "2.3 Distilled",
+          "Template": "LTX23_Distilled"
         }
       ]
     },
@@ -5779,6 +7355,19 @@
       ]
     },
     {
+      "Name": "SkyReels",
+      "Options": [
+        {
+          "Name": "v2 1B",
+          "Template": "SkyReels2_1B"
+        },
+        {
+          "Name": "v2 14B",
+          "Template": "SkyReels2_14B"
+        }
+      ]
+    },
+    {
       "Name": "StableDiffusion XL",
       "Options": [
         {
@@ -5792,6 +7381,27 @@
         {
           "Name": "Lightning",
           "Template": "StableDiffusionXL_Lightning"
+        }
+      ]
+    },
+    {
+      "Name": "StableDiffusion 3",
+      "Options": [
+        {
+          "Name": "3.0 Medium",
+          "Template": "SD30_Medium"
+        },
+        {
+          "Name": "3.5 Medium",
+          "Template": "SD35_Medium"
+        },
+        {
+          "Name": "3.5 Large",
+          "Template": "SD35_Large"
+        },
+        {
+          "Name": "3.5 Large Turbo",
+          "Template": "SD35_LargeTurbo"
         }
       ]
     },

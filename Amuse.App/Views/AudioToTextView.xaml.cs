@@ -19,7 +19,7 @@ namespace Amuse.App.Views
     /// </summary>
     public partial class AudioToTextView : ViewBaseModel
     {
-        private AudioInput _sourceAudio;
+        private AudioInputStream _sourceAudio;
         private AudioInputOptions _options;
         private bool _isMultipleResult;
         private int _selectedBeam;
@@ -67,7 +67,7 @@ namespace Amuse.App.Views
         /// <summary>
         /// Gets or sets the source audio.
         /// </summary>
-        public AudioInput SourceAudio
+        public AudioInputStream SourceAudio
         {
             get { return _sourceAudio; }
             set { SetProperty(ref _sourceAudio, value); ExecuteCommand.RaiseCanExecuteChanged(); }

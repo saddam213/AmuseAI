@@ -444,6 +444,14 @@
                                 IsSelected="{Binding View, Converter={StaticResource EnumToBooleanConverter}, ConverterParameter=TextToAudio}">
                             </CommonControls:IconButton>
                             <CommonControls:IconButton 
+                                Text="Text To Music" 
+                                Icon="f8c9"
+                                Style="{StaticResource SubmenuIconButton}"
+                                Command="{Binding NavigateCommand}" 
+                                CommandParameter="{x:Static Views:View.TextToMusic}" 
+                                IsSelected="{Binding View, Converter={StaticResource EnumToBooleanConverter}, ConverterParameter=TextToMusic}">
+                            </CommonControls:IconButton>
+                            <CommonControls:IconButton 
                                 Text="Audio To Text" 
                                 Icon="f001"
                                 Style="{StaticResource SubmenuIconButton}"

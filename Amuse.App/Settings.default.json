@@ -9,7 +9,7 @@
       "Type": "Vendor",
       "Vendor": "Nvidia",
       "Environment": "cuda-128",
-      "Version": 2,
+      "Version": 4,
       "Status": "Create",
       "IsDefault": true,
       "Variables": {
@@ -25,7 +25,7 @@
         "wheel==0.46.3",
         "transformers==5.5.4",
         "accelerate==1.13.0",
-        "diffusers@https://github.com/huggingface/diffusers/archive/d0c9cbad28d7d3bba28db94622e13500c4179075.zip",
+        "diffusers==0.38.0",
         "protobuf==7.34.1",
         "sentencepiece==0.2.1",
         "ftfy==6.3.1",
@@ -36,7 +36,8 @@
         "gguf==0.18.0",
         "av==17.0.1",
         "optimum-quanto==0.2.7",
-        "bitsandbytes==0.49.2"
+        "bitsandbytes==0.49.2",
+        "soundfile==0.13.1"
       ]
     },
     {
@@ -45,7 +46,7 @@
       "Type": "Vendor",
       "Vendor": "AMD",
       "Environment": "rocm-721",
-      "Version": 2,
+      "Version": 4,
       "Status": "Create",
       "IsDefault": true,
       "Variables": {
@@ -65,7 +66,7 @@
         "wheel==0.46.3",
         "transformers==5.5.4",
         "accelerate==1.13.0",
-        "diffusers@https://github.com/huggingface/diffusers/archive/d0c9cbad28d7d3bba28db94622e13500c4179075.zip",
+        "diffusers==0.38.0",
         "protobuf==7.34.1",
         "sentencepiece==0.2.1",
         "ftfy==6.3.1",
@@ -76,7 +77,8 @@
         "gguf==0.18.0",
         "av==17.0.1",
         "optimum-quanto==0.2.7",
-        "bitsandbytes==0.49.2"
+        "bitsandbytes==0.49.2",
+        "soundfile==0.13.1"
       ]
     }
   ],
@@ -94,8 +96,8 @@
         "TileSize": 528,
         "TileOverlap": 16
       },
-      "Link": "https://huggingface.co/TensorStack/Diffuse/tree/main/Upscale/AnimeSharpV2-ESRGAN-Soft-2x",
-      "UrlPaths": [ "https://huggingface.co/TensorStack/Diffuse/resolve/main/Upscale/AnimeSharpV2-ESRGAN-Soft-2x/model.onnx" ]
+      "Link": "https://huggingface.co/TensorStack/Amuse/tree/main/Upscale/AnimeSharpV2-ESRGAN-Soft-2x",
+      "UrlPaths": [ "https://huggingface.co/TensorStack/Amuse/resolve/main/Upscale/AnimeSharpV2-ESRGAN-Soft-2x/model.onnx" ]
     },
     {
       "Id": 102,
@@ -110,8 +112,8 @@
         "TileSize": 528,
         "TileOverlap": 16
       },
-      "Link": "https://huggingface.co/TensorStack/Diffuse/tree/main/Upscale/AnimeSharpV2-MoSR-Sharp-2x",
-      "UrlPaths": [ "https://huggingface.co/TensorStack/Diffuse/resolve/main/Upscale/AnimeSharpV2-MoSR-Sharp-2x/model.onnx" ]
+      "Link": "https://huggingface.co/TensorStack/Amuse/tree/main/Upscale/AnimeSharpV2-MoSR-Sharp-2x",
+      "UrlPaths": [ "https://huggingface.co/TensorStack/Amuse/resolve/main/Upscale/AnimeSharpV2-MoSR-Sharp-2x/model.onnx" ]
     },
     {
       "Id": 103,
@@ -126,8 +128,8 @@
         "TileSize": 528,
         "TileOverlap": 16
       },
-      "Link": "https://huggingface.co/TensorStack/Diffuse/tree/main/Upscale/AnimeSharpV2-MoSR-Soft-2x",
-      "UrlPaths": [ "https://huggingface.co/TensorStack/Diffuse/resolve/main/Upscale/AnimeSharpV2-MoSR-Soft-2x/model.onnx" ]
+      "Link": "https://huggingface.co/TensorStack/Amuse/tree/main/Upscale/AnimeSharpV2-MoSR-Soft-2x",
+      "UrlPaths": [ "https://huggingface.co/TensorStack/Amuse/resolve/main/Upscale/AnimeSharpV2-MoSR-Soft-2x/model.onnx" ]
     },
     {
       "Id": 104,
@@ -143,8 +145,8 @@
         "TileSize": 528,
         "TileOverlap": 16
       },
-      "Link": "https://huggingface.co/TensorStack/Diffuse/tree/main/Upscale/AnimeSharpV2-RPLKSR-Sharp-2x",
-      "UrlPaths": [ "https://huggingface.co/TensorStack/Diffuse/resolve/main/Upscale/AnimeSharpV2-RPLKSR-Sharp-2x/model.onnx" ]
+      "Link": "https://huggingface.co/TensorStack/Amuse/tree/main/Upscale/AnimeSharpV2-RPLKSR-Sharp-2x",
+      "UrlPaths": [ "https://huggingface.co/TensorStack/Amuse/resolve/main/Upscale/AnimeSharpV2-RPLKSR-Sharp-2x/model.onnx" ]
     },
     {
       "Id": 105,
@@ -159,8 +161,8 @@
         "TileSize": 528,
         "TileOverlap": 16
       },
-      "Link": "https://huggingface.co/TensorStack/Diffuse/tree/main/Upscale/AnimeSharpV2-RPLKSR-Soft-2x",
-      "UrlPaths": [ "https://huggingface.co/TensorStack/Diffuse/resolve/main/Upscale/AnimeSharpV2-RPLKSR-Soft-2x/model.onnx" ]
+      "Link": "https://huggingface.co/TensorStack/Amuse/tree/main/Upscale/AnimeSharpV2-RPLKSR-Soft-2x",
+      "UrlPaths": [ "https://huggingface.co/TensorStack/Amuse/resolve/main/Upscale/AnimeSharpV2-RPLKSR-Soft-2x/model.onnx" ]
     },
     {
       "Id": 106,
@@ -175,8 +177,8 @@
         "TileSize": 528,
         "TileOverlap": 16
       },
-      "Link": "https://huggingface.co/TensorStack/Diffuse/tree/main/Upscale/AnimeSharpV3-2x",
-      "UrlPaths": [ "https://huggingface.co/TensorStack/Diffuse/resolve/main/Upscale/AnimeSharpV3-2x/model.onnx" ]
+      "Link": "https://huggingface.co/TensorStack/Amuse/tree/main/Upscale/AnimeSharpV3-2x",
+      "UrlPaths": [ "https://huggingface.co/TensorStack/Amuse/resolve/main/Upscale/AnimeSharpV3-2x/model.onnx" ]
     },
     {
       "Id": 107,
@@ -191,8 +193,8 @@
         "TileSize": 272,
         "TileOverlap": 16
       },
-      "Link": "https://huggingface.co/TensorStack/Diffuse/tree/main/Upscale/APISR-GRL-GAN-4x",
-      "UrlPaths": [ "https://huggingface.co/TensorStack/Diffuse/resolve/main/Upscale/APISR-GRL-GAN-4x/model.onnx" ]
+      "Link": "https://huggingface.co/TensorStack/Amuse/tree/main/Upscale/APISR-GRL-GAN-4x",
+      "UrlPaths": [ "https://huggingface.co/TensorStack/Amuse/resolve/main/Upscale/APISR-GRL-GAN-4x/model.onnx" ]
     },
     {
       "Id": 108,
@@ -207,8 +209,8 @@
         "TileSize": 528,
         "TileOverlap": 16
       },
-      "Link": "https://huggingface.co/TensorStack/Diffuse/tree/main/Upscale/APISR-RRDB-GAN-2x",
-      "UrlPaths": [ "https://huggingface.co/TensorStack/Diffuse/resolve/main/Upscale/APISR-RRDB-GAN-2x/model.onnx" ]
+      "Link": "https://huggingface.co/TensorStack/Amuse/tree/main/Upscale/APISR-RRDB-GAN-2x",
+      "UrlPaths": [ "https://huggingface.co/TensorStack/Amuse/resolve/main/Upscale/APISR-RRDB-GAN-2x/model.onnx" ]
     },
     {
       "Id": 109,
@@ -223,8 +225,8 @@
         "TileSize": 528,
         "TileOverlap": 16
       },
-      "Link": "https://huggingface.co/TensorStack/Diffuse/tree/main/Upscale/BSRGAN-2x",
-      "UrlPaths": [ "https://huggingface.co/TensorStack/Diffuse/resolve/main/Upscale/BSRGAN-2x/model.onnx" ]
+      "Link": "https://huggingface.co/TensorStack/Amuse/tree/main/Upscale/BSRGAN-2x",
+      "UrlPaths": [ "https://huggingface.co/TensorStack/Amuse/resolve/main/Upscale/BSRGAN-2x/model.onnx" ]
     },
     {
       "Id": 110,
@@ -239,8 +241,8 @@
         "TileSize": 528,
         "TileOverlap": 16
       },
-      "Link": "https://huggingface.co/TensorStack/Diffuse/tree/main/Upscale/RealESRGAN-2x",
-      "UrlPaths": [ "https://huggingface.co/TensorStack/Diffuse/resolve/main/Upscale/RealESRGAN-2x/model.onnx" ]
+      "Link": "https://huggingface.co/TensorStack/Amuse/tree/main/Upscale/RealESRGAN-2x",
+      "UrlPaths": [ "https://huggingface.co/TensorStack/Amuse/resolve/main/Upscale/RealESRGAN-2x/model.onnx" ]
     },
     {
       "Id": 111,
@@ -255,8 +257,8 @@
         "TileSize": 272,
         "TileOverlap": 16
       },
-      "Link": "https://huggingface.co/TensorStack/Diffuse/tree/main/Upscale/RealESRGAN-4x",
-      "UrlPaths": [ "https://huggingface.co/TensorStack/Diffuse/resolve/main/Upscale/RealESRGAN-4x/model.onnx" ]
+      "Link": "https://huggingface.co/TensorStack/Amuse/tree/main/Upscale/RealESRGAN-4x",
+      "UrlPaths": [ "https://huggingface.co/TensorStack/Amuse/resolve/main/Upscale/RealESRGAN-4x/model.onnx" ]
     },
     {
       "Id": 112,
@@ -271,8 +273,8 @@
         "TileSize": 1040,
         "TileOverlap": 16
       },
-      "Link": "https://huggingface.co/TensorStack/Diffuse/tree/main/Upscale/RealESR-General-4x",
-      "UrlPaths": [ "https://huggingface.co/TensorStack/Diffuse/resolve/main/Upscale/RealESR-General-4x/model.onnx" ]
+      "Link": "https://huggingface.co/TensorStack/Amuse/tree/main/Upscale/RealESR-General-4x",
+      "UrlPaths": [ "https://huggingface.co/TensorStack/Amuse/resolve/main/Upscale/RealESR-General-4x/model.onnx" ]
     },
     {
       "Id": 113,
@@ -287,8 +289,8 @@
         "TileSize": 256,
         "TileOverlap": 16
       },
-      "Link": "https://huggingface.co/TensorStack/Diffuse/tree/main/Upscale/RealWebPhoto-RGT-4x",
-      "UrlPaths": [ "https://huggingface.co/TensorStack/Diffuse/resolve/main/Upscale/RealWebPhoto-RGT-4x/model.onnx" ]
+      "Link": "https://huggingface.co/TensorStack/Amuse/tree/main/Upscale/RealWebPhoto-RGT-4x",
+      "UrlPaths": [ "https://huggingface.co/TensorStack/Amuse/resolve/main/Upscale/RealWebPhoto-RGT-4x/model.onnx" ]
     },
     {
       "Id": 114,
@@ -303,8 +305,8 @@
         "TileSize": 208,
         "TileOverlap": 16
       },
-      "Link": "https://huggingface.co/TensorStack/Diffuse/tree/main/Upscale/Swin2SR-Classical-2x",
-      "UrlPaths": [ "https://huggingface.co/TensorStack/Diffuse/resolve/main/Upscale/Swin2SR-Classical-2x/model.onnx" ]
+      "Link": "https://huggingface.co/TensorStack/Amuse/tree/main/Upscale/Swin2SR-Classical-2x",
+      "UrlPaths": [ "https://huggingface.co/TensorStack/Amuse/resolve/main/Upscale/Swin2SR-Classical-2x/model.onnx" ]
     },
     {
       "Id": 115,
@@ -319,8 +321,8 @@
         "TileSize": 272,
         "TileOverlap": 16
       },
-      "Link": "https://huggingface.co/TensorStack/Diffuse/tree/main/Upscale/Swin2SR-Classical-4x",
-      "UrlPaths": [ "https://huggingface.co/TensorStack/Diffuse/resolve/main/Upscale/Swin2SR-Classical-4x/model.onnx" ]
+      "Link": "https://huggingface.co/TensorStack/Amuse/tree/main/Upscale/Swin2SR-Classical-4x",
+      "UrlPaths": [ "https://huggingface.co/TensorStack/Amuse/resolve/main/Upscale/Swin2SR-Classical-4x/model.onnx" ]
     },
     {
       "Id": 116,
@@ -335,8 +337,8 @@
         "TileSize": 208,
         "TileOverlap": 16
       },
-      "Link": "https://huggingface.co/TensorStack/Diffuse/tree/main/Upscale/Swin2SR-RealWorld-BSRGAN-PSN-4x",
-      "UrlPaths": [ "https://huggingface.co/TensorStack/Diffuse/resolve/main/Upscale/Swin2SR-RealWorld-BSRGAN-PSN-4x/model.onnx" ]
+      "Link": "https://huggingface.co/TensorStack/Amuse/tree/main/Upscale/Swin2SR-RealWorld-BSRGAN-PSN-4x",
+      "UrlPaths": [ "https://huggingface.co/TensorStack/Amuse/resolve/main/Upscale/Swin2SR-RealWorld-BSRGAN-PSN-4x/model.onnx" ]
     },
     {
       "Id": 117,
@@ -351,8 +353,8 @@
         "TileSize": 240,
         "TileOverlap": 16
       },
-      "Link": "https://huggingface.co/TensorStack/Diffuse/tree/main/Upscale/SwinIR-BSRGAN-4x",
-      "UrlPaths": [ "https://huggingface.co/TensorStack/Diffuse/resolve/main/Upscale/SwinIR-BSRGAN-4x/model.onnx" ]
+      "Link": "https://huggingface.co/TensorStack/Amuse/tree/main/Upscale/SwinIR-BSRGAN-4x",
+      "UrlPaths": [ "https://huggingface.co/TensorStack/Amuse/resolve/main/Upscale/SwinIR-BSRGAN-4x/model.onnx" ]
     },
     {
       "Id": 118,
@@ -367,8 +369,8 @@
         "TileSize": 272,
         "TileOverlap": 16
       },
-      "Link": "https://huggingface.co/TensorStack/Diffuse/tree/main/Upscale/UltraMix-Smooth-4x",
-      "UrlPaths": [ "https://huggingface.co/TensorStack/Diffuse/resolve/main/Upscale/UltraMix-Smooth-4x/model.onnx" ]
+      "Link": "https://huggingface.co/TensorStack/Amuse/tree/main/Upscale/UltraMix-Smooth-4x",
+      "UrlPaths": [ "https://huggingface.co/TensorStack/Amuse/resolve/main/Upscale/UltraMix-Smooth-4x/model.onnx" ]
     },
     {
       "Id": 119,
@@ -383,8 +385,8 @@
         "TileSize": 272,
         "TileOverlap": 16
       },
-      "Link": "https://huggingface.co/TensorStack/Diffuse/tree/main/Upscale/UltraSharp-4x",
-      "UrlPaths": [ "https://huggingface.co/TensorStack/Diffuse/resolve/main/Upscale/UltraSharp-4x/model.onnx" ]
+      "Link": "https://huggingface.co/TensorStack/Amuse/tree/main/Upscale/UltraSharp-4x",
+      "UrlPaths": [ "https://huggingface.co/TensorStack/Amuse/resolve/main/Upscale/UltraSharp-4x/model.onnx" ]
     }
   ],
   "ExtractModels": [
@@ -405,8 +407,8 @@
         "IsTransparent": false,
         "IsTileSupported": false
       },
-      "Link": "https://huggingface.co/TensorStack/Diffuse/tree/main/Extractor/Canny",
-      "UrlPaths": [ "https://huggingface.co/TensorStack/Diffuse/resolve/main/Extractor/Canny/model.onnx" ]
+      "Link": "https://huggingface.co/TensorStack/Amuse/tree/main/Extract/Canny",
+      "UrlPaths": [ "https://huggingface.co/TensorStack/Amuse/resolve/main/Extract/Canny/model.onnx" ]
     },
     {
       "Id": 102,
@@ -426,8 +428,8 @@
         "IsTransparent": false,
         "IsTileSupported": false
       },
-      "Link": "https://huggingface.co/TensorStack/Diffuse/tree/main/Extractor/SoftEdge",
-      "UrlPaths": [ "https://huggingface.co/TensorStack/Diffuse/resolve/main/Extractor/SoftEdge/model.onnx" ]
+      "Link": "https://huggingface.co/TensorStack/Amuse/tree/main/Extract/SoftEdge",
+      "UrlPaths": [ "https://huggingface.co/TensorStack/Amuse/resolve/main/Extract/SoftEdge/model.onnx" ]
     },
     {
       "Id": 103,
@@ -446,8 +448,8 @@
         "IsTransparent": false,
         "IsTileSupported": false
       },
-      "Link": "https://huggingface.co/TensorStack/Diffuse/tree/main/Extractor/LineDrawing",
-      "UrlPaths": [ "https://huggingface.co/TensorStack/Diffuse/resolve/main/Extractor/LineDrawing/model.onnx" ]
+      "Link": "https://huggingface.co/TensorStack/Amuse/tree/main/Extract/LineDrawing",
+      "UrlPaths": [ "https://huggingface.co/TensorStack/Amuse/resolve/main/Extract/LineDrawing/model.onnx" ]
     },
     {
       "Id": 104,
@@ -468,8 +470,8 @@
         "IsTransparent": false,
         "IsTileSupported": false
       },
-      "Link": "https://huggingface.co/TensorStack/Diffuse/tree/main/Extractor/Depth",
-      "UrlPaths": [ "https://huggingface.co/TensorStack/Diffuse/resolve/main/Extractor/Depth/model.onnx" ]
+      "Link": "https://huggingface.co/TensorStack/Amuse/tree/main/Extract/Depth",
+      "UrlPaths": [ "https://huggingface.co/TensorStack/Amuse/resolve/main/Extract/Depth/model.onnx" ]
     },
     {
       "Id": 105,
@@ -490,8 +492,8 @@
         "IsTransparent": false,
         "IsTileSupported": false
       },
-      "Link": "https://huggingface.co/TensorStack/Diffuse/tree/main/Extractor/DepthAnything-Small",
-      "UrlPaths": [ "https://huggingface.co/TensorStack/Diffuse/resolve/main/Extractor/DepthAnything-Small/model.onnx" ]
+      "Link": "https://huggingface.co/TensorStack/Amuse/tree/main/Extract/DepthAnything-Small",
+      "UrlPaths": [ "https://huggingface.co/TensorStack/Amuse/resolve/main/Extract/DepthAnything-Small/model.onnx" ]
     },
     {
       "Id": 106,
@@ -512,8 +514,8 @@
         "IsTransparent": false,
         "IsTileSupported": false
       },
-      "Link": "https://huggingface.co/TensorStack/Diffuse/tree/main/Extractor/DepthAnything-Base",
-      "UrlPaths": [ "https://huggingface.co/TensorStack/Diffuse/resolve/main/Extractor/DepthAnything-Base/model.onnx" ]
+      "Link": "https://huggingface.co/TensorStack/Amuse/tree/main/Extract/DepthAnything-Base",
+      "UrlPaths": [ "https://huggingface.co/TensorStack/Amuse/resolve/main/Extract/DepthAnything-Base/model.onnx" ]
     },
     {
       "Id": 108,
@@ -534,8 +536,8 @@
         "IsTransparent": false,
         "IsTileSupported": false
       },
-      "Link": "https://huggingface.co/TensorStack/Diffuse/tree/main/Extractor/DepthAnything-Large",
-      "UrlPaths": [ "https://huggingface.co/TensorStack/Diffuse/resolve/main/Extractor/DepthAnything-Large/model.onnx" ]
+      "Link": "https://huggingface.co/TensorStack/Amuse/tree/main/Extract/DepthAnything-Large",
+      "UrlPaths": [ "https://huggingface.co/TensorStack/Amuse/resolve/main/Extract/DepthAnything-Large/model.onnx" ]
     },
     {
       "Id": 109,
@@ -548,8 +550,8 @@
       "DefaultOptions": {
         "Mode": "RemoveBackground"
       },
-      "Link": "https://huggingface.co/TensorStack/Diffuse/tree/main/Extractor/BiRefNet",
-      "UrlPaths": [ "https://huggingface.co/TensorStack/Diffuse/resolve/main/Extractor/BiRefNet/model.onnx" ]
+      "Link": "https://huggingface.co/TensorStack/Amuse/tree/main/Extract/BiRefNet",
+      "UrlPaths": [ "https://huggingface.co/TensorStack/Amuse/resolve/main/Extract/BiRefNet/model.onnx" ]
     },
     {
       "Id": 110,
@@ -563,8 +565,8 @@
       "DefaultOptions": {
         "Mode": "RemoveBackground"
       },
-      "Link": "https://huggingface.co/TensorStack/Diffuse/tree/main/Extractor/RMBGv1.4",
-      "UrlPaths": [ "https://huggingface.co/TensorStack/Diffuse/resolve/main/Extractor/RMBGv1.4/model.onnx" ]
+      "Link": "https://huggingface.co/TensorStack/Amuse/tree/main/Extract/RMBGv1.4",
+      "UrlPaths": [ "https://huggingface.co/TensorStack/Amuse/resolve/main/Extract/RMBGv1.4/model.onnx" ]
     },
     {
       "Id": 111,
@@ -577,8 +579,8 @@
       "DefaultOptions": {
         "Mode": "RemoveBackground"
       },
-      "Link": "https://huggingface.co/TensorStack/Diffuse/tree/main/Extractor/RMBGv2.0",
-      "UrlPaths": [ "https://huggingface.co/TensorStack/Diffuse/resolve/main/Extractor/RMBGv2.0/model.onnx" ]
+      "Link": "https://huggingface.co/TensorStack/Amuse/tree/main/Extract/RMBGv2.0",
+      "UrlPaths": [ "https://huggingface.co/TensorStack/Amuse/resolve/main/Extract/RMBGv2.0/model.onnx" ]
     },
     {
       "Id": 112,
@@ -597,8 +599,8 @@
         "BoneRadius": 8,
         "BoneThickness": 1
       },
-      "Link": "https://huggingface.co/TensorStack/Diffuse/tree/main/Extractor/Pose-Body7",
-      "UrlPaths": [ "https://huggingface.co/TensorStack/Diffuse/resolve/main/Extractor/Pose-Body7/model.onnx" ]
+      "Link": "https://huggingface.co/TensorStack/Amuse/tree/main/Extract/Pose-Body7",
+      "UrlPaths": [ "https://huggingface.co/TensorStack/Amuse/resolve/main/Extract/Pose-Body7/model.onnx" ]
     },
     {
       "Id": 113,
@@ -616,14 +618,15 @@
         "BoneRadius": 8,
         "BoneThickness": 1
       },
-      "Link": "https://huggingface.co/TensorStack/Diffuse/tree/main/Extractor/Pose-Coco",
-      "UrlPaths": [ "https://huggingface.co/TensorStack/Diffuse/resolve/main/Extractor/Pose-Coco/model.onnx" ]
+      "Link": "https://huggingface.co/TensorStack/Amuse/tree/main/Extract/Pose-Coco",
+      "UrlPaths": [ "https://huggingface.co/TensorStack/Amuse/resolve/main/Extract/Pose-Coco/model.onnx" ]
     }
   ],
   "AudioModels": [
     {
       "Id": 100,
       "Backend": "OnnxRuntime",
+      "Pipeline": "OnnxRuntime",
       "Name": "Whisper-Tiny",
       "IsDefault": true,
       "Type": "Whisper",
@@ -631,117 +634,122 @@
       "MinLength": 20,
       "MaxLength": 512,
       "Prefixes": [ "Transcribe", "Translate" ],
-      "Link": "https://huggingface.co/saddam213/DemoApp/tree/main/Text/Whisper-Tiny",
+      "Link": "https://huggingface.co/TensorStack/Amuse/tree/main/Audio/Whisper-Tiny",
       "UrlPaths": [
-        "https://huggingface.co/saddam213/DemoApp/resolve/main/Text/Whisper-Tiny/decoder_model_merged.onnx?download=true",
-        "https://huggingface.co/saddam213/DemoApp/resolve/main/Text/Whisper-Tiny/encoder_model.onnx?download=true",
-        "https://huggingface.co/saddam213/DemoApp/resolve/main/Text/Whisper-Tiny/merges.txt?download=true",
-        "https://huggingface.co/saddam213/DemoApp/resolve/main/Text/Whisper-Tiny/tokenizer_config.json?download=true",
-        "https://huggingface.co/saddam213/DemoApp/resolve/main/Text/Whisper-Tiny/vocab.json?download=true",
-        "https://huggingface.co/saddam213/DemoApp/resolve/main/Text/Whisper-Tiny/mel_filters.npz?download=true"
+        "https://huggingface.co/TensorStack/Amuse/resolve/main/Audio/Whisper-Tiny/decoder_model_merged.onnx?download=true",
+        "https://huggingface.co/TensorStack/Amuse/resolve/main/Audio/Whisper-Tiny/encoder_model.onnx?download=true",
+        "https://huggingface.co/TensorStack/Amuse/resolve/main/Audio/Whisper-Tiny/merges.txt?download=true",
+        "https://huggingface.co/TensorStack/Amuse/resolve/main/Audio/Whisper-Tiny/tokenizer_config.json?download=true",
+        "https://huggingface.co/TensorStack/Amuse/resolve/main/Audio/Whisper-Tiny/vocab.json?download=true",
+        "https://huggingface.co/TensorStack/Amuse/resolve/main/Audio/Whisper-Tiny/mel_filters.npz?download=true"
       ]
     },
     {
       "Id": 101,
       "Backend": "OnnxRuntime",
+      "Pipeline": "OnnxRuntime",
       "Name": "Whisper-Small",
       "Type": "Whisper",
       "Version": "Small",
       "MinLength": 20,
       "MaxLength": 512,
       "Prefixes": [ "Transcribe", "Translate" ],
-      "Link": "https://huggingface.co/saddam213/DemoApp/tree/main/Text/Whisper-Small",
+      "Link": "https://huggingface.co/TensorStack/Amuse/tree/main/Audio/Whisper-Small",
       "UrlPaths": [
-        "https://huggingface.co/saddam213/DemoApp/resolve/main/Text/Whisper-Small/decoder_model_merged.onnx?download=true",
-        "https://huggingface.co/saddam213/DemoApp/resolve/main/Text/Whisper-Small/encoder_model.onnx?download=true",
-        "https://huggingface.co/saddam213/DemoApp/resolve/main/Text/Whisper-Small/merges.txt?download=true",
-        "https://huggingface.co/saddam213/DemoApp/resolve/main/Text/Whisper-Small/tokenizer_config.json?download=true",
-        "https://huggingface.co/saddam213/DemoApp/resolve/main/Text/Whisper-Small/vocab.json?download=true",
-        "https://huggingface.co/saddam213/DemoApp/resolve/main/Text/Whisper-Small/mel_filters.npz?download=true"
+        "https://huggingface.co/TensorStack/Amuse/resolve/main/Audio/Whisper-Small/decoder_model_merged.onnx?download=true",
+        "https://huggingface.co/TensorStack/Amuse/resolve/main/Audio/Whisper-Small/encoder_model.onnx?download=true",
+        "https://huggingface.co/TensorStack/Amuse/resolve/main/Audio/Whisper-Small/merges.txt?download=true",
+        "https://huggingface.co/TensorStack/Amuse/resolve/main/Audio/Whisper-Small/tokenizer_config.json?download=true",
+        "https://huggingface.co/TensorStack/Amuse/resolve/main/Audio/Whisper-Small/vocab.json?download=true",
+        "https://huggingface.co/TensorStack/Amuse/resolve/main/Audio/Whisper-Small/mel_filters.npz?download=true"
       ]
     },
     {
       "Id": 102,
       "Backend": "OnnxRuntime",
+      "Pipeline": "OnnxRuntime",
       "Name": "Whisper-Medium",
       "Type": "Whisper",
       "Version": "Medium",
       "MinLength": 20,
       "MaxLength": 512,
       "Prefixes": [ "Transcribe", "Translate" ],
-      "Link": "https://huggingface.co/saddam213/DemoApp/tree/main/Text/Whisper-Medium",
+      "Link": "https://huggingface.co/TensorStack/Amuse/tree/main/Audio/Whisper-Medium",
       "UrlPaths": [
-        "https://huggingface.co/saddam213/DemoApp/resolve/main/Text/Whisper-Medium/decoder_model_merged.onnx?download=true",
-        "https://huggingface.co/saddam213/DemoApp/resolve/main/Text/Whisper-Medium/encoder_model.onnx?download=true",
-        "https://huggingface.co/saddam213/DemoApp/resolve/main/Text/Whisper-Medium/merges.txt?download=true",
-        "https://huggingface.co/saddam213/DemoApp/resolve/main/Text/Whisper-Medium/tokenizer_config.json?download=true",
-        "https://huggingface.co/saddam213/DemoApp/resolve/main/Text/Whisper-Medium/vocab.json?download=true",
-        "https://huggingface.co/saddam213/DemoApp/resolve/main/Text/Whisper-Medium/mel_filters.npz?download=true"
+        "https://huggingface.co/TensorStack/Amuse/resolve/main/Audio/Whisper-Medium/decoder_model_merged.onnx?download=true",
+        "https://huggingface.co/TensorStack/Amuse/resolve/main/Audio/Whisper-Medium/encoder_model.onnx?download=true",
+        "https://huggingface.co/TensorStack/Amuse/resolve/main/Audio/Whisper-Medium/merges.txt?download=true",
+        "https://huggingface.co/TensorStack/Amuse/resolve/main/Audio/Whisper-Medium/tokenizer_config.json?download=true",
+        "https://huggingface.co/TensorStack/Amuse/resolve/main/Audio/Whisper-Medium/vocab.json?download=true",
+        "https://huggingface.co/TensorStack/Amuse/resolve/main/Audio/Whisper-Medium/mel_filters.npz?download=true"
       ]
     },
     {
       "Id": 103,
       "Backend": "OnnxRuntime",
+      "Pipeline": "OnnxRuntime",
       "Name": "Whisper-Base",
       "Type": "Whisper",
       "Version": "Base",
       "MinLength": 20,
       "MaxLength": 512,
       "Prefixes": [ "Transcribe", "Translate" ],
-      "Link": "https://huggingface.co/saddam213/DemoApp/tree/main/Text/Whisper-Base",
+      "Link": "https://huggingface.co/TensorStack/Amuse/tree/main/Audio/Whisper-Base",
       "UrlPaths": [
-        "https://huggingface.co/saddam213/DemoApp/resolve/main/Text/Whisper-Base/decoder_model_merged.onnx?download=true",
-        "https://huggingface.co/saddam213/DemoApp/resolve/main/Text/Whisper-Base/encoder_model.onnx?download=true",
-        "https://huggingface.co/saddam213/DemoApp/resolve/main/Text/Whisper-Base/merges.txt?download=true",
-        "https://huggingface.co/saddam213/DemoApp/resolve/main/Text/Whisper-Base/tokenizer_config.json?download=true",
-        "https://huggingface.co/saddam213/DemoApp/resolve/main/Text/Whisper-Base/vocab.json?download=true",
-        "https://huggingface.co/saddam213/DemoApp/resolve/main/Text/Whisper-Base/mel_filters.npz?download=true"
+        "https://huggingface.co/TensorStack/Amuse/resolve/main/Audio/Whisper-Base/decoder_model_merged.onnx?download=true",
+        "https://huggingface.co/TensorStack/Amuse/resolve/main/Audio/Whisper-Base/encoder_model.onnx?download=true",
+        "https://huggingface.co/TensorStack/Amuse/resolve/main/Audio/Whisper-Base/merges.txt?download=true",
+        "https://huggingface.co/TensorStack/Amuse/resolve/main/Audio/Whisper-Base/tokenizer_config.json?download=true",
+        "https://huggingface.co/TensorStack/Amuse/resolve/main/Audio/Whisper-Base/vocab.json?download=true",
+        "https://huggingface.co/TensorStack/Amuse/resolve/main/Audio/Whisper-Base/mel_filters.npz?download=true"
       ]
     },
     {
       "Id": 104,
       "Backend": "OnnxRuntime",
+      "Pipeline": "OnnxRuntime",
       "Name": "Whisper-Large",
       "Type": "Whisper",
       "Version": "Large",
       "MinLength": 20,
       "MaxLength": 512,
       "Prefixes": [ "Transcribe", "Translate" ],
-      "Link": "https://huggingface.co/saddam213/DemoApp/tree/main/Text/Whisper-Large",
+      "Link": "https://huggingface.co/TensorStack/Amuse/tree/main/Audio/Whisper-Large",
       "UrlPaths": [
-        "https://huggingface.co/saddam213/DemoApp/resolve/main/Text/Whisper-Large/decoder_model_merged.onnx?download=true",
-        "https://huggingface.co/saddam213/DemoApp/resolve/main/Text/Whisper-Large/encoder_model.onnx?download=true",
-        "https://huggingface.co/saddam213/DemoApp/resolve/main/Text/Whisper-Large/merges.txt?download=true",
-        "https://huggingface.co/saddam213/DemoApp/resolve/main/Text/Whisper-Large/tokenizer_config.json?download=true",
-        "https://huggingface.co/saddam213/DemoApp/resolve/main/Text/Whisper-Large/vocab.json?download=true",
-        "https://huggingface.co/saddam213/DemoApp/resolve/main/Text/Whisper-Large/mel_filters.npz?download=true"
+        "https://huggingface.co/TensorStack/Amuse/resolve/main/Audio/Whisper-Large/decoder_model_merged.onnx?download=true",
+        "https://huggingface.co/TensorStack/Amuse/resolve/main/Audio/Whisper-Large/encoder_model.onnx?download=true",
+        "https://huggingface.co/TensorStack/Amuse/resolve/main/Audio/Whisper-Large/merges.txt?download=true",
+        "https://huggingface.co/TensorStack/Amuse/resolve/main/Audio/Whisper-Large/tokenizer_config.json?download=true",
+        "https://huggingface.co/TensorStack/Amuse/resolve/main/Audio/Whisper-Large/vocab.json?download=true",
+        "https://huggingface.co/TensorStack/Amuse/resolve/main/Audio/Whisper-Large/mel_filters.npz?download=true"
       ]
     },
     {
       "Id": 200,
       "Backend": "OnnxRuntime",
+      "Pipeline": "OnnxRuntime",
       "Name": "Supertonic",
       "IsDefault": true,
       "Type": "Supertonic",
       "MaxLength": 512,
       "Prefixes": [ "Female1", "Female2", "Female3", "Female4", "Female5", "Male1", "Male2", "Male3", "Male4", "Male5" ],
-      "Link": "https://huggingface.co/saddam213/DemoApp/tree/main/Text/Supertonic",
+      "Link": "https://huggingface.co/TensorStack/Amuse/tree/main/Audio/Supertonic",
       "UrlPaths": [
-        "https://huggingface.co/saddam213/DemoApp/resolve/main/Text/Supertonic/duration_predictor.onnx?download=true",
-        "https://huggingface.co/saddam213/DemoApp/resolve/main/Text/Supertonic/text_encoder.onnx?download=true",
-        "https://huggingface.co/saddam213/DemoApp/resolve/main/Text/Supertonic/unicode_indexer.json?download=true",
-        "https://huggingface.co/saddam213/DemoApp/resolve/main/Text/Supertonic/vector_estimator.onnx?download=true",
-        "https://huggingface.co/saddam213/DemoApp/resolve/main/Text/Supertonic/vocoder.onnx?download=true",
-        "https://huggingface.co/saddam213/DemoApp/resolve/main/Text/Supertonic/voice_styles/Female1.json?download=true",
-        "https://huggingface.co/saddam213/DemoApp/resolve/main/Text/Supertonic/voice_styles/Female2.json?download=true",
-        "https://huggingface.co/saddam213/DemoApp/resolve/main/Text/Supertonic/voice_styles/Female3.json?download=true",
-        "https://huggingface.co/saddam213/DemoApp/resolve/main/Text/Supertonic/voice_styles/Female4.json?download=true",
-        "https://huggingface.co/saddam213/DemoApp/resolve/main/Text/Supertonic/voice_styles/Female5.json?download=true",
-        "https://huggingface.co/saddam213/DemoApp/resolve/main/Text/Supertonic/voice_styles/Male1.json?download=true",
-        "https://huggingface.co/saddam213/DemoApp/resolve/main/Text/Supertonic/voice_styles/Male2.json?download=true",
-        "https://huggingface.co/saddam213/DemoApp/resolve/main/Text/Supertonic/voice_styles/Male3.json?download=true",
-        "https://huggingface.co/saddam213/DemoApp/resolve/main/Text/Supertonic/voice_styles/Male4.json?download=true",
-        "https://huggingface.co/saddam213/DemoApp/resolve/main/Text/Supertonic/voice_styles/Male5.json?download=true"
+        "https://huggingface.co/TensorStack/Amuse/resolve/main/Audio/Supertonic/duration_predictor.onnx?download=true",
+        "https://huggingface.co/TensorStack/Amuse/resolve/main/Audio/Supertonic/text_encoder.onnx?download=true",
+        "https://huggingface.co/TensorStack/Amuse/resolve/main/Audio/Supertonic/unicode_indexer.json?download=true",
+        "https://huggingface.co/TensorStack/Amuse/resolve/main/Audio/Supertonic/vector_estimator.onnx?download=true",
+        "https://huggingface.co/TensorStack/Amuse/resolve/main/Audio/Supertonic/vocoder.onnx?download=true",
+        "https://huggingface.co/TensorStack/Amuse/resolve/main/Audio/Supertonic/voice_styles/Female1.json?download=true",
+        "https://huggingface.co/TensorStack/Amuse/resolve/main/Audio/Supertonic/voice_styles/Female2.json?download=true",
+        "https://huggingface.co/TensorStack/Amuse/resolve/main/Audio/Supertonic/voice_styles/Female3.json?download=true",
+        "https://huggingface.co/TensorStack/Amuse/resolve/main/Audio/Supertonic/voice_styles/Female4.json?download=true",
+        "https://huggingface.co/TensorStack/Amuse/resolve/main/Audio/Supertonic/voice_styles/Female5.json?download=true",
+        "https://huggingface.co/TensorStack/Amuse/resolve/main/Audio/Supertonic/voice_styles/Male1.json?download=true",
+        "https://huggingface.co/TensorStack/Amuse/resolve/main/Audio/Supertonic/voice_styles/Male2.json?download=true",
+        "https://huggingface.co/TensorStack/Amuse/resolve/main/Audio/Supertonic/voice_styles/Male3.json?download=true",
+        "https://huggingface.co/TensorStack/Amuse/resolve/main/Audio/Supertonic/voice_styles/Male4.json?download=true",
+        "https://huggingface.co/TensorStack/Amuse/resolve/main/Audio/Supertonic/voice_styles/Male5.json?download=true"
       ]
     }
   ],
@@ -2075,7 +2083,6 @@
       ],
       "BaseType": "bfloat16",
       "ProcessTypes": [ "TextToImage", "ImageToImage", "ImageInpaint", "ImageControlNet" ],
-      "Vendor": [ "Nvidia" ,"AMD"],
       "Link": "https://huggingface.co/Qwen/Qwen-Image-2512",
       "DefaultOptions": {
         "Steps": 30,
@@ -2201,7 +2208,6 @@
       ],
       "BaseType": "bfloat16",
       "ProcessTypes": [ "ImageEdit" ],
-      "Vendor": [ "Nvidia" ,"AMD"],
       "Link": "https://huggingface.co/Qwen/Qwen-Image-Edit-2511",
       "DefaultOptions": {
         "Steps": 30,
@@ -3556,7 +3562,6 @@
       ],
       "BaseType": "bfloat16",
       "ProcessTypes": [ "TextToVideo", "VideoToVideo" ],
-      "Vendor": [ "Nvidia" ,"AMD"],
       "Link": "https://huggingface.co/Wan-AI/Wan2.1-T2V-1.3B-Diffusers",
       "DefaultOptions": {
         "Steps": 30,
@@ -3685,7 +3690,6 @@
       ],
       "BaseType": "bfloat16",
       "ProcessTypes": [ "TextToVideo" ],
-      "Vendor": [ "Nvidia" ,"AMD"],
       "Link": "https://huggingface.co/Wan-AI/Wan2.1-T2V-14B-Diffusers",
       "DefaultOptions": {
         "Steps": 30,
@@ -3789,7 +3793,6 @@
       ],
       "BaseType": "bfloat16",
       "ProcessTypes": [ "ImageToVideo" ],
-      "Vendor": [ "Nvidia" ,"AMD"],
       "Link": "https://huggingface.co/Wan-AI/Wan2.1-I2V-14B-480P-Diffusers",
       "IsDefault": true,
       "DefaultOptions": {
@@ -3890,7 +3893,6 @@
       ],
       "BaseType": "bfloat16",
       "ProcessTypes": [ "TextToVideo", "ImageToVideo", "VideoToVideo" ],
-      "Vendor": [ "Nvidia" ,"AMD"],
       "Link": "https://huggingface.co/Wan-AI/Wan2.2-TI2V-5B-Diffusers",
       "DefaultOptions": {
         "Steps": 50,
@@ -3992,7 +3994,6 @@
       ],
       "BaseType": "bfloat16",
       "ProcessTypes": [ "TextToVideo" ],
-      "Vendor": [ "Nvidia" ,"AMD"],
       "Link": "https://huggingface.co/Wan-AI/Wan2.2-T2V-A14B-Diffusers",
       "DefaultOptions": {
         "Steps": 40,
@@ -4089,7 +4090,6 @@
       ],
       "BaseType": "bfloat16",
       "ProcessTypes": [ "TextToImage" ],
-      "Vendor": [ "Nvidia" ,"AMD"],
       "Link": "https://huggingface.co/kandinskylab/Kandinsky-5.0-T2I-Lite-sft-Diffusers",
       "DefaultOptions": {
         "Steps": 30,
@@ -4172,7 +4172,6 @@
       ],
       "BaseType": "bfloat16",
       "ProcessTypes": [ "ImageEdit" ],
-      "Vendor": [ "Nvidia" ,"AMD"],
       "Link": "https://huggingface.co/kandinskylab/Kandinsky-5.0-I2I-Lite-sft-Diffusers",
       "DefaultOptions": {
         "Steps": 30,
@@ -4255,7 +4254,6 @@
       ],
       "BaseType": "bfloat16",
       "ProcessTypes": [ "TextToVideo" ],
-      "Vendor": [ "Nvidia" ,"AMD"],
       "Link": "https://huggingface.co/kandinskylab/Kandinsky-5.0-T2V-Lite-sft-5s-Diffusers",
       "DefaultOptions": {
         "Steps": 30,
@@ -4326,7 +4324,6 @@
       ],
       "BaseType": "bfloat16",
       "ProcessTypes": [ "ImageToVideo" ],
-      "Vendor": [ "Nvidia" ,"AMD"],
       "Link": "https://huggingface.co/kandinskylab/Kandinsky-5.0-I2V-Pro-sft-5s-Diffusers",
       "DefaultOptions": {
         "Steps": 30,
@@ -4395,7 +4392,6 @@
       ],
       "BaseType": "bfloat16",
       "ProcessTypes": [ "TextToVideo" ],
-      "Vendor": [ "Nvidia" ,"AMD"],
       "Link": "https://huggingface.co/zai-org/CogVideoX-2b",
       "DefaultOptions": {
         "Steps": 30,
@@ -4482,7 +4478,6 @@
       ],
       "BaseType": "bfloat16",
       "ProcessTypes": [ "TextToVideo" ],
-      "Vendor": [ "Nvidia" ,"AMD"],
       "Link": "https://huggingface.co/zai-org/CogVideoX-5b",
       "DefaultOptions": {
         "Steps": 30,
@@ -4569,7 +4564,6 @@
       ],
       "BaseType": "bfloat16",
       "ProcessTypes": [ "ImageToVideo" ],
-      "Vendor": [ "Nvidia" ,"AMD"],
       "Link": "https://huggingface.co/zai-org/CogVideoX-5b-I2V",
       "DefaultOptions": {
         "Steps": 30,
@@ -4654,7 +4648,6 @@
       ],
       "BaseType": "bfloat16",
       "ProcessTypes": [ "TextToVideo" ],
-      "Vendor": [ "Nvidia" ,"AMD"],
       "Link": "https://huggingface.co/zai-org/CogVideoX1.5-5B",
       "DefaultOptions": {
         "Steps": 30,
@@ -4741,7 +4734,6 @@
       ],
       "BaseType": "bfloat16",
       "ProcessTypes": [ "ImageToVideo" ],
-      "Vendor": [ "Nvidia" ,"AMD"],
       "Link": "https://huggingface.co/zai-org/CogVideoX1.5-5B-I2V",
       "DefaultOptions": {
         "Steps": 30,
@@ -4939,7 +4931,6 @@
       ],
       "BaseType": "bfloat16",
       "ProcessTypes": [ "TextToVideo", "ImageToVideo" ],
-      "Vendor": [ "Nvidia" ,"AMD"],
       "Link": "https://huggingface.co/Lightricks/LTX-2",
       "DefaultOptions": {
         "Steps": 40,
@@ -5108,7 +5099,6 @@
       ],
       "BaseType": "bfloat16",
       "ProcessTypes": [ "TextToVideo", "ImageToVideo" ],
-      "Vendor": [ "Nvidia" ,"AMD"],
       "Link": "https://huggingface.co/Lightricks/LTX-2",
       "DefaultOptions": {
         "Steps": 8,
@@ -5274,7 +5264,6 @@
       ],
       "BaseType": "bfloat16",
       "ProcessTypes": [ "TextToVideo", "ImageToVideo" ],
-      "Vendor": [ "Nvidia" ,"AMD"],
       "Link": "https://huggingface.co/Lightricks/LTX-2",
       "DefaultOptions": {
         "Steps": 40,
@@ -5440,7 +5429,6 @@
       ],
       "BaseType": "bfloat16",
       "ProcessTypes": [ "TextToVideo", "ImageToVideo" ],
-      "Vendor": [ "Nvidia" ,"AMD"],
       "Link": "https://huggingface.co/Lightricks/LTX-2",
       "DefaultOptions": {
         "Steps": 8,
@@ -5606,7 +5594,6 @@
       ],
       "BaseType": "bfloat16",
       "ProcessTypes": [ "TextToVideo", "ImageToVideo", "VideoToVideo" ],
-      "Vendor": [ "Nvidia" ,"AMD"],
       "Link": "https://huggingface.co/Skywork/SkyReels-V2-DF-1.3B-540P-Diffusers",
       "DefaultOptions": {
         "Steps": 30,
@@ -5715,7 +5702,6 @@
       ],
       "BaseType": "bfloat16",
       "ProcessTypes": [ "TextToVideo", "ImageToVideo", "VideoToVideo" ],
-      "Vendor": [ "Nvidia" ,"AMD"],
       "Link": "https://huggingface.co/Skywork/SkyReels-V2-DF-14B-540P-Diffusers",
       "DefaultOptions": {
         "Steps": 30,
@@ -5824,7 +5810,6 @@
       ],
       "BaseType": "bfloat16",
       "ProcessTypes": [ "TextToVideo", "ImageToVideo", "VideoToVideo" ],
-      "Vendor": [ "Nvidia" ,"AMD"],
       "Link": "https://huggingface.co/BestWishYsh/Helios-Base",
       "DefaultOptions": {
         "Steps": 20,
@@ -5954,7 +5939,6 @@
       ],
       "BaseType": "bfloat16",
       "ProcessTypes": [ "TextToVideo", "ImageToVideo", "VideoToVideo" ],
-      "Vendor": [ "Nvidia" ,"AMD"],
       "Link": "https://huggingface.co/BestWishYsh/Helios-Mid",
       "DefaultOptions": {
         "Steps": 20,
@@ -6084,7 +6068,6 @@
       ],
       "BaseType": "bfloat16",
       "ProcessTypes": [ "TextToVideo", "ImageToVideo", "VideoToVideo" ],
-      "Vendor": [ "Nvidia" ,"AMD"],
       "Link": "https://huggingface.co/BestWishYsh/Helios-Distilled",
       "DefaultOptions": {
         "Steps": 3,
@@ -6184,6 +6167,59 @@
           "Height": 736
         }
       ]
+    },
+    {
+      "Id": 300,
+      "Backend": "PyTorch",
+      "Name": "ACE-Step v1.5 XL",
+      "Pipeline": "AceStepPipeline",
+      "Path": "ACE-Step/acestep-v15-xl-turbo-diffusers",
+      "Source": "HuggingFace",
+      "MemoryProfile": [
+        {
+          "QualityMode": "Draft",
+          "MemoryModes": [ 4, 20, 32 ]
+        },
+        {
+          "QualityMode": "Standard",
+          "MemoryModes": [ 4, 20, 32 ]
+        },
+        {
+          "QualityMode": "Production",
+          "MemoryModes": [ 4, 23, 32 ]
+        }
+      ],
+      "BaseType": "bfloat16",
+      "ProcessTypes": [ "TextToAudio" ],
+      "Link": "https://huggingface.co/ACE-Step/acestep-v15-xl-turbo-diffusers",
+      "DefaultOptions": {
+        "Steps": 8,
+        "GuidanceScale": 0,
+        "SampleRate": 48000,
+        "MaxLength": 512,
+        "MaxLength2": 4096,
+        "Strength": 1,
+        "Scheduler": "FlowMatchEuler",
+        "Schedulers": {
+          "FlowMatchEuler": {
+            "Scheduler": "FlowMatchEuler",
+            "num_train_timesteps": 1,
+            "shift": 3,
+            "use_dynamic_shifting": false,
+            "base_shift": 0.5,
+            "max_shift": 1.15,
+            "base_image_seq_len": 256,
+            "max_image_seq_len": 4096,
+            "invert_sigmas": false,
+            "shift_terminal": null,
+            "use_karras_sigmas": false,
+            "use_exponential_sigmas": false,
+            "use_beta_sigmas": false,
+            "time_shift_type": "exponential",
+            "stochastic_sampling": false
+          }
+        }
+      }
     }
   ],
   "LoraAdapterModels": [

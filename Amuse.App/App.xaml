@@ -547,7 +547,9 @@
                             <TextBlock DockPanel.Dock="Left"  Text="ControlNet Model" Style="{StaticResource FieldTextBlockStyle}" />
                             <TextBox Text="{Binding ControlNetModel}" Style="{StaticResource TextBlockStyle}" IsReadOnly="True" />
                         </StackPanel>
-                        <UniformGrid Columns="3" Margin="0,4,0,0">
+
+                        <!--Details-->
+                        <UniformGrid Columns="3" Margin="0,4,0,0" Visibility="{Binding MediaType, Converter={StaticResource InverseEnumToVisibilityConverter}, ConverterParameter=Audio}">
                             <StackPanel>
                                 <TextBlock Text="{Binding MediaType, StringFormat={}{0} Size}" Style="{StaticResource FieldTextBlockStyle}" />
                                 <TextBlock>
@@ -570,14 +572,29 @@
                             </StackPanel>
                         </UniformGrid>
 
+                        <UniformGrid Columns="3" Margin="0,4,0,0" Visibility="{Binding MediaType, Converter={StaticResource EnumToVisibilityConverter}, ConverterParameter=Audio}">
+                            <StackPanel>
+                                <TextBlock Text="Duration" Style="{StaticResource FieldTextBlockStyle}"/>
+                                <TextBlock Text="{Binding Duration, FallbackValue=00:00:00, StringFormat={}mm\\:ss\\.ff}" />
+                            </StackPanel>
+                            <StackPanel>
+                                <TextBlock Text="Sample Rate" Style="{StaticResource FieldTextBlockStyle}"/>
+                                <TextBlock Text="{Binding SampleRate, FallbackValue=0hz, StringFormat={}{0}hz}" />
+                            </StackPanel>
+                        </UniformGrid>
+
                         <!--Prompts-->
                         <StackPanel Margin="0,4,0,0">
                             <TextBlock Text="Prompt" Style="{StaticResource FieldTextBlockStyle}" />
-                            <TextBox Text="{Binding Options.Prompt}" Style="{StaticResource TextBlockStyle}" TextWrapping="Wrap" />
+                            <TextBox Text="{Binding Options.Prompt}" Style="{StaticResource TextBlockStyle}" TextWrapping="Wrap" VerticalScrollBarVisibility="Auto" MaxHeight="200"/>
                         </StackPanel>
                         <StackPanel Margin="0,4,0,0" Visibility="{Binding Options.NegativePrompt, Converter={StaticResource NullOrEmptyVisibilityConverter}}">
                             <TextBlock Text="Negative Prompt" Style="{StaticResource FieldTextBlockStyle}" />
-                            <TextBox Text="{Binding Options.NegativePrompt}" Style="{StaticResource TextBlockStyle}" TextWrapping="Wrap" />
+                            <TextBox Text="{Binding Options.NegativePrompt}" Style="{StaticResource TextBlockStyle}" TextWrapping="Wrap" VerticalScrollBarVisibility="Auto" MaxHeight="200"/>
+                        </StackPanel>
+                        <StackPanel Margin="0,4,0,0" Visibility="{Binding Options.Prompt2, Converter={StaticResource NullOrEmptyVisibilityConverter}}">
+                            <TextBlock Text="Prompt2" Style="{StaticResource FieldTextBlockStyle}" />
+                            <TextBox Text="{Binding Options.Prompt2}" Style="{StaticResource TextBlockStyle}" TextWrapping="Wrap" VerticalScrollBarVisibility="Auto" MaxHeight="200"/>
                         </StackPanel>
 
                         <!--Scheduler Settings-->
@@ -976,7 +993,17 @@
                     <TextBlock DockPanel.Dock="Top" Text="{Binding MediaType, StringFormat={}Generated {0}}" FontSize="20"/>
                     <StackPanel>
                         <Separator Opacity=".7"/>
-                        <UniformGrid Columns="3" Margin="0,6,0,0">
+                        <UniformGrid Columns="3" Margin="0,6,0,0" >
+                            <StackPanel>
+                                <TextBlock Text="Duration" Style="{StaticResource FieldTextBlockStyle}"/>
+                                <TextBlock Text="{Binding Duration, FallbackValue=00:00:00, StringFormat={}mm\\:ss\\.ff}" />
+                            </StackPanel>
+                            <StackPanel>
+                                <TextBlock Text="Sample Rate" Style="{StaticResource FieldTextBlockStyle}"/>
+                                <TextBlock Text="{Binding SampleRate, FallbackValue=0hz, StringFormat={}{0}hz}" />
+                            </StackPanel>
+                        </UniformGrid>
+                        <UniformGrid Columns="3" Margin="0,4,0,0">
                             <StackPanel>
                                 <TextBlock Text="Voice Style" Style="{StaticResource FieldTextBlockStyle}" />
                                 <TextBlock>

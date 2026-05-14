@@ -18,7 +18,7 @@ namespace Amuse.App.Views
     /// </summary>
     public partial class TextToAudioView : ViewBaseModel
     {
-        private AudioInput _resultAudio;
+        private AudioInputStream _resultAudio;
         private AudioInputOptions _options;
         private TextInput _sourceText;
 
@@ -47,7 +47,7 @@ namespace Amuse.App.Views
         /// <summary>
         /// Gets or sets the result audio.
         /// </summary>
-        public AudioInput ResultAudio
+        public AudioInputStream ResultAudio
         {
             get { return _resultAudio; }
             set { SetProperty(ref _resultAudio, value); }
@@ -175,11 +175,8 @@ namespace Amuse.App.Views
 
                 Statistics.Stop();
 
-                // Set Result
-                ResultAudio = new AudioInput(resultTensor);
-
                 // History
-                await HistoryService.AddAsync(_resultAudio, new AudioHistory
+                ResultAudio = await HistoryService.AddAsync(resultTensor, new AudioHistory
                 {
                     Options = _options,
                     Model = CurrentPipeline.AudioModel.Name,
