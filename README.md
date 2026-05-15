@@ -3,43 +3,136 @@
    <img width="30%" src="Assets/Amuse-Logo-512.png">
 </p>
 <div align="center">
-   <h2><a href="https://github.com/TensorStack-AI/AmuseAI/releases/download/v3.2.0/Amuse_v3.2.0.exe">Download Amuse v3.2.0</a></h2>
+   <h1><a href="https://github.com/TensorStack-AI/AmuseAI/releases/download/v3.4.0/Amuse_v3.4.0.exe">Download Amuse v3.4.0</a></h1>
 </div>
 
 
-[![GitHub Release](https://img.shields.io/github/v/release/TensorStack-AI/AmuseAI?label=version&color=%2344cc11)](https://github.com/TensorStack-AI/AmuseAI/releases)
+[![GitHub Release](https://img.shields.io/github/v/release/TensorStack-AI/AmuseAI?include_prereleases&label=version&color=%2344cc11)](https://github.com/TensorStack-AI/AmuseAI/releases)
 [![GitHub last commit](https://img.shields.io/github/last-commit/TensorStack-AI/AmuseAI)](https://github.com/TensorStack-AI/AmuseAI/commits/master/)
 [![Discord](https://img.shields.io/discord/1457477275246268451?label=Discord&)]([https://discord.gg/ptgMMv36Xu](https://discord.gg/ptgMMv36Xu))
 
-## Amuse Roadmap
-* ~~**.NET 10 + OnnxRuntime Latest:** Migration to the .NET 10 framework and integration of the latest OnnxRuntime for optimized hardware acceleration.~~ (v3.2.0)
-* ~~**Python Inference Runtime:** Implementation of a dedicated Python backend to provide seamless interop with the broader machine learning ecosystem.~~ (v3.3.0)
-* ~~**LoRA Adapters:** Support for dynamic loading and blending of LoRA adapters for fine-tuned style and character control.~~ (v3.3.2)
-* ~~**Z-Image & FLUX2 Models:** Integration of next-generation transformer architectures, including Z-Image and FLUX2, for high-fidelity image synthesis.~~ (v3.3.4)
-* ~~**WAN & LTX-2 Video Models:** Expansion into generative video using WAN and LTX-2 architectures for advanced motion and temporal consistency.~~ (v3.3.5)
-* **STT + TTS Audio Models:** Deployment of Speech-to-Text for voice-driven prompting and Text-to-Speech for high-quality audio generation.
----
 
 
-## Required External Licences (commercial use)
-`FontAwesome Pro v7` Licence Required https://fontawesome.com/v7/download
-1. Download the `7.1.0 for the desktop` package
-2. Add the font files to the `Fonts` directory
-3. Set build action to `Resource` for all font files
-
----
-
-## Archive:
-https://huggingface.co/TensorStack/Amuse
-
-
-
-## Screenshots
+# Amuse
+Amuse is a high-performance local .NET application for AI image and video generation. Create and process media with a streamlined interface designed for ease of use and seamless integration with modern hardware.
 
 <p align="center" width="100%">
     <img src="Assets/Screenshots/TextToImage.PNG">
 </p>
 
+
+
+## Features
+* Automatic installation of an isolated, Python environment.
+* Safetensors, GGUF, and ONNX support.
+* Video Editor for generated or local content.
+* Image/Video Upscale for static and moving media.
+* Feature Extraction from images and video.
+* Video Interpolation for frame rates and slow-motion.
+* Image Inpaint to remove objects or fill areas.
+* Advanced Image Editing with selection and masking tools.
+* Voice Generation (Supertonic).
+* Speech Recognition (Whisper).
+* Media Gallery for organization and management.
+* Lora/ControlNet Support for output control.
+
+---
+
+## Image Pipelines
+- Z-Image
+- Qwen
+- FLUX.1
+- FLUX.2
+- Chroma
+- Kandinsky5
+- StableDiffusion-XL
+- StableDiffusion-3
+
+## Video Pipelines
+- LTX
+- LTX-2
+- Wan 2.2
+- CogVideoX
+- Kandinsky5
+- SkyReels-V2
+- Helios
+
+## Audio Pipelines
+- ACE-Step XL
+- Whisper
+- Supertonic
+
+---
+
+## GPU Support
+Amuse utilizes `NVIDIA CUDA 12.8` and `AMD ROCm 7.2` for local hardware acceleration.
+
+### Nvidia GPU Support
+Amuse leverages `CUDA 12.8`, providing native support for the latest generation of hardware.<br /> While legacy architectures (Pascal/Maxwell) are technically supported, an RTX-enabled card is strongly recommended to utilize Tensor Cores for efficient generation speeds.
+<table>
+  <thead>
+    <tr>
+      <th>Architecture</th>
+      <th>Platform Support</th>
+      <th>GPU Models</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><b>Blackwell</b> (SM_100)</td>
+      <td>Windows 10, 11, Server 22</td>
+      <td>GeForce RTX 5090, 5080, 5070 Ti, 5070; RTX PRO Blackwell series</td>
+    </tr>
+    <tr>
+      <td><b>Ada Lovelace</b> (SM_89)</td>
+      <td>Windows 10, 11, Server 22</td>
+      <td>GeForce RTX 4090, 4080, 4070 Ti/Super, 4070, 4060 Ti, 4060; RTX 6000/5000/4000 Ada</td>
+    </tr>
+    <tr>
+      <td><b>Ampere</b> (SM_86)</td>
+      <td>Windows 10, 11, Server 22</td>
+      <td>GeForce RTX 3090 Ti, 3090, 3080 Ti, 3080, 3070 Ti, 3070, 3060 Ti, 3060; RTX A-series (A6000, etc.)</td>
+    </tr>
+    <tr>
+      <td><b>Turing</b> (SM_75)</td>
+      <td>Windows 10, 11, Server 22</td>
+      <td>GeForce RTX 2080 Ti, 2080 Super, 2070, 2060; GTX 1660 Ti, 1660 Super, 1650</td>
+    </tr>
+  </tbody>
+</table>
+
+> Note: Minimum Driver (NVIDIA): `Version 527.41` or later is required for `CUDA 12.8` compatibility.
+
+---
+
+### AMD GPU Support
+Amuse leverages `ROCm 7.2`, which introduces a unified software stack for Windows and Linux.<br /> This version is highly optimized for RDNA 3 and the newly released RDNA 4 architectures, offering significant performance gains in local AI inference.
+
+<table>
+  <thead>
+    <tr>
+      <th>Architecture</th>
+      <th>Platform Support</th>
+      <th>GPU Models</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><b>gfx1151</b> (STX_Halo)</td>
+      <td>Windows 10, 11, Server 22</td>
+      <td>Ryzen AI MAX+ Pro 395</td>
+    </tr>
+    <tr>
+      <td><b>gfx110X</b> (RDNA3)</td>
+      <td>Windows 10, 11, Server 22</td>
+      <td>Radeon PRO W7900/W7800/W7700/V710, RX 7900 XTX/XT/GRE, RX 7800 XT, RX 7700 XT</td>
+    </tr>
+  </tbody>
+</table>
+
+> Note: Minimum Driver (AMD): `Version 26.1.1` or later is required for `ROCM 7.2` compatibility.
+
+---
 
 ## Demo Videos
 
