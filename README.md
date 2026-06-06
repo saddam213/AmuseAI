@@ -118,11 +118,6 @@ Amuse leverages `ROCm 7.2`, which introduces a unified software stack for Window
   </thead>
   <tbody>
     <tr>
-      <td><b>gfx1151</b> (STX_Halo)</td>
-      <td>Windows 10, 11, Server 22</td>
-      <td>Ryzen AI MAX+ Pro 395</td>
-    </tr>
-    <tr>
       <td><b>gfx110X</b> (RDNA3)</td>
       <td>Windows 10, 11, Server 22</td>
       <td>Radeon PRO W7900/W7800/W7700/V710, RX 7900 XTX/XT/GRE, RX 7800 XT, RX 7700 XT</td>
