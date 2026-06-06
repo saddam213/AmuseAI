@@ -3,7 +3,7 @@
    <img width="30%" src="Assets/Amuse-Logo-512.png">
 </p>
 <div align="center">
-   <h1><a href="https://github.com/TensorStack-AI/AmuseAI/releases/download/v3.5.1/Amuse_v3.5.1.exe">Download Amuse v3.5.1</a></h1>
+   <h1><a href="https://github.com/TensorStack-AI/AmuseAI/releases/download/v3.5.0/Amuse_v3.5.1.exe">Download Amuse v3.5.1</a></h1>
 </div>
 
 
