@@ -50,7 +50,13 @@
                                             <TextBlock Text="Downloading" TextAlignment="Right"  Opacity=".7" FontSize="11" Visibility="{Binding Status, Converter={StaticResource EnumToVisibilityConverter}, ConverterParameter=Downloading}"/>
                                             <TextBlock Text="Failed" TextAlignment="Right"  Opacity=".7" FontSize="11" Visibility="{Binding Status, Converter={StaticResource EnumToVisibilityConverter}, ConverterParameter=DownloadFailed}"/>
                                         </Grid>
-                                        <TextBlock Text="{Binding Speed, StringFormat={}Speed: {0:N2} MB/s}" TextAlignment="Right" Margin="0,0,2,2" Opacity=".7" FontSize="11"/>
+                                        <StackPanel Margin="0,0,2,2" >
+                                            <TextBlock Opacity=".7" FontSize="11" HorizontalAlignment="Right">
+                                                <Run Text="{Binding Remaining, StringFormat={}{0} remaining}" />
+                                                <Run Text="@" />
+                                                <Run Text="{Binding Speed, StringFormat={}{0:N2} MB/s}" />
+                                            </TextBlock>
+                                        </StackPanel>
                                     </StackPanel>
 
                                     <StackPanel>

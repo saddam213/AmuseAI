@@ -1,6 +1,5 @@
 ﻿using Amuse.App.Common;
 using Amuse.App.Dialogs;
-using Amuse.Common;
 using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
@@ -236,7 +235,7 @@ namespace Amuse.App.Services
                 if (!checkpoint.IsInstalled(directory, components))
                 {
                     var output = CheckpointComponent.GetSafePath(directory, checkpoint.Folder, checkpoint.Path);
-                    await _downloadService.DownloadAsync([.. checkpoint.DownloadFiles], output, CreateProgressCallback(queueItem), queueItem.CancellationToken);
+                    await _downloadService.DownloadAsync([.. checkpoint.DownloadFiles], output, queueItem.ProgressCallback, queueItem.CancellationToken);
                 }
             }
         }
@@ -245,7 +244,7 @@ namespace Amuse.App.Services
         private async Task DownloadComponentAsync(DownloadQueueItem queueItem, ComponentModel component)
         {
             var output = Path.Combine(_settings.DirectoryModel, component.Type, component.Folder);
-            await _downloadService.DownloadAsync([.. component.DownloadFiles], output, CreateProgressCallback(queueItem), queueItem.CancellationToken);
+            await _downloadService.DownloadAsync([.. component.DownloadFiles], output, queueItem.ProgressCallback, queueItem.CancellationToken);
         }
 
 
@@ -281,20 +280,6 @@ namespace Amuse.App.Services
                 return 0;
 
             return _downloadItems.Max(x => x.Index) + 1;
-        }
-
-
-        private static Progress<DownloadProgress> CreateProgressCallback(DownloadQueueItem queueItem)
-        {
-            return new Progress<DownloadProgress>((p) => queueItem.ProgressCallback?.Report(new PipelineProgress
-            {
-                Key = "Download",
-                Value = (int)p.FileProgress,
-                Maximum = 100,
-                BatchValue = (int)p.TotalProgress,
-                BatchMaximum = 100,
-                Elapsed = p.BytesSec > 0 ? (float)(p.BytesSec / 1_048_576.0) : 0f
-            }));
         }
     }
 

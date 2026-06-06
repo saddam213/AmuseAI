@@ -1,9 +1,9 @@
-﻿using Amuse.Common;
-using System;
+﻿using System;
 using System.Threading;
 using TensorStack.Common;
 using TensorStack.WPF;
 using TensorStack.WPF.Controls;
+using TensorStack.WPF.Services;
 
 namespace Amuse.App.Common
 {
@@ -11,10 +11,10 @@ namespace Amuse.App.Common
     {
         private readonly CancellationTokenSource _cancellationTokenSource;
         private float _speed;
-        private string _component;
-        private string _fileName;
         private string _description;
         private string _errorMessage;
+        private string _remaining;
+        private DateTime _lastUpdate;
 
         public DownloadQueueItem(int index, IDownloadModel model)
         {
@@ -22,7 +22,7 @@ namespace Amuse.App.Common
             DownloadModel = model;
             Progress = new ProgressInfo();
             TotalProgress = new ProgressInfo();
-            ProgressCallback = new Progress<PipelineProgress>(OnProgress);
+            ProgressCallback = new Progress<DownloadProgress>(OnProgress);
             _description = GetDescription();
             _cancellationTokenSource = new CancellationTokenSource();
         }
@@ -30,7 +30,7 @@ namespace Amuse.App.Common
         public int Index { get; set; }
         public ProgressInfo Progress { get; }
         public ProgressInfo TotalProgress { get; }
-        public IProgress<PipelineProgress> ProgressCallback { get; }
+        public IProgress<DownloadProgress> ProgressCallback { get; }
         public CancellationToken CancellationToken => _cancellationTokenSource.Token;
         public ModelStatusType Status => DownloadModel.Status;
         public string Name => DownloadModel?.Name;
@@ -43,16 +43,10 @@ namespace Amuse.App.Common
             set { SetProperty(ref _speed, value); }
         }
 
-        public string Component
+        public string Remaining
         {
-            get { return _component; }
-            set { SetProperty(ref _component, value); }
-        }
-
-        public string FileName
-        {
-            get { return _fileName; }
-            set { SetProperty(ref _fileName, value); }
+            get { return _remaining; }
+            set { SetProperty(ref _remaining, value); }
         }
 
         public string ErrorMessage
@@ -77,16 +71,17 @@ namespace Amuse.App.Common
         }
 
 
-        private void OnProgress(PipelineProgress progress)
+        private void OnProgress(DownloadProgress progress)
         {
-            if (progress.Key?.Equals("Download") == false)
-                return;
+            if ((DateTime.UtcNow > _lastUpdate))
+            {
+                _lastUpdate = DateTime.UtcNow.AddMilliseconds(500);
+                Remaining = GetRemainingTime(progress);
+                Speed = progress.BytesSec > 0 ? (float)(progress.BytesSec / 1_000_000.0) : 0f;
+            }
 
-            Speed = progress.Elapsed;
-            Component = progress.Subkey;
-            FileName = progress.Message;
-            Progress.Update(progress.Value, progress.Maximum);
-            TotalProgress.Update(progress.BatchValue, progress.BatchMaximum);
+            Progress.Update((int)progress.FileProgress, 100);
+            TotalProgress.Update((int)progress.TotalProgress, 100);
         }
 
 
@@ -103,6 +98,28 @@ namespace Amuse.App.Common
             {
                 return string.Empty;
             }
+        }
+
+
+        private static string GetRemainingTime(DownloadProgress progress)
+        {
+            var bytesLeft = progress.TotalSize - progress.TotalBytes;
+            if (bytesLeft <= 0)
+                return "Complete";
+
+            if (progress.BytesSec == 0)
+                return "Calculating...";
+
+            var secondsLeft = bytesLeft / progress.BytesSec;
+            var timeSpan = TimeSpan.FromSeconds(secondsLeft);
+            if (timeSpan.TotalDays >= 1)
+                return $"{timeSpan.Days}d {timeSpan.Hours}h";
+            else if (timeSpan.TotalHours >= 1)
+                return $"{timeSpan.Hours}h {timeSpan.Minutes}m";
+            else if (timeSpan.TotalMinutes >= 1)
+                return $"{timeSpan.Minutes}m {timeSpan.Seconds}s";
+
+            return $"{timeSpan.Seconds}s";
         }
     }
 }
