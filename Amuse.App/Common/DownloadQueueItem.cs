@@ -113,13 +113,13 @@ namespace Amuse.App.Common
             var secondsLeft = bytesLeft / progress.BytesSec;
             var timeSpan = TimeSpan.FromSeconds(secondsLeft);
             if (timeSpan.TotalDays >= 1)
-                return $"{timeSpan.Days}d {timeSpan.Hours}h";
+                return $"{timeSpan.Days}d {timeSpan.Hours}h remaining";
             else if (timeSpan.TotalHours >= 1)
-                return $"{timeSpan.Hours}h {timeSpan.Minutes}m";
+                return $"{timeSpan.Hours}h {timeSpan.Minutes}m remaining";
             else if (timeSpan.TotalMinutes >= 1)
-                return $"{timeSpan.Minutes}m {timeSpan.Seconds}s";
+                return $"{timeSpan.Minutes}m {timeSpan.Seconds}s remaining";
 
-            return $"{timeSpan.Seconds}s";
+            return $"{timeSpan.Seconds}s remaining";
         }
     }
 }

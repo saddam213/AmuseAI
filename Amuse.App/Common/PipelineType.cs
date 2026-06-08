@@ -39,6 +39,10 @@ namespace Amuse.App.Common
         Kandinsky5Pipeline = 60,
 
 
+        [Display(Name = "Anima Pipeline", ShortName = "Anima")]
+        AnimaPipeline = 62,
+
+
         // Video
         [Display(Name = "Wan Pipeline", ShortName = "Wan")]
         WanPipeline = 70,

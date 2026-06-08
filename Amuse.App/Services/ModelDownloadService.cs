@@ -200,10 +200,7 @@ namespace Amuse.App.Services
                 }
                 else if (queueItem.DownloadModel is DiffusionModel diffusionModel)
                 {
-                    foreach (var checkpointComponent in diffusionModel.Checkpoint.GetComponents())
-                    {
-                        await DownloadCheckpointAsync(queueItem, _settings.DirectoryDiffusion, checkpointComponent, components);
-                    }
+                    await DownloadDiffusionCheckpointAsync(queueItem, _settings.DirectoryDiffusion, diffusionModel, components);
                 }
 
                 RemoveQueueItem(queueItem);
@@ -245,6 +242,25 @@ namespace Amuse.App.Services
         {
             var output = Path.Combine(_settings.DirectoryModel, component.Type, component.Folder);
             await _downloadService.DownloadAsync([.. component.DownloadFiles], output, queueItem.ProgressCallback, queueItem.CancellationToken);
+        }
+
+
+        private async Task DownloadDiffusionCheckpointAsync(DownloadQueueItem queueItem, string directory, DiffusionModel diffusionModel, IReadOnlyCollection<ComponentModel> components)
+        {
+            var diffusionCheckpointFiles = new Dictionary<string, string[]>();
+            foreach (var checkpoint in diffusionModel.Checkpoint.GetComponents())
+            {
+                if (checkpoint.Type == CheckpointType.OnlineFolder || checkpoint.Type == CheckpointType.OnlineFile)
+                {
+                    if (!checkpoint.IsInstalled(directory, components))
+                    {
+                        var output = CheckpointComponent.GetSafePath(directory, checkpoint.Folder, checkpoint.Path);
+                        diffusionCheckpointFiles.Add(output, checkpoint.DownloadFiles);
+                    }
+                }
+            }
+
+            await _downloadService.DownloadAsync(diffusionCheckpointFiles, queueItem.ProgressCallback, queueItem.CancellationToken);
         }
 
 

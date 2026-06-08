@@ -76,7 +76,7 @@
                         </StackPanel>
 
                         <!--Guidance Scale-->
-                        <StackPanel>
+                        <StackPanel Visibility="{Binding Pipeline.DiffusionModel.DefaultOptions.GuidanceScale, Converter={StaticResource GreaterThanToVisibilityConverter}, ConverterParameter=0}">
                             <CommonControls:SliderControl Text="Guidance" Value="{Binding Options.GuidanceScale}" Minimum="1" Maximum="20" TickFrequency="0.1" ValueFormat="F2"/>
                         </StackPanel>
 

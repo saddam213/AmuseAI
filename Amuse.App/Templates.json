@@ -8601,6 +8601,180 @@
       }
     },
     {
+      "Backend": "PyTorch",
+      "Name": "Anima_Base",
+      "Template": "Anima",
+      "Pipeline": "AnimaPipeline",
+      "ModelType": "Base",
+      "BaseType": "bfloat16",
+      "MediaType": "Image",
+      "ProcessTypes": [ "TextToImage" ],
+      "Checkpoint": {
+        "Vae": {
+          "Name": "AutoEncoder",
+          "Type": "Component",
+          "Path": "VAE_Qwen_Image"
+        },
+        "TextEncoder": {
+          "Name": "TextEncoder",
+          "Type": "Component",
+          "Path": "TE_Qwen3_06B"
+        },
+        "ConditionEncoder": {
+          "Name": "TextConditioner",
+          "Type": "Component",
+          "Path": "CE_Anima"
+        },
+        "Transformer": {
+          "Name": "Transformer",
+          "Type": "LocalFile",
+          "Path": ""
+        }
+      },
+      "MemoryProfile": [
+        {
+          "QualityMode": "Draft",
+          "MemoryModes": [ 2, 6, 4 ]
+        },
+        {
+          "QualityMode": "Standard",
+          "MemoryModes": [ 2, 5, 6 ]
+        },
+        {
+          "QualityMode": "Production",
+          "MemoryModes": [ 2, 6, 8 ]
+        }
+      ],
+      "DefaultOptions": {
+        "Steps": 30,
+        "Width": 1024,
+        "Height": 1024,
+        "GuidanceScale": 4,
+        "Scheduler": "FlowMatchEuler",
+        "Schedulers": [
+          {
+            "Scheduler": "FlowMatchEuler",
+            "NumTrainTimesteps": 1000,
+            "Shift": 3,
+            "UseDynamicShifting": false,
+            "BaseShift": 0.5,
+            "MaxShift": 1.15,
+            "BaseImageSeqLen": 256,
+            "MaxImageSeqLen": 4096,
+            "InvertSigmas": false,
+            "ShiftTerminal": 0,
+            "UseKarrasSigmas": false,
+            "UseExponentialSigmas": false,
+            "UseBetaSigmas": false,
+            "TimeShiftType": "Exponential",
+            "StochasticSampling": false
+          },
+          {
+            "Scheduler": "UniPCMultistep",
+            "NumTrainTimesteps": 1000,
+            "BetaStart": 0.0001,
+            "BetaEnd": 0.02,
+            "BetaSchedule": "Linear",
+            "TrainedBetas": null,
+            "SolverOrder": 2,
+            "PredictionType": "FlowPrediction",
+            "Thresholding": false,
+            "DynamicThresholdingRatio": 0.995,
+            "SampleMaxValue": 1,
+            "PredictX0": true,
+            "SolverType": "BH2",
+            "LowerOrderFinal": true,
+            "UseKarrasSigmas": false,
+            "UseExponentialSigmas": false,
+            "UseBetaSigmas": false,
+            "UseFlowSigmas": true,
+            "FlowShift": 6,
+            "TimestepSpacing": "Linspace",
+            "StepsOffset": 0,
+            "FinalSigmasType": "Zero",
+            "RescaleBetasZeroSNR": false,
+            "UseDynamicShifting": false,
+            "TimeShiftType": "Exponential",
+            "SigmaMin": 0,
+            "SigmaMax": 0,
+            "ShiftTerminal": 0
+          },
+          {
+            "Scheduler": "DPMSolverMultistep",
+            "NumTrainTimesteps": 1000,
+            "BetaStart": 0.0001,
+            "BetaEnd": 0.02,
+            "BetaSchedule": "ScaledLinear",
+            "TrainedBetas": null,
+            "SolverOrder": 2,
+            "PredictionType": "FlowPrediction",
+            "Thresholding": false,
+            "DynamicThresholdingRatio": 0.995,
+            "SampleMaxValue": 1,
+            "AlgorithmType": "DPMSolverPlus",
+            "SolverType": "Midpoint",
+            "EulerAtFinal": false,
+            "LowerOrderFinal": true,
+            "UseKarrasSigmas": false,
+            "UseExponentialSigmas": false,
+            "UseBetaSigmas": false,
+            "UseFlowSigmas": true,
+            "UseLuLambdas": false,
+            "FlowShift": 6,
+            "TimestepSpacing": "Linspace",
+            "StepsOffset": 0,
+            "FinalSigmasType": "Zero",
+            "RescaleBetasZeroSNR": false,
+            "UseDynamicShifting": false,
+            "TimeShiftType": "Exponential"
+          }
+        ]
+      },
+      "Resolutions": [
+        {
+          "Width": 640,
+          "Height": 1536
+        },
+        {
+          "Width": 768,
+          "Height": 1344
+        },
+        {
+          "Width": 832,
+          "Height": 1280
+        },
+        {
+          "Width": 896,
+          "Height": 1152
+        },
+        {
+          "Width": 768,
+          "Height": 768
+        },
+        {
+          "Width": 1024,
+          "Height": 1024,
+          "IsDefault": true
+        },
+        {
+          "Width": 1152,
+          "Height": 896
+        },
+        {
+          "Width": 1280,
+          "Height": 832
+        },
+        {
+          "Width": 1344,
+          "Height": 768
+        },
+        {
+          "Width": 1536,
+          "Height": 640
+        }
+      ]
+    },
+    {
       "Backend": "OnnxRuntime",
       "Name": "LCM_Onnx",
       "Template": null,
@@ -10192,6 +10366,16 @@
         {
           "Name": "XL Turbo",
           "Template": "AceStepXL_Turbo"
+        }
+      ]
+    },
+    {
+      "Name": "Anima",
+      "Backend": "PyTorch",
+      "Options": [
+        {
+          "Name": "Base",
+          "Template": "Anima_Base"
         }
       ]
     },
