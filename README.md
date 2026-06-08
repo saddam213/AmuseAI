@@ -6,9 +6,11 @@
    <h1><a href="https://github.com/TensorStack-AI/AmuseAI/releases/download/v3.5.0/Amuse_v3.5.1.exe">Download Amuse v3.5.1</a></h1>
 </div>
 
-
-[![GitHub Release](https://img.shields.io/github/v/release/TensorStack-AI/AmuseAI?include_prereleases&label=version&color=%2344cc11)](https://github.com/TensorStack-AI/AmuseAI/releases)
+[![GitHub Release](https://img.shields.io/github/v/release/TensorStack-AI/AmuseAI?include_prereleases&label=Amuse&color=%2344cc11)](https://github.com/TensorStack-AI/AmuseAI/releases)
+[![Common Badge](https://img.shields.io/nuget/v/TensorStack.Common?color=4bc51e&label=TensorStack)](https://www.nuget.org/packages/TensorStack.Common)
+![Nuget](https://img.shields.io/nuget/dt/TensorStack.Common?label=Nuget%20Downloads)
 [![GitHub last commit](https://img.shields.io/github/last-commit/TensorStack-AI/AmuseAI)](https://github.com/TensorStack-AI/AmuseAI/commits/master/)
+![GitHub Downloads (all assets, all releases)](https://img.shields.io/github/downloads/TensorStack-AI/AmuseAI/total)
 [![Discord](https://img.shields.io/discord/1457477275246268451?label=Discord&)]([https://discord.gg/ptgMMv36Xu](https://discord.gg/ptgMMv36Xu))
 
 
