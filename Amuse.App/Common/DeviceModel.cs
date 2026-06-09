@@ -28,7 +28,7 @@ namespace Amuse.App.Common
         {
             return vendor switch
             {
-                VendorType.AMD => [QualityMode.Standard, QualityMode.Production],
+                VendorType.AMD => [QualityMode.Draft, QualityMode.Standard, QualityMode.Production],
                 VendorType.Nvidia => [QualityMode.Draft, QualityMode.Standard, QualityMode.Production],
                 _ => [QualityMode.Production]
             };

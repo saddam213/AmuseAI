@@ -519,7 +519,7 @@
 
                     <DockPanel Margin="0,-1,0,1">
                         <TextBlock DockPanel.Dock="Right" Text="{Binding Pipeline, Converter={StaticResource EnumShortNameConverter}}" FontSize="10" Opacity=".7" />
-                        <TextBlock Text="{Binding Backend, Converter={StaticResource EnumDisplayNameConverter}}" FontSize="10"  Opacity=".7" FontStyle="Italic"/>
+                        <TextBlock Text="{Binding Backend, Converter={StaticResource EnumDisplayNameConverter}}" FontSize="10"  Opacity=".7" />
                     </DockPanel>
                 </StackPanel>
             </DataTemplate>

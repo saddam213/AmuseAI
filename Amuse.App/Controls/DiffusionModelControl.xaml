@@ -90,14 +90,14 @@
                 <!--Model-->
                 <DockPanel>
                     <TextBox DockPanel.Dock="Left" Text="Model" IsReadOnly="True" IsHitTestVisible="False" Width="60" FontStyle="Italic" FontSize="11" Opacity="0.7" Padding="4,2,0,0"/>
-                    <Grid>
+                    <Grid Height="36">
                         <ComboBox 
                             SelectedItem="{Binding SelectedModel, Mode=TwoWay}"
                             ItemsSource="{Binding ModelCollectionView}"
                             ItemTemplate="{StaticResource ComboBoxDataDiffusionTemplateModel}"
                             HorizontalContentAlignment="Stretch"
                             SelectionChanged="Model_SelectionChanged"/>
-                        <TextBlock Text="No models found." FontStyle="Italic" Opacity=".4" Margin="5,2,0,0" IsHitTestVisible="False" Visibility="{Binding ModelCollectionView.IsEmpty, Converter={StaticResource BooleanToVisibilityConverter}}"/>
+                        <TextBlock Text="No models found." FontStyle="Italic" Opacity=".4" Margin="5,-2,0,0" VerticalAlignment="Center" IsHitTestVisible="False" Visibility="{Binding ModelCollectionView.IsEmpty, Converter={StaticResource BooleanToVisibilityConverter}}" />
                     </Grid>
                 </DockPanel>
 

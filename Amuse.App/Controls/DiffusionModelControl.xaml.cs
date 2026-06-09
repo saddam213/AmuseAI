@@ -5,6 +5,7 @@ using Amuse.Common;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.ComponentModel;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Windows;
@@ -400,7 +401,10 @@ namespace Amuse.App.Controls
 
             // Base Models
             ModelCollectionView = new ListCollectionView(Settings.DiffusionModels);
+            ModelCollectionView.IsLiveSorting = true;
             ModelCollectionView.IsLiveFiltering = true;
+            ModelCollectionView.SortDescriptions.Add(new SortDescription(nameof(DiffusionModel.Status), ListSortDirection.Descending));
+            ModelCollectionView.SortDescriptions.Add(new SortDescription(nameof(DiffusionModel.Name), ListSortDirection.Ascending));
             ModelCollectionView.Filter = (obj) =>
             {
                 if (obj is not DiffusionModel viewModel)
@@ -426,6 +430,10 @@ namespace Amuse.App.Controls
 
             // Lora Models
             LoraCollectionView = new ListCollectionView(Settings.LoraAdapterModels);
+            LoraCollectionView.IsLiveSorting = true;
+            LoraCollectionView.IsLiveFiltering = true;
+            LoraCollectionView.SortDescriptions.Add(new SortDescription(nameof(LoraAdapterModel.Status), ListSortDirection.Descending));
+            LoraCollectionView.SortDescriptions.Add(new SortDescription(nameof(LoraAdapterModel.Name), ListSortDirection.Ascending));
             LoraCollectionView.Filter = (obj) =>
             {
                 if (obj is not LoraAdapterModel viewModel)
@@ -448,6 +456,10 @@ namespace Amuse.App.Controls
 
             // ControlNet Models
             ControlNetCollectionView = new ListCollectionView(Settings.ControlNetModels);
+            ControlNetCollectionView.IsLiveSorting = true;
+            ControlNetCollectionView.IsLiveFiltering = true;
+            ControlNetCollectionView.SortDescriptions.Add(new SortDescription(nameof(ControlNetModel.Status), ListSortDirection.Descending));
+            ControlNetCollectionView.SortDescriptions.Add(new SortDescription(nameof(ControlNetModel.Name), ListSortDirection.Ascending));
             ControlNetCollectionView.Filter = (obj) =>
             {
                 if (obj is not ControlNetModel viewModel)
@@ -475,6 +487,10 @@ namespace Amuse.App.Controls
 
             // Extractor Models
             ExtractCollectionView = new ListCollectionView(Settings.ExtractModels);
+            ExtractCollectionView.IsLiveSorting = true;
+            ExtractCollectionView.IsLiveFiltering = true;
+            ExtractCollectionView.SortDescriptions.Add(new SortDescription(nameof(ExtractModel.Status), ListSortDirection.Descending));
+            ExtractCollectionView.SortDescriptions.Add(new SortDescription(nameof(ExtractModel.Name), ListSortDirection.Ascending));
             ExtractCollectionView.Filter = (obj) =>
             {
                 if (obj is not ExtractModel viewModel)
@@ -491,6 +507,10 @@ namespace Amuse.App.Controls
 
             //Upscale models
             UpscaleCollectionView = new ListCollectionView(Settings.UpscaleModels);
+            UpscaleCollectionView.IsLiveSorting = true;
+            UpscaleCollectionView.IsLiveFiltering = true;
+            UpscaleCollectionView.SortDescriptions.Add(new SortDescription(nameof(UpscaleModel.Status), ListSortDirection.Descending));
+            UpscaleCollectionView.SortDescriptions.Add(new SortDescription(nameof(UpscaleModel.Name), ListSortDirection.Ascending));
             UpscaleCollectionView.Filter = (obj) =>
             {
                 if (obj is not UpscaleModel viewModel)
@@ -521,21 +541,21 @@ namespace Amuse.App.Controls
             {
                 ModelCollectionView.Refresh();
                 SelectedModel = ModelCollectionView.Cast<DiffusionModel>().FirstOrDefault(x => x == _currentModel)
-                             ?? ModelCollectionView.Cast<DiffusionModel>().OrderByDescending(x => x.IsDefault).FirstOrDefault();
+                             ?? ModelCollectionView.Cast<DiffusionModel>().FirstOrDefault();
             }
 
             if (ExtractCollectionView is not null)
             {
                 ExtractCollectionView.Refresh();
                 SelectedExtractor = ExtractCollectionView.Cast<ExtractModel>().FirstOrDefault(x => x == _currentExtractor)
-                                 ?? ExtractCollectionView.Cast<ExtractModel>().OrderByDescending(x => x.IsDefault).FirstOrDefault();
+                                 ?? ExtractCollectionView.Cast<ExtractModel>().FirstOrDefault();
             }
 
             if (UpscaleCollectionView is not null)
             {
                 UpscaleCollectionView.Refresh();
                 SelectedUpscaler = UpscaleCollectionView.Cast<UpscaleModel>().FirstOrDefault(x => x == _currentUpscaler)
-                                ?? UpscaleCollectionView.Cast<UpscaleModel>().OrderByDescending(x => x.IsDefault).FirstOrDefault();
+                                ?? UpscaleCollectionView.Cast<UpscaleModel>().FirstOrDefault();
             }
 
             RefreshMemoryProfile();
@@ -553,7 +573,7 @@ namespace Amuse.App.Controls
             {
                 ControlNetCollectionView.Refresh();
                 SelectedControlNet = ControlNetCollectionView.Cast<ControlNetModel>().FirstOrDefault(x => x == _currentControlNet)
-                                  ?? ControlNetCollectionView.Cast<ControlNetModel>().OrderByDescending(x => x.IsDefault).FirstOrDefault();
+                                  ?? ControlNetCollectionView.Cast<ControlNetModel>().FirstOrDefault();
             }
 
             RefreshMemoryProfile();
@@ -584,9 +604,7 @@ namespace Amuse.App.Controls
             }
             else
             {
-                var defaultLora = filteredLora
-                    .OrderByDescending(x => x.IsDefault)
-                    .FirstOrDefault();
+                var defaultLora = filteredLora.FirstOrDefault();
                 if (defaultLora is not null)
                     LoraAdapters.Add(defaultLora);
             }

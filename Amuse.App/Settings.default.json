@@ -127,7 +127,7 @@
         "gguf==0.18.0",
         "av==17.0.1",
         "optimum-quanto==0.2.7",
-        "bitsandbytes==0.49.2",
+        "https://github.com/0xDELUXA/bitsandbytes_win_rocm/releases/download/v0.49.2.dev0-py312-rocm7.12-all/bitsandbytes-0.49.2.dev0-cp312-cp312-win_amd64.whl",
         "soundfile==0.13.1"
       ]
     }
