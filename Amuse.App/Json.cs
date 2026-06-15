@@ -70,9 +70,10 @@ namespace Amuse.App
         {
             try
             {
+                var type = GetObjType<T>(obj);
                 using (var jsonWriter = File.OpenWrite(filePath))
                 {
-                    JsonSerializer.Serialize<T>(jsonWriter, obj, DefaultOptions);
+                    JsonSerializer.Serialize(jsonWriter, obj, type, DefaultOptions);
                 }
             }
             catch (Exception ex)
@@ -87,9 +88,10 @@ namespace Amuse.App
             var temp = filePath + ".tmp";
             try
             {
+                var type = GetObjType<T>(obj);
                 await using (var stream = new FileStream(temp, FileMode.Create, FileAccess.Write, FileShare.None))
                 {
-                    await JsonSerializer.SerializeAsync(stream, obj, DefaultOptions);
+                    await JsonSerializer.SerializeAsync(stream, obj, type, DefaultOptions);
                 }
                 File.Move(temp, filePath, overwrite: true);
             }
@@ -115,6 +117,16 @@ namespace Amuse.App
             }
             catch { return default; }
 
+        }
+
+
+        private static Type GetObjType<T>(T obj)
+        {
+            var type = typeof(T);
+            if (type.IsInterface)
+                return obj.GetType();
+
+            return type;
         }
     }
 }

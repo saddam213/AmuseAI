@@ -38,7 +38,7 @@ namespace Amuse.App.Controls
                     Id = cpuDevice.Id,
                     DeviceId = cpuDevice.Id,
                     Name = cpuDevice.Name,
-                    HardwareLUID = cpuDevice.HardwareLUID,
+                    HardwareLUID = 0,
                     HardwareID = cpuDevice.HardwareID,
                     HardwareVendorId = cpuDevice.HardwareVendorId,
                     Memory = cpuDevice.Memory,
@@ -153,7 +153,7 @@ namespace Amuse.App.Controls
         public string Name { get; init; }
         public DeviceType Type { get; init; }
         public int HardwareID { get; init; }
-        public int HardwareLUID { get; init; }
+        public long HardwareLUID { get; init; }
         public int HardwareVendorId { get; init; }
         public int Usage { get; set; }
         public double MemoryUsage { get; set; }

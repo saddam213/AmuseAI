@@ -907,6 +907,69 @@
           "https://huggingface.co/saddam213/Components/resolve/main/Anima_TextConditioner/tokenizer_config.json"
         ]
       }
+    },
+    {
+      "Id": 360,
+      "Backend": "PyTorch",
+      "Name": "GLM AutoEncoder",
+      "Key": "VAE_GLM",
+      "Link": "https://huggingface.co/saddam213/AutoEncoder/tree/main/GLM",
+      "Checkpoint": {
+        "Name": "Component",
+        "Type": "OnlineFolder",
+        "Folder": "AutoEncoder",
+        "Path": "GLM",
+        "DownloadFiles": [
+          "https://huggingface.co/saddam213/AutoEncoder/resolve/main/GLM/config.json",
+          "https://huggingface.co/saddam213/AutoEncoder/resolve/main/GLM/diffusion_pytorch_model.safetensors"
+        ]
+      }
+    },
+    {
+      "Id": 361,
+      "Backend": "PyTorch",
+      "Name": "GLM VisionEncoder",
+      "Key": "VE_GLM",
+      "Link": "https://huggingface.co/saddam213/Components/tree/main/GLMImage_VisionEncoder",
+      "Checkpoint": {
+        "Name": "Component",
+        "Type": "OnlineFolder",
+        "Folder": "Components",
+        "Path": "GLMImage_VisionEncoder",
+        "DownloadFiles": [
+          "https://huggingface.co/saddam213/Components/resolve/main/GLMImage_VisionEncoder/chat_template.jinja",
+          "https://huggingface.co/saddam213/Components/resolve/main/GLMImage_VisionEncoder/config.json",
+          "https://huggingface.co/saddam213/Components/resolve/main/GLMImage_VisionEncoder/generation_config.json",
+          "https://huggingface.co/saddam213/Components/resolve/main/GLMImage_VisionEncoder/model.safetensors.index.json",
+          "https://huggingface.co/saddam213/Components/resolve/main/GLMImage_VisionEncoder/model-00001-of-00004.safetensors",
+          "https://huggingface.co/saddam213/Components/resolve/main/GLMImage_VisionEncoder/model-00002-of-00004.safetensors",
+          "https://huggingface.co/saddam213/Components/resolve/main/GLMImage_VisionEncoder/model-00003-of-00004.safetensors",
+          "https://huggingface.co/saddam213/Components/resolve/main/GLMImage_VisionEncoder/model-00004-of-00004.safetensors",
+          "https://huggingface.co/saddam213/Components/resolve/main/GLMImage_VisionEncoder/preprocessor_config.json",
+          "https://huggingface.co/saddam213/Components/resolve/main/GLMImage_VisionEncoder/tokenizer.json",
+          "https://huggingface.co/saddam213/Components/resolve/main/GLMImage_VisionEncoder/tokenizer_config.json"
+        ]
+      }
+    },
+    {
+      "Id": 362,
+      "Backend": "PyTorch",
+      "Name": "Byt5 Small",
+      "Key": "TE_BYT5_SM",
+      "Link": "https://huggingface.co/saddam213/TextEncoder/tree/main/Byt5-Small",
+      "Checkpoint": {
+        "Name": "Component",
+        "Type": "OnlineFolder",
+        "Folder": "TextEncoder",
+        "Path": "Byt5-Small",
+        "DownloadFiles": [
+          "https://huggingface.co/saddam213/TextEncoder/resolve/main/Byt5-Small/config.json",
+          "https://huggingface.co/saddam213/TextEncoder/resolve/main/Byt5-Small/generation_config.json",
+          "https://huggingface.co/saddam213/TextEncoder/resolve/main/Byt5-Small/model.safetensors",
+          "https://huggingface.co/saddam213/TextEncoder/resolve/main/Byt5-Small/special_tokens_map.json",
+          "https://huggingface.co/saddam213/TextEncoder/resolve/main/Byt5-Small/tokenizer_config.json"
+        ]
+      }
     }
   ],
   "DiffusionModels": [
@@ -8107,7 +8170,7 @@
       "Link": "https://huggingface.co/baidu/ERNIE-Image"
     },
     {
-      "Id": 216,
+      "Id": 217,
       "Backend": "PyTorch",
       "Name": "Ernie Image Turbo",
       "Template": "Ernie",
@@ -8283,6 +8346,131 @@
         }
       ],
       "Link": "https://huggingface.co/baidu/ERNIE-Image-Turbo"
+    },
+    {
+      "Id": 218,
+      "Backend": "PyTorch",
+      "Name": "GLM-Image",
+      "Template": "GlmImage",
+      "Pipeline": "GlmImagePipeline",
+      "ModelType": "Base",
+      "BaseType": "bfloat16",
+      "MediaType": "Image",
+      "ProcessTypes": [ "TextToImage", "ImageEdit" ],
+      "Checkpoint": {
+        "Vae": {
+          "Name": "AutoEncoder",
+          "Type": "Component",
+          "Path": "VAE_GLM"
+        },
+        "TextEncoder": {
+          "Name": "TextEncoder",
+          "Type": "Component",
+          "Path": "TE_BYT5_SM"
+        },
+        "TextEncoder2": {
+          "Name": "VisionEncoder",
+          "Type": "Component",
+          "Path": "VE_GLM"
+        },
+        "Transformer": {
+          "Name": "Transformer",
+          "Type": "OnlineFolder",
+          "Path": "transformer",
+          "Folder": "GLM-Image",
+          "DownloadFiles": [
+            "https://huggingface.co/zai-org/GLM-Image/resolve/main/transformer/config.json",
+            "https://huggingface.co/zai-org/GLM-Image/resolve/main/transformer/diffusion_pytorch_model.safetensors.index.json",
+            "https://huggingface.co/zai-org/GLM-Image/resolve/main/transformer/diffusion_pytorch_model-00001-of-00003.safetensors",
+            "https://huggingface.co/zai-org/GLM-Image/resolve/main/transformer/diffusion_pytorch_model-00002-of-00003.safetensors",
+            "https://huggingface.co/zai-org/GLM-Image/resolve/main/transformer/diffusion_pytorch_model-00003-of-00003.safetensors"
+          ]
+        }
+      },
+      "MemoryProfile": [
+        {
+          "QualityMode": "Draft",
+          "MemoryModes": [ 2, 7, 10 ]
+        },
+        {
+          "QualityMode": "Standard",
+          "MemoryModes": [ 2, 9, 13 ]
+        },
+        {
+          "QualityMode": "Production",
+          "MemoryModes": [ 2, 16, 24 ]
+        }
+      ],
+      "DefaultOptions": {
+        "Steps": 50,
+        "Width": 1024,
+        "Height": 1024,
+        "GuidanceScale": 1.5,
+        "Scheduler": "FlowMatchEuler",
+        "Schedulers": [
+          {
+            "Scheduler": "FlowMatchEuler",
+            "NumTrainTimesteps": 1000,
+            "Shift": 1,
+            "UseDynamicShifting": true,
+            "BaseShift": 0.25,
+            "MaxShift": 0.75,
+            "BaseImageSeqLen": 256,
+            "MaxImageSeqLen": 4096,
+            "InvertSigmas": false,
+            "ShiftTerminal": 0,
+            "UseKarrasSigmas": false,
+            "UseExponentialSigmas": false,
+            "UseBetaSigmas": false,
+            "TimeShiftType": "Linear",
+            "StochasticSampling": false
+          }
+        ]
+      },
+      "Resolutions": [
+        {
+          "Width": 640,
+          "Height": 1536
+        },
+        {
+          "Width": 768,
+          "Height": 1344
+        },
+        {
+          "Width": 832,
+          "Height": 1280
+        },
+        {
+          "Width": 896,
+          "Height": 1152
+        },
+        {
+          "Width": 768,
+          "Height": 768
+        },
+        {
+          "Width": 1024,
+          "Height": 1024,
+          "IsDefault": true
+        },
+        {
+          "Width": 1152,
+          "Height": 896
+        },
+        {
+          "Width": 1280,
+          "Height": 832
+        },
+        {
+          "Width": 1344,
+          "Height": 768
+        },
+        {
+          "Width": 1536,
+          "Height": 640
+        }
+      ],
+      "Link": "https://huggingface.co/zai-org/GLM-Image"
     },
     {
       "Id": 300,

@@ -76,7 +76,7 @@ namespace Amuse.App.Services
             var providerDevices = Provider.GetDevices();
             foreach (var gpuDevice in GPUDevices)
             {
-                if (gpuDevice.HardwareLUID > uint.MaxValue)
+                if (gpuDevice.HardwareLUID == 0 || gpuDevice.HardwareLUID >= uint.MaxValue)
                     continue;
 
                 var providerDevice = providerDevices.FirstOrDefault(x => x.HardwareID == gpuDevice.AdapterInfo.DeviceId && x.HardwareVendorId == gpuDevice.AdapterInfo.VendorId);
