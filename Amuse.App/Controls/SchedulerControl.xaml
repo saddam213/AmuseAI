@@ -1658,7 +1658,7 @@
 
     <Grid DataContext="{Binding RelativeSource={RelativeSource AncestorType={x:Type local:SchedulerControl}}}">
 
-        <DockPanel Visibility="{Binding BackendType, Converter={StaticResource EnumToVisibilityConverter}, ConverterParameter=PyTorch}">
+        <DockPanel Visibility="{Binding BackendType, Converter={StaticResource EnumToVisibilityConverter}, ConverterParameter=HuggingFace}">
 
             <!--Scheduler Type-->
             <StackPanel DockPanel.Dock="Top">

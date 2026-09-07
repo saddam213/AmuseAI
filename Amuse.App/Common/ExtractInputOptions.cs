@@ -1,6 +1,6 @@
 ﻿using System.Runtime.CompilerServices;
 using System.Text.Json.Serialization;
-using TensorStack.Extractors.Common;
+using TensorStack.OnnxRuntime.Extract;
 using TensorStack.WPF;
 
 namespace Amuse.App.Common

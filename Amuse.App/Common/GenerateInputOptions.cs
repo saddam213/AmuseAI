@@ -5,7 +5,7 @@ using System.Runtime.CompilerServices;
 using System.Text.Json.Serialization;
 using TensorStack.Common.Tensor;
 using TensorStack.Media.Audio;
-using TensorStack.TextGeneration.Common;
+using TensorStack.OnnxRuntime.LLM.Common;
 using TensorStack.WPF;
 
 namespace Amuse.App.Common

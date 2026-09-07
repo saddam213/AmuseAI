@@ -1,7 +1,7 @@
 {
   "DiffusionTemplates": [
     {
-      "Backend": "PyTorch",
+      "Backend": "HuggingFace",
       "Name": "AceStep",
       "Template": "AceStep",
       "Pipeline": "AceStepPipeline",
@@ -93,7 +93,7 @@
       }
     },
     {
-      "Backend": "PyTorch",
+      "Backend": "HuggingFace",
       "Name": "AceStep_Turbo",
       "Template": "AceStep_Turbo",
       "Pipeline": "AceStepPipeline",
@@ -185,7 +185,7 @@
       }
     },
     {
-      "Backend": "PyTorch",
+      "Backend": "HuggingFace",
       "Name": "AceStepXL",
       "Template": "AceStepXL",
       "Pipeline": "AceStepPipeline",
@@ -277,7 +277,7 @@
       }
     },
     {
-      "Backend": "PyTorch",
+      "Backend": "HuggingFace",
       "Name": "AceStepXL_Turbo",
       "Template": "AceStepXL_Turbo",
       "Pipeline": "AceStepPipeline",
@@ -369,7 +369,7 @@
       }
     },
     {
-      "Backend": "PyTorch",
+      "Backend": "HuggingFace",
       "Name": "AnyFlow_1B",
       "Template": "AnyFlow_1B",
       "Pipeline": "AnyFlowPipeline",
@@ -460,7 +460,7 @@
       ]
     },
     {
-      "Backend": "PyTorch",
+      "Backend": "HuggingFace",
       "Name": "AnyFlow_14B",
       "Template": "AnyFlow_14B",
       "Pipeline": "AnyFlowPipeline",
@@ -550,7 +550,7 @@
       ]
     },
     {
-      "Backend": "PyTorch",
+      "Backend": "HuggingFace",
       "Name": "Chroma_HD",
       "Template": "Chroma_HD",
       "Pipeline": "ChromaPipeline",
@@ -719,7 +719,7 @@
       ]
     },
     {
-      "Backend": "PyTorch",
+      "Backend": "HuggingFace",
       "Name": "CogVideoX_2B",
       "Template": "CogVideoX_2B",
       "Pipeline": "CogVideoXPipeline",
@@ -821,7 +821,7 @@
       ]
     },
     {
-      "Backend": "PyTorch",
+      "Backend": "HuggingFace",
       "Name": "CogVideoX_5B",
       "Template": "CogVideoX_5B",
       "Pipeline": "CogVideoXPipeline",
@@ -923,7 +923,7 @@
       ]
     },
     {
-      "Backend": "PyTorch",
+      "Backend": "HuggingFace",
       "Name": "CogVideoX_5B_I2V",
       "Template": "CogVideoX_5B_I2V",
       "Pipeline": "CogVideoXPipeline",
@@ -1023,7 +1023,7 @@
       ]
     },
     {
-      "Backend": "PyTorch",
+      "Backend": "HuggingFace",
       "Name": "CogVideoX15_5B",
       "Template": "CogVideoX15_5B",
       "Pipeline": "CogVideoXPipeline",
@@ -1125,7 +1125,7 @@
       ]
     },
     {
-      "Backend": "PyTorch",
+      "Backend": "HuggingFace",
       "Name": "CogVideoX15_5B_I2V",
       "Template": "CogVideoX15_5B_I2V",
       "Pipeline": "CogVideoXPipeline",
@@ -1225,7 +1225,7 @@
       ]
     },
     {
-      "Backend": "PyTorch",
+      "Backend": "HuggingFace",
       "Name": "Ernie_Image",
       "Template": "Ernie",
       "Pipeline": "ErniePipeline",
@@ -1394,7 +1394,7 @@
       ]
     },
     {
-      "Backend": "PyTorch",
+      "Backend": "HuggingFace",
       "Name": "Ernie_Image_Turbo",
       "Template": "Ernie",
       "Pipeline": "ErniePipeline",
@@ -1563,7 +1563,7 @@
       ]
     },
     {
-      "Backend": "PyTorch",
+      "Backend": "HuggingFace",
       "Name": "Flux1_Schnell",
       "Template": "Flux1_Schnell",
       "Pipeline": "FluxPipeline",
@@ -1737,7 +1737,7 @@
       ]
     },
     {
-      "Backend": "PyTorch",
+      "Backend": "HuggingFace",
       "Name": "Flux1_Dev",
       "Template": "Flux1_Dev",
       "Pipeline": "FluxPipeline",
@@ -1912,7 +1912,7 @@
       ]
     },
     {
-      "Backend": "PyTorch",
+      "Backend": "HuggingFace",
       "Name": "Flux2_Klein_4B",
       "Template": "Flux2_Klein_4B",
       "Pipeline": "Flux2KleinPipeline",
@@ -2081,7 +2081,7 @@
       ]
     },
     {
-      "Backend": "PyTorch",
+      "Backend": "HuggingFace",
       "Name": "Flux2_Klein_4B_Base",
       "Template": "Flux2_Klein_4B_Base",
       "Pipeline": "Flux2KleinPipeline",
@@ -2250,7 +2250,7 @@
       ]
     },
     {
-      "Backend": "PyTorch",
+      "Backend": "HuggingFace",
       "Name": "Flux2_Klein_9B",
       "Template": "Flux2_Klein_9B",
       "Pipeline": "Flux2KleinPipeline",
@@ -2419,7 +2419,7 @@
       ]
     },
     {
-      "Backend": "PyTorch",
+      "Backend": "HuggingFace",
       "Name": "Flux2_Klein_9B_Base",
       "Template": "Flux2_Klein_9B_Base",
       "Pipeline": "Flux2KleinPipeline",
@@ -2588,7 +2588,7 @@
       ]
     },
     {
-      "Backend": "PyTorch",
+      "Backend": "HuggingFace",
       "Name": "GlmImage_Base",
       "Template": "GlmImage",
       "Pipeline": "GlmImagePipeline",
@@ -2703,7 +2703,7 @@
       ]
     },
     {
-      "Backend": "PyTorch",
+      "Backend": "HuggingFace",
       "Name": "Helios_Base",
       "Template": "Helios_Base",
       "Pipeline": "HeliosPipeline",
@@ -2848,7 +2848,7 @@
       ]
     },
     {
-      "Backend": "PyTorch",
+      "Backend": "HuggingFace",
       "Name": "Helios_Mid",
       "Template": "Helios_Mid",
       "Pipeline": "HeliosPipeline",
@@ -2993,7 +2993,7 @@
       ]
     },
     {
-      "Backend": "PyTorch",
+      "Backend": "HuggingFace",
       "Name": "Helios_Distilled",
       "Template": "Helios_Distilled",
       "Pipeline": "HeliosPipeline",
@@ -3132,7 +3132,7 @@
       ]
     },
     {
-      "Backend": "PyTorch",
+      "Backend": "HuggingFace",
       "Name": "Joy_Image_Edit",
       "Template": "JoyImage",
       "Pipeline": "JoyImagePipeline",
@@ -3243,7 +3243,7 @@
       ]
     },
     {
-      "Backend": "PyTorch",
+      "Backend": "HuggingFace",
       "Name": "Kandinsky50_Lite_I2I",
       "Template": "Kandinsky50_Lite_I2I",
       "Pipeline": "Kandinsky5ImagePipeline",
@@ -3346,7 +3346,7 @@
       ]
     },
     {
-      "Backend": "PyTorch",
+      "Backend": "HuggingFace",
       "Name": "Kandinsky50_Lite_T2I",
       "Template": "Kandinsky50_Lite_T2I",
       "Pipeline": "Kandinsky5ImagePipeline",
@@ -3449,7 +3449,7 @@
       ]
     },
     {
-      "Backend": "PyTorch",
+      "Backend": "HuggingFace",
       "Name": "Kandinsky50_Lite_T2V",
       "Template": "Kandinsky50_Lite_T2V",
       "Pipeline": "Kandinsky5VideoPipeline",
@@ -3540,7 +3540,7 @@
       ]
     },
     {
-      "Backend": "PyTorch",
+      "Backend": "HuggingFace",
       "Name": "Kandinsky50_Lite_T2V_CFG",
       "Template": "Kandinsky50_Lite_T2V",
       "Pipeline": "Kandinsky5VideoPipeline",
@@ -3631,7 +3631,7 @@
       ]
     },
     {
-      "Backend": "PyTorch",
+      "Backend": "HuggingFace",
       "Name": "Kandinsky50_Lite_T2V_Distilled",
       "Template": "Kandinsky50_Lite_T2V",
       "Pipeline": "Kandinsky5VideoPipeline",
@@ -3722,7 +3722,7 @@
       ]
     },
     {
-      "Backend": "PyTorch",
+      "Backend": "HuggingFace",
       "Name": "Kandinsky50_Lite_T2V_10",
       "Template": "Kandinsky50_Lite_T2V_10",
       "Pipeline": "Kandinsky5VideoPipeline",
@@ -3813,7 +3813,7 @@
       ]
     },
     {
-      "Backend": "PyTorch",
+      "Backend": "HuggingFace",
       "Name": "Kandinsky50_Lite_T2V_CFG_10",
       "Template": "Kandinsky50_Lite_T2V_10",
       "Pipeline": "Kandinsky5VideoPipeline",
@@ -3904,7 +3904,7 @@
       ]
     },
     {
-      "Backend": "PyTorch",
+      "Backend": "HuggingFace",
       "Name": "Kandinsky50_Lite_T2V_Distilled_10",
       "Template": "Kandinsky50_Lite_T2V_10",
       "Pipeline": "Kandinsky5VideoPipeline",
@@ -3995,7 +3995,7 @@
       ]
     },
     {
-      "Backend": "PyTorch",
+      "Backend": "HuggingFace",
       "Name": "Kandinsky50_Pro_T2V",
       "Template": "Kandinsky50_Pro",
       "Pipeline": "Kandinsky5VideoPipeline",
@@ -4084,7 +4084,7 @@
       ]
     },
     {
-      "Backend": "PyTorch",
+      "Backend": "HuggingFace",
       "Name": "Kandinsky50_Pro_T2V_Distilled",
       "Template": "Kandinsky50_Pro",
       "Pipeline": "Kandinsky5VideoPipeline",
@@ -4173,7 +4173,7 @@
       ]
     },
     {
-      "Backend": "PyTorch",
+      "Backend": "HuggingFace",
       "Name": "Kandinsky50_Pro_I2V",
       "Template": "Kandinsky50_Pro",
       "Pipeline": "Kandinsky5VideoPipeline",
@@ -4262,7 +4262,7 @@
       ]
     },
     {
-      "Backend": "PyTorch",
+      "Backend": "HuggingFace",
       "Name": "Kandinsky50_Pro_I2V_Distilled",
       "Template": "Kandinsky50_Pro",
       "Pipeline": "Kandinsky5VideoPipeline",
@@ -4351,7 +4351,7 @@
       ]
     },
     {
-      "Backend": "PyTorch",
+      "Backend": "HuggingFace",
       "Name": "Krea2_Base",
       "Template": "Krea2",
       "Pipeline": "Krea2Pipeline",
@@ -4462,7 +4462,7 @@
       ]
     },
     {
-      "Backend": "PyTorch",
+      "Backend": "HuggingFace",
       "Name": "Krea2_Turbo",
       "Template": "Krea2_Turbo",
       "Pipeline": "Krea2Pipeline",
@@ -4573,7 +4573,7 @@
       ]
     },
     {
-      "Backend": "PyTorch",
+      "Backend": "HuggingFace",
       "Name": "LTX_2B",
       "Template": "LTX",
       "Pipeline": "LTXPipeline",
@@ -4699,7 +4699,7 @@
       ]
     },
     {
-      "Backend": "PyTorch",
+      "Backend": "HuggingFace",
       "Name": "LTX_2B_Distilled",
       "Template": "LTX",
       "Pipeline": "LTXPipeline",
@@ -4825,7 +4825,7 @@
       ]
     },
     {
-      "Backend": "PyTorch",
+      "Backend": "HuggingFace",
       "Name": "LTX_13B",
       "Template": "LTX",
       "Pipeline": "LTXPipeline",
@@ -4951,7 +4951,7 @@
       ]
     },
     {
-      "Backend": "PyTorch",
+      "Backend": "HuggingFace",
       "Name": "LTX_13B_Distilled",
       "Template": "LTX",
       "Pipeline": "LTXPipeline",
@@ -5077,7 +5077,7 @@
       ]
     },
     {
-      "Backend": "PyTorch",
+      "Backend": "HuggingFace",
       "Name": "LTX20_Base",
       "Template": "LTX_20",
       "Pipeline": "LTX20Pipeline",
@@ -5279,7 +5279,7 @@
       ]
     },
     {
-      "Backend": "PyTorch",
+      "Backend": "HuggingFace",
       "Name": "LTX20_Distilled",
       "Template": "LTX_20",
       "Pipeline": "LTX20Pipeline",
@@ -5481,7 +5481,7 @@
       ]
     },
     {
-      "Backend": "PyTorch",
+      "Backend": "HuggingFace",
       "Name": "LTX23_Base",
       "Template": "LTX_23",
       "Pipeline": "LTX20Pipeline",
@@ -5683,7 +5683,7 @@
       ]
     },
     {
-      "Backend": "PyTorch",
+      "Backend": "HuggingFace",
       "Name": "LTX23_Distilled",
       "Template": "LTX_23",
       "Pipeline": "LTX20Pipeline",
@@ -5885,7 +5885,7 @@
       ]
     },
     {
-      "Backend": "PyTorch",
+      "Backend": "HuggingFace",
       "Name": "MotifVideo_2B",
       "Template": "MotifVideo_2B",
       "Pipeline": "MotifVideoPipeline",
@@ -5971,7 +5971,7 @@
       ]
     },
     {
-      "Backend": "PyTorch",
+      "Backend": "HuggingFace",
       "Name": "PrxPixel_Base",
       "Template": "PrxPixel",
       "Pipeline": "PrxPixelPipeline",
@@ -6188,7 +6188,7 @@
       ]
     },
     {
-      "Backend": "PyTorch",
+      "Backend": "HuggingFace",
       "Name": "QwenImage_Base",
       "Template": "QwenImage",
       "Pipeline": "QwenImagePipeline",
@@ -6329,7 +6329,7 @@
       ]
     },
     {
-      "Backend": "PyTorch",
+      "Backend": "HuggingFace",
       "Name": "QwenImage_Edit",
       "Template": "QwenImage_Edit",
       "Pipeline": "QwenImagePipeline",
@@ -6470,7 +6470,7 @@
       ]
     },
     {
-      "Backend": "PyTorch",
+      "Backend": "HuggingFace",
       "Name": "SkyReels2_1B",
       "Template": "SkyReels2_1B",
       "Pipeline": "SkyReelsV2Pipeline",
@@ -6594,7 +6594,7 @@
       ]
     },
     {
-      "Backend": "PyTorch",
+      "Backend": "HuggingFace",
       "Name": "SkyReels2_14B",
       "Template": "SkyReels2_14B",
       "Pipeline": "SkyReelsV2Pipeline",
@@ -6718,7 +6718,7 @@
       ]
     },
     {
-      "Backend": "PyTorch",
+      "Backend": "HuggingFace",
       "Name": "StableDiffusionXL_Base",
       "Template": "SDXL",
       "Pipeline": "StableDiffusionXLPipeline",
@@ -7122,7 +7122,7 @@
       ]
     },
     {
-      "Backend": "PyTorch",
+      "Backend": "HuggingFace",
       "Name": "StableDiffusionXL_Turbo",
       "Template": "SDXL",
       "Pipeline": "StableDiffusionXLPipeline",
@@ -7526,7 +7526,7 @@
       ]
     },
     {
-      "Backend": "PyTorch",
+      "Backend": "HuggingFace",
       "Name": "StableDiffusionXL_Lightning",
       "Template": "SDXL",
       "Pipeline": "StableDiffusionXLPipeline",
@@ -7930,7 +7930,7 @@
       ]
     },
     {
-      "Backend": "PyTorch",
+      "Backend": "HuggingFace",
       "Name": "SD30_Medium",
       "Template": "SD3_Medium",
       "Pipeline": "StableDiffusion3Pipeline",
@@ -8109,7 +8109,7 @@
       ]
     },
     {
-      "Backend": "PyTorch",
+      "Backend": "HuggingFace",
       "Name": "SD35_Medium",
       "Template": "SD35_Medium",
       "Pipeline": "StableDiffusion3Pipeline",
@@ -8288,7 +8288,7 @@
       ]
     },
     {
-      "Backend": "PyTorch",
+      "Backend": "HuggingFace",
       "Name": "SD35_Large",
       "Template": "SD35_Large",
       "Pipeline": "StableDiffusion3Pipeline",
@@ -8467,7 +8467,7 @@
       ]
     },
     {
-      "Backend": "PyTorch",
+      "Backend": "HuggingFace",
       "Name": "SD35_Large_Turbo",
       "Template": "SD35_Large",
       "Pipeline": "StableDiffusion3Pipeline",
@@ -8646,7 +8646,7 @@
       ]
     },
     {
-      "Backend": "PyTorch",
+      "Backend": "HuggingFace",
       "Name": "Wan21_1B_T2V",
       "Template": "Wan21_1B_T2V",
       "Pipeline": "WanPipeline",
@@ -8791,7 +8791,7 @@
       ]
     },
     {
-      "Backend": "PyTorch",
+      "Backend": "HuggingFace",
       "Name": "Wan21_14B_T2V",
       "Template": "Wan21_14B_T2V",
       "Pipeline": "WanPipeline",
@@ -8911,7 +8911,7 @@
       ]
     },
     {
-      "Backend": "PyTorch",
+      "Backend": "HuggingFace",
       "Name": "Wan21_14B_I2V_480",
       "Template": "Wan21_14B_I2V",
       "Pipeline": "WanPipeline",
@@ -9027,7 +9027,7 @@
       ]
     },
     {
-      "Backend": "PyTorch",
+      "Backend": "HuggingFace",
       "Name": "Wan21_14B_I2V_720",
       "Template": "Wan21_14B_I2V",
       "Pipeline": "WanPipeline",
@@ -9143,7 +9143,7 @@
       ]
     },
     {
-      "Backend": "PyTorch",
+      "Backend": "HuggingFace",
       "Name": "Wan22_5B_TI2V",
       "Template": "Wan22_5B_TI2V",
       "Pipeline": "WanPipeline",
@@ -9261,7 +9261,7 @@
       ]
     },
     {
-      "Backend": "PyTorch",
+      "Backend": "HuggingFace",
       "Name": "Wan22_14B_T2V",
       "Template": "Wan22_14B_T2V",
       "Pipeline": "WanPipeline",
@@ -9379,7 +9379,7 @@
       ]
     },
     {
-      "Backend": "PyTorch",
+      "Backend": "HuggingFace",
       "Name": "Wan22_14B_I2V",
       "Template": "Wan22_14B_I2V",
       "Pipeline": "WanPipeline",
@@ -9497,7 +9497,7 @@
       ]
     },
     {
-      "Backend": "PyTorch",
+      "Backend": "HuggingFace",
       "Name": "ZImage_Base",
       "Template": "ZImage",
       "Pipeline": "ZImagePipeline",
@@ -9666,7 +9666,7 @@
       ]
     },
     {
-      "Backend": "PyTorch",
+      "Backend": "HuggingFace",
       "Name": "ZImage_Turbo",
       "Template": "ZImage",
       "Pipeline": "ZImagePipeline",
@@ -9835,7 +9835,7 @@
       ]
     },
     {
-      "Backend": "PyTorch",
+      "Backend": "HuggingFace",
       "Name": "LongCatAudio_1B",
       "Template": "LongCatAudio_1B",
       "Pipeline": "LongCatAudioPipeline",
@@ -9904,7 +9904,7 @@
       }
     },
     {
-      "Backend": "PyTorch",
+      "Backend": "HuggingFace",
       "Name": "LongCatAudio_3B",
       "Template": "LongCatAudio_3B",
       "Pipeline": "LongCatAudioPipeline",
@@ -17336,7 +17336,7 @@
   "DiffusionTemplateMap": [
     {
       "Name": "AceStep Audio",
-      "Backend": "PyTorch",
+      "Backend": "HuggingFace",
       "Options": [
         {
           "Name": "Base",
@@ -17358,7 +17358,7 @@
     },
     {
       "Name": "AnyFlow",
-      "Backend": "PyTorch",
+      "Backend": "HuggingFace",
       "Options": [
         {
           "Name": "T2V 1B",
@@ -17372,7 +17372,7 @@
     },
     {
       "Name": "Chroma",
-      "Backend": "PyTorch",
+      "Backend": "HuggingFace",
       "Options": [
         {
           "Name": "Base",
@@ -17382,7 +17382,7 @@
     },
     {
       "Name": "CogVideoX",
-      "Backend": "PyTorch",
+      "Backend": "HuggingFace",
       "Options": [
         {
           "Name": "T2V 2B",
@@ -17408,7 +17408,7 @@
     },
     {
       "Name": "Ernie Image",
-      "Backend": "PyTorch",
+      "Backend": "HuggingFace",
       "Options": [
         {
           "Name": "Base",
@@ -17422,7 +17422,7 @@
     },
     {
       "Name": "FLUX.1",
-      "Backend": "PyTorch",
+      "Backend": "HuggingFace",
       "Options": [
         {
           "Name": "Dev",
@@ -17436,7 +17436,7 @@
     },
     {
       "Name": "FLUX.2",
-      "Backend": "PyTorch",
+      "Backend": "HuggingFace",
       "Options": [
         {
           "Name": "Klein 4B",
@@ -17458,7 +17458,7 @@
     },
     {
       "Name": "GLM-Image",
-      "Backend": "PyTorch",
+      "Backend": "HuggingFace",
       "Options": [
         {
           "Name": "Base",
@@ -17468,7 +17468,7 @@
     },
     {
       "Name": "Helios",
-      "Backend": "PyTorch",
+      "Backend": "HuggingFace",
       "Options": [
         {
           "Name": "Base",
@@ -17486,7 +17486,7 @@
     },
     {
       "Name": "Joy-AI",
-      "Backend": "PyTorch",
+      "Backend": "HuggingFace",
       "Options": [
         {
           "Name": "Image Edit",
@@ -17496,7 +17496,7 @@
     },
     {
       "Name": "Kandinsky5",
-      "Backend": "PyTorch",
+      "Backend": "HuggingFace",
       "Options": [
         {
           "Name": "T2I Lite",
@@ -17550,7 +17550,7 @@
     },
     {
       "Name": "Krea2",
-      "Backend": "PyTorch",
+      "Backend": "HuggingFace",
       "Options": [
         {
           "Name": "Base",
@@ -17564,7 +17564,7 @@
     },
     {
       "Name": "Long Cat",
-      "Backend": "PyTorch",
+      "Backend": "HuggingFace",
       "Options": [
         {
           "Name": "Audio 1B",
@@ -17578,7 +17578,7 @@
     },
     {
       "Name": "LTX",
-      "Backend": "PyTorch",
+      "Backend": "HuggingFace",
       "Options": [
         {
           "Name": "2B",
@@ -17600,7 +17600,7 @@
     },
     {
       "Name": "LTX-2",
-      "Backend": "PyTorch",
+      "Backend": "HuggingFace",
       "Options": [
         {
           "Name": "2.0 Base",
@@ -17622,7 +17622,7 @@
     },
     {
       "Name": "Motif",
-      "Backend": "PyTorch",
+      "Backend": "HuggingFace",
       "Options": [
         {
           "Name": "Video 2B",
@@ -17632,7 +17632,7 @@
     },
     {
       "Name": "PRX-Pixel",
-      "Backend": "PyTorch",
+      "Backend": "HuggingFace",
       "Options": [
         {
           "Name": "Base",
@@ -17642,7 +17642,7 @@
     },
     {
       "Name": "Qwen Image",
-      "Backend": "PyTorch",
+      "Backend": "HuggingFace",
       "Options": [
         {
           "Name": "Base",
@@ -17656,7 +17656,7 @@
     },
     {
       "Name": "SkyReels",
-      "Backend": "PyTorch",
+      "Backend": "HuggingFace",
       "Options": [
         {
           "Name": "v2 1B",
@@ -17670,7 +17670,7 @@
     },
     {
       "Name": "StableDiffusion XL",
-      "Backend": "PyTorch",
+      "Backend": "HuggingFace",
       "Options": [
         {
           "Name": "Base",
@@ -17688,7 +17688,7 @@
     },
     {
       "Name": "StableDiffusion 3",
-      "Backend": "PyTorch",
+      "Backend": "HuggingFace",
       "Options": [
         {
           "Name": "3.0 Medium",
@@ -17710,7 +17710,7 @@
     },
     {
       "Name": "Wan Video",
-      "Backend": "PyTorch",
+      "Backend": "HuggingFace",
       "Options": [
         {
           "Name": "2.1 T2V (1B)",
@@ -17744,7 +17744,7 @@
     },
     {
       "Name": "Z-Image",
-      "Backend": "PyTorch",
+      "Backend": "HuggingFace",
       "Options": [
         {
           "Name": "Base",
@@ -17794,7 +17794,7 @@
     },
     {
       "Name": "Chroma",
-      "Backend": "PyTorch",
+      "Backend": "HuggingFace",
       "Options": [
         {
           "Name": "Base",
@@ -18063,7 +18063,7 @@
   ],
   "LanguageTemplates": [
     {
-      "Backend": "PyTorch",
+      "Backend": "HuggingFace",
       "Name": "Qwen30_IT",
       "Template": "Qwen30_IT",
       "Pipeline": "Qwen3Pipeline",
@@ -18095,7 +18095,7 @@
       }
     },
     {
-      "Backend": "PyTorch",
+      "Backend": "HuggingFace",
       "Name": "Qwen30_VL",
       "Template": "Qwen30_IT",
       "Pipeline": "Qwen3Pipeline",
@@ -18127,7 +18127,7 @@
       }
     },
     {
-      "Backend": "PyTorch",
+      "Backend": "HuggingFace",
       "Name": "Qwen35_IT",
       "Template": "Qwen35_IT",
       "Pipeline": "Qwen3Pipeline",
@@ -18159,7 +18159,7 @@
       }
     },
     {
-      "Backend": "PyTorch",
+      "Backend": "HuggingFace",
       "Name": "Qwen36_IT",
       "Template": "Qwen36_IT",
       "Pipeline": "Qwen3Pipeline",
@@ -18191,7 +18191,7 @@
       }
     },
     {
-      "Backend": "PyTorch",
+      "Backend": "HuggingFace",
       "Name": "Qwen38_IT",
       "Template": "Qwen38_IT",
       "Pipeline": "Qwen3Pipeline",
@@ -18223,7 +18223,7 @@
       }
     },
     {
-      "Backend": "PyTorch",
+      "Backend": "HuggingFace",
       "Name": "Gemma4_IT",
       "Template": "Gemma4_IT_E",
       "Pipeline": "Gemma4Pipeline",
@@ -18258,7 +18258,7 @@
       }
     },
     {
-      "Backend": "PyTorch",
+      "Backend": "HuggingFace",
       "Name": "Gemma4_IT",
       "Template": "Gemma4_IT",
       "Pipeline": "Gemma4Pipeline",
@@ -18295,7 +18295,7 @@
   "LanguageTemplateMap": [
     {
       "Name": "Gemma 4",
-      "Backend": "PyTorch",
+      "Backend": "HuggingFace",
       "Options": [
         {
           "Name": "Gemma 4 E2B",
@@ -18325,7 +18325,7 @@
     },
     {
       "Name": "Qwen 3.0",
-      "Backend": "PyTorch",
+      "Backend": "HuggingFace",
       "Options": [
         {
           "Name": "Qwen 3.0 4B",
@@ -18367,7 +18367,7 @@
     },
     {
       "Name": "Qwen 3.5",
-      "Backend": "PyTorch",
+      "Backend": "HuggingFace",
       "Options": [
         {
           "Name": "Qwen 3.5 4B",
@@ -18391,7 +18391,7 @@
     },
     {
       "Name": "Qwen 3.6",
-      "Backend": "PyTorch",
+      "Backend": "HuggingFace",
       "Options": [
         {
           "Name": "Qwen 3.6 27B",
@@ -18403,7 +18403,7 @@
     },
     {
       "Name": "Qwen 3.8",
-      "Backend": "PyTorch",
+      "Backend": "HuggingFace",
       "Options": [
         {
           "Name": "Qwen 3.8 27B",

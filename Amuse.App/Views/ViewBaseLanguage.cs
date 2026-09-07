@@ -36,7 +36,7 @@ namespace Amuse.App.Views
             ExecuteCommand = new AsyncRelayCommand(ExecuteAsync, CanExecute);
             ExecuteAutomationCommand = new AsyncRelayCommand(ExecuteAutomationAsync, CanExecuteAutomation);
             StopCommand = new AsyncRelayCommand(GenerateService.StopAsync);
-            PythonProgressCallback = new Progress<PipelineProgress>(OnProgress);
+            PipelineProgressCallback = new Progress<PipelineProgress>(OnProgress);
             AutomationProgress = new ProgressInfo();
         }
 
@@ -80,9 +80,9 @@ namespace Amuse.App.Views
         public IProgress<RunProgress> ProgressCallback { get; }
 
         /// <summary>
-        /// Gets the python progress callback.
+        /// Gets the pipeline progress callback.
         /// </summary>
-        protected IProgress<PipelineProgress> PythonProgressCallback { get; }
+        protected IProgress<PipelineProgress> PipelineProgressCallback { get; }
 
         /// <summary>
         /// Gets or sets the automation progress.
@@ -316,12 +316,12 @@ namespace Amuse.App.Views
                     if (GenerateService.Pipeline.IsLoadRequired(CurrentPipeline))
                     {
                         Logger.LogInformation("[{View}] [LoadLanguageModel] Loading language model {Name}...", ViewName, CurrentPipeline.LanguageModel.Name);
-                        await GenerateService.LoadAsync(CurrentPipeline, PythonProgressCallback);
+                        await GenerateService.LoadAsync(CurrentPipeline, PipelineProgressCallback);
                     }
                     else if (GenerateService.Pipeline.IsReloadRequired(CurrentPipeline))
                     {
                         Logger.LogInformation("[{View}] [LoadLanguageModel] Reloading language model {Name}...", ViewName, CurrentPipeline.LanguageModel.Name);
-                        await GenerateService.ReloadAsync(CurrentPipeline, PythonProgressCallback);
+                        await GenerateService.ReloadAsync(CurrentPipeline, PipelineProgressCallback);
                     }
                     else
                     {
@@ -331,7 +331,7 @@ namespace Amuse.App.Views
                 }
 
                 Logger.LogInformation("[{View}] [LoadLanguageModel] Loading language model {Name}...", ViewName, CurrentPipeline.LanguageModel.Name);
-                await GenerateService.LoadAsync(CurrentPipeline, PythonProgressCallback);
+                await GenerateService.LoadAsync(CurrentPipeline, PipelineProgressCallback);
                 Logger.LogInformation("[{View}] [LoadLanguageModel] Successfully loaded language model, Elapsed: {Elapsed:c}", ViewName, Stopwatch.GetElapsedTime(timestamp));
                 return true;
             }
@@ -407,7 +407,7 @@ namespace Amuse.App.Views
 
 
         /// <summary>
-        /// Called when progress is received from a Python pipeline
+        /// Called when progress is received from a pipeline
         /// </summary>
         /// <param name="progress">The progress.</param>
         protected virtual void OnProgress(PipelineProgress progress)

@@ -1,5 +1,6 @@
 ﻿using Amuse.Common;
 using Amuse.Common.Config;
+using Amuse.Host.OnnxRuntime;
 using Microsoft.Extensions.Logging;
 using Serilog;
 using System;
@@ -9,7 +10,7 @@ using System.Threading.Tasks;
 using TensorStack.Common;
 using Logger = Microsoft.Extensions.Logging.ILogger;
 
-namespace Amuse.Host.PyTorch
+namespace Amuse.OnnxRuntime
 {
     internal class Program
     {

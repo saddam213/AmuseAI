@@ -19,7 +19,7 @@ namespace Amuse.Common
         /// Sends a TensorMessage to the PipeStream.
         /// Tensor messages are used for small tensors that dont require a large contiguous memory mapping, eg: latent previews 
         /// </summary>
-        /// <typeparam name="T">IPythonMessage</typeparam>
+        /// <typeparam name="T">ITensorMessage</typeparam>
         /// <param name="pipe">The pipe.</param>
         /// <param name="message">The message.</param>
         /// <param name="cancellationToken">The cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
@@ -69,7 +69,7 @@ namespace Amuse.Common
         /// <summary>
         /// Receives a TensorMessage message from the PipeStream.
         /// </summary>
-        /// <typeparam name="T">IPythonMessage</typeparam>
+        /// <typeparam name="T">ITensorMessage</typeparam>
         /// <param name="pipe">The pipe.</param>
         /// <param name="cancellationToken">The cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
         public static async Task<T> ReceiveTensorMessage<T>(this PipeStream pipe, CancellationToken cancellationToken = default) where T : ITensorMessage

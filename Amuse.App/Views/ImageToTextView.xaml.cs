@@ -305,7 +305,7 @@ namespace Amuse.App.Views
 
 
         /// <summary>
-        /// Called when progress is received from a Python pipeline
+        /// Called when progress is received from a pipeline
         /// </summary>
         /// <param name="progress">The progress.</param>
         protected override void OnProgress(PipelineProgress progress)

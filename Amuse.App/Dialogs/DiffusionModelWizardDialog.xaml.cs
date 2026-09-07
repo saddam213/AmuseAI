@@ -35,7 +35,7 @@ namespace Amuse.App.Dialogs
             Settings = settings;
             PipelineOptions = new ObservableCollection<WizardItemModel>();
             SelectedBackend = BackendType.StableDiffusionCpp;
-            Backends = [BackendType.StableDiffusionCpp, BackendType.PyTorch];
+            Backends = [BackendType.StableDiffusionCpp, BackendType.HuggingFace];
             Errors = new ObservableCollection<string>();
             CancelCommand = new AsyncRelayCommand(CancelAsync);
             SaveCommand = new AsyncRelayCommand(SaveAsync, CanExecuteSave);
@@ -275,7 +275,7 @@ namespace Amuse.App.Dialogs
 
         private void FilterPipelineOptions()
         {
-            ModelSources = SelectedBackend == BackendType.PyTorch
+            ModelSources = SelectedBackend == BackendType.HuggingFace
                 ? [ModelSourceType.LocalFile, ModelSourceType.LocalFolder, ModelSourceType.Checkpoint]
                 : [ModelSourceType.LocalFile, ModelSourceType.LocalCheckpoint, ModelSourceType.Checkpoint];
 

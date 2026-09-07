@@ -7,8 +7,7 @@ using TensorStack.Common;
 using TensorStack.Common.Pipeline;
 using TensorStack.Media.Video;
 using TensorStack.OnnxRuntime;
-using TensorStack.Upscaler.Common;
-using TensorStack.Upscaler.Pipelines;
+using TensorStack.OnnxRuntime.Upscale;
 
 namespace Amuse.App.Services
 {

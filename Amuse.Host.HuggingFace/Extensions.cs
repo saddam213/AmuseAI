@@ -3,10 +3,10 @@ using System;
 using System.Data;
 using System.Linq;
 using System.Runtime.CompilerServices;
-using TensorStack.Python.Config;
-using TensorStack.Python.Scheduler;
+using TensorStack.HuggingFace.Config;
+using TensorStack.HuggingFace.Scheduler;
 
-namespace Amuse.Host.PyTorch
+namespace Amuse.Host.HuggingFace
 {
     public static class Extensions
     {
@@ -24,11 +24,11 @@ namespace Amuse.Host.PyTorch
         }
 
 
-        public static TensorStack.Python.Common.PipelineReloadOptions ToPythonOptions(this Common.PipelineReloadOptions options)
+        public static TensorStack.HuggingFace.Common.PipelineReloadOptions ToPythonOptions(this Common.PipelineReloadOptions options)
         {
-            return new TensorStack.Python.Common.PipelineReloadOptions
+            return new TensorStack.HuggingFace.Common.PipelineReloadOptions
             {
-                ProcessType = options.ProcessType.Cast<Common.ProcessType, TensorStack.Python.Common.ProcessType>(),
+                ProcessType = options.ProcessType.Cast<Common.ProcessType, TensorStack.HuggingFace.Common.ProcessType>(),
                 ControlNet = options.ControlNet?.ToPythonOptions(),
                 LoraAdapters = options.LoraAdapters?.Select(x => x.ToPythonOptions()).ToList()
             };
@@ -42,7 +42,7 @@ namespace Amuse.Host.PyTorch
                 ModelPath = options.ModelPath,
                 Template = options.Template,
                 ModelType = options.ModelType,
-                DataType = options.DataType.Cast<Amuse.Common.DataType, TensorStack.Python.Common.DataType>(),
+                DataType = options.DataType.Cast<Amuse.Common.DataType, TensorStack.HuggingFace.Common.DataType>(),
                 Device = options.Device,
                 DeviceBusId = options.DeviceBusId,
                 DeviceId = options.DeviceId,
@@ -51,10 +51,10 @@ namespace Amuse.Host.PyTorch
                 IsOptimizeDeviceEnabled = options.IsOptimizeDeviceEnabled,
                 IsOptimizeChannelsEnabled = options.IsOptimizeChannelsEnabled,
 
-                MemoryMode = options.MemoryMode.Cast<Amuse.Common.MemoryModeType, TensorStack.Python.Common.MemoryModeType>(),
+                MemoryMode = options.MemoryMode.Cast<Amuse.Common.MemoryModeType, TensorStack.HuggingFace.Common.MemoryModeType>(),
                 Pipeline = GetPipelineType(options).ToString(),
-                ProcessType = options.ProcessType.Cast<Amuse.Common.ProcessType, TensorStack.Python.Common.ProcessType>(),
-                QuantType = options.QuantType.Cast<Amuse.Common.QuantizationType, TensorStack.Python.Common.QuantizationType>(),
+                ProcessType = options.ProcessType.Cast<Amuse.Common.ProcessType, TensorStack.HuggingFace.Common.ProcessType>(),
+                QuantType = options.QuantType.Cast<Amuse.Common.QuantizationType, TensorStack.HuggingFace.Common.QuantizationType>(),
                 Variant = options.Variant,
 
                 ControlNet = options.ControlNet?.ToPythonOptions(),
@@ -64,9 +64,9 @@ namespace Amuse.Host.PyTorch
         }
 
 
-        public static TensorStack.Python.Common.GenerateImageOptions ToPythonOptions(this Common.GenerateImageOptions options)
+        public static TensorStack.HuggingFace.Common.GenerateImageOptions ToPythonOptions(this Common.GenerateImageOptions options)
         {
-            return new TensorStack.Python.Common.GenerateImageOptions
+            return new TensorStack.HuggingFace.Common.GenerateImageOptions
             {
                 Seed = options.Seed,
                 Prompt = options.Prompt,
@@ -96,9 +96,9 @@ namespace Amuse.Host.PyTorch
         }
 
 
-        public static TensorStack.Python.Common.GenerateVideoOptions ToPythonOptions(this Common.GenerateVideoOptions options)
+        public static TensorStack.HuggingFace.Common.GenerateVideoOptions ToPythonOptions(this Common.GenerateVideoOptions options)
         {
-            return new TensorStack.Python.Common.GenerateVideoOptions
+            return new TensorStack.HuggingFace.Common.GenerateVideoOptions
             {
                 Seed = options.Seed,
                 Prompt = options.Prompt,
@@ -135,9 +135,9 @@ namespace Amuse.Host.PyTorch
         }
 
 
-        public static TensorStack.Python.Common.GenerateAudioOptions ToPythonOptions(this Common.GenerateAudioOptions options)
+        public static TensorStack.HuggingFace.Common.GenerateAudioOptions ToPythonOptions(this Common.GenerateAudioOptions options)
         {
-            return new TensorStack.Python.Common.GenerateAudioOptions
+            return new TensorStack.HuggingFace.Common.GenerateAudioOptions
             {
                 Seed = options.Seed,
                 Prompt = options.Prompt,
@@ -171,9 +171,9 @@ namespace Amuse.Host.PyTorch
         }
 
 
-        public static TensorStack.Python.Common.GenerateTextOptions ToPythonOptions(this Common.GenerateTextOptions options)
+        public static TensorStack.HuggingFace.Common.GenerateTextOptions ToPythonOptions(this Common.GenerateTextOptions options)
         {
-            return new TensorStack.Python.Common.GenerateTextOptions
+            return new TensorStack.HuggingFace.Common.GenerateTextOptions
             {
                 Seed = options.Seed,
                 Prompt = options.Prompt,
@@ -198,14 +198,14 @@ namespace Amuse.Host.PyTorch
                 InputImages = options.InputImages,
                 InputAudios = options.InputAudios,
                 SampleRate = options.SampleRate,
-                CacheType = options.CacheType.Cast<Amuse.Common.CacheType, TensorStack.Python.Common.CacheType>(),
+                CacheType = options.CacheType.Cast<Amuse.Common.CacheType, TensorStack.HuggingFace.Common.CacheType>(),
             };
         }
 
 
-        public static TensorStack.Python.Config.LoraConfig ToPythonOptions(this Common.LoraConfig config)
+        public static TensorStack.HuggingFace.Config.LoraConfig ToPythonOptions(this Common.LoraConfig config)
         {
-            return new TensorStack.Python.Config.LoraConfig
+            return new TensorStack.HuggingFace.Config.LoraConfig
             {
                 Path = config.Path,
                 Name = config.Name,
@@ -214,9 +214,9 @@ namespace Amuse.Host.PyTorch
         }
 
 
-        public static TensorStack.Python.Config.ControlNetConfig ToPythonOptions(this Common.ControlNetConfig config)
+        public static TensorStack.HuggingFace.Config.ControlNetConfig ToPythonOptions(this Common.ControlNetConfig config)
         {
-            return new TensorStack.Python.Config.ControlNetConfig
+            return new TensorStack.HuggingFace.Config.ControlNetConfig
             {
                 Path = config.Path,
                 Name = config.Name,
@@ -225,9 +225,9 @@ namespace Amuse.Host.PyTorch
         }
 
 
-        public static TensorStack.Python.Config.CheckpointConfig ToPythonOptions(this Common.CheckpointConfig config)
+        public static TensorStack.HuggingFace.Config.CheckpointConfig ToPythonOptions(this Common.CheckpointConfig config)
         {
-            return new TensorStack.Python.Config.CheckpointConfig
+            return new TensorStack.HuggingFace.Config.CheckpointConfig
             {
                 TextEncoder = config.TextEncoder,
                 TextEncoder2 = config.TextEncoder2,
@@ -248,9 +248,9 @@ namespace Amuse.Host.PyTorch
         }
 
 
-        public static TensorStack.Python.Common.LoraOptions ToPythonOptions(this Common.LoraOptions options)
+        public static TensorStack.HuggingFace.Common.LoraOptions ToPythonOptions(this Common.LoraOptions options)
         {
-            return new TensorStack.Python.Common.LoraOptions
+            return new TensorStack.HuggingFace.Common.LoraOptions
             {
                 Name = options.Name,
                 Strength = options.Strength,
@@ -258,7 +258,7 @@ namespace Amuse.Host.PyTorch
         }
 
 
-        public static Common.PipelineProgress ToProgress(this TensorStack.Python.Common.PipelineProgress pipelineProgress)
+        public static Common.PipelineProgress ToProgress(this TensorStack.HuggingFace.Common.PipelineProgress pipelineProgress)
         {
             return new Common.PipelineProgress
             {
@@ -277,7 +277,7 @@ namespace Amuse.Host.PyTorch
         }
 
 
-        public static TensorStack.Python.Scheduler.SchedulerOptions ToPythonOptions(this Common.SchedulerOptions options)
+        public static TensorStack.HuggingFace.Scheduler.SchedulerOptions ToPythonOptions(this Common.SchedulerOptions options)
         {
             return options.Scheduler switch
             {
@@ -286,9 +286,9 @@ namespace Amuse.Host.PyTorch
                     NumTrainTimesteps = options.NumTrainTimesteps,
                     BetaEnd = options.BetaEnd,
                     BetaStart = options.BetaStart,
-                    BetaSchedule = options.BetaSchedule.Cast<Amuse.Common.BetaScheduleType, TensorStack.Python.Scheduler.BetaScheduleType>(),
-                    PredictionType = options.PredictionType.Cast<Amuse.Common.PredictionType, TensorStack.Python.Scheduler.PredictionType>(),
-                    TimestepSpacing = options.TimestepSpacing.Cast<Amuse.Common.TimestepSpacingType, TensorStack.Python.Scheduler.TimestepSpacingType>(),
+                    BetaSchedule = options.BetaSchedule.Cast<Amuse.Common.BetaScheduleType, TensorStack.HuggingFace.Scheduler.BetaScheduleType>(),
+                    PredictionType = options.PredictionType.Cast<Amuse.Common.PredictionType, TensorStack.HuggingFace.Scheduler.PredictionType>(),
+                    TimestepSpacing = options.TimestepSpacing.Cast<Amuse.Common.TimestepSpacingType, TensorStack.HuggingFace.Scheduler.TimestepSpacingType>(),
                     StepsOffset = options.StepsOffset,
                     UseKarrasSigmas = options.UseKarrasSigmas,
                     UseBetaSigmas = options.UseBetaSigmas,
@@ -299,18 +299,18 @@ namespace Amuse.Host.PyTorch
                     NumTrainTimesteps = options.NumTrainTimesteps,
                     BetaEnd = options.BetaEnd,
                     BetaStart = options.BetaStart,
-                    BetaSchedule = options.BetaSchedule.Cast<Amuse.Common.BetaScheduleType, TensorStack.Python.Scheduler.BetaScheduleType>(),
-                    PredictionType = options.PredictionType.Cast<Amuse.Common.PredictionType, TensorStack.Python.Scheduler.PredictionType>(),
-                    TimestepSpacing = options.TimestepSpacing.Cast<Amuse.Common.TimestepSpacingType, TensorStack.Python.Scheduler.TimestepSpacingType>(),
+                    BetaSchedule = options.BetaSchedule.Cast<Amuse.Common.BetaScheduleType, TensorStack.HuggingFace.Scheduler.BetaScheduleType>(),
+                    PredictionType = options.PredictionType.Cast<Amuse.Common.PredictionType, TensorStack.HuggingFace.Scheduler.PredictionType>(),
+                    TimestepSpacing = options.TimestepSpacing.Cast<Amuse.Common.TimestepSpacingType, TensorStack.HuggingFace.Scheduler.TimestepSpacingType>(),
                     StepsOffset = options.StepsOffset,
                     UseKarrasSigmas = options.UseKarrasSigmas,
                     UseBetaSigmas = options.UseBetaSigmas,
                     UseExponentialSigmas = options.UseExponentialSigmas,
                     SigmaMax = options.SigmaMax > 0 ? options.SigmaMax : null,
                     SigmaMin = options.SigmaMin > 0 ? options.SigmaMin : null,
-                    FinalSigmasType = options.FinalSigmasType.Cast<Amuse.Common.FinalSigmasType, TensorStack.Python.Scheduler.FinalSigmasType>(),
-                    InterpolationType = options.InterpolationType.Cast<Amuse.Common.InterpolationType, TensorStack.Python.Scheduler.InterpolationType>(),
-                    TimestepType = options.TimestepType.Cast<Amuse.Common.TimestepType, TensorStack.Python.Scheduler.TimestepType>(),
+                    FinalSigmasType = options.FinalSigmasType.Cast<Amuse.Common.FinalSigmasType, TensorStack.HuggingFace.Scheduler.FinalSigmasType>(),
+                    InterpolationType = options.InterpolationType.Cast<Amuse.Common.InterpolationType, TensorStack.HuggingFace.Scheduler.InterpolationType>(),
+                    TimestepType = options.TimestepType.Cast<Amuse.Common.TimestepType, TensorStack.HuggingFace.Scheduler.TimestepType>(),
                     RescaleBetasZeroSNR = options.RescaleBetasZeroSNR,
                 },
                 Amuse.Common.SchedulerType.EulerAncestral => new EulerAncestralOptions
@@ -318,9 +318,9 @@ namespace Amuse.Host.PyTorch
                     NumTrainTimesteps = options.NumTrainTimesteps,
                     BetaEnd = options.BetaEnd,
                     BetaStart = options.BetaStart,
-                    BetaSchedule = options.BetaSchedule.Cast<Amuse.Common.BetaScheduleType, TensorStack.Python.Scheduler.BetaScheduleType>(),
-                    PredictionType = options.PredictionType.Cast<Amuse.Common.PredictionType, TensorStack.Python.Scheduler.PredictionType>(),
-                    TimestepSpacing = options.TimestepSpacing.Cast<Amuse.Common.TimestepSpacingType, TensorStack.Python.Scheduler.TimestepSpacingType>(),
+                    BetaSchedule = options.BetaSchedule.Cast<Amuse.Common.BetaScheduleType, TensorStack.HuggingFace.Scheduler.BetaScheduleType>(),
+                    PredictionType = options.PredictionType.Cast<Amuse.Common.PredictionType, TensorStack.HuggingFace.Scheduler.PredictionType>(),
+                    TimestepSpacing = options.TimestepSpacing.Cast<Amuse.Common.TimestepSpacingType, TensorStack.HuggingFace.Scheduler.TimestepSpacingType>(),
                     StepsOffset = options.StepsOffset,
                     RescaleBetasZeroSNR = options.RescaleBetasZeroSNR,
                 },
@@ -329,16 +329,16 @@ namespace Amuse.Host.PyTorch
                     NumTrainTimesteps = options.NumTrainTimesteps,
                     BetaEnd = options.BetaEnd,
                     BetaStart = options.BetaStart,
-                    BetaSchedule = options.BetaSchedule.Cast<Amuse.Common.BetaScheduleType, TensorStack.Python.Scheduler.BetaScheduleType>(),
-                    PredictionType = options.PredictionType.Cast<Amuse.Common.PredictionType, TensorStack.Python.Scheduler.PredictionType>(),
-                    TimestepSpacing = options.TimestepSpacing.Cast<Amuse.Common.TimestepSpacingType, TensorStack.Python.Scheduler.TimestepSpacingType>(),
+                    BetaSchedule = options.BetaSchedule.Cast<Amuse.Common.BetaScheduleType, TensorStack.HuggingFace.Scheduler.BetaScheduleType>(),
+                    PredictionType = options.PredictionType.Cast<Amuse.Common.PredictionType, TensorStack.HuggingFace.Scheduler.PredictionType>(),
+                    TimestepSpacing = options.TimestepSpacing.Cast<Amuse.Common.TimestepSpacingType, TensorStack.HuggingFace.Scheduler.TimestepSpacingType>(),
                     StepsOffset = options.StepsOffset,
                     ClipSample = options.ClipSample,
                     ClipSampleRange = options.ClipSampleRange,
                     SampleMaxValue = options.SampleMaxValue,
                     Thresholding = options.Thresholding,
                     DynamicThresholdingRatio = options.DynamicThresholdingRatio,
-                    VarianceType = options.VarianceType.Cast<Amuse.Common.VarianceType, TensorStack.Python.Scheduler.VarianceType>(),
+                    VarianceType = options.VarianceType.Cast<Amuse.Common.VarianceType, TensorStack.HuggingFace.Scheduler.VarianceType>(),
                     RescaleBetasZeroSNR = options.RescaleBetasZeroSNR,
                 },
                 Amuse.Common.SchedulerType.DDIM => new DDIMOptions
@@ -346,9 +346,9 @@ namespace Amuse.Host.PyTorch
                     NumTrainTimesteps = options.NumTrainTimesteps,
                     BetaEnd = options.BetaEnd,
                     BetaStart = options.BetaStart,
-                    BetaSchedule = options.BetaSchedule.Cast<Amuse.Common.BetaScheduleType, TensorStack.Python.Scheduler.BetaScheduleType>(),
-                    PredictionType = options.PredictionType.Cast<Amuse.Common.PredictionType, TensorStack.Python.Scheduler.PredictionType>(),
-                    TimestepSpacing = options.TimestepSpacing.Cast<Amuse.Common.TimestepSpacingType, TensorStack.Python.Scheduler.TimestepSpacingType>(),
+                    BetaSchedule = options.BetaSchedule.Cast<Amuse.Common.BetaScheduleType, TensorStack.HuggingFace.Scheduler.BetaScheduleType>(),
+                    PredictionType = options.PredictionType.Cast<Amuse.Common.PredictionType, TensorStack.HuggingFace.Scheduler.PredictionType>(),
+                    TimestepSpacing = options.TimestepSpacing.Cast<Amuse.Common.TimestepSpacingType, TensorStack.HuggingFace.Scheduler.TimestepSpacingType>(),
                     StepsOffset = options.StepsOffset,
                     ClipSample = options.ClipSample,
                     ClipSampleRange = options.ClipSampleRange,
@@ -363,9 +363,9 @@ namespace Amuse.Host.PyTorch
                     NumTrainTimesteps = options.NumTrainTimesteps,
                     BetaEnd = options.BetaEnd,
                     BetaStart = options.BetaStart,
-                    BetaSchedule = options.BetaSchedule.Cast<Amuse.Common.BetaScheduleType, TensorStack.Python.Scheduler.BetaScheduleType>(),
-                    PredictionType = options.PredictionType.Cast<Amuse.Common.PredictionType, TensorStack.Python.Scheduler.PredictionType>(),
-                    TimestepSpacing = options.TimestepSpacing.Cast<Amuse.Common.TimestepSpacingType, TensorStack.Python.Scheduler.TimestepSpacingType>(),
+                    BetaSchedule = options.BetaSchedule.Cast<Amuse.Common.BetaScheduleType, TensorStack.HuggingFace.Scheduler.BetaScheduleType>(),
+                    PredictionType = options.PredictionType.Cast<Amuse.Common.PredictionType, TensorStack.HuggingFace.Scheduler.PredictionType>(),
+                    TimestepSpacing = options.TimestepSpacing.Cast<Amuse.Common.TimestepSpacingType, TensorStack.HuggingFace.Scheduler.TimestepSpacingType>(),
                     StepsOffset = options.StepsOffset,
                     UseKarrasSigmas = options.UseKarrasSigmas,
                     UseBetaSigmas = options.UseBetaSigmas,
@@ -376,9 +376,9 @@ namespace Amuse.Host.PyTorch
                     NumTrainTimesteps = options.NumTrainTimesteps,
                     BetaEnd = options.BetaEnd,
                     BetaStart = options.BetaStart,
-                    BetaSchedule = options.BetaSchedule.Cast<Amuse.Common.BetaScheduleType, TensorStack.Python.Scheduler.BetaScheduleType>(),
-                    PredictionType = options.PredictionType.Cast<Amuse.Common.PredictionType, TensorStack.Python.Scheduler.PredictionType>(),
-                    TimestepSpacing = options.TimestepSpacing.Cast<Amuse.Common.TimestepSpacingType, TensorStack.Python.Scheduler.TimestepSpacingType>(),
+                    BetaSchedule = options.BetaSchedule.Cast<Amuse.Common.BetaScheduleType, TensorStack.HuggingFace.Scheduler.BetaScheduleType>(),
+                    PredictionType = options.PredictionType.Cast<Amuse.Common.PredictionType, TensorStack.HuggingFace.Scheduler.PredictionType>(),
+                    TimestepSpacing = options.TimestepSpacing.Cast<Amuse.Common.TimestepSpacingType, TensorStack.HuggingFace.Scheduler.TimestepSpacingType>(),
                     StepsOffset = options.StepsOffset,
                     UseKarrasSigmas = options.UseKarrasSigmas,
                     UseBetaSigmas = options.UseBetaSigmas,
@@ -395,9 +395,9 @@ namespace Amuse.Host.PyTorch
                     OriginalInferenceSteps = options.OriginalInferenceSteps,
                     BetaEnd = options.BetaEnd,
                     BetaStart = options.BetaStart,
-                    BetaSchedule = options.BetaSchedule.Cast<Amuse.Common.BetaScheduleType, TensorStack.Python.Scheduler.BetaScheduleType>(),
-                    PredictionType = options.PredictionType.Cast<Amuse.Common.PredictionType, TensorStack.Python.Scheduler.PredictionType>(),
-                    TimestepSpacing = options.TimestepSpacing.Cast<Amuse.Common.TimestepSpacingType, TensorStack.Python.Scheduler.TimestepSpacingType>(),
+                    BetaSchedule = options.BetaSchedule.Cast<Amuse.Common.BetaScheduleType, TensorStack.HuggingFace.Scheduler.BetaScheduleType>(),
+                    PredictionType = options.PredictionType.Cast<Amuse.Common.PredictionType, TensorStack.HuggingFace.Scheduler.PredictionType>(),
+                    TimestepSpacing = options.TimestepSpacing.Cast<Amuse.Common.TimestepSpacingType, TensorStack.HuggingFace.Scheduler.TimestepSpacingType>(),
                     StepsOffset = options.StepsOffset,
                     ClipSample = options.ClipSample,
                     ClipSampleRange = options.ClipSampleRange,
@@ -415,7 +415,7 @@ namespace Amuse.Host.PyTorch
                     BaseShift = options.BaseShift,
                     MaxShift = options.MaxShift,
                     ShiftTerminal = options.ShiftTerminal > 0 ? options.ShiftTerminal : null,
-                    TimeShiftType = options.TimeShiftType.Cast<Amuse.Common.TimeShiftType, TensorStack.Python.Scheduler.TimeShiftType>(),
+                    TimeShiftType = options.TimeShiftType.Cast<Amuse.Common.TimeShiftType, TensorStack.HuggingFace.Scheduler.TimeShiftType>(),
                     UseDynamicShifting = options.UseDynamicShifting,
                     BaseImageSeqLen = options.BaseImageSeqLen,
                     MaxImageSeqLen = options.MaxImageSeqLen,
@@ -435,9 +435,9 @@ namespace Amuse.Host.PyTorch
                     NumTrainTimesteps = options.NumTrainTimesteps,
                     BetaEnd = options.BetaEnd,
                     BetaStart = options.BetaStart,
-                    BetaSchedule = options.BetaSchedule.Cast<Amuse.Common.BetaScheduleType, TensorStack.Python.Scheduler.BetaScheduleType>(),
-                    PredictionType = options.PredictionType.Cast<Amuse.Common.PredictionType, TensorStack.Python.Scheduler.PredictionType>(),
-                    TimestepSpacing = options.TimestepSpacing.Cast<Amuse.Common.TimestepSpacingType, TensorStack.Python.Scheduler.TimestepSpacingType>(),
+                    BetaSchedule = options.BetaSchedule.Cast<Amuse.Common.BetaScheduleType, TensorStack.HuggingFace.Scheduler.BetaScheduleType>(),
+                    PredictionType = options.PredictionType.Cast<Amuse.Common.PredictionType, TensorStack.HuggingFace.Scheduler.PredictionType>(),
+                    TimestepSpacing = options.TimestepSpacing.Cast<Amuse.Common.TimestepSpacingType, TensorStack.HuggingFace.Scheduler.TimestepSpacingType>(),
                     StepsOffset = options.StepsOffset,
                     SetAlphaToOne = options.SetAlphaToOne,
                     SkipPrkSteps = options.SkipPrkSteps,
@@ -447,9 +447,9 @@ namespace Amuse.Host.PyTorch
                     NumTrainTimesteps = options.NumTrainTimesteps,
                     BetaEnd = options.BetaEnd,
                     BetaStart = options.BetaStart,
-                    BetaSchedule = options.BetaSchedule.Cast<Amuse.Common.BetaScheduleType, TensorStack.Python.Scheduler.BetaScheduleType>(),
-                    PredictionType = options.PredictionType.Cast<Amuse.Common.PredictionType, TensorStack.Python.Scheduler.PredictionType>(),
-                    TimestepSpacing = options.TimestepSpacing.Cast<Amuse.Common.TimestepSpacingType, TensorStack.Python.Scheduler.TimestepSpacingType>(),
+                    BetaSchedule = options.BetaSchedule.Cast<Amuse.Common.BetaScheduleType, TensorStack.HuggingFace.Scheduler.BetaScheduleType>(),
+                    PredictionType = options.PredictionType.Cast<Amuse.Common.PredictionType, TensorStack.HuggingFace.Scheduler.PredictionType>(),
+                    TimestepSpacing = options.TimestepSpacing.Cast<Amuse.Common.TimestepSpacingType, TensorStack.HuggingFace.Scheduler.TimestepSpacingType>(),
                     StepsOffset = options.StepsOffset,
                     ClipSample = options.ClipSample,
                     ClipSampleRange = options.ClipSampleRange,
@@ -462,21 +462,21 @@ namespace Amuse.Host.PyTorch
                     NumTrainTimesteps = options.NumTrainTimesteps,
                     BetaEnd = options.BetaEnd,
                     BetaStart = options.BetaStart,
-                    BetaSchedule = options.BetaSchedule.Cast<Amuse.Common.BetaScheduleType, TensorStack.Python.Scheduler.BetaScheduleType>(),
-                    PredictionType = options.PredictionType.Cast<Amuse.Common.PredictionType, TensorStack.Python.Scheduler.PredictionType>(),
-                    TimestepSpacing = options.TimestepSpacing.Cast<Amuse.Common.TimestepSpacingType, TensorStack.Python.Scheduler.TimestepSpacingType>(),
+                    BetaSchedule = options.BetaSchedule.Cast<Amuse.Common.BetaScheduleType, TensorStack.HuggingFace.Scheduler.BetaScheduleType>(),
+                    PredictionType = options.PredictionType.Cast<Amuse.Common.PredictionType, TensorStack.HuggingFace.Scheduler.PredictionType>(),
+                    TimestepSpacing = options.TimestepSpacing.Cast<Amuse.Common.TimestepSpacingType, TensorStack.HuggingFace.Scheduler.TimestepSpacingType>(),
                     StepsOffset = options.StepsOffset,
                     Thresholding = options.Thresholding,
                     DynamicThresholdingRatio = options.DynamicThresholdingRatio,
                     SampleMaxValue = options.SampleMaxValue,
                     SigmaMin = options.SigmaMin > 0 ? options.SigmaMin : null,
                     SigmaMax = options.SigmaMax > 0 ? options.SigmaMax : null,
-                    FinalSigmasType = options.FinalSigmasType.Cast<Amuse.Common.FinalSigmasType, TensorStack.Python.Scheduler.FinalSigmasType>(),
-                    SolverType = options.SolverType.Cast<Amuse.Common.SolverType, TensorStack.Python.Scheduler.SolverType>(),
+                    FinalSigmasType = options.FinalSigmasType.Cast<Amuse.Common.FinalSigmasType, TensorStack.HuggingFace.Scheduler.FinalSigmasType>(),
+                    SolverType = options.SolverType.Cast<Amuse.Common.SolverType, TensorStack.HuggingFace.Scheduler.SolverType>(),
                     SolverOrder = options.SolverOrder,
                     LowerOrderFinal = options.LowerOrderFinal,
                     ShiftTerminal = options.ShiftTerminal > 0 ? options.ShiftTerminal : null,
-                    TimeShiftType = options.TimeShiftType.Cast<Amuse.Common.TimeShiftType, TensorStack.Python.Scheduler.TimeShiftType>(),
+                    TimeShiftType = options.TimeShiftType.Cast<Amuse.Common.TimeShiftType, TensorStack.HuggingFace.Scheduler.TimeShiftType>(),
                     UseDynamicShifting = options.UseDynamicShifting,
                     FlowShift = options.FlowShift,
                     PredictX0 = options.PredictX0,
@@ -491,23 +491,23 @@ namespace Amuse.Host.PyTorch
                     NumTrainTimesteps = options.NumTrainTimesteps,
                     BetaEnd = options.BetaEnd,
                     BetaStart = options.BetaStart,
-                    BetaSchedule = options.BetaSchedule.Cast<Amuse.Common.BetaScheduleType, TensorStack.Python.Scheduler.BetaScheduleType>(),
-                    PredictionType = options.PredictionType.Cast<Amuse.Common.PredictionType, TensorStack.Python.Scheduler.PredictionType>(),
-                    TimestepSpacing = options.TimestepSpacing.Cast<Amuse.Common.TimestepSpacingType, TensorStack.Python.Scheduler.TimestepSpacingType>(),
+                    BetaSchedule = options.BetaSchedule.Cast<Amuse.Common.BetaScheduleType, TensorStack.HuggingFace.Scheduler.BetaScheduleType>(),
+                    PredictionType = options.PredictionType.Cast<Amuse.Common.PredictionType, TensorStack.HuggingFace.Scheduler.PredictionType>(),
+                    TimestepSpacing = options.TimestepSpacing.Cast<Amuse.Common.TimestepSpacingType, TensorStack.HuggingFace.Scheduler.TimestepSpacingType>(),
                     StepsOffset = options.StepsOffset,
                     Thresholding = options.Thresholding,
                     DynamicThresholdingRatio = options.DynamicThresholdingRatio,
                     SampleMaxValue = options.SampleMaxValue,
                     SolverOrder = options.SolverOrder,
-                    SolverType = options.SolverType.Cast<Amuse.Common.SolverType, TensorStack.Python.Scheduler.SolverType>(),
+                    SolverType = options.SolverType.Cast<Amuse.Common.SolverType, TensorStack.HuggingFace.Scheduler.SolverType>(),
                     LowerOrderFinal = options.LowerOrderFinal,
                     FlowShift = options.FlowShift,
-                    TimeShiftType = options.TimeShiftType.Cast<Amuse.Common.TimeShiftType, TensorStack.Python.Scheduler.TimeShiftType>(),
-                    FinalSigmasType = options.FinalSigmasType.Cast<Amuse.Common.FinalSigmasType, TensorStack.Python.Scheduler.FinalSigmasType>(),
+                    TimeShiftType = options.TimeShiftType.Cast<Amuse.Common.TimeShiftType, TensorStack.HuggingFace.Scheduler.TimeShiftType>(),
+                    FinalSigmasType = options.FinalSigmasType.Cast<Amuse.Common.FinalSigmasType, TensorStack.HuggingFace.Scheduler.FinalSigmasType>(),
                     UseDynamicShifting = options.UseDynamicShifting,
                     UseFlowSigmas = options.UseFlowSigmas,
                     EulerAtFinal = options.EulerAtFinal,
-                    AlgorithmType = options.AlgorithmType.Cast<Amuse.Common.AlgorithmType, TensorStack.Python.Scheduler.AlgorithmType>(),
+                    AlgorithmType = options.AlgorithmType.Cast<Amuse.Common.AlgorithmType, TensorStack.HuggingFace.Scheduler.AlgorithmType>(),
                     UseLuLambdas = options.UseLuLambdas,
                     UseKarrasSigmas = options.UseKarrasSigmas,
                     UseBetaSigmas = options.UseBetaSigmas,
@@ -519,20 +519,20 @@ namespace Amuse.Host.PyTorch
                     NumTrainTimesteps = options.NumTrainTimesteps,
                     BetaEnd = options.BetaEnd,
                     BetaStart = options.BetaStart,
-                    BetaSchedule = options.BetaSchedule.Cast<Amuse.Common.BetaScheduleType, TensorStack.Python.Scheduler.BetaScheduleType>(),
-                    PredictionType = options.PredictionType.Cast<Amuse.Common.PredictionType, TensorStack.Python.Scheduler.PredictionType>(),
-                    TimestepSpacing = options.TimestepSpacing.Cast<Amuse.Common.TimestepSpacingType, TensorStack.Python.Scheduler.TimestepSpacingType>(),
+                    BetaSchedule = options.BetaSchedule.Cast<Amuse.Common.BetaScheduleType, TensorStack.HuggingFace.Scheduler.BetaScheduleType>(),
+                    PredictionType = options.PredictionType.Cast<Amuse.Common.PredictionType, TensorStack.HuggingFace.Scheduler.PredictionType>(),
+                    TimestepSpacing = options.TimestepSpacing.Cast<Amuse.Common.TimestepSpacingType, TensorStack.HuggingFace.Scheduler.TimestepSpacingType>(),
                     StepsOffset = options.StepsOffset,
                     Thresholding = options.Thresholding,
                     DynamicThresholdingRatio = options.DynamicThresholdingRatio,
                     SampleMaxValue = options.SampleMaxValue,
                     SolverOrder = options.SolverOrder,
-                    SolverType = options.SolverType.Cast<Amuse.Common.SolverType, TensorStack.Python.Scheduler.SolverType>(),
+                    SolverType = options.SolverType.Cast<Amuse.Common.SolverType, TensorStack.HuggingFace.Scheduler.SolverType>(),
                     LowerOrderFinal = options.LowerOrderFinal,
                     FlowShift = options.FlowShift,
-                    VarianceType = options.VarianceType.Cast<Amuse.Common.VarianceType, TensorStack.Python.Scheduler.VarianceType>(),
-                    AlgorithmType = options.AlgorithmType.Cast<Amuse.Common.AlgorithmType, TensorStack.Python.Scheduler.AlgorithmType>(),
-                    FinalSigmasType = options.FinalSigmasType.Cast<Amuse.Common.FinalSigmasType, TensorStack.Python.Scheduler.FinalSigmasType>(),
+                    VarianceType = options.VarianceType.Cast<Amuse.Common.VarianceType, TensorStack.HuggingFace.Scheduler.VarianceType>(),
+                    AlgorithmType = options.AlgorithmType.Cast<Amuse.Common.AlgorithmType, TensorStack.HuggingFace.Scheduler.AlgorithmType>(),
+                    FinalSigmasType = options.FinalSigmasType.Cast<Amuse.Common.FinalSigmasType, TensorStack.HuggingFace.Scheduler.FinalSigmasType>(),
                     UseFlowSigmas = options.UseFlowSigmas,
                     UseKarrasSigmas = options.UseKarrasSigmas,
                     UseBetaSigmas = options.UseBetaSigmas,
@@ -543,9 +543,9 @@ namespace Amuse.Host.PyTorch
                     NumTrainTimesteps = options.NumTrainTimesteps,
                     BetaEnd = options.BetaEnd,
                     BetaStart = options.BetaStart,
-                    BetaSchedule = options.BetaSchedule.Cast<Amuse.Common.BetaScheduleType, TensorStack.Python.Scheduler.BetaScheduleType>(),
-                    PredictionType = options.PredictionType.Cast<Amuse.Common.PredictionType, TensorStack.Python.Scheduler.PredictionType>(),
-                    TimestepSpacing = options.TimestepSpacing.Cast<Amuse.Common.TimestepSpacingType, TensorStack.Python.Scheduler.TimestepSpacingType>(),
+                    BetaSchedule = options.BetaSchedule.Cast<Amuse.Common.BetaScheduleType, TensorStack.HuggingFace.Scheduler.BetaScheduleType>(),
+                    PredictionType = options.PredictionType.Cast<Amuse.Common.PredictionType, TensorStack.HuggingFace.Scheduler.PredictionType>(),
+                    TimestepSpacing = options.TimestepSpacing.Cast<Amuse.Common.TimestepSpacingType, TensorStack.HuggingFace.Scheduler.TimestepSpacingType>(),
                     StepsOffset = options.StepsOffset,
                     UseKarrasSigmas = options.UseKarrasSigmas,
                     UseBetaSigmas = options.UseBetaSigmas,
@@ -557,19 +557,19 @@ namespace Amuse.Host.PyTorch
                     NumTrainTimesteps = options.NumTrainTimesteps,
                     BetaEnd = options.BetaEnd,
                     BetaStart = options.BetaStart,
-                    BetaSchedule = options.BetaSchedule.Cast<Amuse.Common.BetaScheduleType, TensorStack.Python.Scheduler.BetaScheduleType>(),
-                    PredictionType = options.PredictionType.Cast<Amuse.Common.PredictionType, TensorStack.Python.Scheduler.PredictionType>(),
-                    TimestepSpacing = options.TimestepSpacing.Cast<Amuse.Common.TimestepSpacingType, TensorStack.Python.Scheduler.TimestepSpacingType>(),
+                    BetaSchedule = options.BetaSchedule.Cast<Amuse.Common.BetaScheduleType, TensorStack.HuggingFace.Scheduler.BetaScheduleType>(),
+                    PredictionType = options.PredictionType.Cast<Amuse.Common.PredictionType, TensorStack.HuggingFace.Scheduler.PredictionType>(),
+                    TimestepSpacing = options.TimestepSpacing.Cast<Amuse.Common.TimestepSpacingType, TensorStack.HuggingFace.Scheduler.TimestepSpacingType>(),
                     StepsOffset = options.StepsOffset,
                     Thresholding = options.Thresholding,
                     DynamicThresholdingRatio = options.DynamicThresholdingRatio,
                     SampleMaxValue = options.SampleMaxValue,
                     SolverOrder = options.SolverOrder,
-                    SolverType = options.SolverType.Cast<Amuse.Common.SolverType, TensorStack.Python.Scheduler.SolverType>(),
+                    SolverType = options.SolverType.Cast<Amuse.Common.SolverType, TensorStack.HuggingFace.Scheduler.SolverType>(),
                     LowerOrderFinal = options.LowerOrderFinal,
                     FlowShift = options.FlowShift,
-                    TimeShiftType = options.TimeShiftType.Cast<Amuse.Common.TimeShiftType, TensorStack.Python.Scheduler.TimeShiftType>(),
-                    AlgorithmType = options.AlgorithmType.Cast<Amuse.Common.AlgorithmType, TensorStack.Python.Scheduler.AlgorithmType>(),
+                    TimeShiftType = options.TimeShiftType.Cast<Amuse.Common.TimeShiftType, TensorStack.HuggingFace.Scheduler.TimeShiftType>(),
+                    AlgorithmType = options.AlgorithmType.Cast<Amuse.Common.AlgorithmType, TensorStack.HuggingFace.Scheduler.AlgorithmType>(),
                     UseDynamicShifting = options.UseDynamicShifting,
                     UseFlowSigmas = options.UseFlowSigmas,
                     UseKarrasSigmas = options.UseKarrasSigmas,
@@ -579,10 +579,10 @@ namespace Amuse.Host.PyTorch
                 Amuse.Common.SchedulerType.EDMEuler => new EDMEulerOptions
                 {
                     NumTrainTimesteps = options.NumTrainTimesteps,
-                    PredictionType = options.PredictionType.Cast<Amuse.Common.PredictionType, TensorStack.Python.Scheduler.PredictionType>(),
+                    PredictionType = options.PredictionType.Cast<Amuse.Common.PredictionType, TensorStack.HuggingFace.Scheduler.PredictionType>(),
                     SigmaMin = options.SigmaMin ?? 0,
                     SigmaMax = options.SigmaMax ?? 0,
-                    FinalSigmasType = options.FinalSigmasType.Cast<Amuse.Common.FinalSigmasType, TensorStack.Python.Scheduler.FinalSigmasType>(),
+                    FinalSigmasType = options.FinalSigmasType.Cast<Amuse.Common.FinalSigmasType, TensorStack.HuggingFace.Scheduler.FinalSigmasType>(),
                     Rho = options.Rho,
                     SigmaData = options.SigmaData,
                     SigmaScheduleType = options.SigmaScheduleType.AsPythonType(),
@@ -590,12 +590,12 @@ namespace Amuse.Host.PyTorch
                 Amuse.Common.SchedulerType.EDMDPMSolverMultistep => new EDMDPMSolverMultistepOptions
                 {
                     NumTrainTimesteps = options.NumTrainTimesteps,
-                    PredictionType = options.PredictionType.Cast<Amuse.Common.PredictionType, TensorStack.Python.Scheduler.PredictionType>(),
-                    AlgorithmType = options.AlgorithmType.Cast<Amuse.Common.AlgorithmType, TensorStack.Python.Scheduler.AlgorithmType>(),
+                    PredictionType = options.PredictionType.Cast<Amuse.Common.PredictionType, TensorStack.HuggingFace.Scheduler.PredictionType>(),
+                    AlgorithmType = options.AlgorithmType.Cast<Amuse.Common.AlgorithmType, TensorStack.HuggingFace.Scheduler.AlgorithmType>(),
                     EulerAtFinal = options.EulerAtFinal,
                     SigmaMin = options.SigmaMin ?? 0,
                     SigmaMax = options.SigmaMax ?? 0,
-                    FinalSigmasType = options.FinalSigmasType.Cast<Amuse.Common.FinalSigmasType, TensorStack.Python.Scheduler.FinalSigmasType>(),
+                    FinalSigmasType = options.FinalSigmasType.Cast<Amuse.Common.FinalSigmasType, TensorStack.HuggingFace.Scheduler.FinalSigmasType>(),
                     Rho = options.Rho,
                     SigmaData = options.SigmaData,
                     SigmaScheduleType = options.SigmaScheduleType.AsPythonType(),
@@ -603,7 +603,7 @@ namespace Amuse.Host.PyTorch
                     DynamicThresholdingRatio = options.DynamicThresholdingRatio,
                     SampleMaxValue = options.SampleMaxValue,
                     SolverOrder = options.SolverOrder,
-                    SolverType = options.SolverType.Cast<Amuse.Common.SolverType, TensorStack.Python.Scheduler.SolverType>(),
+                    SolverType = options.SolverType.Cast<Amuse.Common.SolverType, TensorStack.HuggingFace.Scheduler.SolverType>(),
                     LowerOrderFinal = options.LowerOrderFinal,
                 },
                 Amuse.Common.SchedulerType.FlowMatchLCM => new FlowMatchLCMOptions
@@ -613,8 +613,8 @@ namespace Amuse.Host.PyTorch
                     BaseShift = options.BaseShift,
                     MaxShift = options.MaxShift,
                     ShiftTerminal = options.ShiftTerminal > 0 ? options.ShiftTerminal : null,
-                    TimeShiftType = options.TimeShiftType.Cast<Amuse.Common.TimeShiftType, TensorStack.Python.Scheduler.TimeShiftType>(),
-                    UpscaleMode = options.UpscaleMode.Cast<Amuse.Common.UpscaleModeType, TensorStack.Python.Scheduler.UpscaleModeType>(),
+                    TimeShiftType = options.TimeShiftType.Cast<Amuse.Common.TimeShiftType, TensorStack.HuggingFace.Scheduler.TimeShiftType>(),
+                    UpscaleMode = options.UpscaleMode.Cast<Amuse.Common.UpscaleModeType, TensorStack.HuggingFace.Scheduler.UpscaleModeType>(),
                     UseDynamicShifting = options.UseDynamicShifting,
                     InvertSigmas = options.InvertSigmas,
                     BaseImageSeqLen = options.BaseImageSeqLen,     // TODO
@@ -633,9 +633,9 @@ namespace Amuse.Host.PyTorch
                     NumTrainTimesteps = options.NumTrainTimesteps,
                     BetaEnd = options.BetaEnd,
                     BetaStart = options.BetaStart,
-                    BetaSchedule = options.BetaSchedule.Cast<Amuse.Common.BetaScheduleType, TensorStack.Python.Scheduler.BetaScheduleType>(),
-                    PredictionType = options.PredictionType.Cast<Amuse.Common.PredictionType, TensorStack.Python.Scheduler.PredictionType>(),
-                    TimestepSpacing = options.TimestepSpacing.Cast<Amuse.Common.TimestepSpacingType, TensorStack.Python.Scheduler.TimestepSpacingType>(),
+                    BetaSchedule = options.BetaSchedule.Cast<Amuse.Common.BetaScheduleType, TensorStack.HuggingFace.Scheduler.BetaScheduleType>(),
+                    PredictionType = options.PredictionType.Cast<Amuse.Common.PredictionType, TensorStack.HuggingFace.Scheduler.PredictionType>(),
+                    TimestepSpacing = options.TimestepSpacing.Cast<Amuse.Common.TimestepSpacingType, TensorStack.HuggingFace.Scheduler.TimestepSpacingType>(),
                     StepsOffset = options.StepsOffset,
                     ClipSample = options.ClipSample,
                     ClipSampleRange = options.ClipSampleRange,
@@ -649,9 +649,9 @@ namespace Amuse.Host.PyTorch
                     NumTrainTimesteps = options.NumTrainTimesteps,
                     BetaEnd = options.BetaEnd,
                     BetaStart = options.BetaStart,
-                    BetaSchedule = options.BetaSchedule.Cast<Amuse.Common.BetaScheduleType, TensorStack.Python.Scheduler.BetaScheduleType>(),
-                    PredictionType = options.PredictionType.Cast<Amuse.Common.PredictionType, TensorStack.Python.Scheduler.PredictionType>(),
-                    TimestepSpacing = options.TimestepSpacing.Cast<Amuse.Common.TimestepSpacingType, TensorStack.Python.Scheduler.TimestepSpacingType>(),
+                    BetaSchedule = options.BetaSchedule.Cast<Amuse.Common.BetaScheduleType, TensorStack.HuggingFace.Scheduler.BetaScheduleType>(),
+                    PredictionType = options.PredictionType.Cast<Amuse.Common.PredictionType, TensorStack.HuggingFace.Scheduler.PredictionType>(),
+                    TimestepSpacing = options.TimestepSpacing.Cast<Amuse.Common.TimestepSpacingType, TensorStack.HuggingFace.Scheduler.TimestepSpacingType>(),
                     StepsOffset = options.StepsOffset,
                     ClipSample = options.ClipSample,
                     ClipSampleRange = options.ClipSampleRange,
@@ -663,13 +663,13 @@ namespace Amuse.Host.PyTorch
                 Amuse.Common.SchedulerType.Helios => new HeliosOptions
                 {
                     NumTrainTimesteps = options.NumTrainTimesteps,
-                    PredictionType = options.PredictionType.Cast<Amuse.Common.PredictionType, TensorStack.Python.Scheduler.PredictionType>(),
+                    PredictionType = options.PredictionType.Cast<Amuse.Common.PredictionType, TensorStack.HuggingFace.Scheduler.PredictionType>(),
                     Shift = options.Shift,
                     Gamma = options.Gamma,
                     SolverOrder = options.SolverOrder,
-                    SolverType = options.SolverType.Cast<Amuse.Common.SolverType, TensorStack.Python.Scheduler.SolverType>(),
+                    SolverType = options.SolverType.Cast<Amuse.Common.SolverType, TensorStack.HuggingFace.Scheduler.SolverType>(),
                     LowerOrderFinal = options.LowerOrderFinal,
-                    TimeShiftType = options.TimeShiftType.Cast<Amuse.Common.TimeShiftType, TensorStack.Python.Scheduler.TimeShiftType>(),
+                    TimeShiftType = options.TimeShiftType.Cast<Amuse.Common.TimeShiftType, TensorStack.HuggingFace.Scheduler.TimeShiftType>(),
                     UseDynamicShifting = options.UseDynamicShifting,
                     UseFlowSigmas = options.UseFlowSigmas,
                     PredictX0 = options.PredictX0,
@@ -681,10 +681,10 @@ namespace Amuse.Host.PyTorch
                 Amuse.Common.SchedulerType.HeliosDMD => new HeliosDMDOptions
                 {
                     NumTrainTimesteps = options.NumTrainTimesteps,
-                    PredictionType = options.PredictionType.Cast<Amuse.Common.PredictionType, TensorStack.Python.Scheduler.PredictionType>(),
+                    PredictionType = options.PredictionType.Cast<Amuse.Common.PredictionType, TensorStack.HuggingFace.Scheduler.PredictionType>(),
                     Shift = options.Shift,
                     Gamma = options.Gamma,
-                    TimeShiftType = options.TimeShiftType.Cast<Amuse.Common.TimeShiftType, TensorStack.Python.Scheduler.TimeShiftType>(),
+                    TimeShiftType = options.TimeShiftType.Cast<Amuse.Common.TimeShiftType, TensorStack.HuggingFace.Scheduler.TimeShiftType>(),
                     UseDynamicShifting = options.UseDynamicShifting,
                     UseFlowSigmas = options.UseFlowSigmas,
                     Stages = options.Stages,                            // TODO
@@ -695,9 +695,9 @@ namespace Amuse.Host.PyTorch
                     NumTrainTimesteps = options.NumTrainTimesteps,
                     BetaEnd = options.BetaEnd,
                     BetaStart = options.BetaStart,
-                    BetaSchedule = options.BetaSchedule.Cast<Amuse.Common.BetaScheduleType, TensorStack.Python.Scheduler.BetaScheduleType>(),
-                    PredictionType = options.PredictionType.Cast<Amuse.Common.PredictionType, TensorStack.Python.Scheduler.PredictionType>(),
-                    TimestepSpacing = options.TimestepSpacing.Cast<Amuse.Common.TimestepSpacingType, TensorStack.Python.Scheduler.TimestepSpacingType>(),
+                    BetaSchedule = options.BetaSchedule.Cast<Amuse.Common.BetaScheduleType, TensorStack.HuggingFace.Scheduler.BetaScheduleType>(),
+                    PredictionType = options.PredictionType.Cast<Amuse.Common.PredictionType, TensorStack.HuggingFace.Scheduler.PredictionType>(),
+                    TimestepSpacing = options.TimestepSpacing.Cast<Amuse.Common.TimestepSpacingType, TensorStack.HuggingFace.Scheduler.TimestepSpacingType>(),
                     StepsOffset = options.StepsOffset,
                     Thresholding = options.Thresholding,
                     DynamicThresholdingRatio = options.DynamicThresholdingRatio,
@@ -712,7 +712,7 @@ namespace Amuse.Host.PyTorch
                 Amuse.Common.SchedulerType.SCM => new SCMOptions
                 {
                     NumTrainTimesteps = options.NumTrainTimesteps,
-                    PredictionType = options.PredictionType.Cast<Amuse.Common.PredictionType, TensorStack.Python.Scheduler.PredictionType>(),
+                    PredictionType = options.PredictionType.Cast<Amuse.Common.PredictionType, TensorStack.HuggingFace.Scheduler.PredictionType>(),
                     SigmaData = options.SigmaData,
                 },
                 Amuse.Common.SchedulerType.SASolver => new SASolverOptions
@@ -720,16 +720,16 @@ namespace Amuse.Host.PyTorch
                     NumTrainTimesteps = options.NumTrainTimesteps,
                     BetaEnd = options.BetaEnd,
                     BetaStart = options.BetaStart,
-                    BetaSchedule = options.BetaSchedule.Cast<Amuse.Common.BetaScheduleType, TensorStack.Python.Scheduler.BetaScheduleType>(),
-                    PredictionType = options.PredictionType.Cast<Amuse.Common.PredictionType, TensorStack.Python.Scheduler.PredictionType>(),
-                    TimestepSpacing = options.TimestepSpacing.Cast<Amuse.Common.TimestepSpacingType, TensorStack.Python.Scheduler.TimestepSpacingType>(),
+                    BetaSchedule = options.BetaSchedule.Cast<Amuse.Common.BetaScheduleType, TensorStack.HuggingFace.Scheduler.BetaScheduleType>(),
+                    PredictionType = options.PredictionType.Cast<Amuse.Common.PredictionType, TensorStack.HuggingFace.Scheduler.PredictionType>(),
+                    TimestepSpacing = options.TimestepSpacing.Cast<Amuse.Common.TimestepSpacingType, TensorStack.HuggingFace.Scheduler.TimestepSpacingType>(),
                     StepsOffset = options.StepsOffset,
                     Thresholding = options.Thresholding,
                     DynamicThresholdingRatio = options.DynamicThresholdingRatio,
                     SampleMaxValue = options.SampleMaxValue,
                     FlowShift = options.FlowShift,
-                    AlgorithmType = options.AlgorithmType.Cast<Amuse.Common.AlgorithmType, TensorStack.Python.Scheduler.AlgorithmType>(),
-                    VarianceType = options.VarianceType.Cast<Amuse.Common.VarianceType, TensorStack.Python.Scheduler.VarianceType>(),
+                    AlgorithmType = options.AlgorithmType.Cast<Amuse.Common.AlgorithmType, TensorStack.HuggingFace.Scheduler.AlgorithmType>(),
+                    VarianceType = options.VarianceType.Cast<Amuse.Common.VarianceType, TensorStack.HuggingFace.Scheduler.VarianceType>(),
                     UseFlowSigmas = options.UseFlowSigmas,
                     LowerOrderFinal = options.LowerOrderFinal,
                     PredictorOrder = options.PredictorOrder,
@@ -748,95 +748,95 @@ namespace Amuse.Host.PyTorch
             };
         }
 
-        public static Common.SchedulerOptions ToClientOptions(this TensorStack.Python.Scheduler.SchedulerOptions options)
+        public static Common.SchedulerOptions ToClientOptions(this TensorStack.HuggingFace.Scheduler.SchedulerOptions options)
         {
-            if (options is TensorStack.Python.Scheduler.LMSOptions lmsOptions)
+            if (options is TensorStack.HuggingFace.Scheduler.LMSOptions lmsOptions)
             {
                 return new Common.SchedulerOptions
                 {
-                    Scheduler = lmsOptions.Scheduler.Cast<TensorStack.Python.Scheduler.SchedulerType, Common.SchedulerType>(),
+                    Scheduler = lmsOptions.Scheduler.Cast<TensorStack.HuggingFace.Scheduler.SchedulerType, Common.SchedulerType>(),
                     NumTrainTimesteps = lmsOptions.NumTrainTimesteps,
                     BetaEnd = lmsOptions.BetaEnd,
                     BetaStart = lmsOptions.BetaStart,
-                    BetaSchedule = lmsOptions.BetaSchedule.Cast<TensorStack.Python.Scheduler.BetaScheduleType, Common.BetaScheduleType>(),
-                    PredictionType = lmsOptions.PredictionType.Cast<TensorStack.Python.Scheduler.PredictionType, Common.PredictionType>(),
-                    TimestepSpacing = lmsOptions.TimestepSpacing.Cast<TensorStack.Python.Scheduler.TimestepSpacingType, Common.TimestepSpacingType>(),
+                    BetaSchedule = lmsOptions.BetaSchedule.Cast<TensorStack.HuggingFace.Scheduler.BetaScheduleType, Common.BetaScheduleType>(),
+                    PredictionType = lmsOptions.PredictionType.Cast<TensorStack.HuggingFace.Scheduler.PredictionType, Common.PredictionType>(),
+                    TimestepSpacing = lmsOptions.TimestepSpacing.Cast<TensorStack.HuggingFace.Scheduler.TimestepSpacingType, Common.TimestepSpacingType>(),
                     StepsOffset = lmsOptions.StepsOffset,
                     UseKarrasSigmas = lmsOptions.UseKarrasSigmas,
                     UseBetaSigmas = lmsOptions.UseBetaSigmas,
                     UseExponentialSigmas = lmsOptions.UseExponentialSigmas,
                 };
             }
-            else if (options is TensorStack.Python.Scheduler.EulerOptions eulerOptions)
+            else if (options is TensorStack.HuggingFace.Scheduler.EulerOptions eulerOptions)
             {
                 return new Common.SchedulerOptions
                 {
-                    Scheduler = eulerOptions.Scheduler.Cast<TensorStack.Python.Scheduler.SchedulerType, Common.SchedulerType>(),
+                    Scheduler = eulerOptions.Scheduler.Cast<TensorStack.HuggingFace.Scheduler.SchedulerType, Common.SchedulerType>(),
                     NumTrainTimesteps = eulerOptions.NumTrainTimesteps,
                     BetaEnd = eulerOptions.BetaEnd,
                     BetaStart = eulerOptions.BetaStart,
-                    BetaSchedule = eulerOptions.BetaSchedule.Cast<TensorStack.Python.Scheduler.BetaScheduleType, Common.BetaScheduleType>(),
-                    PredictionType = eulerOptions.PredictionType.Cast<TensorStack.Python.Scheduler.PredictionType, Common.PredictionType>(),
-                    TimestepSpacing = eulerOptions.TimestepSpacing.Cast<TensorStack.Python.Scheduler.TimestepSpacingType, Common.TimestepSpacingType>(),
+                    BetaSchedule = eulerOptions.BetaSchedule.Cast<TensorStack.HuggingFace.Scheduler.BetaScheduleType, Common.BetaScheduleType>(),
+                    PredictionType = eulerOptions.PredictionType.Cast<TensorStack.HuggingFace.Scheduler.PredictionType, Common.PredictionType>(),
+                    TimestepSpacing = eulerOptions.TimestepSpacing.Cast<TensorStack.HuggingFace.Scheduler.TimestepSpacingType, Common.TimestepSpacingType>(),
                     StepsOffset = eulerOptions.StepsOffset,
                     UseKarrasSigmas = eulerOptions.UseKarrasSigmas,
                     UseBetaSigmas = eulerOptions.UseBetaSigmas,
                     UseExponentialSigmas = eulerOptions.UseExponentialSigmas,
                     SigmaMax = eulerOptions.SigmaMax ?? 0,
                     SigmaMin = eulerOptions.SigmaMin ?? 0,
-                    FinalSigmasType = eulerOptions.FinalSigmasType.Cast<TensorStack.Python.Scheduler.FinalSigmasType, Common.FinalSigmasType>(),
-                    InterpolationType = eulerOptions.InterpolationType.Cast<TensorStack.Python.Scheduler.InterpolationType, Common.InterpolationType>(),
-                    TimestepType = eulerOptions.TimestepType.Cast<TensorStack.Python.Scheduler.TimestepType, Common.TimestepType>(),
+                    FinalSigmasType = eulerOptions.FinalSigmasType.Cast<TensorStack.HuggingFace.Scheduler.FinalSigmasType, Common.FinalSigmasType>(),
+                    InterpolationType = eulerOptions.InterpolationType.Cast<TensorStack.HuggingFace.Scheduler.InterpolationType, Common.InterpolationType>(),
+                    TimestepType = eulerOptions.TimestepType.Cast<TensorStack.HuggingFace.Scheduler.TimestepType, Common.TimestepType>(),
                     RescaleBetasZeroSNR = eulerOptions.RescaleBetasZeroSNR,
                 };
             }
-            else if (options is TensorStack.Python.Scheduler.EulerAncestralOptions eulerAncestralOptions)
+            else if (options is TensorStack.HuggingFace.Scheduler.EulerAncestralOptions eulerAncestralOptions)
             {
                 return new Common.SchedulerOptions
                 {
-                    Scheduler = eulerAncestralOptions.Scheduler.Cast<TensorStack.Python.Scheduler.SchedulerType, Common.SchedulerType>(),
+                    Scheduler = eulerAncestralOptions.Scheduler.Cast<TensorStack.HuggingFace.Scheduler.SchedulerType, Common.SchedulerType>(),
                     NumTrainTimesteps = eulerAncestralOptions.NumTrainTimesteps,
                     BetaEnd = eulerAncestralOptions.BetaEnd,
                     BetaStart = eulerAncestralOptions.BetaStart,
-                    BetaSchedule = eulerAncestralOptions.BetaSchedule.Cast<TensorStack.Python.Scheduler.BetaScheduleType, Common.BetaScheduleType>(),
-                    PredictionType = eulerAncestralOptions.PredictionType.Cast<TensorStack.Python.Scheduler.PredictionType, Common.PredictionType>(),
-                    TimestepSpacing = eulerAncestralOptions.TimestepSpacing.Cast<TensorStack.Python.Scheduler.TimestepSpacingType, Common.TimestepSpacingType>(),
+                    BetaSchedule = eulerAncestralOptions.BetaSchedule.Cast<TensorStack.HuggingFace.Scheduler.BetaScheduleType, Common.BetaScheduleType>(),
+                    PredictionType = eulerAncestralOptions.PredictionType.Cast<TensorStack.HuggingFace.Scheduler.PredictionType, Common.PredictionType>(),
+                    TimestepSpacing = eulerAncestralOptions.TimestepSpacing.Cast<TensorStack.HuggingFace.Scheduler.TimestepSpacingType, Common.TimestepSpacingType>(),
                     StepsOffset = eulerAncestralOptions.StepsOffset,
                     RescaleBetasZeroSNR = eulerAncestralOptions.RescaleBetasZeroSNR,
                 };
             }
-            else if (options is TensorStack.Python.Scheduler.DDPMOptions ddpmOptions)
+            else if (options is TensorStack.HuggingFace.Scheduler.DDPMOptions ddpmOptions)
             {
                 return new Common.SchedulerOptions
                 {
-                    Scheduler = ddpmOptions.Scheduler.Cast<TensorStack.Python.Scheduler.SchedulerType, Common.SchedulerType>(),
+                    Scheduler = ddpmOptions.Scheduler.Cast<TensorStack.HuggingFace.Scheduler.SchedulerType, Common.SchedulerType>(),
                     NumTrainTimesteps = ddpmOptions.NumTrainTimesteps,
                     BetaEnd = ddpmOptions.BetaEnd,
                     BetaStart = ddpmOptions.BetaStart,
-                    BetaSchedule = ddpmOptions.BetaSchedule.Cast<TensorStack.Python.Scheduler.BetaScheduleType, Common.BetaScheduleType>(),
-                    PredictionType = ddpmOptions.PredictionType.Cast<TensorStack.Python.Scheduler.PredictionType, Common.PredictionType>(),
-                    TimestepSpacing = ddpmOptions.TimestepSpacing.Cast<TensorStack.Python.Scheduler.TimestepSpacingType, Common.TimestepSpacingType>(),
+                    BetaSchedule = ddpmOptions.BetaSchedule.Cast<TensorStack.HuggingFace.Scheduler.BetaScheduleType, Common.BetaScheduleType>(),
+                    PredictionType = ddpmOptions.PredictionType.Cast<TensorStack.HuggingFace.Scheduler.PredictionType, Common.PredictionType>(),
+                    TimestepSpacing = ddpmOptions.TimestepSpacing.Cast<TensorStack.HuggingFace.Scheduler.TimestepSpacingType, Common.TimestepSpacingType>(),
                     StepsOffset = ddpmOptions.StepsOffset,
                     ClipSample = ddpmOptions.ClipSample,
                     ClipSampleRange = ddpmOptions.ClipSampleRange,
                     SampleMaxValue = ddpmOptions.SampleMaxValue,
                     Thresholding = ddpmOptions.Thresholding,
                     DynamicThresholdingRatio = ddpmOptions.DynamicThresholdingRatio,
-                    VarianceType = ddpmOptions.VarianceType.Cast<TensorStack.Python.Scheduler.VarianceType, Common.VarianceType>(),
+                    VarianceType = ddpmOptions.VarianceType.Cast<TensorStack.HuggingFace.Scheduler.VarianceType, Common.VarianceType>(),
                     RescaleBetasZeroSNR = ddpmOptions.RescaleBetasZeroSNR,
                 };
             }
-            else if (options is TensorStack.Python.Scheduler.DDIMOptions ddimOptions)
+            else if (options is TensorStack.HuggingFace.Scheduler.DDIMOptions ddimOptions)
             {
                 return new Common.SchedulerOptions
                 {
-                    Scheduler = ddimOptions.Scheduler.Cast<TensorStack.Python.Scheduler.SchedulerType, Common.SchedulerType>(),
+                    Scheduler = ddimOptions.Scheduler.Cast<TensorStack.HuggingFace.Scheduler.SchedulerType, Common.SchedulerType>(),
                     NumTrainTimesteps = ddimOptions.NumTrainTimesteps,
                     BetaEnd = ddimOptions.BetaEnd,
                     BetaStart = ddimOptions.BetaStart,
-                    BetaSchedule = ddimOptions.BetaSchedule.Cast<TensorStack.Python.Scheduler.BetaScheduleType, Common.BetaScheduleType>(),
-                    PredictionType = ddimOptions.PredictionType.Cast<TensorStack.Python.Scheduler.PredictionType, Common.PredictionType>(),
-                    TimestepSpacing = ddimOptions.TimestepSpacing.Cast<TensorStack.Python.Scheduler.TimestepSpacingType, Common.TimestepSpacingType>(),
+                    BetaSchedule = ddimOptions.BetaSchedule.Cast<TensorStack.HuggingFace.Scheduler.BetaScheduleType, Common.BetaScheduleType>(),
+                    PredictionType = ddimOptions.PredictionType.Cast<TensorStack.HuggingFace.Scheduler.PredictionType, Common.PredictionType>(),
+                    TimestepSpacing = ddimOptions.TimestepSpacing.Cast<TensorStack.HuggingFace.Scheduler.TimestepSpacingType, Common.TimestepSpacingType>(),
                     StepsOffset = ddimOptions.StepsOffset,
                     ClipSample = ddimOptions.ClipSample,
                     ClipSampleRange = ddimOptions.ClipSampleRange,
@@ -847,61 +847,61 @@ namespace Amuse.Host.PyTorch
                     RescaleBetasZeroSNR = ddimOptions.RescaleBetasZeroSNR,
                 };
             }
-            else if (options is TensorStack.Python.Scheduler.KDPM2Options kdpm2Options)
+            else if (options is TensorStack.HuggingFace.Scheduler.KDPM2Options kdpm2Options)
             {
                 return new Common.SchedulerOptions
                 {
-                    Scheduler = kdpm2Options.Scheduler.Cast<TensorStack.Python.Scheduler.SchedulerType, Common.SchedulerType>(),
+                    Scheduler = kdpm2Options.Scheduler.Cast<TensorStack.HuggingFace.Scheduler.SchedulerType, Common.SchedulerType>(),
                     NumTrainTimesteps = kdpm2Options.NumTrainTimesteps,
                     BetaEnd = kdpm2Options.BetaEnd,
                     BetaStart = kdpm2Options.BetaStart,
-                    BetaSchedule = kdpm2Options.BetaSchedule.Cast<TensorStack.Python.Scheduler.BetaScheduleType, Common.BetaScheduleType>(),
-                    PredictionType = kdpm2Options.PredictionType.Cast<TensorStack.Python.Scheduler.PredictionType, Common.PredictionType>(),
-                    TimestepSpacing = kdpm2Options.TimestepSpacing.Cast<TensorStack.Python.Scheduler.TimestepSpacingType, Common.TimestepSpacingType>(),
+                    BetaSchedule = kdpm2Options.BetaSchedule.Cast<TensorStack.HuggingFace.Scheduler.BetaScheduleType, Common.BetaScheduleType>(),
+                    PredictionType = kdpm2Options.PredictionType.Cast<TensorStack.HuggingFace.Scheduler.PredictionType, Common.PredictionType>(),
+                    TimestepSpacing = kdpm2Options.TimestepSpacing.Cast<TensorStack.HuggingFace.Scheduler.TimestepSpacingType, Common.TimestepSpacingType>(),
                     StepsOffset = kdpm2Options.StepsOffset,
                     UseKarrasSigmas = kdpm2Options.UseKarrasSigmas,
                     UseBetaSigmas = kdpm2Options.UseBetaSigmas,
                     UseExponentialSigmas = kdpm2Options.UseExponentialSigmas,
                 };
             }
-            else if (options is TensorStack.Python.Scheduler.KDPM2AncestralOptions kdpm2AncestralOptions)
+            else if (options is TensorStack.HuggingFace.Scheduler.KDPM2AncestralOptions kdpm2AncestralOptions)
             {
                 return new Common.SchedulerOptions
                 {
-                    Scheduler = kdpm2AncestralOptions.Scheduler.Cast<TensorStack.Python.Scheduler.SchedulerType, Common.SchedulerType>(),
+                    Scheduler = kdpm2AncestralOptions.Scheduler.Cast<TensorStack.HuggingFace.Scheduler.SchedulerType, Common.SchedulerType>(),
                     NumTrainTimesteps = kdpm2AncestralOptions.NumTrainTimesteps,
                     BetaEnd = kdpm2AncestralOptions.BetaEnd,
                     BetaStart = kdpm2AncestralOptions.BetaStart,
-                    BetaSchedule = kdpm2AncestralOptions.BetaSchedule.Cast<TensorStack.Python.Scheduler.BetaScheduleType, Common.BetaScheduleType>(),
-                    PredictionType = kdpm2AncestralOptions.PredictionType.Cast<TensorStack.Python.Scheduler.PredictionType, Common.PredictionType>(),
-                    TimestepSpacing = kdpm2AncestralOptions.TimestepSpacing.Cast<TensorStack.Python.Scheduler.TimestepSpacingType, Common.TimestepSpacingType>(),
+                    BetaSchedule = kdpm2AncestralOptions.BetaSchedule.Cast<TensorStack.HuggingFace.Scheduler.BetaScheduleType, Common.BetaScheduleType>(),
+                    PredictionType = kdpm2AncestralOptions.PredictionType.Cast<TensorStack.HuggingFace.Scheduler.PredictionType, Common.PredictionType>(),
+                    TimestepSpacing = kdpm2AncestralOptions.TimestepSpacing.Cast<TensorStack.HuggingFace.Scheduler.TimestepSpacingType, Common.TimestepSpacingType>(),
                     StepsOffset = kdpm2AncestralOptions.StepsOffset,
                     UseKarrasSigmas = kdpm2AncestralOptions.UseKarrasSigmas,
                     UseBetaSigmas = kdpm2AncestralOptions.UseBetaSigmas,
                     UseExponentialSigmas = kdpm2AncestralOptions.UseExponentialSigmas,
                 };
             }
-            else if (options is TensorStack.Python.Scheduler.DDPMWuerstchenOptions ddpmWuerstchenOptions)
+            else if (options is TensorStack.HuggingFace.Scheduler.DDPMWuerstchenOptions ddpmWuerstchenOptions)
             {
                 return new Common.SchedulerOptions
                 {
-                    Scheduler = ddpmWuerstchenOptions.Scheduler.Cast<TensorStack.Python.Scheduler.SchedulerType, Common.SchedulerType>(),
+                    Scheduler = ddpmWuerstchenOptions.Scheduler.Cast<TensorStack.HuggingFace.Scheduler.SchedulerType, Common.SchedulerType>(),
                     SValue = ddpmWuerstchenOptions.S,
                     Scaler = ddpmWuerstchenOptions.Scaler,
                 };
             }
-            else if (options is TensorStack.Python.Scheduler.LCMOptions lcmOptions)
+            else if (options is TensorStack.HuggingFace.Scheduler.LCMOptions lcmOptions)
             {
                 return new Common.SchedulerOptions
                 {
-                    Scheduler = lcmOptions.Scheduler.Cast<TensorStack.Python.Scheduler.SchedulerType, Common.SchedulerType>(),
+                    Scheduler = lcmOptions.Scheduler.Cast<TensorStack.HuggingFace.Scheduler.SchedulerType, Common.SchedulerType>(),
                     NumTrainTimesteps = lcmOptions.NumTrainTimesteps,
                     OriginalInferenceSteps = lcmOptions.OriginalInferenceSteps,
                     BetaEnd = lcmOptions.BetaEnd,
                     BetaStart = lcmOptions.BetaStart,
-                    BetaSchedule = lcmOptions.BetaSchedule.Cast<TensorStack.Python.Scheduler.BetaScheduleType, Common.BetaScheduleType>(),
-                    PredictionType = lcmOptions.PredictionType.Cast<TensorStack.Python.Scheduler.PredictionType, Common.PredictionType>(),
-                    TimestepSpacing = lcmOptions.TimestepSpacing.Cast<TensorStack.Python.Scheduler.TimestepSpacingType, Common.TimestepSpacingType>(),
+                    BetaSchedule = lcmOptions.BetaSchedule.Cast<TensorStack.HuggingFace.Scheduler.BetaScheduleType, Common.BetaScheduleType>(),
+                    PredictionType = lcmOptions.PredictionType.Cast<TensorStack.HuggingFace.Scheduler.PredictionType, Common.PredictionType>(),
+                    TimestepSpacing = lcmOptions.TimestepSpacing.Cast<TensorStack.HuggingFace.Scheduler.TimestepSpacingType, Common.TimestepSpacingType>(),
                     StepsOffset = lcmOptions.StepsOffset,
                     ClipSample = lcmOptions.ClipSample,
                     ClipSampleRange = lcmOptions.ClipSampleRange,
@@ -913,17 +913,17 @@ namespace Amuse.Host.PyTorch
                     RescaleBetasZeroSNR = lcmOptions.RescaleBetasZeroSNR,
                 };
             }
-            else if (options is TensorStack.Python.Scheduler.FlowMatchEulerOptions flowMatchEulerOptions)
+            else if (options is TensorStack.HuggingFace.Scheduler.FlowMatchEulerOptions flowMatchEulerOptions)
             {
                 return new Common.SchedulerOptions
                 {
-                    Scheduler = flowMatchEulerOptions.Scheduler.Cast<TensorStack.Python.Scheduler.SchedulerType, Common.SchedulerType>(),
+                    Scheduler = flowMatchEulerOptions.Scheduler.Cast<TensorStack.HuggingFace.Scheduler.SchedulerType, Common.SchedulerType>(),
                     NumTrainTimesteps = flowMatchEulerOptions.NumTrainTimesteps,
                     Shift = flowMatchEulerOptions.Shift,
                     BaseShift = flowMatchEulerOptions.BaseShift ?? 0,
                     MaxShift = flowMatchEulerOptions.MaxShift ?? 0,
                     ShiftTerminal = flowMatchEulerOptions.ShiftTerminal,
-                    TimeShiftType = flowMatchEulerOptions.TimeShiftType.Cast<TensorStack.Python.Scheduler.TimeShiftType, Common.TimeShiftType>(),
+                    TimeShiftType = flowMatchEulerOptions.TimeShiftType.Cast<TensorStack.HuggingFace.Scheduler.TimeShiftType, Common.TimeShiftType>(),
                     UseDynamicShifting = flowMatchEulerOptions.UseDynamicShifting,
                     BaseImageSeqLen = flowMatchEulerOptions.BaseImageSeqLen,
                     MaxImageSeqLen = flowMatchEulerOptions.MaxImageSeqLen,
@@ -934,42 +934,42 @@ namespace Amuse.Host.PyTorch
                     UseExponentialSigmas = flowMatchEulerOptions.UseExponentialSigmas,
                 };
             }
-            else if (options is TensorStack.Python.Scheduler.FlowMatchHeunOptions flowMatchHeunOptions)
+            else if (options is TensorStack.HuggingFace.Scheduler.FlowMatchHeunOptions flowMatchHeunOptions)
             {
                 return new Common.SchedulerOptions
                 {
-                    Scheduler = flowMatchHeunOptions.Scheduler.Cast<TensorStack.Python.Scheduler.SchedulerType, Common.SchedulerType>(),
+                    Scheduler = flowMatchHeunOptions.Scheduler.Cast<TensorStack.HuggingFace.Scheduler.SchedulerType, Common.SchedulerType>(),
                     NumTrainTimesteps = flowMatchHeunOptions.NumTrainTimesteps,
                     Shift = flowMatchHeunOptions.Shift,
                 };
             }
-            else if (options is TensorStack.Python.Scheduler.PNDMOptions pndmOptions)
+            else if (options is TensorStack.HuggingFace.Scheduler.PNDMOptions pndmOptions)
             {
                 return new Common.SchedulerOptions
                 {
-                    Scheduler = pndmOptions.Scheduler.Cast<TensorStack.Python.Scheduler.SchedulerType, Common.SchedulerType>(),
+                    Scheduler = pndmOptions.Scheduler.Cast<TensorStack.HuggingFace.Scheduler.SchedulerType, Common.SchedulerType>(),
                     NumTrainTimesteps = pndmOptions.NumTrainTimesteps,
                     BetaEnd = pndmOptions.BetaEnd,
                     BetaStart = pndmOptions.BetaStart,
-                    BetaSchedule = pndmOptions.BetaSchedule.Cast<TensorStack.Python.Scheduler.BetaScheduleType, Common.BetaScheduleType>(),
-                    PredictionType = pndmOptions.PredictionType.Cast<TensorStack.Python.Scheduler.PredictionType, Common.PredictionType>(),
-                    TimestepSpacing = pndmOptions.TimestepSpacing.Cast<TensorStack.Python.Scheduler.TimestepSpacingType, Common.TimestepSpacingType>(),
+                    BetaSchedule = pndmOptions.BetaSchedule.Cast<TensorStack.HuggingFace.Scheduler.BetaScheduleType, Common.BetaScheduleType>(),
+                    PredictionType = pndmOptions.PredictionType.Cast<TensorStack.HuggingFace.Scheduler.PredictionType, Common.PredictionType>(),
+                    TimestepSpacing = pndmOptions.TimestepSpacing.Cast<TensorStack.HuggingFace.Scheduler.TimestepSpacingType, Common.TimestepSpacingType>(),
                     StepsOffset = pndmOptions.StepsOffset,
                     SetAlphaToOne = pndmOptions.SetAlphaToOne,
                     SkipPrkSteps = pndmOptions.SkipPrkSteps,
                 };
             }
-            else if (options is TensorStack.Python.Scheduler.HeunOptions heunOptions)
+            else if (options is TensorStack.HuggingFace.Scheduler.HeunOptions heunOptions)
             {
                 return new Common.SchedulerOptions
                 {
-                    Scheduler = heunOptions.Scheduler.Cast<TensorStack.Python.Scheduler.SchedulerType, Common.SchedulerType>(),
+                    Scheduler = heunOptions.Scheduler.Cast<TensorStack.HuggingFace.Scheduler.SchedulerType, Common.SchedulerType>(),
                     NumTrainTimesteps = heunOptions.NumTrainTimesteps,
                     BetaEnd = heunOptions.BetaEnd,
                     BetaStart = heunOptions.BetaStart,
-                    BetaSchedule = heunOptions.BetaSchedule.Cast<TensorStack.Python.Scheduler.BetaScheduleType, Common.BetaScheduleType>(),
-                    PredictionType = heunOptions.PredictionType.Cast<TensorStack.Python.Scheduler.PredictionType, Common.PredictionType>(),
-                    TimestepSpacing = heunOptions.TimestepSpacing.Cast<TensorStack.Python.Scheduler.TimestepSpacingType, Common.TimestepSpacingType>(),
+                    BetaSchedule = heunOptions.BetaSchedule.Cast<TensorStack.HuggingFace.Scheduler.BetaScheduleType, Common.BetaScheduleType>(),
+                    PredictionType = heunOptions.PredictionType.Cast<TensorStack.HuggingFace.Scheduler.PredictionType, Common.PredictionType>(),
+                    TimestepSpacing = heunOptions.TimestepSpacing.Cast<TensorStack.HuggingFace.Scheduler.TimestepSpacingType, Common.TimestepSpacingType>(),
                     StepsOffset = heunOptions.StepsOffset,
                     ClipSample = heunOptions.ClipSample,
                     ClipSampleRange = heunOptions.ClipSampleRange,
@@ -978,29 +978,29 @@ namespace Amuse.Host.PyTorch
                     UseExponentialSigmas = heunOptions.UseExponentialSigmas,
                 };
             }
-            else if (options is TensorStack.Python.Scheduler.UniPCMultistepOptions unipcMultistepOptions)
+            else if (options is TensorStack.HuggingFace.Scheduler.UniPCMultistepOptions unipcMultistepOptions)
             {
                 return new Common.SchedulerOptions
                 {
-                    Scheduler = unipcMultistepOptions.Scheduler.Cast<TensorStack.Python.Scheduler.SchedulerType, Common.SchedulerType>(),
+                    Scheduler = unipcMultistepOptions.Scheduler.Cast<TensorStack.HuggingFace.Scheduler.SchedulerType, Common.SchedulerType>(),
                     NumTrainTimesteps = unipcMultistepOptions.NumTrainTimesteps,
                     BetaEnd = unipcMultistepOptions.BetaEnd,
                     BetaStart = unipcMultistepOptions.BetaStart,
-                    BetaSchedule = unipcMultistepOptions.BetaSchedule.Cast<TensorStack.Python.Scheduler.BetaScheduleType, Common.BetaScheduleType>(),
-                    PredictionType = unipcMultistepOptions.PredictionType.Cast<TensorStack.Python.Scheduler.PredictionType, Common.PredictionType>(),
-                    TimestepSpacing = unipcMultistepOptions.TimestepSpacing.Cast<TensorStack.Python.Scheduler.TimestepSpacingType, Common.TimestepSpacingType>(),
+                    BetaSchedule = unipcMultistepOptions.BetaSchedule.Cast<TensorStack.HuggingFace.Scheduler.BetaScheduleType, Common.BetaScheduleType>(),
+                    PredictionType = unipcMultistepOptions.PredictionType.Cast<TensorStack.HuggingFace.Scheduler.PredictionType, Common.PredictionType>(),
+                    TimestepSpacing = unipcMultistepOptions.TimestepSpacing.Cast<TensorStack.HuggingFace.Scheduler.TimestepSpacingType, Common.TimestepSpacingType>(),
                     StepsOffset = unipcMultistepOptions.StepsOffset,
                     Thresholding = unipcMultistepOptions.Thresholding,
                     DynamicThresholdingRatio = unipcMultistepOptions.DynamicThresholdingRatio,
                     SampleMaxValue = unipcMultistepOptions.SampleMaxValue,
                     SigmaMin = unipcMultistepOptions.SigmaMin ?? 0,
                     SigmaMax = unipcMultistepOptions.SigmaMax ?? 0,
-                    FinalSigmasType = unipcMultistepOptions.FinalSigmasType.Cast<TensorStack.Python.Scheduler.FinalSigmasType, Common.FinalSigmasType>(),
-                    SolverType = unipcMultistepOptions.SolverType.Cast<TensorStack.Python.Scheduler.SolverType, Common.SolverType>(),
+                    FinalSigmasType = unipcMultistepOptions.FinalSigmasType.Cast<TensorStack.HuggingFace.Scheduler.FinalSigmasType, Common.FinalSigmasType>(),
+                    SolverType = unipcMultistepOptions.SolverType.Cast<TensorStack.HuggingFace.Scheduler.SolverType, Common.SolverType>(),
                     SolverOrder = unipcMultistepOptions.SolverOrder,
                     LowerOrderFinal = unipcMultistepOptions.LowerOrderFinal,
                     ShiftTerminal = unipcMultistepOptions.ShiftTerminal,
-                    TimeShiftType = unipcMultistepOptions.TimeShiftType.Cast<TensorStack.Python.Scheduler.TimeShiftType, Common.TimeShiftType>(),
+                    TimeShiftType = unipcMultistepOptions.TimeShiftType.Cast<TensorStack.HuggingFace.Scheduler.TimeShiftType, Common.TimeShiftType>(),
                     UseDynamicShifting = unipcMultistepOptions.UseDynamicShifting,
                     FlowShift = unipcMultistepOptions.FlowShift,
                     PredictX0 = unipcMultistepOptions.PredictX0,
@@ -1011,31 +1011,31 @@ namespace Amuse.Host.PyTorch
                     RescaleBetasZeroSNR = unipcMultistepOptions.RescaleBetasZeroSNR,
                 };
             }
-            else if (options is TensorStack.Python.Scheduler.DPMSolverMultistepOptions dpmSolverMultistepOptions)
+            else if (options is TensorStack.HuggingFace.Scheduler.DPMSolverMultistepOptions dpmSolverMultistepOptions)
             {
                 return new Common.SchedulerOptions
                 {
-                    Scheduler = dpmSolverMultistepOptions.Scheduler.Cast<TensorStack.Python.Scheduler.SchedulerType, Common.SchedulerType>(),
+                    Scheduler = dpmSolverMultistepOptions.Scheduler.Cast<TensorStack.HuggingFace.Scheduler.SchedulerType, Common.SchedulerType>(),
                     NumTrainTimesteps = dpmSolverMultistepOptions.NumTrainTimesteps,
                     BetaEnd = dpmSolverMultistepOptions.BetaEnd,
                     BetaStart = dpmSolverMultistepOptions.BetaStart,
-                    BetaSchedule = dpmSolverMultistepOptions.BetaSchedule.Cast<TensorStack.Python.Scheduler.BetaScheduleType, Common.BetaScheduleType>(),
-                    PredictionType = dpmSolverMultistepOptions.PredictionType.Cast<TensorStack.Python.Scheduler.PredictionType, Common.PredictionType>(),
-                    TimestepSpacing = dpmSolverMultistepOptions.TimestepSpacing.Cast<TensorStack.Python.Scheduler.TimestepSpacingType, Common.TimestepSpacingType>(),
+                    BetaSchedule = dpmSolverMultistepOptions.BetaSchedule.Cast<TensorStack.HuggingFace.Scheduler.BetaScheduleType, Common.BetaScheduleType>(),
+                    PredictionType = dpmSolverMultistepOptions.PredictionType.Cast<TensorStack.HuggingFace.Scheduler.PredictionType, Common.PredictionType>(),
+                    TimestepSpacing = dpmSolverMultistepOptions.TimestepSpacing.Cast<TensorStack.HuggingFace.Scheduler.TimestepSpacingType, Common.TimestepSpacingType>(),
                     StepsOffset = dpmSolverMultistepOptions.StepsOffset,
                     Thresholding = dpmSolverMultistepOptions.Thresholding,
                     DynamicThresholdingRatio = dpmSolverMultistepOptions.DynamicThresholdingRatio,
                     SampleMaxValue = dpmSolverMultistepOptions.SampleMaxValue,
                     SolverOrder = dpmSolverMultistepOptions.SolverOrder,
-                    SolverType = dpmSolverMultistepOptions.SolverType.Cast<TensorStack.Python.Scheduler.SolverType, Common.SolverType>(),
+                    SolverType = dpmSolverMultistepOptions.SolverType.Cast<TensorStack.HuggingFace.Scheduler.SolverType, Common.SolverType>(),
                     LowerOrderFinal = dpmSolverMultistepOptions.LowerOrderFinal,
                     FlowShift = dpmSolverMultistepOptions.FlowShift,
-                    TimeShiftType = dpmSolverMultistepOptions.TimeShiftType.Cast<TensorStack.Python.Scheduler.TimeShiftType, Common.TimeShiftType>(),
-                    FinalSigmasType = dpmSolverMultistepOptions.FinalSigmasType.Cast<TensorStack.Python.Scheduler.FinalSigmasType, Common.FinalSigmasType>(),
+                    TimeShiftType = dpmSolverMultistepOptions.TimeShiftType.Cast<TensorStack.HuggingFace.Scheduler.TimeShiftType, Common.TimeShiftType>(),
+                    FinalSigmasType = dpmSolverMultistepOptions.FinalSigmasType.Cast<TensorStack.HuggingFace.Scheduler.FinalSigmasType, Common.FinalSigmasType>(),
                     UseDynamicShifting = dpmSolverMultistepOptions.UseDynamicShifting,
                     UseFlowSigmas = dpmSolverMultistepOptions.UseFlowSigmas,
                     EulerAtFinal = dpmSolverMultistepOptions.EulerAtFinal,
-                    AlgorithmType = dpmSolverMultistepOptions.AlgorithmType.Cast<TensorStack.Python.Scheduler.AlgorithmType, Common.AlgorithmType>(),
+                    AlgorithmType = dpmSolverMultistepOptions.AlgorithmType.Cast<TensorStack.HuggingFace.Scheduler.AlgorithmType, Common.AlgorithmType>(),
                     UseLuLambdas = dpmSolverMultistepOptions.UseLuLambdas,
                     UseKarrasSigmas = dpmSolverMultistepOptions.UseKarrasSigmas,
                     UseBetaSigmas = dpmSolverMultistepOptions.UseBetaSigmas,
@@ -1043,45 +1043,45 @@ namespace Amuse.Host.PyTorch
                     RescaleBetasZeroSNR = dpmSolverMultistepOptions.RescaleBetasZeroSNR,
                 };
             }
-            else if (options is TensorStack.Python.Scheduler.DPMSolverSinglestepOptions dpmSolverSinglestepOptions)
+            else if (options is TensorStack.HuggingFace.Scheduler.DPMSolverSinglestepOptions dpmSolverSinglestepOptions)
             {
                 return new Common.SchedulerOptions
                 {
-                    Scheduler = dpmSolverSinglestepOptions.Scheduler.Cast<TensorStack.Python.Scheduler.SchedulerType, Common.SchedulerType>(),
+                    Scheduler = dpmSolverSinglestepOptions.Scheduler.Cast<TensorStack.HuggingFace.Scheduler.SchedulerType, Common.SchedulerType>(),
                     NumTrainTimesteps = dpmSolverSinglestepOptions.NumTrainTimesteps,
                     BetaEnd = dpmSolverSinglestepOptions.BetaEnd,
                     BetaStart = dpmSolverSinglestepOptions.BetaStart,
-                    BetaSchedule = dpmSolverSinglestepOptions.BetaSchedule.Cast<TensorStack.Python.Scheduler.BetaScheduleType, Common.BetaScheduleType>(),
-                    PredictionType = dpmSolverSinglestepOptions.PredictionType.Cast<TensorStack.Python.Scheduler.PredictionType, Common.PredictionType>(),
-                    TimestepSpacing = dpmSolverSinglestepOptions.TimestepSpacing.Cast<TensorStack.Python.Scheduler.TimestepSpacingType, Common.TimestepSpacingType>(),
+                    BetaSchedule = dpmSolverSinglestepOptions.BetaSchedule.Cast<TensorStack.HuggingFace.Scheduler.BetaScheduleType, Common.BetaScheduleType>(),
+                    PredictionType = dpmSolverSinglestepOptions.PredictionType.Cast<TensorStack.HuggingFace.Scheduler.PredictionType, Common.PredictionType>(),
+                    TimestepSpacing = dpmSolverSinglestepOptions.TimestepSpacing.Cast<TensorStack.HuggingFace.Scheduler.TimestepSpacingType, Common.TimestepSpacingType>(),
                     StepsOffset = dpmSolverSinglestepOptions.StepsOffset,
                     Thresholding = dpmSolverSinglestepOptions.Thresholding,
                     DynamicThresholdingRatio = dpmSolverSinglestepOptions.DynamicThresholdingRatio,
                     SampleMaxValue = dpmSolverSinglestepOptions.SampleMaxValue,
                     SolverOrder = dpmSolverSinglestepOptions.SolverOrder,
-                    SolverType = dpmSolverSinglestepOptions.SolverType.Cast<TensorStack.Python.Scheduler.SolverType, Common.SolverType>(),
+                    SolverType = dpmSolverSinglestepOptions.SolverType.Cast<TensorStack.HuggingFace.Scheduler.SolverType, Common.SolverType>(),
                     LowerOrderFinal = dpmSolverSinglestepOptions.LowerOrderFinal,
                     FlowShift = dpmSolverSinglestepOptions.FlowShift,
-                    VarianceType = dpmSolverSinglestepOptions.VarianceType.Cast<TensorStack.Python.Scheduler.VarianceType, Common.VarianceType>(),
-                    AlgorithmType = dpmSolverSinglestepOptions.AlgorithmType.Cast<TensorStack.Python.Scheduler.AlgorithmType, Common.AlgorithmType>(),
-                    FinalSigmasType = dpmSolverSinglestepOptions.FinalSigmasType.Cast<TensorStack.Python.Scheduler.FinalSigmasType, Common.FinalSigmasType>(),
+                    VarianceType = dpmSolverSinglestepOptions.VarianceType.Cast<TensorStack.HuggingFace.Scheduler.VarianceType, Common.VarianceType>(),
+                    AlgorithmType = dpmSolverSinglestepOptions.AlgorithmType.Cast<TensorStack.HuggingFace.Scheduler.AlgorithmType, Common.AlgorithmType>(),
+                    FinalSigmasType = dpmSolverSinglestepOptions.FinalSigmasType.Cast<TensorStack.HuggingFace.Scheduler.FinalSigmasType, Common.FinalSigmasType>(),
                     UseFlowSigmas = dpmSolverSinglestepOptions.UseFlowSigmas,
                     UseKarrasSigmas = dpmSolverSinglestepOptions.UseKarrasSigmas,
                     UseBetaSigmas = dpmSolverSinglestepOptions.UseBetaSigmas,
                     UseExponentialSigmas = dpmSolverSinglestepOptions.UseExponentialSigmas,
                 };
             }
-            else if (options is TensorStack.Python.Scheduler.DPMSolverSDEOptions dpmSolverSDEOptions)
+            else if (options is TensorStack.HuggingFace.Scheduler.DPMSolverSDEOptions dpmSolverSDEOptions)
             {
                 return new Common.SchedulerOptions
                 {
-                    Scheduler = dpmSolverSDEOptions.Scheduler.Cast<TensorStack.Python.Scheduler.SchedulerType, Common.SchedulerType>(),
+                    Scheduler = dpmSolverSDEOptions.Scheduler.Cast<TensorStack.HuggingFace.Scheduler.SchedulerType, Common.SchedulerType>(),
                     NumTrainTimesteps = dpmSolverSDEOptions.NumTrainTimesteps,
                     BetaEnd = dpmSolverSDEOptions.BetaEnd,
                     BetaStart = dpmSolverSDEOptions.BetaStart,
-                    BetaSchedule = dpmSolverSDEOptions.BetaSchedule.Cast<TensorStack.Python.Scheduler.BetaScheduleType, Common.BetaScheduleType>(),
-                    PredictionType = dpmSolverSDEOptions.PredictionType.Cast<TensorStack.Python.Scheduler.PredictionType, Common.PredictionType>(),
-                    TimestepSpacing = dpmSolverSDEOptions.TimestepSpacing.Cast<TensorStack.Python.Scheduler.TimestepSpacingType, Common.TimestepSpacingType>(),
+                    BetaSchedule = dpmSolverSDEOptions.BetaSchedule.Cast<TensorStack.HuggingFace.Scheduler.BetaScheduleType, Common.BetaScheduleType>(),
+                    PredictionType = dpmSolverSDEOptions.PredictionType.Cast<TensorStack.HuggingFace.Scheduler.PredictionType, Common.PredictionType>(),
+                    TimestepSpacing = dpmSolverSDEOptions.TimestepSpacing.Cast<TensorStack.HuggingFace.Scheduler.TimestepSpacingType, Common.TimestepSpacingType>(),
                     StepsOffset = dpmSolverSDEOptions.StepsOffset,
                     UseKarrasSigmas = dpmSolverSDEOptions.UseKarrasSigmas,
                     UseBetaSigmas = dpmSolverSDEOptions.UseBetaSigmas,
@@ -1089,27 +1089,27 @@ namespace Amuse.Host.PyTorch
                     NoiseSamplerSeed = dpmSolverSDEOptions.NoiseSamplerSeed,
                 };
             }
-            else if (options is TensorStack.Python.Scheduler.DEISMultistepOptions deisMultistepOptions)
+            else if (options is TensorStack.HuggingFace.Scheduler.DEISMultistepOptions deisMultistepOptions)
             {
                 return new Common.SchedulerOptions
                 {
-                    Scheduler = deisMultistepOptions.Scheduler.Cast<TensorStack.Python.Scheduler.SchedulerType, Common.SchedulerType>(),
+                    Scheduler = deisMultistepOptions.Scheduler.Cast<TensorStack.HuggingFace.Scheduler.SchedulerType, Common.SchedulerType>(),
                     NumTrainTimesteps = deisMultistepOptions.NumTrainTimesteps,
                     BetaEnd = deisMultistepOptions.BetaEnd,
                     BetaStart = deisMultistepOptions.BetaStart,
-                    BetaSchedule = deisMultistepOptions.BetaSchedule.Cast<TensorStack.Python.Scheduler.BetaScheduleType, Common.BetaScheduleType>(),
-                    PredictionType = deisMultistepOptions.PredictionType.Cast<TensorStack.Python.Scheduler.PredictionType, Common.PredictionType>(),
-                    TimestepSpacing = deisMultistepOptions.TimestepSpacing.Cast<TensorStack.Python.Scheduler.TimestepSpacingType, Common.TimestepSpacingType>(),
+                    BetaSchedule = deisMultistepOptions.BetaSchedule.Cast<TensorStack.HuggingFace.Scheduler.BetaScheduleType, Common.BetaScheduleType>(),
+                    PredictionType = deisMultistepOptions.PredictionType.Cast<TensorStack.HuggingFace.Scheduler.PredictionType, Common.PredictionType>(),
+                    TimestepSpacing = deisMultistepOptions.TimestepSpacing.Cast<TensorStack.HuggingFace.Scheduler.TimestepSpacingType, Common.TimestepSpacingType>(),
                     StepsOffset = deisMultistepOptions.StepsOffset,
                     Thresholding = deisMultistepOptions.Thresholding,
                     DynamicThresholdingRatio = deisMultistepOptions.DynamicThresholdingRatio,
                     SampleMaxValue = deisMultistepOptions.SampleMaxValue,
                     SolverOrder = deisMultistepOptions.SolverOrder,
-                    SolverType = deisMultistepOptions.SolverType.Cast<TensorStack.Python.Scheduler.SolverType, Common.SolverType>(),
+                    SolverType = deisMultistepOptions.SolverType.Cast<TensorStack.HuggingFace.Scheduler.SolverType, Common.SolverType>(),
                     LowerOrderFinal = deisMultistepOptions.LowerOrderFinal,
                     FlowShift = deisMultistepOptions.FlowShift,
-                    TimeShiftType = deisMultistepOptions.TimeShiftType.Cast<TensorStack.Python.Scheduler.TimeShiftType, Common.TimeShiftType>(),
-                    AlgorithmType = deisMultistepOptions.AlgorithmType.Cast<TensorStack.Python.Scheduler.AlgorithmType, Common.AlgorithmType>(),
+                    TimeShiftType = deisMultistepOptions.TimeShiftType.Cast<TensorStack.HuggingFace.Scheduler.TimeShiftType, Common.TimeShiftType>(),
+                    AlgorithmType = deisMultistepOptions.AlgorithmType.Cast<TensorStack.HuggingFace.Scheduler.AlgorithmType, Common.AlgorithmType>(),
                     UseDynamicShifting = deisMultistepOptions.UseDynamicShifting,
                     UseFlowSigmas = deisMultistepOptions.UseFlowSigmas,
                     UseKarrasSigmas = deisMultistepOptions.UseKarrasSigmas,
@@ -1117,56 +1117,56 @@ namespace Amuse.Host.PyTorch
                     UseExponentialSigmas = deisMultistepOptions.UseExponentialSigmas,
                 };
             }
-            else if (options is TensorStack.Python.Scheduler.EDMEulerOptions edmEulerOptions)
+            else if (options is TensorStack.HuggingFace.Scheduler.EDMEulerOptions edmEulerOptions)
             {
                 return new Common.SchedulerOptions
                 {
-                    Scheduler = edmEulerOptions.Scheduler.Cast<TensorStack.Python.Scheduler.SchedulerType, Common.SchedulerType>(),
+                    Scheduler = edmEulerOptions.Scheduler.Cast<TensorStack.HuggingFace.Scheduler.SchedulerType, Common.SchedulerType>(),
                     NumTrainTimesteps = edmEulerOptions.NumTrainTimesteps,
-                    PredictionType = edmEulerOptions.PredictionType.Cast<TensorStack.Python.Scheduler.PredictionType, Common.PredictionType>(),
+                    PredictionType = edmEulerOptions.PredictionType.Cast<TensorStack.HuggingFace.Scheduler.PredictionType, Common.PredictionType>(),
                     SigmaMax = edmEulerOptions.SigmaMax,
                     SigmaMin = edmEulerOptions.SigmaMin,
-                    FinalSigmasType = edmEulerOptions.FinalSigmasType.Cast<TensorStack.Python.Scheduler.FinalSigmasType, Common.FinalSigmasType>(),
+                    FinalSigmasType = edmEulerOptions.FinalSigmasType.Cast<TensorStack.HuggingFace.Scheduler.FinalSigmasType, Common.FinalSigmasType>(),
                     Rho = edmEulerOptions.Rho,
                     SigmaData = edmEulerOptions.SigmaData,
-                    SigmaScheduleType = edmEulerOptions.SigmaScheduleType.Cast<TensorStack.Python.Scheduler.SigmaScheduleType, Common.SigmaScheduleType>(),
+                    SigmaScheduleType = edmEulerOptions.SigmaScheduleType.Cast<TensorStack.HuggingFace.Scheduler.SigmaScheduleType, Common.SigmaScheduleType>(),
                 };
             }
-            else if (options is TensorStack.Python.Scheduler.EDMDPMSolverMultistepOptions edmDPMSolverMultistep)
+            else if (options is TensorStack.HuggingFace.Scheduler.EDMDPMSolverMultistepOptions edmDPMSolverMultistep)
             {
                 return new Common.SchedulerOptions
                 {
-                    Scheduler = edmDPMSolverMultistep.Scheduler.Cast<TensorStack.Python.Scheduler.SchedulerType, Common.SchedulerType>(),
+                    Scheduler = edmDPMSolverMultistep.Scheduler.Cast<TensorStack.HuggingFace.Scheduler.SchedulerType, Common.SchedulerType>(),
                     NumTrainTimesteps = edmDPMSolverMultistep.NumTrainTimesteps,
-                    PredictionType = edmDPMSolverMultistep.PredictionType.Cast<TensorStack.Python.Scheduler.PredictionType, Common.PredictionType>(),
-                    AlgorithmType = edmDPMSolverMultistep.AlgorithmType.Cast<TensorStack.Python.Scheduler.AlgorithmType, Common.AlgorithmType>(),
+                    PredictionType = edmDPMSolverMultistep.PredictionType.Cast<TensorStack.HuggingFace.Scheduler.PredictionType, Common.PredictionType>(),
+                    AlgorithmType = edmDPMSolverMultistep.AlgorithmType.Cast<TensorStack.HuggingFace.Scheduler.AlgorithmType, Common.AlgorithmType>(),
                     EulerAtFinal = edmDPMSolverMultistep.EulerAtFinal,
                     SigmaMax = edmDPMSolverMultistep.SigmaMax,
                     SigmaMin = edmDPMSolverMultistep.SigmaMin,
-                    FinalSigmasType = edmDPMSolverMultistep.FinalSigmasType.Cast<TensorStack.Python.Scheduler.FinalSigmasType, Common.FinalSigmasType>(),
+                    FinalSigmasType = edmDPMSolverMultistep.FinalSigmasType.Cast<TensorStack.HuggingFace.Scheduler.FinalSigmasType, Common.FinalSigmasType>(),
                     Rho = edmDPMSolverMultistep.Rho,
                     SigmaData = edmDPMSolverMultistep.SigmaData,
-                    SigmaScheduleType = edmDPMSolverMultistep.SigmaScheduleType.Cast<TensorStack.Python.Scheduler.SigmaScheduleType, Common.SigmaScheduleType>(),
+                    SigmaScheduleType = edmDPMSolverMultistep.SigmaScheduleType.Cast<TensorStack.HuggingFace.Scheduler.SigmaScheduleType, Common.SigmaScheduleType>(),
                     Thresholding = edmDPMSolverMultistep.Thresholding,
                     DynamicThresholdingRatio = edmDPMSolverMultistep.DynamicThresholdingRatio,
                     SampleMaxValue = edmDPMSolverMultistep.SampleMaxValue,
                     SolverOrder = edmDPMSolverMultistep.SolverOrder,
-                    SolverType = edmDPMSolverMultistep.SolverType.Cast<TensorStack.Python.Scheduler.SolverType, Common.SolverType>(),
+                    SolverType = edmDPMSolverMultistep.SolverType.Cast<TensorStack.HuggingFace.Scheduler.SolverType, Common.SolverType>(),
                     LowerOrderFinal = edmDPMSolverMultistep.LowerOrderFinal,
                 };
             }
-            else if (options is TensorStack.Python.Scheduler.FlowMatchLCMOptions flowMatchLCMOptions)
+            else if (options is TensorStack.HuggingFace.Scheduler.FlowMatchLCMOptions flowMatchLCMOptions)
             {
                 return new Common.SchedulerOptions
                 {
-                    Scheduler = flowMatchLCMOptions.Scheduler.Cast<TensorStack.Python.Scheduler.SchedulerType, Common.SchedulerType>(),
+                    Scheduler = flowMatchLCMOptions.Scheduler.Cast<TensorStack.HuggingFace.Scheduler.SchedulerType, Common.SchedulerType>(),
                     NumTrainTimesteps = flowMatchLCMOptions.NumTrainTimesteps,
                     Shift = flowMatchLCMOptions.Shift,
                     BaseShift = flowMatchLCMOptions.BaseShift ?? 0,
                     MaxShift = flowMatchLCMOptions.MaxShift ?? 0,
                     ShiftTerminal = flowMatchLCMOptions.ShiftTerminal,
-                    TimeShiftType = flowMatchLCMOptions.TimeShiftType.Cast<TensorStack.Python.Scheduler.TimeShiftType, Common.TimeShiftType>(),
-                    UpscaleMode = flowMatchLCMOptions.UpscaleMode.Cast<TensorStack.Python.Scheduler.UpscaleModeType, Common.UpscaleModeType>(),
+                    TimeShiftType = flowMatchLCMOptions.TimeShiftType.Cast<TensorStack.HuggingFace.Scheduler.TimeShiftType, Common.TimeShiftType>(),
+                    UpscaleMode = flowMatchLCMOptions.UpscaleMode.Cast<TensorStack.HuggingFace.Scheduler.UpscaleModeType, Common.UpscaleModeType>(),
                     UseDynamicShifting = flowMatchLCMOptions.UseDynamicShifting,
                     InvertSigmas = flowMatchLCMOptions.InvertSigmas,
                     BaseImageSeqLen = flowMatchLCMOptions.BaseImageSeqLen,     // TODO
@@ -1177,25 +1177,25 @@ namespace Amuse.Host.PyTorch
                     UseExponentialSigmas = flowMatchLCMOptions.UseExponentialSigmas,
                 };
             }
-            else if (options is TensorStack.Python.Scheduler.IPNDMOptions ipndmOptions)
+            else if (options is TensorStack.HuggingFace.Scheduler.IPNDMOptions ipndmOptions)
             {
                 return new Common.SchedulerOptions
                 {
-                    Scheduler = ipndmOptions.Scheduler.Cast<TensorStack.Python.Scheduler.SchedulerType, Common.SchedulerType>(),
+                    Scheduler = ipndmOptions.Scheduler.Cast<TensorStack.HuggingFace.Scheduler.SchedulerType, Common.SchedulerType>(),
                     NumTrainTimesteps = ipndmOptions.NumTrainTimesteps,
                 };
             }
-            else if (options is TensorStack.Python.Scheduler.CogVideoXDDIMOptions cogDDIMOptions)
+            else if (options is TensorStack.HuggingFace.Scheduler.CogVideoXDDIMOptions cogDDIMOptions)
             {
                 return new Common.SchedulerOptions
                 {
-                    Scheduler = cogDDIMOptions.Scheduler.Cast<TensorStack.Python.Scheduler.SchedulerType, Common.SchedulerType>(),
+                    Scheduler = cogDDIMOptions.Scheduler.Cast<TensorStack.HuggingFace.Scheduler.SchedulerType, Common.SchedulerType>(),
                     NumTrainTimesteps = cogDDIMOptions.NumTrainTimesteps,
                     BetaEnd = cogDDIMOptions.BetaEnd,
                     BetaStart = cogDDIMOptions.BetaStart,
-                    BetaSchedule = cogDDIMOptions.BetaSchedule.Cast<TensorStack.Python.Scheduler.BetaScheduleType, Common.BetaScheduleType>(),
-                    PredictionType = cogDDIMOptions.PredictionType.Cast<TensorStack.Python.Scheduler.PredictionType, Common.PredictionType>(),
-                    TimestepSpacing = cogDDIMOptions.TimestepSpacing.Cast<TensorStack.Python.Scheduler.TimestepSpacingType, Common.TimestepSpacingType>(),
+                    BetaSchedule = cogDDIMOptions.BetaSchedule.Cast<TensorStack.HuggingFace.Scheduler.BetaScheduleType, Common.BetaScheduleType>(),
+                    PredictionType = cogDDIMOptions.PredictionType.Cast<TensorStack.HuggingFace.Scheduler.PredictionType, Common.PredictionType>(),
+                    TimestepSpacing = cogDDIMOptions.TimestepSpacing.Cast<TensorStack.HuggingFace.Scheduler.TimestepSpacingType, Common.TimestepSpacingType>(),
                     StepsOffset = cogDDIMOptions.StepsOffset,
                     ClipSample = cogDDIMOptions.ClipSample,
                     ClipSampleRange = cogDDIMOptions.ClipSampleRange,
@@ -1205,17 +1205,17 @@ namespace Amuse.Host.PyTorch
                     RescaleBetasZeroSNR = cogDDIMOptions.RescaleBetasZeroSNR,
                 };
             }
-            else if (options is TensorStack.Python.Scheduler.CogVideoXDPMOptions cogDPMOptions)
+            else if (options is TensorStack.HuggingFace.Scheduler.CogVideoXDPMOptions cogDPMOptions)
             {
                 return new Common.SchedulerOptions
                 {
-                    Scheduler = cogDPMOptions.Scheduler.Cast<TensorStack.Python.Scheduler.SchedulerType, Common.SchedulerType>(),
+                    Scheduler = cogDPMOptions.Scheduler.Cast<TensorStack.HuggingFace.Scheduler.SchedulerType, Common.SchedulerType>(),
                     NumTrainTimesteps = cogDPMOptions.NumTrainTimesteps,
                     BetaEnd = cogDPMOptions.BetaEnd,
                     BetaStart = cogDPMOptions.BetaStart,
-                    BetaSchedule = cogDPMOptions.BetaSchedule.Cast<TensorStack.Python.Scheduler.BetaScheduleType, Common.BetaScheduleType>(),
-                    PredictionType = cogDPMOptions.PredictionType.Cast<TensorStack.Python.Scheduler.PredictionType, Common.PredictionType>(),
-                    TimestepSpacing = cogDPMOptions.TimestepSpacing.Cast<TensorStack.Python.Scheduler.TimestepSpacingType, Common.TimestepSpacingType>(),
+                    BetaSchedule = cogDPMOptions.BetaSchedule.Cast<TensorStack.HuggingFace.Scheduler.BetaScheduleType, Common.BetaScheduleType>(),
+                    PredictionType = cogDPMOptions.PredictionType.Cast<TensorStack.HuggingFace.Scheduler.PredictionType, Common.PredictionType>(),
+                    TimestepSpacing = cogDPMOptions.TimestepSpacing.Cast<TensorStack.HuggingFace.Scheduler.TimestepSpacingType, Common.TimestepSpacingType>(),
                     StepsOffset = cogDPMOptions.StepsOffset,
                     ClipSample = cogDPMOptions.ClipSample,
                     ClipSampleRange = cogDPMOptions.ClipSampleRange,
@@ -1225,19 +1225,19 @@ namespace Amuse.Host.PyTorch
                     RescaleBetasZeroSNR = cogDPMOptions.RescaleBetasZeroSNR,
                 };
             }
-            else if (options is TensorStack.Python.Scheduler.HeliosOptions heliosOptions)
+            else if (options is TensorStack.HuggingFace.Scheduler.HeliosOptions heliosOptions)
             {
                 return new Common.SchedulerOptions
                 {
-                    Scheduler = heliosOptions.Scheduler.Cast<TensorStack.Python.Scheduler.SchedulerType, Common.SchedulerType>(),
+                    Scheduler = heliosOptions.Scheduler.Cast<TensorStack.HuggingFace.Scheduler.SchedulerType, Common.SchedulerType>(),
                     NumTrainTimesteps = heliosOptions.NumTrainTimesteps,
-                    PredictionType = heliosOptions.PredictionType.Cast<TensorStack.Python.Scheduler.PredictionType, Common.PredictionType>(),
+                    PredictionType = heliosOptions.PredictionType.Cast<TensorStack.HuggingFace.Scheduler.PredictionType, Common.PredictionType>(),
                     Shift = heliosOptions.Shift,
                     Gamma = heliosOptions.Gamma,
                     SolverOrder = heliosOptions.SolverOrder,
-                    SolverType = heliosOptions.SolverType.Cast<TensorStack.Python.Scheduler.SolverType, Common.SolverType>(),
+                    SolverType = heliosOptions.SolverType.Cast<TensorStack.HuggingFace.Scheduler.SolverType, Common.SolverType>(),
                     LowerOrderFinal = heliosOptions.LowerOrderFinal,
-                    TimeShiftType = heliosOptions.TimeShiftType.Cast<TensorStack.Python.Scheduler.TimeShiftType, Common.TimeShiftType>(),
+                    TimeShiftType = heliosOptions.TimeShiftType.Cast<TensorStack.HuggingFace.Scheduler.TimeShiftType, Common.TimeShiftType>(),
                     UseDynamicShifting = heliosOptions.UseDynamicShifting,
                     UseFlowSigmas = heliosOptions.UseFlowSigmas,
                     PredictX0 = heliosOptions.PredictX0,
@@ -1247,33 +1247,33 @@ namespace Amuse.Host.PyTorch
                     DisableCorrector = heliosOptions.DisableCorrector,        // TODO
                 };
             }
-            else if (options is TensorStack.Python.Scheduler.HeliosDMDOptions heliosDMDOptions)
+            else if (options is TensorStack.HuggingFace.Scheduler.HeliosDMDOptions heliosDMDOptions)
             {
                 return new Common.SchedulerOptions
                 {
-                    Scheduler = heliosDMDOptions.Scheduler.Cast<TensorStack.Python.Scheduler.SchedulerType, Common.SchedulerType>(),
+                    Scheduler = heliosDMDOptions.Scheduler.Cast<TensorStack.HuggingFace.Scheduler.SchedulerType, Common.SchedulerType>(),
                     NumTrainTimesteps = heliosDMDOptions.NumTrainTimesteps,
-                    PredictionType = heliosDMDOptions.PredictionType.Cast<TensorStack.Python.Scheduler.PredictionType, Common.PredictionType>(),
+                    PredictionType = heliosDMDOptions.PredictionType.Cast<TensorStack.HuggingFace.Scheduler.PredictionType, Common.PredictionType>(),
                     Shift = heliosDMDOptions.Shift,
                     Gamma = heliosDMDOptions.Gamma,
-                    TimeShiftType = heliosDMDOptions.TimeShiftType.Cast<TensorStack.Python.Scheduler.TimeShiftType, Common.TimeShiftType>(),
+                    TimeShiftType = heliosDMDOptions.TimeShiftType.Cast<TensorStack.HuggingFace.Scheduler.TimeShiftType, Common.TimeShiftType>(),
                     UseDynamicShifting = heliosDMDOptions.UseDynamicShifting,
                     UseFlowSigmas = heliosDMDOptions.UseFlowSigmas,
                     Stages = heliosDMDOptions.Stages,                            // TODO
                     StageRange = heliosDMDOptions.StageRange,                    // TODO
                 };
             }
-            else if (options is TensorStack.Python.Scheduler.TCDOptions tcdOptions)
+            else if (options is TensorStack.HuggingFace.Scheduler.TCDOptions tcdOptions)
             {
                 return new Common.SchedulerOptions
                 {
-                    Scheduler = tcdOptions.Scheduler.Cast<TensorStack.Python.Scheduler.SchedulerType, Common.SchedulerType>(),
+                    Scheduler = tcdOptions.Scheduler.Cast<TensorStack.HuggingFace.Scheduler.SchedulerType, Common.SchedulerType>(),
                     NumTrainTimesteps = tcdOptions.NumTrainTimesteps,
                     BetaEnd = tcdOptions.BetaEnd,
                     BetaStart = tcdOptions.BetaStart,
-                    BetaSchedule = tcdOptions.BetaSchedule.Cast<TensorStack.Python.Scheduler.BetaScheduleType, Common.BetaScheduleType>(),
-                    PredictionType = tcdOptions.PredictionType.Cast<TensorStack.Python.Scheduler.PredictionType, Common.PredictionType>(),
-                    TimestepSpacing = tcdOptions.TimestepSpacing.Cast<TensorStack.Python.Scheduler.TimestepSpacingType, Common.TimestepSpacingType>(),
+                    BetaSchedule = tcdOptions.BetaSchedule.Cast<TensorStack.HuggingFace.Scheduler.BetaScheduleType, Common.BetaScheduleType>(),
+                    PredictionType = tcdOptions.PredictionType.Cast<TensorStack.HuggingFace.Scheduler.PredictionType, Common.PredictionType>(),
+                    TimestepSpacing = tcdOptions.TimestepSpacing.Cast<TensorStack.HuggingFace.Scheduler.TimestepSpacingType, Common.TimestepSpacingType>(),
                     StepsOffset = tcdOptions.StepsOffset,
                     Thresholding = tcdOptions.Thresholding,
                     DynamicThresholdingRatio = tcdOptions.DynamicThresholdingRatio,
@@ -1286,34 +1286,34 @@ namespace Amuse.Host.PyTorch
                     RescaleBetasZeroSNR = tcdOptions.RescaleBetasZeroSNR, // TODO
                 };
             }
-            else if (options is TensorStack.Python.Scheduler.SCMOptions scmOptions)
+            else if (options is TensorStack.HuggingFace.Scheduler.SCMOptions scmOptions)
             {
                 return new Common.SchedulerOptions
                 {
-                    Scheduler = scmOptions.Scheduler.Cast<TensorStack.Python.Scheduler.SchedulerType, Common.SchedulerType>(),
+                    Scheduler = scmOptions.Scheduler.Cast<TensorStack.HuggingFace.Scheduler.SchedulerType, Common.SchedulerType>(),
                     NumTrainTimesteps = scmOptions.NumTrainTimesteps,
-                    PredictionType = scmOptions.PredictionType.Cast<TensorStack.Python.Scheduler.PredictionType, Common.PredictionType>(),
+                    PredictionType = scmOptions.PredictionType.Cast<TensorStack.HuggingFace.Scheduler.PredictionType, Common.PredictionType>(),
                     SigmaData = scmOptions.SigmaData,
                 };
             }
-            else if (options is TensorStack.Python.Scheduler.SASolverOptions saSolverOptions)
+            else if (options is TensorStack.HuggingFace.Scheduler.SASolverOptions saSolverOptions)
             {
                 return new Common.SchedulerOptions
                 {
-                    Scheduler = saSolverOptions.Scheduler.Cast<TensorStack.Python.Scheduler.SchedulerType, Common.SchedulerType>(),
+                    Scheduler = saSolverOptions.Scheduler.Cast<TensorStack.HuggingFace.Scheduler.SchedulerType, Common.SchedulerType>(),
                     NumTrainTimesteps = saSolverOptions.NumTrainTimesteps,
                     BetaEnd = saSolverOptions.BetaEnd,
                     BetaStart = saSolverOptions.BetaStart,
-                    BetaSchedule = saSolverOptions.BetaSchedule.Cast<TensorStack.Python.Scheduler.BetaScheduleType, Common.BetaScheduleType>(),
-                    PredictionType = saSolverOptions.PredictionType.Cast<TensorStack.Python.Scheduler.PredictionType, Common.PredictionType>(),
-                    TimestepSpacing = saSolverOptions.TimestepSpacing.Cast<TensorStack.Python.Scheduler.TimestepSpacingType, Common.TimestepSpacingType>(),
+                    BetaSchedule = saSolverOptions.BetaSchedule.Cast<TensorStack.HuggingFace.Scheduler.BetaScheduleType, Common.BetaScheduleType>(),
+                    PredictionType = saSolverOptions.PredictionType.Cast<TensorStack.HuggingFace.Scheduler.PredictionType, Common.PredictionType>(),
+                    TimestepSpacing = saSolverOptions.TimestepSpacing.Cast<TensorStack.HuggingFace.Scheduler.TimestepSpacingType, Common.TimestepSpacingType>(),
                     StepsOffset = saSolverOptions.StepsOffset,
                     Thresholding = saSolverOptions.Thresholding,
                     DynamicThresholdingRatio = saSolverOptions.DynamicThresholdingRatio,
                     SampleMaxValue = saSolverOptions.SampleMaxValue,
                     FlowShift = saSolverOptions.FlowShift,
-                    AlgorithmType = saSolverOptions.AlgorithmType.Cast<TensorStack.Python.Scheduler.AlgorithmType, Common.AlgorithmType>(),
-                    VarianceType = saSolverOptions.VarianceType.Cast<TensorStack.Python.Scheduler.VarianceType, Common.VarianceType>(),
+                    AlgorithmType = saSolverOptions.AlgorithmType.Cast<TensorStack.HuggingFace.Scheduler.AlgorithmType, Common.AlgorithmType>(),
+                    VarianceType = saSolverOptions.VarianceType.Cast<TensorStack.HuggingFace.Scheduler.VarianceType, Common.VarianceType>(),
                     UseFlowSigmas = saSolverOptions.UseFlowSigmas,
                     LowerOrderFinal = saSolverOptions.LowerOrderFinal,
                     PredictorOrder = saSolverOptions.PredictorOrder,
@@ -1327,7 +1327,7 @@ namespace Amuse.Host.PyTorch
             {
                 return new Common.SchedulerOptions
                 {
-                    Scheduler = ltxEulerAncestralRFOptions.Scheduler.Cast<TensorStack.Python.Scheduler.SchedulerType, Common.SchedulerType>(),
+                    Scheduler = ltxEulerAncestralRFOptions.Scheduler.Cast<TensorStack.HuggingFace.Scheduler.SchedulerType, Common.SchedulerType>(),
                     NumTrainTimesteps = ltxEulerAncestralRFOptions.NumTrainTimesteps,
                     Eta = ltxEulerAncestralRFOptions.Eta,
                     SNoise = ltxEulerAncestralRFOptions.SNoise,
@@ -1338,18 +1338,18 @@ namespace Amuse.Host.PyTorch
         }
 
 
-        public static TensorStack.Python.Common.ConversationMessage[] ToPythonOptions(this Common.ConversationMessage[] messages)
+        public static TensorStack.HuggingFace.Common.ConversationMessage[] ToPythonOptions(this Common.ConversationMessage[] messages)
         {
-            return messages.Select(x => new TensorStack.Python.Common.ConversationMessage(x.Role.Cast<Common.ConversationRole, TensorStack.Python.Common.ConversationRole>(), x.Content, x.ImageIndex, x.AudioIndex)).ToArray();
+            return messages.Select(x => new TensorStack.HuggingFace.Common.ConversationMessage(x.Role.Cast<Common.ConversationRole, TensorStack.HuggingFace.Common.ConversationRole>(), x.Content, x.ImageIndex, x.AudioIndex)).ToArray();
         }
 
 
-        private static TensorStack.Python.Scheduler.SigmaScheduleType AsPythonType(this Common.SigmaScheduleType sigmaSchedule)
+        private static TensorStack.HuggingFace.Scheduler.SigmaScheduleType AsPythonType(this Common.SigmaScheduleType sigmaSchedule)
         {
             return sigmaSchedule switch
             {
-                Common.SigmaScheduleType.Exponential => TensorStack.Python.Scheduler.SigmaScheduleType.Exponential,
-                _ => TensorStack.Python.Scheduler.SigmaScheduleType.Karras
+                Common.SigmaScheduleType.Exponential => TensorStack.HuggingFace.Scheduler.SigmaScheduleType.Exponential,
+                _ => TensorStack.HuggingFace.Scheduler.SigmaScheduleType.Karras
             };
         }
 

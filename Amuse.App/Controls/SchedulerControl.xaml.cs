@@ -19,7 +19,7 @@ namespace Amuse.App.Controls
 
         public static readonly DependencyProperty OptionsProperty = DependencyProperty.Register(nameof(Options), typeof(SchedulerInputOptions[]), typeof(SchedulerControl), new PropertyMetadata<SchedulerControl, SchedulerInputOptions[]>((c, o, n) => c.OnOptionsChanged(o, n)));
         public static readonly DependencyProperty SelectedOptionsProperty = DependencyProperty.Register(nameof(SelectedOptions), typeof(SchedulerInputOptions), typeof(SchedulerControl), new PropertyMetadata<SchedulerControl, SchedulerInputOptions>((c, o, n) => c.OnSelectedOptionsChanged(o, n)));
-        public static readonly DependencyProperty BackendTypeProperty = DependencyProperty.Register(nameof(BackendType), typeof(BackendType), typeof(SchedulerControl), new PropertyMetadata(BackendType.PyTorch));
+        public static readonly DependencyProperty BackendTypeProperty = DependencyProperty.Register(nameof(BackendType), typeof(BackendType), typeof(SchedulerControl), new PropertyMetadata(BackendType.HuggingFace));
         public bool IsSelectorOnly { get; set; }
 
         public SchedulerInputOptions[] Options

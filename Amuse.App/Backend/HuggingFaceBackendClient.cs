@@ -12,22 +12,22 @@ using TensorStack.WPF.Services;
 namespace Amuse.App.Runtime
 {
     /// <summary>
-    /// PipelineClient implementation for Amuse.Host.PyTorch
+    /// PipelineClient implementation for Amuse.Host.HuggingFace
     /// Implements the <see cref="Amuse.App.Runtime.BackendClient" />
     /// </summary>
     /// <seealso cref="Amuse.App.Runtime.BackendClient" />
-    public sealed class PyTorchBackendClient : BackendClient
+    public sealed class HuggingFaceBackendClient : BackendClient
     {
         private readonly IEnvironmentService _environmentService;
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="PyTorchBackendClient"/> class.
+        /// Initializes a new instance of the <see cref="HuggingFaceBackendClient"/> class.
         /// </summary>
         /// <param name="settings">The settings.</param>
         /// <param name="mediaService">The media service.</param>
         /// <param name="environmentService">The environment service.</param>
         /// <param name="logger">The logger.</param>
-        public PyTorchBackendClient(Settings settings, IMediaService mediaService, IEnvironmentService environmentService, ILogger logger)
+        public HuggingFaceBackendClient(Settings settings, IMediaService mediaService, IEnvironmentService environmentService, ILogger logger)
             : base(settings, mediaService, logger)
         {
             _environmentService = environmentService;
@@ -35,7 +35,7 @@ namespace Amuse.App.Runtime
 
 
         /// <summary>
-        /// Create PipelineClient targeting Amuse.Host.PyTorch.
+        /// Create PipelineClient targeting Amuse.Host.HuggingFace.
         /// </summary>
         /// <param name="cancellationToken">The cancellation token.</param>
         /// <exception cref="System.OperationCanceledException"></exception>
@@ -46,7 +46,7 @@ namespace Amuse.App.Runtime
             var clientConfig = new ClientConfig
             {
                 ServerPath = App.DirectoryServer,
-                ServerType = ServerType.PyTorch,
+                ServerType = ServerType.HuggingFace,
                 IsDebugMode = Settings.IsServerDebugEnabled,
                 ServerVariables = createOptions.Variables
             };

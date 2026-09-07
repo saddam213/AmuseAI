@@ -104,7 +104,7 @@ namespace Amuse.App.Controls
 
         private void OnBackendChanged()
         {
-            if (Backend == BackendType.PyTorch)
+            if (Backend == BackendType.HuggingFace)
             {
                 TextEncodedCheckpointTypes = IsOnlineCheckpointsEnabled
                     ? [CheckpointType.LocalFolder, CheckpointType.OnlineFolder, CheckpointType.Component]

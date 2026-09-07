@@ -6,9 +6,9 @@
              xmlns:CoreCommon="clr-namespace:TensorStack.Common;assembly=TensorStack.Common"
              xmlns:CommonControls="clr-namespace:TensorStack.WPF.Controls;assembly=TensorStack.WPF"
              xmlns:AmuseCommon="clr-namespace:Amuse.Common;assembly=Amuse.Common"
-             xmlns:Extractors="clr-namespace:TensorStack.Extractors.Common;assembly=TensorStack.Extractors"
-             xmlns:Whisper="clr-namespace:TensorStack.TextGeneration.Pipelines.Whisper;assembly=TensorStack.TextGeneration"
-             xmlns:TextGeneration="clr-namespace:TensorStack.TextGeneration.Common;assembly=TensorStack.TextGeneration"
+             xmlns:Extractors="clr-namespace:TensorStack.OnnxRuntime.Extract;assembly=TensorStack.OnnxRuntime.Vision"
+             xmlns:Whisper="clr-namespace:TensorStack.OnnxRuntime.LLM.Pipelines.Whisper;assembly=TensorStack.OnnxRuntime.LLM"
+             xmlns:TextGeneration="clr-namespace:TensorStack.OnnxRuntime.LLM.Common;assembly=TensorStack.OnnxRuntime.LLM"
              xmlns:Common="clr-namespace:Amuse.App.Common"
              xmlns:Controls="clr-namespace:Amuse.App.Controls"
              ShutdownMode="OnMainWindowClose">

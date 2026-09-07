@@ -104,7 +104,7 @@ namespace Amuse.App.Dialogs
         {
             return backendType switch
             {
-                BackendType.PyTorch => "Python Virtual",
+                BackendType.HuggingFace => "Python Virtual",
                 BackendType.StableDiffusionCpp => "StableDiffusion.cpp",
                 BackendType.OnnxRuntime => "OnnxRuntime",
                 _ => "Virtual"

@@ -33,12 +33,20 @@ namespace Amuse.App.Services
                 return;
             }
 
-            // Run required migrations
-            if (IsMigrationRequired(_settings.DirectoryModel))
+            // Run runtime migrations
+            if (IsRuntimeMigrationRequired())
             {
-                _logger.LogInformation("[MigrationService] [RunMigrations] Application migrations found, Migrating...");
-                RunMigrations(_settings.DirectoryModel, false);
-                _logger.LogInformation("[MigrationService] [RunMigrations] Application migrations complete.");
+                _logger.LogInformation("[MigrationService] [RunMigrations] Runtime migrations found, Migrating...");
+                RunRuntimeMigrations(false);
+                _logger.LogInformation("[MigrationService] [RunMigrations] Runtime migrations complete.");
+            }
+
+            // Run model migrations
+            if (IsModelMigrationRequired(_settings.DirectoryModel))
+            {
+                _logger.LogInformation("[MigrationService] [RunMigrations] Model migrations found, Migrating...");
+                RunModelMigrations(_settings.DirectoryModel, false);
+                _logger.LogInformation("[MigrationService] [RunMigrations] Model migrations complete.");
             }
 
             _settings.ScanModels();
@@ -48,13 +56,53 @@ namespace Amuse.App.Services
         }
 
 
-        private bool IsMigrationRequired(string modelDirectory)
+        private bool IsRuntimeMigrationRequired()
         {
-            return RunMigrations(modelDirectory, true);
+            return RunRuntimeMigrations(true);
         }
 
 
-        private bool RunMigrations(string modelDirectory, bool isReadOnly)
+        private bool IsModelMigrationRequired(string modelDirectory)
+        {
+            return RunModelMigrations(modelDirectory, true);
+        }
+
+
+        private bool RunRuntimeMigrations(bool isReadOnly)
+        {
+            // v3.8.0 - Rename Runtime Folders
+            var source1 = Path.Combine(App.DirectoryData, "PythonRuntime");
+            var source2 = Path.Combine(App.DirectoryData, "StableDiffusionCppRuntime");
+            var source3 = Path.Combine(App.DirectoryData, "Python");
+            var source4 = Path.Combine(App.DirectoryData, "Pipelines");
+            var destination1 = Path.Combine(App.DirectoryData, "RuntimeHuggingFace");
+            var destination2 = Path.Combine(App.DirectoryData, "RuntimeStableDiffusionCpp");
+
+            if (Directory.Exists(source1) || Directory.Exists(source2) || Directory.Exists(source3) || Directory.Exists(source4))
+            {
+                if (isReadOnly)
+                    return true;
+                try
+                {
+                    if (Directory.Exists(source1))
+                        Directory.Move(source1, destination1);
+                    if (Directory.Exists(source2))
+                        Directory.Move(source2, destination2);
+                    if (Directory.Exists(source3))
+                        Directory.Delete(source3, true);
+                    if (Directory.Exists(source4))
+                        Directory.Delete(source4, true);
+                }
+                catch (Exception ex)
+                {
+                    _logger.LogError(ex, "[MigrationService] [RuntimeMigration] ");
+                }
+            }
+            return false;
+        }
+
+
+        private bool RunModelMigrations(string modelDirectory, bool isReadOnly)
         {
             // v3.7.0 - Flatten Lora directory
             var loraDirectory = Path.Combine(modelDirectory, "LoraAdapter");
@@ -112,7 +160,7 @@ namespace Amuse.App.Services
             ];
 
             return RunMigrations(moveMigrations, isReadOnly)
-                || RunMigrations(deleteMigrations, isReadOnly);
+        || RunMigrations(deleteMigrations, isReadOnly);
         }
 
 

@@ -15,10 +15,10 @@
   "Environments": [
     {
       "Id": 2,
-      "Name": "PyTorch CUDA (13.0)",
+      "Name": "HuggingFace CUDA (13.0)",
       "Type": "Vendor",
       "Vendor": "Nvidia",
-      "Backend": "PyTorch",
+      "Backend": "HuggingFace",
       "Environment": "cuda-130",
       "HostVersion": "3.14",
       "Version": 16,
@@ -54,10 +54,10 @@
     },
     {
       "Id": 10,
-      "Name": "PyTorch ROCM (7.2.1)",
+      "Name": "HuggingFace ROCM (7.2.1)",
       "Type": "Vendor",
       "Vendor": "AMD",
-      "Backend": "PyTorch",
+      "Backend": "HuggingFace",
       "Environment": "rocm-721",
       "HostVersion": "3.12",
       "Version": 16,
@@ -1447,7 +1447,7 @@
   "DiffusionModels": [
     {
       "Id": 100,
-      "Backend": "PyTorch",
+      "Backend": "HuggingFace",
       "Name": "StableDiffusionXL",
       "Template": "SDXL",
       "Pipeline": "StableDiffusionXLPipeline",
@@ -1858,7 +1858,7 @@
     },
     {
       "Id": 101,
-      "Backend": "PyTorch",
+      "Backend": "HuggingFace",
       "Name": "StableDiffusion 3 Medium",
       "Template": "SD3_Medium",
       "Pipeline": "StableDiffusion3Pipeline",
@@ -2045,7 +2045,7 @@
     },
     {
       "Id": 102,
-      "Backend": "PyTorch",
+      "Backend": "HuggingFace",
       "Name": "StableDiffusion 3.5 Medium",
       "Template": "SD35_Medium",
       "Pipeline": "StableDiffusion3Pipeline",
@@ -2232,7 +2232,7 @@
     },
     {
       "Id": 103,
-      "Backend": "PyTorch",
+      "Backend": "HuggingFace",
       "Name": "StableDiffusion 3.5 Large",
       "Template": "SD35_Large",
       "Pipeline": "StableDiffusion3Pipeline",
@@ -2421,7 +2421,7 @@
     },
     {
       "Id": 104,
-      "Backend": "PyTorch",
+      "Backend": "HuggingFace",
       "Name": "StableDiffusion 3.5 Large Turbo",
       "Template": "SD35_Large",
       "Pipeline": "StableDiffusion3Pipeline",
@@ -2610,7 +2610,7 @@
     },
     {
       "Id": 110,
-      "Backend": "PyTorch",
+      "Backend": "HuggingFace",
       "Name": "Z-Image",
       "Template": "ZImage",
       "Pipeline": "ZImagePipeline",
@@ -2788,7 +2788,7 @@
     },
     {
       "Id": 111,
-      "Backend": "PyTorch",
+      "Backend": "HuggingFace",
       "Name": "Z-Image Turbo",
       "Template": "ZImage",
       "Pipeline": "ZImagePipeline",
@@ -2967,7 +2967,7 @@
     },
     {
       "Id": 120,
-      "Backend": "PyTorch",
+      "Backend": "HuggingFace",
       "Name": "Qwen Image (2512)",
       "Template": "QwenImage",
       "Pipeline": "QwenImagePipeline",
@@ -3124,7 +3124,7 @@
     },
     {
       "Id": 121,
-      "Backend": "PyTorch",
+      "Backend": "HuggingFace",
       "Name": "Qwen Image Edit(2511)",
       "Template": "QwenImage_Edit",
       "Pipeline": "QwenImagePipeline",
@@ -3277,7 +3277,7 @@
     },
     {
       "Id": 130,
-      "Backend": "PyTorch",
+      "Backend": "HuggingFace",
       "Name": "Chroma HD",
       "Template": "Chroma_HD",
       "Pipeline": "ChromaPipeline",
@@ -3455,7 +3455,7 @@
     },
     {
       "Id": 140,
-      "Backend": "PyTorch",
+      "Backend": "HuggingFace",
       "Name": "FLUX.1 Schnell",
       "Template": "Flux1_Schnell",
       "Pipeline": "FluxPipeline",
@@ -3640,7 +3640,7 @@
     },
     {
       "Id": 141,
-      "Backend": "PyTorch",
+      "Backend": "HuggingFace",
       "Name": "FLUX.1 Dev",
       "Template": "Flux1_Dev",
       "Pipeline": "FluxPipeline",
@@ -3826,7 +3826,7 @@
     },
     {
       "Id": 143,
-      "Backend": "PyTorch",
+      "Backend": "HuggingFace",
       "Name": "FLUX.2 Klein 4B",
       "Template": "Flux2_Klein_4B",
       "Pipeline": "Flux2KleinPipeline",
@@ -4003,7 +4003,7 @@
     },
     {
       "Id": 144,
-      "Backend": "PyTorch",
+      "Backend": "HuggingFace",
       "Name": "FLUX.2 Klein 4B Base",
       "Template": "Flux2_Klein_4B_Base",
       "Pipeline": "Flux2KleinPipeline",
@@ -4179,7 +4179,7 @@
     },
     {
       "Id": 145,
-      "Backend": "PyTorch",
+      "Backend": "HuggingFace",
       "Name": "FLUX.2 Klein 9B",
       "Template": "Flux2_Klein_9B",
       "Pipeline": "Flux2KleinPipeline",
@@ -4358,7 +4358,7 @@
     },
     {
       "Id": 146,
-      "Backend": "PyTorch",
+      "Backend": "HuggingFace",
       "Name": "FLUX.2 Klein 9B Base",
       "Template": "Flux2_Klein_9B_Base",
       "Pipeline": "Flux2KleinPipeline",
@@ -4537,7 +4537,7 @@
     },
     {
       "Id": 150,
-      "Backend": "PyTorch",
+      "Backend": "HuggingFace",
       "Name": "Wan 2.1 T2V 1B",
       "Template": "Wan21_1B_T2V",
       "Pipeline": "WanPipeline",
@@ -4691,7 +4691,7 @@
     },
     {
       "Id": 151,
-      "Backend": "PyTorch",
+      "Backend": "HuggingFace",
       "Name": "Wan 2.1 T2V 14B",
       "Template": "Wan21_14B_T2V",
       "Pipeline": "WanPipeline",
@@ -4830,7 +4830,7 @@
     },
     {
       "Id": 152,
-      "Backend": "PyTorch",
+      "Backend": "HuggingFace",
       "Name": "Wan 2.1 I2V 14B 480P",
       "Template": "Wan21_14B_I2V",
       "Pipeline": "WanPipeline",
@@ -4967,7 +4967,7 @@
     },
     {
       "Id": 153,
-      "Backend": "PyTorch",
+      "Backend": "HuggingFace",
       "Name": "Wan 2.2 5B",
       "Template": "Wan22_5B_TI2V",
       "Pipeline": "WanPipeline",
@@ -5097,7 +5097,7 @@
     },
     {
       "Id": 154,
-      "Backend": "PyTorch",
+      "Backend": "HuggingFace",
       "Name": "Wan 2.2 T2V 14B",
       "Template": "Wan22_14B_T2V",
       "Pipeline": "WanPipeline",
@@ -5251,7 +5251,7 @@
     },
     {
       "Id": 160,
-      "Backend": "PyTorch",
+      "Backend": "HuggingFace",
       "Name": "Kandinsky5 T2I Lite",
       "Template": "Kandinsky50_Lite_T2I",
       "Pipeline": "Kandinsky5ImagePipeline",
@@ -5361,7 +5361,7 @@
     },
     {
       "Id": 161,
-      "Backend": "PyTorch",
+      "Backend": "HuggingFace",
       "Name": "Kandinsky5 I2I Lite",
       "Template": "Kandinsky50_Lite_I2I",
       "Pipeline": "Kandinsky5ImagePipeline",
@@ -5471,7 +5471,7 @@
     },
     {
       "Id": 162,
-      "Backend": "PyTorch",
+      "Backend": "HuggingFace",
       "Name": "Kandinsky5 T2V Lite",
       "Template": "Kandinsky50_Lite_T2V",
       "Pipeline": "Kandinsky5VideoPipeline",
@@ -5569,7 +5569,7 @@
     },
     {
       "Id": 163,
-      "Backend": "PyTorch",
+      "Backend": "HuggingFace",
       "Name": "Kandinsky5 I2V Pro",
       "Template": "Kandinsky50_Pro",
       "Pipeline": "Kandinsky5VideoPipeline",
@@ -5665,7 +5665,7 @@
     },
     {
       "Id": 170,
-      "Backend": "PyTorch",
+      "Backend": "HuggingFace",
       "Name": "CogVideoX T2V 2B",
       "Template": "CogVideoX_2B",
       "Pipeline": "CogVideoXPipeline",
@@ -5774,7 +5774,7 @@
     },
     {
       "Id": 171,
-      "Backend": "PyTorch",
+      "Backend": "HuggingFace",
       "Name": "CogVideoX T2V 5B",
       "Template": "CogVideoX_5B",
       "Pipeline": "CogVideoXPipeline",
@@ -5885,7 +5885,7 @@
     },
     {
       "Id": 172,
-      "Backend": "PyTorch",
+      "Backend": "HuggingFace",
       "Name": "CogVideoX I2V 5B",
       "Template": "CogVideoX_5B_I2V",
       "Pipeline": "CogVideoXPipeline",
@@ -5995,7 +5995,7 @@
     },
     {
       "Id": 173,
-      "Backend": "PyTorch",
+      "Backend": "HuggingFace",
       "Name": "CogVideoX 1.5 T2V 5B",
       "Template": "CogVideoX15_5B",
       "Pipeline": "CogVideoXPipeline",
@@ -6107,7 +6107,7 @@
     },
     {
       "Id": 174,
-      "Backend": "PyTorch",
+      "Backend": "HuggingFace",
       "Name": "CogVideoX 1.5 I2V 5B",
       "Template": "CogVideoX15_5B_I2V",
       "Pipeline": "CogVideoXPipeline",
@@ -6217,7 +6217,7 @@
     },
     {
       "Id": 180,
-      "Backend": "PyTorch",
+      "Backend": "HuggingFace",
       "Name": "LTX Video",
       "Template": "LTX",
       "Pipeline": "LTXPipeline",
@@ -6352,7 +6352,7 @@
     },
     {
       "Id": 190,
-      "Backend": "PyTorch",
+      "Backend": "HuggingFace",
       "Name": "LTX-2",
       "Template": "LTX_20",
       "Pipeline": "LTX20Pipeline",
@@ -6559,7 +6559,7 @@
     },
     {
       "Id": 192,
-      "Backend": "PyTorch",
+      "Backend": "HuggingFace",
       "Name": "LTX-2 Distilled",
       "Template": "LTX_20",
       "Pipeline": "LTX20Pipeline",
@@ -6766,7 +6766,7 @@
     },
     {
       "Id": 193,
-      "Backend": "PyTorch",
+      "Backend": "HuggingFace",
       "Name": "LTX-2.3",
       "Template": "LTX_23",
       "Pipeline": "LTX20Pipeline",
@@ -6983,7 +6983,7 @@
     },
     {
       "Id": 194,
-      "Backend": "PyTorch",
+      "Backend": "HuggingFace",
       "Name": "LTX-2.3 Distilled",
       "Template": "LTX_23",
       "Pipeline": "LTX20Pipeline",
@@ -7200,7 +7200,7 @@
     },
     {
       "Id": 200,
-      "Backend": "PyTorch",
+      "Backend": "HuggingFace",
       "Name": "SkyReels v2 1B 540P",
       "Template": "SkyReels2_1B",
       "Pipeline": "SkyReelsV2Pipeline",
@@ -7333,7 +7333,7 @@
     },
     {
       "Id": 201,
-      "Backend": "PyTorch",
+      "Backend": "HuggingFace",
       "Name": "SkyReels v2 14B 540P",
       "Template": "SkyReels2_14B",
       "Pipeline": "SkyReelsV2Pipeline",
@@ -7476,7 +7476,7 @@
     },
     {
       "Id": 211,
-      "Backend": "PyTorch",
+      "Backend": "HuggingFace",
       "Name": "Helios Base",
       "Template": "Helios_Base",
       "Pipeline": "HeliosPipeline",
@@ -7634,7 +7634,7 @@
     },
     {
       "Id": 212,
-      "Backend": "PyTorch",
+      "Backend": "HuggingFace",
       "Name": "Helios Mid",
       "Template": "Helios_Mid",
       "Pipeline": "HeliosPipeline",
@@ -7792,7 +7792,7 @@
     },
     {
       "Id": 213,
-      "Backend": "PyTorch",
+      "Backend": "HuggingFace",
       "Name": "Helios Distilled",
       "Template": "Helios_Distilled",
       "Pipeline": "HeliosPipeline",
@@ -7944,7 +7944,7 @@
     },
     {
       "Id": 216,
-      "Backend": "PyTorch",
+      "Backend": "HuggingFace",
       "Name": "Ernie Image",
       "Template": "Ernie",
       "Pipeline": "ErniePipeline",
@@ -8122,7 +8122,7 @@
     },
     {
       "Id": 217,
-      "Backend": "PyTorch",
+      "Backend": "HuggingFace",
       "Name": "Ernie Image Turbo",
       "Template": "Ernie",
       "Pipeline": "ErniePipeline",
@@ -8300,7 +8300,7 @@
     },
     {
       "Id": 218,
-      "Backend": "PyTorch",
+      "Backend": "HuggingFace",
       "Name": "GLM-Image",
       "Template": "GlmImage",
       "Pipeline": "GlmImagePipeline",
@@ -8425,7 +8425,7 @@
     },
     {
       "Id": 219,
-      "Backend": "PyTorch",
+      "Backend": "HuggingFace",
       "Name": "Krea2 Raw",
       "Template": "Krea2",
       "Pipeline": "Krea2Pipeline",
@@ -8547,7 +8547,7 @@
     },
     {
       "Id": 220,
-      "Backend": "PyTorch",
+      "Backend": "HuggingFace",
       "Name": "Krea2 Turbo",
       "Template": "Krea2_Turbo",
       "Pipeline": "Krea2Pipeline",
@@ -8669,7 +8669,7 @@
     },
     {
       "Id": 231,
-      "Backend": "PyTorch",
+      "Backend": "HuggingFace",
       "Name": "JoyAI Image Edit",
       "Template": "JoyImage",
       "Pipeline": "JoyImagePipeline",
@@ -8794,7 +8794,7 @@
     },
     {
       "Id": 232,
-      "Backend": "PyTorch",
+      "Backend": "HuggingFace",
       "Name": "PRX-Pixel",
       "Template": "PrxPixel",
       "Pipeline": "PrxPixelPipeline",
@@ -9020,7 +9020,7 @@
     },
     {
       "Id": 233,
-      "Backend": "PyTorch",
+      "Backend": "HuggingFace",
       "Name": "Motif Video 2B",
       "Template": "MotifVideo_2B",
       "Pipeline": "MotifVideoPipeline",
@@ -9113,7 +9113,7 @@
     },
     {
       "Id": 234,
-      "Backend": "PyTorch",
+      "Backend": "HuggingFace",
       "Name": "AnyFlow 1B",
       "Template": "AnyFlow_1B",
       "Pipeline": "AnyFlowPipeline",
@@ -9211,7 +9211,7 @@
     },
     {
       "Id": 235,
-      "Backend": "PyTorch",
+      "Backend": "HuggingFace",
       "Name": "AnyFlow 14B",
       "Template": "AnyFlow_14B",
       "Pipeline": "AnyFlowPipeline",
@@ -9310,305 +9310,8 @@
       "Link": "https://huggingface.co/nvidia/AnyFlow-Wan2.1-T2V-14B-Diffusers"
     },
     {
-      "Id": 300,
-      "Backend": "PyTorch",
-      "Name": "ACE-Step v1.5",
-      "Template": "AceStep",
-      "Pipeline": "AceStepPipeline",
-      "ModelType": "Base",
-      "BaseType": "bfloat16",
-      "MediaType": "Audio",
-      "ProcessTypes": [ "TextToAudio" ],
-      "ViewFilter": [ "TextToMusic" ],
-      "Checkpoint": {
-        "TextEncoder": {
-          "Name": "TextEncoder",
-          "Type": "Component",
-          "Path": "TE_AceStepXL"
-        },
-        "Vae": {
-          "Name": "AutoEncoder",
-          "Type": "Component",
-          "Path": "VAE_AceStepXL"
-        },
-        "ConditionEncoder": {
-          "Name": "ConditionEncoder",
-          "Type": "Component",
-          "Path": "CE_AceStepXL"
-        },
-        "AudioTokenizer": {
-          "Name": "AudioTokenizer",
-          "Type": "Component",
-          "Path": "AT_AceStepXL"
-        },
-        "AudioDetokenizer": {
-          "Name": "AudioDetokenizer",
-          "Type": "Component",
-          "Path": "AD_AceStepXL"
-        },
-        "Transformer": {
-          "Name": "Transformer",
-          "Type": "OnlineFolder",
-          "Path": "transformer",
-          "Folder": "acestep-v15-base-diffusers",
-          "DownloadFiles": [
-            "https://huggingface.co/Runware/acestep-v15-base-diffusers/resolve/main/transformer/config.json",
-            "https://huggingface.co/Runware/acestep-v15-base-diffusers/resolve/main/transformer/diffusion_pytorch_model.safetensors"
-          ]
-        }
-      },
-      "MemoryProfile": [
-        {
-          "QualityMode": "Draft",
-          "MemoryModes": [ 4, 6, 6 ]
-        },
-        {
-          "QualityMode": "Standard",
-          "MemoryModes": [ 4, 6, 8 ]
-        },
-        {
-          "QualityMode": "Production",
-          "MemoryModes": [ 4, 10, 12 ]
-        }
-      ],
-      "DefaultOptions": {
-        "Steps": 50,
-        "GuidanceScale": 7,
-        "SampleRate": 48000,
-        "Channels": 2,
-        "Strength": 1,
-        "BPM": 80,
-        "Duration": 0,
-        "MaxLength": 512,
-        "MaxLength2": 4096,
-        "Task": "text2music",
-        "Tasks": [ "text2music", "cover", "repaint", "lego" ],
-        "IsVaeTilingEnabled": true,
-        "IsVaeSlicingEnabled": true,
-        "Scheduler": "FlowMatchEuler",
-        "Schedulers": [
-          {
-            "Scheduler": "FlowMatchEuler",
-            "NumTrainTimesteps": 1,
-            "Shift": 3,
-            "UseDynamicShifting": false,
-            "BaseShift": 0.5,
-            "MaxShift": 1.15,
-            "BaseImageSeqLen": 256,
-            "MaxImageSeqLen": 4096,
-            "InvertSigmas": false,
-            "ShiftTerminal": 0,
-            "UseKarrasSigmas": false,
-            "UseExponentialSigmas": false,
-            "UseBetaSigmas": false,
-            "TimeShiftType": "Exponential",
-            "StochasticSampling": false
-          }
-        ]
-      },
-      "Link": "https://huggingface.co/Runware/acestep-v15-base-diffusers"
-    },
-    {
-      "Id": 301,
-      "Backend": "PyTorch",
-      "Name": "ACE-Step v1.5 SFT",
-      "Template": "AceStep",
-      "Pipeline": "AceStepPipeline",
-      "ModelType": "Base",
-      "BaseType": "bfloat16",
-      "MediaType": "Audio",
-      "ProcessTypes": [ "TextToAudio" ],
-      "ViewFilter": [ "TextToMusic" ],
-      "Checkpoint": {
-        "TextEncoder": {
-          "Name": "TextEncoder",
-          "Type": "Component",
-          "Path": "TE_AceStepXL"
-        },
-        "Vae": {
-          "Name": "AutoEncoder",
-          "Type": "Component",
-          "Path": "VAE_AceStepXL"
-        },
-        "ConditionEncoder": {
-          "Name": "ConditionEncoder",
-          "Type": "Component",
-          "Path": "CE_AceStepXL"
-        },
-        "AudioTokenizer": {
-          "Name": "AudioTokenizer",
-          "Type": "Component",
-          "Path": "AT_AceStepXL"
-        },
-        "AudioDetokenizer": {
-          "Name": "AudioDetokenizer",
-          "Type": "Component",
-          "Path": "AD_AceStepXL"
-        },
-        "Transformer": {
-          "Name": "Transformer",
-          "Type": "OnlineFolder",
-          "Path": "transformer",
-          "Folder": "acestep-v15-sft-diffusers",
-          "DownloadFiles": [
-            "https://huggingface.co/Runware/acestep-v15-sft-diffusers/resolve/main/transformer/config.json",
-            "https://huggingface.co/Runware/acestep-v15-sft-diffusers/resolve/main/transformer/diffusion_pytorch_model.safetensors"
-          ]
-        }
-      },
-      "MemoryProfile": [
-        {
-          "QualityMode": "Draft",
-          "MemoryModes": [ 4, 6, 6 ]
-        },
-        {
-          "QualityMode": "Standard",
-          "MemoryModes": [ 4, 6, 8 ]
-        },
-        {
-          "QualityMode": "Production",
-          "MemoryModes": [ 4, 10, 12 ]
-        }
-      ],
-      "DefaultOptions": {
-        "Steps": 50,
-        "GuidanceScale": 7,
-        "SampleRate": 48000,
-        "Channels": 2,
-        "Strength": 1,
-        "BPM": 80,
-        "Duration": 0,
-        "MaxLength": 512,
-        "MaxLength2": 4096,
-        "Task": "text2music",
-        "Tasks": [ "text2music", "cover", "repaint", "lego" ],
-        "IsVaeTilingEnabled": true,
-        "IsVaeSlicingEnabled": true,
-        "Scheduler": "FlowMatchEuler",
-        "Schedulers": [
-          {
-            "Scheduler": "FlowMatchEuler",
-            "NumTrainTimesteps": 1,
-            "Shift": 3,
-            "UseDynamicShifting": false,
-            "BaseShift": 0.5,
-            "MaxShift": 1.15,
-            "BaseImageSeqLen": 256,
-            "MaxImageSeqLen": 4096,
-            "InvertSigmas": false,
-            "ShiftTerminal": 0,
-            "UseKarrasSigmas": false,
-            "UseExponentialSigmas": false,
-            "UseBetaSigmas": false,
-            "TimeShiftType": "Exponential",
-            "StochasticSampling": false
-          }
-        ]
-      },
-      "Link": "https://huggingface.co/Runware/acestep-v15-sft-diffusers"
-    },
-    {
-      "Id": 302,
-      "Backend": "PyTorch",
-      "Name": "ACE-Step v1.5 Turbo",
-      "Template": "AceStep_Turbo",
-      "Pipeline": "AceStepPipeline",
-      "ModelType": "Turbo",
-      "BaseType": "bfloat16",
-      "MediaType": "Audio",
-      "ProcessTypes": [ "TextToAudio" ],
-      "ViewFilter": [ "TextToMusic" ],
-      "Checkpoint": {
-        "TextEncoder": {
-          "Name": "TextEncoder",
-          "Type": "Component",
-          "Path": "TE_AceStepXL"
-        },
-        "Vae": {
-          "Name": "AutoEncoder",
-          "Type": "Component",
-          "Path": "VAE_AceStepXL"
-        },
-        "ConditionEncoder": {
-          "Name": "ConditionEncoder",
-          "Type": "Component",
-          "Path": "CE_AceStepXL"
-        },
-        "AudioTokenizer": {
-          "Name": "AudioTokenizer",
-          "Type": "Component",
-          "Path": "AT_AceStepXL"
-        },
-        "AudioDetokenizer": {
-          "Name": "AudioDetokenizer",
-          "Type": "Component",
-          "Path": "AD_AceStepXL"
-        },
-        "Transformer": {
-          "Name": "Transformer",
-          "Type": "OnlineFolder",
-          "Path": "transformer",
-          "Folder": "acestep-v15-turbo-diffusers",
-          "DownloadFiles": [
-            "https://huggingface.co/Runware/acestep-v15-turbo-diffusers/resolve/main/transformer/config.json",
-            "https://huggingface.co/Runware/acestep-v15-turbo-diffusers/resolve/main/transformer/diffusion_pytorch_model.safetensors"
-          ]
-        }
-      },
-      "MemoryProfile": [
-        {
-          "QualityMode": "Draft",
-          "MemoryModes": [ 4, 6, 6 ]
-        },
-        {
-          "QualityMode": "Standard",
-          "MemoryModes": [ 4, 6, 8 ]
-        },
-        {
-          "QualityMode": "Production",
-          "MemoryModes": [ 4, 10, 12 ]
-        }
-      ],
-      "DefaultOptions": {
-        "Steps": 8,
-        "GuidanceScale": 0,
-        "SampleRate": 48000,
-        "Channels": 2,
-        "Strength": 1,
-        "BPM": 80,
-        "Duration": 0,
-        "MaxLength": 512,
-        "MaxLength2": 4096,
-        "Task": "text2music",
-        "Tasks": [ "text2music", "cover", "repaint", "lego" ],
-        "IsVaeTilingEnabled": true,
-        "IsVaeSlicingEnabled": true,
-        "Scheduler": "FlowMatchEuler",
-        "Schedulers": [
-          {
-            "Scheduler": "FlowMatchEuler",
-            "NumTrainTimesteps": 1,
-            "Shift": 3,
-            "UseDynamicShifting": false,
-            "BaseShift": 0.5,
-            "MaxShift": 1.15,
-            "BaseImageSeqLen": 256,
-            "MaxImageSeqLen": 4096,
-            "InvertSigmas": false,
-            "ShiftTerminal": 0,
-            "UseKarrasSigmas": false,
-            "UseExponentialSigmas": false,
-            "UseBetaSigmas": false,
-            "TimeShiftType": "Exponential",
-            "StochasticSampling": false
-          }
-        ]
-      },
-      "Link": "https://huggingface.co/Runware/acestep-v15-turbo-diffusers"
-    },
-    {
       "Id": 303,
-      "Backend": "PyTorch",
+      "Backend": "HuggingFace",
       "Name": "ACE-Step v1.5 XL",
       "Template": "AceStepXL",
       "Pipeline": "AceStepPipeline",
@@ -9709,7 +9412,7 @@
     },
     {
       "Id": 304,
-      "Backend": "PyTorch",
+      "Backend": "HuggingFace",
       "Name": "ACE-Step v1.5 XL SFT",
       "Template": "AceStepXL",
       "Pipeline": "AceStepPipeline",
@@ -9810,7 +9513,7 @@
     },
     {
       "Id": 305,
-      "Backend": "PyTorch",
+      "Backend": "HuggingFace",
       "Name": "ACE-Step v1.5 XL Turbo",
       "Template": "AceStepXL_Turbo",
       "Pipeline": "AceStepPipeline",
@@ -9911,7 +9614,7 @@
     },
     {
       "Id": 320,
-      "Backend": "PyTorch",
+      "Backend": "HuggingFace",
       "Name": "LongCat Audio 1B",
       "Template": "LongCatAudio_1B",
       "Pipeline": "LongCatAudioPipeline",
@@ -9987,7 +9690,7 @@
     },
     {
       "Id": 321,
-      "Backend": "PyTorch",
+      "Backend": "HuggingFace",
       "Name": "LongCat Audio 3.5B",
       "Template": "LongCatAudio_3B",
       "Pipeline": "LongCatAudioPipeline",
@@ -18998,7 +18701,7 @@
   "LanguageModels": [
     {
       "Id": 800,
-      "Backend": "PyTorch",
+      "Backend": "HuggingFace",
       "Name": "Qwen 3.0 4B",
       "Template": "Qwen30_IT",
       "Pipeline": "Qwen3Pipeline",
@@ -19058,7 +18761,7 @@
     },
     {
       "Id": 801,
-      "Backend": "PyTorch",
+      "Backend": "HuggingFace",
       "Name": "Qwen 3.0 4B VL",
       "Template": "Qwen30_VL",
       "Pipeline": "Qwen3Pipeline",
@@ -19121,7 +18824,7 @@
     },
     {
       "Id": 802,
-      "Backend": "PyTorch",
+      "Backend": "HuggingFace",
       "Name": "Qwen 3.0 8B",
       "Template": "Qwen30_IT",
       "Pipeline": "Qwen3Pipeline",
@@ -19184,7 +18887,7 @@
     },
     {
       "Id": 803,
-      "Backend": "PyTorch",
+      "Backend": "HuggingFace",
       "Name": "Qwen 3.0 8B VL",
       "Template": "Qwen30_VL",
       "Pipeline": "Qwen3Pipeline",
@@ -19249,7 +18952,7 @@
     },
     {
       "Id": 804,
-      "Backend": "PyTorch",
+      "Backend": "HuggingFace",
       "Name": "Qwen 3.0 14B",
       "Template": "Qwen30_IT",
       "Pipeline": "Qwen3Pipeline",
@@ -19314,7 +19017,7 @@
     },
     {
       "Id": 805,
-      "Backend": "PyTorch",
+      "Backend": "HuggingFace",
       "Name": "Qwen 3.0 32B",
       "Template": "Qwen30_IT",
       "Pipeline": "Qwen3Pipeline",
@@ -19388,7 +19091,7 @@
     },
     {
       "Id": 806,
-      "Backend": "PyTorch",
+      "Backend": "HuggingFace",
       "Name": "Qwen 3.5 4B",
       "Template": "Qwen35_IT",
       "Pipeline": "Qwen3Pipeline",
@@ -19450,7 +19153,7 @@
     },
     {
       "Id": 807,
-      "Backend": "PyTorch",
+      "Backend": "HuggingFace",
       "Name": "Qwen 3.5 9B",
       "Template": "Qwen35_IT",
       "Pipeline": "Qwen3Pipeline",
@@ -19514,7 +19217,7 @@
     },
     {
       "Id": 808,
-      "Backend": "PyTorch",
+      "Backend": "HuggingFace",
       "Name": "Qwen 3.5 27B",
       "Template": "Qwen35_IT",
       "Pipeline": "Qwen3Pipeline",
@@ -19586,7 +19289,7 @@
     },
     {
       "Id": 809,
-      "Backend": "PyTorch",
+      "Backend": "HuggingFace",
       "Name": "Qwen 3.6 27B",
       "Template": "Qwen36_IT",
       "Pipeline": "Qwen3Pipeline",
@@ -19663,7 +19366,7 @@
     },
     {
       "Id": 810,
-      "Backend": "PyTorch",
+      "Backend": "HuggingFace",
       "Name": "Qwen 3.8 27B",
       "Template": "Qwen38_IT",
       "Pipeline": "Qwen3Pipeline",
@@ -19742,7 +19445,7 @@
     },
     {
       "Id": 820,
-      "Backend": "PyTorch",
+      "Backend": "HuggingFace",
       "Name": "Gemma4 E2B IT",
       "Template": "Gemma4_IT",
       "Pipeline": "Gemma4Pipeline",
@@ -19803,7 +19506,7 @@
     },
     {
       "Id": 821,
-      "Backend": "PyTorch",
+      "Backend": "HuggingFace",
       "Name": "Gemma4 E4B IT",
       "Template": "Gemma4_IT",
       "Pipeline": "Gemma4Pipeline",
@@ -19864,7 +19567,7 @@
     },
     {
       "Id": 822,
-      "Backend": "PyTorch",
+      "Backend": "HuggingFace",
       "Name": "Gemma4 12B IT",
       "Template": "Gemma4_IT",
       "Pipeline": "Gemma4Pipeline",
@@ -19924,7 +19627,7 @@
     },
     {
       "Id": 824,
-      "Backend": "PyTorch",
+      "Backend": "HuggingFace",
       "Name": "Gemma4 31B IT",
       "Template": "Gemma4_IT",
       "Pipeline": "Gemma4Pipeline",

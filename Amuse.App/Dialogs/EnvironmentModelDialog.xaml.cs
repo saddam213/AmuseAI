@@ -90,7 +90,7 @@ namespace Amuse.App.Dialogs
             set
             {
                 SetProperty(ref _backendType, value);
-                if (_backendType == BackendType.PyTorch)
+                if (_backendType == BackendType.HuggingFace)
                     HostVersions = [.. _pythonVersions];
                 else if (_backendType == BackendType.StableDiffusionCpp)
                     HostVersions = [.. _stableDiffusionCppVersions];
@@ -130,7 +130,7 @@ namespace Amuse.App.Dialogs
                 Environment = "environment-new",
                 Vendor = Settings.Vendors.FirstOrDefault(),
                 Type = EnvironmentType.Vendor,
-                Backend = BackendType.PyTorch
+                Backend = BackendType.HuggingFace
             };
             Populate();
             return base.ShowDialogAsync();

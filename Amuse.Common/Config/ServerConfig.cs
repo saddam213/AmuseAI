@@ -27,34 +27,34 @@ namespace Amuse.Common.Config
             {
                 ServerType.OnnxRuntime,  new ServerConfig
                 {
-                    Name = "AmuseOnnx",
+                    Name = "OnnxRuntime",
                     Arguments = [nameof(ServerType.OnnxRuntime)],
-                    Executable = "AmuseHost.Onnx.exe",
-                    ChannelCommand = "AmuseOnnx.Command",
-                    ChannelPipeName = "AmuseOnnx.PipeName",
-                    ChannelProgress = "AmuseOnnx.Progress"
+                    Executable = "AmuseHost.OnnxRuntime.exe",
+                    ChannelCommand = "AmuseHost.OnnxRuntime.Command",
+                    ChannelPipeName = "AmuseHost.OnnxRuntime.PipeName",
+                    ChannelProgress = "AmuseHost.OnnxRuntime.Progress"
                 }
             },
             {
-                ServerType.PyTorch,  new ServerConfig
+                ServerType.HuggingFace,  new ServerConfig
                 {
-                    Name = "AmusePyTorch",
-                    Arguments = [nameof(ServerType.PyTorch)],
-                    Executable = "AmuseHost.PyTorch.exe",
-                    ChannelCommand = "AmusePyTorch.Command",
-                    ChannelPipeName = "AmusePyTorch.PipeName",
-                    ChannelProgress = "AmusePyTorch.Progress"
+                    Name = "HuggingFace",
+                    Arguments = [nameof(ServerType.HuggingFace)],
+                    Executable = "AmuseHost.HuggingFace.exe",
+                    ChannelCommand = "AmuseHost.HuggingFace.Command",
+                    ChannelPipeName = "AmuseHost.HuggingFace.PipeName",
+                    ChannelProgress = "AmuseHost.HuggingFace.Progress"
                 }
             },
             {
                 ServerType.StableDiffusionCpp,  new ServerConfig
                 {
-                    Name = "AmuseStableDiffusionCpp",
+                    Name = "StableDiffusionCpp",
                     Arguments = [nameof(ServerType.StableDiffusionCpp)],
                     Executable = "AmuseHost.StableDiffusionCpp.exe",
-                    ChannelCommand = "AmuseStableDiffusionCpp.Command",
-                    ChannelPipeName = "AmuseStableDiffusionCpp.PipeName",
-                    ChannelProgress = "AmuseStableDiffusionCpp.Progress"
+                    ChannelCommand = "AmuseHost.StableDiffusionCpp.Command",
+                    ChannelPipeName = "AmuseHost.StableDiffusionCpp.PipeName",
+                    ChannelProgress = "AmuseHost.StableDiffusionCpp.Progress"
                 }
             }
         };

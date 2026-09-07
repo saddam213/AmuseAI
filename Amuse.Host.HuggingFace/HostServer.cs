@@ -7,19 +7,19 @@ using System.Diagnostics;
 using System.Threading;
 using System.Threading.Tasks;
 using TensorStack.Common.Tensor;
-using TensorStack.Python;
+using TensorStack.HuggingFace;
 
-namespace Amuse.Host.PyTorch
+namespace Amuse.Host.HuggingFace
 {
     public sealed class HostServer : PipelineServer
     {
-        private readonly IProgress<TensorStack.Python.Common.PipelineProgress> _progressCallback;
-        private PythonPipeline _pipeline;
+        private readonly IProgress<TensorStack.HuggingFace.Common.PipelineProgress> _progressCallback;
+        private HuggingFacePipeline _pipeline;
 
         public HostServer(ServerConfig config, ILogger logger)
             : base(config, logger)
         {
-            _progressCallback = new Progress<TensorStack.Python.Common.PipelineProgress>(async (p) => await UpdateProgress(p));
+            _progressCallback = new Progress<TensorStack.HuggingFace.Common.PipelineProgress>(async (p) => await UpdateProgress(p));
         }
 
 
@@ -49,8 +49,8 @@ namespace Amuse.Host.PyTorch
                 var timestamp = Stopwatch.GetTimestamp();
                 var environmentRequest = request.CreateOptions;
                 var pythonOptions = request.CreateOptions.ToPythonOptions();
-                var environmentMode = environmentRequest.Mode.Cast<Amuse.Common.EnvironmentMode, TensorStack.Python.Common.EnvironmentMode>();
-                var pythonEnvironment = new PythonManager(pythonOptions, Config.DirectoryBase, Logger);
+                var environmentMode = environmentRequest.Mode.Cast<Amuse.Common.EnvironmentMode, TensorStack.HuggingFace.Common.EnvironmentMode>();
+                var pythonEnvironment = new InstallManager(pythonOptions, Config.DirectoryBase, Logger);
                 if (environmentRequest.Mode == Amuse.Common.EnvironmentMode.Load || (environmentRequest.Mode == Amuse.Common.EnvironmentMode.Create && pythonEnvironment.Exists()))
                 {
                     Logger.LogInformation("[PipelineServer] [CreatePipeline] Loading existing environment...");
@@ -77,7 +77,7 @@ namespace Amuse.Host.PyTorch
             try
             {
                 var pythonOptions = request.LoadOptions.ToPythonOptions();
-                _pipeline = new PythonPipeline(pythonOptions, _progressCallback, Logger);
+                _pipeline = new HuggingFacePipeline(pythonOptions, _progressCallback, Logger);
                 await _pipeline.LoadAsync();
                 await SendResponse(cancellationToken);
             }
@@ -170,7 +170,7 @@ namespace Amuse.Host.PyTorch
         }
 
 
-        private async Task UpdateProgress(TensorStack.Python.Common.PipelineProgress progress)
+        private async Task UpdateProgress(TensorStack.HuggingFace.Common.PipelineProgress progress)
         {
             await QueueProgress(progress.ToProgress());
         }

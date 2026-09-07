@@ -33,21 +33,19 @@
   <ItemGroup Condition="'$(Configuration)' == 'Debug'">
     <ProjectReference Include="..\..\TensorStack.WPF\TensorStack.WPF.csproj" />
     <ProjectReference Include="..\..\TensorStack.Common\TensorStack.Common.csproj" />
-    <ProjectReference Include="..\..\TensorStack.Upscaler\TensorStack.Upscaler.csproj" />
-    <ProjectReference Include="..\..\TensorStack.Extractors\TensorStack.Extractors.csproj" />
-    <ProjectReference Include="..\..\TensorStack.TextGeneration\TensorStack.TextGeneration.csproj" />
     <ProjectReference Include="..\..\TensorStack.Media\TensorStack.Media.csproj" />
     <ProjectReference Include="..\..\TensorStack.Media.BitmapImage\TensorStack.Media.BitmapImage.csproj" />
     <ProjectReference Include="..\..\TensorStack.OnnxRuntime\TensorStack.OnnxRuntime.csproj" />
+    <ProjectReference Include="..\..\TensorStack.OnnxRuntime.Vision\TensorStack.OnnxRuntime.Vision.csproj" />
+    <ProjectReference Include="..\..\TensorStack.OnnxRuntime.LLM\TensorStack.OnnxRuntime.LLM.csproj" />
   </ItemGroup>
 
   <!--Release-->
   <ItemGroup Condition="'$(Configuration)' == 'Release' OR '$(Configuration)' == 'Release_Installer'">
     <PackageReference Include="TensorStack.WPF" Version="$(PackageVersion)" />
-    <PackageReference Include="TensorStack.Upscaler" Version="$(PackageVersion)" />
-    <PackageReference Include="TensorStack.Extractors" Version="$(PackageVersion)" />
-    <PackageReference Include="TensorStack.TextGeneration" Version="$(PackageVersion)" />
     <PackageReference Include="TensorStack.OnnxRuntime" Version="$(PackageVersion)" />
+    <PackageReference Include="TensorStack.OnnxRuntime.Vision" Version="$(PackageVersion)" />
+    <PackageReference Include="TensorStack.OnnxRuntime.LLM" Version="$(PackageVersion)" />
   </ItemGroup>
 
   <!--Binaries-->

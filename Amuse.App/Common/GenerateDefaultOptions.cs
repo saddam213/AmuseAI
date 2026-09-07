@@ -2,7 +2,7 @@
 using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Text.Json.Serialization;
-using TensorStack.TextGeneration.Common;
+using TensorStack.OnnxRuntime.LLM.Common;
 
 namespace Amuse.App.Common
 {

@@ -12,9 +12,9 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 		Directory.Build.props = Directory.Build.props
 	EndProjectSection
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Amuse.Host.Onnx", "Amuse.Host.Onnx\Amuse.Host.Onnx.csproj", "{F9832177-CC53-3242-3B37-99C0D2DF5A96}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Amuse.Host.HuggingFace", "Amuse.Host.HuggingFace\Amuse.Host.HuggingFace.csproj", "{CE815898-FC7F-DFFD-5E85-2E40B9F9A2C4}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Amuse.Host.PyTorch", "Amuse.Host.PyTorch\Amuse.Host.PyTorch.csproj", "{CE815898-FC7F-DFFD-5E85-2E40B9F9A2C4}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Amuse.Host.OnnxRuntime", "Amuse.Host.OnnxRuntime\Amuse.Host.OnnxRuntime.csproj", "{F9832177-CC53-3242-3B37-99C0D2DF5A96}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Amuse.Host.StableDiffusionCpp", "Amuse.Host.StableDiffusionCpp\Amuse.Host.StableDiffusionCpp.csproj", "{DEAD9EB8-5CDF-46ED-A612-65F88E5417C2}"
 EndProject

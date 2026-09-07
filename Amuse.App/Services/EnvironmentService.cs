@@ -122,7 +122,7 @@ namespace Amuse.App.Services
         public PipelineCreateOptions CreatePipelineOptions(EnvironmentModel environment, EnvironmentMode environmentMode = EnvironmentMode.Create)
         {
             var backendPath = GetBackendPath(environment);
-            if (environment.Backend == BackendType.PyTorch)
+            if (environment.Backend == BackendType.HuggingFace)
             {
                 var environmentConfig = new PipelineCreateOptions
                 {
@@ -162,13 +162,13 @@ namespace Amuse.App.Services
         private async Task CreateInternalAsync(EnvironmentModel environment, EnvironmentMode mode, IProgress<PipelineProgress> progressCallback, CancellationToken cancellationToken = default)
         {
             var createOptions = CreatePipelineOptions(environment, mode);
-            if (environment.Backend == BackendType.PyTorch)
+            if (environment.Backend == BackendType.HuggingFace)
             {
                 var clientConfig = new ClientConfig
                 {
                     IsDebugMode = createOptions.IsDebug,
                     ServerPath = App.DirectoryServer,
-                    ServerType = ServerType.PyTorch,
+                    ServerType = ServerType.HuggingFace,
                     ServerVariables = createOptions.Variables
                 };
 
@@ -204,7 +204,7 @@ namespace Amuse.App.Services
         private static string GetPath(EnvironmentModel environment)
         {
             var backendPath = GetBackendPath(environment);
-            return environment.Backend == BackendType.PyTorch
+            return environment.Backend == BackendType.HuggingFace
                 ? Path.Combine(backendPath, "Pipelines", $".{environment.Environment}")
                 : Path.Combine(backendPath, environment.Environment);
         }
@@ -212,9 +212,9 @@ namespace Amuse.App.Services
 
         private static string GetBackendPath(EnvironmentModel environment)
         {
-            return environment.Backend == BackendType.PyTorch
-                ? Path.Combine(App.DirectoryData, "PythonRuntime")
-                : Path.Combine(App.DirectoryData, "StableDiffusionCppRuntime");
+            return environment.Backend == BackendType.HuggingFace
+                ? Path.Combine(App.DirectoryData, "RuntimeHuggingFace")
+                : Path.Combine(App.DirectoryData, "RuntimeStableDiffusionCpp");
         }
 
 
