@@ -73,13 +73,6 @@ NVIDIA GPUs can use **CUDA 13.0** for native GPU acceleration. RTX-enabled cards
 
 > NVIDIA driver version `580.65` or later is required for CUDA 13.0 compatibility.
 
-
-### ROCm (AMD)
-AMD GPUs can use **ROCm 7.14.0** for native GPU acceleration. ROCm provides support for compatible Radeon and Instinct hardware, offering an alternative to CUDA for AMD-based systems. Performance and supported features may vary depending on the specific GPU architecture and operating system.
-
-> AMD driver version `26.8.1` or later is required for ROCm 7.14.0 compatibility.
-
-
 ### Vulkan (AMD, Nvidia, Intel)
 **Vulkan** provides a cross-vendor GPU backend that can be used on compatible hardware without requiring CUDA or ROCm. This makes it particularly useful for GPUs and systems that do not have access to a supported CUDA or ROCm environment.
 
