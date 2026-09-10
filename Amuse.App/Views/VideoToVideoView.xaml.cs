@@ -86,11 +86,11 @@ namespace Amuse.App.Views
                 Statistics.Start();
 
                 // Frames
-                var frames = await GetInputFrames().ToListAsync();
+                var videoSequence = await GetInputFramesAsync();
 
                 // Options
                 var options = Options with { };
-                options.InputImages = frames;
+                options.InputVideos = [videoSequence];
 
                 // Execute
                 var resultTensor = await ExecuteVideoDiffusionAsync(options);
@@ -144,9 +144,6 @@ namespace Amuse.App.Views
                 Statistics.Start();
                 CancellationTokenSource = new CancellationTokenSource();
 
-                // Frames
-                var frames = await GetInputFrames().ToListAsync();
-
                 AutomationProgress.Indeterminate($"Automation Started");
                 var cancellationToken = CancellationTokenSource.Token;
                 await foreach (var automationJob in AutomationManager.CreateJobsAsync(AutomationOptions, Options, MediaType.Video, MediaType.Video))
@@ -157,8 +154,9 @@ namespace Amuse.App.Views
                     if (!automationJob.VideoStreams.IsNullOrEmpty())
                         SourceVideo = automationJob.VideoStreams[0];
 
-                    // Images
-                    automationJob.GenerateOptions.InputImages = await GetInputFrames().ToListAsync();
+                    // Frames
+                    var videoSequence = await GetInputFramesAsync();
+                    automationJob.GenerateOptions.InputVideos = [videoSequence];
 
                     // Diffusion
                     var resultTensor = await ExecuteVideoDiffusionAsync(automationJob.GenerateOptions);
@@ -227,15 +225,17 @@ namespace Amuse.App.Views
         }
 
 
-        private async IAsyncEnumerable<ImageTensor> GetInputFrames()
+        private async Task<VideoSequence> GetInputFramesAsync()
         {
             Progress.Clear();
+            var frames = new List<ImageTensor>();
             await foreach (var sourceFrame in _sourceVideo.GetAsync(Options.Width, Options.Height, Options.FrameRate, TensorStack.Common.ResizeMode.Crop).Take(Options.Frames))
             {
                 Progress.Update(sourceFrame.Index, Options.Frames, $"Processing Input Frame: {sourceFrame.Index}/{sourceFrame.Frame}");
-                yield return sourceFrame.Frame;
+                frames.Add(sourceFrame.Frame);
             }
             Progress.Indeterminate("Encoding Video Frames...");
+            return new VideoSequence([..frames], Options.FrameRate);
         }
     }
 }

@@ -284,21 +284,6 @@ namespace Amuse.Host.StableDiffusionCpp
 
 
         /// <summary>
-        /// Sends a progress message.
-        /// </summary>
-        /// <param name="progressCallback">The progress callback.</param>
-        /// <param name="message">The message.</param>
-        internal static void SendProgressMessage(this IProgress<PipelineProgress> progressCallback, string message)
-        {
-            progressCallback?.Report(new PipelineProgress
-            {
-                Message = message,
-                Key = "Initialize"
-            });
-        }
-
-
-        /// <summary>
         /// Gets the type of the backend.
         /// </summary>
         /// <param name="options">The options.</param>
@@ -541,11 +526,11 @@ namespace Amuse.Host.StableDiffusionCpp
         /// <param name="processType">Type of the process.</param>
         private static ImageTensor[] GetControlFrames(GenerateVideoOptions options, ProcessType processType)
         {
-            if (options.InputImages.IsNullOrEmpty())
+            if (options.InputVideos.IsNullOrEmpty())
                 return default;
 
-            if (options.InputImages.Count > 2 && processType == ProcessType.ImageToVideo)
-                return [.. options.InputImages];
+            if (processType == ProcessType.VideoToVideo)
+                return [.. options.InputVideos[0].Frames];
 
             return default;
         }

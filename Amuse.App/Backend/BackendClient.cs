@@ -472,7 +472,8 @@ namespace Amuse.App.Runtime
                 SchedulerOptions = options.SchedulerOptions?.ToClientOptions(),
                 LoraOptions = LoraOptions(options),
                 InputImages = options.InputImages,
-                InputControlImages = options.InputControlImages
+                InputControlImages = options.InputControlImages,
+                InputVideos = options.InputVideos,
             };
         }
 
@@ -507,7 +508,8 @@ namespace Amuse.App.Runtime
                 SilenceDuration = options.SilenceDuration,
                 SampleRate = DefaultOptions.SampleRate,
                 SchedulerOptions = options.SchedulerOptions?.ToClientOptions(),
-                LoraOptions = LoraOptions(options)
+                LoraOptions = LoraOptions(options),
+                InputVideos = options.InputVideos,
             };
         }
 
@@ -540,7 +542,8 @@ namespace Amuse.App.Runtime
                 IsThinkingEnabled = options.IsThinkingEnabled,
                 InputImages = options.InputImages,
                 SampleRate = DefaultOptions.SampleRate,
-                CacheType = options.CacheType
+                CacheType = options.CacheType,
+                InputVideos = options.InputVideos,
             };
         }
 

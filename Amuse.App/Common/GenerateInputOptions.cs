@@ -477,6 +477,8 @@ namespace Amuse.App.Common
         [JsonIgnore]
         public List<AudioInputStream> InputAudios { get; set; } = [];
 
+        [JsonIgnore]
+        public List<VideoSequence> InputVideos { get; set; } = [];
 
         public bool Equals(GenerateInputOptions other) => ReferenceEquals(this, other);
         public override int GetHashCode() => RuntimeHelpers.GetHashCode(this);

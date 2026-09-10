@@ -66,7 +66,15 @@ namespace Amuse.Host.StableDiffusionCpp
                 await SendLoadingProgress("Creating Environment...");
 
                 var timestamp = Stopwatch.GetTimestamp();
-                if (!await InstallManager.InitializeAsync(request.CreateOptions, _progressRelayCallback))
+                var isReinstall = request.CreateOptions.Mode == EnvironmentMode.Update || request.CreateOptions.Mode == EnvironmentMode.Rebuild || request.CreateOptions.Mode == EnvironmentMode.Reinstall;
+                var backendConfig = new TensorStack.StableDiffusionCpp.Common.BackendConfig
+                {
+                    Name = request.CreateOptions.Environment,
+                    Requirements = request.CreateOptions.Requirements,
+                    Directory = Path.Combine(request.CreateOptions.Directory, request.CreateOptions.Environment),
+                };
+
+                if (!await InstallManager.InitializeAsync(backendConfig, isReinstall, async (l, m) => await SendProgressMessage(l, m)))
                     throw new Exception($"Failed to Install StableDiffusion.Cpp {request.CreateOptions.HostVersion}");
 
                 _options = request.CreateOptions;
@@ -232,6 +240,7 @@ namespace Amuse.Host.StableDiffusionCpp
                 LogLevelType.Debug => LogLevel.Debug,
                 LogLevelType.Warn => LogLevel.Warning,
                 LogLevelType.Error => LogLevel.Error,
+                LogLevelType.Verbose => LogLevel.Trace,
                 _ => LogLevel.Trace
             };
             Logger?.Log(logLevel, "[StableDiffusion.cpp] {message}", message);
@@ -244,6 +253,17 @@ namespace Amuse.Host.StableDiffusionCpp
         private async Task SendLoadingProgress(string message = null)
         {
             await QueueProgress(new PipelineProgress { Key = "Load", Subkey = "Pipeline", Message = message ?? "Loading Pipeline Components..." });
+        }
+
+
+        /// <summary>
+        /// Sends the progress message.
+        /// </summary>
+        /// <param name="message">The message.</param>
+        private async Task SendProgressMessage(LogLevelType level, string message)
+        {
+            OnLogCallback(level, message);
+            await QueueProgress(new PipelineProgress { Key = "Initialize", Message = message });
         }
     }
 }
