@@ -127,14 +127,17 @@ namespace Amuse.App.Views
         }
 
 
-        public override Task OpenAsync(OpenViewArgs args = null)
+        public override async Task OpenAsync(OpenViewArgs args = null)
         {
+            await base.OpenAsync(args);
             if (args is ModelViewOpenArgs modelViewArgs)
             {
-                FilterCategoryType = modelViewArgs.ModelType;
-                FilterPipeline = modelViewArgs.PipelineType.HasValue ? modelViewArgs.PipelineType.GetDisplayName() : String_AllPipelines;
+                _filterCategoryType = modelViewArgs.ModelType;
+                _filterPipeline = modelViewArgs.PipelineType.HasValue ? modelViewArgs.PipelineType.GetDisplayName() : String_AllPipelines;
+                NotifyPropertyChanged(nameof(FilterPipeline));
+                NotifyPropertyChanged(nameof(FilterCategoryType));
+                ModelCollection.Refresh();
             }
-            return base.OpenAsync(args);
         }
 
 

@@ -1,6 +1,7 @@
 ﻿using Amuse.Common;
 using System;
 using System.Windows;
+using TensorStack.Common;
 using TensorStack.WPF.Controls;
 
 namespace Amuse.App.Controls
@@ -20,7 +21,7 @@ namespace Amuse.App.Controls
 
         public static readonly DependencyProperty SettingsProperty = DependencyProperty.Register(nameof(Settings), typeof(Settings), typeof(LanguageControl));
         public static readonly DependencyProperty SelectedLanguageProperty = DependencyProperty.Register(nameof(SelectedLanguage), typeof(LanguageType), typeof(LanguageControl), new FrameworkPropertyMetadata(LanguageType.English, FrameworkPropertyMetadataOptions.BindsTwoWayByDefault));
-        public static readonly DependencyProperty SupportedLanguagesProperty = DependencyProperty.Register(nameof(SupportedLanguages), typeof(LanguageType[]), typeof(LanguageControl), new PropertyMetadata(Enum.GetValues<LanguageType>()));
+        public static readonly DependencyProperty SupportedLanguagesProperty = DependencyProperty.Register(nameof(SupportedLanguages), typeof(LanguageType[]), typeof(LanguageControl), new FrameworkPropertyMetadata(Enum.GetValues<LanguageType>(), null, CoerceSupportedLanguages));
 
         public Settings Settings
         {
@@ -39,6 +40,14 @@ namespace Amuse.App.Controls
         {
             get { return (LanguageType)GetValue(SelectedLanguageProperty); }
             set { SetValue(SelectedLanguageProperty, value); }
+        }
+
+
+        private static object CoerceSupportedLanguages(DependencyObject d, object baseValue)
+        {
+            if (baseValue is LanguageType[] languages && !languages.IsNullOrEmpty())
+                return languages;
+            return Enum.GetValues<LanguageType>();
         }
     }
 }

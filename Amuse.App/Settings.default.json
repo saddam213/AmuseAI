@@ -21,7 +21,7 @@
       "Backend": "HuggingFace",
       "Environment": "cuda-130",
       "HostVersion": "3.14",
-      "Version": 16,
+      "Version": 18,
       "IsDefault": true,
       "Status": "Create",
       "Variables": {
@@ -34,22 +34,22 @@
         "torchaudio==2.11.0+cu130",
         "torchvision==0.26.0+cu130",
         "typing==3.7.4.3",
-        "wheel==0.47.0",
-        "transformers==5.13.1",
-        "accelerate==1.14.0",
+        "wheel==0.48.0",
+        "transformers==5.17.0",
+        "accelerate==1.15.0",
         "diffusers==0.40.0",
-        "protobuf==7.35.1",
+        "protobuf==7.36.1",
         "sentencepiece==0.2.2",
         "ftfy==6.3.1",
-        "scipy==1.18.0",
+        "scipy==1.18.1",
         "peft==0.20.0",
         "torchsde==0.2.6",
         "gguf==0.19.0",
-        "av==18.0.0",
+        "av==18.1.0",
         "soundfile==0.14.0",
         "torchao==0.18.0",
         "optimum-quanto==0.2.7",
-        "bitsandbytes==0.50.0"
+        "bitsandbytes==0.50.2"
       ]
     },
     {
@@ -60,7 +60,7 @@
       "Backend": "HuggingFace",
       "Environment": "rocm-721",
       "HostVersion": "3.12",
-      "Version": 16,
+      "Version": 18,
       "Status": "Create",
       "IsDefault": true,
       "Variables": {
@@ -77,21 +77,21 @@
         "https://repo.radeon.com/rocm/windows/rocm-rel-7.2.1/torchaudio-2.9.1%2Brocm7.2.1-cp312-cp312-win_amd64.whl",
         "https://repo.radeon.com/rocm/windows/rocm-rel-7.2.1/torchvision-0.24.1%2Brocm7.2.1-cp312-cp312-win_amd64.whl",
         "typing==3.7.4.3",
-        "wheel==0.47.0",
-        "transformers==5.13.1",
-        "accelerate==1.14.0",
+        "wheel==0.48.0",
+        "transformers==5.17.0",
+        "accelerate==1.15.0",
         "diffusers==0.40.0",
-        "protobuf==7.35.1",
+        "protobuf==7.36.1",
         "sentencepiece==0.2.2",
         "ftfy==6.3.1",
-        "scipy==1.18.0",
+        "scipy==1.18.1",
         "peft==0.20.0",
         "torchsde==0.2.6",
         "gguf==0.19.0",
-        "av==18.0.0",
+        "av==18.1.0",
         "soundfile==0.14.0",
         "optimum-quanto==0.2.7",
-        "bitsandbytes==0.50.0"
+        "bitsandbytes==0.50.2"
       ]
     },
     {
@@ -102,11 +102,11 @@
       "Backend": "StableDiffusionCpp",
       "Environment": "vulkan",
       "HostVersion": "Vulkan",
-      "Version": 6,
+      "Version": 859,
       "Status": "Create",
       "Variables": {},
       "Requirements": [
-        "https://github.com/leejet/stable-diffusion.cpp/releases/download/master-849-d04e895/sd-master-d04e895-bin-win-vulkan-x64.zip"
+        "https://github.com/leejet/stable-diffusion.cpp/releases/download/master-859-7f410a3/sd-master-7f410a3-bin-win-vulkan-x64.zip"
       ]
     },
     {
@@ -117,12 +117,12 @@
       "Backend": "StableDiffusionCpp",
       "Environment": "vulkan",
       "HostVersion": "Vulkan",
-      "Version": 8,
+      "Version": 859,
       "Status": "Create",
       "IsDefault": true,
       "Variables": {},
       "Requirements": [
-        "https://github.com/leejet/stable-diffusion.cpp/releases/download/master-849-d04e895/sd-master-d04e895-bin-win-vulkan-x64.zip"
+        "https://github.com/leejet/stable-diffusion.cpp/releases/download/master-859-7f410a3/sd-master-7f410a3-bin-win-vulkan-x64.zip"
       ]
     },
     {
@@ -133,12 +133,12 @@
       "Backend": "StableDiffusionCpp",
       "Environment": "vulkan",
       "HostVersion": "Vulkan",
-      "Version": 8,
+      "Version": 859,
       "Status": "Create",
       "IsDefault": true,
       "Variables": {},
       "Requirements": [
-        "https://github.com/leejet/stable-diffusion.cpp/releases/download/master-849-d04e895/sd-master-d04e895-bin-win-vulkan-x64.zip"
+        "https://github.com/leejet/stable-diffusion.cpp/releases/download/master-859-7f410a3/sd-master-7f410a3-bin-win-vulkan-x64.zip"
       ]
     },
     {
@@ -149,16 +149,15 @@
       "Backend": "StableDiffusionCpp",
       "Environment": "cuda",
       "HostVersion": "CUDA",
-      "Version": 8,
+      "Version": 859,
       "Status": "Create",
       "IsDefault": true,
       "Variables": {},
       "Requirements": [
-        "https://github.com/leejet/stable-diffusion.cpp/releases/download/master-849-d04e895/cudart-sd-bin-win-cu12-x64.zip",
-        "https://github.com/leejet/stable-diffusion.cpp/releases/download/master-849-d04e895/sd-master-d04e895-bin-win-cuda12-x64.zip"
+        "https://github.com/leejet/stable-diffusion.cpp/releases/download/master-859-7f410a3/cudart-sd-bin-win-cu12-x64.zip",
+        "https://github.com/leejet/stable-diffusion.cpp/releases/download/master-859-7f410a3/sd-master-7f410a3-bin-win-cuda12-x64.zip"
       ]
     },
-
     {
       "Id": 104,
       "Name": "StableDiffusion.cpp ROCM",
@@ -167,11 +166,11 @@
       "Backend": "StableDiffusionCpp",
       "Environment": "rocm",
       "HostVersion": "ROCM",
-      "Version": 8,
+      "Version": 859,
       "Status": "Create",
       "Variables": {},
       "Requirements": [
-        "https://github.com/leejet/stable-diffusion.cpp/releases/download/master-849-d04e895/sd-master-d04e895-bin-win-rocm-7.14.0-x64.zip",
+        "https://github.com/leejet/stable-diffusion.cpp/releases/download/master-859-7f410a3/sd-master-7f410a3-bin-win-rocm-7.14.0-x64.zip",
         "https://repo.amd.com/rocm/tarball-multi-arch/therock-dist-windows-multiarch-7.14.0.tar.gz"
       ]
     }

@@ -43,6 +43,7 @@
   <!--Release-->
   <ItemGroup Condition="'$(Configuration)' == 'Release' OR '$(Configuration)' == 'Release_Installer'">
     <PackageReference Include="TensorStack.WPF" Version="$(PackageVersion)" />
+    <PackageReference Include="TensorStack.Media" Version="$(PackageVersion)" />
     <PackageReference Include="TensorStack.OnnxRuntime" Version="$(PackageVersion)" />
     <PackageReference Include="TensorStack.OnnxRuntime.Vision" Version="$(PackageVersion)" />
     <PackageReference Include="TensorStack.OnnxRuntime.LLM" Version="$(PackageVersion)" />

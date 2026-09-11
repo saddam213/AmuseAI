@@ -698,11 +698,7 @@ namespace Amuse.App.Controls
 
         public void SetPipeline(PipelineModel pipeline)
         {
-            ModelCollectionView?.Refresh();
-            LoraCollectionView?.Refresh();
-            ControlNetCollectionView?.Refresh();
-            ExtractCollectionView?.Refresh();
-            UpscaleCollectionView?.Refresh();
+            RefreshSelection();
             if (pipeline == null)
                 return;
 
@@ -750,6 +746,39 @@ namespace Amuse.App.Controls
             }
 
             ValidateSelection();
+        }
+
+
+        private void RefreshSelection()
+        {
+            if (ModelCollectionView != null)
+            {
+                ModelCollectionView.Refresh();
+                LoraCollectionView?.Refresh();
+                if (!ModelCollectionView.IsEmpty && _selectedModel == null)
+                    ModelCollectionView.MoveCurrentToFirst();
+            }
+
+            if (ControlNetCollectionView != null)
+            {
+                ControlNetCollectionView.Refresh();
+                if (!ControlNetCollectionView.IsEmpty && _selectedControlNet == null && _isControlNetEnabled)
+                    ControlNetCollectionView.MoveCurrentToFirst();
+            }
+
+            if (ExtractCollectionView != null)
+            {
+                ExtractCollectionView.Refresh();
+                if (!ExtractCollectionView.IsEmpty && _selectedExtractor == null && _isExtractorEnabled)
+                    ExtractCollectionView.MoveCurrentToFirst();
+            }
+
+            if (UpscaleCollectionView != null)
+            {
+                UpscaleCollectionView.Refresh();
+                if (!UpscaleCollectionView.IsEmpty && _selectedExtractor == null && _isUpscalerEnabled)
+                    UpscaleCollectionView.MoveCurrentToFirst();
+            }
         }
 
 
@@ -901,23 +930,23 @@ namespace Amuse.App.Controls
         {
             if (sender.Equals("Diffusion"))
             {
-                await NavigationService.NavigateAsync((int)View.Models, new ModelViewOpenArgs(ModelCategoryType.Diffusion));
+                await NavigationService.NavigateAsync((int)View.Models, new ModelViewOpenArgs(ViewType, ModelCategoryType.Diffusion));
             }
             else if (sender.Equals("ControlNet"))
             {
-                await NavigationService.NavigateAsync((int)View.Models, new ModelViewOpenArgs(ModelCategoryType.ControlNet, _selectedModel.Pipeline));
+                await NavigationService.NavigateAsync((int)View.Models, new ModelViewOpenArgs(ViewType, ModelCategoryType.ControlNet, _selectedModel.Pipeline));
             }
             else if (sender.Equals("LoraAdapter"))
             {
-                await NavigationService.NavigateAsync((int)View.Models, new ModelViewOpenArgs(ModelCategoryType.LoraAdapter, _selectedModel.Pipeline));
+                await NavigationService.NavigateAsync((int)View.Models, new ModelViewOpenArgs(ViewType, ModelCategoryType.LoraAdapter, _selectedModel.Pipeline));
             }
             else if (sender.Equals("Extract"))
             {
-                await NavigationService.NavigateAsync((int)View.Models, new ModelViewOpenArgs(ModelCategoryType.Extract));
+                await NavigationService.NavigateAsync((int)View.Models, new ModelViewOpenArgs(ViewType, ModelCategoryType.Extract));
             }
             else if (sender.Equals("Upscale"))
             {
-                await NavigationService.NavigateAsync((int)View.Models, new ModelViewOpenArgs(ModelCategoryType.Upscale));
+                await NavigationService.NavigateAsync((int)View.Models, new ModelViewOpenArgs(ViewType, ModelCategoryType.Upscale));
             }
         }
 

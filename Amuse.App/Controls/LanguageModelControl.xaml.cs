@@ -340,7 +340,7 @@ namespace Amuse.App.Controls
 
         public void SetPipeline(PipelineModel pipeline)
         {
-            ModelCollectionView?.Refresh();
+            RefreshSelection();
             if (pipeline == null)
                 return;
 
@@ -353,6 +353,17 @@ namespace Amuse.App.Controls
                 ? QualityModes.FirstOrDefault(x => x.MemoryMode == MemoryMode.Auto)
                 : QualityModes.FirstOrDefault(x => x.QualityMode == pipeline.QualityMode);
             ValidateSelection();
+        }
+
+
+        private void RefreshSelection()
+        {
+            if (ModelCollectionView != null)
+            {
+                ModelCollectionView.Refresh();
+                if (!ModelCollectionView.IsEmpty && _selectedModel == null)
+                    ModelCollectionView.MoveCurrentToFirst();
+            }
         }
 
 
@@ -468,7 +479,7 @@ namespace Amuse.App.Controls
         {
             if (sender.Equals("Language"))
             {
-                await NavigationService.NavigateAsync((int)View.Diffusion, new ModelViewOpenArgs(ModelCategoryType.LLM));
+                await NavigationService.NavigateAsync((int)View.Diffusion, new ModelViewOpenArgs(ViewType, ModelCategoryType.LLM));
             }
         }
 

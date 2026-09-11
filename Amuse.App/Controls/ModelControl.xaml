@@ -92,8 +92,7 @@
                             SelectedItem="{Binding SelectedExtractor}"
                             ItemsSource="{Binding ExtractCollectionView}"
                             ItemTemplate="{StaticResource ComboBoxDataTemplateModel}"
-                            HorizontalContentAlignment="Stretch"
-                            IsSynchronizedWithCurrentItem="False">
+                            HorizontalContentAlignment="Stretch">
                             <CommonControls:ContentComboBox.BottomContent>
                                 <DockPanel>
                                     <Button DockPanel.Dock="Right" Height="26" Width="26" Command="{Binding SettingsCommand}" CommandParameter="Extract" >
@@ -118,8 +117,7 @@
                             SelectedItem="{Binding SelectedUpscaler}" 
                             ItemsSource="{Binding UpscaleCollectionView}" 
                             ItemTemplate="{StaticResource ComboBoxDataTemplateModel}"
-                            HorizontalContentAlignment="Stretch"
-                            IsSynchronizedWithCurrentItem="False" >
+                            HorizontalContentAlignment="Stretch" >
                             <CommonControls:ContentComboBox.BottomContent>
                                 <DockPanel>
                                     <Button DockPanel.Dock="Right" Height="26" Width="26" Command="{Binding SettingsCommand}" CommandParameter="Upscale" >

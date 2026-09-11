@@ -296,8 +296,7 @@ namespace Amuse.App.Controls
 
         public void SetPipeline(PipelineModel pipeline)
         {
-            ExtractCollectionView?.Refresh();
-            UpscaleCollectionView?.Refresh();
+            RefreshSelection();
             if (pipeline == null)
                 return;
 
@@ -309,6 +308,24 @@ namespace Amuse.App.Controls
                 SelectedExtractor = pipeline.ExtractModel;
 
             ValidateSelection();
+        }
+
+
+        private void RefreshSelection()
+        {
+            if (ExtractCollectionView != null)
+            {
+                ExtractCollectionView.Refresh();
+                if (!ExtractCollectionView.IsEmpty && _selectedExtractor == null && _isExtractorEnabled)
+                    ExtractCollectionView.MoveCurrentToFirst();
+            }
+
+            if (UpscaleCollectionView != null)
+            {
+                UpscaleCollectionView.Refresh();
+                if (!UpscaleCollectionView.IsEmpty && _selectedExtractor == null && _isUpscalerEnabled)
+                    UpscaleCollectionView.MoveCurrentToFirst();
+            }
         }
 
 
@@ -392,11 +409,11 @@ namespace Amuse.App.Controls
         {
             if (sender.Equals("Extract"))
             {
-                await NavigationService.NavigateAsync((int)View.Extract, new ModelViewOpenArgs(ModelCategoryType.Extract));
+                await NavigationService.NavigateAsync((int)View.Models, new ModelViewOpenArgs(ViewType, ModelCategoryType.Extract));
             }
             else if (sender.Equals("Upscale"))
             {
-                await NavigationService.NavigateAsync((int)View.Upscale, new ModelViewOpenArgs(ModelCategoryType.Upscale));
+                await NavigationService.NavigateAsync((int)View.Models, new ModelViewOpenArgs(ViewType, ModelCategoryType.Upscale));
             }
         }
 
