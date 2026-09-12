@@ -782,6 +782,10 @@ namespace Amuse.App.Controls
                     await ClipboardManager.SetTextAsync(webMessage.Clipboard.Trim());
                 }
             }
+            else if (webMessage.Type == WebMessageType.Wheel)
+            {
+                ScrollViewerHost.ScrollToVerticalOffset(Math.Clamp(ScrollViewerHost.VerticalOffset + webMessage.Y, 0, ScrollViewerHost.ScrollableHeight));
+            }
         }
 
 
@@ -939,6 +943,7 @@ namespace Amuse.App.Controls
             Resize = 1,
             Clipboard = 2,
             Thinking = 3,
+            Wheel = 4
         }
     }
 }

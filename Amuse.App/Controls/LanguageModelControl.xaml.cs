@@ -479,7 +479,7 @@ namespace Amuse.App.Controls
         {
             if (sender.Equals("Language"))
             {
-                await NavigationService.NavigateAsync((int)View.Diffusion, new ModelViewOpenArgs(ViewType, ModelCategoryType.LLM));
+                await NavigationService.NavigateAsync((int)View.Models, new ModelViewOpenArgs(ViewType, ModelCategoryType.LLM));
             }
         }
 
@@ -488,7 +488,7 @@ namespace Amuse.App.Controls
         {
             if (sender.Equals("Language"))
             {
-                await NavigationService.NavigateAsync((int)View.Diffusion);
+                await NavigationService.NavigateAsync((int)View.Language);
             }
         }
     }

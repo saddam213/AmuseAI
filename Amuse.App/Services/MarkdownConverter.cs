@@ -447,7 +447,7 @@ namespace Amuse.App.Services
             var codeLanguage = GetCodeLanguage(block);
             if (codeLanguage == null)
             {
-                renderer.Write(FormatCodeSection(WebUtility.HtmlEncode(codeContent), true));
+                renderer.Write(FormatCodeSection($"<pre>{WebUtility.HtmlEncode(codeContent)}</pre>"));
                 return;
             }
 
@@ -455,17 +455,14 @@ namespace Amuse.App.Services
             var codeSectionStart = formattedHtmlSpan.IndexOf("<pre>");
             var codeSectionEnd = formattedHtmlSpan.LastIndexOf("</pre>") + 6;
             if (codeSectionEnd > codeSectionStart)
-                formattedHtmlSpan = FormatCodeSection(formattedHtmlSpan[codeSectionStart..codeSectionEnd], false);
+                formattedHtmlSpan = FormatCodeSection(formattedHtmlSpan[codeSectionStart..codeSectionEnd]);
 
             renderer.Write(formattedHtmlSpan);
         }
 
 
-        private static string FormatCodeSection(ReadOnlySpan<char> codeContent, bool isSimpleLayout)
+        private static string FormatCodeSection(ReadOnlySpan<char> codeContent)
         {
-            if (isSimpleLayout)
-                return $"<pre>{codeContent}</pre>";
-
             return $$"""
             <div class="copy-block">
                 <div class="copy-content">

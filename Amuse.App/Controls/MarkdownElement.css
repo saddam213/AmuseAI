@@ -102,6 +102,12 @@ pre {
 
 .copy-block {
     position: relative;
+    background-color: #272727;
+    border-radius: 4px;
+}
+
+.copy-content {
+    padding-right: 10px;
 }
 
 .copy-code {

@@ -23,6 +23,13 @@
     });
 }, true);
 
+document.addEventListener('wheel', function (e) {
+    window.chrome.webview.postMessage({
+        Type: "Wheel",
+        Y: e.deltaY,
+    });
+}, true);
+
 document.addEventListener('copy', function(e) {
     let content = '';
     const selection = window.getSelection();
