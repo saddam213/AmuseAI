@@ -135,6 +135,9 @@ namespace Amuse.App
                                 if (environment.Id == 2000)
                                     continue;
 
+                                if (environment.Backend == TensorStack.Common.BackendType.PyTorch)
+                                    environment.Backend = TensorStack.Common.BackendType.HuggingFace;
+
                                 // Add back any Environments the user has created
                                 if (!defaultSettings.Environments.Any(x => x.Id == environment.Id))
                                     defaultSettings.Environments.Add(environment);
@@ -169,6 +172,9 @@ namespace Amuse.App
                     {
                         foreach (var upscaleModel in currentSettings.UpscaleModels.Where(x => x.Id > 1000))
                         {
+                            if (upscaleModel.Backend == TensorStack.Common.BackendType.PyTorch)
+                                upscaleModel.Backend = TensorStack.Common.BackendType.HuggingFace;
+
                             // Add back any upscale Model the user has created
                             defaultSettings.UpscaleModels.Add(upscaleModel);
                         }
@@ -181,6 +187,8 @@ namespace Amuse.App
                             {
                                 if (diffusionModel.Backend == TensorStack.Common.BackendType.OnnxRuntime)
                                     continue;
+                                if (diffusionModel.Backend == TensorStack.Common.BackendType.PyTorch)
+                                    diffusionModel.Backend = TensorStack.Common.BackendType.HuggingFace;
 
                                 if (!defaultSettings.DiffusionModels.Any(x => x.Id == diffusionModel.Id))
                                     defaultSettings.DiffusionModels.Add(diffusionModel);
@@ -204,6 +212,9 @@ namespace Amuse.App
                         {
                             if (languageModel.Id > 1000)
                             {
+                                if (languageModel.Backend == TensorStack.Common.BackendType.PyTorch)
+                                    languageModel.Backend = TensorStack.Common.BackendType.HuggingFace;
+
                                 if (!defaultSettings.LanguageModels.Any(x => x.Id == languageModel.Id))
                                     defaultSettings.LanguageModels.Add(languageModel);
                             }
@@ -240,6 +251,9 @@ namespace Amuse.App
                     {
                         foreach (var extractModel in currentSettings.ExtractModels.Where(x => x.Id > 1000))
                         {
+                            if (extractModel.Backend == TensorStack.Common.BackendType.PyTorch)
+                                extractModel.Backend = TensorStack.Common.BackendType.HuggingFace;
+
                             // Add back any extract Model the user has created
                             defaultSettings.ExtractModels.Add(extractModel);
                         }

@@ -2,7 +2,7 @@
 Amuse is the flagship demo application for the [TensorStack SDK](https://github.com/saddam213/TensorStack), showcasing high-performance local AI image, video, audio and text generation through a modern, extensible .NET architecture.
 
 <div align="center">
-   <h1><a href="https://github.com/saddam213/AmuseAI/releases/download/v3.7.5/Amuse_v3.7.5.exe">Download Amuse v3.7.5</a></h1>
+   <h1><a href="https://github.com/saddam213/AmuseAI/releases/download/v3.7.9/Amuse_v3.7.9.exe">Download Amuse v3.7.9</a></h1>
 </div>
 
 ## Features
@@ -37,6 +37,10 @@ Amuse is the flagship demo application for the [TensorStack SDK](https://github.
 - Krea2
 - GLM Image
 - Ideogram 4
+- Boogu
+- Lens
+- LongCat
+- HiDream-O1
 
 ## Video Pipelines
 - LTX
@@ -51,7 +55,6 @@ Amuse is the flagship demo application for the [TensorStack SDK](https://github.
 - MiniMax-H3
 
 ## Audio Pipelines
-- ACE-Step
 - ACE-Step XL
 - Whisper
 - Supertonic v3
@@ -89,7 +92,7 @@ NVIDIA GPUs can use **CUDA 13.0** for native GPU acceleration. RTX-enabled cards
 
 
 <div align="center">
-   <h1><a href="https://github.com/saddam213/AmuseAI/releases/download/v3.7.5/Amuse_v3.7.5.exe">Download Amuse v3.7.5</a></h1>
+   <h1><a href="https://github.com/saddam213/AmuseAI/releases/download/v3.7.9/Amuse_v3.7.9.exe">Download Amuse v3.7.9</a></h1>
 </div>
 
 
