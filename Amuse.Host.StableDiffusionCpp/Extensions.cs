@@ -153,13 +153,7 @@ namespace Amuse.Host.StableDiffusionCpp
                     ModelArgs = "qwen_image_zero_cond_t=true" // TODO: should be optional
                 };
             }
-            if (pipelineOptions.Pipeline == PipelineType.HiDreamPipeline)
-            {
-                return contextOptions with
-                {
-                    ModelPath = pipelineOptions.CheckpointConfig.FullCheckpoint
-                };
-            }
+
             if (pipelineOptions.Pipeline == PipelineType.LensPipeline)
             {
                 return contextOptions with
@@ -181,6 +175,14 @@ namespace Amuse.Host.StableDiffusionCpp
                     EmbeddingsConnectorsPath = pipelineOptions.CheckpointConfig.Connectors,
                     DiffusionModelPath = pipelineOptions.CheckpointConfig.Transformer,
                     ControlNetPath = pipelineOptions.ControlNet?.Path
+                };
+            }
+            if (pipelineOptions.Pipeline == PipelineType.HiDreamPipeline 
+             || pipelineOptions.Pipeline == PipelineType.SenseNovaPipeline)
+            {
+                return contextOptions with
+                {
+                    ModelPath = pipelineOptions.CheckpointConfig.FullCheckpoint
                 };
             }
             if (pipelineOptions.Pipeline == PipelineType.AnimaPipeline

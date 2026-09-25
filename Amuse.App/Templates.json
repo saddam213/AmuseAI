@@ -17448,45 +17448,45 @@
       },
       "Resolutions": [
         {
-          "Width": 640,
-          "Height": 1536
-        },
-        {
-          "Width": 768,
-          "Height": 1344
-        },
-        {
-          "Width": 832,
-          "Height": 1280
-        },
-        {
-          "Width": 896,
-          "Height": 1152
-        },
-        {
-          "Width": 768,
-          "Height": 768
-        },
-        {
-          "Width": 1024,
-          "Height": 1024,
-          "IsDefault": true
-        },
-        {
-          "Width": 1152,
-          "Height": 896
-        },
-        {
           "Width": 1280,
-          "Height": 832
-        },
-        {
-          "Width": 1344,
-          "Height": 768
+          "Height": 3072
         },
         {
           "Width": 1536,
-          "Height": 640
+          "Height": 2688
+        },
+        {
+          "Width": 1664,
+          "Height": 2560
+        },
+        {
+          "Width": 1792,
+          "Height": 1536
+        },
+        {
+          "Width": 1536,
+          "Height": 1536
+        },
+        {
+          "Width": 2048,
+          "Height": 2048,
+          "IsDefault": true
+        },
+        {
+          "Width": 1536,
+          "Height": 1792
+        },
+        {
+          "Width": 2560,
+          "Height": 1664
+        },
+        {
+          "Width": 2688,
+          "Height": 1536
+        },
+        {
+          "Width": 3072,
+          "Height": 1280
         }
       ]
     },
@@ -17827,6 +17827,139 @@
         {
           "Width": 1536,
           "Height": 640
+        }
+      ]
+    },
+    {
+      "Backend": "StableDiffusionCpp",
+      "Name": "SenseNova_U15_CPP",
+      "Template": "SenseNova_U15_Base",
+      "Pipeline": "SenseNovaPipeline",
+      "ModelType": "Base",
+      "BaseType": "bfloat16",
+      "MediaType": "Image",
+      "ProcessTypes": [ "TextToImage" ],
+      "Checkpoint": {
+        "Transformer": {
+          "Name": "Transformer",
+          "Type": "LocalFile"
+        }
+      },
+      "MemoryProfile": [
+        {
+          "QualityMode": "Draft",
+          "MemoryModes": [ 2, 14, 20 ]
+        },
+        {
+          "QualityMode": "Standard",
+          "MemoryModes": [ 2, 18, 26 ]
+        },
+        {
+          "QualityMode": "Production",
+          "MemoryModes": [ 2, 18, 36 ]
+        }
+      ],
+      "DefaultOptions": {
+        "Steps": 50,
+        "Width": 1024,
+        "Height": 1024,
+        "GuidanceScale": 4,
+        "Scheduler": "Euler",
+        "Schedulers": [
+          {
+            "Scheduler": "Euler"
+          },
+          {
+            "Scheduler": "EulerAncestral"
+          },
+          {
+            "Scheduler": "DPM2"
+          },
+          {
+            "Scheduler": "DPMPlusPlus2SAncestral"
+          },
+          {
+            "Scheduler": "DPMPlusPlus2M"
+          },
+          {
+            "Scheduler": "DPMPlusPlus2Mv2"
+          },
+          {
+            "Scheduler": "DPMPlusPlus2MSDE"
+          },
+          {
+            "Scheduler": "DPMPlusPlus2MSDEBT"
+          },
+          {
+            "Scheduler": "ResidualMultistep"
+          },
+          {
+            "Scheduler": "Residual2S"
+          },
+          {
+            "Scheduler": "Heun"
+          },
+          {
+            "Scheduler": "IPNDM"
+          },
+          {
+            "Scheduler": "LCM"
+          },
+          {
+            "Scheduler": "DDIM"
+          },
+          {
+            "Scheduler": "TCD"
+          },
+          {
+            "Scheduler": "LMS"
+          },
+          {
+            "Scheduler": "ERSDE"
+          }
+        ]
+      },
+      "Resolutions": [
+        {
+          "Width": 1280,
+          "Height": 3072
+        },
+        {
+          "Width": 1536,
+          "Height": 2688
+        },
+        {
+          "Width": 1664,
+          "Height": 2560
+        },
+        {
+          "Width": 1792,
+          "Height": 1536
+        },
+        {
+          "Width": 1536,
+          "Height": 1536
+        },
+        {
+          "Width": 2048,
+          "Height": 2048,
+          "IsDefault": true
+        },
+        {
+          "Width": 1536,
+          "Height": 1792
+        },
+        {
+          "Width": 2560,
+          "Height": 1664
+        },
+        {
+          "Width": 2688,
+          "Height": 1536
+        },
+        {
+          "Width": 3072,
+          "Height": 1280
         }
       ]
     }
@@ -18485,6 +18618,16 @@
         {
           "Name": "2.1 Edit",
           "Template": "QwenImage_21_Edit_CPP"
+        }
+      ]
+    },
+    {
+      "Name": "SenseNova",
+      "Backend": "StableDiffusionCpp",
+      "Options": [
+        {
+          "Name": "U1.5 8B",
+          "Template": "SenseNova_U15_CPP"
         }
       ]
     },

@@ -37,6 +37,7 @@ Local AI image, video, audio and text.
 - LongCat
 - HiDream-O1
 - LLaDA Image
+- SenseNova U1.5
 
 ## Video Pipelines
 - Wan 2.2

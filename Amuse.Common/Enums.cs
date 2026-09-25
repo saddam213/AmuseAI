@@ -42,6 +42,9 @@ namespace Amuse.Common
         [Display(Name = "Qwen Image Pipeline", ShortName = "Qwen", Description = "Qwen's image-generation family, with particular emphasis on instruction following, complex compositions, and text rendering. It is well suited to tasks where the model needs to understand detailed natural-language instructions rather than simply reproduce a visual style.")]
         QwenImagePipeline = 50,
 
+        [Display(Name = "SenseNova Pipeline", ShortName = "SenseNova", Description = "SenseNova is a multimodal AI pipeline designed to improve the quality, reliability, and controllability of visual generation and editing through advances in model architecture, data, prompting, training, and post-processing.\r\n")]
+        SenseNovaPipeline = 55,
+
         [Display(Name = "LLaDA Image Pipeline", ShortName = "LLaDA", Description = "LLaDA-Image is a 6B text-to-image and instruction-guided editing model. The denoiser is a Lumina2/Z-Image-style NextDiT conditioned by a LLaDA2-MoE diffusion-LLM text encoder, and it reuses the Flux.2 VAE. Two checkpoints are published: a 50-step base model and LLaDA-Image-Turbo, a 4-step distilled model")]
         LladaImagePipeline = 56,
 
