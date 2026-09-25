@@ -68,6 +68,7 @@
                     <DataTemplate DataType="{x:Type Common:DiffusionModel}">
                         <DockPanel>
                             <StackPanel DockPanel.Dock="Top">
+                                <ContentPresenter Content="{Binding Checkpoint.Tokenizer}" Visibility="{Binding Checkpoint.Tokenizer, Converter={StaticResource NullVisibilityConverter}}"/>
                                 <ContentPresenter Content="{Binding Checkpoint.TextEncoder}" Visibility="{Binding Checkpoint.TextEncoder, Converter={StaticResource NullVisibilityConverter}}"/>
                                 <ContentPresenter Content="{Binding Checkpoint.TextEncoder2}" Visibility="{Binding Checkpoint.TextEncoder2, Converter={StaticResource NullVisibilityConverter}}"/>
                                 <ContentPresenter Content="{Binding Checkpoint.TextEncoder3}" Visibility="{Binding Checkpoint.TextEncoder3, Converter={StaticResource NullVisibilityConverter}}"/>

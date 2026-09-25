@@ -45,6 +45,7 @@ namespace Amuse.Host.StableDiffusionCpp
                 DiffusionFlashAttn = pipelineOptions.IsFlashAttentionEnabled,
                 LoraApplyMode = Pipeline.LoraApplyType.AtRuntime,
                 PreviewType = Pipeline.PreviewType.Projection,
+                ConditioningCacheSize = 1,
 
                 // Vulkan Specific
                 VaeConvDirect = backendType == Pipeline.BackendType.Vulkan,
@@ -159,13 +160,35 @@ namespace Amuse.Host.StableDiffusionCpp
                     ModelPath = pipelineOptions.CheckpointConfig.FullCheckpoint
                 };
             }
+            if (pipelineOptions.Pipeline == PipelineType.LensPipeline)
+            {
+                return contextOptions with
+                {
+                    TokenizerPath = pipelineOptions.CheckpointConfig.Tokenizer,
+                    VaePath = pipelineOptions.CheckpointConfig.Vae,
+                    LlmPath = pipelineOptions.CheckpointConfig.TextEncoder,
+                    DiffusionModelPath = pipelineOptions.CheckpointConfig.Transformer,
+                    ControlNetPath = pipelineOptions.ControlNet?.Path
+                };
+            }
+            if (pipelineOptions.Pipeline == PipelineType.LladaImagePipeline)
+            {
+                return contextOptions with
+                {
+                    TokenizerPath = pipelineOptions.CheckpointConfig.Tokenizer,
+                    VaePath = pipelineOptions.CheckpointConfig.Vae,
+                    LlmPath = pipelineOptions.CheckpointConfig.TextEncoder,
+                    EmbeddingsConnectorsPath = pipelineOptions.CheckpointConfig.Connectors,
+                    DiffusionModelPath = pipelineOptions.CheckpointConfig.Transformer,
+                    ControlNetPath = pipelineOptions.ControlNet?.Path
+                };
+            }
             if (pipelineOptions.Pipeline == PipelineType.AnimaPipeline
              || pipelineOptions.Pipeline == PipelineType.ErniePipeline
              || pipelineOptions.Pipeline == PipelineType.Flux2KleinPipeline
              || pipelineOptions.Pipeline == PipelineType.Krea2Pipeline
              || pipelineOptions.Pipeline == PipelineType.ZImagePipeline
              || pipelineOptions.Pipeline == PipelineType.BooguImagePipeline
-             || pipelineOptions.Pipeline == PipelineType.LensPipeline
              || pipelineOptions.Pipeline == PipelineType.LongCatImagePipeline)
             {
                 return contextOptions with
@@ -648,6 +671,7 @@ namespace Amuse.Host.StableDiffusionCpp
                 SigmaScheduleType.Flux => Pipeline.SchedulerType.FLUX,
                 SigmaScheduleType.Flux2 => Pipeline.SchedulerType.FLUX2,
                 SigmaScheduleType.Beta => Pipeline.SchedulerType.Beta,
+                SigmaScheduleType.LLADA => Pipeline.SchedulerType.LLADA,
                 _ => Pipeline.SchedulerType.Default
             };
         }

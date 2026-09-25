@@ -16627,6 +16627,11 @@
       "MediaType": "Image",
       "ProcessTypes": [ "TextToImage", "ImageToImage", "ImageInpaint" ],
       "Checkpoint": {
+        "Tokenizer": {
+          "Name": "Tokenizer",
+          "Type": "Component",
+          "Path": "TOK_GPTOSS_20B"
+        },
         "Vae": {
           "Name": "AutoEncoder",
           "Type": "Component",
@@ -16770,6 +16775,11 @@
       "MediaType": "Image",
       "ProcessTypes": [ "TextToImage", "ImageToImage", "ImageInpaint" ],
       "Checkpoint": {
+        "Tokenizer": {
+          "Name": "Tokenizer",
+          "Type": "Component",
+          "Path": "TOK_GPTOSS_20B"
+        },
         "Vae": {
           "Name": "AutoEncoder",
           "Type": "Component",
@@ -17334,7 +17344,7 @@
     },
     {
       "Backend": "StableDiffusionCpp",
-      "Name": "QwenImage_21",
+      "Name": "QwenImage_21_Edit_CPP",
       "Template": "QwenImage",
       "Pipeline": "QwenImagePipeline",
       "ModelType": "Base",
@@ -17433,6 +17443,346 @@
           },
           {
             "Scheduler": "ERSDE"
+          }
+        ]
+      },
+      "Resolutions": [
+        {
+          "Width": 640,
+          "Height": 1536
+        },
+        {
+          "Width": 768,
+          "Height": 1344
+        },
+        {
+          "Width": 832,
+          "Height": 1280
+        },
+        {
+          "Width": 896,
+          "Height": 1152
+        },
+        {
+          "Width": 768,
+          "Height": 768
+        },
+        {
+          "Width": 1024,
+          "Height": 1024,
+          "IsDefault": true
+        },
+        {
+          "Width": 1152,
+          "Height": 896
+        },
+        {
+          "Width": 1280,
+          "Height": 832
+        },
+        {
+          "Width": 1344,
+          "Height": 768
+        },
+        {
+          "Width": 1536,
+          "Height": 640
+        }
+      ]
+    },
+    {
+      "Backend": "StableDiffusionCpp",
+      "Name": "LladaImage_Base_CPP",
+      "Template": "LladaImage_Base",
+      "Pipeline": "LladaImagePipeline",
+      "ModelType": "Base",
+      "BaseType": "bfloat16",
+      "MediaType": "Image",
+      "ProcessTypes": [ "TextToImage", "ImageEdit" ],
+      "Checkpoint": {
+        "Tokenizer": {
+          "Name": "Tokenizer",
+          "Type": "Component",
+          "Path": "TOK_LLADA"
+        },
+        "Vae": {
+          "Name": "AutoEncoder",
+          "Type": "Component",
+          "Path": "VAE_LLADA"
+        },
+        "TextEncoder": {
+          "Name": "TextEncoder",
+          "Type": "Component",
+          "Path": "TE_LLADA"
+        },
+        "Connectors": {
+          "Name": "Connectors",
+          "Type": "Component",
+          "Path": "CON_LLADA_EDIT"
+        },
+        "Transformer": {
+          "Name": "Transformer",
+          "Type": "LocalFile"
+        }
+      },
+      "MemoryProfile": [
+        {
+          "QualityMode": "Draft",
+          "MemoryModes": [ 2, 14, 20 ]
+        },
+        {
+          "QualityMode": "Standard",
+          "MemoryModes": [ 2, 18, 26 ]
+        },
+        {
+          "QualityMode": "Production",
+          "MemoryModes": [ 2, 18, 36 ]
+        }
+      ],
+      "DefaultOptions": {
+        "Steps": 50,
+        "Width": 1024,
+        "Height": 1024,
+        "GuidanceScale": 5,
+        "Scheduler": "Euler",
+        "Schedulers": [
+          {
+            "Scheduler": "Euler",
+            "SigmaScheduleType": "LLADA"
+          },
+          {
+            "Scheduler": "EulerAncestral",
+            "SigmaScheduleType": "LLADA"
+          },
+          {
+            "Scheduler": "DPM2",
+            "SigmaScheduleType": "LLADA"
+          },
+          {
+            "Scheduler": "DPMPlusPlus2SAncestral",
+            "SigmaScheduleType": "LLADA"
+          },
+          {
+            "Scheduler": "DPMPlusPlus2M",
+            "SigmaScheduleType": "LLADA"
+          },
+          {
+            "Scheduler": "DPMPlusPlus2Mv2",
+            "SigmaScheduleType": "LLADA"
+          },
+          {
+            "Scheduler": "DPMPlusPlus2MSDE",
+            "SigmaScheduleType": "LLADA"
+          },
+          {
+            "Scheduler": "DPMPlusPlus2MSDEBT",
+            "SigmaScheduleType": "LLADA"
+          },
+          {
+            "Scheduler": "ResidualMultistep",
+            "SigmaScheduleType": "LLADA"
+          },
+          {
+            "Scheduler": "Residual2S",
+            "SigmaScheduleType": "LLADA"
+          },
+          {
+            "Scheduler": "Heun",
+            "SigmaScheduleType": "LLADA"
+          },
+          {
+            "Scheduler": "IPNDM",
+            "SigmaScheduleType": "LLADA"
+          },
+          {
+            "Scheduler": "LCM",
+            "SigmaScheduleType": "LLADA"
+          },
+          {
+            "Scheduler": "DDIM",
+            "SigmaScheduleType": "LLADA"
+          },
+          {
+            "Scheduler": "TCD",
+            "SigmaScheduleType": "LLADA"
+          },
+          {
+            "Scheduler": "LMS",
+            "SigmaScheduleType": "LLADA"
+          },
+          {
+            "Scheduler": "ERSDE",
+            "SigmaScheduleType": "LLADA"
+          }
+        ]
+      },
+      "Resolutions": [
+        {
+          "Width": 640,
+          "Height": 1536
+        },
+        {
+          "Width": 768,
+          "Height": 1344
+        },
+        {
+          "Width": 832,
+          "Height": 1280
+        },
+        {
+          "Width": 896,
+          "Height": 1152
+        },
+        {
+          "Width": 768,
+          "Height": 768
+        },
+        {
+          "Width": 1024,
+          "Height": 1024,
+          "IsDefault": true
+        },
+        {
+          "Width": 1152,
+          "Height": 896
+        },
+        {
+          "Width": 1280,
+          "Height": 832
+        },
+        {
+          "Width": 1344,
+          "Height": 768
+        },
+        {
+          "Width": 1536,
+          "Height": 640
+        }
+      ]
+    },
+    {
+      "Backend": "StableDiffusionCpp",
+      "Name": "LladaImage_Turbo_CPP",
+      "Template": "LladaImage_Turbo",
+      "Pipeline": "LladaImagePipeline",
+      "ModelType": "Turbo",
+      "BaseType": "bfloat16",
+      "MediaType": "Image",
+      "ProcessTypes": [ "TextToImage", "ImageEdit" ],
+      "Checkpoint": {
+        "Tokenizer": {
+          "Name": "Tokenizer",
+          "Type": "Component",
+          "Path": "TOK_LLADA"
+        },
+        "Vae": {
+          "Name": "AutoEncoder",
+          "Type": "Component",
+          "Path": "VAE_LLADA"
+        },
+        "TextEncoder": {
+          "Name": "TextEncoder",
+          "Type": "Component",
+          "Path": "TE_LLADA_TURBO"
+        },
+        "Connectors": {
+          "Name": "Connectors",
+          "Type": "Component",
+          "Path": "CON_LLADA_EDIT"
+        },
+        "Transformer": {
+          "Name": "Transformer",
+          "Type": "LocalFile"
+        }
+      },
+      "MemoryProfile": [
+        {
+          "QualityMode": "Draft",
+          "MemoryModes": [ 2, 14, 20 ]
+        },
+        {
+          "QualityMode": "Standard",
+          "MemoryModes": [ 2, 18, 26 ]
+        },
+        {
+          "QualityMode": "Production",
+          "MemoryModes": [ 2, 18, 36 ]
+        }
+      ],
+      "DefaultOptions": {
+        "Steps": 4,
+        "Width": 1024,
+        "Height": 1024,
+        "GuidanceScale": 0,
+        "Scheduler": "Euler",
+        "Schedulers": [
+          {
+            "Scheduler": "Euler",
+            "SigmaScheduleType": "LLADA"
+          },
+          {
+            "Scheduler": "EulerAncestral",
+            "SigmaScheduleType": "LLADA"
+          },
+          {
+            "Scheduler": "DPM2",
+            "SigmaScheduleType": "LLADA"
+          },
+          {
+            "Scheduler": "DPMPlusPlus2SAncestral",
+            "SigmaScheduleType": "LLADA"
+          },
+          {
+            "Scheduler": "DPMPlusPlus2M",
+            "SigmaScheduleType": "LLADA"
+          },
+          {
+            "Scheduler": "DPMPlusPlus2Mv2",
+            "SigmaScheduleType": "LLADA"
+          },
+          {
+            "Scheduler": "DPMPlusPlus2MSDE",
+            "SigmaScheduleType": "LLADA"
+          },
+          {
+            "Scheduler": "DPMPlusPlus2MSDEBT",
+            "SigmaScheduleType": "LLADA"
+          },
+          {
+            "Scheduler": "ResidualMultistep",
+            "SigmaScheduleType": "LLADA"
+          },
+          {
+            "Scheduler": "Residual2S",
+            "SigmaScheduleType": "LLADA"
+          },
+          {
+            "Scheduler": "Heun",
+            "SigmaScheduleType": "LLADA"
+          },
+          {
+            "Scheduler": "IPNDM",
+            "SigmaScheduleType": "LLADA"
+          },
+          {
+            "Scheduler": "LCM",
+            "SigmaScheduleType": "LLADA"
+          },
+          {
+            "Scheduler": "DDIM",
+            "SigmaScheduleType": "LLADA"
+          },
+          {
+            "Scheduler": "TCD",
+            "SigmaScheduleType": "LLADA"
+          },
+          {
+            "Scheduler": "LMS",
+            "SigmaScheduleType": "LLADA"
+          },
+          {
+            "Scheduler": "ERSDE",
+            "SigmaScheduleType": "LLADA"
           }
         ]
       },
@@ -18057,6 +18407,20 @@
       ]
     },
     {
+      "Name": "LLaDA",
+      "Backend": "StableDiffusionCpp",
+      "Options": [
+        {
+          "Name": "Base",
+          "Template": "LladaImage_Base_CPP"
+        },
+        {
+          "Name": "Turbo",
+          "Template": "LladaImage_Turbo_CPP"
+        }
+      ]
+    },
+    {
       "Name": "LongCat",
       "Backend": "StableDiffusionCpp",
       "Options": [
@@ -18107,7 +18471,7 @@
       ]
     },
     {
-      "Name": "Qwen Image",
+      "Name": "Qwen",
       "Backend": "StableDiffusionCpp",
       "Options": [
         {
@@ -18119,8 +18483,8 @@
           "Template": "QwenImage_Edit_CPP"
         },
         {
-          "Name": "Qwen Image 2.1",
-          "Template": "QwenImage_21"
+          "Name": "2.1 Edit",
+          "Template": "QwenImage_21_Edit_CPP"
         }
       ]
     },

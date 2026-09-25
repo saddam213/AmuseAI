@@ -626,6 +626,7 @@ namespace Amuse.App.Runtime
             var checkpointConfig = new CheckpointConfig
             {
                 Compute = checkpoint.Compute?.Resolve(Settings, modelDirectory, resolveFiles),
+                Tokenizer = checkpoint.Tokenizer?.Resolve(Settings, modelDirectory, resolveFiles),
                 TextEncoder = checkpoint.TextEncoder?.Resolve(Settings, modelDirectory, resolveFiles),
                 TextEncoder2 = checkpoint.TextEncoder2?.Resolve(Settings, modelDirectory, resolveFiles),
                 TextEncoder3 = checkpoint.TextEncoder3?.Resolve(Settings, modelDirectory, resolveFiles),

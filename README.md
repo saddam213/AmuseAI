@@ -36,10 +36,9 @@ Local AI image, video, audio and text.
 - Lens
 - LongCat
 - HiDream-O1
+- LLaDA Image
 
 ## Video Pipelines
-- LTX
-- LTX-2
 - Wan 2.2
 - CogVideoX
 - Kandinsky5

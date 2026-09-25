@@ -3,6 +3,7 @@
     public sealed record CheckpointConfig
     {
         public string Compute { get; set; }
+        public string Tokenizer { get; set; }
         public string TextEncoder { get; set; }
         public string TextEncoder2 { get; set; }
         public string TextEncoder3 { get; set; }
@@ -25,6 +26,7 @@
             {
                 if ((!string.IsNullOrEmpty(Unet) || !string.IsNullOrEmpty(Transformer))
                     && string.IsNullOrEmpty(Compute)
+                    && string.IsNullOrEmpty(Tokenizer)
                     && string.IsNullOrEmpty(TextEncoder)
                     && string.IsNullOrEmpty(TextEncoder2)
                     && string.IsNullOrEmpty(TextEncoder3)

@@ -102,11 +102,11 @@
       "Backend": "StableDiffusionCpp",
       "Environment": "vulkan",
       "HostVersion": "Vulkan",
-      "Version": 889,
+      "Version": 911,
       "Status": "Create",
       "Variables": {},
       "Requirements": [
-        "https://github.com/leejet/stable-diffusion.cpp/releases/download/master-889-c678dfe/sd-master-c678dfe-bin-win-vulkan-x64.zip"
+        "https://github.com/leejet/stable-diffusion.cpp/releases/download/master-911-740c7ae/sd-master-740c7ae-bin-win-vulkan-x64.zip"
       ]
     },
     {
@@ -117,12 +117,12 @@
       "Backend": "StableDiffusionCpp",
       "Environment": "vulkan",
       "HostVersion": "Vulkan",
-      "Version": 889,
+      "Version": 911,
       "Status": "Create",
       "IsDefault": true,
       "Variables": {},
       "Requirements": [
-        "https://github.com/leejet/stable-diffusion.cpp/releases/download/master-889-c678dfe/sd-master-c678dfe-bin-win-vulkan-x64.zip"
+        "https://github.com/leejet/stable-diffusion.cpp/releases/download/master-911-740c7ae/sd-master-740c7ae-bin-win-vulkan-x64.zip"
       ]
     },
     {
@@ -133,12 +133,12 @@
       "Backend": "StableDiffusionCpp",
       "Environment": "vulkan",
       "HostVersion": "Vulkan",
-      "Version": 889,
+      "Version": 911,
       "Status": "Create",
       "IsDefault": true,
       "Variables": {},
       "Requirements": [
-        "https://github.com/leejet/stable-diffusion.cpp/releases/download/master-889-c678dfe/sd-master-c678dfe-bin-win-vulkan-x64.zip"
+        "https://github.com/leejet/stable-diffusion.cpp/releases/download/master-911-740c7ae/sd-master-740c7ae-bin-win-vulkan-x64.zip"
       ]
     },
     {
@@ -149,13 +149,13 @@
       "Backend": "StableDiffusionCpp",
       "Environment": "cuda",
       "HostVersion": "CUDA",
-      "Version": 889,
+      "Version": 911,
       "Status": "Create",
       "IsDefault": true,
       "Variables": {},
       "Requirements": [
-        "https://github.com/leejet/stable-diffusion.cpp/releases/download/master-889-c678dfe/cudart-sd-bin-win-cu12-x64.zip",
-        "https://github.com/leejet/stable-diffusion.cpp/releases/download/master-889-c678dfe/sd-master-c678dfe-bin-win-cuda12-x64.zip"
+        "https://github.com/leejet/stable-diffusion.cpp/releases/download/master-911-740c7ae/cudart-sd-bin-win-cu12-x64.zip",
+        "https://github.com/leejet/stable-diffusion.cpp/releases/download/master-911-740c7ae/sd-master-740c7ae-bin-win-cuda12-x64.zip"
       ]
     },
     {
@@ -166,11 +166,11 @@
       "Backend": "StableDiffusionCpp",
       "Environment": "rocm",
       "HostVersion": "ROCM",
-      "Version": 889,
+      "Version": 911,
       "Status": "Create",
       "Variables": {},
       "Requirements": [
-        "https://github.com/leejet/stable-diffusion.cpp/releases/download/master-889-c678dfe/sd-master-c678dfe-bin-win-rocm-7.14.0-x64.zip",
+        "https://github.com/leejet/stable-diffusion.cpp/releases/download/master-911-740c7ae/sd-master-740c7ae-bin-win-rocm-7.14.0-x64.zip",
         "https://repo.amd.com/rocm/tarball-multi-arch/therock-dist-windows-multiarch-7.14.0.tar.gz"
       ]
     }
@@ -1144,6 +1144,115 @@
         "MainFile": "qwen_image_2.1_vae_bf16.safetensors",
         "DownloadFiles": [
           "https://huggingface.co/Comfy-Org/Qwen-Image-2.1/resolve/main/vae/qwen_image_2.1_vae_bf16.safetensors"
+        ]
+      }
+    },
+    {
+      "Id": 590,
+      "Name": "GPT OSS 20b Tokenizer",
+      "Key": "TOK_GPTOSS_20B",
+      "Link": "https://huggingface.co/openai/gpt-oss-20b",
+      "Checkpoint": {
+        "Name": "Component",
+        "Type": "OnlineFolder",
+        "Folder": "Tokenizer",
+        "Path": "gpt-oss-20b",
+        "MainFile": "tokenizer.json",
+        "DownloadFiles": [
+          "https://huggingface.co/openai/gpt-oss-20b/resolve/main/tokenizer.json"
+        ]
+      }
+    },
+    {
+      "Id": 591,
+      "Name": "LLaDA Tokenizer",
+      "Key": "TOK_LLADA",
+      "Link": "https://huggingface.co/inclusionAI/LLaDA-Image",
+      "Checkpoint": {
+        "Name": "Component",
+        "Type": "OnlineFolder",
+        "Folder": "Tokenizer",
+        "Path": "llada",
+        "MainFile": "tokenizer.json",
+        "DownloadFiles": [
+          "https://huggingface.co/inclusionAI/LLaDA-Image/resolve/main/tokenizer/tokenizer.json"
+        ]
+      }
+    },
+    {
+      "Id": 592,
+      "Name": "LLaDA AutoEncoder",
+      "Key": "VAE_LLADA",
+      "Link": "https://huggingface.co/inclusionAI/LLaDA-Image",
+      "Checkpoint": {
+        "Name": "Component",
+        "Type": "OnlineFolder",
+        "Folder": "AutoEncoder",
+        "Path": "LLADA",
+        "MainFile": "diffusion_pytorch_model.safetensors",
+        "DownloadFiles": [
+          "https://huggingface.co/inclusionAI/LLaDA-Image/resolve/main/vae/config.json",
+          "https://huggingface.co/inclusionAI/LLaDA-Image/resolve/main/vae/diffusion_pytorch_model.safetensors"
+        ]
+      }
+    },
+    {
+      "Id": 593,
+      "Name": "LLaDA TextEncoder",
+      "Key": "TE_LLADA",
+      "Link": "https://huggingface.co/fszontagh/LLaDA-Image-GGUF",
+      "Checkpoint": {
+        "Name": "Component",
+        "Type": "OnlineFolder",
+        "Folder": "TextEncoder",
+        "MainFile": "llada-image-text_encoder-q8_0.gguf",
+        "DownloadFiles": [
+          "https://huggingface.co/fszontagh/LLaDA-Image-GGUF/resolve/main/llada-image-text_encoder-q8_0.gguf"
+        ]
+      }
+    },
+    {
+      "Id": 594,
+      "Name": "LLaDA Turbo TextEncoder",
+      "Key": "TE_LLADA_TURBO",
+      "Link": "https://huggingface.co/fszontagh/LLaDA-Image-GGUF",
+      "Checkpoint": {
+        "Name": "Component",
+        "Type": "OnlineFolder",
+        "Folder": "TextEncoder",
+        "MainFile": "llada-image-turbo-text_encoder-q8_0.gguf",
+        "DownloadFiles": [
+          "https://huggingface.co/fszontagh/LLaDA-Image-Turbo-GGUF/resolve/main/llada-image-turbo-text_encoder-q8_0.gguf"
+        ]
+      }
+    },
+    {
+      "Id": 595,
+      "Name": "LLaDA Image Connectors",
+      "Key": "CON_LLADA",
+      "Link": "https://huggingface.co/fszontagh/LLaDA-Image-GGUF",
+      "Checkpoint": {
+        "Name": "Component",
+        "Type": "OnlineFolder",
+        "Folder": "Components",
+        "MainFile": "llada-image-connectors.safetensors",
+        "DownloadFiles": [
+          "https://huggingface.co/fszontagh/LLaDA-Image-GGUF/resolve/main/llada-image-connectors.safetensors"
+        ]
+      }
+    },
+    {
+      "Id": 596,
+      "Name": "LLaDA Image Edit Connectors",
+      "Key": "CON_LLADA_EDIT",
+      "Link": "https://huggingface.co/fszontagh/LLaDA-Image-GGUF",
+      "Checkpoint": {
+        "Name": "Component",
+        "Type": "OnlineFolder",
+        "Folder": "Components",
+        "MainFile": "llada-image-connectors-edit.safetensors",
+        "DownloadFiles": [
+          "https://huggingface.co/fszontagh/LLaDA-Image-GGUF/resolve/main/llada-image-connectors-edit.safetensors"
         ]
       }
     }
@@ -14375,6 +14484,11 @@
       "MediaType": "Image",
       "ProcessTypes": [ "TextToImage", "ImageToImage", "ImageInpaint" ],
       "Checkpoint": {
+        "Tokenizer": {
+          "Name": "Tokenizer",
+          "Type": "Component",
+          "Path": "TOK_GPTOSS_20B"
+        },
         "Vae": {
           "Name": "AutoEncoder",
           "Type": "Component",
@@ -14523,6 +14637,11 @@
       "MediaType": "Image",
       "ProcessTypes": [ "TextToImage", "ImageToImage", "ImageInpaint" ],
       "Checkpoint": {
+        "Tokenizer": {
+          "Name": "Tokenizer",
+          "Type": "Component",
+          "Path": "TOK_GPTOSS_20B"
+        },
         "Vae": {
           "Name": "AutoEncoder",
           "Type": "Component",
@@ -15103,6 +15222,356 @@
         }
       ],
       "Link": "https://huggingface.co/Comfy-Org/LongCat-Image"
+    },
+    {
+      "Id": 680,
+      "Backend": "StableDiffusionCpp",
+      "Name": "LLaDA-Image",
+      "Template": "LladaImage_Base",
+      "Pipeline": "LladaImagePipeline",
+      "ModelType": "Base",
+      "BaseType": "bfloat16",
+      "MediaType": "Image",
+      "ProcessTypes": [ "TextToImage", "ImageEdit" ],
+      "Checkpoint": {
+        "Tokenizer": {
+          "Name": "Tokenizer",
+          "Type": "Component",
+          "Path": "TOK_LLADA"
+        },
+        "Vae": {
+          "Name": "AutoEncoder",
+          "Type": "Component",
+          "Path": "VAE_LLADA"
+        },
+        "TextEncoder": {
+          "Name": "TextEncoder",
+          "Type": "Component",
+          "Path": "TE_LLADA"
+        },
+        "Connectors": {
+          "Name": "Connectors",
+          "Type": "Component",
+          "Path": "CON_LLADA_EDIT"
+        },
+        "Transformer": {
+          "Name": "Transformer",
+          "Type": "OnlineFile",
+          "DownloadFiles": [
+            "https://huggingface.co/fszontagh/LLaDA-Image-GGUF/resolve/main/llada-image-q8_0.gguf"
+          ]
+        }
+      },
+      "MemoryProfile": [
+        {
+          "QualityMode": "Draft",
+          "MemoryModes": [ 2, 14, 20 ]
+        },
+        {
+          "QualityMode": "Standard",
+          "MemoryModes": [ 2, 18, 26 ]
+        },
+        {
+          "QualityMode": "Production",
+          "MemoryModes": [ 2, 18, 36 ]
+        }
+      ],
+      "DefaultOptions": {
+        "Steps": 50,
+        "Width": 1024,
+        "Height": 1024,
+        "GuidanceScale": 5,
+        "Scheduler": "Euler",
+        "Schedulers": [
+          {
+            "Scheduler": "Euler",
+            "SigmaScheduleType": "LLADA"
+          },
+          {
+            "Scheduler": "EulerAncestral",
+            "SigmaScheduleType": "LLADA"
+          },
+          {
+            "Scheduler": "DPM2",
+            "SigmaScheduleType": "LLADA"
+          },
+          {
+            "Scheduler": "DPMPlusPlus2SAncestral",
+            "SigmaScheduleType": "LLADA"
+          },
+          {
+            "Scheduler": "DPMPlusPlus2M",
+            "SigmaScheduleType": "LLADA"
+          },
+          {
+            "Scheduler": "DPMPlusPlus2Mv2",
+            "SigmaScheduleType": "LLADA"
+          },
+          {
+            "Scheduler": "DPMPlusPlus2MSDE",
+            "SigmaScheduleType": "LLADA"
+          },
+          {
+            "Scheduler": "DPMPlusPlus2MSDEBT",
+            "SigmaScheduleType": "LLADA"
+          },
+          {
+            "Scheduler": "ResidualMultistep",
+            "SigmaScheduleType": "LLADA"
+          },
+          {
+            "Scheduler": "Residual2S",
+            "SigmaScheduleType": "LLADA"
+          },
+          {
+            "Scheduler": "Heun",
+            "SigmaScheduleType": "LLADA"
+          },
+          {
+            "Scheduler": "IPNDM",
+            "SigmaScheduleType": "LLADA"
+          },
+          {
+            "Scheduler": "LCM",
+            "SigmaScheduleType": "LLADA"
+          },
+          {
+            "Scheduler": "DDIM",
+            "SigmaScheduleType": "LLADA"
+          },
+          {
+            "Scheduler": "TCD",
+            "SigmaScheduleType": "LLADA"
+          },
+          {
+            "Scheduler": "LMS",
+            "SigmaScheduleType": "LLADA"
+          },
+          {
+            "Scheduler": "ERSDE",
+            "SigmaScheduleType": "LLADA"
+          }
+        ]
+      },
+      "Resolutions": [
+        {
+          "Width": 640,
+          "Height": 1536
+        },
+        {
+          "Width": 768,
+          "Height": 1344
+        },
+        {
+          "Width": 832,
+          "Height": 1280
+        },
+        {
+          "Width": 896,
+          "Height": 1152
+        },
+        {
+          "Width": 768,
+          "Height": 768
+        },
+        {
+          "Width": 1024,
+          "Height": 1024,
+          "IsDefault": true
+        },
+        {
+          "Width": 1152,
+          "Height": 896
+        },
+        {
+          "Width": 1280,
+          "Height": 832
+        },
+        {
+          "Width": 1344,
+          "Height": 768
+        },
+        {
+          "Width": 1536,
+          "Height": 640
+        }
+      ],
+      "Link": "https://huggingface.co/fszontagh/LLaDA-Image-GGUF"
+    },
+    {
+      "Id": 681,
+      "Backend": "StableDiffusionCpp",
+      "Name": "LLaDA-Image Turbo",
+      "Template": "LladaImage_Turbo",
+      "Pipeline": "LladaImagePipeline",
+      "ModelType": "Turbo",
+      "BaseType": "bfloat16",
+      "MediaType": "Image",
+      "ProcessTypes": [ "TextToImage", "ImageEdit" ],
+      "Checkpoint": {
+        "Tokenizer": {
+          "Name": "Tokenizer",
+          "Type": "Component",
+          "Path": "TOK_LLADA"
+        },
+        "Vae": {
+          "Name": "AutoEncoder",
+          "Type": "Component",
+          "Path": "VAE_LLADA"
+        },
+        "TextEncoder": {
+          "Name": "TextEncoder",
+          "Type": "Component",
+          "Path": "TE_LLADA_TURBO"
+        },
+        "Connectors": {
+          "Name": "Connectors",
+          "Type": "Component",
+          "Path": "CON_LLADA_EDIT"
+        },
+        "Transformer": {
+          "Name": "Transformer",
+          "Type": "OnlineFile",
+          "DownloadFiles": [
+            "https://huggingface.co/fszontagh/LLaDA-Image-Turbo-GGUF/resolve/main/llada-image-turbo-q8_0.gguf"
+          ]
+        }
+      },
+      "MemoryProfile": [
+        {
+          "QualityMode": "Draft",
+          "MemoryModes": [ 2, 14, 20 ]
+        },
+        {
+          "QualityMode": "Standard",
+          "MemoryModes": [ 2, 18, 26 ]
+        },
+        {
+          "QualityMode": "Production",
+          "MemoryModes": [ 2, 18, 36 ]
+        }
+      ],
+      "DefaultOptions": {
+        "Steps": 4,
+        "Width": 1024,
+        "Height": 1024,
+        "GuidanceScale": 0,
+        "Scheduler": "Euler",
+        "Schedulers": [
+          {
+            "Scheduler": "Euler",
+            "SigmaScheduleType": "LLADA"
+          },
+          {
+            "Scheduler": "EulerAncestral",
+            "SigmaScheduleType": "LLADA"
+          },
+          {
+            "Scheduler": "DPM2",
+            "SigmaScheduleType": "LLADA"
+          },
+          {
+            "Scheduler": "DPMPlusPlus2SAncestral",
+            "SigmaScheduleType": "LLADA"
+          },
+          {
+            "Scheduler": "DPMPlusPlus2M",
+            "SigmaScheduleType": "LLADA"
+          },
+          {
+            "Scheduler": "DPMPlusPlus2Mv2",
+            "SigmaScheduleType": "LLADA"
+          },
+          {
+            "Scheduler": "DPMPlusPlus2MSDE",
+            "SigmaScheduleType": "LLADA"
+          },
+          {
+            "Scheduler": "DPMPlusPlus2MSDEBT",
+            "SigmaScheduleType": "LLADA"
+          },
+          {
+            "Scheduler": "ResidualMultistep",
+            "SigmaScheduleType": "LLADA"
+          },
+          {
+            "Scheduler": "Residual2S",
+            "SigmaScheduleType": "LLADA"
+          },
+          {
+            "Scheduler": "Heun",
+            "SigmaScheduleType": "LLADA"
+          },
+          {
+            "Scheduler": "IPNDM",
+            "SigmaScheduleType": "LLADA"
+          },
+          {
+            "Scheduler": "LCM",
+            "SigmaScheduleType": "LLADA"
+          },
+          {
+            "Scheduler": "DDIM",
+            "SigmaScheduleType": "LLADA"
+          },
+          {
+            "Scheduler": "TCD",
+            "SigmaScheduleType": "LLADA"
+          },
+          {
+            "Scheduler": "LMS",
+            "SigmaScheduleType": "LLADA"
+          },
+          {
+            "Scheduler": "ERSDE",
+            "SigmaScheduleType": "LLADA"
+          }
+        ]
+      },
+      "Resolutions": [
+        {
+          "Width": 640,
+          "Height": 1536
+        },
+        {
+          "Width": 768,
+          "Height": 1344
+        },
+        {
+          "Width": 832,
+          "Height": 1280
+        },
+        {
+          "Width": 896,
+          "Height": 1152
+        },
+        {
+          "Width": 768,
+          "Height": 768
+        },
+        {
+          "Width": 1024,
+          "Height": 1024,
+          "IsDefault": true
+        },
+        {
+          "Width": 1152,
+          "Height": 896
+        },
+        {
+          "Width": 1280,
+          "Height": 832
+        },
+        {
+          "Width": 1344,
+          "Height": 768
+        },
+        {
+          "Width": 1536,
+          "Height": 640
+        }
+      ],
+      "Link": "https://huggingface.co/fszontagh/LLaDA-Image-Turbo-GGUF"
     }
   ],
   "LoraAdapterModels": [

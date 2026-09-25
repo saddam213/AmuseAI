@@ -20,6 +20,19 @@
                 </Border>
             </TabItem>
 
+            <!--Tokenizer-->
+            <TabItem Visibility="{Binding Checkpoint.Tokenizer, Converter={StaticResource NullVisibilityConverter}}">
+                <TabItem.Header>
+                    <StackPanel Orientation="Horizontal" Margin="3">
+                        <TextBlock Text="Tokenizer" />
+                    </StackPanel>
+                </TabItem.Header>
+                <Border BorderThickness="1" BorderBrush="{StaticResource ContainerBorder}" Padding="4">
+                    <local:CheckpointControl Checkpoint="{Binding Checkpoint.Tokenizer}" Settings="{Binding Settings}" IsDiffusionCheckpoint="True" SupportedTypes="{Binding TextEncodedCheckpointTypes}"/>
+                </Border>
+            </TabItem>
+
+
             <!--TextEncoder-->
             <TabItem Visibility="{Binding Checkpoint.TextEncoder, Converter={StaticResource NullVisibilityConverter}}">
                 <TabItem.Header>

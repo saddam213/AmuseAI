@@ -8,6 +8,8 @@ namespace Amuse.App.Common
     {
         [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
         public CheckpointComponent Compute { get; set; }
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+        public CheckpointComponent Tokenizer { get; set; }
 
         [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
         public CheckpointComponent TextEncoder { get; set; }
@@ -80,6 +82,7 @@ namespace Amuse.App.Common
         public IEnumerable<CheckpointComponent> GetComponents()
         {
             if (Compute != null) yield return Compute;
+            if (Tokenizer != null) yield return Tokenizer;
             if (TextEncoder != null) yield return TextEncoder;
             if (TextEncoder2 != null) yield return TextEncoder2;
             if (TextEncoder3 != null) yield return TextEncoder3;
@@ -103,6 +106,7 @@ namespace Amuse.App.Common
             return new DiffusionCheckpointModel
             {
                 Compute = Compute?.DeepClone(),
+                Tokenizer = Tokenizer?.DeepClone(),
                 TextEncoder = TextEncoder?.DeepClone(),
                 TextEncoder2 = TextEncoder2?.DeepClone(),
                 TextEncoder3 = TextEncoder3?.DeepClone(),
