@@ -18800,7 +18800,7 @@
     {
       "Backend": "HuggingFace",
       "Name": "Qwen30_VL",
-      "Template": "Qwen30_IT",
+      "Template": "Qwen30_VL",
       "Pipeline": "Qwen3Pipeline",
       "ModelType": "Vision",
       "BaseType": "bfloat16",
@@ -18927,7 +18927,7 @@
     },
     {
       "Backend": "HuggingFace",
-      "Name": "Gemma4_IT",
+      "Name": "Gemma4_IT_E",
       "Template": "Gemma4_IT_E",
       "Pipeline": "Gemma4Pipeline",
       "ModelType": "Multi",

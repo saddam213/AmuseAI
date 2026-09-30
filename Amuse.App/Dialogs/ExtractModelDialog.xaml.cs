@@ -52,6 +52,7 @@ namespace Amuse.App.Dialogs
                 Id = modelId,
                 Backend = BackendType.OnnxRuntime,
                 Pipeline = PipelineType.ExtractPipeline,
+                Status = ModelStatusType.Unknown,
                 Name = "New Extractor",
                 Checkpoint = new CheckpointComponent
                 {
@@ -116,7 +117,7 @@ namespace Amuse.App.Dialogs
         }
 
 
-        protected override Task SaveAsync()
+        protected override async Task SaveAsync()
         {
             var index = Settings.ExtractModels.Count;
             if (IsUpdateMode)
@@ -126,7 +127,8 @@ namespace Amuse.App.Dialogs
             }
             Settings.ExtractModels.Insert(index, ExtractModel);
             ExtractModel.Initialize(Settings);
-            return base.SaveAsync();
+            await SettingsManager.SaveAsync(Settings);
+            await base.SaveAsync();
         }
 
 

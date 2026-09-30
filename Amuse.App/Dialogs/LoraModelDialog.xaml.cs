@@ -72,6 +72,7 @@ namespace Amuse.App.Dialogs
                 Id = modelId,
                 Pipeline = pipelineType,
                 Name = "New Lora",
+                Status = ModelStatusType.Unknown,
                 Checkpoint = new CheckpointComponent
                 {
                     Name = "LoraAdapter",
@@ -132,7 +133,7 @@ namespace Amuse.App.Dialogs
         }
 
 
-        protected override Task SaveAsync()
+        protected override async Task SaveAsync()
         {
             LoraModel.ViewFilter = GetViewFilter();
             var index = Settings.LoraAdapterModels.Count;
@@ -146,7 +147,8 @@ namespace Amuse.App.Dialogs
             LoraModel.Triggers = Trigger.Count == 0 ? default : Trigger.ToArray();
             Settings.LoraAdapterModels.Insert(index, LoraModel);
             LoraModel.Initialize(Settings);
-            return base.SaveAsync();
+            await SettingsManager.SaveAsync(Settings);
+            await base.SaveAsync();
         }
 
 

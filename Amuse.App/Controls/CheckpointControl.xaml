@@ -3,6 +3,7 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:scm="clr-namespace:System.ComponentModel;assembly=WindowsBase"
              xmlns:local="clr-namespace:Amuse.App.Controls"
              xmlns:CommonControls="clr-namespace:TensorStack.WPF.Controls;assembly=TensorStack.WPF" >
     <Grid DataContext="{Binding RelativeSource={RelativeSource AncestorType={x:Type local:CheckpointControl}}}">
@@ -94,9 +95,16 @@
 
                     <!--Component-->
                     <Grid Visibility="{Binding Checkpoint.Type, Converter={StaticResource EnumToVisibilityConverter}, ConverterParameter=Component}">
+                        <Grid.Resources>
+                            <CollectionViewSource x:Key="SortedComponents" Source="{Binding Settings.Components, RelativeSource={RelativeSource AncestorType={x:Type local:CheckpointControl}}}">
+                                <CollectionViewSource.SortDescriptions>
+                                    <scm:SortDescription PropertyName="Name" />
+                                </CollectionViewSource.SortDescriptions>
+                            </CollectionViewSource>
+                        </Grid.Resources>
                         <StackPanel>
                             <TextBlock Text="{CommonControls:Localize Component}" Style="{StaticResource FieldTextBlockStyle}"/>
-                            <ComboBox ItemsSource="{Binding Settings.Components, RelativeSource={RelativeSource AncestorType={x:Type local:CheckpointControl}}}" SelectedValue="{Binding Checkpoint.Path}" SelectedValuePath="Key" DisplayMemberPath="Name" Height="25"/>
+                            <ComboBox ItemsSource="{Binding Source={StaticResource SortedComponents}}" SelectedValue="{Binding Checkpoint.Path}" SelectedValuePath="Key" DisplayMemberPath="Name" Height="25"/>
                         </StackPanel>
                     </Grid>
 

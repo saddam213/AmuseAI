@@ -92,11 +92,11 @@ namespace Amuse.App.Controls
                 if (checkpoint.Compute != null)
                     SelectedIndex = 0;
                 else if (checkpoint.Unet != null)
-                    SelectedIndex = 4;
-                else if (checkpoint.Transformer != null)
                     SelectedIndex = 5;
+                else if (checkpoint.Transformer != null)
+                    SelectedIndex = 6;
                 else if (checkpoint.TextEncoder != null)
-                    SelectedIndex = 1;
+                    SelectedIndex = 2;
             }
             return Task.CompletedTask;
         }

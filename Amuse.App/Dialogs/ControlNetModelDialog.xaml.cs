@@ -58,6 +58,7 @@ namespace Amuse.App.Dialogs
                 Id = modelId,
                 Pipeline = pipelineType,
                 Name = "New ControlNet",
+                Status = ModelStatusType.Unknown,
                 Checkpoint = new CheckpointComponent
                 {
                     Name = "ControlNet",
@@ -115,7 +116,7 @@ namespace Amuse.App.Dialogs
         }
 
 
-        protected override Task SaveAsync()
+        protected override async Task SaveAsync()
         {
             var index = Settings.ControlNetModels.Count;
             if (IsUpdateMode)
@@ -126,7 +127,8 @@ namespace Amuse.App.Dialogs
             Settings.ControlNetModels.Insert(index, ControlNetModel);
 
             ControlNetModel.Initialize(Settings);
-            return base.SaveAsync();
+            await SettingsManager.SaveAsync(Settings);
+            await base.SaveAsync();
         }
 
 

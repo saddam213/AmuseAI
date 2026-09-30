@@ -126,10 +126,11 @@ namespace Amuse.App.Dialogs
         }
 
 
-        protected override Task SaveAsync()
+        protected override async Task SaveAsync()
         {
             _selectedTemplate.Name = _selectedName;
             _selectedTemplate.Variant = _selectedVariant;
+            _selectedTemplate.Status = ModelStatusType.Unknown;
 
             if (_selectedSource == ModelSourceType.LocalFile)
             {
@@ -203,7 +204,8 @@ namespace Amuse.App.Dialogs
 
             _selectedTemplate.Initialize(Settings);
             Settings.DiffusionModels.Add(_selectedTemplate);
-            return base.SaveAsync();
+            await SettingsManager.SaveAsync(Settings);
+            await base.SaveAsync();
         }
 
 

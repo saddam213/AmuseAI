@@ -53,6 +53,7 @@ namespace Amuse.App.Dialogs
                 Id = modelId,
                 Backend = BackendType.OnnxRuntime,
                 Pipeline = PipelineType.UpscalePipeline,
+                Status = ModelStatusType.Unknown,
                 Name = "New Upscaler",
                 Checkpoint = new CheckpointComponent
                 {
@@ -117,7 +118,7 @@ namespace Amuse.App.Dialogs
         }
 
 
-        protected override Task SaveAsync()
+        protected override async Task SaveAsync()
         {
             var index = Settings.UpscaleModels.Count;
             if (IsUpdateMode)
@@ -128,7 +129,8 @@ namespace Amuse.App.Dialogs
 
             Settings.UpscaleModels.Insert(index, UpscaleModel);
             UpscaleModel.Initialize(Settings);
-            return base.SaveAsync();
+            await SettingsManager.SaveAsync(Settings);
+            await base.SaveAsync();
         }
 
 

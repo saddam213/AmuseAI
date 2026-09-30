@@ -30,9 +30,9 @@ namespace Amuse.App
 
         public Settings()
         {
-            Pipelines = Enum.GetValues<PipelineType>();
-            DiffusionPipelines = Pipelines.Where(x => (int)x < 500).ToArray();
-            LanguagePipelines = [PipelineType.AutoTextPipeline, PipelineType.Qwen3Pipeline, PipelineType.Gemma4Pipeline];
+            Pipelines = [.. Enum.GetValues<PipelineType>().OrderBy(x => x.GetDisplayName())];
+            DiffusionPipelines = [.. Pipelines.Where(x => (int)x < 500)];
+            LanguagePipelines = [PipelineType.AutoTextPipeline, PipelineType.Gemma4Pipeline, PipelineType.Qwen3Pipeline];
         }
 
         [AppDefault]

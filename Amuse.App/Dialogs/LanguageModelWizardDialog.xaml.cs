@@ -125,6 +125,7 @@ namespace Amuse.App.Dialogs
         {
             _selectedTemplate.Name = _selectedName;
             _selectedTemplate.Variant = _selectedVariant;
+            _selectedTemplate.Status = ModelStatusType.Unknown;
 
             if (_selectedSource == ModelSourceType.LocalFolder)
             {
