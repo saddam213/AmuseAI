@@ -199,6 +199,12 @@ namespace Amuse.App.Services
                 processor.GoToColumn(processor.Line.End + 1);
                 return BlockState.ContinueDiscard;
             }
+            if (processor.Line.Match("<tool_call>"))
+            {
+                processor.NewBlocks.Push(new HiddenBlock(this, "ToolCall", "</tool_call>"));
+                processor.GoToColumn(processor.Line.End + 1);
+                return BlockState.ContinueDiscard;
+            }
 
             foreach (var stripTags in _stripTags)
             {

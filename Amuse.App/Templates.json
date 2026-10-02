@@ -18794,7 +18794,8 @@
         "Temperature": 0.6,
         "IsSamplingEnabled": true,
         "NoRepeatNgramSize": 0,
-        "InputImageMaxCount": 32
+        "InputImageMaxCount": 32,
+        "IsToolCallsSupported": true
       }
     },
     {
@@ -18826,7 +18827,8 @@
         "Temperature": 0.7,
         "IsSamplingEnabled": false,
         "NoRepeatNgramSize": 0,
-        "InputImageMaxCount": 32
+        "InputImageMaxCount": 32,
+        "IsToolCallsSupported": true
       }
     },
     {
@@ -18858,7 +18860,8 @@
         "Temperature": 1,
         "IsSamplingEnabled": false,
         "NoRepeatNgramSize": 0,
-        "InputImageMaxCount": 32
+        "InputImageMaxCount": 32,
+        "IsToolCallsSupported": true
       }
     },
     {
@@ -18890,7 +18893,8 @@
         "Temperature": 1,
         "IsSamplingEnabled": false,
         "NoRepeatNgramSize": 0,
-        "InputImageMaxCount": 32
+        "InputImageMaxCount": 32,
+        "IsToolCallsSupported": true
       }
     },
     {
@@ -18922,7 +18926,8 @@
         "Temperature": 1,
         "IsSamplingEnabled": false,
         "NoRepeatNgramSize": 0,
-        "InputImageMaxCount": 32
+        "InputImageMaxCount": 32,
+        "IsToolCallsSupported": true
       }
     },
     {

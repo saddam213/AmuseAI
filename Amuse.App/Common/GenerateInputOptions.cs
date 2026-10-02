@@ -69,6 +69,8 @@ namespace Amuse.App.Common
         private int _latentUpscaleSteps = 4;
         private float _latentUpscaleStrength = 0.7f;
         private int _latentUpscaleTileSize = 128;
+        private bool _isToolCallsEnabled = true;
+        private List<string> _selectedTools = new List<string>();
 
         [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingDefault)]
         public int Width
@@ -467,6 +469,21 @@ namespace Amuse.App.Common
             get { return _cacheType; }
             set { SetProperty(ref _cacheType, value); }
         }
+
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingDefault)]
+        public bool IsToolCallsEnabled
+        {
+            get { return _isToolCallsEnabled; }
+            set { SetProperty(ref _isToolCallsEnabled, value); }
+        }
+
+        [JsonIgnore]
+        public List<string> SelectedTools
+        {
+            get { return _selectedTools; }
+            set { SetProperty(ref _selectedTools, value); }
+        }
+
 
         [JsonIgnore]
         public List<ImageTensor> InputImages { get; set; } = [];

@@ -26,8 +26,8 @@ namespace Amuse.App.Runtime
         /// <param name="settings">The settings.</param>
         /// <param name="mediaService">The media service.</param>
         /// <param name="logger">The logger.</param>
-        public StableDiffusionCppClient(Settings settings, IMediaService mediaService, IEnvironmentService environmentService, ILogger logger)
-            : base(settings, mediaService, logger)
+        public StableDiffusionCppClient(Settings settings, IToolService toolService, IMediaService mediaService, IEnvironmentService environmentService, ILogger logger)
+            : base(settings, toolService, mediaService, logger)
         {
             _environmentService = environmentService;
             StopHostOnException = true;

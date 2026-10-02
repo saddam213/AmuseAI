@@ -74,7 +74,11 @@
                             <CommonControls:SliderControl Text="{CommonControls:Localize MaxLength}" Value="{Binding Options.MaxLength}" Maximum="{Binding Pipeline.LanguageModel.DefaultOptions.MaxLength}" TickFrequency="1024" />
                         </UniformGrid>
 
-                        <CheckBox Content="{CommonControls:Localize ThinkingEnabled}" IsChecked="{Binding Options.IsThinkingEnabled}" Margin="-1,8,0,4" FontStyle="Italic" FontSize="11" Opacity=".9"/>
+                        <UniformGrid Columns="2" Margin="-1,8,0,4">
+                            <CheckBox Content="{CommonControls:Localize ThinkingEnabled}" IsChecked="{Binding Options.IsThinkingEnabled}" FontStyle="Italic" FontSize="11" Opacity=".9"/>
+                            <CheckBox Content="Tool Calls Enabled" IsChecked="{Binding Options.IsToolCallsEnabled}" FontStyle="Italic" FontSize="11" Opacity=".9"/>
+                        </UniformGrid>
+                       
                     </StackPanel>
 
     

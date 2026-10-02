@@ -126,6 +126,7 @@ Amuse is made possible in part by these excellent open-source projects
 - `PdfPig` https://github.com/UglyToad/PdfPig
 - `Markdig` https://github.com/xoofx/markdig
 - `Serilog` https://github.com/serilog/serilog
+- `WebLookup` https://github.com/iyulab/WebLookup
 - `ColorCode` https://github.com/CommunityToolkit/ColorCode-Universal
 - `TensorStack` https://github.com/saddam213/TensorStack
 - `Diffusers` https://github.com/huggingface/diffusers

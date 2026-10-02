@@ -16,6 +16,7 @@ namespace Amuse.App.Services
     {
         private readonly ILogger _logger;
         private readonly Settings _settings;
+        private readonly IToolService _toolService;
         private readonly IMediaService _mediaService;
         private readonly IEnvironmentService _environmentService;
         private readonly IPreviewService _previewService;
@@ -29,10 +30,11 @@ namespace Amuse.App.Services
         /// Initializes a new instance of the <see cref="GenerateService"/> class.
         /// </summary>
         /// <param name="settings">The settings.</param>
-        public GenerateService(Settings settings, IEnvironmentService environmentService, IMediaService mediaService, IPreviewService previewService, ILogger<GenerateService> logger)
+        public GenerateService(Settings settings, IEnvironmentService environmentService, IToolService toolService, IMediaService mediaService, IPreviewService previewService, ILogger<GenerateService> logger)
         {
             _logger = logger;
             _settings = settings;
+            _toolService = toolService;
             _mediaService = mediaService;
             _environmentService = environmentService;
             _previewService = previewService;
@@ -110,9 +112,9 @@ namespace Amuse.App.Services
 
                 _backenClient = pipeline.GenerateModel.Backend switch
                 {
-                    BackendType.HuggingFace => new HuggingFaceBackendClient(_settings, _mediaService, _environmentService, _logger),
-                    BackendType.OnnxRuntime => new OnnxBackendClient(_settings, _mediaService, _logger),
-                    BackendType.StableDiffusionCpp => new StableDiffusionCppClient(_settings, _mediaService, _environmentService, _logger),
+                    BackendType.HuggingFace => new HuggingFaceBackendClient(_settings, _toolService, _mediaService, _environmentService, _logger),
+                    BackendType.OnnxRuntime => new OnnxBackendClient(_settings, _toolService, _mediaService, _logger),
+                    BackendType.StableDiffusionCpp => new StableDiffusionCppClient(_settings, _toolService, _mediaService, _environmentService, _logger),
                     _ => throw new NotImplementedException()
                 };
 

@@ -17,7 +17,8 @@ namespace Amuse.App
             DefaultOptions = new JsonSerializerOptions
             {
                 WriteIndented = true,
-                Converters = { new JsonStringEnumConverter() }
+                Converters = { new JsonStringEnumConverter() },
+                PropertyNameCaseInsensitive = true
             };
         }
 

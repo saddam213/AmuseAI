@@ -17335,7 +17335,8 @@
         "RepetitionPenalty": 1,
         "Temperature": 0.6,
         "IsSamplingEnabled": true,
-        "NoRepeatNgramSize": 0
+        "NoRepeatNgramSize": 0,
+        "IsToolCallsSupported": true
       },
       "Link": "https://huggingface.co/Qwen/Qwen3-4B"
     },
@@ -17398,7 +17399,8 @@
         "Temperature": 0.6,
         "IsSamplingEnabled": false,
         "NoRepeatNgramSize": 0,
-        "InputImageMaxCount": 32
+        "InputImageMaxCount": 32,
+        "IsToolCallsSupported": true
       },
       "Link": "https://huggingface.co/Qwen/Qwen3-VL-4B-Instruct"
     },
@@ -17461,7 +17463,8 @@
         "RepetitionPenalty": 1,
         "Temperature": 0.6,
         "IsSamplingEnabled": false,
-        "NoRepeatNgramSize": 0
+        "NoRepeatNgramSize": 0,
+        "IsToolCallsSupported": true
       },
       "Link": "https://huggingface.co/Qwen/Qwen3-8B"
     },
@@ -17526,7 +17529,8 @@
         "Temperature": 0.7,
         "IsSamplingEnabled": false,
         "NoRepeatNgramSize": 0,
-        "InputImageMaxCount": 32
+        "InputImageMaxCount": 32,
+        "IsToolCallsSupported": true
       },
       "Link": "https://huggingface.co/Qwen/Qwen3-VL-8B-Instruct"
     },
@@ -17591,7 +17595,8 @@
         "RepetitionPenalty": 1,
         "Temperature": 0.6,
         "IsSamplingEnabled": false,
-        "NoRepeatNgramSize": 0
+        "NoRepeatNgramSize": 0,
+        "IsToolCallsSupported": true
       },
       "Link": "https://huggingface.co/Qwen/Qwen3-14B"
     },
@@ -17665,7 +17670,8 @@
         "RepetitionPenalty": 1,
         "Temperature": 0.6,
         "IsSamplingEnabled": false,
-        "NoRepeatNgramSize": 0
+        "NoRepeatNgramSize": 0,
+        "IsToolCallsSupported": true
       },
       "Link": "https://huggingface.co/Qwen/Qwen3-32B"
     },
@@ -17727,7 +17733,8 @@
         "Temperature": 1,
         "IsSamplingEnabled": false,
         "NoRepeatNgramSize": 0,
-        "InputImageMaxCount": 32
+        "InputImageMaxCount": 32,
+        "IsToolCallsSupported": true
       },
       "Link": "https://huggingface.co/Qwen/Qwen3.5-4B"
     },
@@ -17791,7 +17798,8 @@
         "Temperature": 1,
         "IsSamplingEnabled": false,
         "NoRepeatNgramSize": 0,
-        "InputImageMaxCount": 32
+        "InputImageMaxCount": 32,
+        "IsToolCallsSupported": true
       },
       "Link": "https://huggingface.co/Qwen/Qwen3.5-9B"
     },
@@ -17863,7 +17871,8 @@
         "Temperature": 1,
         "IsSamplingEnabled": false,
         "NoRepeatNgramSize": 0,
-        "InputImageMaxCount": 32
+        "InputImageMaxCount": 32,
+        "IsToolCallsSupported": true
       },
       "Link": "https://huggingface.co/Qwen/Qwen3.5-27B"
     },
@@ -17940,7 +17949,8 @@
         "Temperature": 1,
         "IsSamplingEnabled": false,
         "NoRepeatNgramSize": 0,
-        "InputImageMaxCount": 32
+        "InputImageMaxCount": 32,
+        "IsToolCallsSupported": true
       },
       "Link": "https://huggingface.co/Qwen/Qwen3.6-27B"
     },
@@ -18019,7 +18029,8 @@
         "Temperature": 1,
         "IsSamplingEnabled": false,
         "NoRepeatNgramSize": 0,
-        "InputImageMaxCount": 32
+        "InputImageMaxCount": 32,
+        "IsToolCallsSupported": true
       },
       "Link": "https://huggingface.co/Qwen/Qwen3.8-27B"
     },

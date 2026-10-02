@@ -201,6 +201,10 @@ details {
     display: none;
 }
 
+.message-toolcall {
+    display: none;
+}
+
 .message-user {
     display: block;
     padding: 0px 15px 0px 15px;

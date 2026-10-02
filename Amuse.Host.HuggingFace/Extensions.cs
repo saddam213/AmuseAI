@@ -1,5 +1,6 @@
 ﻿using Amuse.Common;
 using System;
+using System.Collections.Generic;
 using System.Data;
 using System.Linq;
 using System.Runtime.CompilerServices;
@@ -200,6 +201,7 @@ namespace Amuse.Host.HuggingFace
                 InputAudios = options.InputAudios,
                 SampleRate = options.SampleRate,
                 CacheType = options.CacheType.Cast<Amuse.Common.CacheType, TensorStack.HuggingFace.Common.CacheType>(),
+                Tools = options.Tools
             };
         }
 
@@ -1339,9 +1341,9 @@ namespace Amuse.Host.HuggingFace
         }
 
 
-        public static TensorStack.HuggingFace.Common.ConversationMessage[] ToPythonOptions(this Common.ConversationMessage[] messages)
+        public static TensorStack.HuggingFace.Common.ConversationMessage[] ToPythonOptions(this List<Common.ConversationMessage> messages)
         {
-            return messages.Select(x => new TensorStack.HuggingFace.Common.ConversationMessage(x.Role.Cast<Common.ConversationRole, TensorStack.HuggingFace.Common.ConversationRole>(), x.Content, x.ImageIndex, x.AudioIndex)).ToArray();
+            return messages.Select(x => new TensorStack.HuggingFace.Common.ConversationMessage(x.Role.Cast<Common.ConversationRole, TensorStack.HuggingFace.Common.ConversationRole>(), x.Content, x.ImageIndex, x.AudioIndex, x.ToolCalls)).ToArray();
         }
 
 

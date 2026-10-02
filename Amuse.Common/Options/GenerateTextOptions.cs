@@ -8,7 +8,7 @@ namespace Amuse.Common
     {
         public int Seed { get; set; }
         public string Prompt { get; set; }
-        public ConversationMessage[] Conversation { get; set; }
+        public List<ConversationMessage> Conversation { get; set; }
         public string TempFileName { get; set; }
         public LanguageType Language { get; set; }
         public string Instruction { get; set; }
@@ -30,7 +30,7 @@ namespace Amuse.Common
         public bool IsThinkingEnabled { get; set; }
         public int SampleRate { get; set; }
         public CacheType CacheType { get; set; }
-
+        public string[] Tools { get; set; }
 
         [JsonIgnore]
         public List<ImageTensor> InputImages { get; set; } = [];

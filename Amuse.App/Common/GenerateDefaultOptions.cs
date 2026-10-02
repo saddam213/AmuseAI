@@ -167,6 +167,9 @@ namespace Amuse.App.Common
         [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingDefault)]
         public int LatentUpscaleTileSize { get; set; } = 128;
 
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingDefault)]
+        public bool IsToolCallsSupported { get; set; }
+
         public GenerateDefaultOptions DeepClone()
         {
             return new GenerateDefaultOptions
@@ -220,7 +223,8 @@ namespace Amuse.App.Common
                 InputAudioMaxCount = InputAudioMaxCount,
                 InputImageMaxCount = InputImageMaxCount,
                 InputVideoMaxCount = InputVideoMaxCount,
-                IsFlashAttentionEnabled = IsFlashAttentionEnabled
+                IsFlashAttentionEnabled = IsFlashAttentionEnabled,
+                IsToolCallsSupported = IsToolCallsSupported
             };
         }
 

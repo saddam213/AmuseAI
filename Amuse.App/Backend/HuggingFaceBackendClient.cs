@@ -27,8 +27,8 @@ namespace Amuse.App.Runtime
         /// <param name="mediaService">The media service.</param>
         /// <param name="environmentService">The environment service.</param>
         /// <param name="logger">The logger.</param>
-        public HuggingFaceBackendClient(Settings settings, IMediaService mediaService, IEnvironmentService environmentService, ILogger logger)
-            : base(settings, mediaService, logger)
+        public HuggingFaceBackendClient(Settings settings, IToolService toolService, IMediaService mediaService, IEnvironmentService environmentService, ILogger logger)
+            : base(settings, toolService, mediaService, logger)
         {
             _environmentService = environmentService;
         }

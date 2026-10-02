@@ -1,4 +1,5 @@
 ﻿using Amuse.App.Common;
+using Amuse.App.Services;
 using System;
 using System.Buffers;
 using System.Collections.Generic;
@@ -230,7 +231,7 @@ namespace Amuse.App
         public static string GetResponseText(string content, bool isConversation = false, string tagOpen = "<think>", string tagClose = "</think>")
         {
             if (isConversation)
-                content = GetLastMessage(content);
+                content = StripToolCalls(GetLastMessage(content));
 
             if (string.IsNullOrEmpty(content))
                 return string.Empty;
@@ -239,9 +240,9 @@ namespace Amuse.App
             {
                 var start = content.IndexOf(tagClose, StringComparison.OrdinalIgnoreCase);
                 if (start > 0)
-                    return content[(start + tagClose.Length)..].Trim();
+                    return StripToolCalls(content[(start + tagClose.Length)..].Trim());
             }
-            return content;
+            return StripToolCalls(content);
         }
 
 
@@ -260,6 +261,19 @@ namespace Amuse.App
 
             start += tagOpen.Length;
             return content[start..end];
+        }
+
+
+        private static string StripToolCalls(string content)
+        {
+            if (!content.Contains(ToolService.TagClose))
+                return content;
+
+            var start = content.LastIndexOf(ToolService.TagClose) + ToolService.TagClose.Length;
+            if (start < 0)
+                return content;
+
+            return content[start..].Trim('\n');
         }
 
 

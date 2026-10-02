@@ -829,7 +829,8 @@ namespace Amuse.Common
     {
         User = 0,
         System = 1,
-        Assistant = 2
+        Assistant = 2,
+        Tool = 3
     }
 
 

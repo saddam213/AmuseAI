@@ -88,6 +88,7 @@ namespace Amuse.App
             builder.Services.AddSingleton<IMigrationService, MigrationService>();
             builder.Services.AddSingleton<IHttpService, HttpService>();
             builder.Services.AddSingleton<IPreviewService, PreviewService>();
+            builder.Services.AddSingleton<IToolService, ToolService>();
 
             // Build
             _appHost = builder.Build();

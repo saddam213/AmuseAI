@@ -28,10 +28,11 @@ namespace Amuse.App.Runtime
         /// <param name="settings">The settings.</param>
         /// <param name="mediaService">The media service.</param>
         /// <param name="logger">The logger.</param>
-        protected BackendClient(Settings settings, IMediaService mediaService, ILogger logger)
+        protected BackendClient(Settings settings, IToolService toolService, IMediaService mediaService, ILogger logger)
         {
             Logger = logger;
             Settings = settings;
+            ToolService = toolService;
             MediaService = mediaService;
         }
 
@@ -41,6 +42,7 @@ namespace Amuse.App.Runtime
         public bool ResolveComponentFiles { get; protected set; }
         protected ILogger Logger { get; }
         protected Settings Settings { get; }
+        protected IToolService ToolService { get; }
         protected IMediaService MediaService { get; }
         protected PipelineClient PipelineClient { get; set; }
         protected IProgress<PipelineProgress> ProgressCallback { get; set; }
@@ -304,7 +306,13 @@ namespace Amuse.App.Runtime
                     generateOptions.InputAudios.Add(await inputAudios.GetAsync(DefaultOptions.SampleRate, DefaultOptions.Channels));
                 }
 
-                var pipelineResult = await PipelineClient.GenerateTextAsync(generateOptions);
+                if (DefaultOptions.IsToolCallsSupported && options.IsToolCallsEnabled)
+                {
+                    options.SelectedTools = ToolService.ToolNames.ToList(); //TODO: UI selection of tools
+                    generateOptions.Tools = ToolService.GetTools(options);
+                }
+
+                var pipelineResult = await GenerateTextLoopAsync(generateOptions);
                 foreach (var beamResult in pipelineResult)
                 {
                     textResult.Results.Add(beamResult);
@@ -316,6 +324,31 @@ namespace Amuse.App.Runtime
                 HandlePipelineClientError(ex);
                 throw new Exception(AppErrors.PipelineClosedUnexpectedly);
             }
+        }
+
+
+        /// <summary>
+        /// Generate text with tool loop
+        /// </summary>
+        /// <param name="options">The options.</param>
+        private async Task<IReadOnlyList<TextInput>> GenerateTextLoopAsync(Amuse.Common.GenerateTextOptions options)
+        {
+            var textResult = await PipelineClient.GenerateTextAsync(options);
+            if (DefaultOptions.IsToolCallsSupported && ToolService.IsToolResponse(textResult))
+            {
+                var toolResponse = ToolService.ParseResponse(textResult);
+                if (toolResponse == null || toolResponse.IsEmpty)
+                    return textResult;
+
+                options.Conversation.Add(new ConversationMessage(ConversationRole.Assistant, "", default, default, toolResponse.ToolCalls));
+                foreach (var tool in toolResponse.Tools)
+                {
+                    var content = await tool.ExecuteAsync(Settings);
+                    options.Conversation.Add(new ConversationMessage(ConversationRole.Tool, content, default, default, default));
+                }
+                textResult = await GenerateTextLoopAsync(options);
+            }
+            return textResult;
         }
 
 
@@ -737,12 +770,12 @@ namespace Amuse.App.Runtime
         }
 
 
-        private static ConversationMessage[] CreateConversation(ObservableCollection<ConversationModel> conversation)
+        private static List<ConversationMessage> CreateConversation(ObservableCollection<ConversationModel> conversation)
         {
             if (conversation.IsNullOrEmpty())
                 return default;
 
-            return [.. conversation.Select(x => new ConversationMessage(x.Role, x.Content, x.ImageIndex.GetIndexValues(), x.AudioIndex.GetIndexValues()))];
+            return [.. conversation.Select(x => new ConversationMessage(x.Role, x.Content, x.ImageIndex.GetIndexValues(), x.AudioIndex.GetIndexValues(), default))];
         }
 
 
