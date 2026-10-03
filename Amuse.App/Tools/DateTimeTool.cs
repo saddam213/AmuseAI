@@ -35,20 +35,27 @@ namespace Amuse.App.Tools
         /// <param name="cancellationToken">The cancellation token.</param>
         public override Task<string> ExecuteAsync(Settings settings, CancellationToken cancellationToken)
         {
-            var now = DateTimeOffset.Now;
-            var utc = now.ToUniversalTime();
-            var timezone = TimeZoneInfo.Local;
-            return Task.FromResult($$"""
+            try
             {
-                "local": "{{now:yyyy-MM-ddTHH:mm:sszzz}}",
-                "date": "{{now:yyyy-MM-dd}}",
-                "day": "{{now:dddd}}",
-                "time": "{{now:HH:mm:ss}}",
-                "timezone": "{{timezone.Id}}",
-                "timezone_display": "{{timezone.DisplayName}}",
-                "utc": "{{utc:yyyy-MM-ddTHH:mm:ssZ}}"
+                var now = DateTimeOffset.Now;
+                var utc = now.ToUniversalTime();
+                var timezone = TimeZoneInfo.Local;
+                return Task.FromResult($$"""
+                {
+                    "local": "{{now:yyyy-MM-ddTHH:mm:sszzz}}",
+                    "date": "{{now:yyyy-MM-dd}}",
+                    "day": "{{now:dddd}}",
+                    "time": "{{now:HH:mm:ss}}",
+                    "timezone": "{{timezone.Id}}",
+                    "timezone_display": "{{timezone.DisplayName}}",
+                    "utc": "{{utc:yyyy-MM-ddTHH:mm:ssZ}}"
+                }
+                """);
             }
-            """);
+            catch (Exception ex)
+            {
+                return Task.FromResult($"[Error] {Name} tool failed to execute: {ex.Message}");
+            }
         }
     }
 }

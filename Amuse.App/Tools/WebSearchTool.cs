@@ -1,4 +1,5 @@
-﻿using System.Text.Json;
+﻿using System;
+using System.Text.Json;
 using System.Threading;
 using System.Threading.Tasks;
 using WebLookup;
@@ -20,13 +21,18 @@ namespace Amuse.App.Tools
             "type": "function",
             "function": {
                 "name": "web_search",
-                "description": "Search the public web for information. Use this tool when you need information that is current, time-sensitive, unfamiliar, or not available in your existing knowledge. The tool returns a list of search results containing titles, URLs, and descriptions. Use the returned URLs with web_fetch when you need to read the full contents of a specific page. Prefer specific search queries that describe exactly what information you need. Do not use this tool when you can answer the user's question confidently without external information.",
+                "description": "Search the public web to find relevant pages, websites, and sources. Use this tool when you need to find URLs or locate current, time-sensitive, unfamiliar, or externally verifiable information. The tool returns a list of search results containing titles and URLs. Prefer specific search queries that clearly describe what you are looking for. Do not use this tool when you can answer the user's question confidently from your existing knowledge.",
                 "parameters": {
                     "type": "object",
                     "properties": {
                         "query": {
                             "type": "string",
                             "description": "The search query"
+                        },
+                        "count": {
+                            "type": "integer",
+                            "description": "The maximum number of search results to return.",
+                            "default": 5
                         }
                     },
                     "required": ["query"]
@@ -42,11 +48,19 @@ namespace Amuse.App.Tools
         /// <param name="cancellationToken">The cancellation token.</param>
         public override async Task<string> ExecuteAsync(Settings settings, CancellationToken cancellationToken = default)
         {
-            var query = Arguments["query"].GetString();
-            using (var provider = new DuckDuckGoSearchProvider())
+            try
             {
-                var results = await provider.SearchAsync(query, count: 5, cancellationToken: cancellationToken);
-                return JsonSerializer.Serialize(results);
+                var query = Arguments["query"].GetString();
+                var count = Arguments.TryGetValue("count", out var countArgument) ? countArgument.GetInt32() : 5;
+                using (var provider = new DuckDuckGoSearchProvider(new DuckDuckGoSearchOptions(), HttpClient))
+                {
+                    var results = await provider.SearchAsync(query, count, cancellationToken);
+                    return JsonSerializer.Serialize(results);
+                }
+            }
+            catch (Exception ex)
+            {
+                return $"[Error] {Name} tool failed to execute: {ex.Message}";
             }
         }
     }

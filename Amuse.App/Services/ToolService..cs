@@ -6,6 +6,7 @@ using System.Linq;
 using System.Reflection;
 using System.Text.Json;
 using TensorStack.Common;
+using TensorStack.WPF.Services;
 
 namespace Amuse.App.Services
 {
@@ -14,12 +15,14 @@ namespace Amuse.App.Services
         public const string TagOpen = "<tool_call>";
         public const string TagClose = "</tool_call>";
         private readonly Dictionary<string, ToolDefinition> _toolDefinitions;
+        private readonly IHttpService _httpService;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="ToolService"/> class.
         /// </summary>
-        public ToolService()
+        public ToolService(IHttpService httpService)
         {
+            _httpService = httpService;
             _toolDefinitions = RegisterTools();
         }
 
@@ -94,7 +97,9 @@ namespace Amuse.App.Services
             if (toolDefinition == null || !_toolDefinitions.TryGetValue(toolDefinition.Name, out var toolRegistration))
                 throw new Exception();
 
-            return (ToolCallBase)JsonSerializer.Deserialize(toolCall, toolRegistration.Type, Json.DefaultOptions);
+            var toolCallImplementation = (ToolCallBase)JsonSerializer.Deserialize(toolCall, toolRegistration.Type, Json.DefaultOptions);
+            toolCallImplementation.HttpClient = _httpService.Client;
+            return toolCallImplementation;
         }
 
 

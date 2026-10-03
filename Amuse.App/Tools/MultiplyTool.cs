@@ -1,4 +1,5 @@
-﻿using System.Threading;
+﻿using System;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace Amuse.App.Tools
@@ -45,9 +46,16 @@ namespace Amuse.App.Tools
         /// <param name="cancellationToken">The cancellation token.</param>
         public override Task<string> ExecuteAsync(Settings settings, CancellationToken cancellationToken)
         {
-            var a = Arguments["a"].GetDouble();
-            var b = Arguments["b"].GetDouble();
-            return Task.FromResult($"{a * b}");
+            try
+            {
+                var a = Arguments["a"].GetDouble();
+                var b = Arguments["b"].GetDouble();
+                return Task.FromResult($"{a * b}");
+            }
+            catch (Exception ex)
+            {
+                return Task.FromResult($"[Error] {Name} tool failed to execute: {ex.Message}");
+            }
         }
     }
 }

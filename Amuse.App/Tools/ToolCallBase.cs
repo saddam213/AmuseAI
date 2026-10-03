@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Net.Http;
 using System.Text.Json;
 using System.Threading;
 using System.Threading.Tasks;
@@ -21,6 +22,11 @@ namespace Amuse.App.Tools
         /// Gets the arguments.
         /// </summary>
         public Dictionary<string, JsonElement> Arguments { get; init; }
+
+        /// <summary>
+        /// Gets or sets the HTTP client.
+        /// </summary>
+        public HttpClient HttpClient { get; set; }
 
         /// <summary>
         /// Executes the tool.
