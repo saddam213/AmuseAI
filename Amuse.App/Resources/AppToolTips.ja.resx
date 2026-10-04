@@ -118,40 +118,40 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="ToolTip_GenerateStop" xml:space="preserve">
-    <value>バックエンドプロセスを終了して、生成を即座に停止します。</value>
+    <value>バックエンドプロセスを終了し、生成を直ちに停止します。</value>
   </data>
   <data name="ToolTip_ModelStatus_Available" xml:space="preserve">
     <value>ダウンロード可能</value>
   </data>
   <data name="ToolTip_ModelStatus_DownloadFailed" xml:space="preserve">
-    <value>モデルのダウンロードに失敗</value>
+    <value>モデル：ダウンロードに失敗</value>
   </data>
   <data name="ToolTip_ModelStatus_Downloading" xml:space="preserve">
-    <value>モデルをダウンロード中</value>
+    <value>モデル：ダウンロード中</value>
   </data>
   <data name="ToolTip_ModelStatus_DownloadQueue" xml:space="preserve">
-    <value>モデルのダウンロード待機中</value>
+    <value>モデル：ダウンロード待機中</value>
   </data>
   <data name="ToolTip_ModelStatus_Installed" xml:space="preserve">
-    <value>モデルはインストール済み</value>
+    <value>モデル：インストール済み</value>
   </data>
   <data name="ToolTip_ModelStatus_NotInstalled" xml:space="preserve">
-    <value>モデルは未インストール</value>
+    <value>モデル：未インストール</value>
   </data>
   <data name="ToolTip_ModelStatus_Unknown" xml:space="preserve">
-    <value>モデルの更新が必要</value>
+    <value>モデル：更新が必要</value>
   </data>
   <data name="ToolTip_Text_Branch" xml:space="preserve">
     <value>会話を分岐</value>
   </data>
   <data name="ToolTip_Text_Rewind" xml:space="preserve">
-    <value>最後のメッセージまで巻き戻す</value>
+    <value>直前のメッセージまで巻き戻す</value>
   </data>
   <data name="ToolTip_Text_SaveResponseFile" xml:space="preserve">
     <value>応答をファイルに保存</value>
   </data>
   <data name="ToolTip_Text_CopyResponseHtml" xml:space="preserve">
-    <value>応答を HTML としてコピー</value>
+    <value>応答をHTMLとしてコピー</value>
   </data>
   <data name="ToolTip_Text_CopyResponseText" xml:space="preserve">
     <value>応答テキストをコピー</value>
@@ -160,7 +160,7 @@
     <value>テキストをクリア</value>
   </data>
   <data name="ToolTip_Lora_AddTrigger" xml:space="preserve">
-    <value>LoRA トリガーワードを追加</value>
+    <value>LoRAトリガーワードを追加</value>
   </data>
   <data name="ToolTip_Paint_Live" xml:space="preserve">
     <value>ライブ生成</value>
@@ -196,10 +196,10 @@
     <value>描画をクリア</value>
   </data>
   <data name="ToolTip_Seed_New" xml:space="preserve">
-    <value>新しい Seed</value>
+    <value>ニューシード</value>
   </data>
   <data name="ToolTip_Seed_Random" xml:space="preserve">
-    <value>ランダム Seed</value>
+    <value>ランダムシード</value>
   </data>
   <data name="ToolTip_VideoTimeline_Clear" xml:space="preserve">
     <value>タイムラインをクリア</value>
@@ -244,10 +244,10 @@
     <value>推定メモリモード</value>
   </data>
   <data name="ToolTip_Text_StreamEnable" xml:space="preserve">
-    <value>Streaming Token 更新を有効化</value>
+    <value>ストリーミングトークン更新を有効化</value>
   </data>
   <data name="ToolTip_Text_StreamDisable" xml:space="preserve">
-    <value>Streaming Token 更新を無効化</value>
+    <value>ストリーミングトークン更新を無効化</value>
   </data>
   <data name="ToolTip_Text_FormatEnable" xml:space="preserve">
     <value>結果の書式設定を有効化（実験的）</value>
@@ -256,15 +256,15 @@
     <value>結果の書式設定を無効化</value>
   </data>
   <data name="ToolTip_Text_ThinkingHide" xml:space="preserve">
-    <value>Thinking 内容を非表示</value>
+    <value>シンキング内容を非表示</value>
   </data>
   <data name="ToolTip_Text_ThinkingShow" xml:space="preserve">
-    <value>Thinking 内容を表示</value>
+    <value>シンキング内容を表示</value>
   </data>
   <data name="ToolTip_Acsess_HuggingFace" xml:space="preserve">
-    <value>制限付きモデル - HuggingFace 認証が必要です。</value>
+    <value>制限付きモデル - HuggingFace認証が必要です。</value>
   </data>
   <data name="ToolTip_Acsess_Civitai" xml:space="preserve">
-    <value>制限付きモデル - Civitai 認証が必要です。</value>
+    <value>制限付きモデル - Civitai認証が必要です。</value>
   </data>
 </root>

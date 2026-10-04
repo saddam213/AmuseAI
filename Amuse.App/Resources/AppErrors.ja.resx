@@ -118,7 +118,7 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="GeneratedAudioNotFound" xml:space="preserve">
-    <value>生成されたオーディオ結果が見つかりません。</value>
+    <value>生成された音声結果が見つかりません。</value>
   </data>
   <data name="GeneratedImageNotFound" xml:space="preserve">
     <value>生成された画像結果が見つかりません。</value>
@@ -130,6 +130,6 @@
     <value>生成された動画結果が見つかりません。</value>
   </data>
   <data name="PipelineClosedUnexpectedly" xml:space="preserve">
-    <value>Pipeline が予期せず終了しました</value>
+    <value>パイプラインが予期せず終了しました</value>
   </data>
 </root>

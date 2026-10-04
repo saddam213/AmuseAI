@@ -121,16 +121,16 @@
     <value>コンポーネント</value>
   </data>
   <data name="ControlNet" xml:space="preserve">
-    <value>ControlNet</value>
+    <value>コントロールネット</value>
   </data>
   <data name="Diffusion" xml:space="preserve">
-    <value>Diffusion</value>
+    <value>拡散モデル</value>
   </data>
   <data name="Environment" xml:space="preserve">
     <value>環境</value>
   </data>
   <data name="Extractor" xml:space="preserve">
-    <value>Extractor</value>
+    <value>エクストラクタ</value>
   </data>
   <data name="Gallery" xml:space="preserve">
     <value>ギャラリー</value>
@@ -142,7 +142,7 @@
     <value>LLM</value>
   </data>
   <data name="LoraAdapter" xml:space="preserve">
-    <value>LoRA アダプター</value>
+    <value>LoRAアダプター</value>
   </data>
   <data name="Models" xml:space="preserve">
     <value>モデル</value>
@@ -235,16 +235,16 @@
     <value>環境セットアップ</value>
   </data>
   <data name="Title_AmuseUpdate" xml:space="preserve">
-    <value>Amuse のアップデート</value>
+    <value>Amuseのアップデート</value>
   </data>
   <data name="Title_ComponentModel" xml:space="preserve">
     <value>コンポーネントモデル</value>
   </data>
   <data name="Title_ControlNetModel" xml:space="preserve">
-    <value>ControlNet モデル</value>
+    <value>コントロールネットモデル</value>
   </data>
   <data name="Title_DiffusionModel" xml:space="preserve">
-    <value>Diffusion モデル</value>
+    <value>拡散モデル</value>
   </data>
   <data name="Title_AddModel" xml:space="preserve">
     <value>モデルを追加</value>
@@ -262,7 +262,7 @@
     <value>言語モデル</value>
   </data>
   <data name="Title_LoraAdapterModel" xml:space="preserve">
-    <value>LoRA アダプターモデル</value>
+    <value>LoRAアダプターモデル</value>
   </data>
   <data name="Title_MediaPreview" xml:space="preserve">
     <value>メディアプレビュー</value>
@@ -274,7 +274,7 @@
     <value>アップスケールモデル</value>
   </data>
   <data name="AllBeamsResults" xml:space="preserve">
-    <value>すべての Beam 結果</value>
+    <value>すべてのBeam結果</value>
   </data>
   <data name="EnableTiling" xml:space="preserve">
     <value>タイリングを有効化</value>
@@ -295,7 +295,7 @@
     <value>LoRA</value>
   </data>
   <data name="Extract" xml:space="preserve">
-    <value>抽出</value>
+    <value>エクストラクト</value>
   </data>
   <data name="Upscale" xml:space="preserve">
     <value>アップスケール</value>
@@ -307,7 +307,7 @@
     <value>出力を反転</value>
   </data>
   <data name="ThinkingEnabled" xml:space="preserve">
-    <value>Thinking を有効化</value>
+    <value>シンキングを有効化</value>
   </data>
   <data name="MinLength" xml:space="preserve">
     <value>最小長</value>
@@ -322,13 +322,13 @@
     <value>サンプリングを有効化</value>
   </data>
   <data name="OutputSeed" xml:space="preserve">
-    <value>出力 Seed</value>
+    <value>出力シード</value>
   </data>
   <data name="AudioEnabled" xml:space="preserve">
-    <value>オーディオを有効化</value>
+    <value>音声を有効化</value>
   </data>
   <data name="EnableAudioProcessing" xml:space="preserve">
-    <value>オーディオ処理を有効化</value>
+    <value>音声処理を有効化</value>
   </data>
   <data name="DownloadAndInstall" xml:space="preserve">
     <value>ダウンロードしてインストール</value>
@@ -343,10 +343,10 @@
     <value>移動</value>
   </data>
   <data name="VaeSlicing" xml:space="preserve">
-    <value>VAE Slicing</value>
+    <value>VAEスライシング</value>
   </data>
   <data name="VaeTiling" xml:space="preserve">
-    <value>VAE Tiling</value>
+    <value>VAEタイリング</value>
   </data>
   <data name="FirstFrameLastFrame" xml:space="preserve">
     <value>先頭フレーム／最終フレーム</value>
@@ -367,58 +367,58 @@
     <value>出力を結合</value>
   </data>
   <data name="RescaleBetasSNR" xml:space="preserve">
-    <value>Betas を SNR で再スケール</value>
+    <value>ベータをSNRで再スケール</value>
   </data>
   <data name="SetAlphaToOne" xml:space="preserve">
-    <value>Alpha を 1 に設定</value>
+    <value>Alphaを1に設定</value>
   </data>
   <data name="ClipSample" xml:space="preserve">
-    <value>Clip Sample</value>
+    <value>クリップサンプル</value>
   </data>
   <data name="Thresholding" xml:space="preserve">
-    <value>Thresholding</value>
+    <value>しきい値処理を有効化</value>
   </data>
   <data name="DynamicShifting" xml:space="preserve">
-    <value>Dynamic Shifting</value>
+    <value>動的シフトを有効化</value>
   </data>
   <data name="InvertSigmas" xml:space="preserve">
-    <value>Sigmas を反転</value>
+    <value>シグマを反転</value>
   </data>
   <data name="StochasticSampling" xml:space="preserve">
-    <value>Stochastic Sampling</value>
+    <value>確率的サンプリングを有効化</value>
   </data>
   <data name="SkipPrkSteps" xml:space="preserve">
-    <value>PRK ステップをスキップ</value>
+    <value>PRKステップをスキップ</value>
   </data>
   <data name="LowerOrderFinal" xml:space="preserve">
     <value>最終段階で低次を使用</value>
   </data>
   <data name="FlowSigmas" xml:space="preserve">
-    <value>Flow Sigmas</value>
+    <value>フローシグマを使用</value>
   </data>
   <data name="PredictorOrder" xml:space="preserve">
-    <value>Predictor Order</value>
+    <value>予測次数</value>
   </data>
   <data name="CorrectorOrder" xml:space="preserve">
-    <value>Corrector Order</value>
+    <value>修正次数</value>
   </data>
   <data name="Predictx0" xml:space="preserve">
-    <value>x0 を予測</value>
+    <value>x0を予測</value>
   </data>
   <data name="UseFlowSigmas" xml:space="preserve">
-    <value>Flow Sigmas を使用</value>
+    <value>フローシグマを使用</value>
   </data>
   <data name="EulerAtFinal" xml:space="preserve">
-    <value>最終段階で Euler を使用</value>
+    <value>最終段階でEulerを使用</value>
   </data>
   <data name="LuLambdas" xml:space="preserve">
-    <value>Lu Lambdas</value>
+    <value>Luラムダを使用</value>
   </data>
   <data name="SNRShiftScale" xml:space="preserve">
-    <value>SNR Shift Scale</value>
+    <value>SNRシフトスケール</value>
   </data>
   <data name="RescaleBetasZeroSNR" xml:space="preserve">
-    <value>RescaleBetasZeroSNR</value>
+    <value>ベータをZeroSNRで再スケール</value>
   </data>
   <data name="Prev" xml:space="preserve">
     <value>前へ</value>
@@ -445,7 +445,7 @@
     <value>最終使用順で並べ替え</value>
   </data>
   <data name="Orientation" xml:space="preserve">
-    <value>向き</value>
+    <value>生成履歴の表示方向</value>
   </data>
   <data name="ResetDialogs" xml:space="preserve">
     <value>ダイアログをリセット</value>
@@ -454,7 +454,7 @@
     <value>外部リンクを有効化</value>
   </data>
   <data name="PipelineDebug" xml:space="preserve">
-    <value>Pipeline Debug</value>
+    <value>パイプラインデバッグ</value>
   </data>
   <data name="OptimizeDevice" xml:space="preserve">
     <value>デバイスを最適化</value>
@@ -466,7 +466,7 @@
     <value>デバイス量子化</value>
   </data>
   <data name="DiffusionStepPreview" xml:space="preserve">
-    <value>Diffusion ステッププレビュー</value>
+    <value>拡散モデルステッププレビュー</value>
   </data>
   <data name="StyleSample" xml:space="preserve">
     <value>スタイルサンプル</value>
@@ -478,16 +478,16 @@
     <value>アップデートを確認</value>
   </data>
   <data name="SchedulerOptions" xml:space="preserve">
-    <value>Scheduler オプション</value>
+    <value>スケジューラーオプション</value>
   </data>
   <data name="LatentUpscale" xml:space="preserve">
-    <value>Latent アップスケール</value>
+    <value>レイテントアップスケール</value>
   </data>
   <data name="AutoEncoder" xml:space="preserve">
-    <value>Auto Encoder</value>
+    <value>オートエンコーダー</value>
   </data>
   <data name="ExtractOptions" xml:space="preserve">
-    <value>抽出オプション</value>
+    <value>エクストラクトオプション</value>
   </data>
   <data name="UpscaleOptions" xml:space="preserve">
     <value>アップスケールオプション</value>
@@ -499,16 +499,16 @@
     <value>応答をコピー</value>
   </data>
   <data name="CopyThinking" xml:space="preserve">
-    <value>Thinking をコピー</value>
+    <value>Thinkingをコピー</value>
   </data>
   <data name="CopyHtml" xml:space="preserve">
-    <value>HTML をコピー</value>
+    <value>HTMLをコピー</value>
   </data>
   <data name="CopyResponseHtml" xml:space="preserve">
-    <value>応答の HTML をコピー</value>
+    <value>応答をHTMLとしてコピー</value>
   </data>
   <data name="CopyThinkingHtml" xml:space="preserve">
-    <value>Thinking の HTML をコピー</value>
+    <value>ThinkingをHTMLとしてコピー</value>
   </data>
   <data name="Model" xml:space="preserve">
     <value>モデル</value>
@@ -532,10 +532,10 @@
     <value>コンポーネント設定</value>
   </data>
   <data name="ControlNetSettings" xml:space="preserve">
-    <value>ControlNet 設定</value>
+    <value>コントロールネット設定</value>
   </data>
   <data name="DiffusionSettings" xml:space="preserve">
-    <value>Diffusion 設定</value>
+    <value>拡散モデル設定</value>
   </data>
   <data name="EnvironmentSettings" xml:space="preserve">
     <value>環境設定</value>
@@ -544,7 +544,7 @@
     <value>抽出設定</value>
   </data>
   <data name="LoraSettings" xml:space="preserve">
-    <value>LoRA 設定</value>
+    <value>LoRA設定</value>
   </data>
   <data name="UpscaleSettings" xml:space="preserve">
     <value>アップスケール設定</value>
@@ -568,16 +568,16 @@
     <value>オプション</value>
   </data>
   <data name="Seed" xml:space="preserve">
-    <value>Seed</value>
+    <value>シード</value>
   </data>
   <data name="Steps" xml:space="preserve">
     <value>ステップ</value>
   </data>
   <data name="Guidance" xml:space="preserve">
-    <value>Guidance</value>
+    <value>ガイダンス</value>
   </data>
   <data name="Strength" xml:space="preserve">
-    <value>強度</value>
+    <value>ストレングス</value>
   </data>
   <data name="Duration" xml:space="preserve">
     <value>長さ</value>
@@ -601,13 +601,13 @@
     <value>タスク</value>
   </data>
   <data name="LengthPenalty" xml:space="preserve">
-    <value>Length Penalty</value>
+    <value>レングスペナルティ</value>
   </data>
   <data name="ChunkSize" xml:space="preserve">
     <value>チャンクサイズ</value>
   </data>
   <data name="EarlyStopping" xml:space="preserve">
-    <value>Early Stopping</value>
+    <value>アーリーストッピング</value>
   </data>
   <data name="Advanced" xml:space="preserve">
     <value>詳細設定</value>
@@ -619,25 +619,25 @@
     <value>画像数</value>
   </data>
   <data name="PromptFolder" xml:space="preserve">
-    <value>プロンプトフォルダー</value>
+    <value>プロンプトフォルダ</value>
   </data>
   <data name="PromptFile" xml:space="preserve">
     <value>プロンプトファイル</value>
   </data>
   <data name="ImageFolder" xml:space="preserve">
-    <value>画像フォルダー</value>
+    <value>画像フォルダ</value>
   </data>
   <data name="VideoFolder" xml:space="preserve">
-    <value>動画フォルダー</value>
+    <value>動画フォルダ</value>
   </data>
   <data name="TextFolder" xml:space="preserve">
-    <value>テキストフォルダー</value>
+    <value>テキストフォルダ</value>
   </data>
   <data name="AudioFolder" xml:space="preserve">
-    <value>オーディオフォルダー</value>
+    <value>音声フォルダ</value>
   </data>
   <data name="OutputFolder" xml:space="preserve">
-    <value>出力フォルダー</value>
+    <value>出力フォルダ</value>
   </data>
   <data name="Beams" xml:space="preserve">
     <value>Beams</value>
@@ -655,10 +655,10 @@
     <value>タイプ</value>
   </data>
   <data name="Folder" xml:space="preserve">
-    <value>フォルダー</value>
+    <value>フォルダ</value>
   </data>
   <data name="SubFolderOptional" xml:space="preserve">
-    <value>サブフォルダー（任意）</value>
+    <value>サブフォルダ（任意）</value>
   </data>
   <data name="Component" xml:space="preserve">
     <value>コンポーネント</value>
@@ -667,7 +667,7 @@
     <value>モデルファイル</value>
   </data>
   <data name="ModelFolder" xml:space="preserve">
-    <value>モデルフォルダー</value>
+    <value>モデルフォルダ</value>
   </data>
   <data name="DownloadFiles" xml:space="preserve">
     <value>ファイルをダウンロード</value>
@@ -676,7 +676,7 @@
     <value>ドキュメント</value>
   </data>
   <data name="Tokens" xml:space="preserve">
-    <value>Tokens</value>
+    <value>トークン</value>
   </data>
   <data name="Length" xml:space="preserve">
     <value>長さ</value>
@@ -688,7 +688,7 @@
     <value>プリセット</value>
   </data>
   <data name="NoiseCondition" xml:space="preserve">
-    <value>Noise Condition</value>
+    <value>ノイズコンディション</value>
   </data>
   <data name="StepsStage1" xml:space="preserve">
     <value>ステップ（Stage 1）</value>
@@ -703,19 +703,19 @@
     <value>ステップ（Low Noise）</value>
   </data>
   <data name="GuidanceModel" xml:space="preserve">
-    <value>Guidance（Model）</value>
+    <value>ガイダンス（モデル）</value>
   </data>
   <data name="GuidanceCFG" xml:space="preserve">
-    <value>Guidance（CFG）</value>
+    <value>ガイダンス（CFG）</value>
   </data>
   <data name="GuidanceHighNoise" xml:space="preserve">
-    <value>Guidance（High Noise）</value>
+    <value>ガイダンス（High Noise）</value>
   </data>
   <data name="GuidanceLowNoise" xml:space="preserve">
-    <value>Guidance（Low Noise）</value>
+    <value>ガイダンス（Low Noise）</value>
   </data>
   <data name="ControlStrength" xml:space="preserve">
-    <value>コントロール強度</value>
+    <value>コントロールストレングス</value>
   </data>
   <data name="Prompt" xml:space="preserve">
     <value>プロンプト</value>
@@ -724,7 +724,7 @@
     <value>ネガティブプロンプト</value>
   </data>
   <data name="DenoiseStrength" xml:space="preserve">
-    <value>Denoise Strength</value>
+    <value>デノイズストレングス</value>
   </data>
   <data name="Ready" xml:space="preserve">
     <value>準備完了</value>
@@ -772,19 +772,19 @@
     <value>システムプロンプト</value>
   </data>
   <data name="RepetitionPenalty" xml:space="preserve">
-    <value>Repetition Penalty</value>
+    <value>レペティションペナルティ</value>
   </data>
   <data name="NoRepeatNgrams" xml:space="preserve">
-    <value>No Repeat Ngrams</value>
+    <value>ノーリピートN-グラム</value>
   </data>
   <data name="TopH" xml:space="preserve">
     <value>TopH</value>
   </data>
   <data name="TypicalP" xml:space="preserve">
-    <value>TypicalP</value>
+    <value>ティピカルP</value>
   </data>
   <data name="KVCache" xml:space="preserve">
-    <value>KV Cache</value>
+    <value>KVキャッシュ</value>
   </data>
   <data name="Note" xml:space="preserve">
     <value>注記</value>
@@ -796,7 +796,7 @@
     <value>追加コンテキスト</value>
   </data>
   <data name="PleaseSelectLora" xml:space="preserve">
-    <value>LoRA を選択してください...</value>
+    <value>LoRAを選択してください...</value>
   </data>
   <data name="TotalUsed" xml:space="preserve">
     <value>使用量合計</value>
@@ -823,7 +823,7 @@
     <value>動画をインポート</value>
   </data>
   <data name="ImportAudio" xml:space="preserve">
-    <value>オーディオをインポート</value>
+    <value>音声をインポート</value>
   </data>
   <data name="ImportImage" xml:space="preserve">
     <value>画像をインポート</value>
@@ -841,55 +841,55 @@
     <value>プレビュー品質</value>
   </data>
   <data name="BetaSchedule" xml:space="preserve">
-    <value>Beta Schedule</value>
+    <value>ベータスケジュール</value>
   </data>
   <data name="BetaStart" xml:space="preserve">
-    <value>Beta Start</value>
+    <value>ベータスタート</value>
   </data>
   <data name="BetaEnd" xml:space="preserve">
-    <value>Beta End</value>
+    <value>ベータエンド</value>
   </data>
   <data name="Prediction" xml:space="preserve">
-    <value>Prediction</value>
+    <value>プレディクション</value>
   </data>
   <data name="TimestepSpacing" xml:space="preserve">
-    <value>Timestep Spacing</value>
+    <value>タイムステップスペーシング</value>
   </data>
   <data name="StepsOffset" xml:space="preserve">
     <value>ステップオフセット</value>
   </data>
   <data name="SigmaMin" xml:space="preserve">
-    <value>Sigma Min</value>
+    <value>シグマ最小値</value>
   </data>
   <data name="SigmaMax" xml:space="preserve">
-    <value>Sigma Max</value>
+    <value>シグマ最大値</value>
   </data>
   <data name="FinalSigmasType" xml:space="preserve">
-    <value>Final Sigmas Type</value>
+    <value>ファイナルシグマタイプ</value>
   </data>
   <data name="SigmaType" xml:space="preserve">
-    <value>Sigma Type</value>
+    <value>シグマタイプ</value>
   </data>
   <data name="InterpolationType" xml:space="preserve">
     <value>補間方式</value>
   </data>
   <data name="TimestepType" xml:space="preserve">
-    <value>Timestep Type</value>
+    <value>タイムステップタイプ</value>
   </data>
   <data name="ClipSampleRange" xml:space="preserve">
-    <value>Clip Sample Range</value>
+    <value>クリップサンプルレンジ</value>
   </data>
   <data name="SampleMaxValue" xml:space="preserve">
     <value>サンプル最大値</value>
   </data>
   <data name="ThresholdingRatio" xml:space="preserve">
-    <value>Thresholding Ratio</value>
+    <value>スレッショルディングレシオ</value>
   </data>
   <data name="Variance" xml:space="preserve">
-    <value>Variance</value>
+    <value>バリアンス</value>
   </data>
   <data name="TimestepScaling" xml:space="preserve">
-    <value>Timestep Scaling</value>
+    <value>タイムステップスケーリング</value>
   </data>
   <data name="Shift" xml:space="preserve">
     <value>シフト</value>
@@ -907,58 +907,58 @@
     <value>タイムシフト</value>
   </data>
   <data name="Solver" xml:space="preserve">
-    <value>Solver</value>
+    <value>ソルバー</value>
   </data>
   <data name="SolverOrder" xml:space="preserve">
-    <value>Solver Order</value>
+    <value>ソルバーオーダー</value>
   </data>
   <data name="FlowShift" xml:space="preserve">
-    <value>Flow Shift</value>
+    <value>フローシフト</value>
   </data>
   <data name="AlgorithmType" xml:space="preserve">
-    <value>Algorithm Type</value>
+    <value>アルゴリズムタイプ</value>
   </data>
   <data name="VarianceType" xml:space="preserve">
-    <value>Variance Type</value>
+    <value>バリアンスタイプ</value>
   </data>
   <data name="NoiseSeed" xml:space="preserve">
-    <value>Noise Seed</value>
+    <value>ノイズシード</value>
   </data>
   <data name="Rho" xml:space="preserve">
-    <value>Rho</value>
+    <value>ロー（Rho）</value>
   </data>
   <data name="SigmaData" xml:space="preserve">
-    <value>SigmaData</value>
+    <value>シグマデータ</value>
   </data>
   <data name="SigmaScheduleType" xml:space="preserve">
-    <value>Sigma Schedule Type</value>
+    <value>シグマスケジュールタイプ</value>
   </data>
   <data name="UpscaleMode" xml:space="preserve">
     <value>アップスケールモード</value>
   </data>
   <data name="Gamma" xml:space="preserve">
-    <value>Gamma</value>
+    <value>ガンマ</value>
   </data>
   <data name="TimeShiftType" xml:space="preserve">
     <value>タイムシフトタイプ</value>
   </data>
   <data name="OriginalSteps" xml:space="preserve">
-    <value>Original Steps</value>
+    <value>オリジナルステップ</value>
   </data>
   <data name="Eta" xml:space="preserve">
-    <value>Eta</value>
+    <value>イータ（Eta）</value>
   </data>
   <data name="SNoise" xml:space="preserve">
     <value>SNoise</value>
   </data>
   <data name="Scheduler" xml:space="preserve">
-    <value>Scheduler</value>
+    <value>スケジューラー</value>
   </data>
   <data name="SigmaSchedule" xml:space="preserve">
-    <value>Sigma Schedule</value>
+    <value>シグマスケジュール</value>
   </data>
   <data name="NewVersionMessage" xml:space="preserve">
-    <value>新しいバージョンの Amuse を利用できます</value>
+    <value>新しいバージョンのAmuseを利用できます</value>
   </data>
   <data name="TimeRemaining" xml:space="preserve">
     <value>残り時間</value>
@@ -979,10 +979,10 @@
     <value>リンク</value>
   </data>
   <data name="Pipeline" xml:space="preserve">
-    <value>Pipeline</value>
+    <value>パイプライン</value>
   </data>
   <data name="Backend" xml:space="preserve">
-    <value>Backend</value>
+    <value>バックエンド</value>
   </data>
   <data name="Status" xml:space="preserve">
     <value>ステータス</value>
@@ -1012,7 +1012,7 @@
     <value>フレームオプション</value>
   </data>
   <data name="FrameChunkOverlap" xml:space="preserve">
-    <value>フレームチャンクのオーバーラップ</value>
+    <value>フレームチャンクオーバーラップ</value>
   </data>
   <data name="FrameChunk" xml:space="preserve">
     <value>フレームチャンク</value>
@@ -1036,13 +1036,13 @@
     <value>品質</value>
   </data>
   <data name="Low" xml:space="preserve">
-    <value>低</value>
+    <value>Low</value>
   </data>
   <data name="Medium" xml:space="preserve">
-    <value>中</value>
+    <value>Medium</value>
   </data>
   <data name="High" xml:space="preserve">
-    <value>高</value>
+    <value>High</value>
   </data>
   <data name="Source" xml:space="preserve">
     <value>ソース</value>
@@ -1126,7 +1126,7 @@
     <value>ダウンロードをキャンセル</value>
   </data>
   <data name="OpenFolder" xml:space="preserve">
-    <value>フォルダーを開く</value>
+    <value>フォルダを開く</value>
   </data>
   <data name="DeleteFiles" xml:space="preserve">
     <value>ファイルを削除</value>
@@ -1147,7 +1147,7 @@
     <value>モデルディレクトリ</value>
   </data>
   <data name="UIScale" xml:space="preserve">
-    <value>UI スケール</value>
+    <value>UIスケール</value>
   </data>
   <data name="TempDirectory" xml:space="preserve">
     <value>一時ディレクトリ</value>
@@ -1156,7 +1156,7 @@
     <value>ログディレクトリ</value>
   </data>
   <data name="AudioInput" xml:space="preserve">
-    <value>オーディオ入力</value>
+    <value>音声入力</value>
   </data>
   <data name="TextResult" xml:space="preserve">
     <value>テキスト結果</value>
@@ -1219,10 +1219,10 @@
     <value>モデルタイプ</value>
   </data>
   <data name="PipelineType" xml:space="preserve">
-    <value>Pipeline タイプ</value>
+    <value>パイプラインタイプ</value>
   </data>
   <data name="BackendType" xml:space="preserve">
-    <value>Backend タイプ</value>
+    <value>バックエンドタイプ</value>
   </data>
   <data name="Access" xml:space="preserve">
     <value>アクセス</value>
@@ -1252,13 +1252,13 @@
     <value>スケール</value>
   </data>
   <data name="AudioResult" xml:space="preserve">
-    <value>オーディオ結果</value>
+    <value>音声結果</value>
   </data>
   <data name="InputText" xml:space="preserve">
     <value>入力テキスト</value>
   </data>
   <data name="ReferenceAudioOptional" xml:space="preserve">
-    <value>参照オーディオ（任意）</value>
+    <value>参照音声（任意）</value>
   </data>
   <data name="Lyrics" xml:space="preserve">
     <value>歌詞</value>
@@ -1267,19 +1267,19 @@
     <value>歌詞タグ</value>
   </data>
   <data name="ReferenceAudio" xml:space="preserve">
-    <value>参照オーディオ</value>
+    <value>参照音声</value>
   </data>
   <data name="LoraModel" xml:space="preserve">
-    <value>LoRA モデル</value>
+    <value>LoRAモデル</value>
   </data>
   <data name="ControlNetModel" xml:space="preserve">
-    <value>ControlNet モデル</value>
+    <value>コントロールネットモデル</value>
   </data>
   <data name="LoraStrength" xml:space="preserve">
-    <value>LoRA 強度</value>
+    <value>LoRAストレングス</value>
   </data>
   <data name="ControlNetStrength" xml:space="preserve">
-    <value>ControlNet 強度</value>
+    <value>コントロールネットストレングス</value>
   </data>
   <data name="Tiled" xml:space="preserve">
     <value>タイル化</value>
@@ -1291,7 +1291,7 @@
     <value>作成日時</value>
   </data>
   <data name="InfoPath" xml:space="preserve">
-    <value>情報パス</value>
+    <value>情報ファイルのパス</value>
   </data>
   <data name="OriginalSize" xml:space="preserve">
     <value>元のサイズ</value>
@@ -1324,7 +1324,7 @@
     <value>アップスケール済み</value>
   </data>
   <data name="Recent" xml:space="preserve">
-    <value>最近</value>
+    <value>Recent</value>
   </data>
   <data name="UpdateAvailable" xml:space="preserve">
     <value>アップデートがあります</value>
