@@ -7,7 +7,6 @@ using System.Threading.Tasks;
 using TensorStack.Common.Pipeline;
 using TensorStack.WPF;
 using TensorStack.WPF.Controls;
-using TensorStack.WPF.Resources;
 using TensorStack.WPF.Services;
 
 namespace Amuse.App.Views

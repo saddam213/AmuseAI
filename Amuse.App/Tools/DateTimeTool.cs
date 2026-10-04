@@ -12,14 +12,38 @@ namespace Amuse.App.Tools
         public override string Name => "datetime";
 
         /// <summary>
+        /// Gets the tool description.
+        /// </summary>
+        public override string Description => "Get the current local date and time, including the day of the week, local timezone, UTC time, and UTC offset";
+
+        /// <summary>
+        /// Gets the is default enabled.
+        /// </summary>
+        public override bool IsDefault => true;
+
+        /// <summary>
+        /// Gets the display name.
+        /// </summary>
+        public override string DisplayName => "DateTime Tool";
+        /// <summary>
+        /// Gets the tool icon.
+        /// </summary>
+        public override string DisplayIcon => "f017";
+
+        /// <summary>
+        /// Gets the is display order.
+        /// </summary>
+        public override int DisplayOrder => 0;
+
+        /// <summary>
         /// Gets the tool schema.
         /// </summary>
-        public override string Schema => """
+        public override string Schema => $$"""
         {
             "type": "function",
             "function": {
-                "name": "datetime",
-                "description": "Get the current local date and time, including the day of the week, local timezone, UTC time, and UTC offset. Use this tool when you need to know the current date or time or need accurate local time information.",
+                "name": "{{Name}}",
+                "description": "{{Description}} Use this tool when you need to know the current date or time or need accurate local time information.",
                 "parameters": {
                     "type": "object",
                     "properties": {}
@@ -37,25 +61,25 @@ namespace Amuse.App.Tools
         {
             try
             {
-                var now = DateTimeOffset.Now;
-                var utc = now.ToUniversalTime();
-                var timezone = TimeZoneInfo.Local;
-                return Task.FromResult($$"""
-                {
-                    "local": "{{now:yyyy-MM-ddTHH:mm:sszzz}}",
-                    "date": "{{now:yyyy-MM-dd}}",
-                    "day": "{{now:dddd}}",
-                    "time": "{{now:HH:mm:ss}}",
-                    "timezone": "{{timezone.Id}}",
-                    "timezone_display": "{{timezone.DisplayName}}",
-                    "utc": "{{utc:yyyy-MM-ddTHH:mm:ssZ}}"
-                }
-                """);
+                var result = new DateTimeResult(DateTimeOffset.Now, TimeZoneInfo.Local);
+                return Task.FromResult(SerializeResult(result));
             }
             catch (Exception ex)
             {
                 return Task.FromResult($"[Error] {Name} tool failed to execute: {ex.Message}");
             }
+        }
+
+
+        /// <summary>
+        /// DateTimeResult structure.
+        /// </summary>
+        private record DateTimeResult(DateTimeOffset LocalTime, TimeZoneInfo TimeZoneInfo)
+        {
+            public string Date => $"{LocalTime:yyyy-MM-dd}";
+            public string Day => $"{LocalTime:dddd}";
+            public string Time => $"{LocalTime:HH:mm:ss}";
+            public string Utc => $"{LocalTime.ToUniversalTime()}";
         }
     }
 }

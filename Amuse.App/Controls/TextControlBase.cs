@@ -44,7 +44,7 @@ namespace Amuse.App.Controls
         public static readonly DependencyProperty IsContextMenuEnabledProperty = DependencyProperty.Register(nameof(IsContextMenuEnabled), typeof(bool), typeof(TextControlBase), new PropertyMetadata(true));
         public static readonly DependencyProperty IsMarkdownEnabledProperty = DependencyProperty.Register(nameof(IsMarkdownEnabled), typeof(bool), typeof(TextControlBase), new PropertyMetadata(true));
         public static readonly DependencyProperty IsStreamUpdateEnabledProperty = DependencyProperty.Register(nameof(IsStreamUpdateEnabled), typeof(bool), typeof(TextControlBase), new PropertyMetadata(true));
-        public static readonly DependencyProperty IsThinkingVisibleProperty = DependencyProperty.Register(nameof(IsThinkingVisible), typeof(bool), typeof(TextControlBase), new PropertyMetadata(true));
+        public static readonly DependencyProperty IsThinkingVisibleProperty = DependencyProperty.Register(nameof(IsThinkingVisible), typeof(bool), typeof(TextControlBase), new PropertyMetadata(false));
         public static readonly DependencyProperty MaxTokenLengthProperty = DependencyProperty.Register(nameof(MaxTokenLength), typeof(int), typeof(TextControlBase), new PropertyMetadata(0));
         public event EventHandler OnConversationClear;
         public AsyncRelayCommand ClearCommand { get; }

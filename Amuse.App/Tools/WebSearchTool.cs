@@ -1,5 +1,6 @@
 ﻿using System;
-using System.Text.Json;
+using System.Collections.Generic;
+using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using WebLookup;
@@ -14,14 +15,39 @@ namespace Amuse.App.Tools
         public override string Name => "web_search";
 
         /// <summary>
+        /// Gets the tool description.
+        /// </summary>
+        public override string Description => "Search the public web for relevant and authoritative sources.";
+
+        /// <summary>
+        /// Gets the is default enabled.
+        /// </summary>
+        public override bool IsDefault => false;
+
+        /// <summary>
+        /// Gets the display name.
+        /// </summary>
+        public override string DisplayName => "Web Search Tool";
+
+        /// <summary>
+        /// Gets the tool icon.
+        /// </summary>
+        public override string DisplayIcon => "e8a6";
+
+        /// <summary>
+        /// Gets the is display order.
+        /// </summary>
+        public override int DisplayOrder => 10;
+
+        /// <summary>
         /// Gets the tool schema.
         /// </summary>
-        public override string Schema => """
+        public override string Schema => $$"""
         {
             "type": "function",
             "function": {
-                "name": "web_search",
-                "description": "Search the public web to find relevant pages, websites, and sources. Use this tool when you need to find URLs or locate current, time-sensitive, unfamiliar, or externally verifiable information. The tool returns a list of search results containing titles and URLs. Prefer specific search queries that clearly describe what you are looking for. Do not use this tool when you can answer the user's question confidently from your existing knowledge.",
+                "name": "{{Name}}",
+                "description": "{{Description}} Use this tool when answering requires current, time-sensitive, unfamiliar, niche, or externally verifiable information, or when you need to discover specific websites or pages. Search results include titles, URLs, and descriptive summaries that can be used to identify and select relevant sources. Prefer specific, focused queries over broad or vague searches. Do not use this tool when the question can be answered reliably from existing knowledge without web access.",
                 "parameters": {
                     "type": "object",
                     "properties": {
@@ -50,18 +76,45 @@ namespace Amuse.App.Tools
         {
             try
             {
-                var query = Arguments["query"].GetString();
-                var count = Arguments.TryGetValue("count", out var countArgument) ? countArgument.GetInt32() : 5;
-                using (var provider = new DuckDuckGoSearchProvider(new DuckDuckGoSearchOptions(), HttpClient))
+                var query = GetArgument<string>("query");
+                var count = GetArgumentOrDefault("count", 5);
+                var providers = GetProviders(settings);
+                using (var provider = new WebSearchClient(providers))
                 {
-                    var results = await provider.SearchAsync(query, count, cancellationToken);
-                    return JsonSerializer.Serialize(results);
+                    var results = await provider.SearchAsync(query, new WebSearchOptions { MaxResultsPerProvider = count }, cancellationToken);
+                    return SerializeResult(results);
                 }
             }
             catch (Exception ex)
             {
                 return $"[Error] {Name} tool failed to execute: {ex.Message}";
             }
+        }
+
+
+        /// <summary>
+        /// Gets the providers.
+        /// </summary>
+        /// <param name="settings">The settings.</param>
+        private ISearchProvider[] GetProviders(Settings settings)
+        {
+            var providers = new List<ISearchProvider>();
+            foreach (var accessToken in settings.AccessTokens.Where(x => !string.IsNullOrEmpty(x.Token)))
+            {
+                if (accessToken.Name.Equals("Tavily", StringComparison.OrdinalIgnoreCase))
+                    providers.Add(new TavilySearchProvider(new TavilySearchOptions { ApiKey = accessToken.Token }));
+                else if (accessToken.Name.Equals("Mojeek", StringComparison.OrdinalIgnoreCase))
+                    providers.Add(new MojeekSearchProvider(new MojeekSearchOptions { ApiKey = accessToken.Token }));
+                else if (accessToken.Name.Equals("SearchApi", StringComparison.OrdinalIgnoreCase))
+                    providers.Add(new SearchApiProvider(new SearchApiOptions { ApiKey = accessToken.Token }));
+            }
+
+            if (providers.Count == 0)
+            {
+                // Fallback to DuckDuckGo (no API key required, but results are poor)
+                providers.Add(new DuckDuckGoSearchProvider(new DuckDuckGoSearchOptions()));
+            }
+            return [.. providers];
         }
     }
 }

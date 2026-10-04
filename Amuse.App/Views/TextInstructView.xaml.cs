@@ -24,8 +24,8 @@ namespace Amuse.App.Views
         /// <summary>
         /// Initializes a new instance of the <see cref="TextInstructView"/> class.
         /// </summary>
-        public TextInstructView(Settings settings, NavigationService navigationService, IModelDownloadService downloadService, IGenerateService generateService, IExtractService extractService, IUpscaleService upscaleService, IHistoryService historyService, ILogger<TextInstructView> logger)
-            : base(settings, navigationService, downloadService, generateService, extractService, upscaleService, historyService, logger)
+        public TextInstructView(Settings settings, NavigationService navigationService, IModelDownloadService downloadService, IGenerateService generateService, IExtractService extractService, IUpscaleService upscaleService, IHistoryService historyService, IToolService toolService, ILogger<TextInstructView> logger)
+            : base(settings, navigationService, downloadService, generateService, extractService, upscaleService, historyService, toolService, logger)
         {
             InitializeComponent();
         }

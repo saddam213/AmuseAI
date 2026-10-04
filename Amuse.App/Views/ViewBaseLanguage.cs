@@ -26,12 +26,13 @@ namespace Amuse.App.Views
         /// <summary>
         /// Initializes a new instance of the <see cref="ViewBaseLanguage"/> class.
         /// </summary>
-        public ViewBaseLanguage(Settings settings, NavigationService navigationService, IModelDownloadService downloadService, IGenerateService generateService, IExtractService extractService, IUpscaleService upscaleService, IHistoryService historyService, ILogger logger)
+        public ViewBaseLanguage(Settings settings, NavigationService navigationService, IModelDownloadService downloadService, IGenerateService generateService, IExtractService extractService, IUpscaleService upscaleService, IHistoryService historyService, IToolService toolService, ILogger logger)
             : base(settings, navigationService, downloadService, historyService, logger)
         {
             GenerateService = generateService;
             ExtractService = extractService;
             UpscaleService = upscaleService;
+            ToolService = toolService;
             Statistics = new StatisticsModel(Dispatcher);
             ProgressCallback = new Progress<RunProgress>(OnProgress);
             ExecuteCommand = new AsyncRelayCommand(ExecuteAsync, CanExecute);
@@ -55,6 +56,11 @@ namespace Amuse.App.Views
         /// Gets the upscale service.
         /// </summary>
         public IUpscaleService UpscaleService { get; }
+
+        /// <summary>
+        /// Gets the tool service.
+        /// </summary>
+        public IToolService ToolService { get; }
 
         /// <summary>
         /// Gets the statistics.

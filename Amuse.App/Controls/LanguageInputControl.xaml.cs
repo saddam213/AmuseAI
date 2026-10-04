@@ -1,4 +1,5 @@
 ﻿using Amuse.App.Common;
+using Amuse.App.Services;
 using Amuse.App.Views;
 using Amuse.Common;
 using System;
@@ -6,6 +7,7 @@ using System.Collections.ObjectModel;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Windows;
+using TensorStack.Common;
 using TensorStack.WPF;
 using TensorStack.WPF.Controls;
 
@@ -21,6 +23,8 @@ namespace Amuse.App.Controls
         public LanguageInputControl()
         {
             SeedCommand = new RelayCommand<bool>(GenerateSeed);
+            ToolCalls = new ObservableCollection<ToolCallModel>();
+            ToolEnableCommand = new AsyncRelayCommand<bool>(ToolEnableAsync);
             InitializeComponent();
         }
 
@@ -32,10 +36,13 @@ namespace Amuse.App.Controls
         public static readonly DependencyProperty AutomationProgressProperty = DependencyProperty.Register(nameof(AutomationProgress), typeof(ProgressInfo), typeof(LanguageInputControl));
         public static readonly DependencyProperty IsInputEnabledProperty = DependencyProperty.Register(nameof(IsInputEnabled), typeof(bool), typeof(LanguageInputControl), new PropertyMetadata(true));
         public static readonly DependencyProperty IsControlBusyProperty = DependencyProperty.Register(nameof(IsControlBusy), typeof(bool), typeof(LanguageInputControl), new PropertyMetadata(false));
+        public static readonly DependencyProperty ToolServiceProperty = DependencyProperty.Register(nameof(ToolService), typeof(IToolService), typeof(LanguageInputControl));
 
         public View ViewType { get; set; }
         public ProcessType ProcessType { get; set; }
         public RelayCommand<bool> SeedCommand { get; }
+        public AsyncRelayCommand<bool> ToolEnableCommand { get; }
+        public ObservableCollection<ToolCallModel> ToolCalls { get; }
 
         public PipelineModel Pipeline
         {
@@ -59,6 +66,12 @@ namespace Amuse.App.Controls
         {
             get { return (ProgressInfo)GetValue(AutomationProgressProperty); }
             set { SetValue(AutomationProgressProperty, value); }
+        }
+
+        public IToolService ToolService
+        {
+            get { return (ToolService)GetValue(ToolServiceProperty); }
+            set { SetValue(ToolServiceProperty, value); }
         }
 
         public bool IsExecuting
@@ -161,6 +174,9 @@ namespace Amuse.App.Controls
             ContextControlElement.ImageMaxCount = newOptions.InputImageMaxCount;
             ContextControlElement.AudioMaxCount = newOptions.InputAudioMaxCount;
             ContextControlElement.VideoMaxCount = newOptions.InputVideoMaxCount;
+
+            // ToolCalls
+            PopulateToolCalls();
             return Task.CompletedTask;
         }
 
@@ -192,6 +208,33 @@ namespace Amuse.App.Controls
         public async Task CreateContextAsync(Collection<ConversationModel> conversation)
         {
             await ContextControlElement.CreateFromConversation(conversation);
+        }
+
+
+        private void PopulateToolCalls()
+        {
+            if (ToolCalls.IsNullOrEmpty())
+            {
+                foreach (var tool in ToolService.ToolDefinitions.OrderBy(x => x.DisplayOrder))
+                {
+                    ToolCalls.Add(new ToolCallModel(tool));
+                }
+            }
+            ToolEnableAsync(true);
+        }
+
+
+        private Task ToolEnableAsync(bool _)
+        {
+            Options.SelectedTools.Clear();
+            if (Options.IsToolCallsEnabled)
+            {
+                foreach (var toolCall in ToolCalls.Where(x => x.IsEnabled))
+                {
+                    Options.SelectedTools.Add(toolCall.Name);
+                }
+            }
+            return Task.CompletedTask;
         }
     }
 }

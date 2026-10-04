@@ -25,8 +25,8 @@ namespace Amuse.App.Views
         /// <summary>
         /// Initializes a new instance of the <see cref="TextConverseView"/> class.
         /// </summary>
-        public TextConverseView(Settings settings, NavigationService navigationService, IModelDownloadService downloadService, IGenerateService generateService, IExtractService extractService, IUpscaleService upscaleService, IHistoryService historyService, ILogger<TextConverseView> logger)
-            : base(settings, navigationService, downloadService, generateService, extractService, upscaleService, historyService, logger)
+        public TextConverseView(Settings settings, NavigationService navigationService, IModelDownloadService downloadService, IGenerateService generateService, IExtractService extractService, IUpscaleService upscaleService, IHistoryService historyService, IToolService toolService, ILogger<TextConverseView> logger)
+            : base(settings, navigationService, downloadService, generateService, extractService, upscaleService, historyService, toolService, logger)
         {
             _conversationId = historyService.GetRandomName();
             InitializeComponent();

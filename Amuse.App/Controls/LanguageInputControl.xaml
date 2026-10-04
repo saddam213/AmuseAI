@@ -75,10 +75,36 @@
                         </UniformGrid>
 
                         <UniformGrid Columns="2" Margin="-1,8,0,4">
+                            <CheckBox Content="Tool Calls Enabled" IsChecked="{Binding Options.IsToolCallsEnabled}" FontStyle="Italic" FontSize="11" Opacity=".9" Command="{Binding ToolEnableCommand}" CommandParameter="{StaticResource True}" IsEnabled="{Binding Pipeline.LanguageModel.DefaultOptions.IsToolCallsSupported}"/>
                             <CheckBox Content="{CommonControls:Localize ThinkingEnabled}" IsChecked="{Binding Options.IsThinkingEnabled}" FontStyle="Italic" FontSize="11" Opacity=".9"/>
-                            <CheckBox Content="Tool Calls Enabled" IsChecked="{Binding Options.IsToolCallsEnabled}" FontStyle="Italic" FontSize="11" Opacity=".9"/>
+
                         </UniformGrid>
                        
+                        <Grid IsEnabled="{Binding Pipeline.LanguageModel.DefaultOptions.IsToolCallsSupported}">
+                            <ItemsControl ItemsSource="{Binding ToolCalls}" IsEnabled="{Binding Options.IsToolCallsEnabled}">
+                                <ItemsControl.ItemTemplate>
+                                    <DataTemplate>
+                                        <CommonControls:ToggleButton 
+                                        Height="30"
+                                        IconTrue="{Binding Icon}"
+                                        IconFalse="{Binding Icon}" 
+                                        ToolTipTrue="{Binding Description}"
+                                        ToolTipFalse="{Binding Description}"
+                                        IsChecked="{Binding IsEnabled, Mode=TwoWay}" 
+                                        IsCheckedCommand="{Binding ToolEnableCommand, RelativeSource={RelativeSource AncestorType={x:Type local:LanguageInputControl}}}" 
+                                        ColorTrue="#80FFFFFF"
+                                        ColorFalse="#25FFFFFF"/>
+                                    </DataTemplate>
+                                </ItemsControl.ItemTemplate>
+                                <ItemsControl.ItemsPanel>
+                                    <ItemsPanelTemplate>
+                                        <UniformGrid Columns="8" />
+                                    </ItemsPanelTemplate>
+                                </ItemsControl.ItemsPanel>
+                            </ItemsControl>
+                        </Grid>
+
+
                     </StackPanel>
 
     

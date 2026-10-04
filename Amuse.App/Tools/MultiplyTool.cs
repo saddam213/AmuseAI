@@ -11,16 +11,41 @@ namespace Amuse.App.Tools
         /// </summary>
         /// <value>The name.</value>
         public override string Name => "multiply";
+     
+        /// <summary>
+        /// Gets the tool description.
+        /// </summary>
+        public override string Description => "A function that multiplies two numbers";
+
+        /// <summary>
+        /// Gets the is default enabled.
+        /// </summary>
+        public override bool IsDefault => false;
+
+        /// <summary>
+        /// Gets the display name.
+        /// </summary>
+        public override string DisplayName => "DateTime Tool";
+
+        /// <summary>
+        /// Gets the tool icon.
+        /// </summary>
+        public override string DisplayIcon => "f1ec";
+
+        /// <summary>
+        /// Gets the is display order.
+        /// </summary>
+        public override int DisplayOrder => int.MaxValue;
 
         /// <summary>
         /// Gets the tool schema.
         /// </summary>
-        public override string Schema => """
+        public override string Schema => $$"""
         {
             "type": "function",
             "function": {
-                "name": "multiply",
-                "description": "A function that multiplies two numbers",
+                "name": "{{Name}}",
+                "description": "{{Description}}",
                 "parameters": {
                     "type": "object",
                     "properties": {
@@ -48,9 +73,9 @@ namespace Amuse.App.Tools
         {
             try
             {
-                var a = Arguments["a"].GetDouble();
-                var b = Arguments["b"].GetDouble();
-                return Task.FromResult($"{a * b}");
+                var a = GetArgument<double>("a");
+                var b = GetArgument<double>("b");
+                return Task.FromResult(SerializeResult($"{a * b}"));
             }
             catch (Exception ex)
             {

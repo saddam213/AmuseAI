@@ -14,7 +14,7 @@ namespace Amuse.App.Services
     {
         public const string TagOpen = "<tool_call>";
         public const string TagClose = "</tool_call>";
-        private readonly Dictionary<string, ToolDefinition> _toolDefinitions;
+        private readonly Dictionary<string, ToolCallBase> _toolDefinitions;
         private readonly IHttpService _httpService;
 
         /// <summary>
@@ -29,7 +29,7 @@ namespace Amuse.App.Services
         /// <summary>
         /// Gets the tool names.
         /// </summary>
-        public IReadOnlyCollection<string> ToolNames => _toolDefinitions.Keys;
+        public IReadOnlyCollection<ToolCallBase> ToolDefinitions => _toolDefinitions.Values;
 
 
         /// <summary>
@@ -97,7 +97,7 @@ namespace Amuse.App.Services
             if (toolDefinition == null || !_toolDefinitions.TryGetValue(toolDefinition.Name, out var toolRegistration))
                 throw new Exception();
 
-            var toolCallImplementation = (ToolCallBase)JsonSerializer.Deserialize(toolCall, toolRegistration.Type, Json.DefaultOptions);
+            var toolCallImplementation = (ToolCallBase)JsonSerializer.Deserialize(toolCall, toolRegistration.GetType(), Json.DefaultOptions);
             toolCallImplementation.HttpClient = _httpService.Client;
             return toolCallImplementation;
         }
@@ -138,16 +138,16 @@ namespace Amuse.App.Services
         /// <summary>
         /// Registers the tools.
         /// </summary>
-        private static Dictionary<string, ToolDefinition> RegisterTools()
+        private static Dictionary<string, ToolCallBase> RegisterTools()
         {
             return Assembly.GetExecutingAssembly()
                 .GetTypes()
                 .Where(t => t.IsClass && !t.IsAbstract && typeof(ToolCallBase).IsAssignableFrom(t))
                 .Select(t => (ToolCallBase)Activator.CreateInstance(t))
-                .ToDictionary(k => k.Name, v => new ToolDefinition(v.Name, v.Schema, v.GetType()));
+                .ToDictionary(k => k.Name, v => v);
         }
 
-        private record ToolDefinition(string Name, string Schema, Type Type);
+        private record ToolDefinition(string Name);
     }
 
 
@@ -156,9 +156,10 @@ namespace Amuse.App.Services
         public bool IsEmpty => ToolCalls.IsNullOrEmpty();
     };
 
+
     public interface IToolService
     {
-        IReadOnlyCollection<string> ToolNames { get; }
+        IReadOnlyCollection<ToolCallBase> ToolDefinitions { get; }
         string[] GetTools(GenerateInputOptions options);
         bool IsToolResponse(IReadOnlyList<TextInput> response);
         ToolResult ParseResponse(IReadOnlyList<TextInput> response);

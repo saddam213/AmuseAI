@@ -52,6 +52,7 @@
                                 Pipeline="{Binding CurrentPipeline, Mode=OneWay}" 
                                 IsExecuting="{Binding GenerateService.IsExecuting, Mode=OneWay}"
                                 IsAutomating="{Binding IsAutomating, Mode=OneWay}"
+                                ToolService="{Binding ToolService, Mode=OneTime}"
                                 IsEnabled="{Binding CurrentPipeline, Converter={StaticResource InverseNullBooleanConverter}, Mode=OneWay}"
                                 IsInputEnabled="{Binding IsViewBusy, Converter={StaticResource InverseBoolConverter}, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"/>
                         </Grid>

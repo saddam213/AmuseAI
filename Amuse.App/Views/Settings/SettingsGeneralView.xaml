@@ -41,26 +41,6 @@
                         </StackPanel>
                     </GroupBox>
 
-                    <GroupBox Header="{CommonControls:Localize AccessTokens}" Margin="0,10,0,0">
-                        <ItemsControl ItemsSource="{Binding Settings.AccessTokens}">
-                            <ItemsControl.ItemTemplate>
-                                <DataTemplate>
-                                    <StackPanel  Margin="6,0">
-                                        <TextBlock Style="{StaticResource FieldTextBlockStyle}">
-                                            <Run Text="{Binding Name}"/>
-                                            <Run Text="Access Token"/>
-                                        </TextBlock>
-                                        <TextBox  Text="{Binding Token}" />
-                                    </StackPanel>
-                                </DataTemplate>
-                            </ItemsControl.ItemTemplate>
-                            <ItemsControl.ItemsPanel>
-                                <ItemsPanelTemplate>
-                                    <UniformGrid IsItemsHost="True" Rows="1" />
-                                </ItemsPanelTemplate>
-                            </ItemsControl.ItemsPanel>
-                        </ItemsControl>
-                    </GroupBox>
 
 
                     <!--History Settings-->
@@ -165,6 +145,41 @@
                     </GroupBox>
 
                 </StackPanel>
+            </DockPanel>
+
+
+            <DockPanel Grid.Column="1" Margin="10,0,0,0">
+                <GroupBox Header="{CommonControls:Localize AccessTokens}" DockPanel.Dock="Top">
+                    <ItemsControl ItemsSource="{Binding Settings.AccessTokens}">
+                        <ItemsControl.ItemTemplate>
+                            <DataTemplate>
+                                <StackPanel  Margin="6,0">
+                                    <TextBlock Style="{StaticResource FieldTextBlockStyle}">
+                                        <Run Text="{Binding Name}"/>
+                                        <Run Text="Access Token"/>
+                                    </TextBlock>
+                                    <Grid>
+                                        <TextBox x:Name="TextBoxControl" Text="{Binding Token}" />
+                                        <Grid Visibility="{Binding IsFocused, ElementName=TextBoxControl, Converter={StaticResource InverseBooleanToVisibilityConverter}}" IsHitTestVisible="False">
+                                            <Grid Visibility="{Binding IsMouseOver, ElementName=TextBoxControl, Converter={StaticResource InverseBooleanToVisibilityConverter}}" IsHitTestVisible="False">
+                                                <Grid Visibility="{Binding Text, ElementName=TextBoxControl, Converter={StaticResource NullOrEmptyVisibilityConverter}}" Background="{StaticResource ControlDefaultBackground}">
+                                                    <TextBox Text="••••••••••••••••••••••••••••••••••••••••••••••••••••••" FontSize="16" Padding="1,-1,-1,-1" Margin="0"/>
+                                                </Grid>
+                                            </Grid>
+                                        </Grid>
+                                    </Grid>
+                                </StackPanel>
+                            </DataTemplate>
+                        </ItemsControl.ItemTemplate>
+                        <!--<ItemsControl.ItemsPanel>
+                            <ItemsPanelTemplate>
+                                <UniformGrid IsItemsHost="True" Rows="1" />
+                            </ItemsPanelTemplate>
+                        </ItemsControl.ItemsPanel>-->
+                    </ItemsControl>
+                </GroupBox>
+
+                <TextBlock />
             </DockPanel>
 
         </Grid>

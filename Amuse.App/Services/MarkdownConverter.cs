@@ -201,7 +201,7 @@ namespace Amuse.App.Services
             }
             if (processor.Line.Match("<tool_call>"))
             {
-                processor.NewBlocks.Push(new HiddenBlock(this, "ToolCall", "</tool_call>"));
+                processor.NewBlocks.Push(new ThinkBlock(this, "Tool Call...", "</tool_call>"));
                 processor.GoToColumn(processor.Line.End + 1);
                 return BlockState.ContinueDiscard;
             }

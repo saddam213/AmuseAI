@@ -10,6 +10,18 @@
     {
       "Name": "Civitai",
       "Domain": "civitai.com"
+    },
+    {
+      "Name": "Tavily",
+      "Domain": "tavily.com"
+    },
+    {
+      "Name": "Mojeek",
+      "Domain": "mojeek.com"
+    },
+    {
+      "Name": "SearchApi",
+      "Domain": "searchapi.io"
     }
   ],
   "Environments": [

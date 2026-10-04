@@ -308,7 +308,6 @@ namespace Amuse.App.Runtime
 
                 if (DefaultOptions.IsToolCallsSupported && options.IsToolCallsEnabled)
                 {
-                    options.SelectedTools = ToolService.ToolNames.ToList(); //TODO: UI selection of tools
                     generateOptions.Tools = ToolService.GetTools(options);
                 }
 
