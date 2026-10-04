@@ -18962,7 +18962,8 @@
         "SampleRate": 16000,
         "Channels": 1,
         "InputImageMaxCount": 4,
-        "InputAudioMaxCount": 1
+        "InputAudioMaxCount": 1,
+        "IsToolCallsSupported": true
       }
     },
     {
@@ -18996,7 +18997,8 @@
         "NoRepeatNgramSize": 0,
         "SampleRate": 16000,
         "Channels": 1,
-        "InputImageMaxCount": 8
+        "InputImageMaxCount": 8,
+        "IsToolCallsSupported": true
       }
     }
   ],

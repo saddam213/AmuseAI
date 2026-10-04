@@ -422,5 +422,11 @@ namespace Amuse.App
 
         [GeneratedRegex(@"^```", RegexOptions.Multiline)]
         private static partial Regex UnclosedFence();
+
+        [GeneratedRegex(@"^call:(?<name>[\w\-]+)(?<args>\{.*\}?)$", RegexOptions.Compiled | RegexOptions.Singleline)]
+        public static partial Regex ToolCallFormatRegex { get; }
+
+        [GeneratedRegex(@"(?<=\{|,)\s*([a-zA-Z_][a-zA-Z0-9_*]*)\s*:", RegexOptions.Compiled)]
+        public static partial Regex UnquotedKeyRegex { get; }
     }
 }

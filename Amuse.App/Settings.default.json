@@ -18103,7 +18103,8 @@
         "SampleRate": 16000,
         "Channels": 1,
         "InputImageMaxCount": 4,
-        "InputAudioMaxCount": 1
+        "InputAudioMaxCount": 1,
+        "IsToolCallsSupported": true
       },
       "Link": "https://huggingface.co/google/gemma-4-E2B-it"
     },
@@ -18164,7 +18165,8 @@
         "SampleRate": 16000,
         "Channels": 1,
         "InputImageMaxCount": 4,
-        "InputAudioMaxCount": 1
+        "InputAudioMaxCount": 1,
+        "IsToolCallsSupported": true
       },
       "Link": "https://huggingface.co/google/gemma-4-E4B-it"
     },
@@ -18224,7 +18226,8 @@
         "NoRepeatNgramSize": 0,
         "SampleRate": 16000,
         "Channels": 1,
-        "InputImageMaxCount": 8
+        "InputImageMaxCount": 8,
+        "IsToolCallsSupported": true
       },
       "Link": "https://huggingface.co/google/gemma-4-12B-it"
     },
@@ -18286,7 +18289,8 @@
         "NoRepeatNgramSize": 0,
         "SampleRate": 16000,
         "Channels": 1,
-        "InputImageMaxCount": 8
+        "InputImageMaxCount": 8,
+        "IsToolCallsSupported": true
       },
       "Link": "https://huggingface.co/google/gemma-4-31B-it"
     }

@@ -125,7 +125,7 @@ namespace Amuse.App.Services
                 if (end == -1)
                     break;
 
-                string toolCall = content[start..end].Trim();
+                string toolCall = NormalizeToolCall(content[start..end].Trim());
                 if (toolCall != null)
                     toolCalls.Add(toolCall);
 
@@ -145,6 +145,28 @@ namespace Amuse.App.Services
                 .Where(t => t.IsClass && !t.IsAbstract && typeof(ToolCallBase).IsAssignableFrom(t))
                 .Select(t => (ToolCallBase)Activator.CreateInstance(t))
                 .ToDictionary(k => k.Name, v => v);
+        }
+
+
+        /// <summary>
+        /// Normalizes the tool call format if required.
+        /// </summary>
+        /// <param name="toolCall">The tool call.</param>
+        private static string NormalizeToolCall(string toolCall)
+        {
+            if (!toolCall.StartsWith("call:"))
+                return toolCall;
+            var match = RegexManager.ToolCallFormatRegex.Match(toolCall);
+            if (!match.Success)
+                return toolCall;
+
+            var name = match.Groups["name"].Value;
+            var rawArgs = match.Groups["args"].Value;
+            var fixedArgs = RegexManager.UnquotedKeyRegex.Replace(rawArgs, "\"$1\":");
+            var arguments = string.IsNullOrEmpty(fixedArgs) || fixedArgs == "{}"
+                ? new object()
+                : JsonSerializer.Deserialize<object>(fixedArgs);
+            return JsonSerializer.Serialize(new { name, arguments });
         }
 
         private record ToolDefinition(string Name);
