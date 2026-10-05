@@ -1329,8 +1329,7 @@
   <data name="UpdateAvailable" xml:space="preserve">
     <value>アップデートがあります</value>
   </data>
-  <assembly alias="System.Windows.Forms" name="System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" />
-  <data name="EnableExternalTools" type="System.Resources.ResXNullRef, System.Windows.Forms">
-    <value />
+  <data name="EnableExternalTools" xml:space="preserve">
+    <value>Enable External Tools</value>
   </data>
 </root>
