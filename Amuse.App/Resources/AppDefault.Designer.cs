@@ -952,6 +952,15 @@ namespace Amuse.App.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Enable External Tools.
+        /// </summary>
+        public static string EnableExternalTools {
+            get {
+                return ResourceManager.GetString("EnableExternalTools", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Enable Slicing.
         /// </summary>
         public static string EnableSlicing {

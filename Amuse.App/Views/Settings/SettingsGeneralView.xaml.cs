@@ -88,14 +88,15 @@ namespace Amuse.App.Views
         private async Task ResetDialogsAsync()
         {
             Settings.IsExternalLinksAcknowledged = false;
+            Settings.IsExternalToolsAcknowledged = false;
             await SaveAsync();
         }
 
 
         private async Task SaveAsync()
         {
-            await SettingsManager.SaveAsync(Settings);
             Settings.ScanModels();
+            await Settings.SaveAsync();
         }
 
         public record ScaleOption(string Label, double Value);

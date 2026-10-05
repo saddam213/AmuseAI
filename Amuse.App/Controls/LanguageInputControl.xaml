@@ -93,21 +93,20 @@
                                         IsChecked="{Binding IsEnabled, Mode=TwoWay}" 
                                         IsCheckedCommand="{Binding ToolEnableCommand, RelativeSource={RelativeSource AncestorType={x:Type local:LanguageInputControl}}}" 
                                         ColorTrue="#80FFFFFF"
-                                        ColorFalse="#25FFFFFF"/>
+                                        ColorFalse="#25FFFFFF"
+                                        ToolTipPlacement="Bottom"/>
                                     </DataTemplate>
                                 </ItemsControl.ItemTemplate>
                                 <ItemsControl.ItemsPanel>
                                     <ItemsPanelTemplate>
-                                        <UniformGrid Columns="8" />
+                                        <UniformGrid Columns="6" />
                                     </ItemsPanelTemplate>
                                 </ItemsControl.ItemsPanel>
                             </ItemsControl>
                         </Grid>
 
-
                     </StackPanel>
 
-    
                     <!--Image Select-->
                     <StackPanel DockPanel.Dock="Top"  Visibility="{Binding IsInputImagesEnabled, Converter={StaticResource BooleanToVisibilityConverter}}">
                         <TextBlock Text="{CommonControls:Localize Inputs}" Style="{StaticResource FieldTextBlockStyle}" />

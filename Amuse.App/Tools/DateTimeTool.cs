@@ -14,7 +14,7 @@ namespace Amuse.App.Tools
         /// <summary>
         /// Gets the tool description.
         /// </summary>
-        public override string Description => "Get the current local date and time, including the day of the week, local timezone, UTC time, and UTC offset";
+        public override string Description => "Get the current local date and time, including the day of the week, time zone, UTC time, and UTC offset.";
 
         /// <summary>
         /// Gets the is default enabled.
@@ -43,7 +43,7 @@ namespace Amuse.App.Tools
             "type": "function",
             "function": {
                 "name": "{{Name}}",
-                "description": "{{Description}} Use this tool when you need to know the current date or time or need accurate local time information.",
+                "description": "{{Description}} Use this tool when you need accurate current date or time information.",
                 "parameters": {
                     "type": "object",
                     "properties": {}
@@ -62,11 +62,11 @@ namespace Amuse.App.Tools
             try
             {
                 var result = new DateTimeResult(DateTimeOffset.Now, TimeZoneInfo.Local);
-                return Task.FromResult(SerializeResult(result));
+                return Task.FromResult(SuccessResult(result));
             }
             catch (Exception ex)
             {
-                return Task.FromResult($"[Error] {Name} tool failed to execute: {ex.Message}");
+                return Task.FromResult(ErrorResult(ex));
             }
         }
 

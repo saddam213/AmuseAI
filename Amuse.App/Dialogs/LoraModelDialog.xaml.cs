@@ -147,7 +147,7 @@ namespace Amuse.App.Dialogs
             LoraModel.Triggers = Trigger.Count == 0 ? default : Trigger.ToArray();
             Settings.LoraAdapterModels.Insert(index, LoraModel);
             LoraModel.Initialize(Settings);
-            await SettingsManager.SaveAsync(Settings);
+            await Settings.SaveAsync();
             await base.SaveAsync();
         }
 

@@ -221,7 +221,7 @@ namespace Amuse.App.Services
         private async Task SaveEnvironmentStatusAsync(EnvironmentModel environment)
         {
             environment.Status = EnvironmentMode.Create;
-            await SettingsManager.SaveAsync(_settings);
+            await _settings.SaveAsync();
         }
     }
 

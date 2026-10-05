@@ -129,7 +129,7 @@ namespace Amuse.App.Dialogs
 
             Settings.UpscaleModels.Insert(index, UpscaleModel);
             UpscaleModel.Initialize(Settings);
-            await SettingsManager.SaveAsync(Settings);
+            await Settings.SaveAsync();
             await base.SaveAsync();
         }
 

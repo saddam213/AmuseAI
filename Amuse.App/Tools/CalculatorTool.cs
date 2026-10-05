@@ -4,18 +4,18 @@ using System.Threading.Tasks;
 
 namespace Amuse.App.Tools
 {
-    public sealed class MultiplyTool : ToolCallBase
+    public sealed class CalculatorTool : ToolCallBase
     {
         /// <summary>
         /// Gets the tool name.
         /// </summary>
         /// <value>The name.</value>
-        public override string Name => "multiply";
+        public override string Name => "calculator";
      
         /// <summary>
         /// Gets the tool description.
         /// </summary>
-        public override string Description => "A function that multiplies two numbers";
+        public override string Description => "Perform basic arithmetic on two numbers.";
 
         /// <summary>
         /// Gets the is default enabled.
@@ -25,7 +25,7 @@ namespace Amuse.App.Tools
         /// <summary>
         /// Gets the display name.
         /// </summary>
-        public override string DisplayName => "DateTime Tool";
+        public override string DisplayName => "CalculatorT Tool";
 
         /// <summary>
         /// Gets the tool icon.
@@ -45,20 +45,25 @@ namespace Amuse.App.Tools
             "type": "function",
             "function": {
                 "name": "{{Name}}",
-                "description": "{{Description}}",
+                "description": "{{Description}} Use this tool when an exact arithmetic calculation is required.",
                 "parameters": {
                     "type": "object",
                     "properties": {
+                        "op": {
+                            "type": "string",
+                            "enum": ["add", "subtract", "multiply", "divide"],
+                            "description": "The arithmetic operation to perform."
+                        },
                         "a": {
                             "type": "number",
-                            "description": "The first number to multiply"
+                            "description": "The first number."
                         },
                         "b": {
-                            "type": "number", 
-                            "description": "The second number to multiply"
+                            "type": "number",
+                            "description": "The second number."
                         }
                     },
-                    "required": ["a", "b"]
+                    "required": ["op", "a", "b"]
                 }
             }
         }
@@ -73,13 +78,22 @@ namespace Amuse.App.Tools
         {
             try
             {
+                var op = GetArgument<string>("op");
                 var a = GetArgument<double>("a");
                 var b = GetArgument<double>("b");
-                return Task.FromResult(SerializeResult($"{a * b}"));
+                var result = op switch
+                {
+                    "add" => a + b,
+                    "subtract" => a - b,
+                    "multiply" => a * b,
+                    "divide" => a / b,
+                    _ => throw new ArgumentException($"Unknown operation: {op}")
+                };
+                return Task.FromResult(SuccessResult(result));
             }
             catch (Exception ex)
             {
-                return Task.FromResult($"[Error] {Name} tool failed to execute: {ex.Message}");
+                return Task.FromResult(ErrorResult(ex));
             }
         }
     }

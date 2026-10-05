@@ -127,7 +127,7 @@ namespace Amuse.App.Dialogs
             }
             Settings.ExtractModels.Insert(index, ExtractModel);
             ExtractModel.Initialize(Settings);
-            await SettingsManager.SaveAsync(Settings);
+            await Settings.SaveAsync();
             await base.SaveAsync();
         }
 

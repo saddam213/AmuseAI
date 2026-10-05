@@ -1458,4 +1458,7 @@
   <data name="DeleteEnvironmentMessage" xml:space="preserve">
     <value>Are you sure you want to delete this environment?</value>
   </data>
+  <data name="EnableExternalTools" xml:space="preserve">
+    <value>Enable External Tools</value>
+  </data>
 </root>

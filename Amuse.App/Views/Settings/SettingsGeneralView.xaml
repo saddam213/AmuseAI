@@ -109,6 +109,7 @@
                                 <Button DockPanel.Dock="Right" Content="{CommonControls:Localize ResetDialogs}" Command="{Binding ResetDialogsCommand}" Width="150"/>
                                 <UniformGrid Rows="1" >
                                     <CheckBox Content="{CommonControls:Localize EnableExternalLinks}" IsChecked="{Binding Settings.IsExternalLinksEnabled}" />
+                                    <CheckBox Content="{CommonControls:Localize EnableExternalTools}" IsChecked="{Binding Settings.IsExternalToolsEnabled}" />
                                 </UniformGrid>
                             </DockPanel>
                           

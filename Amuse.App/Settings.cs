@@ -82,6 +82,8 @@ namespace Amuse.App
         public bool IsDiffusionImagePreviewEnabled { get; set; } = true;
         public bool IsExternalLinksEnabled { get; set; }
         public bool IsExternalLinksAcknowledged { get; set; }
+        public bool IsExternalToolsEnabled { get; set; }
+        public bool IsExternalToolsAcknowledged { get; set; }
 
         public double VolumeInput
         {
@@ -197,7 +199,7 @@ namespace Amuse.App
 
             ScanModels();
             Vendors = [.. Environments.Select(x => x.Vendor).Distinct()];
-            SettingsManager.Save(this);
+            await SaveAsync();
         }
 
 
@@ -256,7 +258,7 @@ namespace Amuse.App
             }
 
             DefaultDeviceId = pipeline.Device.Id;
-            await SettingsManager.SaveAsync(this);
+            await SaveAsync();
         }
 
 
@@ -354,5 +356,17 @@ namespace Amuse.App
 
         [JsonIgnore]
         public PipelineType[] LanguagePipelines { get; }
+
+
+        public void Save()
+        {
+            SettingsManager.Save(this);
+        }
+
+
+        public async Task SaveAsync()
+        {
+            await SettingsManager.SaveAsync(this);
+        }
     }
 }

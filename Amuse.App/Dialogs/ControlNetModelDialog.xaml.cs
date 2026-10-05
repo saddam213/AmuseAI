@@ -127,7 +127,7 @@ namespace Amuse.App.Dialogs
             Settings.ControlNetModels.Insert(index, ControlNetModel);
 
             ControlNetModel.Initialize(Settings);
-            await SettingsManager.SaveAsync(Settings);
+            await Settings.SaveAsync();
             await base.SaveAsync();
         }
 

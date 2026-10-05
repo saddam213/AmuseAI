@@ -161,12 +161,12 @@ namespace Amuse.App.Services
                 return toolCall;
 
             var name = match.Groups["name"].Value;
-            var rawArgs = match.Groups["args"].Value;
+            var rawArgs = match.Groups["args"].Value.Replace("\\", "\\\\");
             var fixedArgs = RegexManager.UnquotedKeyRegex.Replace(rawArgs, "\"$1\":");
             var arguments = string.IsNullOrEmpty(fixedArgs) || fixedArgs == "{}"
                 ? new object()
-                : JsonSerializer.Deserialize<object>(fixedArgs);
-            return JsonSerializer.Serialize(new { name, arguments });
+                : JsonSerializer.Deserialize<object>(fixedArgs, Json.DefaultOptions);
+            return JsonSerializer.Serialize(new { name, arguments }, Json.DefaultOptions);
         }
 
         private record ToolDefinition(string Name);

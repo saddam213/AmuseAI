@@ -279,7 +279,7 @@ namespace Amuse.App.Services
         private async Task UpdateStatus(DownloadQueueItem queueItem, ModelStatusType status)
         {
             queueItem.UpdateStatus(status);
-            await SettingsManager.SaveAsync(_settings);
+            await _settings.SaveAsync();
         }
 
 

@@ -17,7 +17,7 @@ namespace Amuse.App.Tools
         /// <summary>
         /// Gets the tool description.
         /// </summary>
-        public override string Description => "Search the public web for relevant and authoritative sources.";
+        public override string Description => "Search the public web for relevant, authoritative, and up-to-date information.";
 
         /// <summary>
         /// Gets the is default enabled.
@@ -47,7 +47,7 @@ namespace Amuse.App.Tools
             "type": "function",
             "function": {
                 "name": "{{Name}}",
-                "description": "{{Description}} Use this tool when answering requires current, time-sensitive, unfamiliar, niche, or externally verifiable information, or when you need to discover specific websites or pages. Search results include titles, URLs, and descriptive summaries that can be used to identify and select relevant sources. Prefer specific, focused queries over broad or vague searches. Do not use this tool when the question can be answered reliably from existing knowledge without web access.",
+                "description": "{{Description}} Use this tool when an answer requires current, or externally verifiable information, or when you need to find a specific website or page. Do not use it when existing knowledge is sufficient.",
                 "parameters": {
                     "type": "object",
                     "properties": {
@@ -76,18 +76,19 @@ namespace Amuse.App.Tools
         {
             try
             {
+                await CheckExternalAccess(settings);
                 var query = GetArgument<string>("query");
                 var count = GetArgumentOrDefault("count", 5);
                 var providers = GetProviders(settings);
                 using (var provider = new WebSearchClient(providers))
                 {
                     var results = await provider.SearchAsync(query, new WebSearchOptions { MaxResultsPerProvider = count }, cancellationToken);
-                    return SerializeResult(results);
+                    return SuccessResult(results);
                 }
             }
             catch (Exception ex)
             {
-                return $"[Error] {Name} tool failed to execute: {ex.Message}";
+                return ErrorResult(ex);
             }
         }
 

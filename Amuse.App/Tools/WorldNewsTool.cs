@@ -25,10 +25,10 @@ namespace Amuse.App.Tools
         /// </summary>
         public override string Name => "world_news";
 
-         /// <summary>
+        /// <summary>
         /// Gets the tool description.
         /// </summary>
-        public override string Description => "Get the latest world news from multiple news sources, Sky News, BBC News, The Guardian";
+        public override string Description => "Get the latest world news from multiple news sources, including Sky News, BBC News, and The Guardian.";
 
         /// <summary>
         /// Gets the is default enabled.
@@ -58,7 +58,7 @@ namespace Amuse.App.Tools
             "type": "function",
             "function": {
                 "name": "{{Name}}",
-                "description": "{{Description}}. Use this tool when you need a current overview of major world news stories.",
+                "description": "{{Description}} Use this tool for current world news and recent international developments.",
                 "parameters": {
                     "type": "object",
                     "properties": {
@@ -89,6 +89,7 @@ namespace Amuse.App.Tools
         {
             try
             {
+                await CheckExternalAccess(settings);
                 var count = GetArgumentOrDefault("count", 5);
                 var source = GetArgumentOrDefault("source", "all");
                 var feeds = source switch
@@ -104,12 +105,11 @@ namespace Amuse.App.Tools
                 {
                     results.AddRange(await GetFeedAsync(feed, count));
                 }
-
-                return SerializeResult(results);
+                return SuccessResult(results);
             }
             catch (Exception ex)
             {
-                return $"[Error] {Name} tool failed to execute: {ex.Message}";
+                return ErrorResult(ex);
             }
         }
     }

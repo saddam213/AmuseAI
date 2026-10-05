@@ -219,7 +219,7 @@ namespace Amuse.App
                     Log.Logger.Information($"[AppShutdown] Failed to delete Temp Directory");
                 }
                 await _cancellationTokenSource.CancelAsync();
-                await SettingsManager.SaveAsync(_settings);
+                await _settings.SaveAsync();
                 await _appHost.StopAsync();
                 DeregisterExceptionHandlers();
                 _appMutex.WaitOne();

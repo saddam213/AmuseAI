@@ -204,7 +204,7 @@ namespace Amuse.App.Dialogs
 
             _selectedTemplate.Initialize(Settings);
             Settings.DiffusionModels.Add(_selectedTemplate);
-            await SettingsManager.SaveAsync(Settings);
+            await Settings.SaveAsync();
             await base.SaveAsync();
         }
 

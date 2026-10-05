@@ -5,6 +5,7 @@ using System.Net.Http;
 using System.Text.Json;
 using System.Threading;
 using System.Threading.Tasks;
+using TensorStack.WPF.Services;
 
 namespace Amuse.App.Tools
 {
@@ -67,11 +68,23 @@ namespace Amuse.App.Tools
         /// Gets the result.
         /// </summary>
         /// <param name="result">The result.</param>
-        protected string SerializeResult(object result)
+        protected string SuccessResult(object result)
         {
             var content = JsonSerializer.Serialize(result, Json.DefaultOptions);
             Debug.WriteLine(content);
             return content;
+        }
+
+
+        /// <summary>
+        /// Error result.
+        /// </summary>
+        /// <param name="exception">The exception.</param>
+        protected string ErrorResult(Exception exception)
+        {
+            var content = $"[Error] {Name} tool failed to execute, Exception: {exception.Message}";
+            Debug.WriteLine(content);
+            return content; 
         }
 
 
@@ -100,6 +113,26 @@ namespace Amuse.App.Tools
                 return argument.Deserialize<T>();
             }
             return defaultValue;
+        }
+
+
+        /// <summary>
+        /// Checks the extenal access.
+        /// </summary>
+        /// <param name="settings">The settings.</param>
+        /// <exception cref="System.Exception">ToolCall external access denied.</exception>
+        protected async Task CheckExternalAccess(Settings settings)
+        {
+            if (!settings.IsExternalToolsAcknowledged)
+            {
+                var dialogResult = await DialogService.ShowMessageAsync("External Access", $"{DisplayName} will access external data or services.\nData from this request may be sent to retrieve or process the requested information.\n\nDo you want to continue?", TensorStack.WPF.Dialogs.MessageDialogType.YesNo, TensorStack.WPF.Dialogs.MessageBoxIconType.Warning, TensorStack.WPF.Dialogs.MessageBoxStyleType.Warning, true);
+                settings.IsExternalToolsEnabled = dialogResult;
+                settings.IsExternalToolsAcknowledged = dialogResult.DontAskAgain;
+                await settings.SaveAsync();
+            }
+
+            if (!settings.IsExternalToolsEnabled)
+                throw new Exception("ToolCall external access denied.");
         }
     }
 }

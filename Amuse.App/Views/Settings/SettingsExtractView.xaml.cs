@@ -250,7 +250,7 @@ namespace Amuse.App.Views
         private async Task SaveAsync()
         {
             Settings.ScanModels();
-            await SettingsManager.SaveAsync(Settings);
+            await Settings.SaveAsync();
         }
     }
 }

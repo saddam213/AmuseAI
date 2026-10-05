@@ -51,7 +51,7 @@ namespace Amuse.App.Services
 
             _settings.ScanModels();
             _settings.RunMigrations = false;
-            await SettingsManager.SaveAsync(_settings);
+            await _settings.SaveAsync();
             _logger.LogInformation("[MigrationService] [RunMigrations] Migrations complete.");
         }
 

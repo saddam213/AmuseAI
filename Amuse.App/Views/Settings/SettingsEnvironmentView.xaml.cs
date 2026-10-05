@@ -266,7 +266,7 @@ namespace Amuse.App.Views
                 env.IsDefault = false;
 
             SelectedEnvironment.IsDefault = true;
-            await SettingsManager.SaveAsync(Settings);
+            await Settings.SaveAsync();
         }
 
 
@@ -279,8 +279,8 @@ namespace Amuse.App.Views
 
         private async Task SaveAsync()
         {
-            await SettingsManager.SaveAsync(Settings);
             Settings.ScanModels();
+            await Settings.SaveAsync();
         }
     }
 }
