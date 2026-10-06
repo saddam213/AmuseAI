@@ -6,9 +6,11 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.IO;
 using System.Linq;
+using System.Text.Json;
 using System.Text.RegularExpressions;
 using System.Windows;
 using System.Windows.Media;
+using System.Xml.Linq;
 using TensorStack.Common;
 using TensorStack.Common.Tensor;
 using TensorStack.Media.Audio;
@@ -371,6 +373,22 @@ namespace Amuse.App
             return [.. imageInputs.Select(x => x.AsImageTensor())];
         }
 
+
+        public static JsonElement ToJsonElement(this XElement element)
+        {
+            var value = element.Value.Trim();
+            try
+            {
+                using (var doc = JsonDocument.Parse(value))
+                {
+                   return doc.RootElement.Clone();
+                }
+            }
+            catch (JsonException)
+            {
+                return JsonSerializer.SerializeToElement(value);
+            }
+        }
     }
 
 
@@ -414,19 +432,37 @@ namespace Amuse.App
 
     public static partial class RegexManager
     {
+        [GeneratedRegex(@"^```", RegexOptions.Multiline)]
+        private static partial Regex UnclosedFence { get; }
+
+        [GeneratedRegex(@"(?<=\{|,)\s*([a-zA-Z_][a-zA-Z0-9_*]*)\s*:", RegexOptions.Compiled)]
+        private static partial Regex UnquotedKeyRegex { get; }
+
+        [GeneratedRegex(@"<(function|parameter)=([^>]+)>", RegexOptions.Compiled)]
+        private static partial Regex UnNamedXmlKeyRegex { get; }
+
+        [GeneratedRegex(@"^call:(?<name>[\w\-]+)(?<args>\{.*\}?)$", RegexOptions.Compiled | RegexOptions.Singleline)]
+        private static partial Regex ParseGemma4ToolCallRegex { get; }
+
         public static bool HasUnclosedFence(string markdown)
         {
-            int count = UnclosedFence().Count(markdown);
+            int count = UnclosedFence.Count(markdown);
             return count % 2 != 0;
         }
 
-        [GeneratedRegex(@"^```", RegexOptions.Multiline)]
-        private static partial Regex UnclosedFence();
+        public static string ReplaceUnquotedKeys(string input)
+        {
+            return UnquotedKeyRegex.Replace(input.Replace("\\", "\\\\"), "\"$1\":");
+        }
 
-        [GeneratedRegex(@"^call:(?<name>[\w\-]+)(?<args>\{.*\}?)$", RegexOptions.Compiled | RegexOptions.Singleline)]
-        public static partial Regex ToolCallFormatRegex { get; }
+        public static string ReplaceUnNamedXmlKeys(string input)
+        {
+            return UnNamedXmlKeyRegex.Replace(input, "<$1 name=\"$2\">");
+        }
 
-        [GeneratedRegex(@"(?<=\{|,)\s*([a-zA-Z_][a-zA-Z0-9_*]*)\s*:", RegexOptions.Compiled)]
-        public static partial Regex UnquotedKeyRegex { get; }
+        public static Match ParseGemma4ToolCall(string input)
+        {
+            return ParseGemma4ToolCallRegex.Match(input);
+        }
     }
 }

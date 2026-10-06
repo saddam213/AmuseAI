@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using System.Text.Json;
+using System.Xml.Linq;
 using TensorStack.Common;
 using TensorStack.WPF.Services;
 
@@ -154,15 +155,50 @@ namespace Amuse.App.Services
         /// <param name="toolCall">The tool call.</param>
         private static string NormalizeToolCall(string toolCall)
         {
-            if (!toolCall.StartsWith("call:"))
-                return toolCall;
-            var match = RegexManager.ToolCallFormatRegex.Match(toolCall);
+            if (toolCall.StartsWith("<function"))
+                return ParseQwenToolCall(toolCall);
+            else if (toolCall.StartsWith("call:"))
+                return ParseGemma4ToolCall(toolCall);
+            return toolCall;
+        }
+
+
+        /// <summary>
+        /// Parses the Qwen tool call.
+        /// </summary>
+        /// <param name="toolCall">The tool call.</param>
+        /// <returns>System.String.</returns>
+        private static string ParseQwenToolCall(string toolCall)
+        {
+            var xml = XElement.Parse(RegexManager.ReplaceUnNamedXmlKeys(toolCall));
+            var name = xml.Attribute("name").Value;
+            var arguments = new Dictionary<string, JsonElement>();
+            foreach (var parameter in xml.Elements("parameter"))
+            {
+                var parameterName = parameter.Attribute("name")?.Value;
+                if (string.IsNullOrEmpty(parameterName))
+                    continue;
+
+                arguments[parameterName] = parameter.ToJsonElement();
+            }
+            return JsonSerializer.Serialize(new { name, arguments }, Json.DefaultOptions);
+        }
+
+
+        /// <summary>
+        /// Parses the Gemma4 tool call.
+        /// </summary>
+        /// <param name="toolCall">The tool call.</param>
+        /// <returns>System.String.</returns>
+        private static string ParseGemma4ToolCall(string toolCall)
+        {
+            var match = RegexManager.ParseGemma4ToolCall(toolCall);
             if (!match.Success)
                 return toolCall;
 
             var name = match.Groups["name"].Value;
-            var rawArgs = match.Groups["args"].Value.Replace("\\", "\\\\");
-            var fixedArgs = RegexManager.UnquotedKeyRegex.Replace(rawArgs, "\"$1\":");
+            var rawArgs = match.Groups["args"].Value;
+            var fixedArgs = RegexManager.ReplaceUnquotedKeys(rawArgs);
             var arguments = string.IsNullOrEmpty(fixedArgs) || fixedArgs == "{}"
                 ? new object()
                 : JsonSerializer.Deserialize<object>(fixedArgs, Json.DefaultOptions);
