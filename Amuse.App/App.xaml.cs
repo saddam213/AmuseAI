@@ -115,26 +115,6 @@ namespace Amuse.App
 
 
         /// <summary>
-        /// Gets an embedded resource.
-        /// </summary>
-        /// <param name="resourceName">Name of the resource.</param>
-        public static string GetEmbeddedResource(string resourceName)
-        {
-            var assembly = Assembly.GetExecutingAssembly();
-            using (var resourceStream = assembly.GetManifestResourceStream(resourceName))
-            {
-                if (resourceStream == null)
-                    return string.Empty;
-
-                using (var streamReader = new StreamReader(resourceStream, Encoding.UTF8))
-                {
-                    return streamReader.ReadToEnd();
-                }
-            }
-        }
-
-
-        /// <summary>
         /// Determines whether the application is installed.
         /// </summary>
         private static bool IsApplicationInstalled()

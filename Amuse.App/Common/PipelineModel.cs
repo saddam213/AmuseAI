@@ -96,7 +96,7 @@ namespace Amuse.App.Common
             get { return _qualityMode; }
             set { SetProperty(ref _qualityMode, value); }
         }
-      
+
         public ExecutionOptionsModel ExecutionOptions
         {
             get { return _executionOptions; }

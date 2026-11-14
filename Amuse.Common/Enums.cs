@@ -48,6 +48,9 @@ namespace Amuse.Common
         [Display(Name = "MOSS Image Pipeline", ShortName = "MOSS", Description = "MOSS-Image is a text-to-image model family from OpenMOSS that supports natural-language prompts, tag sequences, and JSON layouts for controlling text placement and object arrangement.")]
         MossImagePipeline = 51,
 
+        [Display(Name = "MiniMax Image Pipeline", ShortName = "MiniMax", Description = "MiniMax-H3-Image is a state-of-the-art open-source model for image generation and editing from the MiniMax H3 family. It combines intelligent understanding of creative intent with the ability to build visual worlds: with precise instruction following, it develops a creative concept into concrete characters, scenes and atmosphere.")]
+        MiniMaxImagePipeline = 52,
+
         [Display(Name = "Fibo2 Pipeline", ShortName = "Fibo2", Description = "Fibo 2.0 is the next generation of Bria's FIBO family. For the first time, image editing and image generation live in a single unified model. It keeps the foundation that made FIBO the most controllable open image model: training on long, structured captions through the Visual GenAI Language (VGL).")]
         Fibo2Pipeline = 53,
 

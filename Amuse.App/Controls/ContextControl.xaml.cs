@@ -550,7 +550,7 @@ namespace Amuse.App.Controls
             }
             return imageIndex.Count == 0 ? null : imageIndex;
         }
- 
+
 
         private static Dictionary<int, string> RebuildAudioIndexes(this ContextCache context, ContextCache previousContext, Collection<ConversationModel> conversation)
         {

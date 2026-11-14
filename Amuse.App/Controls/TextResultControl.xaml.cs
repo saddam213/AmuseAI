@@ -5,6 +5,7 @@ using System.Windows;
 using System.Windows.Input;
 using TensorStack.Common;
 using TensorStack.WPF;
+using TensorStack.WPF.Controls;
 
 namespace Amuse.App.Controls
 {

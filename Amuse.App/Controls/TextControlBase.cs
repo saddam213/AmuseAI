@@ -10,6 +10,7 @@ using System.Windows;
 using System.Windows.Threading;
 using TensorStack.WPF;
 using TensorStack.WPF.Controls;
+using TensorStack.WPF.Services;
 
 namespace Amuse.App.Controls
 {
@@ -233,8 +234,8 @@ namespace Amuse.App.Controls
             }
             else if (role == ConversationRole.Assistant)
             {
-                message.Thinking = Utils.GetThinkingText(content);
-                message.Content = Utils.GetResponseText(content) + messageClose;
+                message.Thinking = MarkdownConverter.GetThinkingText(content);
+                message.Content = MarkdownConverter.GetResponseText(content) + messageClose;
                 _conversation.Add(message);
             }
             else

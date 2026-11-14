@@ -22,14 +22,11 @@
     <PackageReference Include="DocumentFormat.OpenXml" Version="3.5.1" />
     <PackageReference Include="PdfPig" Version="0.1.16" />
     <PackageReference Include="System.Linq.Async" Version="7.0.1" />
-    <PackageReference Include="System.Management" Version="10.0.13" />
-    <PackageReference Include="Microsoft.Extensions.Hosting" Version="10.0.13" />
+    <PackageReference Include="System.Management" Version="11.0.0" />
+    <PackageReference Include="Microsoft.Extensions.Hosting" Version="11.0.0" />
     <PackageReference Include="Serilog.Extensions.Logging" Version="10.0.0" />
     <PackageReference Include="Serilog.Sinks.File" Version="7.0.0" />
-    <PackageReference Include="Markdig" Version="1.4.0" />
-    <PackageReference Include="ColorCode.HTML" Version="2.0.15" />
-    <PackageReference Include="Microsoft.Web.WebView2" Version="1.0.4258.31" />
-    <PackageReference Include="WebLookup" Version="0.3.0" />
+    <PackageReference Include="WebLookup" Version="0.4.0" />
   </ItemGroup>
 
   <!--Debug-->
@@ -66,10 +63,6 @@
   </ItemGroup>
 
   <!--Embedded-->
-  <ItemGroup>
-    <EmbeddedResource Include="Controls\MarkdownElement.css" />
-    <EmbeddedResource Include="Controls\MarkdownElement.js" />
-  </ItemGroup>
 
   <!--Images-->
   <ItemGroup>

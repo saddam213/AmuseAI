@@ -215,7 +215,7 @@ namespace Amuse.App.Views
                         await SaveHistoryAsync(textResult.Result, options);
                     }
 
-                    await automationJob.SaveAsync(Utils.GetResponseText(textResult.Result.Text));
+                    await automationJob.SaveAsync(MarkdownConverter.GetResponseText(textResult.Result.Text));
                     AutomationProgress.Update(automationJob.Id, automationJob.Count, $"{AppDefault.Automation}: {automationJob.Id}/{automationJob.Count}");
                 }
 
@@ -292,7 +292,7 @@ namespace Amuse.App.Views
         private async Task<TextInput> SaveHistoryAsync(TextInput textResult, GenerateInputOptions options)
         {
             Logger.LogInformation($"[ImageToText] [SaveHistory] Saving history...");
-            textResult.Text = Utils.GetResponseText(textResult.Text);
+            textResult.Text = MarkdownConverter.GetResponseText(textResult.Text);
             var result = await HistoryService.AddAsync(textResult, new DiffusionHistory
             {
                 Options = options,

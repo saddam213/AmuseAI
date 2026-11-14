@@ -132,4 +132,40 @@
   <data name="PipelineClosedUnexpectedly" xml:space="preserve">
     <value>パイプラインが予期せず終了しました</value>
   </data>
+  <data name="ExecuteAutomationTitle" xml:space="preserve">
+    <value>自動化を実行</value>
+  </data>
+  <data name="ExecutePipelineTitle" xml:space="preserve">
+    <value>パイプラインを実行</value>
+  </data>
+  <data name="ImportComponent" xml:space="preserve">
+    <value>コンポーネントファイルのインポートに失敗しました。</value>
+  </data>
+  <data name="ImportEnvironment" xml:space="preserve">
+    <value>環境ファイルのインポートに失敗しました。</value>
+  </data>
+  <data name="ImportErrorTitle" xml:space="preserve">
+    <value>インポートエラー</value>
+  </data>
+  <data name="ImportModel" xml:space="preserve">
+    <value>モデルファイルのインポートに失敗しました。</value>
+  </data>
+  <data name="LoadPipelineTitle" xml:space="preserve">
+    <value>パイプラインを読み込む</value>
+  </data>
+  <data name="ParseErrorDocument" xml:space="preserve">
+    <value>ドキュメントの解析に失敗しました。</value>
+  </data>
+  <data name="ParseErrorTitle" xml:space="preserve">
+    <value>解析エラー</value>
+  </data>
+  <data name="UnexpectedError" xml:space="preserve">
+    <value>予期しないエラーが発生しました</value>
+  </data>
+  <data name="UnexpectedErrorTitle" xml:space="preserve">
+    <value>予期しないエラー</value>
+  </data>
+  <data name="UnloadPipelineTitle" xml:space="preserve">
+    <value>パイプラインをアンロード</value>
+  </data>
 </root>

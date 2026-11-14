@@ -19,14 +19,14 @@ namespace Amuse.Host.StableDiffusionCpp
         /// <param name="pipelineOptions">The pipeline options.</param>
         /// <returns>PipelineCommon.ContextOptions.</returns>
         /// <exception cref="System.NotImplementedException">Pipeline not supported</exception>
-        internal static PipelineCommon.ContextOptions CreateContextOptions(this PipelineCreateOptions options, PipelineLoadOptions pipelineOptions)
+        internal static PipelineCommon.StableDiffusionOptions CreateContextOptions(this PipelineCreateOptions options, PipelineLoadOptions pipelineOptions)
         {
             var backendType = GetBackendType(options);
             var backendDevice = GetBackend(pipelineOptions, backendType);
             var paramsBackend = GetParamsBackend(pipelineOptions);
             var convDirectMode = GetConvDirect(pipelineOptions);
             var flashAttnMode = GetFlashAttention(pipelineOptions);
-            var contextOptions = new PipelineCommon.ContextOptions
+            var stableDiffusionOptions = new PipelineCommon.StableDiffusionOptions
             {
                 Backend = backendDevice,
                 ParamsBackend = paramsBackend,
@@ -54,7 +54,7 @@ namespace Amuse.Host.StableDiffusionCpp
 
             if (pipelineOptions.Pipeline == PipelineType.StableDiffusionXLPipeline)
             {
-                return contextOptions with
+                return stableDiffusionOptions with
                 {
                     ModelPath = pipelineOptions.CheckpointConfig.FullCheckpoint,
                     VaePath = pipelineOptions.CheckpointConfig.Vae,
@@ -66,7 +66,7 @@ namespace Amuse.Host.StableDiffusionCpp
             }
             if (pipelineOptions.Pipeline == PipelineType.StableDiffusion3Pipeline)
             {
-                return contextOptions with
+                return stableDiffusionOptions with
                 {
                     VaePath = pipelineOptions.CheckpointConfig.Vae,
                     ClipLPath = pipelineOptions.CheckpointConfig.TextEncoder,
@@ -78,7 +78,7 @@ namespace Amuse.Host.StableDiffusionCpp
             }
             if (pipelineOptions.Pipeline == PipelineType.FluxPipeline)
             {
-                return contextOptions with
+                return stableDiffusionOptions with
                 {
                     VaePath = pipelineOptions.CheckpointConfig.Vae,
                     ClipLPath = pipelineOptions.CheckpointConfig.TextEncoder,
@@ -89,7 +89,7 @@ namespace Amuse.Host.StableDiffusionCpp
             }
             if (pipelineOptions.Pipeline == PipelineType.ChromaPipeline)
             {
-                return contextOptions with
+                return stableDiffusionOptions with
                 {
                     VaePath = pipelineOptions.CheckpointConfig.Vae,
                     T5xxlPath = pipelineOptions.CheckpointConfig.TextEncoder,
@@ -99,7 +99,7 @@ namespace Amuse.Host.StableDiffusionCpp
             }
             if (pipelineOptions.Pipeline == PipelineType.IdeogramPipeline)
             {
-                return contextOptions with
+                return stableDiffusionOptions with
                 {
                     VaePath = pipelineOptions.CheckpointConfig.Vae,
                     LlmPath = pipelineOptions.CheckpointConfig.TextEncoder,
@@ -110,7 +110,7 @@ namespace Amuse.Host.StableDiffusionCpp
             }
             if (pipelineOptions.Pipeline == PipelineType.LTX20Pipeline)
             {
-                return contextOptions with
+                return stableDiffusionOptions with
                 {
                     VaePath = pipelineOptions.CheckpointConfig.Vae,
                     AudioVaePath = pipelineOptions.CheckpointConfig.AudioVae,
@@ -121,7 +121,7 @@ namespace Amuse.Host.StableDiffusionCpp
             }
             if (pipelineOptions.Pipeline == PipelineType.WanPipeline)
             {
-                return contextOptions with
+                return stableDiffusionOptions with
                 {
                     VaePath = pipelineOptions.CheckpointConfig.Vae,
                     T5xxlPath = pipelineOptions.CheckpointConfig.TextEncoder,
@@ -132,7 +132,7 @@ namespace Amuse.Host.StableDiffusionCpp
             }
             if (pipelineOptions.Pipeline == PipelineType.MiniMaxVideoPipeline)
             {
-                return contextOptions with
+                return stableDiffusionOptions with
                 {
                     VaePath = pipelineOptions.CheckpointConfig.Vae,
                     AudioVaePath = pipelineOptions.CheckpointConfig.AudioVae,
@@ -142,7 +142,7 @@ namespace Amuse.Host.StableDiffusionCpp
             }
             if (pipelineOptions.Pipeline == PipelineType.QwenImagePipeline)
             {
-                return contextOptions with
+                return stableDiffusionOptions with
                 {
                     VaePath = pipelineOptions.CheckpointConfig.Vae,
                     LlmPath = pipelineOptions.CheckpointConfig.TextEncoder,
@@ -155,7 +155,7 @@ namespace Amuse.Host.StableDiffusionCpp
             if (pipelineOptions.Pipeline == PipelineType.LensPipeline
              || pipelineOptions.Pipeline == PipelineType.MossImagePipeline)
             {
-                return contextOptions with
+                return stableDiffusionOptions with
                 {
                     TokenizerPath = pipelineOptions.CheckpointConfig.Tokenizer,
                     VaePath = pipelineOptions.CheckpointConfig.Vae,
@@ -166,7 +166,7 @@ namespace Amuse.Host.StableDiffusionCpp
             }
             if (pipelineOptions.Pipeline == PipelineType.LladaImagePipeline)
             {
-                return contextOptions with
+                return stableDiffusionOptions with
                 {
                     TokenizerPath = pipelineOptions.CheckpointConfig.Tokenizer,
                     VaePath = pipelineOptions.CheckpointConfig.Vae,
@@ -178,7 +178,7 @@ namespace Amuse.Host.StableDiffusionCpp
             }
             if (pipelineOptions.Pipeline == PipelineType.IrisPipeline)
             {
-                return contextOptions with
+                return stableDiffusionOptions with
                 {
                     LlmPath = pipelineOptions.CheckpointConfig.TextEncoder,
                     DiffusionModelPath = pipelineOptions.CheckpointConfig.Transformer,
@@ -187,14 +187,15 @@ namespace Amuse.Host.StableDiffusionCpp
             if (pipelineOptions.Pipeline == PipelineType.HiDreamPipeline
              || pipelineOptions.Pipeline == PipelineType.SenseNovaPipeline)
             {
-                return contextOptions with
+                return stableDiffusionOptions with
                 {
                     ModelPath = pipelineOptions.CheckpointConfig.FullCheckpoint
                 };
             }
-            if (pipelineOptions.Pipeline == PipelineType.Fibo2Pipeline)
+            if (pipelineOptions.Pipeline == PipelineType.Fibo2Pipeline
+             || pipelineOptions.Pipeline == PipelineType.MiniMaxImagePipeline)
             {
-                return contextOptions with
+                return stableDiffusionOptions with
                 {
                     VaePath = pipelineOptions.CheckpointConfig.Vae,
                     LlmPath = pipelineOptions.CheckpointConfig.TextEncoder,
@@ -212,7 +213,7 @@ namespace Amuse.Host.StableDiffusionCpp
              || pipelineOptions.Pipeline == PipelineType.BooguImagePipeline
              || pipelineOptions.Pipeline == PipelineType.LongCatImagePipeline)
             {
-                return contextOptions with
+                return stableDiffusionOptions with
                 {
                     VaePath = pipelineOptions.CheckpointConfig.Vae,
                     LlmPath = pipelineOptions.CheckpointConfig.TextEncoder,

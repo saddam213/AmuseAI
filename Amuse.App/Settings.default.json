@@ -114,11 +114,11 @@
       "Backend": "StableDiffusionCpp",
       "Environment": "vulkan",
       "HostVersion": "Vulkan",
-      "Version": 1024,
+      "Version": 1094,
       "Status": "Create",
       "Variables": {},
       "Requirements": [
-        "https://github.com/leejet/stable-diffusion.cpp/releases/download/master-1024-77b72a2/sd-master-77b72a2-bin-win-vulkan-x64.zip"
+        "https://github.com/leejet/stable-diffusion.cpp/releases/download/master-1094-3bad892/sd-master-3bad892-bin-win-vulkan-x64.zip"
       ]
     },
     {
@@ -129,12 +129,12 @@
       "Backend": "StableDiffusionCpp",
       "Environment": "vulkan",
       "HostVersion": "Vulkan",
-      "Version": 1024,
+      "Version": 1094,
       "Status": "Create",
       "IsDefault": true,
       "Variables": {},
       "Requirements": [
-        "https://github.com/leejet/stable-diffusion.cpp/releases/download/master-1024-77b72a2/sd-master-77b72a2-bin-win-vulkan-x64.zip"
+        "https://github.com/leejet/stable-diffusion.cpp/releases/download/master-1094-3bad892/sd-master-3bad892-bin-win-vulkan-x64.zip"
       ]
     },
     {
@@ -145,12 +145,12 @@
       "Backend": "StableDiffusionCpp",
       "Environment": "vulkan",
       "HostVersion": "Vulkan",
-      "Version": 1024,
+      "Version": 1094,
       "Status": "Create",
       "IsDefault": true,
       "Variables": {},
       "Requirements": [
-        "https://github.com/leejet/stable-diffusion.cpp/releases/download/master-1024-77b72a2/sd-master-77b72a2-bin-win-vulkan-x64.zip"
+        "https://github.com/leejet/stable-diffusion.cpp/releases/download/master-1094-3bad892/sd-master-3bad892-bin-win-vulkan-x64.zip"
       ]
     },
     {
@@ -161,13 +161,13 @@
       "Backend": "StableDiffusionCpp",
       "Environment": "cuda",
       "HostVersion": "CUDA",
-      "Version": 1024,
+      "Version": 1094,
       "Status": "Create",
       "IsDefault": true,
       "Variables": {},
       "Requirements": [
-        "https://github.com/leejet/stable-diffusion.cpp/releases/download/master-1024-77b72a2/cudart-sd-bin-win-cu12-x64.zip",
-        "https://github.com/leejet/stable-diffusion.cpp/releases/download/master-1024-77b72a2/sd-master-77b72a2-bin-win-cuda12-x64.zip"
+        "https://github.com/leejet/stable-diffusion.cpp/releases/download/master-1094-3bad892/cudart-sd-bin-win-cu12-x64.zip",
+        "https://github.com/leejet/stable-diffusion.cpp/releases/download/master-1094-3bad892/sd-master-3bad892-bin-win-cuda12-x64.zip"
       ]
     },
     {
@@ -178,11 +178,11 @@
       "Backend": "StableDiffusionCpp",
       "Environment": "rocm",
       "HostVersion": "ROCM",
-      "Version": 1024,
+      "Version": 1094,
       "Status": "Create",
       "Variables": {},
       "Requirements": [
-        "https://github.com/leejet/stable-diffusion.cpp/releases/download/master-1024-77b72a2/sd-master-77b72a2-bin-win-rocm-10.1.0-x64.zip",
+        "https://github.com/leejet/stable-diffusion.cpp/releases/download/master-1094-3bad892/sd-master-3bad892-bin-win-rocm-10.1.0-x64.zip",
         "https://stable.repo.amd.com/rocm/core/tarball/therock-dist-windows-multiarch-10.1.0.tar.gz"
       ]
     }
@@ -1141,6 +1141,21 @@
         "MainFile": "qwen3vl_32b_minimax_h3-Q4_K_M.gguf",
         "DownloadFiles": [
           "https://huggingface.co/unsloth/MiniMax-H3-GGUF/resolve/main/qwen3vl_32b_minimax_h3-Q4_K_M.gguf"
+        ]
+      }
+    },
+    {
+      "Id": 563,
+      "Name": "MiniMax-H3 Image Vae",
+      "Key": "VAE_MMH3_IMG",
+      "Link": "https://huggingface.co/Comfy-Org/MiniMax-H3-Image",
+      "Checkpoint": {
+        "Name": "Component",
+        "Type": "OnlineFolder",
+        "Folder": "AutoEncoder",
+        "MainFile": "minimax_h3_image_vae_fp16.safetensors",
+        "DownloadFiles": [
+          "https://huggingface.co/Comfy-Org/MiniMax-H3-Image/resolve/main/vae/minimax_h3_image_vae_fp16.safetensors"
         ]
       }
     },
@@ -13379,7 +13394,7 @@
     {
       "Id": 620,
       "Backend": "StableDiffusionCpp",
-      "Name": "MiniMax H3",
+      "Name": "MiniMax H3 Video",
       "Template": "MiniMax_H3",
       "Pipeline": "MiniMaxVideoPipeline",
       "ModelType": "Base",
@@ -13558,6 +13573,187 @@
         }
       ],
       "Link": "https://huggingface.co/unsloth/MiniMax-H3-GGUF"
+    },
+    {
+      "Id": 621,
+      "Backend": "StableDiffusionCpp",
+      "Name": "MiniMax H3 Image",
+      "Template": "MiniMax_H3_Image",
+      "Pipeline": "MiniMaxImagePipeline",
+      "ModelType": "Base",
+      "BaseType": "bfloat16",
+      "MediaType": "Image",
+      "ProcessTypes": [ "TextToImage", "ImageEdit" ],
+      "Checkpoint": {
+        "Vae": {
+          "Name": "AutoEncoder",
+          "Type": "Component",
+          "Path": "VAE_MMH3_IMG"
+        },
+        "TextEncoder": {
+          "Name": "TextEncoder",
+          "Type": "Component",
+          "Path": "TE_MMH3_GGUF"
+        },
+        "Transformer": {
+          "Name": "Transformer",
+          "Type": "OnlineFile",
+          "DownloadFiles": [
+            "https://huggingface.co/Comfy-Org/MiniMax-H3-Image/resolve/main/diffusion_models/minimax_h3_image_pruned_int8_convrot.safetensors"
+          ]
+        }
+      },
+      "MemoryProfile": [
+        {
+          "QualityMode": "Draft",
+          "MemoryModes": [ 6, 20, 24 ]
+        },
+        {
+          "QualityMode": "Standard",
+          "MemoryModes": [ 6, 24, 36 ]
+        },
+        {
+          "QualityMode": "Production",
+          "MemoryModes": [ 8, 24, 48 ]
+        }
+      ],
+      "DefaultOptions": {
+        "Steps": 6,
+        "Width": 1024,
+        "Height": 1024,
+        "GuidanceScale": 1,
+        "Scheduler": "Euler",
+        "Schedulers": [
+          {
+            "Scheduler": "Euler"
+          },
+          {
+            "Scheduler": "EulerAncestral"
+          },
+          {
+            "Scheduler": "DPM2"
+          },
+          {
+            "Scheduler": "DPMPlusPlus2SAncestral"
+          },
+          {
+            "Scheduler": "DPMPlusPlus2M"
+          },
+          {
+            "Scheduler": "DPMPlusPlus2Mv2"
+          },
+          {
+            "Scheduler": "DPMPlusPlus2MSDE"
+          },
+          {
+            "Scheduler": "DPMPlusPlus2MSDEBT"
+          },
+          {
+            "Scheduler": "ResidualMultistep",
+            "SigmaScheduleType": "Simple"
+          },
+          {
+            "Scheduler": "Residual2S"
+          },
+          {
+            "Scheduler": "Heun"
+          },
+          {
+            "Scheduler": "IPNDM"
+          },
+          {
+            "Scheduler": "LCM"
+          },
+          {
+            "Scheduler": "DDIM"
+          },
+          {
+            "Scheduler": "TCD"
+          },
+          {
+            "Scheduler": "LMS"
+          },
+          {
+            "Scheduler": "ERSDE"
+          }
+        ]
+      },
+      "Resolutions": [
+        {
+          "Width": 2688,
+          "Height": 6272
+        },
+        {
+          "Width": 3072,
+          "Height": 5472
+        },
+        {
+          "Width": 3360,
+          "Height": 5024
+        },
+        {
+          "Width": 3552,
+          "Height": 4736
+        },
+        {
+          "Width": 1344,
+          "Height": 3136
+        },
+        {
+          "Width": 1536,
+          "Height": 2736
+        },
+        {
+          "Width": 1680,
+          "Height": 2512
+        },
+        {
+          "Width": 1776,
+          "Height": 2368
+        },
+        {
+          "Width": 4096,
+          "Height": 4096
+        },
+        {
+          "Width": 2048,
+          "Height": 2048,
+          "IsDefault": true
+        },
+        {
+          "Width": 2368,
+          "Height": 1776
+        },
+        {
+          "Width": 2512,
+          "Height": 1680
+        },
+        {
+          "Width": 2736,
+          "Height": 1536
+        },
+        {
+          "Width": 3136,
+          "Height": 1344
+        },
+        {
+          "Width": 4736,
+          "Height": 3552
+        },
+        {
+          "Width": 5024,
+          "Height": 3360
+        },
+        {
+          "Width": 5472,
+          "Height": 3072
+        },
+        {
+          "Width": 6272,
+          "Height": 2688
+        }
+      ],
+      "Link": "https://huggingface.co/Comfy-Org/MiniMax-H3-Image"
     },
     {
       "Id": 630,

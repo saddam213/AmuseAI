@@ -103,7 +103,7 @@ namespace Amuse.Host.StableDiffusionCpp
                 var contextOptions = _options.CreateContextOptions(_pipelineOptions);
                 var backendDirectory = Path.Combine(_options.Directory, _options.Environment);
                 _pipeline = new StableDiffusionPipeline(backendDirectory, _progressCallback, Logger);
-                await _pipeline.LoadContextAsync(contextOptions, cancellationToken);
+                await _pipeline.LoadAsync(contextOptions, cancellationToken: cancellationToken);
 
                 await SendResponse(cancellationToken);
             }
@@ -149,7 +149,7 @@ namespace Amuse.Host.StableDiffusionCpp
         {
             try
             {
-                _pipeline.UnloadContext();
+                _pipeline.Unload();
                 await SendResponse(cancellationToken);
             }
             catch (Exception ex)

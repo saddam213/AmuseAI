@@ -13000,6 +13000,182 @@
     },
     {
       "Backend": "StableDiffusionCpp",
+      "Name": "MiniMax_H3_Image_CPP",
+      "Template": "MiniMax_H3_Image",
+      "Pipeline": "MiniMaxImagePipeline",
+      "ModelType": "Base",
+      "BaseType": "bfloat16",
+      "MediaType": "Image",
+      "ProcessTypes": [ "TextToImage", "ImageEdit" ],
+      "Checkpoint": {
+        "Vae": {
+          "Name": "AutoEncoder",
+          "Type": "Component",
+          "Path": "VAE_MMH3_IMG"
+        },
+        "TextEncoder": {
+          "Name": "TextEncoder",
+          "Type": "Component",
+          "Path": "TE_MMH3_GGUF"
+        },
+        "Transformer": {
+          "Name": "Transformer",
+          "Type": "LocalFile"
+        }
+      },
+      "MemoryProfile": [
+        {
+          "QualityMode": "Draft",
+          "MemoryModes": [ 6, 20, 24 ]
+        },
+        {
+          "QualityMode": "Standard",
+          "MemoryModes": [ 6, 24, 36 ]
+        },
+        {
+          "QualityMode": "Production",
+          "MemoryModes": [ 8, 24, 48 ]
+        }
+      ],
+      "DefaultOptions": {
+        "Steps": 6,
+        "Width": 1024,
+        "Height": 1024,
+        "GuidanceScale": 1,
+        "Scheduler": "Euler",
+        "Schedulers": [
+          {
+            "Scheduler": "Euler"
+          },
+          {
+            "Scheduler": "EulerAncestral"
+          },
+          {
+            "Scheduler": "DPM2"
+          },
+          {
+            "Scheduler": "DPMPlusPlus2SAncestral"
+          },
+          {
+            "Scheduler": "DPMPlusPlus2M"
+          },
+          {
+            "Scheduler": "DPMPlusPlus2Mv2"
+          },
+          {
+            "Scheduler": "DPMPlusPlus2MSDE"
+          },
+          {
+            "Scheduler": "DPMPlusPlus2MSDEBT"
+          },
+          {
+            "Scheduler": "ResidualMultistep",
+            "SigmaScheduleType": "Simple"
+          },
+          {
+            "Scheduler": "Residual2S"
+          },
+          {
+            "Scheduler": "Heun"
+          },
+          {
+            "Scheduler": "IPNDM"
+          },
+          {
+            "Scheduler": "LCM"
+          },
+          {
+            "Scheduler": "DDIM"
+          },
+          {
+            "Scheduler": "TCD"
+          },
+          {
+            "Scheduler": "LMS"
+          },
+          {
+            "Scheduler": "ERSDE"
+          }
+        ]
+      },
+      "Resolutions": [
+        {
+          "Width": 2688,
+          "Height": 6272
+        },
+        {
+          "Width": 3072,
+          "Height": 5472
+        },
+        {
+          "Width": 3360,
+          "Height": 5024
+        },
+        {
+          "Width": 3552,
+          "Height": 4736
+        },
+        {
+          "Width": 1344,
+          "Height": 3136
+        },
+        {
+          "Width": 1536,
+          "Height": 2736
+        },
+        {
+          "Width": 1680,
+          "Height": 2512
+        },
+        {
+          "Width": 1776,
+          "Height": 2368
+        },
+        {
+          "Width": 4096,
+          "Height": 4096
+        },
+        {
+          "Width": 2048,
+          "Height": 2048,
+          "IsDefault": true
+        },
+        {
+          "Width": 2368,
+          "Height": 1776
+        },
+        {
+          "Width": 2512,
+          "Height": 1680
+        },
+        {
+          "Width": 2736,
+          "Height": 1536
+        },
+        {
+          "Width": 3136,
+          "Height": 1344
+        },
+        {
+          "Width": 4736,
+          "Height": 3552
+        },
+        {
+          "Width": 5024,
+          "Height": 3360
+        },
+        {
+          "Width": 5472,
+          "Height": 3072
+        },
+        {
+          "Width": 6272,
+          "Height": 2688
+        }
+      ]
+    },
+    {
+      "Backend": "StableDiffusionCpp",
       "Name": "QwenImage_Base_CPP",
       "Template": "QwenImage",
       "Pipeline": "QwenImagePipeline",
@@ -19698,6 +19874,10 @@
         {
           "Name": "H3 Video",
           "Template": "MiniMax_H3_Base_CPP"
+        },
+        {
+          "Name": "H3 Image",
+          "Template": "MiniMax_H3_Image_CPP"
         }
       ]
     },

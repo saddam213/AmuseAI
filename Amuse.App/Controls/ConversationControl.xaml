@@ -166,7 +166,7 @@
                 <Grid x:Name="MainContent" Background="Transparent">
                     <Image Source="{StaticResource PlaceholderText}" Stretch="Uniform" IsHitTestVisible="False"/>
                     <Grid Visibility="{Binding IsContentReady, ElementName=ResultControl, Converter={StaticResource BooleanToVisibilityConverter}, UpdateSourceTrigger=PropertyChanged, Mode=OneWay}">
-                        <Controls:MarkdownElement 
+                        <CommonControls:MarkdownElement 
                             x:Name="ResultControl" 
                             Settings="{Binding Settings, Mode=OneWay}"
                             IsConversationMode="True"

@@ -81,6 +81,7 @@ namespace Amuse.App
         public bool IsExternalLinksAcknowledged { get; set; }
         public bool IsExternalToolsEnabled { get; set; }
         public bool IsExternalToolsAcknowledged { get; set; }
+        public string UserAgent { get; set; }
 
         public double VolumeInput
         {
@@ -179,6 +180,7 @@ namespace Amuse.App
 
         public async Task Initialize(string directoryData)
         {
+            UserAgent = $"Amuse/{App.AppVersionDisplay}";
             if (string.IsNullOrEmpty(DirectoryTemp) || !Path.Exists(DirectoryTemp))
                 DirectoryTemp = Path.Combine(directoryData, "Temp");
             if (string.IsNullOrEmpty(DirectoryHistory) || !Path.Exists(DirectoryHistory))

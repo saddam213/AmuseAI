@@ -1330,6 +1330,135 @@
     <value>アップデートがあります</value>
   </data>
   <data name="EnableExternalTools" xml:space="preserve">
-    <value>Enable External Tools</value>
+    <value>外部ツールを有効化</value>
+  </data>
+  <data name="Interpolate" xml:space="preserve">
+    <value>補間</value>
+  </data>
+  <data name="ProgressInitialize" xml:space="preserve">
+    <value>パイプラインを初期化中...</value>
+  </data>
+  <data name="ProgressTextEncoder" xml:space="preserve">
+    <value>プロンプトをエンコード中...</value>
+  </data>
+  <data name="ProgressTransformer" xml:space="preserve">
+    <value>生成中...</value>
+  </data>
+  <data name="ProgressStep" xml:space="preserve">
+    <value>ステップ: {5}/{6}</value>
+  </data>
+  <data name="ProgressAutoEncoder" xml:space="preserve">
+    <value>生成結果を処理中...</value>
+  </data>
+  <data name="ProgressComplete" xml:space="preserve">
+    <value>生成結果を処理中...</value>
+  </data>
+  <data name="ActiveDownloadsMessage" xml:space="preserve">
+    <value>実行中のダウンロードがあります。キャンセルして終了してもよろしいですか？</value>
+  </data>
+  <data name="AutomationStarted" xml:space="preserve">
+    <value>自動化を開始しました</value>
+  </data>
+  <data name="RenderingVideo" xml:space="preserve">
+    <value>動画をレンダリング中</value>
+  </data>
+  <data name="DeleteGalleryItems" xml:space="preserve">
+    <value>ギャラリーの全{0}項目を削除してもよろしいですか？</value>
+  </data>
+  <data name="DeleteGalleryItemsFiltered" xml:space="preserve">
+    <value>フィルター済みのギャラリー項目{0}件を削除してもよろしいですか？</value>
+  </data>
+  <data name="LoadingPipeline" xml:space="preserve">
+    <value>パイプラインを読み込み中</value>
+  </data>
+  <data name="LoadPipeline" xml:space="preserve">
+    <value>パイプラインを読み込む</value>
+  </data>
+  <data name="EncodingVideoFrames" xml:space="preserve">
+    <value>動画フレームをエンコード中</value>
+  </data>
+  <data name="ProcessingInputFrame" xml:space="preserve">
+    <value>入力フレームを処理中</value>
+  </data>
+  <data name="CancellingGeneration" xml:space="preserve">
+    <value>生成をキャンセル中</value>
+  </data>
+  <data name="ExtractingImage" xml:space="preserve">
+    <value>画像を抽出中</value>
+  </data>
+  <data name="ExtractingVideo" xml:space="preserve">
+    <value>動画を抽出中</value>
+  </data>
+  <data name="UpscalingImage" xml:space="preserve">
+    <value>画像をアップスケール中</value>
+  </data>
+  <data name="UpscalingVideo" xml:space="preserve">
+    <value>動画をアップスケール中</value>
+  </data>
+  <data name="RenderingImage" xml:space="preserve">
+    <value>画像をレンダリング中</value>
+  </data>
+  <data name="InitializingBackendEnvironment" xml:space="preserve">
+    <value>{0}環境を初期化中</value>
+  </data>
+  <data name="Tile" xml:space="preserve">
+    <value>タイル</value>
+  </data>
+  <data name="GeneratingBeamResults" xml:space="preserve">
+    <value>Beam結果を生成中</value>
+  </data>
+  <data name="RemoveComponent" xml:space="preserve">
+    <value>コンポーネントの登録を解除</value>
+  </data>
+  <data name="RemoveComponentMessage" xml:space="preserve">
+    <value>このコンポーネントの登録を解除してもよろしいですか？</value>
+  </data>
+  <data name="ImportComponent" xml:space="preserve">
+    <value>コンポーネントをインポート</value>
+  </data>
+  <data name="ExportComponent" xml:space="preserve">
+    <value>コンポーネントをエクスポート</value>
+  </data>
+  <data name="DeleteComponent" xml:space="preserve">
+    <value>コンポーネントを削除</value>
+  </data>
+  <data name="DeleteComponentMessage" xml:space="preserve">
+    <value>このコンポーネントを削除してもよろしいですか？</value>
+  </data>
+  <data name="RemoveModel" xml:space="preserve">
+    <value>モデルの登録を解除</value>
+  </data>
+  <data name="RemoveModelMessage" xml:space="preserve">
+    <value>このモデルの登録を解除してもよろしいですか？</value>
+  </data>
+  <data name="ImportModel" xml:space="preserve">
+    <value>モデルをインポート</value>
+  </data>
+  <data name="ExportModel" xml:space="preserve">
+    <value>モデルをエクスポート</value>
+  </data>
+  <data name="DeleteModel" xml:space="preserve">
+    <value>モデルを削除</value>
+  </data>
+  <data name="DeleteModelMessage" xml:space="preserve">
+    <value>このモデルを削除してもよろしいですか？</value>
+  </data>
+  <data name="RemoveEnvironment" xml:space="preserve">
+    <value>環境の登録を解除</value>
+  </data>
+  <data name="RemoveEnvironmentMessage" xml:space="preserve">
+    <value>この環境の登録を解除してもよろしいですか？</value>
+  </data>
+  <data name="ImportEnvironment" xml:space="preserve">
+    <value>環境をインポート</value>
+  </data>
+  <data name="ExportEnvironment" xml:space="preserve">
+    <value>環境をエクスポート</value>
+  </data>
+  <data name="DeleteEnvironment" xml:space="preserve">
+    <value>環境を削除</value>
+  </data>
+  <data name="DeleteEnvironmentMessage" xml:space="preserve">
+    <value>この環境を削除してもよろしいですか？</value>
   </data>
 </root>

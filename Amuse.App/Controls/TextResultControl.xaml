@@ -150,7 +150,7 @@
                     <!--Single Result-->
                     <Grid Visibility="{Binding IsMultipleBeamResult, Converter={StaticResource InverseBooleanToVisibilityConverter}, Mode=OneWay}">
                         <Grid Visibility="{Binding IsContentReady, ElementName=ResultControl, Converter={StaticResource BooleanToVisibilityConverter}, UpdateSourceTrigger=PropertyChanged, Mode=OneWay}">
-                            <Controls:MarkdownElement 
+                            <CommonControls:MarkdownElement 
                                 x:Name="ResultControl" 
                                 Settings="{Binding Settings, Mode=OneWay}"
                                 IsInputEnabled="{Binding IsInputEnabled, UpdateSourceTrigger=PropertyChanged, Mode=OneWay}"
@@ -180,7 +180,7 @@
                             </TabControl.ItemTemplate>
                             <TabControl.ContentTemplate>
                                 <DataTemplate>
-                                    <Controls:MarkdownElement 
+                                    <CommonControls:MarkdownElement 
                                         IsScrollToBottomEnabled="False"
                                         Settings="{Binding Settings, RelativeSource={RelativeSource AncestorType={x:Type Controls:TextResultControl}}, Mode=OneWay}"
                                         IsThinkingVisible="{Binding IsThinkingVisible, RelativeSource={RelativeSource AncestorType={x:Type Controls:TextResultControl}}, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"
