@@ -41,6 +41,7 @@ Local AI image, video, audio and text.
 - SenseNova U1.5
 - MOSS-Image
 - Fibo 2.0
+- MiniMax-H3
 
 ## Video Pipelines
 - Wan 2.2
