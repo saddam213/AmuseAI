@@ -145,7 +145,7 @@
                                             <DataTemplate>
                                                 <StackPanel>
                                                     <TextBlock MinWidth="100">
-                                                        <Run Text="Beam:"/>
+                                                        <Run Text="{CommonControls:Localize BeamLabel}"/>
                                                         <Run Text="{Binding Beam}"/>
                                                     </TextBlock>
                                                     <TextBlock FontSize="8" FontStyle="Italic" Opacity=".6" >

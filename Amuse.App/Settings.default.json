@@ -114,11 +114,11 @@
       "Backend": "StableDiffusionCpp",
       "Environment": "vulkan",
       "HostVersion": "Vulkan",
-      "Version": 1094,
+      "Version": 1104,
       "Status": "Create",
       "Variables": {},
       "Requirements": [
-        "https://github.com/leejet/stable-diffusion.cpp/releases/download/master-1094-3bad892/sd-master-3bad892-bin-win-vulkan-x64.zip"
+        "https://github.com/leejet/stable-diffusion.cpp/releases/download/master-1104-5dcfa79/sd-master-5dcfa79-bin-win-vulkan-x64.zip"
       ]
     },
     {
@@ -129,12 +129,12 @@
       "Backend": "StableDiffusionCpp",
       "Environment": "vulkan",
       "HostVersion": "Vulkan",
-      "Version": 1094,
+      "Version": 1104,
       "Status": "Create",
       "IsDefault": true,
       "Variables": {},
       "Requirements": [
-        "https://github.com/leejet/stable-diffusion.cpp/releases/download/master-1094-3bad892/sd-master-3bad892-bin-win-vulkan-x64.zip"
+        "https://github.com/leejet/stable-diffusion.cpp/releases/download/master-1104-5dcfa79/sd-master-5dcfa79-bin-win-vulkan-x64.zip"
       ]
     },
     {
@@ -145,12 +145,12 @@
       "Backend": "StableDiffusionCpp",
       "Environment": "vulkan",
       "HostVersion": "Vulkan",
-      "Version": 1094,
+      "Version": 1104,
       "Status": "Create",
       "IsDefault": true,
       "Variables": {},
       "Requirements": [
-        "https://github.com/leejet/stable-diffusion.cpp/releases/download/master-1094-3bad892/sd-master-3bad892-bin-win-vulkan-x64.zip"
+        "https://github.com/leejet/stable-diffusion.cpp/releases/download/master-1104-5dcfa79/sd-master-5dcfa79-bin-win-vulkan-x64.zip"
       ]
     },
     {
@@ -161,13 +161,13 @@
       "Backend": "StableDiffusionCpp",
       "Environment": "cuda",
       "HostVersion": "CUDA",
-      "Version": 1094,
+      "Version": 1104,
       "Status": "Create",
       "IsDefault": true,
       "Variables": {},
       "Requirements": [
-        "https://github.com/leejet/stable-diffusion.cpp/releases/download/master-1094-3bad892/cudart-sd-bin-win-cu12-x64.zip",
-        "https://github.com/leejet/stable-diffusion.cpp/releases/download/master-1094-3bad892/sd-master-3bad892-bin-win-cuda12-x64.zip"
+        "https://github.com/leejet/stable-diffusion.cpp/releases/download/master-1104-5dcfa79/cudart-sd-bin-win-cu12-x64.zip",
+        "https://github.com/leejet/stable-diffusion.cpp/releases/download/master-1104-5dcfa79/sd-master-5dcfa79-bin-win-cuda12-x64.zip"
       ]
     },
     {
@@ -178,11 +178,11 @@
       "Backend": "StableDiffusionCpp",
       "Environment": "rocm",
       "HostVersion": "ROCM",
-      "Version": 1094,
+      "Version": 1104,
       "Status": "Create",
       "Variables": {},
       "Requirements": [
-        "https://github.com/leejet/stable-diffusion.cpp/releases/download/master-1094-3bad892/sd-master-3bad892-bin-win-rocm-10.1.0-x64.zip",
+        "https://github.com/leejet/stable-diffusion.cpp/releases/download/master-1104-5dcfa79/sd-master-5dcfa79-bin-win-rocm-10.1.0-x64.zip",
         "https://stable.repo.amd.com/rocm/core/tarball/therock-dist-windows-multiarch-10.1.0.tar.gz"
       ]
     }
@@ -13449,6 +13449,191 @@
         "IsVaeTilingEnabled": true,
         "IsVaeSlicingEnabled": true,
         "IsFirstFrameLastFrameEnabled": true,
+        "Scheduler": "Euler",
+        "Schedulers": [
+          {
+            "Scheduler": "Euler"
+          },
+          {
+            "Scheduler": "EulerAncestral"
+          },
+          {
+            "Scheduler": "DPM2"
+          },
+          {
+            "Scheduler": "DPMPlusPlus2SAncestral"
+          },
+          {
+            "Scheduler": "DPMPlusPlus2M"
+          },
+          {
+            "Scheduler": "DPMPlusPlus2Mv2"
+          },
+          {
+            "Scheduler": "DPMPlusPlus2MSDE"
+          },
+          {
+            "Scheduler": "DPMPlusPlus2MSDEBT"
+          },
+          {
+            "Scheduler": "ResidualMultistep",
+            "SigmaScheduleType": "Simple"
+          },
+          {
+            "Scheduler": "Residual2S"
+          },
+          {
+            "Scheduler": "Heun"
+          },
+          {
+            "Scheduler": "IPNDM"
+          },
+          {
+            "Scheduler": "LCM"
+          },
+          {
+            "Scheduler": "DDIM"
+          },
+          {
+            "Scheduler": "TCD"
+          },
+          {
+            "Scheduler": "LMS"
+          },
+          {
+            "Scheduler": "ERSDE"
+          }
+        ],
+        "Strength": 0.7,
+        "FrameOptions": [
+          5,
+          22,
+          39,
+          56,
+          73,
+          90,
+          107,
+          124,
+          158,
+          209,
+          260,
+          311,
+          362,
+          413,
+          464,
+          566,
+          668,
+          770,
+          872,
+          940,
+          991
+        ]
+      },
+      "Resolutions": [
+        {
+          "Width": 1344,
+          "Height": 768
+        },
+        {
+          "Width": 1024,
+          "Height": 576
+        },
+        {
+          "Width": 960,
+          "Height": 544
+        },
+        {
+          "Width": 864,
+          "Height": 480,
+          "IsDefault": true
+        },
+        {
+          "Width": 768,
+          "Height": 768
+        },
+        {
+          "Width": 1024,
+          "Height": 1024
+        },
+        {
+          "Width": 480,
+          "Height": 864
+        },
+        {
+          "Width": 544,
+          "Height": 960
+        },
+        {
+          "Width": 576,
+          "Height": 1024
+        },
+        {
+          "Width": 768,
+          "Height": 1344
+        }
+      ],
+      "Link": "https://huggingface.co/unsloth/MiniMax-H3-GGUF"
+    },
+    {
+      "Id": 622,
+      "Backend": "StableDiffusionCpp",
+      "Name": "MiniMax H3 Reference",
+      "Template": "MiniMax_H3_Ref",
+      "Pipeline": "MiniMaxVideoPipeline",
+      "ModelType": "Base",
+      "BaseType": "bfloat16",
+      "MediaType": "Video",
+      "ProcessTypes": [ "MediaToVideo" ],
+      "Checkpoint": {
+        "Vae": {
+          "Name": "AutoEncoder",
+          "Type": "Component",
+          "Path": "VAE_MMH3"
+        },
+        "AudioVae": {
+          "Name": "AutoEncoder",
+          "Type": "Component",
+          "Path": "AVAE_MMH3"
+        },
+        "TextEncoder": {
+          "Name": "TextEncoder",
+          "Type": "Component",
+          "Path": "TE_MMH3_GGUF"
+        },
+        "Transformer": {
+          "Name": "Transformer",
+          "Type": "OnlineFile",
+          "DownloadFiles": [
+            "https://huggingface.co/unsloth/MiniMax-H3-GGUF/resolve/main/minimax_h3_ref2va_pruned-Q8_0.gguf"
+          ]
+        }
+      },
+      "MemoryProfile": [
+        {
+          "QualityMode": "Draft",
+          "MemoryModes": [ 6, 20, 24 ]
+        },
+        {
+          "QualityMode": "Standard",
+          "MemoryModes": [ 6, 24, 36 ]
+        },
+        {
+          "QualityMode": "Production",
+          "MemoryModes": [ 8, 24, 48 ]
+        }
+      ],
+      "DefaultOptions": {
+        "Steps": 20,
+        "Frames": 56,
+        "FrameRate": 24,
+        "Width": 864,
+        "Height": 480,
+        "GuidanceScale": 1,
+        "IsVaeTilingEnabled": true,
+        "IsVaeSlicingEnabled": true,
+        "InputImageMaxCount": 9,
+        "InputVideoMaxCount": 3,
+        "InputAudioMaxCount": 3,
         "Scheduler": "Euler",
         "Schedulers": [
           {

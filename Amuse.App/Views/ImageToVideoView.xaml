@@ -135,7 +135,7 @@
                                         Source="{Binding SourceImage1, Mode=TwoWay}" 
                                         IsInputEnabled="{Binding IsPipelineLoaded, Mode=OneWay}"
                                         OnMediaImport="OnMediaImport"
-                                        Title="First Frame"/>
+                                        Title="{CommonControls:Localize FirstFrame}"/>
                                     <Grid.Style>
                                         <Style TargetType="{x:Type Grid}">
                                             <Style.Triggers>
@@ -166,7 +166,7 @@
                                         CropHeight="{Binding Options.Height, Mode=OneWay}"
                                         Source="{Binding SourceImage2, Mode=TwoWay}" 
                                         IsInputEnabled="{Binding IsPipelineLoaded, Mode=OneWay}"
-                                        Title="Last Frame"/>
+                                        Title="{CommonControls:Localize LastFrame}"/>
                                 </Grid>
 
                                 <UniformGrid.Style>

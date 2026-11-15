@@ -21,7 +21,7 @@
                             <CommonControls:FontAwesome Icon="f002" Size="12"/>
                         </Border>
                         <CommonControls:IconButton DockPanel.Dock="Right" Icon="f00d" IconSize="12" IconColor="{StaticResource DangerColour}" Width="23" Command="{Binding FilterClearCommand}"/>
-                        <CommonControls:PlaceholderTextBox Text="{Binding FilterText, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Placeholder="Search Diffusion Models" PlaceholderOpacity=".5"/>
+                        <CommonControls:PlaceholderTextBox Text="{Binding FilterText, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Placeholder="{CommonControls:Localize SearchLanguageModels}" PlaceholderOpacity=".5"/>
                     </DockPanel>
                     <UniformGrid Rows="1">
                         <DockPanel>

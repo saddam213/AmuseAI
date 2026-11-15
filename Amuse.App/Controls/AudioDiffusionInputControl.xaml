@@ -87,7 +87,7 @@
 
                         <!--BPM-->
                         <StackPanel>
-                            <CommonControls:SliderControl Text="Bpm" Value="{Binding Options.Bpm}" Minimum="30" Maximum="300" TickFrequency="1"/>
+                            <CommonControls:SliderControl Text="{CommonControls:Localize BPM}" Value="{Binding Options.Bpm}" Minimum="30" Maximum="300" TickFrequency="1"/>
                         </StackPanel>
 
                         <UniformGrid Columns="2">
@@ -207,10 +207,10 @@
                         </UniformGrid>
 
                         <UniformGrid Columns="2" Margin="0,4,0,0">
-                            <CommonControls:SliderControl Text="Beams" Value="{Binding Options.Beams}" Minimum="0" Maximum="20" TickFrequency="1" />
-                            <CommonControls:SliderControl Text="Temperature" Value="{Binding Options.Temperature}" Minimum="0.1" Maximum="5" TickFrequency="0.01" ValueFormat="N2"/>
-                            <CommonControls:SliderControl Text="TopK" Value="{Binding Options.TopK}" Minimum="1" Maximum="100" TickFrequency="1" />
-                            <CommonControls:SliderControl Text="TopP" Value="{Binding Options.TopP}" Minimum="0.1" Maximum="1" TickFrequency="0.01" ValueFormat="N2"/>
+                            <CommonControls:SliderControl Text="{CommonControls:Localize Beams}" Value="{Binding Options.Beams}" Minimum="0" Maximum="20" TickFrequency="1" />
+                            <CommonControls:SliderControl Text="{CommonControls:Localize Temperature}" Value="{Binding Options.Temperature}" Minimum="0.1" Maximum="5" TickFrequency="0.01" ValueFormat="N2"/>
+                            <CommonControls:SliderControl Text="{CommonControls:Localize TopK}" Value="{Binding Options.TopK}" Minimum="1" Maximum="100" TickFrequency="1" />
+                            <CommonControls:SliderControl Text="{CommonControls:Localize TopP}" Value="{Binding Options.TopP}" Minimum="0.1" Maximum="1" TickFrequency="0.01" ValueFormat="N2"/>
                             <CommonControls:SliderControl Text="{CommonControls:Localize MinLength}" Value="{Binding Options.MinLength}" Minimum="{Binding Pipeline.DiffusionModel.DefaultOptions.MinLength}" Maximum="{Binding Pipeline.DiffusionModel.DefaultOptions.MaxLength}" TickFrequency="1" />
                             <CommonControls:SliderControl Text="{CommonControls:Localize MaxLength}" Value="{Binding Options.MaxLength}" Minimum="{Binding Pipeline.DiffusionModel.DefaultOptions.MinLength}" Maximum="{Binding Pipeline.DiffusionModel.DefaultOptions.MaxLength}" TickFrequency="1" />
                             <CommonControls:SliderControl Text="{CommonControls:Localize LengthPenalty}" Value="{Binding Options.LengthPenalty}" Minimum="-5" Maximum="5" TickFrequency="0.05" ValueFormat="N2" />

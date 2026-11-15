@@ -297,6 +297,9 @@ namespace Amuse.Host.StableDiffusionCpp
                 InitImage = GetFirstFrame(generateOptions, pipelineOptions.ProcessType),
                 EndImage = GetLastFrame(generateOptions, pipelineOptions.ProcessType),
                 ControlFrames = GetControlFrames(generateOptions, pipelineOptions.ProcessType),
+                RefImages = GetReferenceImages(generateOptions, pipelineOptions.ProcessType),
+                RefVideos = GetReferenceVideos(generateOptions, pipelineOptions.ProcessType),
+                RefAudios = GetReferenceAudios(generateOptions, pipelineOptions.ProcessType),
                 VaceStrength = generateOptions.ControlNetScale,
                 Hires = hiresDefaults.GetHiresOptions(generateOptions, pipelineOptions),
                 SampleParameters = samplerDefaults with
@@ -607,6 +610,57 @@ namespace Amuse.Host.StableDiffusionCpp
 
             if (processType == ProcessType.VideoToVideo)
                 return [.. options.InputVideos[0].Frames];
+
+            return default;
+        }
+
+
+        /// <summary>
+        /// Gets the reference images.
+        /// </summary>
+        /// <param name="options">The options.</param>
+        /// <param name="processType">Type of the process.</param>
+        private static ImageTensor[] GetReferenceImages(GenerateVideoOptions options, ProcessType processType)
+        {
+            if (options.InputImages.IsNullOrEmpty())
+                return default;
+
+            if (processType == ProcessType.MediaToVideo)
+                return [.. options.InputImages];
+
+            return default;
+        }
+
+
+        /// <summary>
+        /// Gets the reference videos.
+        /// </summary>
+        /// <param name="options">The options.</param>
+        /// <param name="processType">Type of the process.</param>
+        private static VideoSequence[] GetReferenceVideos(GenerateVideoOptions options, ProcessType processType)
+        {
+            if (options.InputVideos.IsNullOrEmpty())
+                return default;
+
+            if (processType == ProcessType.MediaToVideo)
+                return [.. options.InputVideos];
+
+            return default;
+        }
+
+
+        /// <summary>
+        /// Gets the reference audios.
+        /// </summary>
+        /// <param name="options">The options.</param>
+        /// <param name="processType">Type of the process.</param>
+        private static AudioTensor[] GetReferenceAudios(GenerateVideoOptions options, ProcessType processType)
+        {
+            if (options.InputAudios.IsNullOrEmpty())
+                return default;
+
+            if (processType == ProcessType.MediaToVideo)
+                return [.. options.InputAudios];
 
             return default;
         }

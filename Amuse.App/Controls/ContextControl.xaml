@@ -108,8 +108,8 @@
                     </Style>
                 </Border.Style>
                 <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center"  Visibility="{Binding ContextCollection.Count, Converter={StaticResource LessThanToVisibilityConverter}, ConverterParameter=1}" Opacity=".6" Margin="0,-40,0,0">
-                    <TextBlock Text="Attach Documents / Media" TextAlignment="Center"/>
-                    <TextBlock Text="Provides additional context for your conversation" TextAlignment="Center" FontStyle="Italic"/>
+                    <TextBlock Text="{CommonControls:Localize AttachDocumentsMedia}" TextAlignment="Center"/>
+                    <TextBlock Text="{CommonControls:Localize AttachDocumentsMediaMessage}" TextAlignment="Center" FontStyle="Italic"/>
                 </StackPanel>
             </Border>
         </Grid>

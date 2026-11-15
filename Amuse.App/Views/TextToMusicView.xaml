@@ -192,12 +192,12 @@
                     <DockPanel DockPanel.Dock="Top" >
                         <StackPanel DockPanel.Dock="Top" TextBlock.FontSize="11">
                             <TextBlock Text="{CommonControls:Localize Style}" Style="{StaticResource FieldTextBlockStyle}"/>
-                            <TextBlock Text="Combine genre, instruments, mood, and style for the most accurate results. For example, 'Dreamy lo-fi hip-hop with soft piano and bedroom-pop production' works better than a single-word prompt." TextWrapping="Wrap" Opacity=".9"/>
+                            <TextBlock Text="{CommonControls:Localize MusicStyleTip}" TextWrapping="Wrap" Opacity=".9"/>
                             <StackPanel Margin="0,6,0,0" Opacity=".9">
-                                <TextBlock Text="- Name the genre: synthwave, hip-hop, lo-fi, or folk"/>
-                                <TextBlock Text="- List instruments: 808 drums, piano, or acoustic guitar"/>
-                                <TextBlock Text="- Define the mood: energetic, dreamy, or melancholic"/>
-                                <TextBlock Text="- Production: polished, live recording, or bedroom pop"/>
+                                <TextBlock Text="{CommonControls:Localize MusicStyleTipGenre}"/>
+                                <TextBlock Text="{CommonControls:Localize MusicStyleTipInstruments}"/>
+                                <TextBlock Text="{CommonControls:Localize MusicStyleTipMood}"/>
+                                <TextBlock Text="{CommonControls:Localize MusicStyleTipProduction}"/>
                             </StackPanel>
                         </StackPanel>
                         <DockPanel>
@@ -214,10 +214,10 @@
                         <StackPanel DockPanel.Dock="Top" TextBlock.FontSize="11">
                             <TextBlock Text="{CommonControls:Localize Lyrics}" Style="{StaticResource FieldTextBlockStyle}"/>
                             <StackPanel Opacity=".9">
-                                <TextBlock Text="- Keep lines around 6-10 syllables"/>
-                                <TextBlock Text="- Use UPPERCASE for words you want emphasized or shouted"/>
-                                <TextBlock Text="- Use ( ) for background vocals or echoes"/>
-                                <TextBlock Text="- Add descriptors: [Chorus - anthemic] or [Verse - whispered]"/>
+                                <TextBlock Text="{CommonControls:Localize MusicLyricsTipSyllables}"/>
+                                <TextBlock Text="{CommonControls:Localize MusicLyricsTipUppercase}"/>
+                                <TextBlock Text="{CommonControls:Localize MusicLyricsTipBrackets}"/>
+                                <TextBlock Text="{CommonControls:Localize MusicLyricsTipDescriptors}"/>
                             </StackPanel>
                             <TextBlock Text="{CommonControls:Localize LyricTags}" Margin="0,8,0,0" Style="{StaticResource FieldTextBlockStyle}"/>
                         </StackPanel>
@@ -243,13 +243,13 @@
                             <Button Grid.Column="0" Grid.Row="4" Content="[Bridge]" FontSize="11" HorizontalContentAlignment="Left" Padding="0" Style="{StaticResource TransparentButton}" Command="{Binding AppendLyricCommand}" CommandParameter="[Bridge]" />
                             <Button Grid.Column="0" Grid.Row="5" Content="[Instrumental]" FontSize="11" HorizontalContentAlignment="Left" Padding="0" Style="{StaticResource TransparentButton}" Command="{Binding AppendLyricCommand}" CommandParameter="[Instrumental]"/>
                             <Button Grid.Column="0" Grid.Row="6" Content="[Outro]" FontSize="11" HorizontalContentAlignment="Left" Padding="0" Style="{StaticResource TransparentButton}" Command="{Binding AppendLyricCommand}" CommandParameter="[Outro]"/>
-                            <TextBlock Grid.Column="1" Grid.Row="0" FontSize="11" Text="Sets up atmosphere, usually instrumental" Margin="0,1"/>
-                            <TextBlock Grid.Column="1" Grid.Row="1" FontSize="11" Text="Main storytelling section, moderate energy" Margin="0,1"/>
-                            <TextBlock Grid.Column="1" Grid.Row="2" FontSize="11" Text="Builds tension before the chorus" Margin="0,1"/>
-                            <TextBlock Grid.Column="1" Grid.Row="3" FontSize="11" Text="Emotional peak, highest energy" Margin="0,1"/>
-                            <TextBlock Grid.Column="1" Grid.Row="4" FontSize="11" Text="A shift — different melody, different feel" Margin="0,1"/>
-                            <TextBlock Grid.Column="1" Grid.Row="5" FontSize="11" Text="No vocals, just instruments" Margin="0,1"/>
-                            <TextBlock Grid.Column="1" Grid.Row="6" FontSize="11" Text="Winds down, often fades" Margin="0,1"/>
+                            <TextBlock Grid.Column="1" Grid.Row="0" FontSize="11" Text="{CommonControls:Localize LyricTagIntroMessage}" Margin="0,1"/>
+                            <TextBlock Grid.Column="1" Grid.Row="1" FontSize="11" Text="{CommonControls:Localize LyricTagVerseMessage}" Margin="0,1"/>
+                            <TextBlock Grid.Column="1" Grid.Row="2" FontSize="11" Text="{CommonControls:Localize LyricTagPreChorusMessage}" Margin="0,1"/>
+                            <TextBlock Grid.Column="1" Grid.Row="3" FontSize="11" Text="{CommonControls:Localize LyricTagChorusMessage}" Margin="0,1"/>
+                            <TextBlock Grid.Column="1" Grid.Row="4" FontSize="11" Text="{CommonControls:Localize LyricTagBridgeMessage}" Margin="0,1"/>
+                            <TextBlock Grid.Column="1" Grid.Row="5" FontSize="11" Text="{CommonControls:Localize LyricTagInstrumentalMessage}" Margin="0,1"/>
+                            <TextBlock Grid.Column="1" Grid.Row="6" FontSize="11" Text="{CommonControls:Localize LyricTagOutroMessage}" Margin="0,1"/>
                         </Grid>
                         <UniformGrid DockPanel.Dock="Top" Columns="3" Margin="0,12,0,0" Opacity=".8" Height="22">
                             <Button Content="{CommonControls:Localize LyricsSample}" Command="{Binding AppendLyricExampleCommand}" CommandParameter="Lyrics1" FontSize="11"/>
@@ -263,10 +263,10 @@
                     <StackPanel TextBlock.FontSize="11">
                         <TextBlock Text="{CommonControls:Localize ReferenceAudio}" Style="{StaticResource FieldTextBlockStyle}"/>
                         <StackPanel Opacity=".9">
-                            <TextBlock Text="Use an audio optional file as a template for the final output"/>
-                            <TextBlock Text="- Matches the tonal warmth and frequency balance"/>
-                            <TextBlock Text="- Replicates specific instrumental textures and grain"/>
-                            <TextBlock Text="- Captures the unique rhythmic and atmospheric vibe"/>
+                            <TextBlock Text="{CommonControls:Localize MusicReferenceTip}"/>
+                            <TextBlock Text="{CommonControls:Localize MusicReferenceTipTonal}"/>
+                            <TextBlock Text="{CommonControls:Localize MusicReferenceTipTexture}"/>
+                            <TextBlock Text="{CommonControls:Localize MusicReferenceTipVibe}"/>
                         </StackPanel>
                     </StackPanel>
 

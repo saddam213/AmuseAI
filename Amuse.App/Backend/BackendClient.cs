@@ -228,6 +228,13 @@ namespace Amuse.App.Runtime
                 options.Seed = options.Seed > 0 ? options.Seed : Random.Shared.Next();
                 options.NegativePrompt = options.GuidanceScale > 1f && string.IsNullOrEmpty(options.NegativePrompt) ? " " : options.NegativePrompt;
                 var generateOptions = GenerateVideoOptions(options, videoFileName);
+                foreach (var inputAudio in options.InputAudios)
+                {
+                    var sampleRate = DefaultOptions.SampleRate > 0 ? DefaultOptions.SampleRate : inputAudio.SampleRate;
+                    var channels = DefaultOptions.Channels > 0 ? DefaultOptions.Channels : inputAudio.Channels;
+                    generateOptions.InputAudios.Add(await inputAudio.GetAsync(sampleRate, channels));
+                }
+
                 var videoSequences = await PipelineClient.GenerateVideoAsync(generateOptions);
                 if (videoSequences.IsNullOrEmpty())
                 {

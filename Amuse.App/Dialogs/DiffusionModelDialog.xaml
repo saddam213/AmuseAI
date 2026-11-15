@@ -329,7 +329,7 @@
                                             </StackPanel>
 
                                             <StackPanel>
-                                                <TextBlock Text="BPM" Style="{StaticResource FieldTextBlockStyle}"/>
+                                                <TextBlock Text="{CommonControls:Localize BPM}" Style="{StaticResource FieldTextBlockStyle}"/>
                                                 <TextBox Text="{Binding DiffusionModel.DefaultOptions.BPM, UpdateSourceTrigger=PropertyChanged}"  />
                                             </StackPanel>
 
@@ -340,19 +340,19 @@
                                                 <TextBox Text="{Binding DiffusionModel.DefaultOptions.ChunkSize, UpdateSourceTrigger=PropertyChanged}"  />
                                             </StackPanel>
                                             <StackPanel Visibility="{Binding DiffusionModel.Pipeline, Converter={StaticResource EnumToVisibilityConverter}, ConverterParameter=WhisperPipeline}">
-                                                <TextBlock Text="Beams" Style="{StaticResource FieldTextBlockStyle}"/>
+                                                <TextBlock Text="{CommonControls:Localize Beams}" Style="{StaticResource FieldTextBlockStyle}"/>
                                                 <TextBox Text="{Binding DiffusionModel.DefaultOptions.Beams, UpdateSourceTrigger=PropertyChanged}"  />
                                             </StackPanel>
                                             <StackPanel Visibility="{Binding DiffusionModel.Pipeline, Converter={StaticResource EnumToVisibilityConverter}, ConverterParameter=WhisperPipeline}">
-                                                <TextBlock Text="TopK" Style="{StaticResource FieldTextBlockStyle}"/>
+                                                <TextBlock Text="{CommonControls:Localize TopK}" Style="{StaticResource FieldTextBlockStyle}"/>
                                                 <TextBox Text="{Binding DiffusionModel.DefaultOptions.TopK, UpdateSourceTrigger=PropertyChanged}"  />
                                             </StackPanel>
                                             <StackPanel Visibility="{Binding DiffusionModel.Pipeline, Converter={StaticResource EnumToVisibilityConverter}, ConverterParameter=WhisperPipeline}">
-                                                <TextBlock Text="TopP" Style="{StaticResource FieldTextBlockStyle}"/>
+                                                <TextBlock Text="{CommonControls:Localize TopP}" Style="{StaticResource FieldTextBlockStyle}"/>
                                                 <CommonControls:FloatBox FloatValue="{Binding DiffusionModel.DefaultOptions.TopP, UpdateSourceTrigger=PropertyChanged}"  />
                                             </StackPanel>
                                             <StackPanel Visibility="{Binding DiffusionModel.Pipeline, Converter={StaticResource EnumToVisibilityConverter}, ConverterParameter=WhisperPipeline}">
-                                                <TextBlock Text="Temperature" Style="{StaticResource FieldTextBlockStyle}"/>
+                                                <TextBlock Text="{CommonControls:Localize Temperature}" Style="{StaticResource FieldTextBlockStyle}"/>
                                                 <CommonControls:FloatBox FloatValue="{Binding DiffusionModel.DefaultOptions.Temperature, UpdateSourceTrigger=PropertyChanged}"  />
                                             </StackPanel>
                                             <StackPanel Visibility="{Binding DiffusionModel.Pipeline, Converter={StaticResource EnumToVisibilityConverter}, ConverterParameter=WhisperPipeline}">
@@ -394,27 +394,27 @@
                                                 <TextBox Text="{Binding DiffusionModel.DefaultOptions.ChunkSize, UpdateSourceTrigger=PropertyChanged}"  />
                                             </StackPanel>
                                             <StackPanel>
-                                                <TextBlock Text="Beams" Style="{StaticResource FieldTextBlockStyle}"/>
+                                                <TextBlock Text="{CommonControls:Localize Beams}" Style="{StaticResource FieldTextBlockStyle}"/>
                                                 <TextBox Text="{Binding DiffusionModel.DefaultOptions.Beams, UpdateSourceTrigger=PropertyChanged}"  />
                                             </StackPanel>
                                             <StackPanel>
-                                                <TextBlock Text="TopK" Style="{StaticResource FieldTextBlockStyle}"/>
+                                                <TextBlock Text="{CommonControls:Localize TopK}" Style="{StaticResource FieldTextBlockStyle}"/>
                                                 <TextBox Text="{Binding DiffusionModel.DefaultOptions.TopK, UpdateSourceTrigger=PropertyChanged}"  />
                                             </StackPanel>
                                             <StackPanel>
-                                                <TextBlock Text="TopP" Style="{StaticResource FieldTextBlockStyle}"/>
+                                                <TextBlock Text="{CommonControls:Localize TopP}" Style="{StaticResource FieldTextBlockStyle}"/>
                                                 <CommonControls:FloatBox FloatValue="{Binding DiffusionModel.DefaultOptions.TopP, UpdateSourceTrigger=PropertyChanged}"  />
                                             </StackPanel>
                                             <StackPanel>
-                                                <TextBlock Text="TopH" Style="{StaticResource FieldTextBlockStyle}"/>
+                                                <TextBlock Text="{CommonControls:Localize TopH}" Style="{StaticResource FieldTextBlockStyle}"/>
                                                 <CommonControls:FloatBox FloatValue="{Binding DiffusionModel.DefaultOptions.TopH, UpdateSourceTrigger=PropertyChanged}"  />
                                             </StackPanel>
                                             <StackPanel>
-                                                <TextBlock Text="TypicalP" Style="{StaticResource FieldTextBlockStyle}"/>
+                                                <TextBlock Text="{CommonControls:Localize TypicalP}" Style="{StaticResource FieldTextBlockStyle}"/>
                                                 <CommonControls:FloatBox FloatValue="{Binding DiffusionModel.DefaultOptions.TypicalP, UpdateSourceTrigger=PropertyChanged}"  />
                                             </StackPanel>
                                             <StackPanel>
-                                                <TextBlock Text="Temperature" Style="{StaticResource FieldTextBlockStyle}"/>
+                                                <TextBlock Text="{CommonControls:Localize Temperature}" Style="{StaticResource FieldTextBlockStyle}"/>
                                                 <CommonControls:FloatBox FloatValue="{Binding DiffusionModel.DefaultOptions.Temperature, UpdateSourceTrigger=PropertyChanged}"  />
                                             </StackPanel>
                                             <StackPanel>
@@ -497,31 +497,31 @@
                     <Grid Margin="4">
                         <StackPanel VerticalAlignment="Top"  Visibility="{Binding DiffusionModel.MediaType, Converter={StaticResource EnumToVisibilityConverter}, ConverterParameter=Image}">
                             <UniformGrid Columns="3" >
-                                <CheckBox x:Name="CheckBoxTextToImage" Content="TextToImage" />
-                                <CheckBox x:Name="CheckBoxImageToImage" Content="ImageToImage" />
-                                <CheckBox x:Name="CheckBoxImageEdit" Content="ImageEdit" />
-                                <CheckBox x:Name="CheckBoxImageInpaint" Content="ImageInpaint" />
-                                <CheckBox x:Name="CheckBoxImageControlNet" Content="Image (ControlNet)" />
-                                <CheckBox x:Name="CheckBoxImageToImageControlNet" Content="ImageToImage (ControlNet)" />
+                                <CheckBox x:Name="CheckBoxTextToImage" Content="{CommonControls:Localize Function_TextToImage}" />
+                                <CheckBox x:Name="CheckBoxImageToImage" Content="{CommonControls:Localize Function_ImageToImage}" />
+                                <CheckBox x:Name="CheckBoxImageEdit" Content="{CommonControls:Localize Function_ImageEdit}" />
+                                <CheckBox x:Name="CheckBoxImageInpaint" Content="{CommonControls:Localize Function_ImageInpaint}" />
+                                <CheckBox x:Name="CheckBoxImageControlNet" Content="{CommonControls:Localize Function_ImageControlNet}" />
+                                <CheckBox x:Name="CheckBoxImageToImageControlNet" Content="{CommonControls:Localize Function_ImageToImageControlNet}" />
                             </UniformGrid>
                         </StackPanel>
                         <StackPanel VerticalAlignment="Top"  Visibility="{Binding DiffusionModel.MediaType, Converter={StaticResource EnumToVisibilityConverter}, ConverterParameter=Video}">
                             <UniformGrid Columns="3" >
-                                <CheckBox x:Name="CheckBoxTextToVideo" Content="TextToVideo" />
-                                <CheckBox x:Name="CheckBoxImageToVideo" Content="ImageToVideo" />
-                                <CheckBox x:Name="CheckBoxVideoToVideo" Content="VideoToVideo" />
+                                <CheckBox x:Name="CheckBoxTextToVideo" Content="{CommonControls:Localize Function_TextToVideo}" />
+                                <CheckBox x:Name="CheckBoxImageToVideo" Content="{CommonControls:Localize Function_ImageToVideo}" />
+                                <CheckBox x:Name="CheckBoxVideoToVideo" Content="{CommonControls:Localize Function_VideoToVideo}" />
                             </UniformGrid>
                         </StackPanel>
                         <StackPanel VerticalAlignment="Top"  Visibility="{Binding DiffusionModel.MediaType, Converter={StaticResource EnumToVisibilityConverter}, ConverterParameter=Audio}">
                             <UniformGrid Columns="3" >
-                                <CheckBox x:Name="CheckBoxTextToAudio" Content="TextToAudio" />
-                                <CheckBox x:Name="CheckBoxAudioToText" Content="AudioToText" />
+                                <CheckBox x:Name="CheckBoxTextToAudio" Content="{CommonControls:Localize Function_TextToAudio}" />
+                                <CheckBox x:Name="CheckBoxAudioToText" Content="{CommonControls:Localize Function_AudioToText}" />
                             </UniformGrid>
                         </StackPanel>
                         <StackPanel VerticalAlignment="Top"  Visibility="{Binding DiffusionModel.MediaType, Converter={StaticResource EnumToVisibilityConverter}, ConverterParameter=Text}">
                             <UniformGrid Columns="3" >
-                                <CheckBox x:Name="CheckBoxTextToText" Content="TextToText" />
-                                <CheckBox x:Name="CheckBoxImageToText" Content="ImageToText" />
+                                <CheckBox x:Name="CheckBoxTextToText" Content="{CommonControls:Localize Function_TextToText}" />
+                                <CheckBox x:Name="CheckBoxImageToText" Content="{CommonControls:Localize Function_ImageToText}" />
                             </UniformGrid>
                         </StackPanel>
                     </Grid>
@@ -532,32 +532,32 @@
                     <Grid Margin="4">
                         <StackPanel VerticalAlignment="Top"  Visibility="{Binding DiffusionModel.MediaType, Converter={StaticResource EnumToVisibilityConverter}, ConverterParameter=Image}">
                             <UniformGrid Columns="3" >
-                                <CheckBox x:Name="CheckBoxViewTextToImage" Content="TextToImage" />
-                                <CheckBox x:Name="CheckBoxViewImageToImage" Content="ImageToImage" />
-                                <CheckBox x:Name="CheckBoxViewImageEdit" Content="ImageEdit" />
-                                <CheckBox x:Name="CheckBoxViewImageInpaint" Content="ImageInpaint" />
-                                <CheckBox x:Name="CheckBoxViewPaintToImage" Content="PaintToImage" />
-                                <CheckBox x:Name="CheckBoxViewFrameToFrame" Content="FrameToFrame" />
+                                <CheckBox x:Name="CheckBoxViewTextToImage" Content="{CommonControls:Localize Function_TextToImage}" />
+                                <CheckBox x:Name="CheckBoxViewImageToImage" Content="{CommonControls:Localize Function_ImageToImage}" />
+                                <CheckBox x:Name="CheckBoxViewImageEdit" Content="{CommonControls:Localize Function_ImageEdit}" />
+                                <CheckBox x:Name="CheckBoxViewImageInpaint" Content="{CommonControls:Localize Function_ImageInpaint}" />
+                                <CheckBox x:Name="CheckBoxViewPaintToImage" Content="{CommonControls:Localize Function_PaintToImage}" />
+                                <CheckBox x:Name="CheckBoxViewFrameToFrame" Content="{CommonControls:Localize Function_FrameToFrame}" />
                             </UniformGrid>
                         </StackPanel>
                         <StackPanel VerticalAlignment="Top"  Visibility="{Binding DiffusionModel.MediaType, Converter={StaticResource EnumToVisibilityConverter}, ConverterParameter=Video}">
                             <UniformGrid Columns="3" >
-                                <CheckBox x:Name="CheckBoxViewTextToVideo" Content="TextToVideo" />
-                                <CheckBox x:Name="CheckBoxViewImageToVideo" Content="ImageToVideo" />
-                                <CheckBox x:Name="CheckBoxViewVideoToVideo" Content="VideoToVideo" />
+                                <CheckBox x:Name="CheckBoxViewTextToVideo" Content="{CommonControls:Localize Function_TextToVideo}" />
+                                <CheckBox x:Name="CheckBoxViewImageToVideo" Content="{CommonControls:Localize Function_ImageToVideo}" />
+                                <CheckBox x:Name="CheckBoxViewVideoToVideo" Content="{CommonControls:Localize Function_VideoToVideo}" />
                             </UniformGrid>
                         </StackPanel>
                         <StackPanel VerticalAlignment="Top"  Visibility="{Binding DiffusionModel.MediaType, Converter={StaticResource EnumToVisibilityConverter}, ConverterParameter=Audio}">
                             <UniformGrid Columns="3" >
-                                <CheckBox x:Name="CheckBoxViewTextToMusic" Content="TextToMusic" />
-                                <CheckBox x:Name="CheckBoxViewTextToAudio" Content="TextToAudio" />
+                                <CheckBox x:Name="CheckBoxViewTextToMusic" Content="{CommonControls:Localize Function_TextToMusic}" />
+                                <CheckBox x:Name="CheckBoxViewTextToAudio" Content="{CommonControls:Localize Function_TextToAudio}" />
                             </UniformGrid>
                         </StackPanel>
                         <StackPanel VerticalAlignment="Top"  Visibility="{Binding DiffusionModel.MediaType, Converter={StaticResource EnumToVisibilityConverter}, ConverterParameter=Text}">
                             <UniformGrid Columns="3" >
-                                <CheckBox x:Name="CheckBoxViewImageToText" Content="ImageToText" />
-                                <CheckBox x:Name="CheckBoxViewTextInstruct" Content="TextInstruct" />
-                                <CheckBox x:Name="CheckBoxViewTextConverse" Content="TextConverse" />
+                                <CheckBox x:Name="CheckBoxViewImageToText" Content="{CommonControls:Localize Function_ImageToText}" />
+                                <CheckBox x:Name="CheckBoxViewTextInstruct" Content="{CommonControls:Localize Function_TextInstruct}" />
+                                <CheckBox x:Name="CheckBoxViewTextConverse" Content="{CommonControls:Localize Function_TextConverse}" />
                             </UniformGrid>
                         </StackPanel>
                     </Grid>

@@ -204,6 +204,9 @@ namespace Amuse.Common
         [Display(Name = "VideoToVideo", ShortName = "V2V", Description = "Translates a source video into a different style or texture while tracking the underlying motion structures.")]
         VideoToVideo = 302,
 
+        [Display(Name = "MediaToVideo", ShortName = "M2V", Description = "Generates a video guided by multiple reference images, videos and audio clips.")]
+        MediaToVideo = 303,
+
 
         // Audio
         [Display(Name = "TextToAudio", ShortName = "T2A", Description = "Converts written text into spoken voice synthesis, realistic sound effects, or continuous music tracks.")]

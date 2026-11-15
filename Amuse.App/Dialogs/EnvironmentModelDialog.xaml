@@ -21,7 +21,7 @@
                 <TextBox Text="{Binding EnvironmentModel.Name, UpdateSourceTrigger=PropertyChanged}" />
             </StackPanel>
             <StackPanel Margin="2,0,2,0" IsEnabled="{Binding IsFixedEnvironment, Converter={StaticResource InverseBoolConverter}}">
-                <TextBlock Text="Environment" Style="{StaticResource FieldTextBlockStyle}"/>
+                <TextBlock Text="{CommonControls:Localize Environment}" Style="{StaticResource FieldTextBlockStyle}"/>
                 <TextBox Text="{Binding EnvironmentModel.Environment, UpdateSourceTrigger=PropertyChanged}" />
             </StackPanel>
             <StackPanel Margin="0,0,2,0" IsEnabled="{Binding IsFixedEnvironment, Converter={StaticResource InverseBoolConverter}}" Visibility="{Binding IsCreate, Converter={StaticResource BooleanToVisibilityConverter}}">

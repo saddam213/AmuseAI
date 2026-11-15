@@ -179,7 +179,7 @@
                                 AcceptsReturn="True" 
                                 TextWrapping="Wrap" 
                                 PreviewKeyDown="OnSourceTextKeyDown"
-                                Placeholder="Please ask a question..." 
+                                Placeholder="{CommonControls:Localize AskQuestionPlaceholder}" 
                                 VerticalScrollBarVisibility="Auto"
                                 Visibility="{Binding IsAutomating, Converter={StaticResource InverseBooleanToVisibilityConverter}}"/>
                             <TextBox 

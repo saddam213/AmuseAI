@@ -1,19 +1,20 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using Amuse.App.Resources;
+using System.ComponentModel.DataAnnotations;
 
 namespace Amuse.App.Common
 {
     public enum ModelSourceType
     {
-        [Display(Name = "Local File", Description = "Diffusion Unet or Transformer file (Default Components)")]
+        [Display(Name = "ModelSourceType0", Description = "ModelSourceType0_Description", ResourceType = typeof(AppEnums))]
         LocalFile = 0,
 
-        [Display(Name = "Local Folder", Description = "Full checkpoint directory containing all components (Diffusers Format)")]
+        [Display(Name = "ModelSourceType1", Description = "ModelSourceType1_Description", ResourceType = typeof(AppEnums))]
         LocalFolder = 1,
 
-        [Display(Name = "Local Checkpoint", Description = "Single checkpoint file containing all components (safetensors or gguf)")]
+        [Display(Name = "ModelSourceType2", Description = "ModelSourceType2_Description", ResourceType = typeof(AppEnums))]
         LocalCheckpoint = 2,
 
-        [Display(Name = "Custom Checkpoint", Description = "Configure the model components manually")]
-        Checkpoint = 3,
+        [Display(Name = "ModelSourceType3", Description = "ModelSourceType3_Description", ResourceType = typeof(AppEnums))]
+        Checkpoint = 3
     }
 }

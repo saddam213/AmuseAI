@@ -1,34 +1,35 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using Amuse.App.Resources;
+using System.ComponentModel.DataAnnotations;
 
 namespace Amuse.App.Common
 {
     public enum MemoryMode
     {
-        [Display(Description = "Automatically selects the best strategy.")]
+        [Display(Name = "MemoryMode0", Description = "MemoryMode0_Description", ResourceType = typeof(AppEnums))]
         Auto = 0,
 
-        [Display(Description = "Loads model weights across GPUs and CPU.")]
+        [Display(Name = "MemoryMode1", Description = "MemoryMode1_Description", ResourceType = typeof(AppEnums))]
         Balanced = 1,
 
-        [Display(Description = "Loads tensor weights to GPU only when needed.")]
+        [Display(Name = "MemoryMode2", Description = "MemoryMode2_Description", ResourceType = typeof(AppEnums))]
         Low = 2,
 
-        [Display(Description = "Loads model weights to GPU only when needed.")]
+        [Display(Name = "MemoryMode3", Description = "MemoryMode3_Description", ResourceType = typeof(AppEnums))]
         Medium = 3,
 
-        [Display(Description = "Loads all weights to GPU for peak performance.")]
+        [Display(Name = "MemoryMode4", Description = "MemoryMode4_Description", ResourceType = typeof(AppEnums))]
         High = 4
     }
 
     public enum QualityMode
     {
-        [Display(Description = "Uses 4-bit quantization (int4). Maximum memory savings with a noticeable loss in fine detail and texture clarity.")]
+        [Display(Name = "QualityMode0", Description = "QualityMode0_Description", ResourceType = typeof(AppEnums))]
         Draft = 0,
 
-        [Display(Description = "Uses 8-bit quantization (float8). High visual fidelity with significant memory optimization; indistinguishable from high for most users.")]
+        [Display(Name = "QualityMode1", Description = "QualityMode1_Description", ResourceType = typeof(AppEnums))]
         Standard = 1,
 
-        [Display(Description = "Uses 16-bit precision (bfloat16). Original model weights with zero quality loss; requires the most VRAM for maximum accuracy.")]
-        Production = 2,
+        [Display(Name = "QualityMode2", Description = "QualityMode2_Description", ResourceType = typeof(AppEnums))]
+        Production = 2
     }
 }

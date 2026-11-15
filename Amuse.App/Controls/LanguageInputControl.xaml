@@ -75,7 +75,7 @@
                         </UniformGrid>
 
                         <UniformGrid Columns="2" Margin="-1,8,0,4">
-                            <CheckBox Content="Tool Calls Enabled" IsChecked="{Binding Options.IsToolCallsEnabled}" FontStyle="Italic" FontSize="11" Opacity=".9" Command="{Binding ToolEnableCommand}" CommandParameter="{StaticResource True}" IsEnabled="{Binding Pipeline.LanguageModel.DefaultOptions.IsToolCallsSupported}"/>
+                            <CheckBox Content="{CommonControls:Localize ToolCallsEnabled}" IsChecked="{Binding Options.IsToolCallsEnabled}" FontStyle="Italic" FontSize="11" Opacity=".9" Command="{Binding ToolEnableCommand}" CommandParameter="{StaticResource True}" IsEnabled="{Binding Pipeline.LanguageModel.DefaultOptions.IsToolCallsSupported}"/>
                             <CheckBox Content="{CommonControls:Localize ThinkingEnabled}" IsChecked="{Binding Options.IsThinkingEnabled}" FontStyle="Italic" FontSize="11" Opacity=".9"/>
 
                         </UniformGrid>
@@ -164,12 +164,12 @@
                 <DockPanel Margin="0,4,0,8">
 
                     <UniformGrid DockPanel.Dock="Top" Columns="2" Margin="0,4,0,0">
-                        <CommonControls:SliderControl Text="Beams" Value="{Binding Options.Beams}" Minimum="1" Maximum="20" TickFrequency="1" />
-                        <CommonControls:SliderControl Text="Temperature" Value="{Binding Options.Temperature}" Minimum="0.1" Maximum="5" TickFrequency="0.01" ValueFormat="N2"/>
-                        <CommonControls:SliderControl Text="TopK" Value="{Binding Options.TopK}" Minimum="1" Maximum="100" TickFrequency="1" />
-                        <CommonControls:SliderControl Text="TopP" Value="{Binding Options.TopP}" Minimum="0.01" Maximum="1" TickFrequency="0.01" ValueFormat="N2"/>
-                        <CommonControls:SliderControl Text="TopH" Value="{Binding Options.TopH}" Minimum="0.01" Maximum="1" TickFrequency="0.01" ValueFormat="N2"/>
-                        <CommonControls:SliderControl Text="TypicalP" Value="{Binding Options.TypicalP}" Minimum="0.01" Maximum="1" TickFrequency="0.01" ValueFormat="N2"/>
+                        <CommonControls:SliderControl Text="{CommonControls:Localize Beams}" Value="{Binding Options.Beams}" Minimum="1" Maximum="20" TickFrequency="1" />
+                        <CommonControls:SliderControl Text="{CommonControls:Localize Temperature}" Value="{Binding Options.Temperature}" Minimum="0.1" Maximum="5" TickFrequency="0.01" ValueFormat="N2"/>
+                        <CommonControls:SliderControl Text="{CommonControls:Localize TopK}" Value="{Binding Options.TopK}" Minimum="1" Maximum="100" TickFrequency="1" />
+                        <CommonControls:SliderControl Text="{CommonControls:Localize TopP}" Value="{Binding Options.TopP}" Minimum="0.01" Maximum="1" TickFrequency="0.01" ValueFormat="N2"/>
+                        <CommonControls:SliderControl Text="{CommonControls:Localize TopH}" Value="{Binding Options.TopH}" Minimum="0.01" Maximum="1" TickFrequency="0.01" ValueFormat="N2"/>
+                        <CommonControls:SliderControl Text="{CommonControls:Localize TypicalP}" Value="{Binding Options.TypicalP}" Minimum="0.01" Maximum="1" TickFrequency="0.01" ValueFormat="N2"/>
                         <CommonControls:SliderControl Text="{CommonControls:Localize LengthPenalty}" Value="{Binding Options.LengthPenalty}" Minimum="-5" Maximum="5" TickFrequency="0.05" ValueFormat="N2" />
                         <CommonControls:SliderControl Text="{CommonControls:Localize RepetitionPenalty}" Value="{Binding Options.RepetitionPenalty}" Minimum="0.05" Maximum="5" TickFrequency="0.05" ValueFormat="N2" />
                         <CommonControls:SliderControl Text="{CommonControls:Localize NoRepeatNgrams}" Value="{Binding Options.NoRepeatNgramSize}" Minimum="0" Maximum="10" TickFrequency="1" ValueFormat="N0" />
@@ -186,7 +186,7 @@
                     <Grid DockPanel.Dock="Bottom" Visibility="{Binding Options.Beams, Converter={StaticResource GreaterThanToVisibilityConverter}, ConverterParameter=1}">
                         <TextBlock FontSize="11" Foreground="{StaticResource WarningColour}" TextAlignment="Center" Opacity=".8" Margin="0,10,0,0" >
                             <Run Text="{CommonControls:Localize Note, Append=:}" FontWeight="SemiBold" />
-                            <Run Text="Beam results won't be displayed until all beams have completed"/>
+                            <Run Text="{CommonControls:Localize BeamResultsMessage}"/>
                         </TextBlock>
                     </Grid>
 

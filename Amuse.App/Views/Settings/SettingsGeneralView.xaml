@@ -123,11 +123,11 @@
                             <UniformGrid Columns="1" >
                                 <StackPanel Margin="0,4,0,0">
                                     <CheckBox Content="{CommonControls:Localize PipelineDebug}" IsChecked="{Binding Settings.IsServerDebugEnabled}" />
-                                    <TextBlock Text="Show the pipeline status in a seperate console window" FontSize="11" FontStyle="Italic" Opacity=".6" Margin="22,0,0,0"/>
+                                    <TextBlock Text="{CommonControls:Localize PipelineDebugMessage}" FontSize="11" FontStyle="Italic" Opacity=".6" Margin="22,0,0,0"/>
                                 </StackPanel>
                                 <StackPanel Margin="0,4,0,0">
                                     <CheckBox Content="{CommonControls:Localize DiffusionStepPreview}" IsChecked="{Binding Settings.IsDiffusionImagePreviewEnabled}" />
-                                    <TextBlock Text="Enable step preview images" FontSize="11" FontStyle="Italic" Opacity=".6" Margin="22,0,0,0"/>
+                                    <TextBlock Text="{CommonControls:Localize DiffusionStepPreviewMessage}" FontSize="11" FontStyle="Italic" Opacity=".6" Margin="22,0,0,0"/>
                                 </StackPanel>
                             </UniformGrid>
                         </StackPanel>
@@ -145,7 +145,7 @@
                                 <StackPanel  Margin="6,0">
                                     <TextBlock Style="{StaticResource FieldTextBlockStyle}">
                                         <Run Text="{Binding Name}"/>
-                                        <Run Text="Access Token"/>
+                                        <Run Text="{CommonControls:Localize AccessToken}"/>
                                     </TextBlock>
                                     <Grid>
                                         <TextBox x:Name="TextBoxControl" Text="{Binding Token}" />

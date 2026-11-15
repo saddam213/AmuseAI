@@ -134,6 +134,8 @@ namespace Amuse.App.Common
                     return [AutomationType.Seed, AutomationType.PromptLines, AutomationType.PromptFiles];
                 case View.FrameToFrame:
                     return [AutomationType.Seed, AutomationType.PromptLines, AutomationType.PromptFiles];
+                case View.MediaToVideo:
+                    return [AutomationType.Seed, AutomationType.PromptLines, AutomationType.PromptFiles];
 
                 case View.ImageUpscale:
                     return [AutomationType.InputFiles];

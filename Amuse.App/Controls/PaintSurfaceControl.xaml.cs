@@ -1,7 +1,9 @@
 ﻿using Amuse.App.Common;
+using Amuse.App.Resources;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Windows;
@@ -690,9 +692,16 @@ namespace Amuse.App.Controls
 
     public enum PaintDrawingTool
     {
+        [Display(Name = "PaintDrawingTool0", ResourceType = typeof(AppEnums))]
         RoundBrush = 0,
+
+        [Display(Name = "PaintDrawingTool1", ResourceType = typeof(AppEnums))]
         SquareBrush = 1,
+
+        [Display(Name = "PaintDrawingTool2", ResourceType = typeof(AppEnums))]
         Highlight = 2,
-        Eraser = 3,
+
+        [Display(Name = "PaintDrawingTool3", ResourceType = typeof(AppEnums))]
+        Eraser = 3
     }
 }

@@ -11,7 +11,6 @@ using System.IO;
 using System.Net.Http.Json;
 using System.Reflection;
 using System.Runtime.InteropServices;
-using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
@@ -34,10 +33,13 @@ namespace Amuse.App
         public static readonly string AppVersionTag = GetAppVersionTag();           // v0.3.0
         public static readonly string AppVersionDisplay = GetAppVersionDisplay();   // v0.3.0-dev
         public static readonly string AppDisplayName = GetAppDisplayName();         // Amuse v0.3.0-dev
+        private static readonly TimeSpan _shutdownTimeout = TimeSpan.FromSeconds(30);
         private readonly CancellationTokenSource _cancellationTokenSource;
         private readonly Splashscreen _splashscreen = new();
         private static IHost _appHost;
         private static Mutex _appMutex;
+        private static int _isShutdown;
+
         private static string _directoryBase;
         private static string _directoryData;
         private static string _directoryLogs;
@@ -190,6 +192,10 @@ namespace Amuse.App
         /// </summary>
         private async Task AppShutdown()
         {
+            // OnSessionEnding and OnExit can both run, only shut down once
+            if (Interlocked.Exchange(ref _isShutdown, 1) == 1)
+                return;
+
             Log.Logger.Information($"[AppShutdown] Shutting down application...");
             using (_appHost)
             {
@@ -198,14 +204,75 @@ namespace Amuse.App
                 {
                     Log.Logger.Information($"[AppShutdown] Failed to delete Temp Directory");
                 }
-                await _cancellationTokenSource.CancelAsync();
-                await _settings.SaveAsync();
-                await _appHost.StopAsync();
+
+                // Run each step even if an earlier one fails, so settings are always saved
+                await RunShutdownStepAsync("Cancel", () => _cancellationTokenSource.CancelAsync());
+                await RunShutdownStepAsync("SaveSettings", () => _settings.SaveAsync());
+                await RunShutdownStepAsync("StopHost", () => _appHost.StopAsync());
                 DeregisterExceptionHandlers();
                 _appMutex.WaitOne();
                 _appMutex.ReleaseMutex();
                 _appMutex.Dispose();
                 FileQueue.Shutdown();
+
+                // Log before _appHost is disposed, it owns and disposes the Serilog logger
+                Log.Logger.Information($"[AppShutdown] Application shutdown complete.");
+            }
+        }
+
+
+        /// <summary>
+        /// Runs a shutdown step, logging and swallowing any exception.
+        /// </summary>
+        /// <param name="name">The step name.</param>
+        /// <param name="step">The step.</param>
+        private static async Task RunShutdownStepAsync(string name, Func<Task> step)
+        {
+            try
+            {
+                await step();
+            }
+            catch (Exception ex)
+            {
+                Log.Logger.Error(ex, "[AppShutdown] {Step} failed.", name);
+            }
+        }
+
+
+        /// <summary>
+        /// Runs AppShutdown to completion before returning.
+        /// WPF does not await async void overrides, so without this the process can exit mid-shutdown.
+        /// Shutdown runs on the UI thread (parts of it are thread-affine), so pump the dispatcher
+        /// while waiting rather than blocking it, otherwise anything that needs the UI thread deadlocks.
+        /// </summary>
+        private void AppShutdownBlocking()
+        {
+            var shutdownTask = AppShutdown();
+            if (!shutdownTask.IsCompleted)
+            {
+                var frame = new DispatcherFrame();
+                var timeoutTask = Task.WhenAny(shutdownTask, Task.Delay(_shutdownTimeout));
+                timeoutTask.ContinueWith(_ => frame.Continue = false, TaskScheduler.Default);
+                try
+                {
+                    Dispatcher.PushFrame(frame);
+                }
+                catch (InvalidOperationException ex)
+                {
+                    // Dispatcher processing suspended, cannot wait for shutdown
+                    Log.Logger.Error(ex, "[AppShutdown] Unable to wait for shutdown to complete.");
+                }
+            }
+
+            if (!shutdownTask.IsCompleted)
+            {
+                Log.Logger.Warning("[AppShutdown] Shutdown did not complete within {Timeout}, exiting anyway.", _shutdownTimeout);
+                return;
+            }
+
+            if (shutdownTask.IsFaulted)
+            {
+                Log.Logger.Error(shutdownTask.Exception, "[AppShutdown] An exception occurred during shutdown.");
             }
         }
 
@@ -225,9 +292,9 @@ namespace Amuse.App
         /// Raises the <see cref="E:System.Windows.Application.SessionEnding" /> event.
         /// </summary>
         /// <param name="e">A <see cref="T:System.Windows.SessionEndingCancelEventArgs" /> that contains the event data.</param>
-        protected override async void OnSessionEnding(SessionEndingCancelEventArgs e)
+        protected override void OnSessionEnding(SessionEndingCancelEventArgs e)
         {
-            await AppShutdown();
+            AppShutdownBlocking();
             base.OnSessionEnding(e);
         }
 
@@ -236,9 +303,9 @@ namespace Amuse.App
         /// Raises the <see cref="E:System.Windows.Application.Exit" /> event.
         /// </summary>
         /// <param name="e">An <see cref="T:System.Windows.ExitEventArgs" /> that contains the event data.</param>
-        protected async override void OnExit(ExitEventArgs e)
+        protected override void OnExit(ExitEventArgs e)
         {
-            await AppShutdown();
+            AppShutdownBlocking();
             base.OnExit(e);
         }
 
@@ -270,12 +337,12 @@ namespace Amuse.App
         /// </summary>
         /// <param name="sender">The sender.</param>
         /// <param name="e">The <see cref="DispatcherUnhandledExceptionEventArgs"/> instance containing the event data.</param>
-        private async void OnDispatcherException(object sender, DispatcherUnhandledExceptionEventArgs e)
+        private void OnDispatcherException(object sender, DispatcherUnhandledExceptionEventArgs e)
         {
-            await ShowExceptionMessage(e.Exception);
-
             // Prevent application from crashing
+            // Must be set before the handler returns, WPF reads it synchronously
             e.Handled = true;
+            ShowExceptionMessage(e.Exception);
         }
 
 
@@ -284,12 +351,13 @@ namespace Amuse.App
         /// </summary>
         /// <param name="sender">The sender.</param>
         /// <param name="e">The <see cref="UnhandledExceptionEventArgs"/> instance containing the event data.</param>
-        private async void OnAppDomainException(object sender, UnhandledExceptionEventArgs e)
+        private void OnAppDomainException(object sender, UnhandledExceptionEventArgs e)
         {
-            if (e.ExceptionObject is Exception ex)
-            {
-                await ShowExceptionMessage(ex);
-            }
+            // The process is terminating and this cannot be prevented, a dialog would never be shown
+            // Log and flush so the cause is not lost
+            Log.Logger.Fatal(e.ExceptionObject as Exception, "[Application] [Exception] An unhandled exception occurred, IsTerminating: {IsTerminating}", e.IsTerminating);
+            if (e.IsTerminating)
+                Log.CloseAndFlush();
         }
 
 
@@ -298,12 +366,11 @@ namespace Amuse.App
         /// </summary>
         /// <param name="sender">The sender.</param>
         /// <param name="e">The <see cref="UnobservedTaskExceptionEventArgs"/> instance containing the event data.</param>
-        private async void OnTaskSchedulerException(object sender, UnobservedTaskExceptionEventArgs e)
+        private void OnTaskSchedulerException(object sender, UnobservedTaskExceptionEventArgs e)
         {
-            await ShowExceptionMessage(e.Exception);
-
             // Prevent application from crashing
             e.SetObserved();
+            ShowExceptionMessage(e.Exception);
         }
 
 
@@ -311,10 +378,26 @@ namespace Amuse.App
         /// Shows the exception message.
         /// </summary>
         /// <param name="ex">The ex.</param>
-        private static async Task ShowExceptionMessage(Exception ex)
+        private static void ShowExceptionMessage(Exception ex)
         {
             Log.Logger.Error(ex, "[Application] [Exception] An unexpected exception occurred.");
-            await App.Current.Dispatcher.InvokeAsync(() => DialogService.ShowErrorAsync(AppErrors.UnexpectedErrorTitle, $"{AppErrors.UnexpectedError}:\n{ex.Message}"));
+
+            // Queue the dialog, never block the caller (may be the UI or finalizer thread)
+            var dispatcher = Current?.Dispatcher;
+            if (dispatcher is null || dispatcher.HasShutdownStarted)
+                return;
+
+            _ = dispatcher.InvokeAsync(async () =>
+            {
+                try
+                {
+                    await DialogService.ShowErrorAsync(AppErrors.UnexpectedErrorTitle, $"{AppErrors.UnexpectedError}:\n{ex.Message}");
+                }
+                catch (Exception dialogEx)
+                {
+                    Log.Logger.Error(dialogEx, "[Application] [Exception] Failed to show exception dialog.");
+                }
+            });
         }
 
 

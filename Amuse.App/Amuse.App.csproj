@@ -94,6 +94,11 @@
       <AutoGen>True</AutoGen>
       <DependentUpon>AppDefault.resx</DependentUpon>
     </Compile>
+    <Compile Update="Resources\AppEnums.Designer.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>AppEnums.resx</DependentUpon>
+    </Compile>
     <Compile Update="Resources\AppErrors.Designer.cs">
       <DesignTime>True</DesignTime>
       <AutoGen>True</AutoGen>
@@ -109,6 +114,10 @@
     <EmbeddedResource Update="Resources\AppDefault.resx">
       <Generator>PublicResXFileCodeGenerator</Generator>
       <LastGenOutput>AppDefault.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Update="Resources\AppEnums.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>AppEnums.Designer.cs</LastGenOutput>
     </EmbeddedResource>
     <EmbeddedResource Update="Resources\AppErrors.resx">
       <Generator>PublicResXFileCodeGenerator</Generator>

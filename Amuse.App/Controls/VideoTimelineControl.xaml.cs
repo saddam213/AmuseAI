@@ -1,7 +1,9 @@
-﻿using Amuse.App.Services;
+﻿using Amuse.App.Resources;
+using Amuse.App.Services;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Threading;
@@ -1281,9 +1283,16 @@ namespace Amuse.App.Controls
 
     public enum TimelineSegmentType
     {
+        [Display(Name = "TimelineSegmentType0", ResourceType = typeof(AppEnums))]
         Video = 0,
+
+        [Display(Name = "TimelineSegmentType1", ResourceType = typeof(AppEnums))]
         Image = 1,
+
+        [Display(Name = "TimelineSegmentType2", ResourceType = typeof(AppEnums))]
         Audio = 2,
+
+        [Display(Name = "TimelineSegmentType3", ResourceType = typeof(AppEnums))]
         Overlay = 3
     }
 

@@ -1,25 +1,26 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using Amuse.App.Resources;
+using System.ComponentModel.DataAnnotations;
 
 namespace Amuse.App.Common
 {
     public enum ModelStatusType
     {
-        [Display(Name = "Available")]
+        [Display(Name = "ModelStatusType0", ResourceType = typeof(AppEnums))]
         Available = 0,
 
-        [Display(Name = "Unknown")]
+        [Display(Name = "ModelStatusType1", ResourceType = typeof(AppEnums))]
         Unknown = 1,
 
-        [Display(Name = "Downloading")]
+        [Display(Name = "ModelStatusType2", ResourceType = typeof(AppEnums))]
         Downloading = 11,
 
-        [Display(Name = "Download Queued")]
+        [Display(Name = "ModelStatusType3", ResourceType = typeof(AppEnums))]
         DownloadQueue = 12,
 
-        [Display(Name = "Download Failed")]
+        [Display(Name = "ModelStatusType4", ResourceType = typeof(AppEnums))]
         DownloadFailed = 13,
 
-        [Display(Name = "Installed")]
-        Installed = 20,
+        [Display(Name = "ModelStatusType5", ResourceType = typeof(AppEnums))]
+        Installed = 20
     }
 }

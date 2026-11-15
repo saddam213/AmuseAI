@@ -12,7 +12,7 @@
             <TabItem Visibility="{Binding Checkpoint.Compute, Converter={StaticResource NullVisibilityConverter}}">
                 <TabItem.Header>
                     <StackPanel Orientation="Horizontal" Margin="3">
-                        <TextBlock Text="Compute" />
+                        <TextBlock Text="{CommonControls:Localize Compute}" />
                     </StackPanel>
                 </TabItem.Header>
                 <Border BorderThickness="1" BorderBrush="{StaticResource ContainerBorder}" Padding="4">
@@ -24,7 +24,7 @@
             <TabItem Visibility="{Binding Checkpoint.Tokenizer, Converter={StaticResource NullVisibilityConverter}}">
                 <TabItem.Header>
                     <StackPanel Orientation="Horizontal" Margin="3">
-                        <TextBlock Text="Tokenizer" />
+                        <TextBlock Text="{CommonControls:Localize Tokenizer}" />
                     </StackPanel>
                 </TabItem.Header>
                 <Border BorderThickness="1" BorderBrush="{StaticResource ContainerBorder}" Padding="4">
@@ -37,7 +37,7 @@
             <TabItem Visibility="{Binding Checkpoint.TextEncoder, Converter={StaticResource NullVisibilityConverter}}">
                 <TabItem.Header>
                     <StackPanel Orientation="Horizontal" Margin="3">
-                        <TextBlock Text="TextEncoder" />
+                        <TextBlock Text="{CommonControls:Localize TextEncoder}" />
                     </StackPanel>
                 </TabItem.Header>
                 <Border BorderThickness="1" BorderBrush="{StaticResource ContainerBorder}" Padding="4">
@@ -49,7 +49,7 @@
             <TabItem Visibility="{Binding Checkpoint.TextEncoder2, Converter={StaticResource NullVisibilityConverter}}">
                 <TabItem.Header>
                     <StackPanel Orientation="Horizontal" Margin="3">
-                        <TextBlock Text="TextEncoder2" />
+                        <TextBlock Text="{CommonControls:Localize TextEncoder2}" />
                     </StackPanel>
                 </TabItem.Header>
                 <Border BorderThickness="1" BorderBrush="{StaticResource ContainerBorder}" Padding="4">
@@ -61,7 +61,7 @@
             <TabItem Visibility="{Binding Checkpoint.TextEncoder3, Converter={StaticResource NullVisibilityConverter}}">
                 <TabItem.Header>
                     <StackPanel Orientation="Horizontal" Margin="3">
-                        <TextBlock Text="TextEncoder3" />
+                        <TextBlock Text="{CommonControls:Localize TextEncoder3}" />
                     </StackPanel>
                 </TabItem.Header>
                 <Border BorderThickness="1" BorderBrush="{StaticResource ContainerBorder}" Padding="4">
@@ -73,7 +73,7 @@
             <TabItem Visibility="{Binding Checkpoint.Unet, Converter={StaticResource NullVisibilityConverter}}">
                 <TabItem.Header>
                     <StackPanel Orientation="Horizontal" Margin="3">
-                        <TextBlock Text="Unet" />
+                        <TextBlock Text="{CommonControls:Localize Unet}" />
                     </StackPanel>
                 </TabItem.Header>
                 <Border BorderThickness="1" BorderBrush="{StaticResource ContainerBorder}" Padding="4">
@@ -85,7 +85,7 @@
             <TabItem Visibility="{Binding Checkpoint.Transformer, Converter={StaticResource NullVisibilityConverter}}">
                 <TabItem.Header>
                     <StackPanel Orientation="Horizontal" Margin="3">
-                        <TextBlock Text="Transformer" />
+                        <TextBlock Text="{CommonControls:Localize Transformer}" />
                     </StackPanel>
                 </TabItem.Header>
                 <Border BorderThickness="1" BorderBrush="{StaticResource ContainerBorder}" Padding="4">
@@ -97,7 +97,7 @@
             <TabItem Visibility="{Binding Checkpoint.Transformer2, Converter={StaticResource NullVisibilityConverter}}">
                 <TabItem.Header>
                     <StackPanel Orientation="Horizontal" Margin="3">
-                        <TextBlock Text="Transformer2" />
+                        <TextBlock Text="{CommonControls:Localize Transformer2}" />
                     </StackPanel>
                 </TabItem.Header>
                 <Border BorderThickness="1" BorderBrush="{StaticResource ContainerBorder}" Padding="4">
@@ -109,7 +109,7 @@
             <TabItem Visibility="{Binding Checkpoint.Vae, Converter={StaticResource NullVisibilityConverter}}">
                 <TabItem.Header>
                     <StackPanel Orientation="Horizontal" Margin="3">
-                        <TextBlock Text="AutoEncoder" />
+                        <TextBlock Text="{CommonControls:Localize AutoEncoder}" />
                     </StackPanel>
                 </TabItem.Header>
                 <Border BorderThickness="1" BorderBrush="{StaticResource ContainerBorder}" Padding="4">
@@ -121,7 +121,7 @@
             <TabItem Visibility="{Binding Checkpoint.AudioVae, Converter={StaticResource NullVisibilityConverter}}">
                 <TabItem.Header>
                     <StackPanel Orientation="Horizontal" Margin="3">
-                        <TextBlock Text="AudioVae" />
+                        <TextBlock Text="{CommonControls:Localize AudioVae}" />
                     </StackPanel>
                 </TabItem.Header>
                 <Border BorderThickness="1" BorderBrush="{StaticResource ContainerBorder}" Padding="4">
@@ -133,7 +133,7 @@
             <TabItem Visibility="{Binding Checkpoint.Vocoder, Converter={StaticResource NullVisibilityConverter}}">
                 <TabItem.Header>
                     <StackPanel Orientation="Horizontal" Margin="3">
-                        <TextBlock Text="Vocoder" />
+                        <TextBlock Text="{CommonControls:Localize Vocoder}" />
                     </StackPanel>
                 </TabItem.Header>
                 <Border BorderThickness="1" BorderBrush="{StaticResource ContainerBorder}" Padding="4">
@@ -145,7 +145,7 @@
             <TabItem Visibility="{Binding Checkpoint.Connectors, Converter={StaticResource NullVisibilityConverter}}">
                 <TabItem.Header>
                     <StackPanel Orientation="Horizontal" Margin="3">
-                        <TextBlock Text="Connectors" />
+                        <TextBlock Text="{CommonControls:Localize Connectors}" />
                     </StackPanel>
                 </TabItem.Header>
                 <Border BorderThickness="1" BorderBrush="{StaticResource ContainerBorder}" Padding="4">
@@ -157,7 +157,7 @@
             <TabItem Visibility="{Binding Checkpoint.LatentUpsampler, Converter={StaticResource NullVisibilityConverter}}">
                 <TabItem.Header>
                     <StackPanel Orientation="Horizontal" Margin="3">
-                        <TextBlock Text="Latent Upsampler" />
+                        <TextBlock Text="{CommonControls:Localize LatentUpsampler}" />
                     </StackPanel>
                 </TabItem.Header>
                 <Border BorderThickness="1" BorderBrush="{StaticResource ContainerBorder}" Padding="4">
@@ -169,7 +169,7 @@
             <TabItem Visibility="{Binding Checkpoint.LatentUpsamplerTemporal, Converter={StaticResource NullVisibilityConverter}}">
                 <TabItem.Header>
                     <StackPanel Orientation="Horizontal" Margin="3">
-                        <TextBlock Text="Latent Upsampler Temporal" />
+                        <TextBlock Text="{CommonControls:Localize LatentUpsamplerTemporal}" />
                     </StackPanel>
                 </TabItem.Header>
                 <Border BorderThickness="1" BorderBrush="{StaticResource ContainerBorder}" Padding="4">
@@ -181,7 +181,7 @@
             <TabItem Visibility="{Binding Checkpoint.ConditionEncoder, Converter={StaticResource NullVisibilityConverter}}">
                 <TabItem.Header>
                     <StackPanel Orientation="Horizontal" Margin="3">
-                        <TextBlock Text="Condition Encoder" />
+                        <TextBlock Text="{CommonControls:Localize ConditionEncoder}" />
                     </StackPanel>
                 </TabItem.Header>
                 <Border BorderThickness="1" BorderBrush="{StaticResource ContainerBorder}" Padding="4">
@@ -193,7 +193,7 @@
             <TabItem Visibility="{Binding Checkpoint.AudioTokenizer, Converter={StaticResource NullVisibilityConverter}}">
                 <TabItem.Header>
                     <StackPanel Orientation="Horizontal" Margin="3">
-                        <TextBlock Text="Audio Tokenizer" />
+                        <TextBlock Text="{CommonControls:Localize AudioTokenizer}" />
                     </StackPanel>
                 </TabItem.Header>
                 <Border BorderThickness="1" BorderBrush="{StaticResource ContainerBorder}" Padding="4">
@@ -205,7 +205,7 @@
             <TabItem Visibility="{Binding Checkpoint.AudioDetokenizer, Converter={StaticResource NullVisibilityConverter}}">
                 <TabItem.Header>
                     <StackPanel Orientation="Horizontal" Margin="3">
-                        <TextBlock Text="Audio Detokenizer" />
+                        <TextBlock Text="{CommonControls:Localize AudioDetokenizer}" />
                     </StackPanel>
                 </TabItem.Header>
                 <Border BorderThickness="1" BorderBrush="{StaticResource ContainerBorder}" Padding="4">

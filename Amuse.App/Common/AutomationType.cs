@@ -1,20 +1,20 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using Amuse.App.Resources;
+using System.ComponentModel.DataAnnotations;
 
 namespace Amuse.App.Common
 {
     public enum AutomationType
     {
-
-        [Display(Name = "Seed Batch", Description = "Generate the specified amount of times with a unique seed value")]
+        [Display(Name = "AutomationType0", Description = "AutomationType0_Description", ResourceType = typeof(AppEnums))]
         Seed = 0,
 
-        [Display(Name = "Prompt Lines", Description = "Generate for each prompt line in the specified text file")]
+        [Display(Name = "AutomationType1", Description = "AutomationType1_Description", ResourceType = typeof(AppEnums))]
         PromptLines = 10,
 
-        [Display(Name = "Prompt Files", Description = "Generate for each prompt in a text file in the specified folder")]
+        [Display(Name = "AutomationType2", Description = "AutomationType2_Description", ResourceType = typeof(AppEnums))]
         PromptFiles = 11,
 
-        [Display(Name = "Input Files", Description = "Generate for each input file in the specified folder")]
-        InputFiles = 12,
+        [Display(Name = "AutomationType3", Description = "AutomationType3_Description", ResourceType = typeof(AppEnums))]
+        InputFiles = 12
     }
 }

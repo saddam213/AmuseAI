@@ -1,0 +1,366 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <!-- 
+    Microsoft ResX Schema 
+    
+    Version 2.0
+    
+    The primary goals of this format is to allow a simple XML format 
+    that is mostly human readable. The generation and parsing of the 
+    various data types are done through the TypeConverter classes 
+    associated with the data types.
+    
+    Example:
+    
+    ... ado.net/XML headers & schema ...
+    <resheader name="resmimetype">text/microsoft-resx</resheader>
+    <resheader name="version">2.0</resheader>
+    <resheader name="reader">System.Resources.ResXResourceReader, System.Windows.Forms, ...</resheader>
+    <resheader name="writer">System.Resources.ResXResourceWriter, System.Windows.Forms, ...</resheader>
+    <data name="Name1"><value>this is my long string</value><comment>this is a comment</comment></data>
+    <data name="Color1" type="System.Drawing.Color, System.Drawing">Blue</data>
+    <data name="Bitmap1" mimetype="application/x-microsoft.net.object.binary.base64">
+        <value>[base64 mime encoded serialized .NET Framework object]</value>
+    </data>
+    <data name="Icon1" type="System.Drawing.Icon, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
+        <value>[base64 mime encoded string representing a byte array form of the .NET Framework object]</value>
+        <comment>This is a comment</comment>
+    </data>
+                
+    There are any number of "resheader" rows that contain simple 
+    name/value pairs.
+    
+    Each data row contains a name, and value. The row also contains a 
+    type or mimetype. Type corresponds to a .NET class that support 
+    text/value conversion through the TypeConverter architecture. 
+    Classes that don't support this are serialized and stored with the 
+    mimetype set.
+    
+    The mimetype is used for serialized objects, and tells the 
+    ResXResourceReader how to depersist the object. This is currently not 
+    extensible. For a given mimetype the value must be set accordingly:
+    
+    Note - application/x-microsoft.net.object.binary.base64 is the format 
+    that the ResXResourceWriter will generate, however the reader can 
+    read any of the formats listed below.
+    
+    mimetype: application/x-microsoft.net.object.binary.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Binary.BinaryFormatter
+            : and then encoded with base64 encoding.
+    
+    mimetype: application/x-microsoft.net.object.soap.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Soap.SoapFormatter
+            : and then encoded with base64 encoding.
+
+    mimetype: application/x-microsoft.net.object.bytearray.base64
+    value   : The object must be serialized into a byte array 
+            : using a System.ComponentModel.TypeConverter
+            : and then encoded with base64 encoding.
+    -->
+  <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+    <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
+    <xsd:element name="root" msdata:IsDataSet="true">
+      <xsd:complexType>
+        <xsd:choice maxOccurs="unbounded">
+          <xsd:element name="metadata">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" />
+              </xsd:sequence>
+              <xsd:attribute name="name" use="required" type="xsd:string" />
+              <xsd:attribute name="type" type="xsd:string" />
+              <xsd:attribute name="mimetype" type="xsd:string" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="assembly">
+            <xsd:complexType>
+              <xsd:attribute name="alias" type="xsd:string" />
+              <xsd:attribute name="name" type="xsd:string" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="data">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1" />
+              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
+              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="resheader">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" />
+            </xsd:complexType>
+          </xsd:element>
+        </xsd:choice>
+      </xsd:complexType>
+    </xsd:element>
+  </xsd:schema>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="AutomationType0" xml:space="preserve">
+    <value>Seed Batch</value>
+  </data>
+  <data name="AutomationType0_Description" xml:space="preserve">
+    <value>Generate the specified amount of times with a unique seed value</value>
+  </data>
+  <data name="AutomationType1" xml:space="preserve">
+    <value>Prompt Lines</value>
+  </data>
+  <data name="AutomationType1_Description" xml:space="preserve">
+    <value>Generate for each prompt line in the specified text file</value>
+  </data>
+  <data name="AutomationType2" xml:space="preserve">
+    <value>Prompt Files</value>
+  </data>
+  <data name="AutomationType2_Description" xml:space="preserve">
+    <value>Generate for each prompt in a text file in the specified folder</value>
+  </data>
+  <data name="AutomationType3" xml:space="preserve">
+    <value>Input Files</value>
+  </data>
+  <data name="AutomationType3_Description" xml:space="preserve">
+    <value>Generate for each input file in the specified folder</value>
+  </data>
+  <data name="CheckpointType0" xml:space="preserve">
+    <value>Local Folder</value>
+  </data>
+  <data name="CheckpointType1" xml:space="preserve">
+    <value>Local File</value>
+  </data>
+  <data name="CheckpointType2" xml:space="preserve">
+    <value>Online Folder</value>
+  </data>
+  <data name="CheckpointType3" xml:space="preserve">
+    <value>Online File</value>
+  </data>
+  <data name="CheckpointType4" xml:space="preserve">
+    <value>Component</value>
+  </data>
+  <data name="EnvironmentType0" xml:space="preserve">
+    <value>Vendor</value>
+  </data>
+  <data name="EnvironmentType1" xml:space="preserve">
+    <value>Device</value>
+  </data>
+  <data name="EnvironmentType2" xml:space="preserve">
+    <value>Pipeline</value>
+  </data>
+  <data name="ExtractorType0" xml:space="preserve">
+    <value>Default</value>
+  </data>
+  <data name="ExtractorType1" xml:space="preserve">
+    <value>Background</value>
+  </data>
+  <data name="ExtractorType2" xml:space="preserve">
+    <value>Pose</value>
+  </data>
+  <data name="MemoryMode0" xml:space="preserve">
+    <value>Auto</value>
+  </data>
+  <data name="MemoryMode0_Description" xml:space="preserve">
+    <value>Automatically selects the best strategy.</value>
+  </data>
+  <data name="MemoryMode1" xml:space="preserve">
+    <value>Balanced</value>
+  </data>
+  <data name="MemoryMode1_Description" xml:space="preserve">
+    <value>Loads model weights across GPUs and CPU.</value>
+  </data>
+  <data name="MemoryMode2" xml:space="preserve">
+    <value>Low</value>
+  </data>
+  <data name="MemoryMode2_Description" xml:space="preserve">
+    <value>Loads tensor weights to GPU only when needed.</value>
+  </data>
+  <data name="MemoryMode3" xml:space="preserve">
+    <value>Medium</value>
+  </data>
+  <data name="MemoryMode3_Description" xml:space="preserve">
+    <value>Loads model weights to GPU only when needed.</value>
+  </data>
+  <data name="MemoryMode4" xml:space="preserve">
+    <value>High</value>
+  </data>
+  <data name="MemoryMode4_Description" xml:space="preserve">
+    <value>Loads all weights to GPU for peak performance.</value>
+  </data>
+  <data name="QualityMode0" xml:space="preserve">
+    <value>Draft</value>
+  </data>
+  <data name="QualityMode0_Description" xml:space="preserve">
+    <value>Uses 4-bit quantization (int4). Maximum memory savings with a noticeable loss in fine detail and texture clarity.</value>
+  </data>
+  <data name="QualityMode1" xml:space="preserve">
+    <value>Standard</value>
+  </data>
+  <data name="QualityMode1_Description" xml:space="preserve">
+    <value>Uses 8-bit quantization (float8). High visual fidelity with significant memory optimization; indistinguishable from high for most users.</value>
+  </data>
+  <data name="QualityMode2" xml:space="preserve">
+    <value>Production</value>
+  </data>
+  <data name="QualityMode2_Description" xml:space="preserve">
+    <value>Uses 16-bit precision (bfloat16). Original model weights with zero quality loss; requires the most VRAM for maximum accuracy.</value>
+  </data>
+  <data name="ModelCategoryType0" xml:space="preserve">
+    <value>Diffusion</value>
+  </data>
+  <data name="ModelCategoryType1" xml:space="preserve">
+    <value>ControlNets</value>
+  </data>
+  <data name="ModelCategoryType2" xml:space="preserve">
+    <value>Lora Adapters</value>
+  </data>
+  <data name="ModelCategoryType3" xml:space="preserve">
+    <value>Upscalers</value>
+  </data>
+  <data name="ModelCategoryType4" xml:space="preserve">
+    <value>Extractors</value>
+  </data>
+  <data name="ModelCategoryType5" xml:space="preserve">
+    <value>Components</value>
+  </data>
+  <data name="ModelCategoryType6" xml:space="preserve">
+    <value>LLMs</value>
+  </data>
+  <data name="ModelSourceType0" xml:space="preserve">
+    <value>Local File</value>
+  </data>
+  <data name="ModelSourceType0_Description" xml:space="preserve">
+    <value>Diffusion Unet or Transformer file (Default Components)</value>
+  </data>
+  <data name="ModelSourceType1" xml:space="preserve">
+    <value>Local Folder</value>
+  </data>
+  <data name="ModelSourceType1_Description" xml:space="preserve">
+    <value>Full checkpoint directory containing all components (Diffusers Format)</value>
+  </data>
+  <data name="ModelSourceType2" xml:space="preserve">
+    <value>Local Checkpoint</value>
+  </data>
+  <data name="ModelSourceType2_Description" xml:space="preserve">
+    <value>Single checkpoint file containing all components (safetensors or gguf)</value>
+  </data>
+  <data name="ModelSourceType3" xml:space="preserve">
+    <value>Custom Checkpoint</value>
+  </data>
+  <data name="ModelSourceType3_Description" xml:space="preserve">
+    <value>Configure the model components manually</value>
+  </data>
+  <data name="ModelStatusType0" xml:space="preserve">
+    <value>Available</value>
+  </data>
+  <data name="ModelStatusType1" xml:space="preserve">
+    <value>Unknown</value>
+  </data>
+  <data name="ModelStatusType2" xml:space="preserve">
+    <value>Downloading</value>
+  </data>
+  <data name="ModelStatusType3" xml:space="preserve">
+    <value>Download Queued</value>
+  </data>
+  <data name="ModelStatusType4" xml:space="preserve">
+    <value>Download Failed</value>
+  </data>
+  <data name="ModelStatusType5" xml:space="preserve">
+    <value>Installed</value>
+  </data>
+  <data name="AspectType0" xml:space="preserve">
+    <value>Square</value>
+  </data>
+  <data name="AspectType1" xml:space="preserve">
+    <value>Portrait</value>
+  </data>
+  <data name="AspectType2" xml:space="preserve">
+    <value>Landscape</value>
+  </data>
+  <data name="InputTabOption0" xml:space="preserve">
+    <value>Options</value>
+  </data>
+  <data name="InputTabOption1" xml:space="preserve">
+    <value>Advanced</value>
+  </data>
+  <data name="InputTabOption2" xml:space="preserve">
+    <value>Automation</value>
+  </data>
+  <data name="PaintDrawingTool0" xml:space="preserve">
+    <value>RoundBrush</value>
+  </data>
+  <data name="PaintDrawingTool1" xml:space="preserve">
+    <value>SquareBrush</value>
+  </data>
+  <data name="PaintDrawingTool2" xml:space="preserve">
+    <value>Highlight</value>
+  </data>
+  <data name="PaintDrawingTool3" xml:space="preserve">
+    <value>Eraser</value>
+  </data>
+  <data name="TimelineSegmentType0" xml:space="preserve">
+    <value>Video</value>
+  </data>
+  <data name="TimelineSegmentType1" xml:space="preserve">
+    <value>Image</value>
+  </data>
+  <data name="TimelineSegmentType2" xml:space="preserve">
+    <value>Audio</value>
+  </data>
+  <data name="TimelineSegmentType3" xml:space="preserve">
+    <value>Overlay</value>
+  </data>
+  <data name="AdapterFlags0" xml:space="preserve">
+    <value>None</value>
+  </data>
+  <data name="AdapterFlags1" xml:space="preserve">
+    <value>Remote</value>
+  </data>
+  <data name="AdapterFlags2" xml:space="preserve">
+    <value>Software</value>
+  </data>
+  <data name="AdapterType0" xml:space="preserve">
+    <value>GPU</value>
+  </data>
+  <data name="AdapterType1" xml:space="preserve">
+    <value>NPU</value>
+  </data>
+  <data name="AdapterType2" xml:space="preserve">
+    <value>Other</value>
+  </data>
+  <data name="ViewCategory0" xml:space="preserve">
+    <value>Other</value>
+  </data>
+  <data name="ViewCategory1" xml:space="preserve">
+    <value>Settings</value>
+  </data>
+  <data name="ViewCategory2" xml:space="preserve">
+    <value>Image</value>
+  </data>
+  <data name="ViewCategory3" xml:space="preserve">
+    <value>Video</value>
+  </data>
+  <data name="ViewCategory4" xml:space="preserve">
+    <value>Audio</value>
+  </data>
+  <data name="ViewCategory5" xml:space="preserve">
+    <value>Text</value>
+  </data>
+</root>

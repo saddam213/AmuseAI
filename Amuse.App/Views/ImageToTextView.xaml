@@ -141,7 +141,7 @@
                                     Source="{Binding SourceImage1, Mode=TwoWay}" 
                                     IsInputEnabled="{Binding IsPipelineLoaded, Mode=OneWay}"
                                     OnMediaImport="OnMediaImport"
-                                    Title="Image 1"/>
+                                    Title="{CommonControls:Localize Image1}"/>
                                 <Grid.Style>
                                     <Style TargetType="{x:Type Grid}">
                                         <Setter Property="Grid.Row" Value="0"/>
@@ -200,7 +200,7 @@
                                     Source="{Binding SourceImage2, Mode=TwoWay}" 
                                     IsInputEnabled="{Binding IsPipelineLoaded, Mode=OneWay}"
                                     OnMediaImport="OnMediaImport"
-                                    Title="Image 2"/>
+                                    Title="{CommonControls:Localize Image2}"/>
                                 <Grid.Style>
                                     <Style TargetType="{x:Type Grid}">
                                         <Setter Property="Grid.Row" Value="0"/>
@@ -247,7 +247,7 @@
                                     Source="{Binding SourceImage3, Mode=TwoWay}" 
                                     IsInputEnabled="{Binding IsPipelineLoaded, Mode=OneWay}"
                                     OnMediaImport="OnMediaImport"
-                                    Title="Image 3"/>
+                                    Title="{CommonControls:Localize Image3}"/>
                                 <Grid.Style>
                                     <Style TargetType="{x:Type Grid}">
                                         <Setter Property="Margin" Value="0,0,0,0"/>
@@ -284,7 +284,7 @@
                                    Source="{Binding SourceImage4, Mode=TwoWay}" 
                                    IsInputEnabled="{Binding IsPipelineLoaded, Mode=OneWay}"
                                    OnMediaImport="OnMediaImport"
-                                   Title="Image 4"/>
+                                   Title="{CommonControls:Localize Image4}"/>
                                 <Grid.Style>
                                     <Style TargetType="{x:Type Grid}">
                                         <Setter Property="Grid.Row" Value="1"/>

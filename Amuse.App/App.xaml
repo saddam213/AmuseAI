@@ -397,6 +397,46 @@
             </Style>
 
 
+            <Style TargetType="{x:Type Controls:MediaReferenceControl}">
+                <Setter Property="AllowDrop" Value="False"/>
+                <Style.Triggers>
+                    <MultiDataTrigger>
+                        <MultiDataTrigger.Conditions>
+                            <Condition Binding="{Binding IsEnabled, RelativeSource={RelativeSource Self}}" Value="True" />
+                            <Condition Binding="{Binding ImageMaxCount, RelativeSource={RelativeSource Self}, Converter={StaticResource GreaterThanToBooleanConverter}, ConverterParameter=0}" Value="True" />
+                            <Condition Binding="{Binding IsDragDrop, RelativeSource={RelativeSource AncestorType=CommonControls:ViewControl}}" Value="True" />
+                            <Condition Binding="{Binding DragDropType, RelativeSource={RelativeSource AncestorType=CommonControls:ViewControl}}" Value="Image" />
+                        </MultiDataTrigger.Conditions>
+                        <MultiDataTrigger.Setters>
+                            <Setter Property="AllowDrop" Value="True"/>
+                        </MultiDataTrigger.Setters>
+                    </MultiDataTrigger>
+                    <MultiDataTrigger>
+                        <MultiDataTrigger.Conditions>
+                            <Condition Binding="{Binding IsEnabled, RelativeSource={RelativeSource Self}}" Value="True" />
+                            <Condition Binding="{Binding VideoMaxCount, RelativeSource={RelativeSource Self}, Converter={StaticResource GreaterThanToBooleanConverter}, ConverterParameter=0}" Value="True" />
+                            <Condition Binding="{Binding IsDragDrop, RelativeSource={RelativeSource AncestorType=CommonControls:ViewControl}}" Value="True" />
+                            <Condition Binding="{Binding DragDropType, RelativeSource={RelativeSource AncestorType=CommonControls:ViewControl}}" Value="Video" />
+                        </MultiDataTrigger.Conditions>
+                        <MultiDataTrigger.Setters>
+                            <Setter Property="AllowDrop" Value="True"/>
+                        </MultiDataTrigger.Setters>
+                    </MultiDataTrigger>
+                    <MultiDataTrigger>
+                        <MultiDataTrigger.Conditions>
+                            <Condition Binding="{Binding IsEnabled, RelativeSource={RelativeSource Self}}" Value="True" />
+                            <Condition Binding="{Binding AudioMaxCount, RelativeSource={RelativeSource Self}, Converter={StaticResource GreaterThanToBooleanConverter}, ConverterParameter=0}" Value="True" />
+                            <Condition Binding="{Binding IsDragDrop, RelativeSource={RelativeSource AncestorType=CommonControls:ViewControl}}" Value="True" />
+                            <Condition Binding="{Binding DragDropType, RelativeSource={RelativeSource AncestorType=CommonControls:ViewControl}}" Value="Audio" />
+                        </MultiDataTrigger.Conditions>
+                        <MultiDataTrigger.Setters>
+                            <Setter Property="AllowDrop" Value="True"/>
+                        </MultiDataTrigger.Setters>
+                    </MultiDataTrigger>
+                </Style.Triggers>
+            </Style>
+
+
             <Style x:Key="ToggleButtonBasic" TargetType="{x:Type ToggleButton}">
                 <Setter Property="FocusVisualStyle" Value="{StaticResource FocusVisual}"/>
                 <Setter Property="Background" Value="{StaticResource ComboBoxBackground}"/>
@@ -753,7 +793,7 @@
                                 <TextBox Text="{Binding Options.NegativePrompt}" Style="{StaticResource TextBlockStyle}" TextWrapping="Wrap" VerticalScrollBarVisibility="Auto" MaxHeight="200"/>
                             </StackPanel>
                             <StackPanel Margin="0,4,0,0" Visibility="{Binding Options.Prompt2, Converter={StaticResource NullOrEmptyVisibilityConverter}}">
-                                <TextBlock Text="Prompt2" Style="{StaticResource FieldTextBlockStyle}" />
+                                <TextBlock Text="{CommonControls:Localize Prompt2}" Style="{StaticResource FieldTextBlockStyle}" />
                                 <TextBox Text="{Binding Options.Prompt2}" Style="{StaticResource TextBlockStyle}" TextWrapping="Wrap" VerticalScrollBarVisibility="Auto" MaxHeight="200"/>
                             </StackPanel>
                         </StackPanel>
@@ -1194,7 +1234,7 @@
                                 <TextBlock Text="{Binding Duration, FallbackValue=00:00:00, StringFormat={}mm\\:ss\\.ff}" />
                             </StackPanel>
                             <StackPanel>
-                                <TextBlock Text="Sample Rate" Style="{StaticResource FieldTextBlockStyle}"/>
+                                <TextBlock Text="{CommonControls:Localize SampleRate}" Style="{StaticResource FieldTextBlockStyle}"/>
                                 <TextBlock Text="{Binding SampleRate, FallbackValue=0hz, StringFormat={}{0}hz}" />
                             </StackPanel>
                         </UniformGrid>

@@ -186,6 +186,9 @@
   <data name="Menu_VideoToVideo" xml:space="preserve">
     <value>Video ➔ Video</value>
   </data>
+  <data name="Menu_MediaToVideo" xml:space="preserve">
+    <value>Media ➔ Video</value>
+  </data>
   <data name="Menu_FrameToFrame" xml:space="preserve">
     <value>Frame ➔ Frame</value>
   </data>
@@ -1460,5 +1463,332 @@
   </data>
   <data name="EnableExternalTools" xml:space="preserve">
     <value>Enable External Tools</value>
+  </data>
+  <data name="References" xml:space="preserve">
+    <value>References</value>
+  </data>
+  <data name="ReferenceAddImage" xml:space="preserve">
+    <value>Add Image Reference</value>
+  </data>
+  <data name="ReferenceAddVideo" xml:space="preserve">
+    <value>Add Video Reference</value>
+  </data>
+  <data name="ReferenceAddAudio" xml:space="preserve">
+    <value>Add Audio Reference</value>
+  </data>
+  <data name="ReferenceEmpty" xml:space="preserve">
+    <value>Add Reference Media</value>
+  </data>
+  <data name="ReferenceEmptyMessage" xml:space="preserve">
+    <value>Images, videos and audio to guide the generation</value>
+  </data>
+  <data name="Prompt2" xml:space="preserve">
+    <value>Prompt2</value>
+  </data>
+  <data name="BPM" xml:space="preserve">
+    <value>BPM</value>
+  </data>
+  <data name="AttachDocumentsMedia" xml:space="preserve">
+    <value>Attach Documents / Media</value>
+  </data>
+  <data name="AttachDocumentsMediaMessage" xml:space="preserve">
+    <value>Provides additional context for your conversation</value>
+  </data>
+  <data name="Compute" xml:space="preserve">
+    <value>Compute</value>
+  </data>
+  <data name="Tokenizer" xml:space="preserve">
+    <value>Tokenizer</value>
+  </data>
+  <data name="TextEncoder" xml:space="preserve">
+    <value>Text Encoder</value>
+  </data>
+  <data name="TextEncoder2" xml:space="preserve">
+    <value>Text Encoder 2</value>
+  </data>
+  <data name="TextEncoder3" xml:space="preserve">
+    <value>Text Encoder 3</value>
+  </data>
+  <data name="Unet" xml:space="preserve">
+    <value>Unet</value>
+  </data>
+  <data name="Transformer" xml:space="preserve">
+    <value>Transformer</value>
+  </data>
+  <data name="Transformer2" xml:space="preserve">
+    <value>Transformer 2</value>
+  </data>
+  <data name="AudioVae" xml:space="preserve">
+    <value>Audio VAE</value>
+  </data>
+  <data name="Vocoder" xml:space="preserve">
+    <value>Vocoder</value>
+  </data>
+  <data name="Connectors" xml:space="preserve">
+    <value>Connectors</value>
+  </data>
+  <data name="LatentUpsampler" xml:space="preserve">
+    <value>Latent Upsampler</value>
+  </data>
+  <data name="LatentUpsamplerTemporal" xml:space="preserve">
+    <value>Latent Upsampler Temporal</value>
+  </data>
+  <data name="ConditionEncoder" xml:space="preserve">
+    <value>Condition Encoder</value>
+  </data>
+  <data name="AudioTokenizer" xml:space="preserve">
+    <value>Audio Tokenizer</value>
+  </data>
+  <data name="AudioDetokenizer" xml:space="preserve">
+    <value>Audio Detokenizer</value>
+  </data>
+  <data name="TextModel" xml:space="preserve">
+    <value>Text Model</value>
+  </data>
+  <data name="TextModel2" xml:space="preserve">
+    <value>Text Model 2</value>
+  </data>
+  <data name="InputStrength" xml:space="preserve">
+    <value>Input Strength</value>
+  </data>
+  <data name="NoHistoryItemsFound" xml:space="preserve">
+    <value>No History Items Found</value>
+  </data>
+  <data name="ToolCallsEnabled" xml:space="preserve">
+    <value>Tool Calls Enabled</value>
+  </data>
+  <data name="BeamResultsMessage" xml:space="preserve">
+    <value>Beam results won't be displayed until all beams have completed</value>
+  </data>
+  <data name="Karras" xml:space="preserve">
+    <value>Karras</value>
+  </data>
+  <data name="Beta" xml:space="preserve">
+    <value>Beta</value>
+  </data>
+  <data name="Exponential" xml:space="preserve">
+    <value>Exponential</value>
+  </data>
+  <data name="SValue" xml:space="preserve">
+    <value>S Value</value>
+  </data>
+  <data name="Scaler" xml:space="preserve">
+    <value>Scaler</value>
+  </data>
+  <data name="BeamLabel" xml:space="preserve">
+    <value>Beam:</value>
+  </data>
+  <data name="Function_TextToImage" xml:space="preserve">
+    <value>TextToImage</value>
+  </data>
+  <data name="Function_ImageToImage" xml:space="preserve">
+    <value>ImageToImage</value>
+  </data>
+  <data name="Function_ImageEdit" xml:space="preserve">
+    <value>ImageEdit</value>
+  </data>
+  <data name="Function_ImageInpaint" xml:space="preserve">
+    <value>ImageInpaint</value>
+  </data>
+  <data name="Function_ImageControlNet" xml:space="preserve">
+    <value>Image (ControlNet)</value>
+  </data>
+  <data name="Function_ImageToImageControlNet" xml:space="preserve">
+    <value>ImageToImage (ControlNet)</value>
+  </data>
+  <data name="Function_PaintToImage" xml:space="preserve">
+    <value>PaintToImage</value>
+  </data>
+  <data name="Function_FrameToFrame" xml:space="preserve">
+    <value>FrameToFrame</value>
+  </data>
+  <data name="Function_TextToVideo" xml:space="preserve">
+    <value>TextToVideo</value>
+  </data>
+  <data name="Function_ImageToVideo" xml:space="preserve">
+    <value>ImageToVideo</value>
+  </data>
+  <data name="Function_VideoToVideo" xml:space="preserve">
+    <value>VideoToVideo</value>
+  </data>
+  <data name="Function_TextToMusic" xml:space="preserve">
+    <value>TextToMusic</value>
+  </data>
+  <data name="Function_TextToAudio" xml:space="preserve">
+    <value>TextToAudio</value>
+  </data>
+  <data name="Function_AudioToText" xml:space="preserve">
+    <value>AudioToText</value>
+  </data>
+  <data name="Function_TextToText" xml:space="preserve">
+    <value>TextToText</value>
+  </data>
+  <data name="Function_ImageToText" xml:space="preserve">
+    <value>ImageToText</value>
+  </data>
+  <data name="Function_TextInstruct" xml:space="preserve">
+    <value>TextInstruct</value>
+  </data>
+  <data name="Function_TextConverse" xml:space="preserve">
+    <value>TextConverse</value>
+  </data>
+  <data name="Title_ExecutionOptions" xml:space="preserve">
+    <value>Execution Options</value>
+  </data>
+  <data name="OptimizeDeviceMessage" xml:space="preserve">
+    <value>Set device specific optimizations (matmul_precision, reduced_precision, allow_tf32 etc.)</value>
+  </data>
+  <data name="OptimizeChannelsMessage" xml:space="preserve">
+    <value>Set the model channel order NCHW -&gt; NHWC</value>
+  </data>
+  <data name="DeviceQuantizationMessage" xml:space="preserve">
+    <value>Quantize model on GPU device</value>
+  </data>
+  <data name="SegmentPrefetch" xml:space="preserve">
+    <value>Segment Prefetch</value>
+  </data>
+  <data name="SegmentedCompute" xml:space="preserve">
+    <value>Segmented Compute</value>
+  </data>
+  <data name="MemoryReserveGB" xml:space="preserve">
+    <value>Memory Reserve (GB)</value>
+  </data>
+  <data name="FlashAttention" xml:space="preserve">
+    <value>Flash Attention</value>
+  </data>
+  <data name="EnableSageAttention" xml:space="preserve">
+    <value>Enable Sage Attention</value>
+  </data>
+  <data name="ConvDirect" xml:space="preserve">
+    <value>Conv-Direct</value>
+  </data>
+  <data name="CPUExecution" xml:space="preserve">
+    <value>CPU Execution</value>
+  </data>
+  <data name="VRAMGB" xml:space="preserve">
+    <value>VRAM (GB)</value>
+  </data>
+  <data name="MadeInNewZealand" xml:space="preserve">
+    <value>Made in New Zealand</value>
+  </data>
+  <data name="CreatedBy" xml:space="preserve">
+    <value>Created By: </value>
+  </data>
+  <data name="Image1" xml:space="preserve">
+    <value>Image 1</value>
+  </data>
+  <data name="Image2" xml:space="preserve">
+    <value>Image 2</value>
+  </data>
+  <data name="Image3" xml:space="preserve">
+    <value>Image 3</value>
+  </data>
+  <data name="Image4" xml:space="preserve">
+    <value>Image 4</value>
+  </data>
+  <data name="PosX" xml:space="preserve">
+    <value>Pos X</value>
+  </data>
+  <data name="PosY" xml:space="preserve">
+    <value>Pos Y</value>
+  </data>
+  <data name="FirstFrame" xml:space="preserve">
+    <value>First Frame</value>
+  </data>
+  <data name="LastFrame" xml:space="preserve">
+    <value>Last Frame</value>
+  </data>
+  <data name="SearchComponents" xml:space="preserve">
+    <value>Search Components</value>
+  </data>
+  <data name="SearchControlNetModels" xml:space="preserve">
+    <value>Search ControlNet Models</value>
+  </data>
+  <data name="SearchDiffusionModels" xml:space="preserve">
+    <value>Search Diffusion Models</value>
+  </data>
+  <data name="SearchEnvironments" xml:space="preserve">
+    <value>Search Environments</value>
+  </data>
+  <data name="SearchExtractModels" xml:space="preserve">
+    <value>Search Extract Models</value>
+  </data>
+  <data name="SearchLanguageModels" xml:space="preserve">
+    <value>Search Language Models</value>
+  </data>
+  <data name="SearchLoraModels" xml:space="preserve">
+    <value>Search Lora Models</value>
+  </data>
+  <data name="SearchUpscaleModels" xml:space="preserve">
+    <value>Search Upscale Models</value>
+  </data>
+  <data name="PipelineDebugMessage" xml:space="preserve">
+    <value>Show the pipeline status in a separate console window</value>
+  </data>
+  <data name="DiffusionStepPreviewMessage" xml:space="preserve">
+    <value>Enable step preview images</value>
+  </data>
+  <data name="AskQuestionPlaceholder" xml:space="preserve">
+    <value>Please ask a question...</value>
+  </data>
+  <data name="MusicStyleTip" xml:space="preserve">
+    <value>Combine genre, instruments, mood, and style for the most accurate results. For example, 'Dreamy lo-fi hip-hop with soft piano and bedroom-pop production' works better than a single-word prompt.</value>
+  </data>
+  <data name="MusicStyleTipGenre" xml:space="preserve">
+    <value>- Name the genre: synthwave, hip-hop, lo-fi, or folk</value>
+  </data>
+  <data name="MusicStyleTipInstruments" xml:space="preserve">
+    <value>- List instruments: 808 drums, piano, or acoustic guitar</value>
+  </data>
+  <data name="MusicStyleTipMood" xml:space="preserve">
+    <value>- Define the mood: energetic, dreamy, or melancholic</value>
+  </data>
+  <data name="MusicStyleTipProduction" xml:space="preserve">
+    <value>- Production: polished, live recording, or bedroom pop</value>
+  </data>
+  <data name="MusicLyricsTipSyllables" xml:space="preserve">
+    <value>- Keep lines around 6-10 syllables</value>
+  </data>
+  <data name="MusicLyricsTipUppercase" xml:space="preserve">
+    <value>- Use UPPERCASE for words you want emphasized or shouted</value>
+  </data>
+  <data name="MusicLyricsTipBrackets" xml:space="preserve">
+    <value>- Use ( ) for background vocals or echoes</value>
+  </data>
+  <data name="MusicLyricsTipDescriptors" xml:space="preserve">
+    <value>- Add descriptors: [Chorus - anthemic] or [Verse - whispered]</value>
+  </data>
+  <data name="LyricTagIntroMessage" xml:space="preserve">
+    <value>Sets up atmosphere, usually instrumental</value>
+  </data>
+  <data name="LyricTagVerseMessage" xml:space="preserve">
+    <value>Main storytelling section, moderate energy</value>
+  </data>
+  <data name="LyricTagPreChorusMessage" xml:space="preserve">
+    <value>Builds tension before the chorus</value>
+  </data>
+  <data name="LyricTagChorusMessage" xml:space="preserve">
+    <value>Emotional peak, highest energy</value>
+  </data>
+  <data name="LyricTagBridgeMessage" xml:space="preserve">
+    <value>A shift — different melody, different feel</value>
+  </data>
+  <data name="LyricTagInstrumentalMessage" xml:space="preserve">
+    <value>No vocals, just instruments</value>
+  </data>
+  <data name="LyricTagOutroMessage" xml:space="preserve">
+    <value>Winds down, often fades</value>
+  </data>
+  <data name="MusicReferenceTip" xml:space="preserve">
+    <value>Use an optional audio file as a template for the final output</value>
+  </data>
+  <data name="MusicReferenceTipTonal" xml:space="preserve">
+    <value>- Matches the tonal warmth and frequency balance</value>
+  </data>
+  <data name="MusicReferenceTipTexture" xml:space="preserve">
+    <value>- Replicates specific instrumental textures and grain</value>
+  </data>
+  <data name="MusicReferenceTipVibe" xml:space="preserve">
+    <value>- Captures the unique rhythmic and atmospheric vibe</value>
   </data>
 </root>

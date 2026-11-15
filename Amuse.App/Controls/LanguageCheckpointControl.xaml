@@ -12,7 +12,7 @@
             <TabItem Visibility="{Binding Checkpoint.TextModel, Converter={StaticResource NullVisibilityConverter}}">
                 <TabItem.Header>
                     <StackPanel Orientation="Horizontal" Margin="3">
-                        <TextBlock Text="TextModel" />
+                        <TextBlock Text="{CommonControls:Localize TextModel}" />
                     </StackPanel>
                 </TabItem.Header>
                 <Border BorderThickness="1" BorderBrush="{StaticResource ContainerBorder}" Padding="4">
@@ -24,7 +24,7 @@
             <TabItem Visibility="{Binding Checkpoint.TextModel2, Converter={StaticResource NullVisibilityConverter}}">
                 <TabItem.Header>
                     <StackPanel Orientation="Horizontal" Margin="3">
-                        <TextBlock Text="TextModel2" />
+                        <TextBlock Text="{CommonControls:Localize TextModel2}" />
                     </StackPanel>
                 </TabItem.Header>
                 <Border BorderThickness="1" BorderBrush="{StaticResource ContainerBorder}" Padding="4">

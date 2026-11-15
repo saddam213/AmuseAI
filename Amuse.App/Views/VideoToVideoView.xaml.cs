@@ -232,7 +232,7 @@ namespace Amuse.App.Views
             var frames = new List<ImageTensor>();
             await foreach (var sourceFrame in _sourceVideo.GetAsync(Options.Width, Options.Height, Options.FrameRate, TensorStack.Common.ResizeMode.Crop).Take(Options.Frames))
             {
-                Progress.Update(sourceFrame.Index, Options.Frames, $"{AppDefault.ProcessingInputFrame}: {sourceFrame.Index}/{sourceFrame.Frame}");
+                Progress.Update(sourceFrame.Index, Options.Frames, $"{AppDefault.ProcessingInputFrame}: {sourceFrame.Index}/{Options.Frames}");
                 frames.Add(sourceFrame.Frame);
             }
             Progress.Indeterminate($"{AppDefault.EncodingVideoFrames}...");

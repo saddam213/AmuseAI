@@ -57,10 +57,10 @@
                 <DockPanel Margin="0,4,0,0">
                     <TextBlock DockPanel.Dock="Top" Text="{CommonControls:Localize SigmaType}" Style="{StaticResource FieldTextBlockStyle}" />
                     <StackPanel Orientation="Horizontal" Margin="0,2,0,0">
-                        <RadioButton GroupName="SigmasType" IsChecked="True" Content="Default"/>
-                        <RadioButton GroupName="SigmasType" IsChecked="{Binding UseKarrasSigmas}" Content="Karras" Margin="20,0,0,0"/>
-                        <RadioButton GroupName="SigmasType" IsChecked="{Binding UseBetaSigmas}" Content="Beta" Margin="20,0,0,0"/>
-                        <RadioButton GroupName="SigmasType" IsChecked="{Binding UseExponentialSigmas}" Content="Exponential" Margin="20,0,0,0"/>
+                        <RadioButton GroupName="SigmasType" IsChecked="True" Content="{CommonControls:Localize Default_}"/>
+                        <RadioButton GroupName="SigmasType" IsChecked="{Binding UseKarrasSigmas}" Content="{CommonControls:Localize Karras}" Margin="20,0,0,0"/>
+                        <RadioButton GroupName="SigmasType" IsChecked="{Binding UseBetaSigmas}" Content="{CommonControls:Localize Beta}" Margin="20,0,0,0"/>
+                        <RadioButton GroupName="SigmasType" IsChecked="{Binding UseExponentialSigmas}" Content="{CommonControls:Localize Exponential}" Margin="20,0,0,0"/>
                     </StackPanel>
                 </DockPanel>
 
@@ -136,10 +136,10 @@
                 <DockPanel Margin="0,4,0,0">
                     <TextBlock DockPanel.Dock="Top" Text="{CommonControls:Localize SigmaType}" Style="{StaticResource FieldTextBlockStyle}" />
                     <StackPanel Orientation="Horizontal" Margin="0,2,0,0">
-                        <RadioButton GroupName="SigmasType" IsChecked="True" Content="Default"/>
-                        <RadioButton GroupName="SigmasType" IsChecked="{Binding UseKarrasSigmas}" Content="Karras" Margin="20,0,0,0"/>
-                        <RadioButton GroupName="SigmasType" IsChecked="{Binding UseBetaSigmas}" Content="Beta" Margin="20,0,0,0"/>
-                        <RadioButton GroupName="SigmasType" IsChecked="{Binding UseExponentialSigmas}" Content="Exponential" Margin="20,0,0,0"/>
+                        <RadioButton GroupName="SigmasType" IsChecked="True" Content="{CommonControls:Localize Default_}"/>
+                        <RadioButton GroupName="SigmasType" IsChecked="{Binding UseKarrasSigmas}" Content="{CommonControls:Localize Karras}" Margin="20,0,0,0"/>
+                        <RadioButton GroupName="SigmasType" IsChecked="{Binding UseBetaSigmas}" Content="{CommonControls:Localize Beta}" Margin="20,0,0,0"/>
+                        <RadioButton GroupName="SigmasType" IsChecked="{Binding UseExponentialSigmas}" Content="{CommonControls:Localize Exponential}" Margin="20,0,0,0"/>
                     </StackPanel>
                 </DockPanel>
 
@@ -341,11 +341,11 @@
             <StackPanel>
                 <UniformGrid Columns="3" Margin="0,4,0,0">
                     <StackPanel Margin="0,0,0,0">
-                        <TextBlock Text="S Value" Style="{StaticResource FieldTextBlockStyle}" />
+                        <TextBlock Text="{CommonControls:Localize SValue}" Style="{StaticResource FieldTextBlockStyle}" />
                         <CommonControls:FloatBox FloatValue="{Binding SValue, UpdateSourceTrigger=PropertyChanged}" />
                     </StackPanel>
                     <StackPanel Margin="4,0,4,0">
-                        <TextBlock Text="Scaler" Style="{StaticResource FieldTextBlockStyle}" />
+                        <TextBlock Text="{CommonControls:Localize Scaler}" Style="{StaticResource FieldTextBlockStyle}" />
                         <CommonControls:FloatBox FloatValue="{Binding Scaler, UpdateSourceTrigger=PropertyChanged}" />
                     </StackPanel>
                 </UniformGrid>
@@ -468,10 +468,10 @@
                 <DockPanel Margin="0,4,0,0">
                     <TextBlock DockPanel.Dock="Top" Text="{CommonControls:Localize SigmaType}" Style="{StaticResource FieldTextBlockStyle}" />
                     <StackPanel Orientation="Horizontal" Margin="0,2,0,0">
-                        <RadioButton GroupName="SigmasType" IsChecked="True" Content="Default"/>
-                        <RadioButton GroupName="SigmasType" IsChecked="{Binding UseKarrasSigmas}" Content="Karras" Margin="20,0,0,0"/>
-                        <RadioButton GroupName="SigmasType" IsChecked="{Binding UseBetaSigmas}" Content="Beta" Margin="20,0,0,0"/>
-                        <RadioButton GroupName="SigmasType" IsChecked="{Binding UseExponentialSigmas}" Content="Exponential" Margin="20,0,0,0"/>
+                        <RadioButton GroupName="SigmasType" IsChecked="True" Content="{CommonControls:Localize Default_}"/>
+                        <RadioButton GroupName="SigmasType" IsChecked="{Binding UseKarrasSigmas}" Content="{CommonControls:Localize Karras}" Margin="20,0,0,0"/>
+                        <RadioButton GroupName="SigmasType" IsChecked="{Binding UseBetaSigmas}" Content="{CommonControls:Localize Beta}" Margin="20,0,0,0"/>
+                        <RadioButton GroupName="SigmasType" IsChecked="{Binding UseExponentialSigmas}" Content="{CommonControls:Localize Exponential}" Margin="20,0,0,0"/>
                     </StackPanel>
                 </DockPanel>
             </StackPanel>
@@ -578,10 +578,10 @@
                 <DockPanel Margin="0,4,0,0">
                     <TextBlock DockPanel.Dock="Top" Text="{CommonControls:Localize SigmaType}" Style="{StaticResource FieldTextBlockStyle}" />
                     <StackPanel Orientation="Horizontal" Margin="0,2,0,0">
-                        <RadioButton GroupName="SigmasType" IsChecked="True" Content="Default"/>
-                        <RadioButton GroupName="SigmasType" IsChecked="{Binding UseKarrasSigmas}" Content="Karras" Margin="20,0,0,0"/>
-                        <RadioButton GroupName="SigmasType" IsChecked="{Binding UseBetaSigmas}" Content="Beta" Margin="20,0,0,0"/>
-                        <RadioButton GroupName="SigmasType" IsChecked="{Binding UseExponentialSigmas}" Content="Exponential" Margin="20,0,0,0"/>
+                        <RadioButton GroupName="SigmasType" IsChecked="True" Content="{CommonControls:Localize Default_}"/>
+                        <RadioButton GroupName="SigmasType" IsChecked="{Binding UseKarrasSigmas}" Content="{CommonControls:Localize Karras}" Margin="20,0,0,0"/>
+                        <RadioButton GroupName="SigmasType" IsChecked="{Binding UseBetaSigmas}" Content="{CommonControls:Localize Beta}" Margin="20,0,0,0"/>
+                        <RadioButton GroupName="SigmasType" IsChecked="{Binding UseExponentialSigmas}" Content="{CommonControls:Localize Exponential}" Margin="20,0,0,0"/>
                     </StackPanel>
                 </DockPanel>
             </StackPanel>
@@ -698,10 +698,10 @@
                 <DockPanel Margin="0,4,0,0">
                     <TextBlock DockPanel.Dock="Top" Text="{CommonControls:Localize SigmaType}" Style="{StaticResource FieldTextBlockStyle}" />
                     <StackPanel Orientation="Horizontal" Margin="0,2,0,0">
-                        <RadioButton GroupName="SigmasType" IsChecked="True" Content="Default"/>
-                        <RadioButton GroupName="SigmasType" IsChecked="{Binding UseKarrasSigmas}" Content="Karras" Margin="20,0,0,0"/>
-                        <RadioButton GroupName="SigmasType" IsChecked="{Binding UseBetaSigmas}" Content="Beta" Margin="20,0,0,0"/>
-                        <RadioButton GroupName="SigmasType" IsChecked="{Binding UseExponentialSigmas}" Content="Exponential" Margin="20,0,0,0"/>
+                        <RadioButton GroupName="SigmasType" IsChecked="True" Content="{CommonControls:Localize Default_}"/>
+                        <RadioButton GroupName="SigmasType" IsChecked="{Binding UseKarrasSigmas}" Content="{CommonControls:Localize Karras}" Margin="20,0,0,0"/>
+                        <RadioButton GroupName="SigmasType" IsChecked="{Binding UseBetaSigmas}" Content="{CommonControls:Localize Beta}" Margin="20,0,0,0"/>
+                        <RadioButton GroupName="SigmasType" IsChecked="{Binding UseExponentialSigmas}" Content="{CommonControls:Localize Exponential}" Margin="20,0,0,0"/>
                     </StackPanel>
                 </DockPanel>
 
@@ -811,10 +811,10 @@
                 <DockPanel Margin="0,4,0,0">
                     <TextBlock DockPanel.Dock="Top" Text="{CommonControls:Localize SigmaType}" Style="{StaticResource FieldTextBlockStyle}" />
                     <StackPanel Orientation="Horizontal" Margin="0,2,0,0">
-                        <RadioButton GroupName="SigmasType" IsChecked="True" Content="Default"/>
-                        <RadioButton GroupName="SigmasType" IsChecked="{Binding UseKarrasSigmas}" Content="Karras" Margin="20,0,0,0"/>
-                        <RadioButton GroupName="SigmasType" IsChecked="{Binding UseBetaSigmas}" Content="Beta" Margin="20,0,0,0"/>
-                        <RadioButton GroupName="SigmasType" IsChecked="{Binding UseExponentialSigmas}" Content="Exponential" Margin="20,0,0,0"/>
+                        <RadioButton GroupName="SigmasType" IsChecked="True" Content="{CommonControls:Localize Default_}"/>
+                        <RadioButton GroupName="SigmasType" IsChecked="{Binding UseKarrasSigmas}" Content="{CommonControls:Localize Karras}" Margin="20,0,0,0"/>
+                        <RadioButton GroupName="SigmasType" IsChecked="{Binding UseBetaSigmas}" Content="{CommonControls:Localize Beta}" Margin="20,0,0,0"/>
+                        <RadioButton GroupName="SigmasType" IsChecked="{Binding UseExponentialSigmas}" Content="{CommonControls:Localize Exponential}" Margin="20,0,0,0"/>
                     </StackPanel>
                 </DockPanel>
 
@@ -914,10 +914,10 @@
                 <DockPanel Margin="0,4,0,0">
                     <TextBlock DockPanel.Dock="Top" Text="{CommonControls:Localize SigmaType}" Style="{StaticResource FieldTextBlockStyle}" />
                     <StackPanel Orientation="Horizontal" Margin="0,2,0,0">
-                        <RadioButton GroupName="SigmasType" IsChecked="True" Content="Default"/>
-                        <RadioButton GroupName="SigmasType" IsChecked="{Binding UseKarrasSigmas}" Content="Karras" Margin="20,0,0,0"/>
-                        <RadioButton GroupName="SigmasType" IsChecked="{Binding UseBetaSigmas}" Content="Beta" Margin="20,0,0,0"/>
-                        <RadioButton GroupName="SigmasType" IsChecked="{Binding UseExponentialSigmas}" Content="Exponential" Margin="20,0,0,0"/>
+                        <RadioButton GroupName="SigmasType" IsChecked="True" Content="{CommonControls:Localize Default_}"/>
+                        <RadioButton GroupName="SigmasType" IsChecked="{Binding UseKarrasSigmas}" Content="{CommonControls:Localize Karras}" Margin="20,0,0,0"/>
+                        <RadioButton GroupName="SigmasType" IsChecked="{Binding UseBetaSigmas}" Content="{CommonControls:Localize Beta}" Margin="20,0,0,0"/>
+                        <RadioButton GroupName="SigmasType" IsChecked="{Binding UseExponentialSigmas}" Content="{CommonControls:Localize Exponential}" Margin="20,0,0,0"/>
                     </StackPanel>
                 </DockPanel>
             </StackPanel>
@@ -970,10 +970,10 @@
                 <DockPanel Margin="0,4,0,0">
                     <TextBlock DockPanel.Dock="Top" Text="{CommonControls:Localize SigmaType}" Style="{StaticResource FieldTextBlockStyle}" />
                     <StackPanel Orientation="Horizontal" Margin="0,2,0,0">
-                        <RadioButton GroupName="SigmasType" IsChecked="True" Content="Default"/>
-                        <RadioButton GroupName="SigmasType" IsChecked="{Binding UseKarrasSigmas}" Content="Karras" Margin="20,0,0,0"/>
-                        <RadioButton GroupName="SigmasType" IsChecked="{Binding UseBetaSigmas}" Content="Beta" Margin="20,0,0,0"/>
-                        <RadioButton GroupName="SigmasType" IsChecked="{Binding UseExponentialSigmas}" Content="Exponential" Margin="20,0,0,0"/>
+                        <RadioButton GroupName="SigmasType" IsChecked="True" Content="{CommonControls:Localize Default_}"/>
+                        <RadioButton GroupName="SigmasType" IsChecked="{Binding UseKarrasSigmas}" Content="{CommonControls:Localize Karras}" Margin="20,0,0,0"/>
+                        <RadioButton GroupName="SigmasType" IsChecked="{Binding UseBetaSigmas}" Content="{CommonControls:Localize Beta}" Margin="20,0,0,0"/>
+                        <RadioButton GroupName="SigmasType" IsChecked="{Binding UseExponentialSigmas}" Content="{CommonControls:Localize Exponential}" Margin="20,0,0,0"/>
                     </StackPanel>
                 </DockPanel>
             </StackPanel>
@@ -1063,10 +1063,10 @@
                 <DockPanel Margin="0,4,0,0">
                     <TextBlock DockPanel.Dock="Top" Text="{CommonControls:Localize SigmaType}" Style="{StaticResource FieldTextBlockStyle}" />
                     <StackPanel Orientation="Horizontal" Margin="0,2,0,0">
-                        <RadioButton GroupName="SigmasType" IsChecked="True" Content="Default"/>
-                        <RadioButton GroupName="SigmasType" IsChecked="{Binding UseKarrasSigmas}" Content="Karras" Margin="20,0,0,0"/>
-                        <RadioButton GroupName="SigmasType" IsChecked="{Binding UseBetaSigmas}" Content="Beta" Margin="20,0,0,0"/>
-                        <RadioButton GroupName="SigmasType" IsChecked="{Binding UseExponentialSigmas}" Content="Exponential" Margin="20,0,0,0"/>
+                        <RadioButton GroupName="SigmasType" IsChecked="True" Content="{CommonControls:Localize Default_}"/>
+                        <RadioButton GroupName="SigmasType" IsChecked="{Binding UseKarrasSigmas}" Content="{CommonControls:Localize Karras}" Margin="20,0,0,0"/>
+                        <RadioButton GroupName="SigmasType" IsChecked="{Binding UseBetaSigmas}" Content="{CommonControls:Localize Beta}" Margin="20,0,0,0"/>
+                        <RadioButton GroupName="SigmasType" IsChecked="{Binding UseExponentialSigmas}" Content="{CommonControls:Localize Exponential}" Margin="20,0,0,0"/>
                     </StackPanel>
                 </DockPanel>
 
@@ -1230,10 +1230,10 @@
                 <DockPanel Margin="0,4,0,0">
                     <TextBlock DockPanel.Dock="Top" Text="{CommonControls:Localize SigmaType}" Style="{StaticResource FieldTextBlockStyle}" />
                     <StackPanel Orientation="Horizontal" Margin="0,2,0,0">
-                        <RadioButton GroupName="SigmasType" IsChecked="True" Content="Default"/>
-                        <RadioButton GroupName="SigmasType" IsChecked="{Binding UseKarrasSigmas}" Content="Karras" Margin="20,0,0,0"/>
-                        <RadioButton GroupName="SigmasType" IsChecked="{Binding UseBetaSigmas}" Content="Beta" Margin="20,0,0,0"/>
-                        <RadioButton GroupName="SigmasType" IsChecked="{Binding UseExponentialSigmas}" Content="Exponential" Margin="20,0,0,0"/>
+                        <RadioButton GroupName="SigmasType" IsChecked="True" Content="{CommonControls:Localize Default_}"/>
+                        <RadioButton GroupName="SigmasType" IsChecked="{Binding UseKarrasSigmas}" Content="{CommonControls:Localize Karras}" Margin="20,0,0,0"/>
+                        <RadioButton GroupName="SigmasType" IsChecked="{Binding UseBetaSigmas}" Content="{CommonControls:Localize Beta}" Margin="20,0,0,0"/>
+                        <RadioButton GroupName="SigmasType" IsChecked="{Binding UseExponentialSigmas}" Content="{CommonControls:Localize Exponential}" Margin="20,0,0,0"/>
                     </StackPanel>
                 </DockPanel>
             </StackPanel>
@@ -1606,10 +1606,10 @@
                 <DockPanel Margin="0,4,0,0">
                     <TextBlock DockPanel.Dock="Top" Text="{CommonControls:Localize SigmaType}" Style="{StaticResource FieldTextBlockStyle}" />
                     <StackPanel Orientation="Horizontal" Margin="0,2,0,0">
-                        <RadioButton GroupName="SigmasType" IsChecked="True" Content="Default"/>
-                        <RadioButton GroupName="SigmasType" IsChecked="{Binding UseKarrasSigmas}" Content="Karras" Margin="20,0,0,0"/>
-                        <RadioButton GroupName="SigmasType" IsChecked="{Binding UseBetaSigmas}" Content="Beta" Margin="20,0,0,0"/>
-                        <RadioButton GroupName="SigmasType" IsChecked="{Binding UseExponentialSigmas}" Content="Exponential" Margin="20,0,0,0"/>
+                        <RadioButton GroupName="SigmasType" IsChecked="True" Content="{CommonControls:Localize Default_}"/>
+                        <RadioButton GroupName="SigmasType" IsChecked="{Binding UseKarrasSigmas}" Content="{CommonControls:Localize Karras}" Margin="20,0,0,0"/>
+                        <RadioButton GroupName="SigmasType" IsChecked="{Binding UseBetaSigmas}" Content="{CommonControls:Localize Beta}" Margin="20,0,0,0"/>
+                        <RadioButton GroupName="SigmasType" IsChecked="{Binding UseExponentialSigmas}" Content="{CommonControls:Localize Exponential}" Margin="20,0,0,0"/>
                     </StackPanel>
                 </DockPanel>
 

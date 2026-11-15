@@ -90,17 +90,17 @@
                             <TextBlock Text="{CommonControls:Localize TagOptional}" Style="{StaticResource FieldTextBlockStyle}" FontSize="9" Margin="4,0,0,2" VerticalAlignment="Bottom"/>
                         </StackPanel>
                         <UniformGrid Columns="6" >
-                            <CheckBox x:Name="CheckBoxViewTextToImage" Content="TextToImage" />
-                            <CheckBox x:Name="CheckBoxViewImageToImage" Content="ImageToImage" />
-                            <CheckBox x:Name="CheckBoxViewImageEdit" Content="ImageEdit" />
-                            <CheckBox x:Name="CheckBoxViewImageInpaint" Content="ImageInpaint" />
-                            <CheckBox x:Name="CheckBoxViewPaintToImage" Content="PaintToImage" />
-                            <CheckBox x:Name="CheckBoxViewFrameToFrame" Content="FrameToFrame" />
-                            <CheckBox x:Name="CheckBoxViewTextToVideo" Content="TextToVideo" />
-                            <CheckBox x:Name="CheckBoxViewImageToVideo" Content="ImageToVideo" />
-                            <CheckBox x:Name="CheckBoxViewVideoToVideo" Content="VideoToVideo" />
-                            <CheckBox x:Name="CheckBoxViewTextToMusic" Content="TextToMusic" />
-                            <CheckBox x:Name="CheckBoxViewTextToAudio" Content="TextToAudio" />
+                            <CheckBox x:Name="CheckBoxViewTextToImage" Content="{CommonControls:Localize Function_TextToImage}" />
+                            <CheckBox x:Name="CheckBoxViewImageToImage" Content="{CommonControls:Localize Function_ImageToImage}" />
+                            <CheckBox x:Name="CheckBoxViewImageEdit" Content="{CommonControls:Localize Function_ImageEdit}" />
+                            <CheckBox x:Name="CheckBoxViewImageInpaint" Content="{CommonControls:Localize Function_ImageInpaint}" />
+                            <CheckBox x:Name="CheckBoxViewPaintToImage" Content="{CommonControls:Localize Function_PaintToImage}" />
+                            <CheckBox x:Name="CheckBoxViewFrameToFrame" Content="{CommonControls:Localize Function_FrameToFrame}" />
+                            <CheckBox x:Name="CheckBoxViewTextToVideo" Content="{CommonControls:Localize Function_TextToVideo}" />
+                            <CheckBox x:Name="CheckBoxViewImageToVideo" Content="{CommonControls:Localize Function_ImageToVideo}" />
+                            <CheckBox x:Name="CheckBoxViewVideoToVideo" Content="{CommonControls:Localize Function_VideoToVideo}" />
+                            <CheckBox x:Name="CheckBoxViewTextToMusic" Content="{CommonControls:Localize Function_TextToMusic}" />
+                            <CheckBox x:Name="CheckBoxViewTextToAudio" Content="{CommonControls:Localize Function_TextToAudio}" />
                         </UniformGrid>
                     </StackPanel>
                 </StackPanel>

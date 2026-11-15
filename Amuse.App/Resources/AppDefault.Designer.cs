@@ -196,6 +196,42 @@ namespace Amuse.App.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Please ask a question....
+        /// </summary>
+        public static string AskQuestionPlaceholder {
+            get {
+                return ResourceManager.GetString("AskQuestionPlaceholder", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Attach Documents / Media.
+        /// </summary>
+        public static string AttachDocumentsMedia {
+            get {
+                return ResourceManager.GetString("AttachDocumentsMedia", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Provides additional context for your conversation.
+        /// </summary>
+        public static string AttachDocumentsMediaMessage {
+            get {
+                return ResourceManager.GetString("AttachDocumentsMediaMessage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Audio Detokenizer.
+        /// </summary>
+        public static string AudioDetokenizer {
+            get {
+                return ResourceManager.GetString("AudioDetokenizer", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Audio Enabled.
         /// </summary>
         public static string AudioEnabled {
@@ -228,6 +264,24 @@ namespace Amuse.App.Resources {
         public static string AudioResult {
             get {
                 return ResourceManager.GetString("AudioResult", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Audio Tokenizer.
+        /// </summary>
+        public static string AudioTokenizer {
+            get {
+                return ResourceManager.GetString("AudioTokenizer", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Audio VAE.
+        /// </summary>
+        public static string AudioVae {
+            get {
+                return ResourceManager.GetString("AudioVae", resourceCulture);
             }
         }
         
@@ -304,11 +358,38 @@ namespace Amuse.App.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Beam:.
+        /// </summary>
+        public static string BeamLabel {
+            get {
+                return ResourceManager.GetString("BeamLabel", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Beam results won't be displayed until all beams have completed.
+        /// </summary>
+        public static string BeamResultsMessage {
+            get {
+                return ResourceManager.GetString("BeamResultsMessage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Beams.
         /// </summary>
         public static string Beams {
             get {
                 return ResourceManager.GetString("Beams", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Beta.
+        /// </summary>
+        public static string Beta {
+            get {
+                return ResourceManager.GetString("Beta", resourceCulture);
             }
         }
         
@@ -363,6 +444,15 @@ namespace Amuse.App.Resources {
         public static string BoneThickness {
             get {
                 return ResourceManager.GetString("BoneThickness", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to BPM.
+        /// </summary>
+        public static string BPM {
+            get {
+                return ResourceManager.GetString("BPM", resourceCulture);
             }
         }
         
@@ -493,6 +583,33 @@ namespace Amuse.App.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Compute.
+        /// </summary>
+        public static string Compute {
+            get {
+                return ResourceManager.GetString("Compute", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Condition Encoder.
+        /// </summary>
+        public static string ConditionEncoder {
+            get {
+                return ResourceManager.GetString("ConditionEncoder", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Connectors.
+        /// </summary>
+        public static string Connectors {
+            get {
+                return ResourceManager.GetString("Connectors", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Control.
         /// </summary>
         public static string Control {
@@ -543,6 +660,15 @@ namespace Amuse.App.Resources {
         public static string ControlStrength {
             get {
                 return ResourceManager.GetString("ControlStrength", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Conv-Direct.
+        /// </summary>
+        public static string ConvDirect {
+            get {
+                return ResourceManager.GetString("ConvDirect", resourceCulture);
             }
         }
         
@@ -619,11 +745,29 @@ namespace Amuse.App.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to CPU Execution.
+        /// </summary>
+        public static string CPUExecution {
+            get {
+                return ResourceManager.GetString("CPUExecution", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Created.
         /// </summary>
         public static string Created {
             get {
                 return ResourceManager.GetString("Created", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Created By: .
+        /// </summary>
+        public static string CreatedBy {
+            get {
+                return ResourceManager.GetString("CreatedBy", resourceCulture);
             }
         }
         
@@ -790,6 +934,15 @@ namespace Amuse.App.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Quantize model on GPU device.
+        /// </summary>
+        public static string DeviceQuantizationMessage {
+            get {
+                return ResourceManager.GetString("DeviceQuantizationMessage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Diffusion.
         /// </summary>
         public static string Diffusion {
@@ -813,6 +966,15 @@ namespace Amuse.App.Resources {
         public static string DiffusionStepPreview {
             get {
                 return ResourceManager.GetString("DiffusionStepPreview", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Enable step preview images.
+        /// </summary>
+        public static string DiffusionStepPreviewMessage {
+            get {
+                return ResourceManager.GetString("DiffusionStepPreviewMessage", resourceCulture);
             }
         }
         
@@ -961,6 +1123,15 @@ namespace Amuse.App.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Enable Sage Attention.
+        /// </summary>
+        public static string EnableSageAttention {
+            get {
+                return ResourceManager.GetString("EnableSageAttention", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Enable Slicing.
         /// </summary>
         public static string EnableSlicing {
@@ -1056,6 +1227,15 @@ namespace Amuse.App.Resources {
         public static string ExperimentalSettings {
             get {
                 return ResourceManager.GetString("ExperimentalSettings", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Exponential.
+        /// </summary>
+        public static string Exponential {
+            get {
+                return ResourceManager.GetString("Exponential", resourceCulture);
             }
         }
         
@@ -1168,11 +1348,29 @@ namespace Amuse.App.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to First Frame.
+        /// </summary>
+        public static string FirstFrame {
+            get {
+                return ResourceManager.GetString("FirstFrame", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to FirstFrame LastFrame.
         /// </summary>
         public static string FirstFrameLastFrame {
             get {
                 return ResourceManager.GetString("FirstFrameLastFrame", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Flash Attention.
+        /// </summary>
+        public static string FlashAttention {
+            get {
+                return ResourceManager.GetString("FlashAttention", resourceCulture);
             }
         }
         
@@ -1272,6 +1470,168 @@ namespace Amuse.App.Resources {
         public static string FrameWidth {
             get {
                 return ResourceManager.GetString("FrameWidth", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to AudioToText.
+        /// </summary>
+        public static string Function_AudioToText {
+            get {
+                return ResourceManager.GetString("Function_AudioToText", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to FrameToFrame.
+        /// </summary>
+        public static string Function_FrameToFrame {
+            get {
+                return ResourceManager.GetString("Function_FrameToFrame", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Image (ControlNet).
+        /// </summary>
+        public static string Function_ImageControlNet {
+            get {
+                return ResourceManager.GetString("Function_ImageControlNet", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to ImageEdit.
+        /// </summary>
+        public static string Function_ImageEdit {
+            get {
+                return ResourceManager.GetString("Function_ImageEdit", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to ImageInpaint.
+        /// </summary>
+        public static string Function_ImageInpaint {
+            get {
+                return ResourceManager.GetString("Function_ImageInpaint", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to ImageToImage.
+        /// </summary>
+        public static string Function_ImageToImage {
+            get {
+                return ResourceManager.GetString("Function_ImageToImage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to ImageToImage (ControlNet).
+        /// </summary>
+        public static string Function_ImageToImageControlNet {
+            get {
+                return ResourceManager.GetString("Function_ImageToImageControlNet", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to ImageToText.
+        /// </summary>
+        public static string Function_ImageToText {
+            get {
+                return ResourceManager.GetString("Function_ImageToText", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to ImageToVideo.
+        /// </summary>
+        public static string Function_ImageToVideo {
+            get {
+                return ResourceManager.GetString("Function_ImageToVideo", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to PaintToImage.
+        /// </summary>
+        public static string Function_PaintToImage {
+            get {
+                return ResourceManager.GetString("Function_PaintToImage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to TextConverse.
+        /// </summary>
+        public static string Function_TextConverse {
+            get {
+                return ResourceManager.GetString("Function_TextConverse", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to TextInstruct.
+        /// </summary>
+        public static string Function_TextInstruct {
+            get {
+                return ResourceManager.GetString("Function_TextInstruct", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to TextToAudio.
+        /// </summary>
+        public static string Function_TextToAudio {
+            get {
+                return ResourceManager.GetString("Function_TextToAudio", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to TextToImage.
+        /// </summary>
+        public static string Function_TextToImage {
+            get {
+                return ResourceManager.GetString("Function_TextToImage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to TextToMusic.
+        /// </summary>
+        public static string Function_TextToMusic {
+            get {
+                return ResourceManager.GetString("Function_TextToMusic", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to TextToText.
+        /// </summary>
+        public static string Function_TextToText {
+            get {
+                return ResourceManager.GetString("Function_TextToText", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to TextToVideo.
+        /// </summary>
+        public static string Function_TextToVideo {
+            get {
+                return ResourceManager.GetString("Function_TextToVideo", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to VideoToVideo.
+        /// </summary>
+        public static string Function_VideoToVideo {
+            get {
+                return ResourceManager.GetString("Function_VideoToVideo", resourceCulture);
             }
         }
         
@@ -1380,6 +1740,42 @@ namespace Amuse.App.Resources {
         public static string HistorySettings {
             get {
                 return ResourceManager.GetString("HistorySettings", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Image 1.
+        /// </summary>
+        public static string Image1 {
+            get {
+                return ResourceManager.GetString("Image1", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Image 2.
+        /// </summary>
+        public static string Image2 {
+            get {
+                return ResourceManager.GetString("Image2", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Image 3.
+        /// </summary>
+        public static string Image3 {
+            get {
+                return ResourceManager.GetString("Image3", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Image 4.
+        /// </summary>
+        public static string Image4 {
+            get {
+                return ResourceManager.GetString("Image4", resourceCulture);
             }
         }
         
@@ -1510,6 +1906,15 @@ namespace Amuse.App.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Input Strength.
+        /// </summary>
+        public static string InputStrength {
+            get {
+                return ResourceManager.GetString("InputStrength", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Input Text.
         /// </summary>
         public static string InputText {
@@ -1609,6 +2014,15 @@ namespace Amuse.App.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Karras.
+        /// </summary>
+        public static string Karras {
+            get {
+                return ResourceManager.GetString("Karras", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Key.
         /// </summary>
         public static string Key {
@@ -1632,6 +2046,33 @@ namespace Amuse.App.Resources {
         public static string KVCache {
             get {
                 return ResourceManager.GetString("KVCache", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Last Frame.
+        /// </summary>
+        public static string LastFrame {
+            get {
+                return ResourceManager.GetString("LastFrame", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Latent Upsampler.
+        /// </summary>
+        public static string LatentUpsampler {
+            get {
+                return ResourceManager.GetString("LatentUpsampler", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Latent Upsampler Temporal.
+        /// </summary>
+        public static string LatentUpsamplerTemporal {
+            get {
+                return ResourceManager.GetString("LatentUpsamplerTemporal", resourceCulture);
             }
         }
         
@@ -1807,11 +2248,83 @@ namespace Amuse.App.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to A shift — different melody, different feel.
+        /// </summary>
+        public static string LyricTagBridgeMessage {
+            get {
+                return ResourceManager.GetString("LyricTagBridgeMessage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Emotional peak, highest energy.
+        /// </summary>
+        public static string LyricTagChorusMessage {
+            get {
+                return ResourceManager.GetString("LyricTagChorusMessage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to No vocals, just instruments.
+        /// </summary>
+        public static string LyricTagInstrumentalMessage {
+            get {
+                return ResourceManager.GetString("LyricTagInstrumentalMessage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Sets up atmosphere, usually instrumental.
+        /// </summary>
+        public static string LyricTagIntroMessage {
+            get {
+                return ResourceManager.GetString("LyricTagIntroMessage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Winds down, often fades.
+        /// </summary>
+        public static string LyricTagOutroMessage {
+            get {
+                return ResourceManager.GetString("LyricTagOutroMessage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Builds tension before the chorus.
+        /// </summary>
+        public static string LyricTagPreChorusMessage {
+            get {
+                return ResourceManager.GetString("LyricTagPreChorusMessage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Lyric Tags.
         /// </summary>
         public static string LyricTags {
             get {
                 return ResourceManager.GetString("LyricTags", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Main storytelling section, moderate energy.
+        /// </summary>
+        public static string LyricTagVerseMessage {
+            get {
+                return ResourceManager.GetString("LyricTagVerseMessage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Made in New Zealand.
+        /// </summary>
+        public static string MadeInNewZealand {
+            get {
+                return ResourceManager.GetString("MadeInNewZealand", resourceCulture);
             }
         }
         
@@ -1924,6 +2437,15 @@ namespace Amuse.App.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Memory Reserve (GB).
+        /// </summary>
+        public static string MemoryReserveGB {
+            get {
+                return ResourceManager.GetString("MemoryReserveGB", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Memory Size.
         /// </summary>
         public static string MemorySize {
@@ -2019,6 +2541,15 @@ namespace Amuse.App.Resources {
         public static string Menu_ImageUpscale {
             get {
                 return ResourceManager.GetString("Menu_ImageUpscale", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Media ➔ Video.
+        /// </summary>
+        public static string Menu_MediaToVideo {
+            get {
+                return ResourceManager.GetString("Menu_MediaToVideo", resourceCulture);
             }
         }
         
@@ -2266,6 +2797,123 @@ namespace Amuse.App.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to - Use ( ) for background vocals or echoes.
+        /// </summary>
+        public static string MusicLyricsTipBrackets {
+            get {
+                return ResourceManager.GetString("MusicLyricsTipBrackets", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to - Add descriptors: [Chorus - anthemic] or [Verse - whispered].
+        /// </summary>
+        public static string MusicLyricsTipDescriptors {
+            get {
+                return ResourceManager.GetString("MusicLyricsTipDescriptors", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to - Keep lines around 6-10 syllables.
+        /// </summary>
+        public static string MusicLyricsTipSyllables {
+            get {
+                return ResourceManager.GetString("MusicLyricsTipSyllables", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to - Use UPPERCASE for words you want emphasized or shouted.
+        /// </summary>
+        public static string MusicLyricsTipUppercase {
+            get {
+                return ResourceManager.GetString("MusicLyricsTipUppercase", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Use an optional audio file as a template for the final output.
+        /// </summary>
+        public static string MusicReferenceTip {
+            get {
+                return ResourceManager.GetString("MusicReferenceTip", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to - Replicates specific instrumental textures and grain.
+        /// </summary>
+        public static string MusicReferenceTipTexture {
+            get {
+                return ResourceManager.GetString("MusicReferenceTipTexture", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to - Matches the tonal warmth and frequency balance.
+        /// </summary>
+        public static string MusicReferenceTipTonal {
+            get {
+                return ResourceManager.GetString("MusicReferenceTipTonal", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to - Captures the unique rhythmic and atmospheric vibe.
+        /// </summary>
+        public static string MusicReferenceTipVibe {
+            get {
+                return ResourceManager.GetString("MusicReferenceTipVibe", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Combine genre, instruments, mood, and style for the most accurate results. For example, 'Dreamy lo-fi hip-hop with soft piano and bedroom-pop production' works better than a single-word prompt..
+        /// </summary>
+        public static string MusicStyleTip {
+            get {
+                return ResourceManager.GetString("MusicStyleTip", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to - Name the genre: synthwave, hip-hop, lo-fi, or folk.
+        /// </summary>
+        public static string MusicStyleTipGenre {
+            get {
+                return ResourceManager.GetString("MusicStyleTipGenre", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to - List instruments: 808 drums, piano, or acoustic guitar.
+        /// </summary>
+        public static string MusicStyleTipInstruments {
+            get {
+                return ResourceManager.GetString("MusicStyleTipInstruments", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to - Define the mood: energetic, dreamy, or melancholic.
+        /// </summary>
+        public static string MusicStyleTipMood {
+            get {
+                return ResourceManager.GetString("MusicStyleTipMood", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to - Production: polished, live recording, or bedroom pop.
+        /// </summary>
+        public static string MusicStyleTipProduction {
+            get {
+                return ResourceManager.GetString("MusicStyleTipProduction", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Name.
         /// </summary>
         public static string Name {
@@ -2325,6 +2973,15 @@ namespace Amuse.App.Resources {
         public static string NoDevicesFound {
             get {
                 return ResourceManager.GetString("NoDevicesFound", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to No History Items Found.
+        /// </summary>
+        public static string NoHistoryItemsFound {
+            get {
+                return ResourceManager.GetString("NoHistoryItemsFound", resourceCulture);
             }
         }
         
@@ -2419,11 +3076,29 @@ namespace Amuse.App.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Set the model channel order NCHW -&gt; NHWC.
+        /// </summary>
+        public static string OptimizeChannelsMessage {
+            get {
+                return ResourceManager.GetString("OptimizeChannelsMessage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Optimize Device.
         /// </summary>
         public static string OptimizeDevice {
             get {
                 return ResourceManager.GetString("OptimizeDevice", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Set device specific optimizations (matmul_precision, reduced_precision, allow_tf32 etc.).
+        /// </summary>
+        public static string OptimizeDeviceMessage {
+            get {
+                return ResourceManager.GetString("OptimizeDeviceMessage", resourceCulture);
             }
         }
         
@@ -2590,6 +3265,15 @@ namespace Amuse.App.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Show the pipeline status in a separate console window.
+        /// </summary>
+        public static string PipelineDebugMessage {
+            get {
+                return ResourceManager.GetString("PipelineDebugMessage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Pipeline Type.
         /// </summary>
         public static string PipelineType {
@@ -2604,6 +3288,24 @@ namespace Amuse.App.Resources {
         public static string PleaseSelectLora {
             get {
                 return ResourceManager.GetString("PleaseSelectLora", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Pos X.
+        /// </summary>
+        public static string PosX {
+            get {
+                return ResourceManager.GetString("PosX", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Pos Y.
+        /// </summary>
+        public static string PosY {
+            get {
+                return ResourceManager.GetString("PosY", resourceCulture);
             }
         }
         
@@ -2743,6 +3445,15 @@ namespace Amuse.App.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Prompt2.
+        /// </summary>
+        public static string Prompt2 {
+            get {
+                return ResourceManager.GetString("Prompt2", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Prompt File.
         /// </summary>
         public static string PromptFile {
@@ -2797,6 +3508,33 @@ namespace Amuse.App.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Add Audio Reference.
+        /// </summary>
+        public static string ReferenceAddAudio {
+            get {
+                return ResourceManager.GetString("ReferenceAddAudio", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Add Image Reference.
+        /// </summary>
+        public static string ReferenceAddImage {
+            get {
+                return ResourceManager.GetString("ReferenceAddImage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Add Video Reference.
+        /// </summary>
+        public static string ReferenceAddVideo {
+            get {
+                return ResourceManager.GetString("ReferenceAddVideo", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Reference Audio.
         /// </summary>
         public static string ReferenceAudio {
@@ -2811,6 +3549,33 @@ namespace Amuse.App.Resources {
         public static string ReferenceAudioOptional {
             get {
                 return ResourceManager.GetString("ReferenceAudioOptional", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Add Reference Media.
+        /// </summary>
+        public static string ReferenceEmpty {
+            get {
+                return ResourceManager.GetString("ReferenceEmpty", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Images, videos and audio to guide the generation.
+        /// </summary>
+        public static string ReferenceEmptyMessage {
+            get {
+                return ResourceManager.GetString("ReferenceEmptyMessage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to References.
+        /// </summary>
+        public static string References {
+            get {
+                return ResourceManager.GetString("References", resourceCulture);
             }
         }
         
@@ -3067,6 +3832,15 @@ namespace Amuse.App.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Scaler.
+        /// </summary>
+        public static string Scaler {
+            get {
+                return ResourceManager.GetString("Scaler", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Scheduler.
         /// </summary>
         public static string Scheduler {
@@ -3103,11 +3877,101 @@ namespace Amuse.App.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Search Components.
+        /// </summary>
+        public static string SearchComponents {
+            get {
+                return ResourceManager.GetString("SearchComponents", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Search ControlNet Models.
+        /// </summary>
+        public static string SearchControlNetModels {
+            get {
+                return ResourceManager.GetString("SearchControlNetModels", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Search Diffusion Models.
+        /// </summary>
+        public static string SearchDiffusionModels {
+            get {
+                return ResourceManager.GetString("SearchDiffusionModels", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Search Environments.
+        /// </summary>
+        public static string SearchEnvironments {
+            get {
+                return ResourceManager.GetString("SearchEnvironments", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Search Extract Models.
+        /// </summary>
+        public static string SearchExtractModels {
+            get {
+                return ResourceManager.GetString("SearchExtractModels", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Search Language Models.
+        /// </summary>
+        public static string SearchLanguageModels {
+            get {
+                return ResourceManager.GetString("SearchLanguageModels", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Search Lora Models.
+        /// </summary>
+        public static string SearchLoraModels {
+            get {
+                return ResourceManager.GetString("SearchLoraModels", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Search Upscale Models.
+        /// </summary>
+        public static string SearchUpscaleModels {
+            get {
+                return ResourceManager.GetString("SearchUpscaleModels", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Seed.
         /// </summary>
         public static string Seed {
             get {
                 return ResourceManager.GetString("Seed", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Segmented Compute.
+        /// </summary>
+        public static string SegmentedCompute {
+            get {
+                return ResourceManager.GetString("SegmentedCompute", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Segment Prefetch.
+        /// </summary>
+        public static string SegmentPrefetch {
+            get {
+                return ResourceManager.GetString("SegmentPrefetch", resourceCulture);
             }
         }
         
@@ -3445,6 +4309,15 @@ namespace Amuse.App.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to S Value.
+        /// </summary>
+        public static string SValue {
+            get {
+                return ResourceManager.GetString("SValue", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to System Prompt.
         /// </summary>
         public static string SystemPrompt {
@@ -3517,11 +4390,56 @@ namespace Amuse.App.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Text Encoder.
+        /// </summary>
+        public static string TextEncoder {
+            get {
+                return ResourceManager.GetString("TextEncoder", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Text Encoder 2.
+        /// </summary>
+        public static string TextEncoder2 {
+            get {
+                return ResourceManager.GetString("TextEncoder2", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Text Encoder 3.
+        /// </summary>
+        public static string TextEncoder3 {
+            get {
+                return ResourceManager.GetString("TextEncoder3", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Text Folder.
         /// </summary>
         public static string TextFolder {
             get {
                 return ResourceManager.GetString("TextFolder", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Text Model.
+        /// </summary>
+        public static string TextModel {
+            get {
+                return ResourceManager.GetString("TextModel", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Text Model 2.
+        /// </summary>
+        public static string TextModel2 {
+            get {
+                return ResourceManager.GetString("TextModel2", resourceCulture);
             }
         }
         
@@ -3742,6 +4660,15 @@ namespace Amuse.App.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Execution Options.
+        /// </summary>
+        public static string Title_ExecutionOptions {
+            get {
+                return ResourceManager.GetString("Title_ExecutionOptions", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Extract Model.
         /// </summary>
         public static string Title_ExtractModel {
@@ -3796,11 +4723,29 @@ namespace Amuse.App.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Tokenizer.
+        /// </summary>
+        public static string Tokenizer {
+            get {
+                return ResourceManager.GetString("Tokenizer", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Tokens.
         /// </summary>
         public static string Tokens {
             get {
                 return ResourceManager.GetString("Tokens", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Tool Calls Enabled.
+        /// </summary>
+        public static string ToolCallsEnabled {
+            get {
+                return ResourceManager.GetString("ToolCallsEnabled", resourceCulture);
             }
         }
         
@@ -3841,6 +4786,24 @@ namespace Amuse.App.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Transformer.
+        /// </summary>
+        public static string Transformer {
+            get {
+                return ResourceManager.GetString("Transformer", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Transformer 2.
+        /// </summary>
+        public static string Transformer2 {
+            get {
+                return ResourceManager.GetString("Transformer2", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Trigger Words.
         /// </summary>
         public static string TriggerWords {
@@ -3873,6 +4836,15 @@ namespace Amuse.App.Resources {
         public static string UIScale {
             get {
                 return ResourceManager.GetString("UIScale", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Unet.
+        /// </summary>
+        public static string Unet {
+            get {
+                return ResourceManager.GetString("Unet", resourceCulture);
             }
         }
         
@@ -4075,11 +5047,29 @@ namespace Amuse.App.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Vocoder.
+        /// </summary>
+        public static string Vocoder {
+            get {
+                return ResourceManager.GetString("Vocoder", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Voice Style.
         /// </summary>
         public static string VoiceStyle {
             get {
                 return ResourceManager.GetString("VoiceStyle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to VRAM (GB).
+        /// </summary>
+        public static string VRAMGB {
+            get {
+                return ResourceManager.GetString("VRAMGB", resourceCulture);
             }
         }
         

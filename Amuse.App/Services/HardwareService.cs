@@ -1,6 +1,8 @@
 ﻿using Amuse.App.Common;
+using Amuse.App.Resources;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.Diagnostics;
 using System.Linq;
 using System.Management;
@@ -937,15 +939,25 @@ namespace Amuse.App.Services
     [Flags]
     public enum AdapterFlags : uint
     {
+        [Display(Name = "AdapterFlags0", ResourceType = typeof(AppEnums))]
         None = 0,
+
+        [Display(Name = "AdapterFlags1", ResourceType = typeof(AppEnums))]
         Remote = 1,
+
+        [Display(Name = "AdapterFlags2", ResourceType = typeof(AppEnums))]
         Software = 2
     }
 
     public enum AdapterType : uint
     {
+        [Display(Name = "AdapterType0", ResourceType = typeof(AppEnums))]
         GPU = 0,
+
+        [Display(Name = "AdapterType1", ResourceType = typeof(AppEnums))]
         NPU = 1,
+
+        [Display(Name = "AdapterType2", ResourceType = typeof(AppEnums))]
         Other = 2
     }
 

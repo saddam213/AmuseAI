@@ -21,7 +21,7 @@
                     </Border>
                     <CommonControls:IconButton DockPanel.Dock="Right" Icon="f00d" IconSize="12" IconColor="{StaticResource DangerColour}" Width="23" Command="{Binding FilterClearCommand}"/>
                     <ComboBox DockPanel.Dock="Right" ItemsSource="{Binding FilterStatuses}" SelectedItem="{Binding FilterStatus}" Width="100"/>
-                    <CommonControls:PlaceholderTextBox Text="{Binding FilterText, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Placeholder="Search Upscale Models" PlaceholderOpacity=".5"/>
+                    <CommonControls:PlaceholderTextBox Text="{Binding FilterText, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Placeholder="{CommonControls:Localize SearchUpscaleModels}" PlaceholderOpacity=".5"/>
                 </DockPanel>
 
                 <StackPanel DockPanel.Dock="Bottom">

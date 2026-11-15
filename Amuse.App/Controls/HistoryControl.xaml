@@ -805,7 +805,7 @@
     <Grid  DataContext="{Binding RelativeSource={RelativeSource AncestorType={x:Type local:HistoryControl}}}">
 
         <!--<TextBlock 
-            Text="No History Items Found" 
+            Text="{CommonControls:Localize NoHistoryItemsFound}" 
             Opacity=".5" 
             FontSize="15"
             HorizontalAlignment="Center" 

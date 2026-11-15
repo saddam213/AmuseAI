@@ -330,9 +330,9 @@
                         <Grid Width="180" VerticalAlignment="Bottom" HorizontalAlignment="Left" Margin="20,0,0,20">
                             <DockPanel Opacity=".7">
                                 <CommonControls:FontAwesome DockPanel.Dock="Top" Icon="f535" Size="35" IconStyle="SharpThin" HorizontalAlignment="Left" />
-                                <TextBlock DockPanel.Dock="Top" Text="Made in New Zealand" />
+                                <TextBlock DockPanel.Dock="Top" Text="{CommonControls:Localize MadeInNewZealand}" />
                                 <StackPanel HorizontalAlignment="Left" VerticalAlignment="Bottom"  UseLayoutRounding="True" Orientation="Horizontal">
-                                    <TextBlock Text="Created By: " FontStyle="Italic"  FontSize="10" VerticalAlignment="Center" Margin="0,2,0,0" />
+                                    <TextBlock Text="{CommonControls:Localize CreatedBy}" FontStyle="Italic"  FontSize="10" VerticalAlignment="Center" Margin="0,2,0,0" />
                                     <TextBlock Text="sa_ddam213" Foreground="{StaticResource AccentColour2}"/>
                                 </StackPanel>
                             </DockPanel>
@@ -435,6 +435,14 @@
                                 Command="{Binding NavigateCommand}" 
                                 CommandParameter="{x:Static Views:View.VideoToVideo}" 
                                 IsSelected="{Binding View, Converter={StaticResource EnumToBooleanConverter}, ConverterParameter=VideoToVideo}">
+                            </CommonControls:IconButton>
+                            <CommonControls:IconButton 
+                                Text="{CommonControls:Localize Menu_MediaToVideo}" 
+                                Icon="f87c"
+                                Style="{StaticResource SubmenuIconButton}"
+                                Command="{Binding NavigateCommand}" 
+                                CommandParameter="{x:Static Views:View.MediaToVideo}" 
+                                IsSelected="{Binding View, Converter={StaticResource EnumToBooleanConverter}, ConverterParameter=MediaToVideo}">
                             </CommonControls:IconButton>
                             <CommonControls:IconButton 
                                 Text="{CommonControls:Localize Menu_FrameToFrame}" 

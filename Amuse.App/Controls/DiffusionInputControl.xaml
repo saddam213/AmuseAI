@@ -283,7 +283,7 @@
                                 <CommonControls:SliderControl Text="{CommonControls:Localize ControlStrength}" Value="{Binding Options.ControlNetStrength}" IsPercent="True" Minimum="0.01" Maximum="1" TickFrequency="0.01"/>
                                 <!--<DockPanel Visibility="{Binding IsImageToImageControlNetSupported, Converter={StaticResource BooleanToVisibilityConverter}}">
                                     <CheckBox DockPanel.Dock="Left" Content="{CommonControls:Localize InputImage}" Margin="0,10,20,0"/>
-                                    <CommonControls:SliderControl Text="Input Strength" Value="{Binding Options.Strength}"  IsPercent="True"  Minimum="0.01" Maximum="1" TickFrequency="0.01" />
+                                    <CommonControls:SliderControl Text="{CommonControls:Localize InputStrength}" Value="{Binding Options.Strength}"  IsPercent="True"  Minimum="0.01" Maximum="1" TickFrequency="0.01" />
                                 </DockPanel>-->
                             </StackPanel>
                         </Grid>

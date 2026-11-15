@@ -86,7 +86,7 @@
                             <TextBlock Text="{CommonControls:Localize MemoryModes}" Style="{StaticResource FieldTextBlockStyle}" Margin="0,10,0,0"/>
                             <UniformGrid Columns="2" >
                                 <TextBlock Text="{CommonControls:Localize Quality}" Style="{StaticResource FieldTextBlockStyle}"/>
-                                <TextBlock Text="VRAM (GB)" Style="{StaticResource FieldTextBlockStyle}"/>
+                                <TextBlock Text="{CommonControls:Localize VRAMGB}" Style="{StaticResource FieldTextBlockStyle}"/>
                             </UniformGrid>
                             <ItemsControl ItemsSource="{Binding LanguageModel.MemoryProfile}">
                                 <ItemsControl.ItemTemplate>
@@ -153,27 +153,27 @@
                                                 <TextBox Text="{Binding LanguageModel.DefaultOptions.ChunkSize, UpdateSourceTrigger=PropertyChanged}"  />
                                             </StackPanel>
                                             <StackPanel>
-                                                <TextBlock Text="Beams" Style="{StaticResource FieldTextBlockStyle}"/>
+                                                <TextBlock Text="{CommonControls:Localize Beams}" Style="{StaticResource FieldTextBlockStyle}"/>
                                                 <TextBox Text="{Binding LanguageModel.DefaultOptions.Beams, UpdateSourceTrigger=PropertyChanged}"  />
                                             </StackPanel>
                                             <StackPanel>
-                                                <TextBlock Text="TopK" Style="{StaticResource FieldTextBlockStyle}"/>
+                                                <TextBlock Text="{CommonControls:Localize TopK}" Style="{StaticResource FieldTextBlockStyle}"/>
                                                 <TextBox Text="{Binding LanguageModel.DefaultOptions.TopK, UpdateSourceTrigger=PropertyChanged}"  />
                                             </StackPanel>
                                             <StackPanel>
-                                                <TextBlock Text="TopP" Style="{StaticResource FieldTextBlockStyle}"/>
+                                                <TextBlock Text="{CommonControls:Localize TopP}" Style="{StaticResource FieldTextBlockStyle}"/>
                                                 <CommonControls:FloatBox FloatValue="{Binding LanguageModel.DefaultOptions.TopP, UpdateSourceTrigger=PropertyChanged}"  />
                                             </StackPanel>
                                             <StackPanel>
-                                                <TextBlock Text="TopH" Style="{StaticResource FieldTextBlockStyle}"/>
+                                                <TextBlock Text="{CommonControls:Localize TopH}" Style="{StaticResource FieldTextBlockStyle}"/>
                                                 <CommonControls:FloatBox FloatValue="{Binding LanguageModel.DefaultOptions.TopH, UpdateSourceTrigger=PropertyChanged}"  />
                                             </StackPanel>
                                             <StackPanel>
-                                                <TextBlock Text="TypicalP" Style="{StaticResource FieldTextBlockStyle}"/>
+                                                <TextBlock Text="{CommonControls:Localize TypicalP}" Style="{StaticResource FieldTextBlockStyle}"/>
                                                 <CommonControls:FloatBox FloatValue="{Binding LanguageModel.DefaultOptions.TypicalP, UpdateSourceTrigger=PropertyChanged}"  />
                                             </StackPanel>
                                             <StackPanel>
-                                                <TextBlock Text="Temperature" Style="{StaticResource FieldTextBlockStyle}"/>
+                                                <TextBlock Text="{CommonControls:Localize Temperature}" Style="{StaticResource FieldTextBlockStyle}"/>
                                                 <CommonControls:FloatBox FloatValue="{Binding LanguageModel.DefaultOptions.Temperature, UpdateSourceTrigger=PropertyChanged}"  />
                                             </StackPanel>
                                             <StackPanel>
@@ -210,8 +210,8 @@
                     <Grid Margin="4">
                         <StackPanel VerticalAlignment="Top"  Visibility="{Binding LanguageModel.MediaType, Converter={StaticResource EnumToVisibilityConverter}, ConverterParameter=Text}">
                             <UniformGrid Columns="3" >
-                                <CheckBox x:Name="CheckBoxTextToText" Content="TextToText" />
-                                <CheckBox x:Name="CheckBoxImageToText" Content="ImageToText" />
+                                <CheckBox x:Name="CheckBoxTextToText" Content="{CommonControls:Localize Function_TextToText}" />
+                                <CheckBox x:Name="CheckBoxImageToText" Content="{CommonControls:Localize Function_ImageToText}" />
                             </UniformGrid>
                         </StackPanel>
                     </Grid>
@@ -222,9 +222,9 @@
                     <Grid Margin="4">
                         <StackPanel VerticalAlignment="Top"  Visibility="{Binding LanguageModel.MediaType, Converter={StaticResource EnumToVisibilityConverter}, ConverterParameter=Text}">
                             <UniformGrid Columns="3" >
-                                <CheckBox x:Name="CheckBoxViewImageToText" Content="ImageToText" />
-                                <CheckBox x:Name="CheckBoxViewTextInstruct" Content="TextInstruct" />
-                                <CheckBox x:Name="CheckBoxViewTextConverse" Content="TextConverse" />
+                                <CheckBox x:Name="CheckBoxViewImageToText" Content="{CommonControls:Localize Function_ImageToText}" />
+                                <CheckBox x:Name="CheckBoxViewTextInstruct" Content="{CommonControls:Localize Function_TextInstruct}" />
+                                <CheckBox x:Name="CheckBoxViewTextConverse" Content="{CommonControls:Localize Function_TextConverse}" />
                             </UniformGrid>
                         </StackPanel>
                     </Grid>

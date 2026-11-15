@@ -72,7 +72,7 @@
                                         </StackPanel>
                                         <UniformGrid Grid.Column="1" Columns="4" >
                                             <StackPanel>
-                                                <TextBlock Text="Pos X" Style="{StaticResource FieldTextBlockStyle}"/>
+                                                <TextBlock Text="{CommonControls:Localize PosX}" Style="{StaticResource FieldTextBlockStyle}"/>
                                                 <TextBox Text="{Binding PositionX, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
                                                     <i:Interaction.Behaviors>
                                                         <CommonBehaviors:TextBoxMouseIncrementBehavior />
@@ -80,7 +80,7 @@
                                                 </TextBox>
                                             </StackPanel>
                                             <StackPanel>
-                                                <TextBlock Text="Pos Y" Style="{StaticResource FieldTextBlockStyle}"/>
+                                                <TextBlock Text="{CommonControls:Localize PosY}" Style="{StaticResource FieldTextBlockStyle}"/>
                                                 <TextBox Text="{Binding PositionY, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
                                                     <i:Interaction.Behaviors>
                                                         <CommonBehaviors:TextBoxMouseIncrementBehavior />
@@ -236,7 +236,7 @@
                                                 </UniformGrid>
                                                 <StackPanel Margin="5,1,0,0">
                                                     <TextBlock Text="{Binding Name}"  FontSize="12" />
-                                                    <TextBlock Text="Image"  FontSize="8" Opacity=".6" />
+                                                    <TextBlock Text="{CommonControls:Localize Image}"  FontSize="8" Opacity=".6" />
                                                 </StackPanel>
                                             </DockPanel>
                                         </DataTemplate>
