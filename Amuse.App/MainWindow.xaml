@@ -49,7 +49,7 @@
                     </StackPanel>
                     <Grid>
                         <Button HorizontalAlignment="Center" VerticalAlignment="Center" Margin="0,2,0,0" ToolTip="{CommonControls:Localize UpdateAvailable}" Command="{Binding UpdateCommand, Source={x:Static Application.Current}}" Style="{StaticResource TransparentButton}" Visibility="{Binding Settings.IsUpdateAvailable, Converter={StaticResource BooleanToHiddenConverter}}">
-                            <StackPanel Orientation="Horizontal" Opacity=".8">
+                            <StackPanel Orientation="Horizontal" Opacity=".9">
                                 <CommonControls:FontAwesome Icon="f30f" IconStyle="Light" Color="{StaticResource SuccessColour}" Margin="3,0" Size="14" />
                                 <TextBlock Text="{CommonControls:Localize NewVersion}" Foreground="{StaticResource SuccessColour}" Margin="1,0,0,0" FontSize="11"/>
                             </StackPanel>

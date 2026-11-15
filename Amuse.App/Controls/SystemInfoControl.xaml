@@ -35,9 +35,9 @@
                             <ProgressBar Maximum="{Binding MemoryGB}" Value="{Binding ProgressSubValue, Mode=OneWay}" Margin="0,12,0,12"  Orientation="Vertical" Background="Transparent" Foreground="Black" Opacity=".15" />
                             <UniformGrid Rows="3" HorizontalAlignment="Center">
                                 <TextBlock Text="{Binding MemoryGB, StringFormat={}{0:N0}GB}" VerticalAlignment="Top" HorizontalAlignment="Center" FontSize="9" Opacity=".7" FontStyle="Italic" />
-                                <TextBlock Text="{Binding MemoryUsage, StringFormat={}{0:N0}GB}" VerticalAlignment="Center" HorizontalAlignment="Center" FontSize="10" Foreground="#BFFFFFFF" >
+                                <TextBlock Text="{Binding MemoryUsage, StringFormat={}{0:N0}GB}" VerticalAlignment="Center" HorizontalAlignment="Center" FontSize="10" Foreground="{StaticResource ProgressTextForeground}" >
                                     <TextBlock.Effect>
-                                        <DropShadowEffect Color="Black" BlurRadius="4" ShadowDepth="1" Opacity="1"/>
+                                        <DropShadowEffect Color="{StaticResource ProgressTextShadowColor}" BlurRadius="4" ShadowDepth="1" Opacity="1" />
                                     </TextBlock.Effect>
                                 </TextBlock>
                                 <TextBlock HorizontalAlignment="Center" VerticalAlignment="Bottom" FontSize="9" Opacity=".7" FontStyle="Italic" >
@@ -73,9 +73,9 @@
                             <ProgressBar Maximum="100" Value="{Binding Usage}"  Margin="0,12,0,12" Orientation="Vertical" />
                             <UniformGrid Rows="3" HorizontalAlignment="Center">
                                 <TextBlock Text="100%" VerticalAlignment="Top" HorizontalAlignment="Center" FontSize="9" Opacity=".7" FontStyle="Italic" />
-                                <TextBlock Text="{Binding Usage, StringFormat={}{0:N0}%}" VerticalAlignment="Center" HorizontalAlignment="Center" FontSize="10" Foreground="#BFFFFFFF" >
+                                <TextBlock Text="{Binding Usage, StringFormat={}{0:N0}%}" VerticalAlignment="Center" HorizontalAlignment="Center" FontSize="10" Foreground="{StaticResource ProgressTextForeground}" >
                                     <TextBlock.Effect>
-                                        <DropShadowEffect Color="Black" BlurRadius="4" ShadowDepth="1" Opacity="1"/>
+                                        <DropShadowEffect Color="{StaticResource ProgressTextShadowColor}" BlurRadius="4" ShadowDepth="1" Opacity="1" />
                                     </TextBlock.Effect>
                                 </TextBlock>
                                 <TextBlock HorizontalAlignment="Center" VerticalAlignment="Bottom" FontSize="9" Opacity=".7" FontStyle="Italic" >

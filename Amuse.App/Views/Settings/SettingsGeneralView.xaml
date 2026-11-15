@@ -81,8 +81,12 @@
                     <!--Other Settings-->
                     <GroupBox Header="{CommonControls:Localize OtherSettings}" Margin="0,10,0,0">
                         <StackPanel Margin="6">
-                            <UniformGrid Columns="4" >
-                                <StackPanel Margin="0,0,4,0">
+                            <UniformGrid Columns="5" >
+                                <StackPanel Margin="0,0,4,0" ToolTip="{CommonControls:Localize ToolTip_Theme}" ToolTipService.InitialShowDelay="200">
+                                    <TextBlock Text="{CommonControls:Localize Theme}" Style="{StaticResource FieldTextBlockStyle}"/>
+                                    <ComboBox ItemsSource="{Binding Source={StaticResource ThemeType}}" SelectedItem="{Binding Settings.Theme, Mode=TwoWay}" Style="{StaticResource EnumComboBox}" />
+                                </StackPanel>
+                                <StackPanel Margin="4,0,4,0">
                                     <TextBlock Text="{CommonControls:Localize Language}" Style="{StaticResource FieldTextBlockStyle}"/>
                                     <CommonControls:LocalizationControl UILanguage="{Binding Settings.UILanguage, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
                                 </StackPanel>
@@ -90,6 +94,7 @@
                                     <TextBlock Text="{CommonControls:Localize UIScale}" Style="{StaticResource FieldTextBlockStyle}"/>
                                     <ComboBox ItemsSource="{Binding ScaleOptions}" SelectedValue="{Binding Settings.UIScale, Mode=TwoWay}" SelectedValuePath="Value" DisplayMemberPath="Label" />
                                 </StackPanel>
+                              
                                 <CheckBox Content="{CommonControls:Localize CheckForUpdates}" IsChecked="{Binding Settings.IsAutoUpdateEnabled}" Margin="5,20,0,0"/>
                                 <CommonControls:HyperlinkControl Label="{CommonControls:Localize LogDirectory}" Link="{x:Static app:App.DirectoryLogs}" IsButtonType="True" VerticalAlignment="Stretch" Margin="0,8,0,0" />
                             </UniformGrid>

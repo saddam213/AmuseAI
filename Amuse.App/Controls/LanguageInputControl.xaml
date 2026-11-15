@@ -92,8 +92,8 @@
                                         ToolTipFalse="{Binding Description}"
                                         IsChecked="{Binding IsEnabled, Mode=TwoWay}" 
                                         IsCheckedCommand="{Binding ToolEnableCommand, RelativeSource={RelativeSource AncestorType={x:Type local:LanguageInputControl}}}" 
-                                        ColorTrue="#80FFFFFF"
-                                        ColorFalse="#25FFFFFF"
+                                        ColorTrue="{StaticResource ToggleIconOnColour}"
+                                        ColorFalse="{StaticResource ToggleIconOffColour}"
                                         ToolTipPlacement="Bottom"/>
                                     </DataTemplate>
                                 </ItemsControl.ItemTemplate>

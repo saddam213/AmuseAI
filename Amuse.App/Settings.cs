@@ -19,6 +19,7 @@ namespace Amuse.App
         private Orientation _historyOrientation;
         private int _historyItems = 500;
         private double _uiScale = 1;
+        private ThemeType _theme;
         private string _uiLanguage;
         private double _volumeInput = 0.1;
         private double _volumeOutput = 0.1;
@@ -117,6 +118,12 @@ namespace Amuse.App
         {
             get { return _uiScale; }
             set { SetProperty(ref _uiScale, value); }
+        }
+
+        public ThemeType Theme
+        {
+            get { return _theme; }
+            set { SetProperty(ref _theme, value); }
         }
 
         public int HistoryItems

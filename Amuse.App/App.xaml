@@ -477,7 +477,7 @@
 
             <Style x:Key="ModelStatusFontAwesome" TargetType="{x:Type CommonControls:FontAwesome}" BasedOn="{StaticResource {x:Type CommonControls:FontAwesome}}">
                 <Setter Property="Icon" Value="f00c"/>
-                <Setter Property="Color" Value="#10FFFFFF"/>
+                <Setter Property="Color" Value="{StaticResource IconMutedColour}"/>
                 <Setter Property="ToolTip" Value="{CommonControls:Localize ToolTip_ModelStatus_NotInstalled}"/>
                 <Style.Triggers>
                     <DataTrigger Binding="{Binding Tag, RelativeSource={RelativeSource Self}}" Value="Installed">
@@ -635,7 +635,7 @@
                                 <CommonControls:FontAwesome.Style>
                                     <Style TargetType="{x:Type CommonControls:FontAwesome}" BasedOn="{StaticResource {x:Type CommonControls:FontAwesome}}">
                                         <Setter Property="ToolTip" Value="{x:Null}"/>
-                                        <Setter Property="Color" Value="#10FFFFFF"/>
+                                        <Setter Property="Color" Value="{StaticResource IconMutedColour}"/>
                                         <Style.Triggers>
                                             <DataTrigger Binding="{Binding AccessToken}" Value="HuggingFace">
                                                 <Setter Property="Color" Value="{StaticResource WarningColour}"/>
@@ -674,7 +674,7 @@
                             <CommonControls:FontAwesome.Style>
                                 <Style TargetType="{x:Type CommonControls:FontAwesome}" BasedOn="{StaticResource {x:Type CommonControls:FontAwesome}}">
                                     <Setter Property="ToolTip" Value="{x:Null}"/>
-                                    <Setter Property="Color" Value="#10FFFFFF"/>
+                                    <Setter Property="Color" Value="{StaticResource IconMutedColour}"/>
                                     <Style.Triggers>
                                         <DataTrigger Binding="{Binding AccessToken}" Value="HuggingFace">
                                             <Setter Property="Color" Value="{StaticResource WarningColour}"/>

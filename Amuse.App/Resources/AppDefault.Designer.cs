@@ -4453,6 +4453,33 @@ namespace Amuse.App.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Theme.
+        /// </summary>
+        public static string Theme {
+            get {
+                return ResourceManager.GetString("Theme", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Restart Amuse to apply the new theme.
+        /// </summary>
+        public static string ThemeChangedMessage {
+            get {
+                return ResourceManager.GetString("ThemeChangedMessage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Theme Changed.
+        /// </summary>
+        public static string ThemeChangedTitle {
+            get {
+                return ResourceManager.GetString("ThemeChangedTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Thinking Enabled.
         /// </summary>
         public static string ThinkingEnabled {

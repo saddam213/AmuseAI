@@ -39,7 +39,7 @@
             <Setter Property="Margin" Value="0,0,0,18"/>
             <Setter Property="CornerRadius" Value="6,6,0,0"/>
             <Setter Property="BorderThickness" Value="1,1,1,0"/>
-            <Setter Property="Background" Value="#80000000"/>
+            <Setter Property="Background" Value="{StaticResource HistoryItemBackground}"/>
             <Setter Property="BorderBrush" Value="{StaticResource ContainerBorder}"/>
             <Style.Triggers>
                 <DataTrigger Binding="{Binding Orientation, RelativeSource={RelativeSource AncestorType={x:Type local:HistoryControl}}}" Value="Vertical">

@@ -385,6 +385,15 @@ namespace Amuse.App.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Restart Amuse to apply the theme.
+        /// </summary>
+        public static string ToolTip_Theme {
+            get {
+                return ResourceManager.GetString("ToolTip_Theme", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Clear Timeline.
         /// </summary>
         public static string ToolTip_VideoTimeline_Clear {

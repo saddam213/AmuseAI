@@ -267,4 +267,7 @@
   <data name="ToolTip_Acsess_Civitai" xml:space="preserve">
     <value>Gated Model - Civitai Authentication Required.</value>
   </data>
+  <data name="ToolTip_Theme" xml:space="preserve">
+    <value>Restart Amuse to apply the theme.</value>
+  </data>
 </root>

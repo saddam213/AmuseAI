@@ -267,4 +267,7 @@
   <data name="ToolTip_Acsess_Civitai" xml:space="preserve">
     <value>制限付きモデル - Civitai認証が必要です。</value>
   </data>
+  <data name="ToolTip_Theme" xml:space="preserve">
+    <value>テーマを適用するにはAmuseを再起動してください。</value>
+  </data>
 </root>

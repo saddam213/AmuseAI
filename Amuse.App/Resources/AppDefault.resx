@@ -1791,4 +1791,13 @@
   <data name="MusicReferenceTipVibe" xml:space="preserve">
     <value>- Captures the unique rhythmic and atmospheric vibe</value>
   </data>
+  <data name="Theme" xml:space="preserve">
+    <value>Theme</value>
+  </data>
+  <data name="ThemeChangedTitle" xml:space="preserve">
+    <value>Theme Changed</value>
+  </data>
+  <data name="ThemeChangedMessage" xml:space="preserve">
+    <value>Restart Amuse to apply the new theme.</value>
+  </data>
 </root>

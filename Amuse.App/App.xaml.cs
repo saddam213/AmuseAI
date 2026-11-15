@@ -18,6 +18,7 @@ using System.Windows.Media;
 using System.Windows.Threading;
 using TensorStack.Common.Common;
 using TensorStack.WPF;
+using TensorStack.WPF.Dialogs;
 using TensorStack.WPF.Services;
 
 namespace Amuse.App
@@ -470,6 +471,35 @@ namespace Amuse.App
             if (propertyName.Equals(nameof(Settings.IsAutoUpdateEnabled)))
             {
                 await CheckForUpdates();
+            }
+            else if (propertyName.Equals(nameof(Settings.Theme)))
+            {
+                await OnThemeChangedAsync();
+            }
+        }
+
+
+        /// <summary>
+        /// Called when the theme setting changes, saves settings and tells the user a restart is required.
+        /// </summary>
+        private async Task OnThemeChangedAsync()
+        {
+            try
+            {
+                // Save
+                await _settings.SaveAsync();
+                Log.Logger.Information("[OnThemeChanged] Theme changed, Theme: {Theme}, Active: {Active}", _settings.Theme, ThemeDictionary.Theme);
+
+                // Switched back to the running theme, no restart needed
+                if (_settings.Theme == ThemeDictionary.Theme)
+                    return;
+
+                // Notify
+                await DialogService.ShowMessageAsync(AppDefault.ThemeChangedTitle, AppDefault.ThemeChangedMessage, MessageDialogType.Ok, MessageBoxIconType.Info, MessageBoxStyleType.Info);
+            }
+            catch (Exception ex)
+            {
+                Log.Logger.Error(ex, "[OnThemeChanged] An exception occurred handling the theme change.");
             }
         }
 
