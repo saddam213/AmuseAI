@@ -59,7 +59,7 @@ namespace Amuse.App.Dialogs
 
         protected override async Task SaveAsync()
         {
-            await _navigationService.NavigateAsync((int)View.General);
+            await _navigationService.NavigateAsync((int)View.SettingsGeneral);
             await base.CancelAsync();
         }
 

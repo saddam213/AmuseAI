@@ -46,7 +46,7 @@ namespace Amuse.App.Views
             InitializeComponent();
         }
 
-        public override View View => View.Component;
+        public override View View => View.SettingsComponent;
         public AsyncRelayCommand AddModelCommand { get; }
         public AsyncRelayCommand CopyModelCommand { get; }
         public AsyncRelayCommand UpdateModelCommand { get; }

@@ -137,6 +137,7 @@ namespace Amuse.App.Services
 
                 environmentConfig.Variables.Add("HF_HUB_OFFLINE", "1");
                 environmentConfig.Variables.Add("HF_HUB_CACHE", _settings.DirectoryDiffusion);
+                environmentConfig.Variables.Add("PIP_CACHE_DIR", Path.Combine(backendPath, "Pipelines", ".pip-cache"));
                 return environmentConfig;
             }
             else if (environment.Backend == BackendType.StableDiffusionCpp)
@@ -146,6 +147,20 @@ namespace Amuse.App.Services
                     IsDebug = _settings.IsServerDebugEnabled,
                     ServerPort = 2345,
                     ServerAddress = "127.0.0.1",
+                    Directory = backendPath,
+                    Environment = environment.Environment,
+                    HostVersion = environment.HostVersion,
+                    Requirements = [.. environment.Requirements],
+                    Variables = environment.Variables?.ToDictionary() ?? [],
+                    Status = status
+                };
+                return environmentConfig;
+            }
+            else if (environment.Backend == BackendType.AudioCpp)
+            {
+                var environmentConfig = new PipelineCreateOptions
+                {
+                    IsDebug = _settings.IsServerDebugEnabled,
                     Directory = backendPath,
                     Environment = environment.Environment,
                     HostVersion = environment.HostVersion,
@@ -194,6 +209,22 @@ namespace Amuse.App.Services
                     await SaveEnvironmentStatusAsync(environment);
                 }
             }
+            else if (environment.Backend == BackendType.AudioCpp)
+            {
+                var clientConfig = new ClientConfig
+                {
+                    IsDebugMode = createOptions.IsDebug,
+                    ServerPath = App.DirectoryServer,
+                    ServerType = ServerType.AudioCpp,
+                    ServerVariables = createOptions.Variables
+                };
+
+                using (var pipelineClient = new PipelineClient(clientConfig, progressCallback, _logger))
+                {
+                    await pipelineClient.CreateAsync(createOptions, cancellationToken);
+                    await SaveEnvironmentStatusAsync(environment);
+                }
+            }
             else
             {
                 throw new NotImplementedException();
@@ -212,9 +243,12 @@ namespace Amuse.App.Services
 
         private static string GetBackendPath(EnvironmentModel environment)
         {
-            return environment.Backend == BackendType.HuggingFace
-                ? Path.Combine(App.DirectoryData, "RuntimeHuggingFace")
-                : Path.Combine(App.DirectoryData, "RuntimeStableDiffusionCpp");
+            return environment.Backend switch
+            {
+                BackendType.HuggingFace => Path.Combine(App.DirectoryData, "RuntimeHuggingFace"),
+                BackendType.AudioCpp => Path.Combine(App.DirectoryData, "RuntimeAudioCpp"),
+                _ => Path.Combine(App.DirectoryData, "RuntimeStableDiffusionCpp")
+            };
         }
 
 

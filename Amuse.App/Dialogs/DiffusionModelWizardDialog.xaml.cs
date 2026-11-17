@@ -35,7 +35,7 @@ namespace Amuse.App.Dialogs
             Settings = settings;
             PipelineOptions = new ObservableCollection<WizardItemModel>();
             SelectedBackend = BackendType.StableDiffusionCpp;
-            Backends = [BackendType.StableDiffusionCpp, BackendType.HuggingFace];
+            Backends = [BackendType.StableDiffusionCpp, BackendType.HuggingFace, BackendType.AudioCpp];
             Errors = new ObservableCollection<string>();
             CancelCommand = new AsyncRelayCommand(CancelAsync);
             SaveCommand = new AsyncRelayCommand(SaveAsync, CanExecuteSave);

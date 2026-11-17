@@ -4,6 +4,7 @@ using Amuse.App.Services;
 using Amuse.App.Views;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Windows;
@@ -214,12 +215,15 @@ namespace Amuse.App.Controls
 
             // Extractor Models
             ExtractCollectionView = new ListCollectionView(Settings.ExtractModels);
+            ExtractCollectionView.IsLiveSorting = true;
+            ExtractCollectionView.SortDescriptions.Add(new SortDescription(nameof(ExtractModel.Status), ListSortDirection.Descending));
+            ExtractCollectionView.SortDescriptions.Add(new SortDescription(nameof(ExtractModel.Name), ListSortDirection.Ascending));
             ExtractCollectionView.Filter = (obj) =>
             {
                 if (obj is not ExtractModel viewModel)
                     return false;
 
-                if (viewModel.Status == ModelStatusType.Available)
+                if (Settings.IsInstalledModelsOnly && viewModel.Status == ModelStatusType.Available)
                     return false;
 
                 if (_selectedDevice is null)
@@ -231,12 +235,15 @@ namespace Amuse.App.Controls
 
             //Upscale models
             UpscaleCollectionView = new ListCollectionView(Settings.UpscaleModels);
+            UpscaleCollectionView.IsLiveSorting = true;
+            UpscaleCollectionView.SortDescriptions.Add(new SortDescription(nameof(UpscaleModel.Status), ListSortDirection.Descending));
+            UpscaleCollectionView.SortDescriptions.Add(new SortDescription(nameof(UpscaleModel.Name), ListSortDirection.Ascending));
             UpscaleCollectionView.Filter = (obj) =>
             {
                 if (obj is not UpscaleModel viewModel)
                     return false;
 
-                if (viewModel.Status == ModelStatusType.Available)
+                if (Settings.IsInstalledModelsOnly && viewModel.Status == ModelStatusType.Available)
                     return false;
 
                 if (_selectedDevice is null)
@@ -254,6 +261,10 @@ namespace Amuse.App.Controls
                     DeviceCollectionView.Refresh();
                     SelectedDevice = Settings.GetDefaultDevice();
                 }
+                else if (p.PropertyName == nameof(Settings.IsInstalledModelsOnly))
+                {
+                    Device_SelectionChanged(default, default);
+                }
             };
             return Task.CompletedTask;
         }
@@ -265,14 +276,14 @@ namespace Amuse.App.Controls
             {
                 ExtractCollectionView.Refresh();
                 SelectedExtractor = ExtractCollectionView.Cast<ExtractModel>().FirstOrDefault(x => x == _currentExtractor)
-                                 ?? ExtractCollectionView.Cast<ExtractModel>().OrderByDescending(x => x.IsDefault).FirstOrDefault();
+                                 ?? ExtractCollectionView.Cast<ExtractModel>().OrderByDescending(x => x.IsDefault).ThenByDescending(x => x.Status).FirstOrDefault();
             }
 
             if (UpscaleCollectionView is not null)
             {
                 UpscaleCollectionView.Refresh();
                 SelectedUpscaler = UpscaleCollectionView.Cast<UpscaleModel>().FirstOrDefault(x => x == _currentUpscaler)
-                                ?? UpscaleCollectionView.Cast<UpscaleModel>().OrderByDescending(x => x.IsDefault).FirstOrDefault();
+                                ?? UpscaleCollectionView.Cast<UpscaleModel>().OrderByDescending(x => x.IsDefault).ThenByDescending(x => x.Status).FirstOrDefault();
             }
         }
 
@@ -422,11 +433,11 @@ namespace Amuse.App.Controls
         {
             if (sender.Equals("Extract"))
             {
-                await NavigationService.NavigateAsync((int)View.Extract);
+                await NavigationService.NavigateAsync((int)View.SettingsExtract);
             }
             else if (sender.Equals("Upscale"))
             {
-                await NavigationService.NavigateAsync((int)View.Upscale);
+                await NavigationService.NavigateAsync((int)View.SettingsUpscale);
             }
         }
     }

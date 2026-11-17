@@ -30,7 +30,7 @@ namespace Amuse.App.Views
             InitializeComponent();
         }
 
-        public override View View => View.General;
+        public override View View => View.SettingsGeneral;
         public AsyncRelayCommand SaveCommand { get; }
         public AsyncRelayCommand MoveModelDirectoryCommand { get; }
         public AsyncRelayCommand MoveHistoryDirectoryCommand { get; }

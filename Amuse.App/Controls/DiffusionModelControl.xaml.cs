@@ -457,7 +457,7 @@ namespace Amuse.App.Controls
                 if (obj is not DiffusionModel viewModel)
                     return false;
 
-                if (viewModel.Status == ModelStatusType.Available)
+                if (Settings.IsInstalledModelsOnly && viewModel.Status == ModelStatusType.Available)
                     return false;
 
                 if (_selectedDevice is null)
@@ -489,7 +489,7 @@ namespace Amuse.App.Controls
                 if (obj is not LoraAdapterModel viewModel)
                     return false;
 
-                if (viewModel.Status == ModelStatusType.Available)
+                if (Settings.IsInstalledModelsOnly && viewModel.Status == ModelStatusType.Available)
                     return false;
 
                 if (_selectedModel is null)
@@ -518,7 +518,7 @@ namespace Amuse.App.Controls
                 if (obj is not ControlNetModel viewModel)
                     return false;
 
-                if (viewModel.Status == ModelStatusType.Available)
+                if (Settings.IsInstalledModelsOnly && viewModel.Status == ModelStatusType.Available)
                     return false;
 
                 if (_selectedModel is null)
@@ -548,7 +548,7 @@ namespace Amuse.App.Controls
                 if (obj is not ExtractModel viewModel)
                     return false;
 
-                if (viewModel.Status == ModelStatusType.Available)
+                if (Settings.IsInstalledModelsOnly && viewModel.Status == ModelStatusType.Available)
                     return false;
 
                 if (_selectedModel is null)
@@ -571,7 +571,7 @@ namespace Amuse.App.Controls
                 if (obj is not UpscaleModel viewModel)
                     return false;
 
-                if (viewModel.Status == ModelStatusType.Available)
+                if (Settings.IsInstalledModelsOnly && viewModel.Status == ModelStatusType.Available)
                     return false;
 
                 if (_selectedModel is null)
@@ -592,6 +592,11 @@ namespace Amuse.App.Controls
                 {
                     DeviceCollectionView.Refresh();
                     SelectedDevice = Settings.GetDefaultDevice();
+                }
+                else if (p.PropertyName == nameof(Settings.IsInstalledModelsOnly))
+                {
+                    Device_SelectionChanged(default, default);
+                    Model_SelectionChanged(default, default);
                 }
             };
 
@@ -648,7 +653,7 @@ namespace Amuse.App.Controls
             if (_selectedModel is null)
                 return;
 
-            IsLoraSupported = IsLoraAvailable && _selectedModel.Backend != BackendType.OnnxRuntime;
+            IsLoraSupported = IsLoraAvailable && _selectedModel.Backend != BackendType.OnnxRuntime && _selectedModel.Backend != BackendType.AudioCpp;
             SelectedQualityMode = _selectedModel.UserQualityMode is null
                 ? _selectedDevice?.DefaultQualityMode ?? QualityMode.Standard
                 : _selectedModel.UserQualityMode.Value;
@@ -985,23 +990,29 @@ namespace Amuse.App.Controls
         {
             if (sender.Equals("Diffusion"))
             {
-                await NavigationService.NavigateAsync((int)View.Diffusion);
+                var settingsView = ViewManager.GetViewCategory(ViewType) switch
+                {
+                    ViewCategory.Video => View.SettingsVideo,
+                    ViewCategory.Audio => View.SettingsAudio,
+                    _ => View.SettingsImage
+                };
+                await NavigationService.NavigateAsync((int)settingsView);
             }
             else if (sender.Equals("ControlNet"))
             {
-                await NavigationService.NavigateAsync((int)View.ControlNet);
+                await NavigationService.NavigateAsync((int)View.SettingsControlNet);
             }
             else if (sender.Equals("LoraAdapter"))
             {
-                await NavigationService.NavigateAsync((int)View.LoraAdapter);
+                await NavigationService.NavigateAsync((int)View.SettingsLoraAdapter);
             }
             else if (sender.Equals("Extract"))
             {
-                await NavigationService.NavigateAsync((int)View.Extract);
+                await NavigationService.NavigateAsync((int)View.SettingsExtract);
             }
             else if (sender.Equals("Upscale"))
             {
-                await NavigationService.NavigateAsync((int)View.Upscale);
+                await NavigationService.NavigateAsync((int)View.SettingsUpscale);
             }
         }
     }

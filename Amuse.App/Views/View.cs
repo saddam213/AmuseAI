@@ -5,15 +5,17 @@ namespace Amuse.App.Views
     public enum View
     {
         Home = 0,
-        General = 50,
-        Environment = 51,
-        Diffusion = 52,
-        LoraAdapter = 53,
-        ControlNet = 54,
-        Extract = 55,
-        Upscale = 56,
-        Component = 58,
-        Language = 59,
+        SettingsGeneral = 50,
+        SettingsEnvironment = 51,
+        SettingsImage = 52,
+        SettingsLoraAdapter = 53,
+        SettingsControlNet = 54,
+        SettingsExtract = 55,
+        SettingsUpscale = 56,
+        SettingsComponent = 58,
+        SettingsLanguage = 59,
+        SettingsVideo = 60,
+        SettingsAudio = 61,
 
         TextToImage = 100,
         ImageToImage = 101,
@@ -64,7 +66,7 @@ namespace Amuse.App.Views
         private static readonly Dictionary<ViewCategory, View> CurrentViewMap = new Dictionary<ViewCategory, View>
         {
             {ViewCategory.Other, View.Gallery },
-            {ViewCategory.Settings, View.General },
+            {ViewCategory.Settings, View.SettingsGeneral },
             {ViewCategory.Image, View.TextToImage },
             {ViewCategory.Video, View.TextToVideo },
             {ViewCategory.Audio, View.TextToMusic },
@@ -79,15 +81,17 @@ namespace Amuse.App.Views
             { View.Models, ViewCategory.Other  },
 
             // Settings
-            { View.General, ViewCategory.Settings  },
-            { View.Environment, ViewCategory.Settings  },
-            { View.Diffusion, ViewCategory.Settings  },
-            { View.LoraAdapter , ViewCategory.Settings  },
-            { View.ControlNet, ViewCategory.Settings  },
-            { View.Extract , ViewCategory.Settings  },
-            { View.Upscale , ViewCategory.Settings  },
-            { View.Component , ViewCategory.Settings  },
-            { View.Language , ViewCategory.Settings  },
+            { View.SettingsGeneral, ViewCategory.Settings  },
+            { View.SettingsEnvironment, ViewCategory.Settings  },
+            { View.SettingsImage, ViewCategory.Settings  },
+            { View.SettingsVideo, ViewCategory.Settings  },
+            { View.SettingsAudio, ViewCategory.Settings  },
+            { View.SettingsLoraAdapter , ViewCategory.Settings  },
+            { View.SettingsControlNet, ViewCategory.Settings  },
+            { View.SettingsExtract , ViewCategory.Settings  },
+            { View.SettingsUpscale , ViewCategory.Settings  },
+            { View.SettingsComponent , ViewCategory.Settings  },
+            { View.SettingsLanguage , ViewCategory.Settings  },
 
             // Image
             { View.TextToImage, ViewCategory.Image  },

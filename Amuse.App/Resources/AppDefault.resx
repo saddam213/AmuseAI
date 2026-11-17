@@ -123,14 +123,23 @@
   <data name="ControlNet" xml:space="preserve">
     <value>ControlNet</value>
   </data>
+  <data name="ControlNets" xml:space="preserve">
+    <value>ControlNets</value>
+  </data>
   <data name="Diffusion" xml:space="preserve">
     <value>Diffusion</value>
   </data>
   <data name="Environment" xml:space="preserve">
     <value>Environment</value>
   </data>
+  <data name="Environments" xml:space="preserve">
+    <value>Environments</value>
+  </data>
   <data name="Extractor" xml:space="preserve">
     <value>Extractor</value>
+  </data>
+  <data name="Extractors" xml:space="preserve">
+    <value>Extractors</value>
   </data>
   <data name="Gallery" xml:space="preserve">
     <value>Gallery</value>
@@ -144,6 +153,9 @@
   <data name="LoraAdapter" xml:space="preserve">
     <value>Lora Adapter</value>
   </data>
+  <data name="LoraAdapters" xml:space="preserve">
+    <value>Lora Adapters</value>
+  </data>
   <data name="Models" xml:space="preserve">
     <value>Models</value>
   </data>
@@ -155,6 +167,9 @@
   </data>
   <data name="Upscaler" xml:space="preserve">
     <value>Upscaler</value>
+  </data>
+  <data name="Upscalers" xml:space="preserve">
+    <value>Upscalers</value>
   </data>
   <data name="Menu_ImageToImage" xml:space="preserve">
     <value>Image ➔ Image</value>
@@ -539,6 +554,27 @@
   </data>
   <data name="DiffusionSettings" xml:space="preserve">
     <value>Diffusion Settings</value>
+  </data>
+  <data name="ImageSettings" xml:space="preserve">
+    <value>Image Settings</value>
+  </data>
+  <data name="VideoSettings" xml:space="preserve">
+    <value>Video Settings</value>
+  </data>
+  <data name="AudioSettings" xml:space="preserve">
+    <value>Audio Settings</value>
+  </data>
+  <data name="ImageModels" xml:space="preserve">
+    <value>Image Models</value>
+  </data>
+  <data name="VideoModels" xml:space="preserve">
+    <value>Video Models</value>
+  </data>
+  <data name="AudioModels" xml:space="preserve">
+    <value>Audio Models</value>
+  </data>
+  <data name="TextModels" xml:space="preserve">
+    <value>Text Models</value>
   </data>
   <data name="EnvironmentSettings" xml:space="preserve">
     <value>Environment Settings</value>

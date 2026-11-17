@@ -59,7 +59,7 @@ namespace Amuse.App.Views
             InitializeComponent();
         }
 
-        public override View View => View.Language;
+        public override View View => View.SettingsLanguage;
         public AsyncRelayCommand SaveCommand { get; }
         public AsyncRelayCommand AddModelWizardCommand { get; }
         public AsyncRelayCommand CopyModelCommand { get; }

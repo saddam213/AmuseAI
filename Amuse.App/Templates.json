@@ -1,6 +1,403 @@
 {
   "DiffusionTemplates": [
     {
+      "Backend": "AudioCpp",
+      "Name": "AudioCpp_MiniMaxMusic3",
+      "Template": "AudioCpp_MiniMaxMusic3",
+      "Pipeline": "MiniMaxAudioPipeline",
+      "ModelType": "Base",
+      "BaseType": "bfloat16",
+      "MediaType": "Audio",
+      "ProcessTypes": [ "TextToAudio" ],
+      "ViewFilter": [ "TextToMusic" ],
+      "Checkpoint": {
+        "Transformer": {
+          "Name": "Model",
+          "Type": "LocalFolder",
+          "Path": ""
+        }
+      },
+      "MemoryProfile": [
+        {
+          "QualityMode": "Draft",
+          "MemoryModes": [ 8, 10, 12 ]
+        },
+        {
+          "QualityMode": "Standard",
+          "MemoryModes": [ 8, 10, 12 ]
+        },
+        {
+          "QualityMode": "Production",
+          "MemoryModes": [ 8, 10, 12 ]
+        }
+      ],
+      "DefaultOptions": {
+        "Steps": 30,
+        "GuidanceScale": 1.7,
+        "GuidanceScale2": 1.5,
+        "SampleRate": 44100,
+        "Channels": 2,
+        "Strength": 1,
+        "Duration": 30,
+        "MaxLength": 512,
+        "MaxLength2": 4096,
+        "Scheduler": "FlowMatchEuler",
+        "Schedulers": [
+          {
+            "Scheduler": "FlowMatchEuler",
+            "NumTrainTimesteps": 1,
+            "Shift": 3,
+            "UseDynamicShifting": false,
+            "BaseShift": 0.5,
+            "MaxShift": 1.15,
+            "BaseImageSeqLen": 256,
+            "MaxImageSeqLen": 4096,
+            "InvertSigmas": false,
+            "ShiftTerminal": 0,
+            "UseKarrasSigmas": false,
+            "UseExponentialSigmas": false,
+            "UseBetaSigmas": false,
+            "TimeShiftType": "Exponential",
+            "StochasticSampling": false
+          }
+        ]
+      }
+    },
+    {
+      "Backend": "AudioCpp",
+      "Name": "AudioCpp_StableAudio3",
+      "Template": "AudioCpp_StableAudio3",
+      "Pipeline": "StableAudioPipeline",
+      "ModelType": "Base",
+      "BaseType": "bfloat16",
+      "MediaType": "Audio",
+      "ProcessTypes": [ "TextToAudio" ],
+      "ViewFilter": [ "TextToMusic" ],
+      "Checkpoint": {
+        "Transformer": {
+          "Name": "Model",
+          "Type": "LocalFile",
+          "Path": ""
+        }
+      },
+      "MemoryProfile": [
+        {
+          "QualityMode": "Draft",
+          "MemoryModes": [ 4, 6, 8 ]
+        },
+        {
+          "QualityMode": "Standard",
+          "MemoryModes": [ 4, 6, 8 ]
+        },
+        {
+          "QualityMode": "Production",
+          "MemoryModes": [ 4, 6, 8 ]
+        }
+      ],
+      "DefaultOptions": {
+        "Steps": 8,
+        "GuidanceScale": 1,
+        "SampleRate": 44100,
+        "Channels": 2,
+        "Strength": 1,
+        "Duration": 120,
+        "MaxLength": 512,
+        "Scheduler": "FlowMatchEuler",
+        "Schedulers": [
+          {
+            "Scheduler": "FlowMatchEuler",
+            "NumTrainTimesteps": 1,
+            "Shift": 3,
+            "UseDynamicShifting": false,
+            "BaseShift": 0.5,
+            "MaxShift": 1.15,
+            "BaseImageSeqLen": 256,
+            "MaxImageSeqLen": 4096,
+            "InvertSigmas": false,
+            "ShiftTerminal": 0,
+            "UseKarrasSigmas": false,
+            "UseExponentialSigmas": false,
+            "UseBetaSigmas": false,
+            "TimeShiftType": "Exponential",
+            "StochasticSampling": false
+          }
+        ]
+      }
+    },
+    {
+      "Backend": "AudioCpp",
+      "Name": "AudioCpp_StableAudio3_SFX",
+      "Template": "AudioCpp_StableAudio3_SFX",
+      "Pipeline": "StableAudioPipeline",
+      "ModelType": "Base",
+      "BaseType": "bfloat16",
+      "MediaType": "Audio",
+      "ProcessTypes": [ "TextToAudio" ],
+      "ViewFilter": [ "TextToAudio" ],
+      "Checkpoint": {
+        "Transformer": {
+          "Name": "Model",
+          "Type": "LocalFile",
+          "Path": ""
+        }
+      },
+      "MemoryProfile": [
+        {
+          "QualityMode": "Draft",
+          "MemoryModes": [ 4, 4, 6 ]
+        },
+        {
+          "QualityMode": "Standard",
+          "MemoryModes": [ 4, 4, 6 ]
+        },
+        {
+          "QualityMode": "Production",
+          "MemoryModes": [ 4, 4, 6 ]
+        }
+      ],
+      "DefaultOptions": {
+        "Steps": 8,
+        "GuidanceScale": 1,
+        "SampleRate": 44100,
+        "Channels": 2,
+        "Strength": 1,
+        "Duration": 30,
+        "MaxLength": 512,
+        "Scheduler": "FlowMatchEuler",
+        "Schedulers": [
+          {
+            "Scheduler": "FlowMatchEuler",
+            "NumTrainTimesteps": 1,
+            "Shift": 3,
+            "UseDynamicShifting": false,
+            "BaseShift": 0.5,
+            "MaxShift": 1.15,
+            "BaseImageSeqLen": 256,
+            "MaxImageSeqLen": 4096,
+            "InvertSigmas": false,
+            "ShiftTerminal": 0,
+            "UseKarrasSigmas": false,
+            "UseExponentialSigmas": false,
+            "UseBetaSigmas": false,
+            "TimeShiftType": "Exponential",
+            "StochasticSampling": false
+          }
+        ]
+      }
+    },
+    {
+      "Backend": "AudioCpp",
+      "Name": "AudioCpp_YuE2",
+      "Template": "AudioCpp_YuE2",
+      "Pipeline": "YuEPipeline",
+      "ModelType": "Base",
+      "BaseType": "bfloat16",
+      "MediaType": "Audio",
+      "ProcessTypes": [ "TextToAudio" ],
+      "ViewFilter": [ "TextToMusic" ],
+      "Checkpoint": {
+        "Transformer": {
+          "Name": "Model",
+          "Type": "LocalFolder",
+          "Path": ""
+        }
+      },
+      "MemoryProfile": [
+        {
+          "QualityMode": "Draft",
+          "MemoryModes": [ 6, 8, 8 ]
+        },
+        {
+          "QualityMode": "Standard",
+          "MemoryModes": [ 6, 8, 8 ]
+        },
+        {
+          "QualityMode": "Production",
+          "MemoryModes": [ 6, 8, 8 ]
+        }
+      ],
+      "DefaultOptions": {
+        "Steps": 8,
+        "GuidanceScale": 1,
+        "SampleRate": 48000,
+        "Channels": 2,
+        "Strength": 1,
+        "Duration": 0,
+        "MaxLength": 512,
+        "MaxLength2": 4096,
+        "Task": "full",
+        "Tasks": [ "full", "melody", "off" ],
+        "Scheduler": "FlowMatchEuler",
+        "Schedulers": [
+          {
+            "Scheduler": "FlowMatchEuler",
+            "NumTrainTimesteps": 1,
+            "Shift": 3,
+            "UseDynamicShifting": false,
+            "BaseShift": 0.5,
+            "MaxShift": 1.15,
+            "BaseImageSeqLen": 256,
+            "MaxImageSeqLen": 4096,
+            "InvertSigmas": false,
+            "ShiftTerminal": 0,
+            "UseKarrasSigmas": false,
+            "UseExponentialSigmas": false,
+            "UseBetaSigmas": false,
+            "TimeShiftType": "Exponential",
+            "StochasticSampling": false
+          }
+        ]
+      }
+    },
+    {
+      "Backend": "AudioCpp",
+      "Name": "AudioCpp_AceStep_Turbo",
+      "Template": "AudioCpp_AceStep_Turbo",
+      "Pipeline": "AceStepPipeline",
+      "ModelType": "Turbo",
+      "BaseType": "bfloat16",
+      "MediaType": "Audio",
+      "ProcessTypes": [ "TextToAudio" ],
+      "ViewFilter": [ "TextToMusic" ],
+      "Checkpoint": {
+        "Transformer": {
+          "Name": "Model",
+          "Type": "LocalFile",
+          "Path": ""
+        }
+      },
+      "MemoryProfile": [
+        {
+          "QualityMode": "Draft",
+          "MemoryModes": [ 4, 6, 6 ]
+        },
+        {
+          "QualityMode": "Standard",
+          "MemoryModes": [ 4, 6, 8 ]
+        },
+        {
+          "QualityMode": "Production",
+          "MemoryModes": [ 4, 10, 12 ]
+        }
+      ],
+      "DefaultOptions": {
+        "Steps": 8,
+        "GuidanceScale": 1,
+        "SampleRate": 48000,
+        "Channels": 2,
+        "Strength": 1,
+        "BPM": 80,
+        "Duration": 0,
+        "MaxLength": 512,
+        "MaxLength2": 4096,
+        "Task": "text2music",
+        "Tasks": [ "text2music", "cover", "repaint", "lego", "complete", "extract" ],
+        "Scheduler": "FlowMatchEuler",
+        "Schedulers": [
+          {
+            "Scheduler": "FlowMatchEuler",
+            "NumTrainTimesteps": 1,
+            "Shift": 3,
+            "UseDynamicShifting": false,
+            "BaseShift": 0.5,
+            "MaxShift": 1.15,
+            "BaseImageSeqLen": 256,
+            "MaxImageSeqLen": 4096,
+            "InvertSigmas": false,
+            "ShiftTerminal": 0,
+            "UseKarrasSigmas": false,
+            "UseExponentialSigmas": false,
+            "UseBetaSigmas": false,
+            "TimeShiftType": "Exponential",
+            "StochasticSampling": false
+          }
+        ]
+      }
+    },
+    {
+      "Backend": "AudioCpp",
+      "Name": "AudioCpp_Parakeet_TDT",
+      "Template": "AudioCpp_Parakeet_TDT",
+      "Pipeline": "ParakeetPipeline",
+      "ModelType": "Base",
+      "BaseType": "bfloat16",
+      "MediaType": "Audio",
+      "ProcessTypes": [ "AudioToText" ],
+      "ViewFilter": [ "AudioToText" ],
+      "Checkpoint": {
+        "Transformer": {
+          "Name": "Model",
+          "Type": "LocalFile",
+          "Path": ""
+        }
+      },
+      "MemoryProfile": [
+        {
+          "QualityMode": "Draft",
+          "MemoryModes": [ 2, 2, 2 ]
+        },
+        {
+          "QualityMode": "Standard",
+          "MemoryModes": [ 2, 2, 2 ]
+        },
+        {
+          "QualityMode": "Production",
+          "MemoryModes": [ 2, 2, 2 ]
+        }
+      ],
+      "DefaultOptions": {
+        "SampleRate": 16000,
+        "Channels": 1,
+        "MaxLength": 0,
+        "ChunkSize": 0
+      }
+    },
+    {
+      "Backend": "AudioCpp",
+      "Name": "AudioCpp_Supertonic3",
+      "Template": "AudioCpp_Supertonic3",
+      "Pipeline": "SupertonicPipeline",
+      "ModelType": "Base",
+      "BaseType": "bfloat16",
+      "MediaType": "Audio",
+      "ProcessTypes": [ "TextToAudio" ],
+      "ViewFilter": [ "TextToAudio" ],
+      "Checkpoint": {
+        "Transformer": {
+          "Name": "Model",
+          "Type": "LocalFile",
+          "Path": ""
+        }
+      },
+      "MemoryProfile": [
+        {
+          "QualityMode": "Draft",
+          "MemoryModes": [ 2, 2, 2 ]
+        },
+        {
+          "QualityMode": "Standard",
+          "MemoryModes": [ 2, 2, 2 ]
+        },
+        {
+          "QualityMode": "Production",
+          "MemoryModes": [ 2, 2, 2 ]
+        }
+      ],
+      "DefaultOptions": {
+        "Steps": 8,
+        "GuidanceScale": 0,
+        "SampleRate": 44100,
+        "Channels": 1,
+        "MaxLength": 512,
+        "Speed": 1.05,
+        "SilenceDuration": 0.2,
+        "Task": "F1",
+        "Tasks": [ "F1", "F2", "F3", "F4", "F5", "M1", "M2", "M3", "M4", "M5" ],
+        "Language": "English",
+        "Languages": [ "English", "Korean", "Japanese", "Arabic", "Bulgarian", "Czech", "Danish", "German", "Greek", "Spanish", "Estonian", "Finnish", "French", "Hindi", "Croatian", "Hungarian", "Indonesian", "Italian", "Lithuanian", "Latvian", "Dutch", "Polish", "Portuguese", "Romanian", "Russian", "Slovak", "Slovenian", "Swedish", "Turkish", "Ukrainian", "Vietnamese" ]
+      }
+    },
+    {
       "Backend": "HuggingFace",
       "Name": "AceStep",
       "Template": "AceStep",
@@ -19373,6 +19770,70 @@
     }
   ],
   "DiffusionTemplateMap": [
+    {
+      "Name": "MiniMax Music",
+      "Backend": "AudioCpp",
+      "Options": [
+        {
+          "Name": "v3",
+          "Template": "AudioCpp_MiniMaxMusic3"
+        }
+      ]
+    },
+    {
+      "Name": "Stable Audio",
+      "Backend": "AudioCpp",
+      "Options": [
+        {
+          "Name": "v3",
+          "Template": "AudioCpp_StableAudio3"
+        },
+        {
+          "Name": "v3 SFX",
+          "Template": "AudioCpp_StableAudio3_SFX"
+        }
+      ]
+    },
+    {
+      "Name": "YuE",
+      "Backend": "AudioCpp",
+      "Options": [
+        {
+          "Name": "v2",
+          "Template": "AudioCpp_YuE2"
+        }
+      ]
+    },
+    {
+      "Name": "AceStep Audio",
+      "Backend": "AudioCpp",
+      "Options": [
+        {
+          "Name": "Turbo",
+          "Template": "AudioCpp_AceStep_Turbo"
+        }
+      ]
+    },
+    {
+      "Name": "Parakeet",
+      "Backend": "AudioCpp",
+      "Options": [
+        {
+          "Name": "TDT v3",
+          "Template": "AudioCpp_Parakeet_TDT"
+        }
+      ]
+    },
+    {
+      "Name": "Supertonic",
+      "Backend": "AudioCpp",
+      "Options": [
+        {
+          "Name": "v3",
+          "Template": "AudioCpp_Supertonic3"
+        }
+      ]
+    },
     {
       "Name": "AceStep Audio",
       "Backend": "HuggingFace",

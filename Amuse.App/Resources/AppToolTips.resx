@@ -270,4 +270,10 @@
   <data name="ToolTip_Theme" xml:space="preserve">
     <value>Restart Amuse to apply the theme.</value>
   </data>
+  <data name="ToolTip_ModelFilterAll" xml:space="preserve">
+    <value>Showing all models, click to show installed models only</value>
+  </data>
+  <data name="ToolTip_ModelFilterInstalled" xml:space="preserve">
+    <value>Showing installed models only, click to show all models</value>
+  </data>
 </root>

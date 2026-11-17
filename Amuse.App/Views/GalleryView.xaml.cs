@@ -275,7 +275,7 @@ namespace Amuse.App.Views
 
         private static View[] GetProcessTypes()
         {
-            return Enum.GetValues<View>().Except([View.Home, View.Diffusion, View.ControlNet, View.LoraAdapter, View.Extract, View.Upscale, View.General, View.Environment, View.Gallery, View.Recent]).ToArray();
+            return Enum.GetValues<View>().Except([View.Home, View.SettingsImage, View.SettingsVideo, View.SettingsAudio, View.SettingsControlNet, View.SettingsLoraAdapter, View.SettingsExtract, View.SettingsUpscale, View.SettingsGeneral, View.SettingsEnvironment, View.Gallery, View.Recent]).ToArray();
         }
 
 

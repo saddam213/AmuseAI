@@ -56,7 +56,7 @@ namespace Amuse.App.Views
             InitializeComponent();
         }
 
-        public override View View => View.ControlNet;
+        public override View View => View.SettingsControlNet;
         public AsyncRelayCommand SaveCommand { get; }
         public AsyncRelayCommand AddModelCommand { get; }
         public AsyncRelayCommand AddModelWizardCommand { get; }

@@ -122,6 +122,16 @@ namespace Amuse.App.Controls
                    ? [CheckpointType.LocalFile, CheckpointType.Component, CheckpointType.OnlineFile, CheckpointType.OnlineFolder]
                    : [CheckpointType.LocalFile, CheckpointType.Component];
             }
+            if (Backend == BackendType.AudioCpp)
+            {
+                // audio.cpp models are a single GGUF file or a model folder
+                TextEncodedCheckpointTypes = IsOnlineCheckpointsEnabled
+                    ? [CheckpointType.LocalFile, CheckpointType.LocalFolder, CheckpointType.OnlineFile, CheckpointType.OnlineFolder]
+                    : [CheckpointType.LocalFile, CheckpointType.LocalFolder];
+                CheckpointTypes = IsOnlineCheckpointsEnabled
+                   ? [CheckpointType.LocalFile, CheckpointType.LocalFolder, CheckpointType.OnlineFile, CheckpointType.OnlineFolder]
+                   : [CheckpointType.LocalFile, CheckpointType.LocalFolder];
+            }
         }
 
 

@@ -175,7 +175,7 @@ namespace Amuse.App.Services
         /// <param name="device">The device.</param>
         private ModelSession<ModelConfig> CreateModelSession(DeviceModel device)
         {
-            if (_backendType == BackendType.StableDiffusionCpp)
+            if (_backendType == BackendType.StableDiffusionCpp || _backendType == BackendType.AudioCpp)
                 return null;
 
             var previewModelPath = GetModelPath();

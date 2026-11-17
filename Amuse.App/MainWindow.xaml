@@ -194,11 +194,11 @@
                                 IconMargin="20,0,4,0"
                                 IconColor="{StaticResource AccentColour2}"
                                 Command="{Binding NavigateCommand}" 
-                                CommandParameter="{x:Static Views:View.General}" 
-                                IsSelected="{Binding View, Converter={StaticResource EnumToBooleanConverter}, ConverterParameter=General}">
+                                CommandParameter="{x:Static Views:View.SettingsGeneral}" 
+                                IsSelected="{Binding View, Converter={StaticResource EnumToBooleanConverter}, ConverterParameter=SettingsGeneral}">
                             </CommonControls:IconButton>
                             <CommonControls:IconButton 
-                                Text="{CommonControls:Localize Environment}" 
+                                Text="{CommonControls:Localize Environments}" 
                                 Icon="f233"
                                 IconSize="18"
                                 FontSize="14"
@@ -210,12 +210,12 @@
                                 IconMargin="20,0,6,0"
                                 IconColor="{StaticResource AccentColour2}"
                                 Command="{Binding NavigateCommand}" 
-                                CommandParameter="{x:Static Views:View.Environment}" 
-                                IsSelected="{Binding View, Converter={StaticResource EnumToBooleanConverter}, ConverterParameter=Environment}">
+                                CommandParameter="{x:Static Views:View.SettingsEnvironment}" 
+                                IsSelected="{Binding View, Converter={StaticResource EnumToBooleanConverter}, ConverterParameter=SettingsEnvironment}">
                             </CommonControls:IconButton>
                             <CommonControls:IconButton 
-                                Text="{CommonControls:Localize LLM}" 
-                                Icon="e699"
+                                Text="{CommonControls:Localize ImageModels}" 
+                                Icon="f03e"
                                 IconSize="18"
                                 FontSize="14"
                                 FontWeight="SemiBold"
@@ -223,15 +223,31 @@
                                 Alignment="Left"
                                 Placement="Right"
                                 TextOpacity=".9"
-                                IconMargin="20,0,6,0"
+                                IconMargin="20,0,7,0"
                                 IconColor="{StaticResource AccentColour2}"
                                 Command="{Binding NavigateCommand}" 
-                                CommandParameter="{x:Static Views:View.Language}" 
-                                IsSelected="{Binding View, Converter={StaticResource EnumToBooleanConverter}, ConverterParameter=Language}">
+                                CommandParameter="{x:Static Views:View.SettingsImage}" 
+                                IsSelected="{Binding View, Converter={StaticResource EnumToBooleanConverter}, ConverterParameter=SettingsImage}">
                             </CommonControls:IconButton>
                             <CommonControls:IconButton 
-                                Text="{CommonControls:Localize Diffusion}" 
-                                Icon="e4e2"
+                                Text="{CommonControls:Localize VideoModels}" 
+                                Icon="f008"
+                                IconSize="18"
+                                FontSize="14"
+                                FontWeight="SemiBold"
+                                Orientation="Horizontal"
+                                Alignment="Left"
+                                Placement="Right"
+                                TextOpacity=".9"
+                                IconMargin="20,0,7,0"
+                                IconColor="{StaticResource AccentColour2}"
+                                Command="{Binding NavigateCommand}" 
+                                CommandParameter="{x:Static Views:View.SettingsVideo}" 
+                                IsSelected="{Binding View, Converter={StaticResource EnumToBooleanConverter}, ConverterParameter=SettingsVideo}">
+                            </CommonControls:IconButton>
+                            <CommonControls:IconButton 
+                                Text="{CommonControls:Localize AudioModels}" 
+                                Icon="f001"
                                 IconSize="18"
                                 FontSize="14"
                                 FontWeight="SemiBold"
@@ -242,11 +258,28 @@
                                 IconMargin="20,0,4,0"
                                 IconColor="{StaticResource AccentColour2}"
                                 Command="{Binding NavigateCommand}" 
-                                CommandParameter="{x:Static Views:View.Diffusion}" 
-                                IsSelected="{Binding View, Converter={StaticResource EnumToBooleanConverter}, ConverterParameter=Diffusion}">
+                                CommandParameter="{x:Static Views:View.SettingsAudio}" 
+                                IsSelected="{Binding View, Converter={StaticResource EnumToBooleanConverter}, ConverterParameter=SettingsAudio}">
                             </CommonControls:IconButton>
                             <CommonControls:IconButton 
-                                Text="{CommonControls:Localize LoraAdapter}" 
+                                Text="{CommonControls:Localize TextModels}"
+                                Icon="f893"
+                                IconStyle="Regular"
+                                IconSize="18"
+                                FontSize="14"
+                                FontWeight="SemiBold"
+                                Orientation="Horizontal"
+                                Alignment="Left"
+                                Placement="Right"
+                                TextOpacity=".9"
+                                IconMargin="20,0,8,0"
+                                IconColor="{StaticResource AccentColour2}"
+                                Command="{Binding NavigateCommand}" 
+                                CommandParameter="{x:Static Views:View.SettingsLanguage}" 
+                                IsSelected="{Binding View, Converter={StaticResource EnumToBooleanConverter}, ConverterParameter=SettingsLanguage}">
+                            </CommonControls:IconButton>
+                            <CommonControls:IconButton 
+                                Text="{CommonControls:Localize LoraAdapters}" 
                                 Icon="f1e0"
                                 IconSize="18"
                                 FontSize="14"
@@ -258,11 +291,11 @@
                                 IconMargin="20,0,5,0"
                                 IconColor="{StaticResource AccentColour2}"
                                 Command="{Binding NavigateCommand}" 
-                                CommandParameter="{x:Static Views:View.LoraAdapter}" 
-                                IsSelected="{Binding View, Converter={StaticResource EnumToBooleanConverter}, ConverterParameter=LoraAdapter}">
+                                CommandParameter="{x:Static Views:View.SettingsLoraAdapter}" 
+                                IsSelected="{Binding View, Converter={StaticResource EnumToBooleanConverter}, ConverterParameter=SettingsLoraAdapter}">
                             </CommonControls:IconButton>
                             <CommonControls:IconButton 
-                                Text="{CommonControls:Localize ControlNet}" 
+                                Text="{CommonControls:Localize ControlNets}" 
                                 Icon="f78a"
                                 IconSize="18"
                                 FontSize="14"
@@ -271,14 +304,14 @@
                                 Alignment="Left"
                                 Placement="Right"
                                 TextOpacity=".9"
-                                IconMargin="17,0,3,0"
+                                IconMargin="16,0,4,0"
                                 IconColor="{StaticResource AccentColour2}"
                                 Command="{Binding NavigateCommand}" 
-                                CommandParameter="{x:Static Views:View.ControlNet}" 
-                                IsSelected="{Binding View, Converter={StaticResource EnumToBooleanConverter}, ConverterParameter=ControlNet}">
+                                CommandParameter="{x:Static Views:View.SettingsControlNet}" 
+                                IsSelected="{Binding View, Converter={StaticResource EnumToBooleanConverter}, ConverterParameter=SettingsControlNet}">
                             </CommonControls:IconButton>
                             <CommonControls:IconButton 
-                                Text="{CommonControls:Localize Extractor}" 
+                                Text="{CommonControls:Localize Extractors}" 
                                 Icon="f302"
                                 IconSize="18"
                                 FontSize="14"
@@ -287,14 +320,14 @@
                                 Alignment="Left"
                                 Placement="Right"
                                 TextOpacity=".9"
-                                IconMargin="20,0,3,0"
+                                IconMargin="19,0,4,0"
                                 IconColor="{StaticResource AccentColour2}"
                                 Command="{Binding NavigateCommand}" 
-                                CommandParameter="{x:Static Views:View.Extract}" 
-                                IsSelected="{Binding View, Converter={StaticResource EnumToBooleanConverter}, ConverterParameter=Extract}">
+                                CommandParameter="{x:Static Views:View.SettingsExtract}" 
+                                IsSelected="{Binding View, Converter={StaticResource EnumToBooleanConverter}, ConverterParameter=SettingsExtract}">
                             </CommonControls:IconButton>
                             <CommonControls:IconButton 
-                                Text="{CommonControls:Localize Upscaler}" 
+                                Text="{CommonControls:Localize Upscalers}" 
                                 Icon="f424"
                                 IconSize="18"
                                 FontSize="14"
@@ -306,8 +339,8 @@
                                 IconMargin="20,0,6,0"
                                 IconColor="{StaticResource AccentColour2}"
                                 Command="{Binding NavigateCommand}" 
-                                CommandParameter="{x:Static Views:View.Upscale}" 
-                                IsSelected="{Binding View, Converter={StaticResource EnumToBooleanConverter}, ConverterParameter=Upscale}">
+                                CommandParameter="{x:Static Views:View.SettingsUpscale}" 
+                                IsSelected="{Binding View, Converter={StaticResource EnumToBooleanConverter}, ConverterParameter=SettingsUpscale}">
                             </CommonControls:IconButton>
                             <CommonControls:IconButton 
                                 Text="{CommonControls:Localize Components}" 
@@ -322,8 +355,8 @@
                                 IconMargin="20,0,8,0"
                                 IconColor="{StaticResource AccentColour2}"
                                 Command="{Binding NavigateCommand}" 
-                                CommandParameter="{x:Static Views:View.Component}" 
-                                IsSelected="{Binding View, Converter={StaticResource EnumToBooleanConverter}, ConverterParameter=Component}">
+                                CommandParameter="{x:Static Views:View.SettingsComponent}" 
+                                IsSelected="{Binding View, Converter={StaticResource EnumToBooleanConverter}, ConverterParameter=SettingsComponent}">
                             </CommonControls:IconButton>
                         </UniformGrid>
 

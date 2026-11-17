@@ -27,6 +27,7 @@ namespace Amuse.App
         private bool _isVolumeOutputMute;
         private bool _isAutoUpdateEnabled = true;
         private bool _isUpdateAvailable;
+        private bool _isInstalledModelsOnly;
         private VendorType[] vendors;
 
         public Settings()
@@ -142,6 +143,15 @@ namespace Amuse.App
         {
             get { return _isAutoUpdateEnabled; }
             set { SetProperty(ref _isAutoUpdateEnabled, value); }
+        }
+
+        /// <summary>
+        /// Gets or sets a value indicating whether model selectors show only installed models.
+        /// </summary>
+        public bool IsInstalledModelsOnly
+        {
+            get { return _isInstalledModelsOnly; }
+            set { SetProperty(ref _isInstalledModelsOnly, value); }
         }
 
         [JsonIgnore]

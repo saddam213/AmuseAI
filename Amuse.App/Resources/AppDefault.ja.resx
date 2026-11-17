@@ -123,13 +123,22 @@
   <data name="ControlNet" xml:space="preserve">
     <value>コントロールネット</value>
   </data>
+  <data name="ControlNets" xml:space="preserve">
+    <value>コントロールネット</value>
+  </data>
   <data name="Diffusion" xml:space="preserve">
     <value>拡散モデル</value>
   </data>
   <data name="Environment" xml:space="preserve">
     <value>環境</value>
   </data>
+  <data name="Environments" xml:space="preserve">
+    <value>環境</value>
+  </data>
   <data name="Extractor" xml:space="preserve">
+    <value>エクストラクタ</value>
+  </data>
+  <data name="Extractors" xml:space="preserve">
     <value>エクストラクタ</value>
   </data>
   <data name="Gallery" xml:space="preserve">
@@ -144,6 +153,9 @@
   <data name="LoraAdapter" xml:space="preserve">
     <value>LoRAアダプター</value>
   </data>
+  <data name="LoraAdapters" xml:space="preserve">
+    <value>LoRAアダプター</value>
+  </data>
   <data name="Models" xml:space="preserve">
     <value>モデル</value>
   </data>
@@ -154,6 +166,9 @@
     <value>Text ➔ Image</value>
   </data>
   <data name="Upscaler" xml:space="preserve">
+    <value>アップスケーラー</value>
+  </data>
+  <data name="Upscalers" xml:space="preserve">
     <value>アップスケーラー</value>
   </data>
   <data name="Menu_ImageToImage" xml:space="preserve">
@@ -539,6 +554,27 @@
   </data>
   <data name="DiffusionSettings" xml:space="preserve">
     <value>拡散モデル設定</value>
+  </data>
+  <data name="ImageSettings" xml:space="preserve">
+    <value>画像設定</value>
+  </data>
+  <data name="VideoSettings" xml:space="preserve">
+    <value>動画設定</value>
+  </data>
+  <data name="AudioSettings" xml:space="preserve">
+    <value>音声設定</value>
+  </data>
+  <data name="ImageModels" xml:space="preserve">
+    <value>画像モデル</value>
+  </data>
+  <data name="VideoModels" xml:space="preserve">
+    <value>動画モデル</value>
+  </data>
+  <data name="AudioModels" xml:space="preserve">
+    <value>音声モデル</value>
+  </data>
+  <data name="TextModels" xml:space="preserve">
+    <value>テキストモデル</value>
   </data>
   <data name="EnvironmentSettings" xml:space="preserve">
     <value>環境設定</value>

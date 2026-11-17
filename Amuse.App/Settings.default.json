@@ -114,11 +114,11 @@
       "Backend": "StableDiffusionCpp",
       "Environment": "vulkan",
       "HostVersion": "Vulkan",
-      "Version": 1104,
+      "Version": 1106,
       "Status": "Create",
       "Variables": {},
       "Requirements": [
-        "https://github.com/leejet/stable-diffusion.cpp/releases/download/master-1104-5dcfa79/sd-master-5dcfa79-bin-win-vulkan-x64.zip"
+        "https://github.com/leejet/stable-diffusion.cpp/releases/download/master-1106-532d2c1/sd-master-532d2c1-bin-win-vulkan-x64.zip"
       ]
     },
     {
@@ -129,12 +129,12 @@
       "Backend": "StableDiffusionCpp",
       "Environment": "vulkan",
       "HostVersion": "Vulkan",
-      "Version": 1104,
+      "Version": 1106,
       "Status": "Create",
       "IsDefault": true,
       "Variables": {},
       "Requirements": [
-        "https://github.com/leejet/stable-diffusion.cpp/releases/download/master-1104-5dcfa79/sd-master-5dcfa79-bin-win-vulkan-x64.zip"
+        "https://github.com/leejet/stable-diffusion.cpp/releases/download/master-1106-532d2c1/sd-master-532d2c1-bin-win-vulkan-x64.zip"
       ]
     },
     {
@@ -145,12 +145,12 @@
       "Backend": "StableDiffusionCpp",
       "Environment": "vulkan",
       "HostVersion": "Vulkan",
-      "Version": 1104,
+      "Version": 1106,
       "Status": "Create",
       "IsDefault": true,
       "Variables": {},
       "Requirements": [
-        "https://github.com/leejet/stable-diffusion.cpp/releases/download/master-1104-5dcfa79/sd-master-5dcfa79-bin-win-vulkan-x64.zip"
+        "https://github.com/leejet/stable-diffusion.cpp/releases/download/master-1106-532d2c1/sd-master-532d2c1-bin-win-vulkan-x64.zip"
       ]
     },
     {
@@ -161,13 +161,13 @@
       "Backend": "StableDiffusionCpp",
       "Environment": "cuda",
       "HostVersion": "CUDA",
-      "Version": 1104,
+      "Version": 1106,
       "Status": "Create",
       "IsDefault": true,
       "Variables": {},
       "Requirements": [
-        "https://github.com/leejet/stable-diffusion.cpp/releases/download/master-1104-5dcfa79/cudart-sd-bin-win-cu12-x64.zip",
-        "https://github.com/leejet/stable-diffusion.cpp/releases/download/master-1104-5dcfa79/sd-master-5dcfa79-bin-win-cuda12-x64.zip"
+        "https://github.com/leejet/stable-diffusion.cpp/releases/download/master-1106-532d2c1/cudart-sd-bin-win-cu12-x64.zip",
+        "https://github.com/leejet/stable-diffusion.cpp/releases/download/master-1106-532d2c1/sd-master-532d2c1-bin-win-cuda12-x64.zip"
       ]
     },
     {
@@ -178,12 +178,60 @@
       "Backend": "StableDiffusionCpp",
       "Environment": "rocm",
       "HostVersion": "ROCM",
-      "Version": 1104,
+      "Version": 1106,
       "Status": "Create",
       "Variables": {},
       "Requirements": [
-        "https://github.com/leejet/stable-diffusion.cpp/releases/download/master-1104-5dcfa79/sd-master-5dcfa79-bin-win-rocm-10.1.0-x64.zip",
+        "https://github.com/leejet/stable-diffusion.cpp/releases/download/master-1106-532d2c1/sd-master-532d2c1-bin-win-rocm-10.1.0-x64.zip",
         "https://stable.repo.amd.com/rocm/core/tarball/therock-dist-windows-multiarch-10.1.0.tar.gz"
+      ]
+    },
+    {
+      "Id": 200,
+      "Name": "Audio.cpp Vulkan",
+      "Type": "Vendor",
+      "Vendor": "Nvidia",
+      "Backend": "AudioCpp",
+      "Environment": "vulkan",
+      "HostVersion": "Vulkan",
+      "Version": 95,
+      "Status": "Create",
+      "IsDefault": true,
+      "Variables": {},
+      "Requirements": [
+        "https://github.com/0xShug0/audio.cpp/releases/download/v0.9.5/audio-v0.9.5-lib-windows-x64-vulkan.zip"
+      ]
+    },
+    {
+      "Id": 201,
+      "Name": "Audio.cpp Vulkan",
+      "Type": "Vendor",
+      "Vendor": "AMD",
+      "Backend": "AudioCpp",
+      "Environment": "vulkan",
+      "HostVersion": "Vulkan",
+      "Version": 95,
+      "Status": "Create",
+      "IsDefault": true,
+      "Variables": {},
+      "Requirements": [
+        "https://github.com/0xShug0/audio.cpp/releases/download/v0.9.5/audio-v0.9.5-lib-windows-x64-vulkan.zip"
+      ]
+    },
+    {
+      "Id": 202,
+      "Name": "Audio.cpp Vulkan",
+      "Type": "Vendor",
+      "Vendor": "Intel",
+      "Backend": "AudioCpp",
+      "Environment": "vulkan",
+      "HostVersion": "Vulkan",
+      "Version": 95,
+      "Status": "Create",
+      "IsDefault": true,
+      "Variables": {},
+      "Requirements": [
+        "https://github.com/0xShug0/audio.cpp/releases/download/v0.9.5/audio-v0.9.5-lib-windows-x64-vulkan.zip"
       ]
     }
   ],
@@ -8734,6 +8782,517 @@
       },
       "IsDefault": true,
       "Link": "https://huggingface.co/saddam213/Amuse/tree/main/Audio/Supertonic"
+    },
+    {
+      "Id": 900,
+      "Backend": "AudioCpp",
+      "Name": "ACE-Step v1.5 Turbo GGUF",
+      "Template": "AudioCpp_AceStep_Turbo",
+      "Pipeline": "AceStepPipeline",
+      "ModelType": "Turbo",
+      "BaseType": "bfloat16",
+      "MediaType": "Audio",
+      "ProcessTypes": [ "TextToAudio" ],
+      "ViewFilter": [ "TextToMusic" ],
+      "Checkpoint": {
+        "Transformer": {
+          "Name": "Model",
+          "Type": "OnlineFile",
+          "DownloadFiles": [
+            "https://huggingface.co/audio-cpp/audio.cpp-gguf/resolve/main/ACE-Step1.5-GGUF/turbo/ace-step-1.5-turbo-q8_0.gguf"
+          ]
+        }
+      },
+      "MemoryProfile": [
+        {
+          "QualityMode": "Draft",
+          "MemoryModes": [ 4, 6, 6 ]
+        },
+        {
+          "QualityMode": "Standard",
+          "MemoryModes": [ 4, 6, 8 ]
+        },
+        {
+          "QualityMode": "Production",
+          "MemoryModes": [ 4, 10, 12 ]
+        }
+      ],
+      "DefaultOptions": {
+        "Steps": 8,
+        "GuidanceScale": 1,
+        "SampleRate": 48000,
+        "Channels": 2,
+        "Strength": 1,
+        "BPM": 80,
+        "Duration": 0,
+        "MaxLength": 512,
+        "MaxLength2": 4096,
+        "Task": "text2music",
+        "Tasks": [ "text2music", "cover", "repaint", "lego", "complete", "extract" ],
+        "Scheduler": "FlowMatchEuler",
+        "Schedulers": [
+          {
+            "Scheduler": "FlowMatchEuler",
+            "NumTrainTimesteps": 1,
+            "Shift": 3,
+            "UseDynamicShifting": false,
+            "BaseShift": 0.5,
+            "MaxShift": 1.15,
+            "BaseImageSeqLen": 256,
+            "MaxImageSeqLen": 4096,
+            "InvertSigmas": false,
+            "ShiftTerminal": 0,
+            "UseKarrasSigmas": false,
+            "UseExponentialSigmas": false,
+            "UseBetaSigmas": false,
+            "TimeShiftType": "Exponential",
+            "StochasticSampling": false
+          }
+        ]
+      },
+      "Link": "https://huggingface.co/audio-cpp/audio.cpp-gguf/tree/main/ACE-Step1.5-GGUF"
+    },
+    {
+      "Id": 901,
+      "Backend": "AudioCpp",
+      "Name": "Supertonic v3 GGUF",
+      "Template": "AudioCpp_Supertonic3",
+      "Pipeline": "SupertonicPipeline",
+      "ModelType": "Base",
+      "BaseType": "bfloat16",
+      "MediaType": "Audio",
+      "ProcessTypes": [ "TextToAudio" ],
+      "ViewFilter": [ "TextToAudio" ],
+      "Checkpoint": {
+        "Transformer": {
+          "Name": "Model",
+          "Type": "OnlineFile",
+          "DownloadFiles": [
+            "https://huggingface.co/audio-cpp/audio.cpp-gguf/resolve/main/Supertonic-3-GGUF/supertonic-3-q8_0.gguf"
+          ]
+        }
+      },
+      "MemoryProfile": [
+        {
+          "QualityMode": "Draft",
+          "MemoryModes": [ 2, 2, 2 ]
+        },
+        {
+          "QualityMode": "Standard",
+          "MemoryModes": [ 2, 2, 2 ]
+        },
+        {
+          "QualityMode": "Production",
+          "MemoryModes": [ 2, 2, 2 ]
+        }
+      ],
+      "DefaultOptions": {
+        "Steps": 8,
+        "GuidanceScale": 0,
+        "SampleRate": 44100,
+        "Channels": 1,
+        "MaxLength": 512,
+        "Speed": 1.05,
+        "SilenceDuration": 0.2,
+        "Task": "F1",
+        "Tasks": [ "F1", "F2", "F3", "F4", "F5", "M1", "M2", "M3", "M4", "M5" ],
+        "Language": "English",
+        "Languages": [ "English", "Korean", "Japanese", "Arabic", "Bulgarian", "Czech", "Danish", "German", "Greek", "Spanish", "Estonian", "Finnish", "French", "Hindi", "Croatian", "Hungarian", "Indonesian", "Italian", "Lithuanian", "Latvian", "Dutch", "Polish", "Portuguese", "Romanian", "Russian", "Slovak", "Slovenian", "Swedish", "Turkish", "Ukrainian", "Vietnamese" ]
+      },
+      "Link": "https://huggingface.co/audio-cpp/audio.cpp-gguf/tree/main/Supertonic-3-GGUF"
+    },
+    {
+      "Id": 902,
+      "Backend": "AudioCpp",
+      "Name": "MiniMax Music 3 GGUF",
+      "Template": "AudioCpp_MiniMaxMusic3",
+      "Pipeline": "MiniMaxAudioPipeline",
+      "ModelType": "Base",
+      "BaseType": "bfloat16",
+      "MediaType": "Audio",
+      "ProcessTypes": [ "TextToAudio" ],
+      "ViewFilter": [ "TextToMusic" ],
+      "Checkpoint": {
+        "Transformer": {
+          "AutoMap": true,
+          "Name": "Model",
+          "Type": "OnlineFolder",
+          "Folder": "MiniMax-Music3-GGUF",
+          "DownloadFiles": [
+            "https://huggingface.co/audio-cpp/MiniMax-Music3-GGUF/resolve/main/config.json",
+            "https://huggingface.co/audio-cpp/MiniMax-Music3-GGUF/resolve/main/config/language_model.json",
+            "https://huggingface.co/audio-cpp/MiniMax-Music3-GGUF/resolve/main/config/rvq_depth_decoder.json",
+            "https://huggingface.co/audio-cpp/MiniMax-Music3-GGUF/resolve/main/config/condition_encoder.json",
+            "https://huggingface.co/audio-cpp/MiniMax-Music3-GGUF/resolve/main/config/transformer.json",
+            "https://huggingface.co/audio-cpp/MiniMax-Music3-GGUF/resolve/main/config/vocoder.json",
+            "https://huggingface.co/audio-cpp/MiniMax-Music3-GGUF/resolve/main/tokenizer/tokenizer.json",
+            "https://huggingface.co/audio-cpp/MiniMax-Music3-GGUF/resolve/main/tokenizer/tokenizer_config.json",
+            "https://huggingface.co/audio-cpp/MiniMax-Music3-GGUF/resolve/main/language_model_q4_0.gguf",
+            "https://huggingface.co/audio-cpp/MiniMax-Music3-GGUF/resolve/main/rvq_depth_decoder_q8_0.gguf",
+            "https://huggingface.co/audio-cpp/MiniMax-Music3-GGUF/resolve/main/condition_encoder.gguf",
+            "https://huggingface.co/audio-cpp/MiniMax-Music3-GGUF/resolve/main/transformer_q4_0.gguf",
+            "https://huggingface.co/audio-cpp/MiniMax-Music3-GGUF/resolve/main/vocoder.gguf"
+          ]
+        }
+      },
+      "MemoryProfile": [
+        {
+          "QualityMode": "Draft",
+          "MemoryModes": [ 8, 10, 12 ]
+        },
+        {
+          "QualityMode": "Standard",
+          "MemoryModes": [ 8, 10, 12 ]
+        },
+        {
+          "QualityMode": "Production",
+          "MemoryModes": [ 8, 10, 12 ]
+        }
+      ],
+      "DefaultOptions": {
+        "Steps": 30,
+        "GuidanceScale": 1.7,
+        "GuidanceScale2": 1.5,
+        "SampleRate": 44100,
+        "Channels": 2,
+        "Strength": 1,
+        "Duration": 30,
+        "MaxLength": 512,
+        "MaxLength2": 4096,
+        "Scheduler": "FlowMatchEuler",
+        "Schedulers": [
+          {
+            "Scheduler": "FlowMatchEuler",
+            "NumTrainTimesteps": 1,
+            "Shift": 3,
+            "UseDynamicShifting": false,
+            "BaseShift": 0.5,
+            "MaxShift": 1.15,
+            "BaseImageSeqLen": 256,
+            "MaxImageSeqLen": 4096,
+            "InvertSigmas": false,
+            "ShiftTerminal": 0,
+            "UseKarrasSigmas": false,
+            "UseExponentialSigmas": false,
+            "UseBetaSigmas": false,
+            "TimeShiftType": "Exponential",
+            "StochasticSampling": false
+          }
+        ]
+      },
+      "Link": "https://huggingface.co/audio-cpp/MiniMax-Music3-GGUF"
+    },
+    {
+      "Id": 903,
+      "Backend": "AudioCpp",
+      "Name": "Stable Audio 3 Medium GGUF",
+      "Template": "AudioCpp_StableAudio3",
+      "Pipeline": "StableAudioPipeline",
+      "ModelType": "Base",
+      "BaseType": "bfloat16",
+      "MediaType": "Audio",
+      "ProcessTypes": [ "TextToAudio" ],
+      "ViewFilter": [ "TextToMusic" ],
+      "Checkpoint": {
+        "Transformer": {
+          "Name": "Model",
+          "Type": "OnlineFile",
+          "DownloadFiles": [
+            "https://huggingface.co/audio-cpp/audio.cpp-gguf/resolve/main/Stable-Audio-3-Medium-GGUF/stable-audio-3-medium-q8_0.gguf"
+          ]
+        }
+      },
+      "MemoryProfile": [
+        {
+          "QualityMode": "Draft",
+          "MemoryModes": [ 4, 6, 8 ]
+        },
+        {
+          "QualityMode": "Standard",
+          "MemoryModes": [ 4, 6, 8 ]
+        },
+        {
+          "QualityMode": "Production",
+          "MemoryModes": [ 4, 6, 8 ]
+        }
+      ],
+      "DefaultOptions": {
+        "Steps": 8,
+        "GuidanceScale": 1,
+        "SampleRate": 44100,
+        "Channels": 2,
+        "Strength": 1,
+        "Duration": 120,
+        "MaxLength": 512,
+        "Scheduler": "FlowMatchEuler",
+        "Schedulers": [
+          {
+            "Scheduler": "FlowMatchEuler",
+            "NumTrainTimesteps": 1,
+            "Shift": 3,
+            "UseDynamicShifting": false,
+            "BaseShift": 0.5,
+            "MaxShift": 1.15,
+            "BaseImageSeqLen": 256,
+            "MaxImageSeqLen": 4096,
+            "InvertSigmas": false,
+            "ShiftTerminal": 0,
+            "UseKarrasSigmas": false,
+            "UseExponentialSigmas": false,
+            "UseBetaSigmas": false,
+            "TimeShiftType": "Exponential",
+            "StochasticSampling": false
+          }
+        ]
+      },
+      "Link": "https://huggingface.co/audio-cpp/audio.cpp-gguf/tree/main/Stable-Audio-3-Medium-GGUF"
+    },
+    {
+      "Id": 904,
+      "Backend": "AudioCpp",
+      "Name": "Stable Audio 3 Small Music GGUF",
+      "Template": "AudioCpp_StableAudio3",
+      "Pipeline": "StableAudioPipeline",
+      "ModelType": "Base",
+      "BaseType": "bfloat16",
+      "MediaType": "Audio",
+      "ProcessTypes": [ "TextToAudio" ],
+      "ViewFilter": [ "TextToMusic" ],
+      "Checkpoint": {
+        "Transformer": {
+          "Name": "Model",
+          "Type": "OnlineFile",
+          "DownloadFiles": [
+            "https://huggingface.co/audio-cpp/audio.cpp-gguf/resolve/main/Stable-Audio-3-Small-Music-GGUF/stable-audio-3-small-music-q8_0.gguf"
+          ]
+        }
+      },
+      "MemoryProfile": [
+        {
+          "QualityMode": "Draft",
+          "MemoryModes": [ 4, 4, 6 ]
+        },
+        {
+          "QualityMode": "Standard",
+          "MemoryModes": [ 4, 4, 6 ]
+        },
+        {
+          "QualityMode": "Production",
+          "MemoryModes": [ 4, 4, 6 ]
+        }
+      ],
+      "DefaultOptions": {
+        "Steps": 8,
+        "GuidanceScale": 1,
+        "SampleRate": 44100,
+        "Channels": 2,
+        "Strength": 1,
+        "Duration": 120,
+        "MaxLength": 512,
+        "Scheduler": "FlowMatchEuler",
+        "Schedulers": [
+          {
+            "Scheduler": "FlowMatchEuler",
+            "NumTrainTimesteps": 1,
+            "Shift": 3,
+            "UseDynamicShifting": false,
+            "BaseShift": 0.5,
+            "MaxShift": 1.15,
+            "BaseImageSeqLen": 256,
+            "MaxImageSeqLen": 4096,
+            "InvertSigmas": false,
+            "ShiftTerminal": 0,
+            "UseKarrasSigmas": false,
+            "UseExponentialSigmas": false,
+            "UseBetaSigmas": false,
+            "TimeShiftType": "Exponential",
+            "StochasticSampling": false
+          }
+        ]
+      },
+      "Link": "https://huggingface.co/audio-cpp/audio.cpp-gguf/tree/main/Stable-Audio-3-Small-Music-GGUF"
+    },
+    {
+      "Id": 905,
+      "Backend": "AudioCpp",
+      "Name": "Stable Audio 3 Small SFX GGUF",
+      "Template": "AudioCpp_StableAudio3_SFX",
+      "Pipeline": "StableAudioPipeline",
+      "ModelType": "Base",
+      "BaseType": "bfloat16",
+      "MediaType": "Audio",
+      "ProcessTypes": [ "TextToAudio" ],
+      "ViewFilter": [ "TextToAudio" ],
+      "Checkpoint": {
+        "Transformer": {
+          "Name": "Model",
+          "Type": "OnlineFile",
+          "DownloadFiles": [
+            "https://huggingface.co/audio-cpp/audio.cpp-gguf/resolve/main/Stable-Audio-3-Small-SFX-GGUF/stable-audio-3-small-sfx-q8_0.gguf"
+          ]
+        }
+      },
+      "MemoryProfile": [
+        {
+          "QualityMode": "Draft",
+          "MemoryModes": [ 4, 4, 6 ]
+        },
+        {
+          "QualityMode": "Standard",
+          "MemoryModes": [ 4, 4, 6 ]
+        },
+        {
+          "QualityMode": "Production",
+          "MemoryModes": [ 4, 4, 6 ]
+        }
+      ],
+      "DefaultOptions": {
+        "Steps": 8,
+        "GuidanceScale": 1,
+        "SampleRate": 44100,
+        "Channels": 2,
+        "Strength": 1,
+        "Duration": 30,
+        "MaxLength": 512,
+        "Scheduler": "FlowMatchEuler",
+        "Schedulers": [
+          {
+            "Scheduler": "FlowMatchEuler",
+            "NumTrainTimesteps": 1,
+            "Shift": 3,
+            "UseDynamicShifting": false,
+            "BaseShift": 0.5,
+            "MaxShift": 1.15,
+            "BaseImageSeqLen": 256,
+            "MaxImageSeqLen": 4096,
+            "InvertSigmas": false,
+            "ShiftTerminal": 0,
+            "UseKarrasSigmas": false,
+            "UseExponentialSigmas": false,
+            "UseBetaSigmas": false,
+            "TimeShiftType": "Exponential",
+            "StochasticSampling": false
+          }
+        ]
+      },
+      "Link": "https://huggingface.co/audio-cpp/audio.cpp-gguf/tree/main/Stable-Audio-3-Small-SFX-GGUF"
+    },
+    {
+      "Id": 906,
+      "Backend": "AudioCpp",
+      "Name": "YuE2 3B GGUF",
+      "Template": "AudioCpp_YuE2",
+      "Pipeline": "YuEPipeline",
+      "ModelType": "Base",
+      "BaseType": "bfloat16",
+      "MediaType": "Audio",
+      "ProcessTypes": [ "TextToAudio" ],
+      "ViewFilter": [ "TextToMusic" ],
+      "Checkpoint": {
+        "Transformer": {
+          "AutoMap": true,
+          "Name": "Model",
+          "Type": "OnlineFolder",
+          "Folder": "Yue2-3B-GGUF",
+          "DownloadFiles": [
+            "https://huggingface.co/audio-cpp/Yue2-3B-GGUF/resolve/main/sidecars/yue2-model-config.json",
+            "https://huggingface.co/audio-cpp/Yue2-3B-GGUF/resolve/main/sidecars/yue2-generation-config.json",
+            "https://huggingface.co/audio-cpp/Yue2-3B-GGUF/resolve/main/sidecars/yue2-qwen.tiktoken",
+            "https://huggingface.co/audio-cpp/Yue2-3B-GGUF/resolve/main/sidecars/yue2-vae-config.json",
+            "https://huggingface.co/audio-cpp/Yue2-3B-GGUF/resolve/main/yue2-3b-q8_0.gguf",
+            "https://huggingface.co/audio-cpp/Yue2-3B-GGUF/resolve/main/yue2-vae-f16.gguf"
+          ]
+        }
+      },
+      "MemoryProfile": [
+        {
+          "QualityMode": "Draft",
+          "MemoryModes": [ 6, 8, 8 ]
+        },
+        {
+          "QualityMode": "Standard",
+          "MemoryModes": [ 6, 8, 8 ]
+        },
+        {
+          "QualityMode": "Production",
+          "MemoryModes": [ 6, 8, 8 ]
+        }
+      ],
+      "DefaultOptions": {
+        "Steps": 8,
+        "GuidanceScale": 1,
+        "SampleRate": 48000,
+        "Channels": 2,
+        "Strength": 1,
+        "Duration": 0,
+        "MaxLength": 512,
+        "MaxLength2": 4096,
+        "Task": "full",
+        "Tasks": [ "full", "melody", "off" ],
+        "Scheduler": "FlowMatchEuler",
+        "Schedulers": [
+          {
+            "Scheduler": "FlowMatchEuler",
+            "NumTrainTimesteps": 1,
+            "Shift": 3,
+            "UseDynamicShifting": false,
+            "BaseShift": 0.5,
+            "MaxShift": 1.15,
+            "BaseImageSeqLen": 256,
+            "MaxImageSeqLen": 4096,
+            "InvertSigmas": false,
+            "ShiftTerminal": 0,
+            "UseKarrasSigmas": false,
+            "UseExponentialSigmas": false,
+            "UseBetaSigmas": false,
+            "TimeShiftType": "Exponential",
+            "StochasticSampling": false
+          }
+        ]
+      },
+      "Link": "https://huggingface.co/audio-cpp/Yue2-3B-GGUF"
+    },
+    {
+      "Id": 907,
+      "Backend": "AudioCpp",
+      "Name": "Parakeet TDT 0.6B v3 GGUF",
+      "Template": "AudioCpp_Parakeet_TDT",
+      "Pipeline": "ParakeetPipeline",
+      "ModelType": "Base",
+      "BaseType": "bfloat16",
+      "MediaType": "Audio",
+      "ProcessTypes": [ "AudioToText" ],
+      "ViewFilter": [ "AudioToText" ],
+      "Checkpoint": {
+        "Transformer": {
+          "Name": "Model",
+          "Type": "OnlineFile",
+          "DownloadFiles": [
+            "https://huggingface.co/audio-cpp/audio.cpp-gguf/resolve/main/Parakeet-TDT-0.6B-v3-GGUF/parakeet-tdt-0.6b-v3-q8_0.gguf"
+          ]
+        }
+      },
+      "MemoryProfile": [
+        {
+          "QualityMode": "Draft",
+          "MemoryModes": [ 2, 2, 2 ]
+        },
+        {
+          "QualityMode": "Standard",
+          "MemoryModes": [ 2, 2, 2 ]
+        },
+        {
+          "QualityMode": "Production",
+          "MemoryModes": [ 2, 2, 2 ]
+        }
+      ],
+      "DefaultOptions": {
+        "SampleRate": 16000,
+        "Channels": 1,
+        "MaxLength": 0,
+        "ChunkSize": 0
+      },
+      "Link": "https://huggingface.co/audio-cpp/audio.cpp-gguf/tree/main/Parakeet-TDT-0.6B-v3-GGUF"
     },
     {
       "Id": 360,

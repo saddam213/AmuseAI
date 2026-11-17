@@ -6,7 +6,8 @@ namespace Amuse.Common
     {
         OnnxRuntime = 0,
         HuggingFace = 10,
-        StableDiffusionCpp = 20
+        StableDiffusionCpp = 20,
+        AudioCpp = 30
     }
 
     public enum PipelineType
@@ -142,6 +143,12 @@ namespace Amuse.Common
         [Display(Name = "MiniMax Audio Pipeline", ShortName = "MiniMax", Description = "MiniMax's audio-generation models cover expressive generative audio and music tasks, with an emphasis on high-quality output and natural musical structure. Suitable for creating music and other complex audio content from prompts.")]
         MiniMaxAudioPipeline = 213,
 
+        [Display(Name = "Stable Audio Pipeline", ShortName = "StableAudio", Description = "Stability AI's Stable Audio family generates music and sound effects from text prompts, with variable-length output and audio-to-audio editing. Suitable for instrumental music, ambient soundscapes and short sound effects.")]
+        StableAudioPipeline = 214,
+
+        [Display(Name = "YuE Pipeline", ShortName = "YuE", Description = "YuE is an open lyrics-to-song model family that generates full songs with vocals and accompaniment from lyrics and a style prompt, using symbolic score planning followed by acoustic rendering.")]
+        YuEPipeline = 215,
+
 
         // Other
         [Display(Name = "Upscale Pipeline", ShortName = "Upscale", Description = "General-purpose image upscaling pipeline designed to increase resolution and enhance visual detail while preserving the original image content.")]
@@ -155,6 +162,9 @@ namespace Amuse.Common
 
         [Display(Name = "Supertonic Pipeline", ShortName = "Supertonic", Description = "A lightweight text-to-speech model designed to convert text into natural-sounding speech efficiently. Focuses on practical local inference while providing expressive synthesized voices without requiring a large cloud-based speech service.")]
         SupertonicPipeline = 503,
+
+        [Display(Name = "Parakeet Pipeline", ShortName = "Parakeet", Description = "NVIDIA's Parakeet-TDT is a fast, accurate automatic speech recognition model covering 25 European languages with automatic language detection. It transcribes spoken audio into punctuated text and is well suited to quick local speech-to-text workflows.")]
+        ParakeetPipeline = 504,
 
 
         // Text

@@ -1,0 +1,13 @@
+﻿<Views:SettingsDiffusionViewBase x:Class="Amuse.App.Views.SettingsAudioView"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+    xmlns:local="clr-namespace:Amuse.App.Views"
+    xmlns:CommonControls="clr-namespace:TensorStack.WPF.Controls;assembly=TensorStack.WPF"
+    xmlns:Controls="clr-namespace:Amuse.App.Controls"
+    xmlns:Views="clr-namespace:Amuse.App.Views">
+    <GroupBox DataContext="{Binding RelativeSource={RelativeSource AncestorType={x:Type local:SettingsAudioView}}}" Margin="10, 20, 20, 20" Header="{CommonControls:Localize AudioSettings}" Padding="4">
+        <Controls:SettingsDiffusionControl />
+    </GroupBox>
+</Views:SettingsDiffusionViewBase>

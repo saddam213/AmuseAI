@@ -86,7 +86,25 @@ namespace Amuse.App.Resources {
                 return ResourceManager.GetString("ToolTip_GenerateStop", resourceCulture);
             }
         }
-        
+
+        /// <summary>
+        ///   Looks up a localized string similar to Showing all models, click to show installed models only.
+        /// </summary>
+        public static string ToolTip_ModelFilterAll {
+            get {
+                return ResourceManager.GetString("ToolTip_ModelFilterAll", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to Showing installed models only, click to show all models.
+        /// </summary>
+        public static string ToolTip_ModelFilterInstalled {
+            get {
+                return ResourceManager.GetString("ToolTip_ModelFilterInstalled", resourceCulture);
+            }
+        }
+
         /// <summary>
         ///   Looks up a localized string similar to Add LoRA Trigger word.
         /// </summary>
@@ -385,7 +403,7 @@ namespace Amuse.App.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Restart Amuse to apply the theme.
+        ///   Looks up a localized string similar to Restart Amuse to apply the theme..
         /// </summary>
         public static string ToolTip_Theme {
             get {

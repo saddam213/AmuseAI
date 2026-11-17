@@ -743,6 +743,7 @@ namespace Amuse.App.Resources {
                 return ResourceManager.GetString("TimelineSegmentType3", resourceCulture);
             }
         }
+        
         /// <summary>
         ///   Looks up a localized string similar to Other.
         /// </summary>

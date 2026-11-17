@@ -41,9 +41,9 @@ namespace Amuse.App.Common
         private static BackendType[] GetSupportedBackends(VendorType vendor, string deviceType)
         {
             if (vendor == VendorType.Intel)
-                return [BackendType.OnnxRuntime, BackendType.StableDiffusionCpp];
+                return [BackendType.OnnxRuntime, BackendType.StableDiffusionCpp, BackendType.AudioCpp];
 
-            return [BackendType.HuggingFace, BackendType.OnnxRuntime, BackendType.StableDiffusionCpp];
+            return [BackendType.HuggingFace, BackendType.OnnxRuntime, BackendType.StableDiffusionCpp, BackendType.AudioCpp];
         }
 
 

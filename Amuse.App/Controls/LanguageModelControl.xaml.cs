@@ -265,7 +265,7 @@ namespace Amuse.App.Controls
                 if (obj is not LanguageModel viewModel)
                     return false;
 
-                if (viewModel.Status == ModelStatusType.Available)
+                if (Settings.IsInstalledModelsOnly && viewModel.Status == ModelStatusType.Available)
                     return false;
 
                 if (_selectedDevice is null)
@@ -295,6 +295,10 @@ namespace Amuse.App.Controls
                 {
                     DeviceCollectionView.Refresh();
                     SelectedDevice = Settings.GetDefaultDevice();
+                }
+                else if (p.PropertyName == nameof(Settings.IsInstalledModelsOnly))
+                {
+                    Device_SelectionChanged(default, default);
                 }
             };
 
@@ -519,7 +523,7 @@ namespace Amuse.App.Controls
         {
             if (sender.Equals("Language"))
             {
-                await NavigationService.NavigateAsync((int)View.Language);
+                await NavigationService.NavigateAsync((int)View.SettingsLanguage);
             }
         }
     }

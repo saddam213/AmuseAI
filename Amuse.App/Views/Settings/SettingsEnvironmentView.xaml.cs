@@ -50,7 +50,7 @@ namespace Amuse.App.Views
             InitializeComponent();
         }
 
-        public override View View => View.Environment;
+        public override View View => View.SettingsEnvironment;
         public IEnvironmentService EnvironmentService { get; }
         public AsyncRelayCommand SaveCommand { get; }
         public AsyncRelayCommand AddEnvironmentCommand { get; }

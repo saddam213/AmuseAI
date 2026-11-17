@@ -98,6 +98,7 @@
                                     <Button DockPanel.Dock="Right" Height="26" Width="26" Command="{Binding SettingsCommand}" CommandParameter="Extract" >
                                         <CommonControls:FontAwesome Icon="f013" Size="12"/>
                                     </Button>
+                                    <CommonControls:ToggleButton DockPanel.Dock="Right" Width="26" Height="26" IconTrue="f0b0" IconFalse="f0b0" SizeTrue="12" SizeFalse="12" ColorTrue="{StaticResource ToggleIconOnColour}" ColorFalse="{StaticResource ToggleIconOffColour}" ToolTipTrue="{CommonControls:Localize ToolTip_ModelFilterInstalled}" ToolTipFalse="{CommonControls:Localize ToolTip_ModelFilterAll}" ToolTipPlacement="Top" ToolTipInitialDelay="200" IsChecked="{Binding Settings.IsInstalledModelsOnly, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"/>
                                     <UniformGrid Rows="1">
                                         <Button Content="{CommonControls:Localize Install}" Height="26" Command="{Binding InstallCommand}" CommandParameter="Extract"/>
                                         <Button Content="{CommonControls:Localize Download}" Height="26" Command="{Binding DownloadCommand}" CommandParameter="Extract"/>
@@ -123,6 +124,7 @@
                                     <Button DockPanel.Dock="Right" Height="26" Width="26" Command="{Binding SettingsCommand}" CommandParameter="Upscale" >
                                         <CommonControls:FontAwesome Icon="f013" Size="12"/>
                                     </Button>
+                                    <CommonControls:ToggleButton DockPanel.Dock="Right" Width="26" Height="26" IconTrue="f0b0" IconFalse="f0b0" SizeTrue="12" SizeFalse="12" ColorTrue="{StaticResource ToggleIconOnColour}" ColorFalse="{StaticResource ToggleIconOffColour}" ToolTipTrue="{CommonControls:Localize ToolTip_ModelFilterInstalled}" ToolTipFalse="{CommonControls:Localize ToolTip_ModelFilterAll}" ToolTipPlacement="Top" ToolTipInitialDelay="200" IsChecked="{Binding Settings.IsInstalledModelsOnly, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"/>
                                     <UniformGrid Rows="1">
                                         <Button Content="{CommonControls:Localize Install}" Height="26" Command="{Binding InstallCommand}" CommandParameter="Upscale"/>
                                         <Button Content="{CommonControls:Localize Download}" Height="26" Command="{Binding DownloadCommand}" CommandParameter="Upscale"/>

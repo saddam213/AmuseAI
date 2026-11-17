@@ -60,6 +60,18 @@ namespace Amuse.Common.Config
                     ChannelProgress = "AmuseHost.StableDiffusionCpp.Progress",
                     ChannelTensor = "AmuseHost.StableDiffusionCpp.Tensor"
                 }
+            },
+            {
+                ServerType.AudioCpp,  new ServerConfig
+                {
+                    Name = "AudioCpp",
+                    Arguments = [nameof(ServerType.AudioCpp)],
+                    Executable = "AmuseHost.AudioCpp.exe",
+                    ChannelCommand = "AmuseHost.AudioCpp.Command",
+                    ChannelPipeName = "AmuseHost.AudioCpp.PipeName",
+                    ChannelProgress = "AmuseHost.AudioCpp.Progress",
+                    ChannelTensor = "AmuseHost.AudioCpp.Tensor"
+                }
             }
         };
     }

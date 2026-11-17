@@ -106,6 +106,7 @@ namespace Amuse.App.Dialogs
             {
                 BackendType.HuggingFace => "Python Virtual",
                 BackendType.StableDiffusionCpp => "StableDiffusion.cpp",
+                BackendType.AudioCpp => "Audio.cpp",
                 BackendType.OnnxRuntime => "OnnxRuntime",
                 _ => "Virtual"
             };

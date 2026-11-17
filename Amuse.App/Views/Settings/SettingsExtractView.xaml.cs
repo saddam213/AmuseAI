@@ -50,7 +50,7 @@ namespace Amuse.App.Views
             InitializeComponent();
         }
 
-        public override View View => View.Extract;
+        public override View View => View.SettingsExtract;
         public AsyncRelayCommand SaveCommand { get; }
         public AsyncRelayCommand AddModelCommand { get; }
         public AsyncRelayCommand AddModelWizardCommand { get; }
