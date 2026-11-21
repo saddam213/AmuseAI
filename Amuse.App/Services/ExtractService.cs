@@ -1,41 +1,51 @@
 ﻿using Amuse.App.Common;
+using Amuse.App.Resources;
+using Amuse.App.Runtime;
+using Amuse.Common;
+using Microsoft.Extensions.Logging;
 using System;
+using System.Diagnostics;
 using System.Threading;
 using System.Threading.Tasks;
 using TensorStack.Common;
-using TensorStack.Common.Common;
 using TensorStack.Common.Pipeline;
 using TensorStack.Common.Tensor;
 using TensorStack.Common.Video;
+using TensorStack.Media;
 using TensorStack.Media.Video;
-using TensorStack.OnnxRuntime;
-using TensorStack.OnnxRuntime.Extract;
 
 namespace Amuse.App.Services
 {
     public sealed class ExtractService : ServiceBase, IExtractService
     {
+        private readonly ILogger _logger;
         private readonly Settings _settings;
+        private readonly IToolService _toolService;
         private readonly IMediaService _mediaService;
+        private readonly SemaphoreSlim _operationLock = new SemaphoreSlim(1, 1);
         private PipelineModel _currentPipeline;
-        private IPipeline _extractPipeline;
+        private BackendClient _backendClient;
         private CancellationTokenSource _cancellationTokenSource;
+        private IProgress<RunProgress> _executeProgress;
         private bool _isLoaded;
         private bool _isLoading;
         private bool _isExecuting;
-        private ExtractorConfig _currentConfig;
         private ExtractInputOptions _defaultOptions;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="ExtractService"/> class.
         /// </summary>
         /// <param name="settings">The settings.</param>
-        public ExtractService(Settings settings, IMediaService mediaService)
+        /// <param name="toolService">The tool service.</param>
+        /// <param name="mediaService">The media service.</param>
+        /// <param name="logger">The logger.</param>
+        public ExtractService(Settings settings, IToolService toolService, IMediaService mediaService, ILogger<ExtractService> logger)
         {
+            _logger = logger;
             _settings = settings;
+            _toolService = toolService;
             _mediaService = mediaService;
         }
-
 
         /// <summary>
         /// Gets the pipeline.
@@ -81,284 +91,116 @@ namespace Amuse.App.Services
 
 
         /// <summary>
-        /// Load the pipeline
+        /// Load the extract pipeline into its backend host.
         /// </summary>
-        /// <param name="config">The configuration.</param>
+        /// <param name="pipeline">The pipeline.</param>
         public async Task LoadAsync(PipelineModel pipeline)
         {
+            var timestamp = Stopwatch.GetTimestamp();
+            await _operationLock.WaitAsync();
             try
             {
                 IsLoaded = false;
                 IsLoading = true;
                 using (_cancellationTokenSource = new CancellationTokenSource())
                 {
-                    var cancellationToken = _cancellationTokenSource.Token;
-                    if (_extractPipeline != null)
-                    {
-                        await _extractPipeline.UnloadAsync(cancellationToken);
-                    }
-
-                    _currentPipeline = pipeline;
-                    var device = _currentPipeline.Device;
-                    var model = _currentPipeline.ExtractModel;
-                    _defaultOptions = model.DefaultOptions;
-                    _currentConfig = new ExtractorConfig
-                    {
-                        Channels = model.Channels,
-                        Normalization = model.Normalization,
-                        OutputChannels = model.OutputChannels,
-                        OutputNormalization = model.OutputNormalization,
-                        IsDynamicOutput = model.IsDynamicOutput,
-                        SampleSize = model.SampleSize,
-                        Path = model.Checkpoint.Resolve(_settings, _settings.DirectoryExtract)
-                    };
-
-                    _currentConfig.SetProvider(device.GetProvider(Microsoft.ML.OnnxRuntime.GraphOptimizationLevel.ORT_DISABLE_ALL));
-                    _extractPipeline = model.Type switch
-                    {
-                        ExtractorType.Pose => PosePipeline.Create(_currentConfig),
-                        ExtractorType.Background => BackgroundPipeline.Create(_currentConfig),
-                        _ => ExtractorPipeline.Create(_currentConfig)
-                    };
-
-                    await Task.Run(() => _extractPipeline.LoadAsync(cancellationToken), cancellationToken);
+                    await LoadBackendAsync(pipeline, _cancellationTokenSource.Token);
+                    _logger.LogInformation("[ExtractService] [Load] Extract model loaded, Elapsed: {Elapsed:c}", Stopwatch.GetElapsedTime(timestamp));
                 }
             }
             catch (OperationCanceledException)
             {
-                _extractPipeline?.Dispose();
-                _extractPipeline = null;
-                _currentConfig = null;
-                _currentPipeline = null;
+                _logger.LogInformation("[ExtractService] [Load] Loading extract model cancelled, Elapsed: {Elapsed:c}", Stopwatch.GetElapsedTime(timestamp));
+                throw;
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "[ExtractService] [Load] An exception occurred loading extract model, Elapsed: {Elapsed:c}", Stopwatch.GetElapsedTime(timestamp));
                 throw;
             }
             finally
             {
-                IsLoaded = true;
                 IsLoading = false;
+                _operationLock.Release();
             }
         }
 
 
         /// <summary>
-        /// Execute the image ExtractorPipeline
+        /// Execute the extractor on an image.
         /// </summary>
         /// <param name="request">The request.</param>
+        /// <param name="progressCallback">The progress callback.</param>
         public async Task<ImageTensor> ExecuteAsync(ExtractImageRequest request, IProgress<RunProgress> progressCallback)
         {
+            await _operationLock.WaitAsync();
             try
             {
                 IsExecuting = true;
-                var imageTensor = _currentPipeline.ExtractModel.Type switch
+                using (_cancellationTokenSource = new CancellationTokenSource())
                 {
-                    ExtractorType.Default => await ExecuteDefaultAsync(request, progressCallback),
-                    ExtractorType.Background => await ExecuteBackgroundAsync(request, progressCallback),
-                    ExtractorType.Pose => await ExecutePoseAsync(request, progressCallback),
-                    _ => throw new NotImplementedException()
-                };
-
-                return imageTensor;
+                    // Extract
+                    EnsureLoaded();
+                    _executeProgress = progressCallback;
+                    return await RunOnBackendAsync(() => _backendClient.ExtractImageAsync(request.Image, request.Options));
+                }
+            }
+            catch (OperationCanceledException)
+            {
+                _logger.LogInformation("[ExtractService] [Execute] Image extract cancelled.");
+                throw;
             }
             finally
             {
+                _executeProgress = null;
                 IsExecuting = false;
+                _operationLock.Release();
             }
         }
 
 
+        /// <summary>
+        /// Execute the extractor on a video, frame by frame.
+        /// </summary>
+        /// <param name="request">The request.</param>
+        /// <param name="progressCallback">The progress callback.</param>
         public async Task<VideoInputStream> ExecuteAsync(ExtractVideoRequest request, IProgress<RunProgress> progressCallback)
         {
+            await _operationLock.WaitAsync();
             try
             {
                 IsExecuting = true;
-                var videoStream = _currentPipeline.ExtractModel.Type switch
+                var videoFileName = _mediaService.GetTempFile(MediaType.Video);
+                using (_cancellationTokenSource = new CancellationTokenSource())
                 {
-                    ExtractorType.Default => await ExecuteDefaultAsync(request, progressCallback),
-                    ExtractorType.Background => await ExecuteBackgroundAsync(request, progressCallback),
-                    ExtractorType.Pose => await ExecutePoseAsync(request, progressCallback),
-                    _ => throw new NotImplementedException()
-                };
+                    var cancellationToken = _cancellationTokenSource.Token;
+                    var model = EnsureLoaded();
 
-                return videoStream;
+                    // Video frames have no alpha channel
+                    var isTransparentSupported = model.Type != ExtractorType.Background;
+
+                    // Extract, frame by frame
+                    var frameCount = request.VideoStream.FrameCount;
+                    async Task<VideoFrame> FrameProcessor(VideoFrame frame)
+                    {
+                        var processedFrame = await RunOnBackendAsync(() => _backendClient.ExtractImageAsync(frame.Frame, request.Options, isTransparentSupported));
+                        progressCallback?.Report(new RunProgress(frame.Index, frameCount));
+                        return new VideoFrame(frame.Index, processedFrame, frame.SourceFrameRate, frame.AuxFrame);
+                    }
+
+                    return await request.VideoStream.ProcessAsync(videoFileName, FrameProcessor, true, _settings.ReadBuffer, _settings.WriteBuffer, cancellationToken);
+                }
+            }
+            catch (OperationCanceledException)
+            {
+                _logger.LogInformation("[ExtractService] [Execute] Video extract cancelled.");
+                throw;
             }
             finally
             {
+                _executeProgress = null;
                 IsExecuting = false;
-            }
-        }
-
-
-
-
-        /// <summary>
-        /// Execute the image ExtractorPipeline
-        /// </summary>
-        /// <param name="request">The request.</param>
-        private async Task<ImageTensor> ExecuteDefaultAsync(ExtractImageRequest request, IProgress<RunProgress> progressCallback)
-        {
-            var pipeline = _extractPipeline as ExtractorPipeline;
-            using (_cancellationTokenSource = new CancellationTokenSource())
-            {
-                return await Task.Run(() => pipeline.RunAsync(new ExtractorImageOptions
-                {
-                    Image = request.Image,
-                    IsInverted = request.Options.IsInverted,
-                    MaxTileSize = request.Options.TileSize,
-                    IsTileEnabled = request.Options.IsTileEnabled,
-                    TileOverlap = request.Options.TileOverlap,
-                    MergeInput = request.Options.MergeInput
-                }, progressCallback, _cancellationTokenSource.Token));
-            }
-        }
-
-
-        /// <summary>
-        /// Execute the image BackgroundPipeline
-        /// </summary>
-        /// <param name="request">The request.</param>
-        private async Task<ImageTensor> ExecuteBackgroundAsync(ExtractImageRequest request, IProgress<RunProgress> progressCallback)
-        {
-            var pipeline = _extractPipeline as BackgroundPipeline;
-            using (_cancellationTokenSource = new CancellationTokenSource())
-            {
-                return await Task.Run(() => pipeline.RunAsync(new BackgroundImageOptions
-                {
-                    Image = request.Image,
-                    Mode = request.Options.Mode
-                }, progressCallback, _cancellationTokenSource.Token));
-            }
-        }
-
-
-        /// <summary>
-        /// Execute the image PosePipeline
-        /// </summary>
-        /// <param name="request">The request.</param>
-        private async Task<ImageTensor> ExecutePoseAsync(ExtractImageRequest request, IProgress<RunProgress> progressCallback)
-        {
-            var pipeline = _extractPipeline as PosePipeline;
-            using (_cancellationTokenSource = new CancellationTokenSource())
-            {
-                return await Task.Run(() => pipeline.RunAsync(new PoseImageOptions
-                {
-                    Image = request.Image,
-                    BodyConfidence = request.Options.BodyConfidence,
-                    BoneRadius = request.Options.BoneRadius,
-                    BoneThickness = request.Options.BoneThickness,
-                    ColorAlpha = request.Options.ColorAlpha,
-                    Detections = request.Options.Detections,
-                    IsTransparent = request.Options.IsTransparent,
-                    JointConfidence = request.Options.JointConfidence,
-                    JointRadius = request.Options.JointRadius,
-                }, progressCallback, _cancellationTokenSource.Token));
-            }
-        }
-
-
-        /// <summary>
-        /// Execute the video ExtractorPipeline
-        /// </summary>
-        /// <param name="request">The options.</param>
-        /// <param name="progressCallback">The progress callback.</param>
-        /// <returns>A Task&lt;VideoInputStream&gt; representing the asynchronous operation.</returns>
-        private async Task<VideoInputStream> ExecuteDefaultAsync(ExtractVideoRequest request, IProgress<RunProgress> progressCallback)
-        {
-            var pipeline = _extractPipeline as ExtractorPipeline;
-            var resultVideoFile = FileHelper.RandomFileName(_settings.DirectoryTemp, "mp4");
-            using (_cancellationTokenSource = new CancellationTokenSource())
-            {
-                var frameCount = request.VideoStream.FrameCount;
-                var cancellationToken = _cancellationTokenSource.Token;
-
-                async Task<VideoFrame> FrameProcessor(VideoFrame frame)
-                {
-                    var processedFrame = await pipeline.RunAsync(new ExtractorImageOptions
-                    {
-                        Image = frame.Frame,
-                        IsInverted = request.Options.IsInverted,
-                        MaxTileSize = request.Options.TileSize,
-                        IsTileEnabled = request.Options.IsTileEnabled,
-                        TileOverlap = request.Options.TileOverlap,
-                        MergeInput = request.Options.MergeInput
-                    }, cancellationToken: cancellationToken);
-
-                    progressCallback.Report(new RunProgress(frame.Index, frameCount));
-                    return new VideoFrame(frame.Index, processedFrame, frame.SourceFrameRate, frame.AuxFrame);
-                }
-
-                return await _mediaService.SaveWithAudioAsync(request.VideoStream, resultVideoFile, FrameProcessor, cancellationToken);
-            }
-        }
-
-
-        /// <summary>
-        /// Execute the video BackgroundPipeline
-        /// </summary>
-        /// <param name="request">The options.</param>
-        /// <param name="progressCallback">The progress callback.</param>
-        /// <returns>A Task&lt;VideoInputStream&gt; representing the asynchronous operation.</returns>
-        private async Task<VideoInputStream> ExecuteBackgroundAsync(ExtractVideoRequest request, IProgress<RunProgress> progressCallback)
-        {
-            var pipeline = _extractPipeline as BackgroundPipeline;
-            var resultVideoFile = FileHelper.RandomFileName(_settings.DirectoryTemp, "mp4");
-            using (_cancellationTokenSource = new CancellationTokenSource())
-            {
-                var frameCount = request.VideoStream.FrameCount;
-                var cancellationToken = _cancellationTokenSource.Token;
-
-                async Task<VideoFrame> FrameProcessor(VideoFrame frame)
-                {
-                    var processedFrame = await pipeline.RunAsync(new BackgroundImageOptions
-                    {
-                        Image = frame.Frame,
-                        Mode = request.Options.Mode,
-                        IsTransparentSupported = false
-                    }, cancellationToken: cancellationToken);
-
-                    progressCallback.Report(new RunProgress(frame.Index, frameCount));
-                    return new VideoFrame(frame.Index, processedFrame, frame.SourceFrameRate, frame.AuxFrame);
-                }
-
-                return await _mediaService.SaveWithAudioAsync(request.VideoStream, resultVideoFile, FrameProcessor, cancellationToken);
-            }
-        }
-
-
-        /// <summary>
-        /// Execute the video PosePipeline
-        /// </summary>
-        /// <param name="request">The options.</param>
-        /// <param name="progressCallback">The progress callback.</param>
-        /// <returns>A Task&lt;VideoInputStream&gt; representing the asynchronous operation.</returns>
-        private async Task<VideoInputStream> ExecutePoseAsync(ExtractVideoRequest request, IProgress<RunProgress> progressCallback)
-        {
-            var pipeline = _extractPipeline as PosePipeline;
-            var resultVideoFile = FileHelper.RandomFileName(_settings.DirectoryTemp, "mp4");
-            using (_cancellationTokenSource = new CancellationTokenSource())
-            {
-                var frameCount = request.VideoStream.FrameCount;
-                var cancellationToken = _cancellationTokenSource.Token;
-
-                async Task<VideoFrame> FrameProcessor(VideoFrame frame)
-                {
-                    var processedFrame = await pipeline.RunAsync(new PoseImageOptions
-                    {
-                        Image = frame.Frame,
-                        BodyConfidence = request.Options.BodyConfidence,
-                        BoneRadius = request.Options.BoneRadius,
-                        BoneThickness = request.Options.BoneThickness,
-                        ColorAlpha = request.Options.ColorAlpha,
-                        Detections = request.Options.Detections,
-                        IsTransparent = request.Options.IsTransparent,
-                        JointConfidence = request.Options.JointConfidence,
-                        JointRadius = request.Options.JointRadius,
-                    }, cancellationToken: cancellationToken);
-
-                    progressCallback.Report(new RunProgress(frame.Index, frameCount));
-                    return new VideoFrame(frame.Index, processedFrame, frame.SourceFrameRate, frame.AuxFrame);
-                }
-
-                return await _mediaService.SaveWithAudioAsync(request.VideoStream, resultVideoFile, FrameProcessor, cancellationToken);
+                _operationLock.Release();
             }
         }
 
@@ -369,6 +211,9 @@ namespace Amuse.App.Services
         public async Task CancelAsync()
         {
             await _cancellationTokenSource.SafeCancelAsync();
+            var backendClient = _backendClient;
+            if (backendClient is not null)
+                await backendClient.CancelAsync();
         }
 
 
@@ -377,19 +222,182 @@ namespace Amuse.App.Services
         /// </summary>
         public async Task UnloadAsync()
         {
-            if (_extractPipeline != null)
+            // Interrupt a running load or execute, then wait for it to finish
+            await CancelAsync();
+            await _operationLock.WaitAsync();
+            try
             {
-                await _cancellationTokenSource.SafeCancelAsync();
-                await _extractPipeline.UnloadAsync();
-                _extractPipeline?.Dispose();
-                _extractPipeline = null;
-                _currentConfig = null;
-                _currentPipeline = null;
+                await UnloadBackendAsync();
+                IsLoaded = false;
+                IsLoading = false;
+                IsExecuting = false;
+            }
+            finally
+            {
+                _operationLock.Release();
+            }
+        }
+
+
+        /// <summary>
+        /// Loads the extract model into a new backend host.
+        /// </summary>
+        /// <param name="pipeline">The pipeline.</param>
+        /// <param name="cancellationToken">The cancellation token.</param>
+        private async Task LoadBackendAsync(PipelineModel pipeline, CancellationToken cancellationToken)
+        {
+            // Unload
+            await UnloadBackendAsync();
+            cancellationToken.ThrowIfCancellationRequested();
+
+            // Load, an extract-only pipeline, the host ignores the view's generate models
+            var model = pipeline.ExtractModel;
+            _logger.LogInformation("[ExtractService] [Load] Loading extract model {Name}, Backend: {Backend}, Type: {Type}...", model.Name, model.Backend, model.Type);
+            var extractPipeline = new PipelineModel
+            {
+                Device = pipeline.Device,
+                ExtractModel = model,
+                ViewType = pipeline.ViewType,
+                MemoryMode = pipeline.MemoryMode
+            };
+            _backendClient = CreateBackendClient(model.Backend);
+            try
+            {
+                await _backendClient.LoadAsync(extractPipeline, new Progress<Amuse.Common.PipelineProgress>(OnHostProgress));
+                cancellationToken.ThrowIfCancellationRequested();
+            }
+            catch (Exception)
+            {
+                // Never leave a disconnected client behind
+                await UnloadBackendAsync();
+                throw;
             }
 
-            IsLoaded = false;
-            IsLoaded = false;
-            IsExecuting = false;
+            // Result
+            _currentPipeline = pipeline;
+            _defaultOptions = model.DefaultOptions;
+            IsLoaded = true;
+        }
+
+
+        /// <summary>
+        /// Runs a call on the backend host, stopping the host when the call fails in a way that requires it.
+        /// </summary>
+        /// <typeparam name="T">The result type.</typeparam>
+        /// <param name="backendCall">The backend call.</param>
+        private async Task<T> RunOnBackendAsync<T>(Func<Task<T>> backendCall)
+        {
+            try
+            {
+                return await backendCall();
+            }
+            catch (OperationCanceledException)
+            {
+                throw;
+            }
+            catch (Exception ex) when (IsHostFailed())
+            {
+                _logger.LogError(ex, "[ExtractService] [Execute] Extract failed, stopping the extract host.");
+                await UnloadBackendOnErrorAsync();
+                throw;
+            }
+        }
+
+
+        /// <summary>
+        /// Gets the loaded extract model.
+        /// </summary>
+        /// <exception cref="InvalidOperationException">No extract model is loaded</exception>
+        private ExtractModel EnsureLoaded()
+        {
+            if (!_isLoaded || _backendClient is null || _currentPipeline?.ExtractModel is null)
+                throw new InvalidOperationException(AppErrors.ExtractModelNotLoaded);
+
+            return _currentPipeline.ExtractModel;
+        }
+
+
+        /// <summary>
+        /// Relays the host step progress to the current execute progress callback.
+        /// </summary>
+        /// <param name="progress">The host progress.</param>
+        private void OnHostProgress(Amuse.Common.PipelineProgress progress)
+        {
+            if (_executeProgress is null || progress.Maximum <= 0)
+                return;
+
+            _executeProgress.Report(new RunProgress(progress.Value, progress.Maximum));
+        }
+
+
+        /// <summary>
+        /// Creates the backend client for the extract model backend, the extract host runs separately from the generate and upscale hosts.
+        /// </summary>
+        /// <param name="backend">The backend.</param>
+        private BackendClient CreateBackendClient(BackendType backend)
+        {
+            return backend switch
+            {
+                BackendType.OnnxRuntime => new OnnxBackendClient(_settings, _toolService, _mediaService, _logger, ServerType.OnnxRuntimeExtract),
+                _ => throw new NotSupportedException(string.Format(AppErrors.ExtractBackendNotSupported, backend))
+            };
+        }
+
+
+        /// <summary>
+        /// Unloads the backend client and stops its host.
+        /// </summary>
+        private async Task UnloadBackendAsync()
+        {
+            try
+            {
+                if (_backendClient is not null)
+                    await _backendClient.UnloadAsync();
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "[ExtractService] [Unload] An exception occurred unloading extract model.");
+            }
+            finally
+            {
+                _backendClient?.Dispose();
+                _backendClient = null;
+                _currentPipeline = null;
+                _defaultOptions = null;
+                IsLoaded = false;
+            }
+        }
+
+
+        /// <summary>
+        /// Determines whether an execution error requires the extract host to be stopped,
+        /// the backend stops on any error, or the host connection was lost.
+        /// </summary>
+        private bool IsHostFailed()
+        {
+            return _backendClient is not null
+                && (_backendClient.StopHostOnException || !_backendClient.IsConnected);
+        }
+
+
+        /// <summary>
+        /// Stops the backend host after an execution error.
+        /// </summary>
+        private async Task UnloadBackendOnErrorAsync()
+        {
+            try
+            {
+                await _backendClient.StopAsync();
+            }
+            catch (Exception) { }
+            finally
+            {
+                _backendClient?.Dispose();
+                _backendClient = null;
+                _currentPipeline = null;
+                _defaultOptions = null;
+                IsLoaded = false;
+            }
         }
     }
 

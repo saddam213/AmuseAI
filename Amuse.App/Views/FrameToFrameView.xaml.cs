@@ -130,7 +130,8 @@ namespace Amuse.App.Views
                 Statistics.Start();
 
                 var tempVideoStreamFile = MediaService.GetTempFile(MediaType.Video);
-                var resultVideoStream = await MediaService.SaveWithAudioAsync(ExecuteVideoFramesAsync(Options), _sourceVideo.SourceFile, tempVideoStreamFile);
+                await ExecuteVideoFramesAsync(Options).SaveAsync(tempVideoStreamFile, audioSourceFile: _sourceVideo.SourceFile);
+                var resultVideoStream = await VideoInputStream.CreateAsync(tempVideoStreamFile);
 
                 Statistics.Stop();
                 ResultVideo = await SaveHistoryAsync(Options, resultVideoStream);
@@ -195,7 +196,8 @@ namespace Amuse.App.Views
 
 
                     var tempVideoStreamFile = MediaService.GetTempFile(MediaType.Video);
-                    var resultVideoStream = await MediaService.SaveWithAudioAsync(ExecuteVideoFramesAsync(automationJob.GenerateOptions), _sourceVideo.SourceFile, tempVideoStreamFile);
+                    await ExecuteVideoFramesAsync(automationJob.GenerateOptions).SaveAsync(tempVideoStreamFile, audioSourceFile: _sourceVideo.SourceFile);
+                    var resultVideoStream = await VideoInputStream.CreateAsync(tempVideoStreamFile);
 
                     Statistics.Stop();
                     ResultVideo = !AutomationOptions.IsHistoryEnabled
@@ -252,7 +254,7 @@ namespace Amuse.App.Views
                 var resultTensor = await ExecuteImageDiffusionAsync(options);
 
                 // Upscale
-                resultTensor = await ExecuteImageUpscaleAsync(resultTensor);
+                resultTensor = await ExecuteImageUpscaleAsync(resultTensor, isResultKeptOnError: false);
 
                 // Result
                 ResultImage = await resultTensor.ToImageInputAsync();
@@ -293,8 +295,8 @@ namespace Amuse.App.Views
                 Options = options,
                 Model = CurrentPipeline.DiffusionModel.Name,
                 LoraModels = CurrentPipeline.LoraAdapterModel?.Select(x => x.Name).ToArray(),
-                UpscaleModel = CurrentPipeline.UpscaleModel?.Name,
-                UpscaleOptions = CurrentPipeline.UpscaleModel is not null ? UpscaleOptions : null,
+                UpscaleModel = UpscaledModel?.Name,
+                UpscaleOptions = UpscaledModel is not null ? UpscaleOptions : null,
                 Source = View.FrameToFrame,
             });
             Logger.LogInformation($"[FrameToFrame] [SaveHistory] History saved.");

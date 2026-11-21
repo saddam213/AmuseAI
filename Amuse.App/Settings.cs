@@ -10,6 +10,7 @@ using System.Threading.Tasks;
 using System.Windows.Controls;
 using TensorStack.Common;
 using TensorStack.Common.Common;
+using TensorStack.Media;
 using TensorStack.WPF;
 
 namespace Amuse.App
@@ -73,7 +74,6 @@ namespace Amuse.App
 
         public int ReadBuffer { get; set; } = 32;
         public int WriteBuffer { get; set; } = 32;
-        public string VideoCodec { get; set; } = "mp4v";
         public bool IsLegacyDeviceDetection { get; set; }
         public bool IsServerDebugEnabled { get; set; } = false;
         public bool IsHistoryRecentItemsEnabled { get; set; } = true;
@@ -83,6 +83,9 @@ namespace Amuse.App
         public bool IsExternalLinksAcknowledged { get; set; }
         public bool IsExternalToolsEnabled { get; set; }
         public bool IsExternalToolsAcknowledged { get; set; }
+        public bool IsDangerousToolsEnabled { get; set; }
+        public bool IsDangerousToolsAcknowledged { get; set; }
+        public bool IsAppSetupAcknowledged { get; set; }
         public string UserAgent { get; set; }
 
         public double VolumeInput
@@ -145,9 +148,6 @@ namespace Amuse.App
             set { SetProperty(ref _isAutoUpdateEnabled, value); }
         }
 
-        /// <summary>
-        /// Gets or sets a value indicating whether model selectors show only installed models.
-        /// </summary>
         public bool IsInstalledModelsOnly
         {
             get { return _isInstalledModelsOnly; }
@@ -205,6 +205,7 @@ namespace Amuse.App
 
             Directory.CreateDirectory(DirectoryTemp);
             Directory.CreateDirectory(DirectoryHistory);
+            MediaManager.Initialize(directoryTemp: DirectoryTemp);
             CreateModelDirectory(directoryData);
 
             var templateSettings = Path.Combine(directoryData, "Templates.json");
@@ -242,7 +243,6 @@ namespace Amuse.App
                 if (defaultModel is not null)
                     defaultModel.IsDefault = false;
 
-                pipeline.DiffusionModel.UserQualityMode = pipeline.QualityMode;
                 pipeline.DiffusionModel.UserMemoryMode = pipeline.MemoryMode;
                 pipeline.DiffusionModel.UserExecutionOptions = pipeline.ExecutionOptions;
                 pipeline.DiffusionModel.IsDefault = true;
@@ -253,8 +253,7 @@ namespace Amuse.App
                 if (defaultModel is not null)
                     defaultModel.IsDefault = false;
 
-                pipeline.LanguageModel.UserQualityMode = pipeline.QualityMode;
-                //pipeline.LanguageModel.UserMemoryMode = pipeline.MemoryMode;
+                pipeline.LanguageModel.UserMemoryMode = pipeline.MemoryMode;
                 pipeline.LanguageModel.UserExecutionOptions = pipeline.ExecutionOptions;
                 pipeline.LanguageModel.IsDefault = true;
             }
@@ -309,6 +308,7 @@ namespace Amuse.App
         {
             DirectoryTemp = directory;
             Directory.CreateDirectory(directory);
+            MediaManager.Initialize(directoryTemp: directory);
         }
 
 

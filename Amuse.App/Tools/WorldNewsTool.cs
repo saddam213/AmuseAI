@@ -1,8 +1,8 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
+using TensorStack.WPF.Controls;
 
 namespace Amuse.App.Tools
 {
@@ -46,9 +46,14 @@ namespace Amuse.App.Tools
         public override string DisplayIcon => "f1ea";
 
         /// <summary>
+        ///  Gets the tool icon style.
+        /// </summary>
+        public override FontAwesomeIconStyle DisplayIconStyle { get; } = FontAwesomeIconStyle.SharpLight;
+
+        /// <summary>
         /// Gets the is display order.
         /// </summary>
-        public override int DisplayOrder => 11;
+        public override int DisplayOrder => 40;
 
         /// <summary>
         /// Gets the tool schema.
@@ -100,11 +105,7 @@ namespace Amuse.App.Tools
                     _ => _newsFeeds
                 };
 
-                var results = new List<FeedResult>();
-                foreach (var feed in feeds)
-                {
-                    results.AddRange(await GetFeedAsync(feed, count));
-                }
+                var results = await GetFeedsAsync(feeds, count, cancellationToken);
                 return SuccessResult(results);
             }
             catch (Exception ex)

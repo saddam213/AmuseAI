@@ -25,11 +25,11 @@ namespace Amuse.App.Dialogs
         private DiffusionModel _originalDiffusionModel;
         private DiffusionCheckpointModel _checkpointModel;
         private SchedulerInputOptions[] _schedulers;
+        private DataType[] _dataTypes;
 
         public DiffusionModelDialog(Settings settings)
         {
             Settings = settings;
-            DataTypes = [DataType.Bfloat16, DataType.Float16, DataType.Float8, DataType.Int8];
             Sizes = new ObservableCollection<SizeOption>();
             SaveCommand = new AsyncRelayCommand(SaveAsync, CanExecuteSave);
             CancelCommand = new AsyncRelayCommand(CancelAsync);
@@ -48,7 +48,14 @@ namespace Amuse.App.Dialogs
         public AsyncRelayCommand<SizeOption> RemoveSizeCommand { get; }
         public ObservableCollection<SizeOption> Sizes { get; }
         public bool IsUpdateMode => _originalDiffusionModel is not null;
-        public DataType[] DataTypes { get; }
+        /// <summary>
+        /// Gets or sets the data types the model backend can load.
+        /// </summary>
+        public DataType[] DataTypes
+        {
+            get { return _dataTypes; }
+            set { SetProperty(ref _dataTypes, value); }
+        }
         public AccessToken[] AccessTokens { get; }
 
         public DiffusionModel DiffusionModel
@@ -220,6 +227,10 @@ namespace Amuse.App.Dialogs
 
         private void Populate()
         {
+            // DataTypes, keep the current type if the backend list does not have it
+            var dataTypes = DiffusionModel.Backend.GetDataTypes();
+            DataTypes = dataTypes.Contains(DiffusionModel.BaseType) ? dataTypes : [.. dataTypes, DiffusionModel.BaseType];
+
             foreach (var size in DiffusionModel.Resolutions)
                 Sizes.Add(size);
 
@@ -320,12 +331,9 @@ namespace Amuse.App.Dialogs
             if (DiffusionModel.DefaultOptions.ChunkSize < 0)
                 yield return "ChunkSize must be be >= 0";
 
-            // MemoryProfile
-            foreach (var profile in DiffusionModel.MemoryProfile)
-            {
-                if (profile.MemoryModes.Any(x => x < 0))
-                    yield return "MemoryMode must be >= 0";
-            }
+            // Memory
+            if (DiffusionModel.MemorySize < 0)
+                yield return "Memory Size must be >= 0";
 
             // ProcessTypes
             var processTypes = GetProcessTypes();

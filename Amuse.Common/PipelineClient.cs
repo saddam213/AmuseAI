@@ -407,6 +407,51 @@ namespace Amuse.Common
 
 
         /// <summary>
+        /// Upscales Image.
+        /// </summary>
+        /// <param name="options">The options.</param>
+        public async Task<IReadOnlyList<ImageTensor>> UpscaleImageAsync(UpscaleImageRunOptions options)
+        {
+            _isCanceled = false;
+            var response = await SendPipelineTensorRequestAsync(new PipelineRequest(new PipelineRunOptions
+            {
+                UpscaleImageOptions = options
+            }));
+            return response.ImageTensors;
+        }
+
+
+        /// <summary>
+        /// Upscales Video.
+        /// </summary>
+        /// <param name="options">The options.</param>
+        public async Task<IReadOnlyList<VideoSequence>> UpscaleVideoAsync(UpscaleVideoRunOptions options)
+        {
+            _isCanceled = false;
+            var response = await SendPipelineTensorRequestAsync(new PipelineRequest(new PipelineRunOptions
+            {
+                UpscaleVideoOptions = options
+            }));
+            return response.VideoSequences;
+        }
+
+
+        /// <summary>
+        /// Extracts Image.
+        /// </summary>
+        /// <param name="options">The options.</param>
+        public async Task<IReadOnlyList<ImageTensor>> ExtractImageAsync(ExtractImageRunOptions options)
+        {
+            _isCanceled = false;
+            var response = await SendPipelineTensorRequestAsync(new PipelineRequest(new PipelineRunOptions
+            {
+                ExtractImageOptions = options
+            }));
+            return response.ImageTensors;
+        }
+
+
+        /// <summary>
         /// Sends the pipeline request, waits and returns the response
         /// </summary>
         /// <param name="request">The request.</param>

@@ -17,20 +17,7 @@
           "Path": ""
         }
       },
-      "MemoryProfile": [
-        {
-          "QualityMode": "Draft",
-          "MemoryModes": [ 8, 10, 12 ]
-        },
-        {
-          "QualityMode": "Standard",
-          "MemoryModes": [ 8, 10, 12 ]
-        },
-        {
-          "QualityMode": "Production",
-          "MemoryModes": [ 8, 10, 12 ]
-        }
-      ],
+      "MemorySize": 12,
       "DefaultOptions": {
         "Steps": 30,
         "GuidanceScale": 1.7,
@@ -80,20 +67,7 @@
           "Path": ""
         }
       },
-      "MemoryProfile": [
-        {
-          "QualityMode": "Draft",
-          "MemoryModes": [ 4, 6, 8 ]
-        },
-        {
-          "QualityMode": "Standard",
-          "MemoryModes": [ 4, 6, 8 ]
-        },
-        {
-          "QualityMode": "Production",
-          "MemoryModes": [ 4, 6, 8 ]
-        }
-      ],
+      "MemorySize": 8,
       "DefaultOptions": {
         "Steps": 8,
         "GuidanceScale": 1,
@@ -141,20 +115,7 @@
           "Path": ""
         }
       },
-      "MemoryProfile": [
-        {
-          "QualityMode": "Draft",
-          "MemoryModes": [ 4, 4, 6 ]
-        },
-        {
-          "QualityMode": "Standard",
-          "MemoryModes": [ 4, 4, 6 ]
-        },
-        {
-          "QualityMode": "Production",
-          "MemoryModes": [ 4, 4, 6 ]
-        }
-      ],
+      "MemorySize": 6,
       "DefaultOptions": {
         "Steps": 8,
         "GuidanceScale": 1,
@@ -202,20 +163,7 @@
           "Path": ""
         }
       },
-      "MemoryProfile": [
-        {
-          "QualityMode": "Draft",
-          "MemoryModes": [ 6, 8, 8 ]
-        },
-        {
-          "QualityMode": "Standard",
-          "MemoryModes": [ 6, 8, 8 ]
-        },
-        {
-          "QualityMode": "Production",
-          "MemoryModes": [ 6, 8, 8 ]
-        }
-      ],
+      "MemorySize": 8,
       "DefaultOptions": {
         "Steps": 8,
         "GuidanceScale": 1,
@@ -266,23 +214,62 @@
           "Path": ""
         }
       },
-      "MemoryProfile": [
-        {
-          "QualityMode": "Draft",
-          "MemoryModes": [ 4, 6, 6 ]
-        },
-        {
-          "QualityMode": "Standard",
-          "MemoryModes": [ 4, 6, 8 ]
-        },
-        {
-          "QualityMode": "Production",
-          "MemoryModes": [ 4, 10, 12 ]
-        }
-      ],
+      "MemorySize": 8,
       "DefaultOptions": {
         "Steps": 8,
-        "GuidanceScale": 1,
+        "GuidanceScale": 0,
+        "SampleRate": 48000,
+        "Channels": 2,
+        "Strength": 1,
+        "BPM": 80,
+        "Duration": 0,
+        "MaxLength": 512,
+        "MaxLength2": 4096,
+        "Task": "text2music",
+        "Tasks": [ "text2music", "cover", "repaint", "lego", "complete", "extract" ],
+        "Scheduler": "FlowMatchEuler",
+        "Schedulers": [
+          {
+            "Scheduler": "FlowMatchEuler",
+            "NumTrainTimesteps": 1,
+            "Shift": 3,
+            "UseDynamicShifting": false,
+            "BaseShift": 0.5,
+            "MaxShift": 1.15,
+            "BaseImageSeqLen": 256,
+            "MaxImageSeqLen": 4096,
+            "InvertSigmas": false,
+            "ShiftTerminal": 0,
+            "UseKarrasSigmas": false,
+            "UseExponentialSigmas": false,
+            "UseBetaSigmas": false,
+            "TimeShiftType": "Exponential",
+            "StochasticSampling": false
+          }
+        ]
+      }
+    },
+    {
+      "Backend": "AudioCpp",
+      "Name": "AudioCpp_AceStep_Base",
+      "Template": "AudioCpp_AceStep_Base",
+      "Pipeline": "AceStepPipeline",
+      "ModelType": "Base",
+      "BaseType": "bfloat16",
+      "MediaType": "Audio",
+      "ProcessTypes": [ "TextToAudio" ],
+      "ViewFilter": [ "TextToMusic" ],
+      "Checkpoint": {
+        "Transformer": {
+          "Name": "Model",
+          "Type": "LocalFile",
+          "Path": ""
+        }
+      },
+      "MemorySize": 8,
+      "DefaultOptions": {
+        "Steps": 50,
+        "GuidanceScale": 7,
         "SampleRate": 48000,
         "Channels": 2,
         "Strength": 1,
@@ -331,20 +318,7 @@
           "Path": ""
         }
       },
-      "MemoryProfile": [
-        {
-          "QualityMode": "Draft",
-          "MemoryModes": [ 2, 2, 2 ]
-        },
-        {
-          "QualityMode": "Standard",
-          "MemoryModes": [ 2, 2, 2 ]
-        },
-        {
-          "QualityMode": "Production",
-          "MemoryModes": [ 2, 2, 2 ]
-        }
-      ],
+      "MemorySize": 2,
       "DefaultOptions": {
         "SampleRate": 16000,
         "Channels": 1,
@@ -369,20 +343,7 @@
           "Path": ""
         }
       },
-      "MemoryProfile": [
-        {
-          "QualityMode": "Draft",
-          "MemoryModes": [ 2, 2, 2 ]
-        },
-        {
-          "QualityMode": "Standard",
-          "MemoryModes": [ 2, 2, 2 ]
-        },
-        {
-          "QualityMode": "Production",
-          "MemoryModes": [ 2, 2, 2 ]
-        }
-      ],
+      "MemorySize": 2,
       "DefaultOptions": {
         "Steps": 8,
         "GuidanceScale": 0,
@@ -395,6 +356,235 @@
         "Tasks": [ "F1", "F2", "F3", "F4", "F5", "M1", "M2", "M3", "M4", "M5" ],
         "Language": "English",
         "Languages": [ "English", "Korean", "Japanese", "Arabic", "Bulgarian", "Czech", "Danish", "German", "Greek", "Spanish", "Estonian", "Finnish", "French", "Hindi", "Croatian", "Hungarian", "Indonesian", "Italian", "Lithuanian", "Latvian", "Dutch", "Polish", "Portuguese", "Romanian", "Russian", "Slovak", "Slovenian", "Swedish", "Turkish", "Ukrainian", "Vietnamese" ]
+      }
+    },
+    {
+      "Backend": "AudioCpp",
+      "Name": "AudioCpp_VoxtralTTS",
+      "Template": "AudioCpp_VoxtralTTS",
+      "Pipeline": "VoxtralTTSPipeline",
+      "ModelType": "Base",
+      "BaseType": "bfloat16",
+      "MediaType": "Audio",
+      "ProcessTypes": [ "TextToAudio" ],
+      "ViewFilter": [ "TextToAudio" ],
+      "Checkpoint": {
+        "Transformer": {
+          "Name": "Model",
+          "Type": "LocalFile",
+          "Path": ""
+        }
+      },
+      "MemorySize": 8,
+      "DefaultOptions": {
+        "Steps": 7,
+        "GuidanceScale": 1.2,
+        "SampleRate": 24000,
+        "Channels": 1,
+        "MaxLength": 512,
+        "Task": "casual_male",
+        "Tasks": [ "casual_male", "casual_female", "cheerful_female", "neutral_male", "neutral_female", "de_male", "de_female", "es_male", "es_female", "fr_male", "fr_female", "it_male", "it_female", "nl_male", "nl_female", "pt_male", "pt_female", "ar_male", "hi_male", "hi_female" ]
+      }
+    },
+    {
+      "Backend": "AudioCpp",
+      "Name": "AudioCpp_Qwen3TTS_CustomVoice",
+      "Template": "AudioCpp_Qwen3TTS_CustomVoice",
+      "Pipeline": "Qwen3TTSPipeline",
+      "ModelType": "Base",
+      "BaseType": "bfloat16",
+      "MediaType": "Audio",
+      "ProcessTypes": [ "TextToAudio" ],
+      "ViewFilter": [ "TextToAudio" ],
+      "Checkpoint": {
+        "Transformer": {
+          "Name": "Model",
+          "Type": "LocalFile",
+          "Path": ""
+        }
+      },
+      "MemorySize": 6,
+      "DefaultOptions": {
+        "SampleRate": 24000,
+        "Channels": 1,
+        "MaxLength": 512,
+        "Task": "Vivian",
+        "Tasks": [ "Vivian", "Serena", "Uncle_Fu", "Dylan", "Eric", "Ryan", "Aiden", "Ono_Anna", "Sohee" ]
+      }
+    },
+    {
+      "Backend": "AudioCpp",
+      "Name": "AudioCpp_ChatterboxTurbo",
+      "Template": "AudioCpp_ChatterboxTurbo",
+      "Pipeline": "ChatterboxPipeline",
+      "ModelType": "Turbo",
+      "BaseType": "bfloat16",
+      "MediaType": "Audio",
+      "ProcessTypes": [ "TextToAudio" ],
+      "ViewFilter": [ "TextToAudio" ],
+      "Checkpoint": {
+        "Transformer": {
+          "Name": "Model",
+          "Type": "LocalFile",
+          "Path": ""
+        }
+      },
+      "MemorySize": 2,
+      "DefaultOptions": {
+        "SampleRate": 24000,
+        "Channels": 1,
+        "MaxLength": 512
+      }
+    },
+    {
+      "Backend": "AudioCpp",
+      "Name": "AudioCpp_OmniVoice",
+      "Template": "AudioCpp_OmniVoice",
+      "Pipeline": "OmniVoicePipeline",
+      "ModelType": "Base",
+      "BaseType": "bfloat16",
+      "MediaType": "Audio",
+      "ProcessTypes": [ "TextToAudio" ],
+      "ViewFilter": [ "TextToAudio" ],
+      "Checkpoint": {
+        "Transformer": {
+          "Name": "Model",
+          "Type": "LocalFile",
+          "Path": ""
+        }
+      },
+      "MemorySize": 4,
+      "DefaultOptions": {
+        "Steps": 32,
+        "GuidanceScale": 2,
+        "SampleRate": 24000,
+        "Channels": 1,
+        "MaxLength": 512
+      }
+    },
+    {
+      "Backend": "AudioCpp",
+      "Name": "AudioCpp_MossSoundEffect",
+      "Template": "AudioCpp_MossSoundEffect",
+      "Pipeline": "MossSoundEffectPipeline",
+      "ModelType": "Base",
+      "BaseType": "bfloat16",
+      "MediaType": "Audio",
+      "ProcessTypes": [ "TextToAudio" ],
+      "ViewFilter": [ "TextToAudio" ],
+      "Checkpoint": {
+        "Transformer": {
+          "Name": "Model",
+          "Type": "LocalFile",
+          "Path": ""
+        }
+      },
+      "MemorySize": 8,
+      "DefaultOptions": {
+        "Steps": 100,
+        "GuidanceScale": 4,
+        "SampleRate": 48000,
+        "Channels": 1,
+        "Strength": 1,
+        "Duration": 10,
+        "MaxLength": 512,
+        "Scheduler": "FlowMatchEuler",
+        "Schedulers": [
+          {
+            "Scheduler": "FlowMatchEuler",
+            "NumTrainTimesteps": 1,
+            "Shift": 5,
+            "UseDynamicShifting": false,
+            "BaseShift": 0.5,
+            "MaxShift": 1.15,
+            "BaseImageSeqLen": 256,
+            "MaxImageSeqLen": 4096,
+            "InvertSigmas": false,
+            "ShiftTerminal": 0,
+            "UseKarrasSigmas": false,
+            "UseExponentialSigmas": false,
+            "UseBetaSigmas": false,
+            "TimeShiftType": "Exponential",
+            "StochasticSampling": false
+          }
+        ]
+      }
+    },
+    {
+      "Backend": "AudioCpp",
+      "Name": "AudioCpp_Qwen3ASR",
+      "Template": "AudioCpp_Qwen3ASR",
+      "Pipeline": "Qwen3ASRPipeline",
+      "ModelType": "Base",
+      "BaseType": "bfloat16",
+      "MediaType": "Audio",
+      "ProcessTypes": [ "AudioToText" ],
+      "ViewFilter": [ "AudioToText" ],
+      "Checkpoint": {
+        "Transformer": {
+          "Name": "Model",
+          "Type": "LocalFile",
+          "Path": ""
+        }
+      },
+      "MemorySize": 4,
+      "DefaultOptions": {
+        "SampleRate": 16000,
+        "Channels": 1,
+        "MaxLength": 0,
+        "ChunkSize": 0
+      }
+    },
+    {
+      "Backend": "AudioCpp",
+      "Name": "AudioCpp_Canary",
+      "Template": "AudioCpp_Canary",
+      "Pipeline": "CanaryPipeline",
+      "ModelType": "Base",
+      "BaseType": "bfloat16",
+      "MediaType": "Audio",
+      "ProcessTypes": [ "AudioToText" ],
+      "ViewFilter": [ "AudioToText" ],
+      "Checkpoint": {
+        "Transformer": {
+          "Name": "Model",
+          "Type": "LocalFile",
+          "Path": ""
+        }
+      },
+      "MemorySize": 2,
+      "DefaultOptions": {
+        "SampleRate": 16000,
+        "Channels": 1,
+        "MaxLength": 0,
+        "ChunkSize": 0,
+        "Language": "English",
+        "Languages": [ "English", "German", "Spanish", "French" ]
+      }
+    },
+    {
+      "Backend": "AudioCpp",
+      "Name": "AudioCpp_CohereASR",
+      "Template": "AudioCpp_CohereASR",
+      "Pipeline": "CohereASRPipeline",
+      "ModelType": "Base",
+      "BaseType": "bfloat16",
+      "MediaType": "Audio",
+      "ProcessTypes": [ "AudioToText" ],
+      "ViewFilter": [ "AudioToText" ],
+      "Checkpoint": {
+        "Transformer": {
+          "Name": "Model",
+          "Type": "LocalFile",
+          "Path": ""
+        }
+      },
+      "MemorySize": 4,
+      "DefaultOptions": {
+        "SampleRate": 16000,
+        "Channels": 1,
+        "MaxLength": 0,
+        "ChunkSize": 0
       }
     },
     {
@@ -439,20 +629,7 @@
           "Path": ""
         }
       },
-      "MemoryProfile": [
-        {
-          "QualityMode": "Draft",
-          "MemoryModes": [ 4, 6, 6 ]
-        },
-        {
-          "QualityMode": "Standard",
-          "MemoryModes": [ 4, 6, 8 ]
-        },
-        {
-          "QualityMode": "Production",
-          "MemoryModes": [ 4, 10, 12 ]
-        }
-      ],
+      "MemorySize": 8,
       "DefaultOptions": {
         "Steps": 50,
         "GuidanceScale": 1,
@@ -531,20 +708,7 @@
           "Path": ""
         }
       },
-      "MemoryProfile": [
-        {
-          "QualityMode": "Draft",
-          "MemoryModes": [ 4, 6, 6 ]
-        },
-        {
-          "QualityMode": "Standard",
-          "MemoryModes": [ 4, 6, 8 ]
-        },
-        {
-          "QualityMode": "Production",
-          "MemoryModes": [ 4, 10, 12 ]
-        }
-      ],
+      "MemorySize": 8,
       "DefaultOptions": {
         "Steps": 8,
         "GuidanceScale": 0,
@@ -623,20 +787,7 @@
           "Path": ""
         }
       },
-      "MemoryProfile": [
-        {
-          "QualityMode": "Draft",
-          "MemoryModes": [ 4, 6, 6 ]
-        },
-        {
-          "QualityMode": "Standard",
-          "MemoryModes": [ 4, 6, 8 ]
-        },
-        {
-          "QualityMode": "Production",
-          "MemoryModes": [ 4, 10, 12 ]
-        }
-      ],
+      "MemorySize": 8,
       "DefaultOptions": {
         "Steps": 50,
         "GuidanceScale": 1,
@@ -715,20 +866,7 @@
           "Path": ""
         }
       },
-      "MemoryProfile": [
-        {
-          "QualityMode": "Draft",
-          "MemoryModes": [ 4, 6, 6 ]
-        },
-        {
-          "QualityMode": "Standard",
-          "MemoryModes": [ 4, 6, 8 ]
-        },
-        {
-          "QualityMode": "Production",
-          "MemoryModes": [ 4, 10, 12 ]
-        }
-      ],
+      "MemorySize": 8,
       "DefaultOptions": {
         "Steps": 8,
         "GuidanceScale": 0,
@@ -791,20 +929,7 @@
           "Path": ""
         }
       },
-      "MemoryProfile": [
-        {
-          "QualityMode": "Draft",
-          "MemoryModes": [ 2, 6, 10 ]
-        },
-        {
-          "QualityMode": "Standard",
-          "MemoryModes": [ 2, 8, 12 ]
-        },
-        {
-          "QualityMode": "Production",
-          "MemoryModes": [ 2, 12, 18 ]
-        }
-      ],
+      "MemorySize": 12,
       "DefaultOptions": {
         "Steps": 4,
         "Frames": 81,
@@ -882,20 +1007,7 @@
           "Path": ""
         }
       },
-      "MemoryProfile": [
-        {
-          "QualityMode": "Draft",
-          "MemoryModes": [ 8, 21, 38 ]
-        },
-        {
-          "QualityMode": "Standard",
-          "MemoryModes": [ 8, 21, 38 ]
-        },
-        {
-          "QualityMode": "Production",
-          "MemoryModes": [ 8, 34, 52 ]
-        }
-      ],
+      "MemorySize": 38,
       "DefaultOptions": {
         "Steps": 4,
         "Frames": 81,
@@ -972,20 +1084,7 @@
           "Path": ""
         }
       },
-      "MemoryProfile": [
-        {
-          "QualityMode": "Draft",
-          "MemoryModes": [ 2, 8, 14 ]
-        },
-        {
-          "QualityMode": "Standard",
-          "MemoryModes": [ 2, 13, 20 ]
-        },
-        {
-          "QualityMode": "Production",
-          "MemoryModes": [ 2, 23, 32 ]
-        }
-      ],
+      "MemorySize": 20,
       "DefaultOptions": {
         "Steps": 30,
         "Width": 1024,
@@ -1141,20 +1240,7 @@
           "Path": ""
         }
       },
-      "MemoryProfile": [
-        {
-          "QualityMode": "Draft",
-          "MemoryModes": [ 10, 54, 64 ]
-        },
-        {
-          "QualityMode": "Standard",
-          "MemoryModes": [ 10, 54, 64 ]
-        },
-        {
-          "QualityMode": "Production",
-          "MemoryModes": [ 10, 54, 72 ]
-        }
-      ],
+      "MemorySize": 64,
       "DefaultOptions": {
         "Steps": 30,
         "Width": 720,
@@ -1243,20 +1329,7 @@
           "Path": ""
         }
       },
-      "MemoryProfile": [
-        {
-          "QualityMode": "Draft",
-          "MemoryModes": [ 8, 54, 72 ]
-        },
-        {
-          "QualityMode": "Standard",
-          "MemoryModes": [ 8, 54, 72 ]
-        },
-        {
-          "QualityMode": "Production",
-          "MemoryModes": [ 8, 54, 72 ]
-        }
-      ],
+      "MemorySize": 72,
       "DefaultOptions": {
         "Steps": 30,
         "Width": 720,
@@ -1345,20 +1418,7 @@
           "Path": ""
         }
       },
-      "MemoryProfile": [
-        {
-          "QualityMode": "Draft",
-          "MemoryModes": [ 8, 54, 72 ]
-        },
-        {
-          "QualityMode": "Standard",
-          "MemoryModes": [ 8, 54, 72 ]
-        },
-        {
-          "QualityMode": "Production",
-          "MemoryModes": [ 8, 54, 72 ]
-        }
-      ],
+      "MemorySize": 72,
       "DefaultOptions": {
         "Steps": 30,
         "Width": 720,
@@ -1445,20 +1505,7 @@
           "Path": ""
         }
       },
-      "MemoryProfile": [
-        {
-          "QualityMode": "Draft",
-          "MemoryModes": [ 8, 54, 72 ]
-        },
-        {
-          "QualityMode": "Standard",
-          "MemoryModes": [ 8, 54, 72 ]
-        },
-        {
-          "QualityMode": "Production",
-          "MemoryModes": [ 8, 54, 72 ]
-        }
-      ],
+      "MemorySize": 72,
       "DefaultOptions": {
         "Steps": 30,
         "Width": 1360,
@@ -1547,20 +1594,7 @@
           "Path": ""
         }
       },
-      "MemoryProfile": [
-        {
-          "QualityMode": "Draft",
-          "MemoryModes": [ 8, 54, 72 ]
-        },
-        {
-          "QualityMode": "Standard",
-          "MemoryModes": [ 8, 54, 72 ]
-        },
-        {
-          "QualityMode": "Production",
-          "MemoryModes": [ 8, 54, 72 ]
-        }
-      ],
+      "MemorySize": 72,
       "DefaultOptions": {
         "Steps": 30,
         "Width": 1360,
@@ -1647,20 +1681,7 @@
           "Path": ""
         }
       },
-      "MemoryProfile": [
-        {
-          "QualityMode": "Draft",
-          "MemoryModes": [ 2, 10, 12 ]
-        },
-        {
-          "QualityMode": "Standard",
-          "MemoryModes": [ 2, 14, 18 ]
-        },
-        {
-          "QualityMode": "Production",
-          "MemoryModes": [ 2, 22, 26 ]
-        }
-      ],
+      "MemorySize": 18,
       "DefaultOptions": {
         "Steps": 50,
         "Width": 1024,
@@ -1816,20 +1837,7 @@
           "Path": ""
         }
       },
-      "MemoryProfile": [
-        {
-          "QualityMode": "Draft",
-          "MemoryModes": [ 2, 10, 12 ]
-        },
-        {
-          "QualityMode": "Standard",
-          "MemoryModes": [ 2, 14, 18 ]
-        },
-        {
-          "QualityMode": "Production",
-          "MemoryModes": [ 2, 22, 26 ]
-        }
-      ],
+      "MemorySize": 18,
       "DefaultOptions": {
         "Steps": 8,
         "Width": 1024,
@@ -1990,20 +1998,7 @@
           "Path": ""
         }
       },
-      "MemoryProfile": [
-        {
-          "QualityMode": "Draft",
-          "MemoryModes": [ 2, 8, 14 ]
-        },
-        {
-          "QualityMode": "Standard",
-          "MemoryModes": [ 2, 13, 20 ]
-        },
-        {
-          "QualityMode": "Production",
-          "MemoryModes": [ 2, 23, 32 ]
-        }
-      ],
+      "MemorySize": 20,
       "DefaultOptions": {
         "Steps": 4,
         "Width": 1024,
@@ -2164,20 +2159,7 @@
           "Path": ""
         }
       },
-      "MemoryProfile": [
-        {
-          "QualityMode": "Draft",
-          "MemoryModes": [ 2, 8, 14 ]
-        },
-        {
-          "QualityMode": "Standard",
-          "MemoryModes": [ 2, 13, 20 ]
-        },
-        {
-          "QualityMode": "Production",
-          "MemoryModes": [ 2, 23, 32 ]
-        }
-      ],
+      "MemorySize": 20,
       "DefaultOptions": {
         "Steps": 30,
         "Width": 1024,
@@ -2334,20 +2316,7 @@
           "Path": ""
         }
       },
-      "MemoryProfile": [
-        {
-          "QualityMode": "Draft",
-          "MemoryModes": [ 2, 4, 6 ]
-        },
-        {
-          "QualityMode": "Standard",
-          "MemoryModes": [ 2, 6, 10 ]
-        },
-        {
-          "QualityMode": "Production",
-          "MemoryModes": [ 2, 10, 16 ]
-        }
-      ],
+      "MemorySize": 10,
       "DefaultOptions": {
         "Steps": 4,
         "Width": 1024,
@@ -2503,20 +2472,7 @@
           "Path": ""
         }
       },
-      "MemoryProfile": [
-        {
-          "QualityMode": "Draft",
-          "MemoryModes": [ 2, 4, 6 ]
-        },
-        {
-          "QualityMode": "Standard",
-          "MemoryModes": [ 2, 6, 10 ]
-        },
-        {
-          "QualityMode": "Production",
-          "MemoryModes": [ 2, 10, 16 ]
-        }
-      ],
+      "MemorySize": 10,
       "DefaultOptions": {
         "Steps": 50,
         "Width": 1024,
@@ -2672,20 +2628,7 @@
           "Path": ""
         }
       },
-      "MemoryProfile": [
-        {
-          "QualityMode": "Draft",
-          "MemoryModes": [ 4, 6, 12 ]
-        },
-        {
-          "QualityMode": "Standard",
-          "MemoryModes": [ 4, 10, 20 ]
-        },
-        {
-          "QualityMode": "Production",
-          "MemoryModes": [ 4, 20, 35 ]
-        }
-      ],
+      "MemorySize": 20,
       "DefaultOptions": {
         "Steps": 4,
         "Width": 1024,
@@ -2841,20 +2784,7 @@
           "Path": ""
         }
       },
-      "MemoryProfile": [
-        {
-          "QualityMode": "Draft",
-          "MemoryModes": [ 4, 6, 12 ]
-        },
-        {
-          "QualityMode": "Standard",
-          "MemoryModes": [ 4, 10, 20 ]
-        },
-        {
-          "QualityMode": "Production",
-          "MemoryModes": [ 4, 20, 35 ]
-        }
-      ],
+      "MemorySize": 20,
       "DefaultOptions": {
         "Steps": 50,
         "Width": 1024,
@@ -3015,20 +2945,7 @@
           "Path": ""
         }
       },
-      "MemoryProfile": [
-        {
-          "QualityMode": "Draft",
-          "MemoryModes": [ 2, 8, 13 ]
-        },
-        {
-          "QualityMode": "Standard",
-          "MemoryModes": [ 2, 11, 20 ]
-        },
-        {
-          "QualityMode": "Production",
-          "MemoryModes": [ 2, 20, 36 ]
-        }
-      ],
+      "MemorySize": 20,
       "DefaultOptions": {
         "Steps": 30,
         "Width": 1024,
@@ -3125,20 +3042,7 @@
           "Path": ""
         }
       },
-      "MemoryProfile": [
-        {
-          "QualityMode": "Draft",
-          "MemoryModes": [ 4, 20, 32 ]
-        },
-        {
-          "QualityMode": "Standard",
-          "MemoryModes": [ 4, 20, 32 ]
-        },
-        {
-          "QualityMode": "Production",
-          "MemoryModes": [ 4, 23, 32 ]
-        }
-      ],
+      "MemorySize": 32,
       "DefaultOptions": {
         "Steps": 20,
         "Width": 640,
@@ -3270,20 +3174,7 @@
           "Path": ""
         }
       },
-      "MemoryProfile": [
-        {
-          "QualityMode": "Draft",
-          "MemoryModes": [ 4, 20, 32 ]
-        },
-        {
-          "QualityMode": "Standard",
-          "MemoryModes": [ 4, 20, 32 ]
-        },
-        {
-          "QualityMode": "Production",
-          "MemoryModes": [ 4, 23, 32 ]
-        }
-      ],
+      "MemorySize": 32,
       "DefaultOptions": {
         "Steps": 20,
         "Width": 640,
@@ -3415,20 +3306,7 @@
           "Path": ""
         }
       },
-      "MemoryProfile": [
-        {
-          "QualityMode": "Draft",
-          "MemoryModes": [ 4, 20, 32 ]
-        },
-        {
-          "QualityMode": "Standard",
-          "MemoryModes": [ 4, 20, 32 ]
-        },
-        {
-          "QualityMode": "Production",
-          "MemoryModes": [ 4, 23, 32 ]
-        }
-      ],
+      "MemorySize": 32,
       "DefaultOptions": {
         "Steps": 3,
         "Width": 640,
@@ -3554,20 +3432,7 @@
           "Path": ""
         }
       },
-      "MemoryProfile": [
-        {
-          "QualityMode": "Draft",
-          "MemoryModes": [ 8, 11, 18 ]
-        },
-        {
-          "QualityMode": "Standard",
-          "MemoryModes": [ 8, 17, 26 ]
-        },
-        {
-          "QualityMode": "Production",
-          "MemoryModes": [ 8, 32, 38 ]
-        }
-      ],
+      "MemorySize": 26,
       "DefaultOptions": {
         "Steps": 30,
         "Width": 1024,
@@ -3670,20 +3535,7 @@
           "Path": ""
         }
       },
-      "MemoryProfile": [
-        {
-          "QualityMode": "Draft",
-          "MemoryModes": [ 2, 8, 12 ]
-        },
-        {
-          "QualityMode": "Standard",
-          "MemoryModes": [ 2, 14, 18 ]
-        },
-        {
-          "QualityMode": "Production",
-          "MemoryModes": [ 2, 18, 32 ]
-        }
-      ],
+      "MemorySize": 18,
       "DefaultOptions": {
         "Steps": 30,
         "Width": 1024,
@@ -3773,20 +3625,7 @@
           "Path": ""
         }
       },
-      "MemoryProfile": [
-        {
-          "QualityMode": "Draft",
-          "MemoryModes": [ 2, 8, 12 ]
-        },
-        {
-          "QualityMode": "Standard",
-          "MemoryModes": [ 2, 14, 18 ]
-        },
-        {
-          "QualityMode": "Production",
-          "MemoryModes": [ 2, 18, 32 ]
-        }
-      ],
+      "MemorySize": 18,
       "DefaultOptions": {
         "Steps": 30,
         "Width": 1024,
@@ -3876,20 +3715,7 @@
           "Path": ""
         }
       },
-      "MemoryProfile": [
-        {
-          "QualityMode": "Draft",
-          "MemoryModes": [ 4, 24, 28 ]
-        },
-        {
-          "QualityMode": "Standard",
-          "MemoryModes": [ 4, 24, 32 ]
-        },
-        {
-          "QualityMode": "Production",
-          "MemoryModes": [ 4, 24, 68 ]
-        }
-      ],
+      "MemorySize": 32,
       "DefaultOptions": {
         "Steps": 30,
         "Width": 768,
@@ -3967,20 +3793,7 @@
           "Path": ""
         }
       },
-      "MemoryProfile": [
-        {
-          "QualityMode": "Draft",
-          "MemoryModes": [ 4, 24, 28 ]
-        },
-        {
-          "QualityMode": "Standard",
-          "MemoryModes": [ 4, 24, 32 ]
-        },
-        {
-          "QualityMode": "Production",
-          "MemoryModes": [ 4, 24, 68 ]
-        }
-      ],
+      "MemorySize": 32,
       "DefaultOptions": {
         "Steps": 30,
         "Width": 768,
@@ -4058,20 +3871,7 @@
           "Path": ""
         }
       },
-      "MemoryProfile": [
-        {
-          "QualityMode": "Draft",
-          "MemoryModes": [ 4, 24, 28 ]
-        },
-        {
-          "QualityMode": "Standard",
-          "MemoryModes": [ 4, 24, 32 ]
-        },
-        {
-          "QualityMode": "Production",
-          "MemoryModes": [ 4, 24, 68 ]
-        }
-      ],
+      "MemorySize": 32,
       "DefaultOptions": {
         "Steps": 16,
         "Width": 768,
@@ -4149,20 +3949,7 @@
           "Path": ""
         }
       },
-      "MemoryProfile": [
-        {
-          "QualityMode": "Draft",
-          "MemoryModes": [ 4, 24, 28 ]
-        },
-        {
-          "QualityMode": "Standard",
-          "MemoryModes": [ 4, 24, 32 ]
-        },
-        {
-          "QualityMode": "Production",
-          "MemoryModes": [ 4, 24, 68 ]
-        }
-      ],
+      "MemorySize": 32,
       "DefaultOptions": {
         "Steps": 30,
         "Width": 768,
@@ -4240,20 +4027,7 @@
           "Path": ""
         }
       },
-      "MemoryProfile": [
-        {
-          "QualityMode": "Draft",
-          "MemoryModes": [ 4, 24, 28 ]
-        },
-        {
-          "QualityMode": "Standard",
-          "MemoryModes": [ 4, 24, 32 ]
-        },
-        {
-          "QualityMode": "Production",
-          "MemoryModes": [ 4, 24, 68 ]
-        }
-      ],
+      "MemorySize": 32,
       "DefaultOptions": {
         "Steps": 30,
         "Width": 768,
@@ -4331,20 +4105,7 @@
           "Path": ""
         }
       },
-      "MemoryProfile": [
-        {
-          "QualityMode": "Draft",
-          "MemoryModes": [ 4, 24, 28 ]
-        },
-        {
-          "QualityMode": "Standard",
-          "MemoryModes": [ 4, 24, 32 ]
-        },
-        {
-          "QualityMode": "Production",
-          "MemoryModes": [ 4, 24, 68 ]
-        }
-      ],
+      "MemorySize": 32,
       "DefaultOptions": {
         "Steps": 16,
         "Width": 768,
@@ -4422,20 +4183,7 @@
           "Path": ""
         }
       },
-      "MemoryProfile": [
-        {
-          "QualityMode": "Draft",
-          "MemoryModes": [ 4, 24, 28 ]
-        },
-        {
-          "QualityMode": "Standard",
-          "MemoryModes": [ 4, 24, 32 ]
-        },
-        {
-          "QualityMode": "Production",
-          "MemoryModes": [ 4, 24, 68 ]
-        }
-      ],
+      "MemorySize": 32,
       "DefaultOptions": {
         "Steps": 30,
         "Width": 768,
@@ -4511,20 +4259,7 @@
           "Path": ""
         }
       },
-      "MemoryProfile": [
-        {
-          "QualityMode": "Draft",
-          "MemoryModes": [ 4, 24, 28 ]
-        },
-        {
-          "QualityMode": "Standard",
-          "MemoryModes": [ 4, 24, 32 ]
-        },
-        {
-          "QualityMode": "Production",
-          "MemoryModes": [ 4, 24, 68 ]
-        }
-      ],
+      "MemorySize": 32,
       "DefaultOptions": {
         "Steps": 16,
         "Width": 768,
@@ -4600,20 +4335,7 @@
           "Path": ""
         }
       },
-      "MemoryProfile": [
-        {
-          "QualityMode": "Draft",
-          "MemoryModes": [ 4, 24, 28 ]
-        },
-        {
-          "QualityMode": "Standard",
-          "MemoryModes": [ 4, 24, 32 ]
-        },
-        {
-          "QualityMode": "Production",
-          "MemoryModes": [ 4, 24, 68 ]
-        }
-      ],
+      "MemorySize": 32,
       "DefaultOptions": {
         "Steps": 30,
         "Width": 768,
@@ -4689,20 +4411,7 @@
           "Path": ""
         }
       },
-      "MemoryProfile": [
-        {
-          "QualityMode": "Draft",
-          "MemoryModes": [ 4, 24, 28 ]
-        },
-        {
-          "QualityMode": "Standard",
-          "MemoryModes": [ 4, 24, 32 ]
-        },
-        {
-          "QualityMode": "Production",
-          "MemoryModes": [ 4, 24, 68 ]
-        }
-      ],
+      "MemorySize": 32,
       "DefaultOptions": {
         "Steps": 16,
         "Width": 768,
@@ -4773,20 +4482,7 @@
           "Path": ""
         }
       },
-      "MemoryProfile": [
-        {
-          "QualityMode": "Draft",
-          "MemoryModes": [ 8, 20, 23 ]
-        },
-        {
-          "QualityMode": "Standard",
-          "MemoryModes": [ 8, 28, 30 ]
-        },
-        {
-          "QualityMode": "Production",
-          "MemoryModes": [ 8, 42, 46 ]
-        }
-      ],
+      "MemorySize": 30,
       "DefaultOptions": {
         "Steps": 28,
         "Width": 1024,
@@ -4884,20 +4580,7 @@
           "Path": ""
         }
       },
-      "MemoryProfile": [
-        {
-          "QualityMode": "Draft",
-          "MemoryModes": [ 8, 20, 23 ]
-        },
-        {
-          "QualityMode": "Standard",
-          "MemoryModes": [ 8, 28, 30 ]
-        },
-        {
-          "QualityMode": "Production",
-          "MemoryModes": [ 8, 42, 46 ]
-        }
-      ],
+      "MemorySize": 30,
       "DefaultOptions": {
         "Steps": 8,
         "Width": 1024,
@@ -4995,20 +4678,7 @@
           "Path": ""
         }
       },
-      "MemoryProfile": [
-        {
-          "QualityMode": "Draft",
-          "MemoryModes": [ 16, 23, 48 ]
-        },
-        {
-          "QualityMode": "Standard",
-          "MemoryModes": [ 16, 23, 48 ]
-        },
-        {
-          "QualityMode": "Production",
-          "MemoryModes": [ 16, 32, 48 ]
-        }
-      ],
+      "MemorySize": 48,
       "DefaultOptions": {
         "Steps": 50,
         "Width": 704,
@@ -5121,20 +4791,7 @@
           "Path": ""
         }
       },
-      "MemoryProfile": [
-        {
-          "QualityMode": "Draft",
-          "MemoryModes": [ 16, 23, 48 ]
-        },
-        {
-          "QualityMode": "Standard",
-          "MemoryModes": [ 16, 23, 48 ]
-        },
-        {
-          "QualityMode": "Production",
-          "MemoryModes": [ 16, 32, 48 ]
-        }
-      ],
+      "MemorySize": 48,
       "DefaultOptions": {
         "Steps": 8,
         "Width": 704,
@@ -5247,20 +4904,7 @@
           "Path": ""
         }
       },
-      "MemoryProfile": [
-        {
-          "QualityMode": "Draft",
-          "MemoryModes": [ 16, 23, 48 ]
-        },
-        {
-          "QualityMode": "Standard",
-          "MemoryModes": [ 16, 23, 48 ]
-        },
-        {
-          "QualityMode": "Production",
-          "MemoryModes": [ 16, 32, 48 ]
-        }
-      ],
+      "MemorySize": 48,
       "DefaultOptions": {
         "Steps": 50,
         "Width": 704,
@@ -5373,20 +5017,7 @@
           "Path": ""
         }
       },
-      "MemoryProfile": [
-        {
-          "QualityMode": "Draft",
-          "MemoryModes": [ 16, 23, 48 ]
-        },
-        {
-          "QualityMode": "Standard",
-          "MemoryModes": [ 16, 23, 48 ]
-        },
-        {
-          "QualityMode": "Production",
-          "MemoryModes": [ 16, 32, 48 ]
-        }
-      ],
+      "MemorySize": 48,
       "DefaultOptions": {
         "Steps": 8,
         "Width": 704,
@@ -5514,20 +5145,7 @@
           "Path": ""
         }
       },
-      "MemoryProfile": [
-        {
-          "QualityMode": "Draft",
-          "MemoryModes": [ 12, 16, 48 ]
-        },
-        {
-          "QualityMode": "Standard",
-          "MemoryModes": [ 12, 20, 64 ]
-        },
-        {
-          "QualityMode": "Production",
-          "MemoryModes": [ 12, 42, 92 ]
-        }
-      ],
+      "MemorySize": 64,
       "DefaultOptions": {
         "Steps": 40,
         "Width": 768,
@@ -5716,20 +5334,7 @@
           "Path": ""
         }
       },
-      "MemoryProfile": [
-        {
-          "QualityMode": "Draft",
-          "MemoryModes": [ 12, 16, 48 ]
-        },
-        {
-          "QualityMode": "Standard",
-          "MemoryModes": [ 12, 20, 64 ]
-        },
-        {
-          "QualityMode": "Production",
-          "MemoryModes": [ 12, 42, 92 ]
-        }
-      ],
+      "MemorySize": 64,
       "DefaultOptions": {
         "Steps": 8,
         "Width": 768,
@@ -5918,20 +5523,7 @@
           "Path": ""
         }
       },
-      "MemoryProfile": [
-        {
-          "QualityMode": "Draft",
-          "MemoryModes": [ 12, 20, 48 ]
-        },
-        {
-          "QualityMode": "Standard",
-          "MemoryModes": [ 12, 23, 64 ]
-        },
-        {
-          "QualityMode": "Production",
-          "MemoryModes": [ 12, 46, 92 ]
-        }
-      ],
+      "MemorySize": 64,
       "DefaultOptions": {
         "Steps": 40,
         "Width": 768,
@@ -6120,20 +5712,7 @@
           "Path": ""
         }
       },
-      "MemoryProfile": [
-        {
-          "QualityMode": "Draft",
-          "MemoryModes": [ 12, 20, 48 ]
-        },
-        {
-          "QualityMode": "Standard",
-          "MemoryModes": [ 12, 23, 64 ]
-        },
-        {
-          "QualityMode": "Production",
-          "MemoryModes": [ 12, 46, 92 ]
-        }
-      ],
+      "MemorySize": 64,
       "DefaultOptions": {
         "Steps": 8,
         "Width": 768,
@@ -6307,20 +5886,7 @@
           "Path": ""
         }
       },
-      "MemoryProfile": [
-        {
-          "QualityMode": "Draft",
-          "MemoryModes": [ 8, 11, 18 ]
-        },
-        {
-          "QualityMode": "Standard",
-          "MemoryModes": [ 8, 24, 32 ]
-        },
-        {
-          "QualityMode": "Production",
-          "MemoryModes": [ 8, 32, 42 ]
-        }
-      ],
+      "MemorySize": 32,
       "DefaultOptions": {
         "Steps": 50,
         "Width": 1280,
@@ -6388,20 +5954,7 @@
           "Path": ""
         }
       },
-      "MemoryProfile": [
-        {
-          "QualityMode": "Draft",
-          "MemoryModes": [ 6, 7, 9 ]
-        },
-        {
-          "QualityMode": "Standard",
-          "MemoryModes": [ 6, 10, 12 ]
-        },
-        {
-          "QualityMode": "Production",
-          "MemoryModes": [ 6, 16, 20 ]
-        }
-      ],
+      "MemorySize": 12,
       "DefaultOptions": {
         "Steps": 28,
         "Width": 1024,
@@ -6610,20 +6163,7 @@
           "Path": ""
         }
       },
-      "MemoryProfile": [
-        {
-          "QualityMode": "Draft",
-          "MemoryModes": [ 2, 12, 18 ]
-        },
-        {
-          "QualityMode": "Standard",
-          "MemoryModes": [ 2, 22, 32 ]
-        },
-        {
-          "QualityMode": "Production",
-          "MemoryModes": [ 2, 40, 60 ]
-        }
-      ],
+      "MemorySize": 32,
       "DefaultOptions": {
         "Steps": 30,
         "Width": 1024,
@@ -6751,20 +6291,7 @@
           "Path": ""
         }
       },
-      "MemoryProfile": [
-        {
-          "QualityMode": "Draft",
-          "MemoryModes": [ 2, 12, 18 ]
-        },
-        {
-          "QualityMode": "Standard",
-          "MemoryModes": [ 2, 22, 32 ]
-        },
-        {
-          "QualityMode": "Production",
-          "MemoryModes": [ 2, 40, 60 ]
-        }
-      ],
+      "MemorySize": 32,
       "DefaultOptions": {
         "Steps": 30,
         "Width": 1024,
@@ -6892,20 +6419,7 @@
           "Path": ""
         }
       },
-      "MemoryProfile": [
-        {
-          "QualityMode": "Draft",
-          "MemoryModes": [ 4, 20, 32 ]
-        },
-        {
-          "QualityMode": "Standard",
-          "MemoryModes": [ 4, 20, 32 ]
-        },
-        {
-          "QualityMode": "Production",
-          "MemoryModes": [ 4, 23, 32 ]
-        }
-      ],
+      "MemorySize": 32,
       "DefaultOptions": {
         "Steps": 30,
         "Width": 960,
@@ -7016,20 +6530,7 @@
           "Path": ""
         }
       },
-      "MemoryProfile": [
-        {
-          "QualityMode": "Draft",
-          "MemoryModes": [ 4, 20, 32 ]
-        },
-        {
-          "QualityMode": "Standard",
-          "MemoryModes": [ 4, 20, 32 ]
-        },
-        {
-          "QualityMode": "Production",
-          "MemoryModes": [ 4, 23, 32 ]
-        }
-      ],
+      "MemorySize": 32,
       "DefaultOptions": {
         "Steps": 30,
         "Width": 960,
@@ -7144,20 +6645,7 @@
           "Path": ""
         }
       },
-      "MemoryProfile": [
-        {
-          "QualityMode": "Draft",
-          "MemoryModes": [ 2, 4, 8 ]
-        },
-        {
-          "QualityMode": "Standard",
-          "MemoryModes": [ 2, 6, 10 ]
-        },
-        {
-          "QualityMode": "Production",
-          "MemoryModes": [ 2, 8, 16 ]
-        }
-      ],
+      "MemorySize": 10,
       "DefaultOptions": {
         "Steps": 30,
         "Width": 1024,
@@ -7548,20 +7036,7 @@
           "Path": ""
         }
       },
-      "MemoryProfile": [
-        {
-          "QualityMode": "Draft",
-          "MemoryModes": [ 2, 4, 8 ]
-        },
-        {
-          "QualityMode": "Standard",
-          "MemoryModes": [ 2, 6, 10 ]
-        },
-        {
-          "QualityMode": "Production",
-          "MemoryModes": [ 2, 8, 16 ]
-        }
-      ],
+      "MemorySize": 10,
       "DefaultOptions": {
         "Steps": 4,
         "Width": 512,
@@ -7952,20 +7427,7 @@
           "Path": ""
         }
       },
-      "MemoryProfile": [
-        {
-          "QualityMode": "Draft",
-          "MemoryModes": [ 2, 4, 8 ]
-        },
-        {
-          "QualityMode": "Standard",
-          "MemoryModes": [ 2, 6, 10 ]
-        },
-        {
-          "QualityMode": "Production",
-          "MemoryModes": [ 2, 8, 16 ]
-        }
-      ],
+      "MemorySize": 10,
       "DefaultOptions": {
         "Steps": 8,
         "Width": 1024,
@@ -8362,20 +7824,7 @@
           "Path": ""
         }
       },
-      "MemoryProfile": [
-        {
-          "QualityMode": "Draft",
-          "MemoryModes": [ 2, 4, 8 ]
-        },
-        {
-          "QualityMode": "Standard",
-          "MemoryModes": [ 2, 6, 10 ]
-        },
-        {
-          "QualityMode": "Production",
-          "MemoryModes": [ 2, 8, 16 ]
-        }
-      ],
+      "MemorySize": 10,
       "DefaultOptions": {
         "Steps": 30,
         "Width": 1024,
@@ -8541,20 +7990,7 @@
           "Path": ""
         }
       },
-      "MemoryProfile": [
-        {
-          "QualityMode": "Draft",
-          "MemoryModes": [ 2, 8, 12 ]
-        },
-        {
-          "QualityMode": "Standard",
-          "MemoryModes": [ 2, 10, 18 ]
-        },
-        {
-          "QualityMode": "Production",
-          "MemoryModes": [ 2, 18, 28 ]
-        }
-      ],
+      "MemorySize": 18,
       "DefaultOptions": {
         "Steps": 30,
         "Width": 1024,
@@ -8720,20 +8156,7 @@
           "Path": ""
         }
       },
-      "MemoryProfile": [
-        {
-          "QualityMode": "Draft",
-          "MemoryModes": [ 2, 6, 10 ]
-        },
-        {
-          "QualityMode": "Standard",
-          "MemoryModes": [ 2, 8, 12 ]
-        },
-        {
-          "QualityMode": "Production",
-          "MemoryModes": [ 2, 10, 18 ]
-        }
-      ],
+      "MemorySize": 12,
       "DefaultOptions": {
         "Steps": 30,
         "Width": 1024,
@@ -8899,20 +8322,7 @@
           "Path": ""
         }
       },
-      "MemoryProfile": [
-        {
-          "QualityMode": "Draft",
-          "MemoryModes": [ 2, 8, 12 ]
-        },
-        {
-          "QualityMode": "Standard",
-          "MemoryModes": [ 2, 10, 18 ]
-        },
-        {
-          "QualityMode": "Production",
-          "MemoryModes": [ 2, 18, 28 ]
-        }
-      ],
+      "MemorySize": 18,
       "DefaultOptions": {
         "Steps": 4,
         "Width": 1024,
@@ -9068,20 +8478,7 @@
           "Path": ""
         }
       },
-      "MemoryProfile": [
-        {
-          "QualityMode": "Draft",
-          "MemoryModes": [ 2, 6, 10 ]
-        },
-        {
-          "QualityMode": "Standard",
-          "MemoryModes": [ 2, 8, 12 ]
-        },
-        {
-          "QualityMode": "Production",
-          "MemoryModes": [ 2, 12, 18 ]
-        }
-      ],
+      "MemorySize": 12,
       "DefaultOptions": {
         "Steps": 30,
         "Frames": 81,
@@ -9213,20 +8610,7 @@
           "Path": ""
         }
       },
-      "MemoryProfile": [
-        {
-          "QualityMode": "Draft",
-          "MemoryModes": [ 8, 21, 38 ]
-        },
-        {
-          "QualityMode": "Standard",
-          "MemoryModes": [ 8, 21, 38 ]
-        },
-        {
-          "QualityMode": "Production",
-          "MemoryModes": [ 8, 34, 52 ]
-        }
-      ],
+      "MemorySize": 38,
       "DefaultOptions": {
         "Steps": 30,
         "Frames": 81,
@@ -9333,20 +8717,7 @@
           "Path": ""
         }
       },
-      "MemoryProfile": [
-        {
-          "QualityMode": "Draft",
-          "MemoryModes": [ 8, 21, 38 ]
-        },
-        {
-          "QualityMode": "Standard",
-          "MemoryModes": [ 8, 21, 38 ]
-        },
-        {
-          "QualityMode": "Production",
-          "MemoryModes": [ 8, 34, 52 ]
-        }
-      ],
+      "MemorySize": 38,
       "DefaultOptions": {
         "Steps": 30,
         "Frames": 81,
@@ -9449,20 +8820,7 @@
           "Path": ""
         }
       },
-      "MemoryProfile": [
-        {
-          "QualityMode": "Draft",
-          "MemoryModes": [ 8, 21, 38 ]
-        },
-        {
-          "QualityMode": "Standard",
-          "MemoryModes": [ 8, 21, 38 ]
-        },
-        {
-          "QualityMode": "Production",
-          "MemoryModes": [ 8, 34, 52 ]
-        }
-      ],
+      "MemorySize": 38,
       "DefaultOptions": {
         "Steps": 30,
         "Frames": 81,
@@ -9565,20 +8923,7 @@
           "Path": ""
         }
       },
-      "MemoryProfile": [
-        {
-          "QualityMode": "Draft",
-          "MemoryModes": [ 6, 17, 26 ]
-        },
-        {
-          "QualityMode": "Standard",
-          "MemoryModes": [ 6, 17, 26 ]
-        },
-        {
-          "QualityMode": "Production",
-          "MemoryModes": [ 8, 17, 31 ]
-        }
-      ],
+      "MemorySize": 26,
       "DefaultOptions": {
         "Steps": 50,
         "Frames": 121,
@@ -9688,20 +9033,7 @@
           "Path": ""
         }
       },
-      "MemoryProfile": [
-        {
-          "QualityMode": "Draft",
-          "MemoryModes": [ 6, 17, 26 ]
-        },
-        {
-          "QualityMode": "Standard",
-          "MemoryModes": [ 6, 17, 26 ]
-        },
-        {
-          "QualityMode": "Production",
-          "MemoryModes": [ 8, 17, 31 ]
-        }
-      ],
+      "MemorySize": 26,
       "DefaultOptions": {
         "Steps": 40,
         "Frames": 81,
@@ -9806,20 +9138,7 @@
           "Path": ""
         }
       },
-      "MemoryProfile": [
-        {
-          "QualityMode": "Draft",
-          "MemoryModes": [ 6, 17, 26 ]
-        },
-        {
-          "QualityMode": "Standard",
-          "MemoryModes": [ 6, 17, 26 ]
-        },
-        {
-          "QualityMode": "Production",
-          "MemoryModes": [ 8, 17, 31 ]
-        }
-      ],
+      "MemorySize": 26,
       "DefaultOptions": {
         "Steps": 40,
         "Frames": 81,
@@ -9919,20 +9238,7 @@
           "Path": ""
         }
       },
-      "MemoryProfile": [
-        {
-          "QualityMode": "Draft",
-          "MemoryModes": [ 2, 6, 8 ]
-        },
-        {
-          "QualityMode": "Standard",
-          "MemoryModes": [ 2, 9, 14 ]
-        },
-        {
-          "QualityMode": "Production",
-          "MemoryModes": [ 2, 14, 24 ]
-        }
-      ],
+      "MemorySize": 14,
       "DefaultOptions": {
         "Steps": 30,
         "Width": 1024,
@@ -10088,20 +9394,7 @@
           "Path": ""
         }
       },
-      "MemoryProfile": [
-        {
-          "QualityMode": "Draft",
-          "MemoryModes": [ 2, 6, 8 ]
-        },
-        {
-          "QualityMode": "Standard",
-          "MemoryModes": [ 2, 9, 14 ]
-        },
-        {
-          "QualityMode": "Production",
-          "MemoryModes": [ 2, 14, 24 ]
-        }
-      ],
+      "MemorySize": 14,
       "DefaultOptions": {
         "Steps": 9,
         "Width": 1024,
@@ -10258,20 +9551,7 @@
           "Path": ""
         }
       },
-      "MemoryProfile": [
-        {
-          "QualityMode": "Draft",
-          "MemoryModes": [ 4, 20, 32 ]
-        },
-        {
-          "QualityMode": "Standard",
-          "MemoryModes": [ 4, 20, 32 ]
-        },
-        {
-          "QualityMode": "Production",
-          "MemoryModes": [ 4, 23, 32 ]
-        }
-      ],
+      "MemorySize": 32,
       "DefaultOptions": {
         "Steps": 50,
         "GuidanceScale": 7,
@@ -10327,20 +9607,7 @@
           "Path": ""
         }
       },
-      "MemoryProfile": [
-        {
-          "QualityMode": "Draft",
-          "MemoryModes": [ 4, 20, 32 ]
-        },
-        {
-          "QualityMode": "Standard",
-          "MemoryModes": [ 4, 20, 32 ]
-        },
-        {
-          "QualityMode": "Production",
-          "MemoryModes": [ 4, 23, 32 ]
-        }
-      ],
+      "MemorySize": 32,
       "DefaultOptions": {
         "Steps": 50,
         "GuidanceScale": 7,
@@ -10395,20 +9662,7 @@
           "Path": ""
         }
       },
-      "MemoryProfile": [
-        {
-          "QualityMode": "Draft",
-          "MemoryModes": [ 2, 3, 4 ]
-        },
-        {
-          "QualityMode": "Standard",
-          "MemoryModes": [ 2, 5, 6 ]
-        },
-        {
-          "QualityMode": "Production",
-          "MemoryModes": [ 2, 6, 8 ]
-        }
-      ],
+      "MemorySize": 6,
       "DefaultOptions": {
         "Steps": 20,
         "Width": 1024,
@@ -10539,20 +9793,7 @@
           "Path": ""
         }
       },
-      "MemoryProfile": [
-        {
-          "QualityMode": "Draft",
-          "MemoryModes": [ 2, 3, 4 ]
-        },
-        {
-          "QualityMode": "Standard",
-          "MemoryModes": [ 2, 5, 6 ]
-        },
-        {
-          "QualityMode": "Production",
-          "MemoryModes": [ 2, 6, 8 ]
-        }
-      ],
+      "MemorySize": 6,
       "DefaultOptions": {
         "Steps": 8,
         "Width": 1024,
@@ -10682,20 +9923,7 @@
           "Type": "LocalFile"
         }
       },
-      "MemoryProfile": [
-        {
-          "QualityMode": "Draft",
-          "MemoryModes": [ 2, 10, 12 ]
-        },
-        {
-          "QualityMode": "Standard",
-          "MemoryModes": [ 2, 14, 16 ]
-        },
-        {
-          "QualityMode": "Production",
-          "MemoryModes": [ 2, 22, 26 ]
-        }
-      ],
+      "MemorySize": 16,
       "DefaultOptions": {
         "Steps": 50,
         "Width": 1024,
@@ -10842,20 +10070,7 @@
           "Type": "LocalFile"
         }
       },
-      "MemoryProfile": [
-        {
-          "QualityMode": "Draft",
-          "MemoryModes": [ 2, 10, 12 ]
-        },
-        {
-          "QualityMode": "Standard",
-          "MemoryModes": [ 2, 14, 18 ]
-        },
-        {
-          "QualityMode": "Production",
-          "MemoryModes": [ 2, 22, 26 ]
-        }
-      ],
+      "MemorySize": 18,
       "DefaultOptions": {
         "Steps": 8,
         "Width": 1024,
@@ -11007,20 +10222,7 @@
           "Type": "LocalFile"
         }
       },
-      "MemoryProfile": [
-        {
-          "QualityMode": "Draft",
-          "MemoryModes": [ 2, 8, 14 ]
-        },
-        {
-          "QualityMode": "Standard",
-          "MemoryModes": [ 2, 13, 20 ]
-        },
-        {
-          "QualityMode": "Production",
-          "MemoryModes": [ 2, 23, 32 ]
-        }
-      ],
+      "MemorySize": 20,
       "DefaultOptions": {
         "Steps": 4,
         "Width": 1024,
@@ -11155,20 +10357,7 @@
           "Type": "LocalFile"
         }
       },
-      "MemoryProfile": [
-        {
-          "QualityMode": "Draft",
-          "MemoryModes": [ 2, 8, 14 ]
-        },
-        {
-          "QualityMode": "Standard",
-          "MemoryModes": [ 2, 13, 20 ]
-        },
-        {
-          "QualityMode": "Production",
-          "MemoryModes": [ 2, 23, 32 ]
-        }
-      ],
+      "MemorySize": 20,
       "DefaultOptions": {
         "Steps": 30,
         "Width": 1024,
@@ -11304,20 +10493,7 @@
           "Type": "LocalFile"
         }
       },
-      "MemoryProfile": [
-        {
-          "QualityMode": "Draft",
-          "MemoryModes": [ 2, 8, 14 ]
-        },
-        {
-          "QualityMode": "Standard",
-          "MemoryModes": [ 2, 13, 20 ]
-        },
-        {
-          "QualityMode": "Production",
-          "MemoryModes": [ 2, 23, 32 ]
-        }
-      ],
+      "MemorySize": 20,
       "DefaultOptions": {
         "Steps": 30,
         "Width": 1024,
@@ -11448,20 +10624,7 @@
           "Type": "LocalFile"
         }
       },
-      "MemoryProfile": [
-        {
-          "QualityMode": "Draft",
-          "MemoryModes": [ 2, 4, 6 ]
-        },
-        {
-          "QualityMode": "Standard",
-          "MemoryModes": [ 2, 6, 10 ]
-        },
-        {
-          "QualityMode": "Production",
-          "MemoryModes": [ 2, 10, 16 ]
-        }
-      ],
+      "MemorySize": 10,
       "DefaultOptions": {
         "Steps": 4,
         "Width": 1024,
@@ -11591,20 +10754,7 @@
           "Type": "LocalFile"
         }
       },
-      "MemoryProfile": [
-        {
-          "QualityMode": "Draft",
-          "MemoryModes": [ 2, 4, 6 ]
-        },
-        {
-          "QualityMode": "Standard",
-          "MemoryModes": [ 2, 6, 10 ]
-        },
-        {
-          "QualityMode": "Production",
-          "MemoryModes": [ 2, 10, 16 ]
-        }
-      ],
+      "MemorySize": 10,
       "DefaultOptions": {
         "Steps": 50,
         "Width": 1024,
@@ -11734,20 +10884,7 @@
           "Type": "LocalFile"
         }
       },
-      "MemoryProfile": [
-        {
-          "QualityMode": "Draft",
-          "MemoryModes": [ 4, 6, 12 ]
-        },
-        {
-          "QualityMode": "Standard",
-          "MemoryModes": [ 4, 10, 20 ]
-        },
-        {
-          "QualityMode": "Production",
-          "MemoryModes": [ 4, 20, 35 ]
-        }
-      ],
+      "MemorySize": 20,
       "DefaultOptions": {
         "Steps": 4,
         "Width": 1024,
@@ -11877,20 +11014,7 @@
           "Type": "LocalFile"
         }
       },
-      "MemoryProfile": [
-        {
-          "QualityMode": "Draft",
-          "MemoryModes": [ 4, 6, 12 ]
-        },
-        {
-          "QualityMode": "Standard",
-          "MemoryModes": [ 4, 10, 20 ]
-        },
-        {
-          "QualityMode": "Production",
-          "MemoryModes": [ 4, 20, 35 ]
-        }
-      ],
+      "MemorySize": 20,
       "DefaultOptions": {
         "Steps": 50,
         "Width": 1024,
@@ -12024,20 +11148,7 @@
           "Type": "LocalFile"
         }
       },
-      "MemoryProfile": [
-        {
-          "QualityMode": "Draft",
-          "MemoryModes": [ 8, 10, 16 ]
-        },
-        {
-          "QualityMode": "Standard",
-          "MemoryModes": [ 8, 14, 26 ]
-        },
-        {
-          "QualityMode": "Production",
-          "MemoryModes": [ 8, 14, 52 ]
-        }
-      ],
+      "MemorySize": 26,
       "DefaultOptions": {
         "Steps": 48,
         "Width": 1024,
@@ -12152,20 +11263,7 @@
           "Type": "LocalFile"
         }
       },
-      "MemoryProfile": [
-        {
-          "QualityMode": "Draft",
-          "MemoryModes": [ 8, 12, 12 ]
-        },
-        {
-          "QualityMode": "Standard",
-          "MemoryModes": [ 8, 14, 20 ]
-        },
-        {
-          "QualityMode": "Production",
-          "MemoryModes": [ 8, 16, 36 ]
-        }
-      ],
+      "MemorySize": 20,
       "DefaultOptions": {
         "Steps": 28,
         "Width": 1024,
@@ -12296,20 +11394,7 @@
           "Type": "LocalFile"
         }
       },
-      "MemoryProfile": [
-        {
-          "QualityMode": "Draft",
-          "MemoryModes": [ 8, 12, 12 ]
-        },
-        {
-          "QualityMode": "Standard",
-          "MemoryModes": [ 8, 14, 20 ]
-        },
-        {
-          "QualityMode": "Production",
-          "MemoryModes": [ 8, 16, 36 ]
-        }
-      ],
+      "MemorySize": 20,
       "DefaultOptions": {
         "Steps": 8,
         "Width": 1024,
@@ -12455,20 +11540,7 @@
           "Type": "LocalFile"
         }
       },
-      "MemoryProfile": [
-        {
-          "QualityMode": "Draft",
-          "MemoryModes": [ 12, 20, 48 ]
-        },
-        {
-          "QualityMode": "Standard",
-          "MemoryModes": [ 12, 23, 64 ]
-        },
-        {
-          "QualityMode": "Production",
-          "MemoryModes": [ 12, 46, 92 ]
-        }
-      ],
+      "MemorySize": 64,
       "DefaultOptions": {
         "Steps": 40,
         "Width": 768,
@@ -12660,20 +11732,7 @@
           "Type": "LocalFile"
         }
       },
-      "MemoryProfile": [
-        {
-          "QualityMode": "Draft",
-          "MemoryModes": [ 12, 20, 48 ]
-        },
-        {
-          "QualityMode": "Standard",
-          "MemoryModes": [ 12, 23, 64 ]
-        },
-        {
-          "QualityMode": "Production",
-          "MemoryModes": [ 12, 46, 92 ]
-        }
-      ],
+      "MemorySize": 64,
       "DefaultOptions": {
         "Steps": 8,
         "Width": 768,
@@ -12860,20 +11919,7 @@
           "Type": "LocalFile"
         }
       },
-      "MemoryProfile": [
-        {
-          "QualityMode": "Draft",
-          "MemoryModes": [ 12, 20, 48 ]
-        },
-        {
-          "QualityMode": "Standard",
-          "MemoryModes": [ 12, 23, 64 ]
-        },
-        {
-          "QualityMode": "Production",
-          "MemoryModes": [ 12, 46, 92 ]
-        }
-      ],
+      "MemorySize": 64,
       "DefaultOptions": {
         "Steps": 40,
         "Width": 768,
@@ -13060,20 +12106,7 @@
           "Type": "LocalFile"
         }
       },
-      "MemoryProfile": [
-        {
-          "QualityMode": "Draft",
-          "MemoryModes": [ 12, 20, 48 ]
-        },
-        {
-          "QualityMode": "Standard",
-          "MemoryModes": [ 12, 23, 64 ]
-        },
-        {
-          "QualityMode": "Production",
-          "MemoryModes": [ 12, 46, 92 ]
-        }
-      ],
+      "MemorySize": 64,
       "DefaultOptions": {
         "Steps": 8,
         "Width": 768,
@@ -13255,20 +12288,7 @@
           "Type": "LocalFile"
         }
       },
-      "MemoryProfile": [
-        {
-          "QualityMode": "Draft",
-          "MemoryModes": [ 6, 20, 24 ]
-        },
-        {
-          "QualityMode": "Standard",
-          "MemoryModes": [ 6, 24, 36 ]
-        },
-        {
-          "QualityMode": "Production",
-          "MemoryModes": [ 8, 24, 48 ]
-        }
-      ],
+      "MemorySize": 36,
       "DefaultOptions": {
         "Steps": 20,
         "Frames": 56,
@@ -13425,20 +12445,7 @@
           "Type": "LocalFile"
         }
       },
-      "MemoryProfile": [
-        {
-          "QualityMode": "Draft",
-          "MemoryModes": [ 6, 20, 24 ]
-        },
-        {
-          "QualityMode": "Standard",
-          "MemoryModes": [ 6, 24, 36 ]
-        },
-        {
-          "QualityMode": "Production",
-          "MemoryModes": [ 8, 24, 48 ]
-        }
-      ],
+      "MemorySize": 36,
       "DefaultOptions": {
         "Steps": 20,
         "Frames": 56,
@@ -13592,20 +12599,7 @@
           "Type": "LocalFile"
         }
       },
-      "MemoryProfile": [
-        {
-          "QualityMode": "Draft",
-          "MemoryModes": [ 6, 20, 24 ]
-        },
-        {
-          "QualityMode": "Standard",
-          "MemoryModes": [ 6, 24, 36 ]
-        },
-        {
-          "QualityMode": "Production",
-          "MemoryModes": [ 8, 24, 48 ]
-        }
-      ],
+      "MemorySize": 36,
       "DefaultOptions": {
         "Steps": 6,
         "Width": 1024,
@@ -13768,20 +12762,7 @@
           "Type": "LocalFile"
         }
       },
-      "MemoryProfile": [
-        {
-          "QualityMode": "Draft",
-          "MemoryModes": [ 2, 12, 18 ]
-        },
-        {
-          "QualityMode": "Standard",
-          "MemoryModes": [ 2, 22, 32 ]
-        },
-        {
-          "QualityMode": "Production",
-          "MemoryModes": [ 2, 40, 60 ]
-        }
-      ],
+      "MemorySize": 32,
       "DefaultOptions": {
         "Steps": 30,
         "Width": 1024,
@@ -13912,20 +12893,7 @@
           "Type": "LocalFile"
         }
       },
-      "MemoryProfile": [
-        {
-          "QualityMode": "Draft",
-          "MemoryModes": [ 2, 12, 18 ]
-        },
-        {
-          "QualityMode": "Standard",
-          "MemoryModes": [ 2, 22, 32 ]
-        },
-        {
-          "QualityMode": "Production",
-          "MemoryModes": [ 2, 40, 60 ]
-        }
-      ],
+      "MemorySize": 32,
       "DefaultOptions": {
         "Steps": 30,
         "Width": 1024,
@@ -14060,20 +13028,7 @@
           "Type": "LocalFile"
         }
       },
-      "MemoryProfile": [
-        {
-          "QualityMode": "Draft",
-          "MemoryModes": [ 2, 4, 8 ]
-        },
-        {
-          "QualityMode": "Standard",
-          "MemoryModes": [ 2, 6, 10 ]
-        },
-        {
-          "QualityMode": "Production",
-          "MemoryModes": [ 2, 8, 16 ]
-        }
-      ],
+      "MemorySize": 10,
       "DefaultOptions": {
         "Steps": 30,
         "Width": 1024,
@@ -14208,20 +13163,7 @@
           "Path": ""
         }
       },
-      "MemoryProfile": [
-        {
-          "QualityMode": "Draft",
-          "MemoryModes": [ 2, 4, 8 ]
-        },
-        {
-          "QualityMode": "Standard",
-          "MemoryModes": [ 2, 6, 10 ]
-        },
-        {
-          "QualityMode": "Production",
-          "MemoryModes": [ 2, 8, 16 ]
-        }
-      ],
+      "MemorySize": 10,
       "DefaultOptions": {
         "Steps": 4,
         "Width": 512,
@@ -14356,20 +13298,7 @@
           "Path": ""
         }
       },
-      "MemoryProfile": [
-        {
-          "QualityMode": "Draft",
-          "MemoryModes": [ 2, 4, 8 ]
-        },
-        {
-          "QualityMode": "Standard",
-          "MemoryModes": [ 2, 6, 10 ]
-        },
-        {
-          "QualityMode": "Production",
-          "MemoryModes": [ 2, 8, 16 ]
-        }
-      ],
+      "MemorySize": 10,
       "DefaultOptions": {
         "Steps": 8,
         "Width": 1024,
@@ -14509,20 +13438,7 @@
           "Type": "LocalFile"
         }
       },
-      "MemoryProfile": [
-        {
-          "QualityMode": "Draft",
-          "MemoryModes": [ 2, 4, 8 ]
-        },
-        {
-          "QualityMode": "Standard",
-          "MemoryModes": [ 2, 6, 10 ]
-        },
-        {
-          "QualityMode": "Production",
-          "MemoryModes": [ 2, 8, 16 ]
-        }
-      ],
+      "MemorySize": 10,
       "DefaultOptions": {
         "Steps": 30,
         "Width": 1024,
@@ -14662,20 +13578,7 @@
           "Type": "LocalFile"
         }
       },
-      "MemoryProfile": [
-        {
-          "QualityMode": "Draft",
-          "MemoryModes": [ 2, 8, 12 ]
-        },
-        {
-          "QualityMode": "Standard",
-          "MemoryModes": [ 2, 10, 18 ]
-        },
-        {
-          "QualityMode": "Production",
-          "MemoryModes": [ 2, 18, 28 ]
-        }
-      ],
+      "MemorySize": 18,
       "DefaultOptions": {
         "Steps": 30,
         "Width": 1024,
@@ -14815,20 +13718,7 @@
           "Type": "LocalFile"
         }
       },
-      "MemoryProfile": [
-        {
-          "QualityMode": "Draft",
-          "MemoryModes": [ 2, 6, 10 ]
-        },
-        {
-          "QualityMode": "Standard",
-          "MemoryModes": [ 2, 8, 12 ]
-        },
-        {
-          "QualityMode": "Production",
-          "MemoryModes": [ 2, 10, 18 ]
-        }
-      ],
+      "MemorySize": 12,
       "DefaultOptions": {
         "Steps": 30,
         "Width": 1024,
@@ -14968,20 +13858,7 @@
           "Type": "LocalFile"
         }
       },
-      "MemoryProfile": [
-        {
-          "QualityMode": "Draft",
-          "MemoryModes": [ 2, 8, 12 ]
-        },
-        {
-          "QualityMode": "Standard",
-          "MemoryModes": [ 2, 10, 18 ]
-        },
-        {
-          "QualityMode": "Production",
-          "MemoryModes": [ 2, 18, 28 ]
-        }
-      ],
+      "MemorySize": 18,
       "DefaultOptions": {
         "Steps": 4,
         "Width": 1024,
@@ -15111,20 +13988,7 @@
           "Type": "LocalFile"
         }
       },
-      "MemoryProfile": [
-        {
-          "QualityMode": "Draft",
-          "MemoryModes": [ 2, 6, 8 ]
-        },
-        {
-          "QualityMode": "Standard",
-          "MemoryModes": [ 2, 9, 14 ]
-        },
-        {
-          "QualityMode": "Production",
-          "MemoryModes": [ 2, 14, 24 ]
-        }
-      ],
+      "MemorySize": 14,
       "DefaultOptions": {
         "Steps": 30,
         "Width": 1024,
@@ -15255,20 +14119,7 @@
           "Path": ""
         }
       },
-      "MemoryProfile": [
-        {
-          "QualityMode": "Draft",
-          "MemoryModes": [ 2, 6, 10 ]
-        },
-        {
-          "QualityMode": "Standard",
-          "MemoryModes": [ 2, 8, 12 ]
-        },
-        {
-          "QualityMode": "Production",
-          "MemoryModes": [ 2, 12, 18 ]
-        }
-      ],
+      "MemorySize": 12,
       "DefaultOptions": {
         "Steps": 30,
         "Frames": 81,
@@ -15380,20 +14231,7 @@
           "Path": ""
         }
       },
-      "MemoryProfile": [
-        {
-          "QualityMode": "Draft",
-          "MemoryModes": [ 8, 21, 38 ]
-        },
-        {
-          "QualityMode": "Standard",
-          "MemoryModes": [ 8, 21, 38 ]
-        },
-        {
-          "QualityMode": "Production",
-          "MemoryModes": [ 8, 34, 52 ]
-        }
-      ],
+      "MemorySize": 38,
       "DefaultOptions": {
         "Steps": 30,
         "Frames": 81,
@@ -15514,20 +14352,7 @@
           "Path": ""
         }
       },
-      "MemoryProfile": [
-        {
-          "QualityMode": "Draft",
-          "MemoryModes": [ 8, 21, 38 ]
-        },
-        {
-          "QualityMode": "Standard",
-          "MemoryModes": [ 8, 21, 38 ]
-        },
-        {
-          "QualityMode": "Production",
-          "MemoryModes": [ 8, 34, 52 ]
-        }
-      ],
+      "MemorySize": 38,
       "DefaultOptions": {
         "Steps": 30,
         "Frames": 81,
@@ -15645,20 +14470,7 @@
           "Path": ""
         }
       },
-      "MemoryProfile": [
-        {
-          "QualityMode": "Draft",
-          "MemoryModes": [ 8, 21, 38 ]
-        },
-        {
-          "QualityMode": "Standard",
-          "MemoryModes": [ 8, 21, 38 ]
-        },
-        {
-          "QualityMode": "Production",
-          "MemoryModes": [ 8, 34, 52 ]
-        }
-      ],
+      "MemorySize": 38,
       "DefaultOptions": {
         "Steps": 30,
         "Frames": 81,
@@ -15775,20 +14587,7 @@
           "Type": "LocalFile"
         }
       },
-      "MemoryProfile": [
-        {
-          "QualityMode": "Draft",
-          "MemoryModes": [ 6, 17, 26 ]
-        },
-        {
-          "QualityMode": "Standard",
-          "MemoryModes": [ 6, 17, 26 ]
-        },
-        {
-          "QualityMode": "Production",
-          "MemoryModes": [ 8, 17, 31 ]
-        }
-      ],
+      "MemorySize": 26,
       "DefaultOptions": {
         "Steps": 30,
         "Frames": 121,
@@ -15935,20 +14734,7 @@
           "Type": "LocalFile"
         }
       },
-      "MemoryProfile": [
-        {
-          "QualityMode": "Draft",
-          "MemoryModes": [ 6, 17, 26 ]
-        },
-        {
-          "QualityMode": "Standard",
-          "MemoryModes": [ 6, 17, 26 ]
-        },
-        {
-          "QualityMode": "Production",
-          "MemoryModes": [ 8, 17, 31 ]
-        }
-      ],
+      "MemorySize": 26,
       "DefaultOptions": {
         "Steps": 16,
         "Steps2": 6,
@@ -16101,20 +14887,7 @@
           "Type": "LocalFile"
         }
       },
-      "MemoryProfile": [
-        {
-          "QualityMode": "Draft",
-          "MemoryModes": [ 6, 17, 26 ]
-        },
-        {
-          "QualityMode": "Standard",
-          "MemoryModes": [ 6, 17, 26 ]
-        },
-        {
-          "QualityMode": "Production",
-          "MemoryModes": [ 8, 17, 31 ]
-        }
-      ],
+      "MemorySize": 26,
       "DefaultOptions": {
         "Steps": 16,
         "Steps2": 6,
@@ -16263,20 +15036,7 @@
           "Type": "LocalFile"
         }
       },
-      "MemoryProfile": [
-        {
-          "QualityMode": "Draft",
-          "MemoryModes": [ 2, 6, 8 ]
-        },
-        {
-          "QualityMode": "Standard",
-          "MemoryModes": [ 2, 9, 14 ]
-        },
-        {
-          "QualityMode": "Production",
-          "MemoryModes": [ 2, 14, 24 ]
-        }
-      ],
+      "MemorySize": 14,
       "DefaultOptions": {
         "Steps": 9,
         "Width": 1024,
@@ -16406,20 +15166,7 @@
           "Type": "LocalFile"
         }
       },
-      "MemoryProfile": [
-        {
-          "QualityMode": "Draft",
-          "MemoryModes": [ 2, 8, 14 ]
-        },
-        {
-          "QualityMode": "Standard",
-          "MemoryModes": [ 2, 13, 20 ]
-        },
-        {
-          "QualityMode": "Production",
-          "MemoryModes": [ 2, 23, 32 ]
-        }
-      ],
+      "MemorySize": 20,
       "DefaultOptions": {
         "Steps": 30,
         "Width": 1024,
@@ -16549,20 +15296,7 @@
           "Type": "LocalFile"
         }
       },
-      "MemoryProfile": [
-        {
-          "QualityMode": "Draft",
-          "MemoryModes": [ 2, 8, 14 ]
-        },
-        {
-          "QualityMode": "Standard",
-          "MemoryModes": [ 2, 13, 20 ]
-        },
-        {
-          "QualityMode": "Production",
-          "MemoryModes": [ 2, 23, 32 ]
-        }
-      ],
+      "MemorySize": 20,
       "DefaultOptions": {
         "Steps": 30,
         "Width": 1024,
@@ -16692,20 +15426,7 @@
           "Type": "LocalFile"
         }
       },
-      "MemoryProfile": [
-        {
-          "QualityMode": "Draft",
-          "MemoryModes": [ 2, 8, 14 ]
-        },
-        {
-          "QualityMode": "Standard",
-          "MemoryModes": [ 2, 13, 20 ]
-        },
-        {
-          "QualityMode": "Production",
-          "MemoryModes": [ 2, 23, 32 ]
-        }
-      ],
+      "MemorySize": 20,
       "DefaultOptions": {
         "Steps": 4,
         "Width": 1024,
@@ -16835,20 +15556,7 @@
           "Type": "LocalFile"
         }
       },
-      "MemoryProfile": [
-        {
-          "QualityMode": "Draft",
-          "MemoryModes": [ 2, 8, 14 ]
-        },
-        {
-          "QualityMode": "Standard",
-          "MemoryModes": [ 2, 13, 25 ]
-        },
-        {
-          "QualityMode": "Production",
-          "MemoryModes": [ 2, 25, 32 ]
-        }
-      ],
+      "MemorySize": 25,
       "DefaultOptions": {
         "Steps": 30,
         "Width": 1024,
@@ -16978,20 +15686,7 @@
           "Type": "LocalFile"
         }
       },
-      "MemoryProfile": [
-        {
-          "QualityMode": "Draft",
-          "MemoryModes": [ 2, 8, 14 ]
-        },
-        {
-          "QualityMode": "Standard",
-          "MemoryModes": [ 2, 13, 25 ]
-        },
-        {
-          "QualityMode": "Production",
-          "MemoryModes": [ 2, 25, 32 ]
-        }
-      ],
+      "MemorySize": 25,
       "DefaultOptions": {
         "Steps": 4,
         "Width": 1024,
@@ -17111,20 +15806,7 @@
           "Type": "LocalFile"
         }
       },
-      "MemoryProfile": [
-        {
-          "QualityMode": "Draft",
-          "MemoryModes": [ 2, 6, 10 ]
-        },
-        {
-          "QualityMode": "Standard",
-          "MemoryModes": [ 2, 9, 15 ]
-        },
-        {
-          "QualityMode": "Production",
-          "MemoryModes": [ 2, 14, 18 ]
-        }
-      ],
+      "MemorySize": 15,
       "DefaultOptions": {
         "Steps": 50,
         "Width": 1024,
@@ -17244,20 +15926,7 @@
           "Type": "LocalFile"
         }
       },
-      "MemoryProfile": [
-        {
-          "QualityMode": "Draft",
-          "MemoryModes": [ 2, 6, 10 ]
-        },
-        {
-          "QualityMode": "Standard",
-          "MemoryModes": [ 2, 9, 15 ]
-        },
-        {
-          "QualityMode": "Production",
-          "MemoryModes": [ 2, 14, 18 ]
-        }
-      ],
+      "MemorySize": 15,
       "DefaultOptions": {
         "Steps": 28,
         "Width": 1024,
@@ -17392,20 +16061,7 @@
           "Type": "LocalFile"
         }
       },
-      "MemoryProfile": [
-        {
-          "QualityMode": "Draft",
-          "MemoryModes": [ 2, 8, 14 ]
-        },
-        {
-          "QualityMode": "Standard",
-          "MemoryModes": [ 2, 10, 18 ]
-        },
-        {
-          "QualityMode": "Production",
-          "MemoryModes": [ 2, 14, 26 ]
-        }
-      ],
+      "MemorySize": 18,
       "DefaultOptions": {
         "Steps": 28,
         "Width": 1024,
@@ -17540,20 +16196,7 @@
           "Type": "LocalFile"
         }
       },
-      "MemoryProfile": [
-        {
-          "QualityMode": "Draft",
-          "MemoryModes": [ 2, 8, 14 ]
-        },
-        {
-          "QualityMode": "Standard",
-          "MemoryModes": [ 2, 10, 18 ]
-        },
-        {
-          "QualityMode": "Production",
-          "MemoryModes": [ 2, 14, 26 ]
-        }
-      ],
+      "MemorySize": 18,
       "DefaultOptions": {
         "Steps": 4,
         "Width": 1024,
@@ -17683,20 +16326,7 @@
           "Type": "LocalFile"
         }
       },
-      "MemoryProfile": [
-        {
-          "QualityMode": "Draft",
-          "MemoryModes": [ 2, 8, 14 ]
-        },
-        {
-          "QualityMode": "Standard",
-          "MemoryModes": [ 2, 10, 18 ]
-        },
-        {
-          "QualityMode": "Production",
-          "MemoryModes": [ 2, 14, 26 ]
-        }
-      ],
+      "MemorySize": 18,
       "DefaultOptions": {
         "Steps": 50,
         "Width": 1024,
@@ -17826,20 +16456,7 @@
           "Type": "LocalFile"
         }
       },
-      "MemoryProfile": [
-        {
-          "QualityMode": "Draft",
-          "MemoryModes": [ 2, 8, 14 ]
-        },
-        {
-          "QualityMode": "Standard",
-          "MemoryModes": [ 2, 10, 18 ]
-        },
-        {
-          "QualityMode": "Production",
-          "MemoryModes": [ 2, 14, 26 ]
-        }
-      ],
+      "MemorySize": 18,
       "DefaultOptions": {
         "Steps": 50,
         "Width": 1024,
@@ -17969,20 +16586,7 @@
           "Type": "LocalFile"
         }
       },
-      "MemoryProfile": [
-        {
-          "QualityMode": "Draft",
-          "MemoryModes": [ 2, 8, 14 ]
-        },
-        {
-          "QualityMode": "Standard",
-          "MemoryModes": [ 2, 10, 18 ]
-        },
-        {
-          "QualityMode": "Production",
-          "MemoryModes": [ 2, 14, 26 ]
-        }
-      ],
+      "MemorySize": 18,
       "DefaultOptions": {
         "Steps": 8,
         "Width": 1024,
@@ -18117,20 +16721,7 @@
           "Type": "LocalFile"
         }
       },
-      "MemoryProfile": [
-        {
-          "QualityMode": "Draft",
-          "MemoryModes": [ 2, 12, 18 ]
-        },
-        {
-          "QualityMode": "Standard",
-          "MemoryModes": [ 2, 18, 26 ]
-        },
-        {
-          "QualityMode": "Production",
-          "MemoryModes": [ 2, 26, 36 ]
-        }
-      ],
+      "MemorySize": 26,
       "DefaultOptions": {
         "Steps": 30,
         "Width": 1024,
@@ -18314,20 +16905,7 @@
           "Type": "LocalFile"
         }
       },
-      "MemoryProfile": [
-        {
-          "QualityMode": "Draft",
-          "MemoryModes": [ 2, 14, 20 ]
-        },
-        {
-          "QualityMode": "Standard",
-          "MemoryModes": [ 2, 18, 26 ]
-        },
-        {
-          "QualityMode": "Production",
-          "MemoryModes": [ 2, 18, 36 ]
-        }
-      ],
+      "MemorySize": 26,
       "DefaultOptions": {
         "Steps": 50,
         "Width": 1024,
@@ -18484,20 +17062,7 @@
           "Type": "LocalFile"
         }
       },
-      "MemoryProfile": [
-        {
-          "QualityMode": "Draft",
-          "MemoryModes": [ 2, 14, 20 ]
-        },
-        {
-          "QualityMode": "Standard",
-          "MemoryModes": [ 2, 18, 26 ]
-        },
-        {
-          "QualityMode": "Production",
-          "MemoryModes": [ 2, 18, 36 ]
-        }
-      ],
+      "MemorySize": 26,
       "DefaultOptions": {
         "Steps": 4,
         "Width": 1024,
@@ -18634,20 +17199,7 @@
           "Type": "LocalFile"
         }
       },
-      "MemoryProfile": [
-        {
-          "QualityMode": "Draft",
-          "MemoryModes": [ 2, 14, 20 ]
-        },
-        {
-          "QualityMode": "Standard",
-          "MemoryModes": [ 2, 18, 26 ]
-        },
-        {
-          "QualityMode": "Production",
-          "MemoryModes": [ 2, 18, 36 ]
-        }
-      ],
+      "MemorySize": 26,
       "DefaultOptions": {
         "Steps": 50,
         "Width": 1024,
@@ -18772,20 +17324,7 @@
           "Type": "LocalFile"
         }
       },
-      "MemoryProfile": [
-        {
-          "QualityMode": "Draft",
-          "MemoryModes": [ 8, 12, 12 ]
-        },
-        {
-          "QualityMode": "Standard",
-          "MemoryModes": [ 8, 14, 20 ]
-        },
-        {
-          "QualityMode": "Production",
-          "MemoryModes": [ 8, 16, 36 ]
-        }
-      ],
+      "MemorySize": 20,
       "DefaultOptions": {
         "Steps": 30,
         "Width": 1024,
@@ -18915,20 +17454,7 @@
           "Type": "LocalFile"
         }
       },
-      "MemoryProfile": [
-        {
-          "QualityMode": "Draft",
-          "MemoryModes": [ 2, 6, 8 ]
-        },
-        {
-          "QualityMode": "Standard",
-          "MemoryModes": [ 2, 6, 12 ]
-        },
-        {
-          "QualityMode": "Production",
-          "MemoryModes": [ 2, 12, 18 ]
-        }
-      ],
+      "MemorySize": 12,
       "DefaultOptions": {
         "Steps": 16,
         "Width": 1024,
@@ -19058,20 +17584,7 @@
           "Type": "LocalFile"
         }
       },
-      "MemoryProfile": [
-        {
-          "QualityMode": "Draft",
-          "MemoryModes": [ 2, 6, 8 ]
-        },
-        {
-          "QualityMode": "Standard",
-          "MemoryModes": [ 2, 6, 12 ]
-        },
-        {
-          "QualityMode": "Production",
-          "MemoryModes": [ 2, 12, 18 ]
-        }
-      ],
+      "MemorySize": 12,
       "DefaultOptions": {
         "Steps": 50,
         "Width": 1024,
@@ -19206,20 +17719,7 @@
           "Type": "LocalFile"
         }
       },
-      "MemoryProfile": [
-        {
-          "QualityMode": "Draft",
-          "MemoryModes": [ 2, 8, 12 ]
-        },
-        {
-          "QualityMode": "Standard",
-          "MemoryModes": [ 2, 10, 16 ]
-        },
-        {
-          "QualityMode": "Production",
-          "MemoryModes": [ 2, 16, 22 ]
-        }
-      ],
+      "MemorySize": 16,
       "DefaultOptions": {
         "Steps": 50,
         "Width": 1024,
@@ -19354,20 +17854,7 @@
           "Type": "LocalFile"
         }
       },
-      "MemoryProfile": [
-        {
-          "QualityMode": "Draft",
-          "MemoryModes": [ 2, 8, 12 ]
-        },
-        {
-          "QualityMode": "Standard",
-          "MemoryModes": [ 2, 10, 16 ]
-        },
-        {
-          "QualityMode": "Production",
-          "MemoryModes": [ 2, 16, 22 ]
-        }
-      ],
+      "MemorySize": 16,
       "DefaultOptions": {
         "Steps": 50,
         "Width": 1024,
@@ -19502,20 +17989,7 @@
           "Type": "LocalFile"
         }
       },
-      "MemoryProfile": [
-        {
-          "QualityMode": "Draft",
-          "MemoryModes": [ 2, 8, 12 ]
-        },
-        {
-          "QualityMode": "Standard",
-          "MemoryModes": [ 2, 10, 16 ]
-        },
-        {
-          "QualityMode": "Production",
-          "MemoryModes": [ 2, 16, 22 ]
-        }
-      ],
+      "MemorySize": 16,
       "DefaultOptions": {
         "Steps": 50,
         "Width": 1024,
@@ -19650,20 +18124,7 @@
           "Type": "LocalFile"
         }
       },
-      "MemoryProfile": [
-        {
-          "QualityMode": "Draft",
-          "MemoryModes": [ 2, 8, 12 ]
-        },
-        {
-          "QualityMode": "Standard",
-          "MemoryModes": [ 2, 10, 16 ]
-        },
-        {
-          "QualityMode": "Production",
-          "MemoryModes": [ 2, 16, 22 ]
-        }
-      ],
+      "MemorySize": 16,
       "DefaultOptions": {
         "Steps": 4,
         "Width": 1024,
@@ -19811,6 +18272,10 @@
         {
           "Name": "Turbo",
           "Template": "AudioCpp_AceStep_Turbo"
+        },
+        {
+          "Name": "Base",
+          "Template": "AudioCpp_AceStep_Base"
         }
       ]
     },
@@ -19831,6 +18296,86 @@
         {
           "Name": "v3",
           "Template": "AudioCpp_Supertonic3"
+        }
+      ]
+    },
+    {
+      "Name": "Voxtral TTS",
+      "Backend": "AudioCpp",
+      "Options": [
+        {
+          "Name": "4B",
+          "Template": "AudioCpp_VoxtralTTS"
+        }
+      ]
+    },
+    {
+      "Name": "Qwen3 TTS",
+      "Backend": "AudioCpp",
+      "Options": [
+        {
+          "Name": "CustomVoice",
+          "Template": "AudioCpp_Qwen3TTS_CustomVoice"
+        }
+      ]
+    },
+    {
+      "Name": "Chatterbox",
+      "Backend": "AudioCpp",
+      "Options": [
+        {
+          "Name": "Turbo",
+          "Template": "AudioCpp_ChatterboxTurbo"
+        }
+      ]
+    },
+    {
+      "Name": "OmniVoice",
+      "Backend": "AudioCpp",
+      "Options": [
+        {
+          "Name": "Base",
+          "Template": "AudioCpp_OmniVoice"
+        }
+      ]
+    },
+    {
+      "Name": "MOSS SoundEffect",
+      "Backend": "AudioCpp",
+      "Options": [
+        {
+          "Name": "v2",
+          "Template": "AudioCpp_MossSoundEffect"
+        }
+      ]
+    },
+    {
+      "Name": "Qwen3 ASR",
+      "Backend": "AudioCpp",
+      "Options": [
+        {
+          "Name": "Base",
+          "Template": "AudioCpp_Qwen3ASR"
+        }
+      ]
+    },
+    {
+      "Name": "Canary",
+      "Backend": "AudioCpp",
+      "Options": [
+        {
+          "Name": "Flash",
+          "Template": "AudioCpp_Canary"
+        }
+      ]
+    },
+    {
+      "Name": "Cohere Transcribe",
+      "Backend": "AudioCpp",
+      "Options": [
+        {
+          "Name": "Base",
+          "Template": "AudioCpp_CohereASR"
         }
       ]
     },
@@ -20666,7 +19211,7 @@
           "Path": ""
         }
       },
-      "MemoryProfile": [],
+      "MemorySize": 0,
       "DefaultOptions": {
         "MaxLength": 40960,
         "Beams": 1,
@@ -20699,7 +19244,7 @@
           "Path": ""
         }
       },
-      "MemoryProfile": [],
+      "MemorySize": 0,
       "DefaultOptions": {
         "MaxLength": 262144,
         "Beams": 1,
@@ -20732,7 +19277,7 @@
           "Path": ""
         }
       },
-      "MemoryProfile": [],
+      "MemorySize": 0,
       "DefaultOptions": {
         "MaxLength": 262144,
         "Beams": 1,
@@ -20765,7 +19310,7 @@
           "Path": ""
         }
       },
-      "MemoryProfile": [],
+      "MemorySize": 0,
       "DefaultOptions": {
         "MaxLength": 262144,
         "Beams": 1,
@@ -20798,7 +19343,7 @@
           "Path": ""
         }
       },
-      "MemoryProfile": [],
+      "MemorySize": 0,
       "DefaultOptions": {
         "MaxLength": 262144,
         "Beams": 1,
@@ -20831,7 +19376,7 @@
           "Path": ""
         }
       },
-      "MemoryProfile": [],
+      "MemorySize": 0,
       "DefaultOptions": {
         "MaxLength": 262144,
         "Beams": 1,
@@ -20867,7 +19412,235 @@
           "Path": ""
         }
       },
-      "MemoryProfile": [],
+      "MemorySize": 0,
+      "DefaultOptions": {
+        "MaxLength": 262144,
+        "Beams": 1,
+        "TopK": 64,
+        "TopP": 0.95,
+        "TopH": 1,
+        "TypicalP": 1,
+        "LengthPenalty": 0,
+        "RepetitionPenalty": 1,
+        "Temperature": 1,
+        "IsSamplingEnabled": false,
+        "NoRepeatNgramSize": 0,
+        "SampleRate": 16000,
+        "Channels": 1,
+        "InputImageMaxCount": 8,
+        "IsToolCallsSupported": true
+      }
+    },
+    {
+      "Backend": "LlamaCpp",
+      "Name": "Qwen30_GGUF",
+      "Template": "Qwen30_IT",
+      "Pipeline": "Qwen3Pipeline",
+      "ModelType": "Base",
+      "BaseType": "bfloat16",
+      "MediaType": "Text",
+      "ProcessTypes": [ "TextToText" ],
+      "Checkpoint": {
+        "TextModel": {
+          "Name": "TextModel",
+          "Type": "LocalFile",
+          "Path": ""
+        }
+      },
+      "MemorySize": 0,
+      "DefaultOptions": {
+        "MaxLength": 40960,
+        "Beams": 1,
+        "TopK": 20,
+        "TopP": 0.95,
+        "TopH": 1,
+        "TypicalP": 1,
+        "LengthPenalty": 0,
+        "RepetitionPenalty": 1,
+        "Temperature": 0.6,
+        "IsSamplingEnabled": true,
+        "NoRepeatNgramSize": 0,
+        "InputImageMaxCount": 32,
+        "IsToolCallsSupported": true
+      }
+    },
+    {
+      "Backend": "LlamaCpp",
+      "Name": "Qwen35_GGUF",
+      "Template": "Qwen35_IT",
+      "Pipeline": "Qwen3Pipeline",
+      "ModelType": "Vision",
+      "BaseType": "bfloat16",
+      "MediaType": "Text",
+      "ProcessTypes": [ "TextToText", "ImageToText" ],
+      "Checkpoint": {
+        "TextModel": {
+          "Name": "TextModel",
+          "Type": "LocalFile",
+          "Path": ""
+        },
+        "TextModel2": {
+          "Name": "TextModel2",
+          "Type": "LocalFile",
+          "Path": ""
+        }
+      },
+      "MemorySize": 0,
+      "DefaultOptions": {
+        "MaxLength": 262144,
+        "Beams": 1,
+        "TopK": 20,
+        "TopP": 0.95,
+        "TopH": 1,
+        "TypicalP": 1,
+        "LengthPenalty": 0,
+        "RepetitionPenalty": 1,
+        "Temperature": 1,
+        "IsSamplingEnabled": false,
+        "NoRepeatNgramSize": 0,
+        "InputImageMaxCount": 32,
+        "IsToolCallsSupported": true
+      }
+    },
+    {
+      "Backend": "LlamaCpp",
+      "Name": "Qwen36_GGUF",
+      "Template": "Qwen36_IT",
+      "Pipeline": "Qwen3Pipeline",
+      "ModelType": "Vision",
+      "BaseType": "bfloat16",
+      "MediaType": "Text",
+      "ProcessTypes": [ "TextToText", "ImageToText" ],
+      "Checkpoint": {
+        "TextModel": {
+          "Name": "TextModel",
+          "Type": "LocalFile",
+          "Path": ""
+        },
+        "TextModel2": {
+          "Name": "TextModel2",
+          "Type": "LocalFile",
+          "Path": ""
+        }
+      },
+      "MemorySize": 0,
+      "DefaultOptions": {
+        "MaxLength": 262144,
+        "Beams": 1,
+        "TopK": 20,
+        "TopP": 0.95,
+        "TopH": 1,
+        "TypicalP": 1,
+        "LengthPenalty": 0,
+        "RepetitionPenalty": 1,
+        "Temperature": 1,
+        "IsSamplingEnabled": false,
+        "NoRepeatNgramSize": 0,
+        "InputImageMaxCount": 32,
+        "IsToolCallsSupported": true
+      }
+    },
+    {
+      "Backend": "LlamaCpp",
+      "Name": "Qwen38_GGUF",
+      "Template": "Qwen38_IT",
+      "Pipeline": "Qwen3Pipeline",
+      "ModelType": "Vision",
+      "BaseType": "bfloat16",
+      "MediaType": "Text",
+      "ProcessTypes": [ "TextToText", "ImageToText" ],
+      "Checkpoint": {
+        "TextModel": {
+          "Name": "TextModel",
+          "Type": "LocalFile",
+          "Path": ""
+        },
+        "TextModel2": {
+          "Name": "TextModel2",
+          "Type": "LocalFile",
+          "Path": ""
+        }
+      },
+      "MemorySize": 0,
+      "DefaultOptions": {
+        "MaxLength": 262144,
+        "Beams": 1,
+        "TopK": 20,
+        "TopP": 0.95,
+        "TopH": 1,
+        "TypicalP": 1,
+        "LengthPenalty": 0,
+        "RepetitionPenalty": 1,
+        "Temperature": 1,
+        "IsSamplingEnabled": false,
+        "NoRepeatNgramSize": 0,
+        "InputImageMaxCount": 32,
+        "IsToolCallsSupported": true
+      }
+    },
+    {
+      "Backend": "LlamaCpp",
+      "Name": "Gemma4_GGUF_E",
+      "Template": "Gemma4_IT_E",
+      "Pipeline": "Gemma4Pipeline",
+      "ModelType": "Multi",
+      "BaseType": "bfloat16",
+      "MediaType": "Text",
+      "ProcessTypes": [ "TextToText", "ImageToText" ],
+      "Checkpoint": {
+        "TextModel": {
+          "Name": "TextModel",
+          "Type": "LocalFile",
+          "Path": ""
+        },
+        "TextModel2": {
+          "Name": "TextModel2",
+          "Type": "LocalFile",
+          "Path": ""
+        }
+      },
+      "MemorySize": 0,
+      "DefaultOptions": {
+        "MaxLength": 262144,
+        "Beams": 1,
+        "TopK": 64,
+        "TopP": 0.95,
+        "TopH": 1,
+        "TypicalP": 1,
+        "LengthPenalty": 0,
+        "RepetitionPenalty": 1,
+        "Temperature": 1,
+        "IsSamplingEnabled": false,
+        "NoRepeatNgramSize": 0,
+        "SampleRate": 16000,
+        "Channels": 1,
+        "InputImageMaxCount": 4,
+        "InputAudioMaxCount": 1,
+        "IsToolCallsSupported": true
+      }
+    },
+    {
+      "Backend": "LlamaCpp",
+      "Name": "Gemma4_GGUF",
+      "Template": "Gemma4_IT",
+      "Pipeline": "Gemma4Pipeline",
+      "ModelType": "Multi",
+      "BaseType": "bfloat16",
+      "MediaType": "Text",
+      "ProcessTypes": [ "TextToText", "ImageToText" ],
+      "Checkpoint": {
+        "TextModel": {
+          "Name": "TextModel",
+          "Type": "LocalFile",
+          "Path": ""
+        },
+        "TextModel2": {
+          "Name": "TextModel2",
+          "Type": "LocalFile",
+          "Path": ""
+        }
+      },
+      "MemorySize": 0,
       "DefaultOptions": {
         "MaxLength": 262144,
         "Beams": 1,
@@ -21003,6 +19776,114 @@
         {
           "Name": "Qwen 3.8 27B",
           "Template": "Qwen38_IT",
+          "ModelParams": 27,
+          "ModelMaxLength": 262144
+        }
+      ]
+    },
+    {
+      "Name": "Gemma 4",
+      "Backend": "LlamaCpp",
+      "Options": [
+        {
+          "Name": "Gemma 4 E2B",
+          "Template": "Gemma4_GGUF_E",
+          "ModelParams": 2,
+          "ModelMaxLength": 131072
+        },
+        {
+          "Name": "Gemma 4 E4B",
+          "Template": "Gemma4_GGUF_E",
+          "ModelParams": 4,
+          "ModelMaxLength": 131072
+        },
+        {
+          "Name": "Gemma 4 12B",
+          "Template": "Gemma4_GGUF",
+          "ModelParams": 12,
+          "ModelMaxLength": 262144
+        },
+        {
+          "Name": "Gemma 4 31B",
+          "Template": "Gemma4_GGUF",
+          "ModelParams": 31,
+          "ModelMaxLength": 262144
+        }
+      ]
+    },
+    {
+      "Name": "Qwen 3.0",
+      "Backend": "LlamaCpp",
+      "Options": [
+        {
+          "Name": "Qwen 3.0 4B",
+          "Template": "Qwen30_GGUF",
+          "ModelParams": 4,
+          "ModelMaxLength": 40960
+        },
+        {
+          "Name": "Qwen 3.0 8B",
+          "Template": "Qwen30_GGUF",
+          "ModelParams": 8,
+          "ModelMaxLength": 40960
+        },
+        {
+          "Name": "Qwen 3.0 14B",
+          "Template": "Qwen30_GGUF",
+          "ModelParams": 14,
+          "ModelMaxLength": 40960
+        },
+        {
+          "Name": "Qwen 3.0 32B",
+          "Template": "Qwen30_GGUF",
+          "ModelParams": 32,
+          "ModelMaxLength": 40960
+        }
+      ]
+    },
+    {
+      "Name": "Qwen 3.5",
+      "Backend": "LlamaCpp",
+      "Options": [
+        {
+          "Name": "Qwen 3.5 4B",
+          "Template": "Qwen35_GGUF",
+          "ModelParams": 4,
+          "ModelMaxLength": 262144
+        },
+        {
+          "Name": "Qwen 3.5 9B",
+          "Template": "Qwen35_GGUF",
+          "ModelParams": 9,
+          "ModelMaxLength": 262144
+        },
+        {
+          "Name": "Qwen 3.5 27B",
+          "Template": "Qwen35_GGUF",
+          "ModelParams": 27,
+          "ModelMaxLength": 262144
+        }
+      ]
+    },
+    {
+      "Name": "Qwen 3.6",
+      "Backend": "LlamaCpp",
+      "Options": [
+        {
+          "Name": "Qwen 3.6 27B",
+          "Template": "Qwen36_GGUF",
+          "ModelParams": 27,
+          "ModelMaxLength": 262144
+        }
+      ]
+    },
+    {
+      "Name": "Qwen 3.8",
+      "Backend": "LlamaCpp",
+      "Options": [
+        {
+          "Name": "Qwen 3.8 27B",
+          "Template": "Qwen38_GGUF",
           "ModelParams": 27,
           "ModelMaxLength": 262144
         }

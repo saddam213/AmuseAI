@@ -37,7 +37,6 @@ namespace Amuse.App.Controls
         private ExtractModel _selectedExtractor;
         private UpscaleModel _selectedUpscaler;
         private MemoryProfileModel _selectedMemoryMode;
-        private QualityMode _selectedQualityMode;
         private ExecutionOptionsModel _selectedExecutionOptions;
 
         private bool _isControlNetSupported;
@@ -57,7 +56,6 @@ namespace Amuse.App.Controls
         private LoraAdapterModel[] _currentLora;
         private UpscaleModel _currentUpscaler;
         private MemoryMode _currentMemoryMode;
-        private QualityMode _currentQualityMode;
         private ExecutionOptionsModel _currentExecutionOptions;
 
         private bool _currentControlNetEnabled;
@@ -179,12 +177,6 @@ namespace Amuse.App.Controls
             set { SetProperty(ref _selectedMemoryMode, value); ValidateSelection(); }
         }
 
-        public QualityMode SelectedQualityMode
-        {
-            get { return _selectedQualityMode; }
-            set { SetProperty(ref _selectedQualityMode, value); ValidateSelection(); }
-        }
-
         public ExecutionOptionsModel SelectedExecutionOptions
         {
             get { return _selectedExecutionOptions; }
@@ -294,7 +286,6 @@ namespace Amuse.App.Controls
             _currentLora = _isLoraEnabled ? [.. LoraAdapters] : default;
             _currentUpscaler = SelectedUpscaler;
             _currentMemoryMode = SelectedMemoryMode.MemoryMode;
-            _currentQualityMode = SelectedQualityMode;
             _currentExecutionOptions = SelectedExecutionOptions;
 
             _currentControlNetEnabled = _isControlNetEnabled;
@@ -311,7 +302,6 @@ namespace Amuse.App.Controls
                 UpscaleModel = _currentUpscalerEnabled ? _currentUpscaler : default,
                 LoraAdapterModel = _currentLoraEnabled ? _currentLora : default,
                 MemoryMode = _currentMemoryMode,
-                QualityMode = _currentQualityMode,
                 ExecutionOptions = _currentExecutionOptions,
                 ProcessType = GetProcessType(),
                 ViewType = ViewType
@@ -354,7 +344,6 @@ namespace Amuse.App.Controls
             {
                 Device = _selectedDevice,
                 MemoryMode = _selectedMemoryMode.MemoryMode,
-                QualityMode = _selectedQualityMode,
                 ProcessType = _processType,
                 ViewType = ViewType
             };
@@ -426,7 +415,6 @@ namespace Amuse.App.Controls
                 || _currentUpscaler != SelectedUpscaler
                 || _currentUpscalerEnabled != _isUpscalerEnabled
                 || _currentMemoryMode != SelectedMemoryMode?.MemoryMode
-                || _currentQualityMode != SelectedQualityMode
                 || _currentExecutionOptions != SelectedExecutionOptions;
         }
 
@@ -460,16 +448,10 @@ namespace Amuse.App.Controls
                 if (Settings.IsInstalledModelsOnly && viewModel.Status == ModelStatusType.Available)
                     return false;
 
-                if (_selectedDevice is null)
-                    return false;
-
-                if (!_selectedDevice.SupportedBackends.Contains(viewModel.Backend))
+                if (!viewModel.IsCompatible(_selectedDevice))
                     return false;
 
                 if (!viewModel.ProcessTypes.Contains(_processType))
-                    return false;
-
-                if (!viewModel.Vendor.IsNullOrEmpty() && !viewModel.Vendor.Contains(_selectedDevice.Vendor))
                     return false;
 
                 if (!viewModel.ViewFilter.IsNullOrEmpty() && !viewModel.ViewFilter.Contains(ViewType))
@@ -580,6 +562,9 @@ namespace Amuse.App.Controls
                 if (!viewModel.ViewFilter.IsNullOrEmpty() && !viewModel.ViewFilter.Contains(ViewType))
                     return false;
 
+                if (_selectedDevice is not null && !_selectedDevice.SupportedBackends.Contains(viewModel.Backend))
+                    return false;
+
                 return true;
             };
 
@@ -606,7 +591,6 @@ namespace Amuse.App.Controls
 
         private void Device_SelectionChanged(object sender, System.Windows.Controls.SelectionChangedEventArgs e)
         {
-            SetDeviceDataTypes();
             if (IsLoraEnabled && !IsLoraSupported)
                 IsLoraEnabled = false;
 
@@ -653,10 +637,7 @@ namespace Amuse.App.Controls
             if (_selectedModel is null)
                 return;
 
-            IsLoraSupported = IsLoraAvailable && _selectedModel.Backend != BackendType.OnnxRuntime && _selectedModel.Backend != BackendType.AudioCpp;
-            SelectedQualityMode = _selectedModel.UserQualityMode is null
-                ? _selectedDevice?.DefaultQualityMode ?? QualityMode.Standard
-                : _selectedModel.UserQualityMode.Value;
+            IsLoraSupported = IsLoraAvailable && _selectedModel.Backend != BackendType.OnnxRuntime;
             SelectedMemoryMode = _selectedModel.UserMemoryMode is null
                 ? MemoryModes.FirstOrDefault(x => x.MemoryMode == MemoryMode.Auto)
                 : MemoryModes.FirstOrDefault(x => x.MemoryMode == _selectedModel.UserMemoryMode.Value);
@@ -691,33 +672,18 @@ namespace Amuse.App.Controls
         }
 
 
-        private void SetDeviceDataTypes()
-        {
-            if (_selectedDevice is null)
-                return;
-
-            SelectedQualityMode = _selectedDevice.QualityModes.Contains(_selectedQualityMode)
-                ? _selectedQualityMode
-                : _selectedDevice.DefaultQualityMode;
-        }
-
-
+        /// <summary>
+        /// Refreshes the backend descriptions and the mode Auto resolves to for the selected model and device.
+        /// </summary>
         private void RefreshMemoryProfile()
         {
-            if (_selectedDevice is null || _selectedModel is null || _selectedMemoryMode is null)
+            foreach (var memoryMode in MemoryModes)
+                memoryMode.Description = memoryMode.MemoryMode.GetDescription(_selectedModel?.Backend);
+
+            if (_selectedDevice is null || _selectedModel is null)
                 return;
 
-            var deviceMemory = _selectedDevice.MemoryGB;
-            var profile = _selectedModel.MemoryProfile?.FirstOrDefault(x => x.QualityMode == _selectedQualityMode);
-            if (profile is null)
-                return;
-
-            var modeIndex = profile.GetIndex(deviceMemory);
-            MemoryModes[0].MemoryGB = profile.MemoryModes.ElementAtOrDefault(modeIndex);
-            MemoryModes[0].DetectedMode = Enum.GetValues<MemoryMode>()[modeIndex + 2];
-            MemoryModes[2].MemoryGB = profile.MemoryModes.ElementAtOrDefault(0);
-            MemoryModes[3].MemoryGB = profile.MemoryModes.ElementAtOrDefault(1);
-            MemoryModes[4].MemoryGB = profile.MemoryModes.ElementAtOrDefault(2);
+            MemoryModes[0].DetectedMode = Extensions.ResolveMemoryMode(_selectedModel.MemorySize, _selectedDevice.MemoryGB);
         }
 
 
@@ -742,7 +708,6 @@ namespace Amuse.App.Controls
             SelectedDevice = pipeline.Device;
             SelectedModel = pipeline.DiffusionModel;
 
-            SelectedQualityMode = pipeline.QualityMode;
             SelectedMemoryMode = MemoryModes.FirstOrDefault(x => x.MemoryMode == pipeline.MemoryMode);
             SelectedExecutionOptions = _selectedModel?.UserExecutionOptions ?? new ExecutionOptionsModel();
 
@@ -780,6 +745,21 @@ namespace Amuse.App.Controls
                 }
             }
 
+            ValidateSelection();
+        }
+
+
+        /// <summary>
+        /// Selects the model if it is available for the current view and device.
+        /// </summary>
+        /// <param name="model">The model.</param>
+        public void SelectModel(DiffusionModel model)
+        {
+            RefreshSelection();
+            if (model == null || !ModelCollectionView.Contains(model))
+                return;
+
+            SelectedModel = model;
             ValidateSelection();
         }
 

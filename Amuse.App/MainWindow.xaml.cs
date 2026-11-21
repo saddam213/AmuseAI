@@ -5,6 +5,7 @@ using Amuse.App.Services;
 using Amuse.App.Views;
 using System.ComponentModel;
 using System.Threading.Tasks;
+using System.Windows;
 using System.Windows.Threading;
 using TensorStack.WPF;
 using TensorStack.WPF.Controls;
@@ -19,7 +20,7 @@ namespace Amuse.App
     {
         private readonly double _defaultWidth = 1600;
         private readonly double _defaultHeight = 900;
-        private readonly View _defaultView = View.TextToImage;
+        private readonly View _defaultView = View.Home;
         private View _view;
         private ViewCategory _viewCategory;
 
@@ -37,8 +38,8 @@ namespace Amuse.App
             Width = _defaultWidth * Settings.UIScale;
             Height = _defaultHeight * Settings.UIScale;
             navigation.OnNavigated += (_, viewId) => OnNavigated(viewId);
+            Loaded += OnLoaded;
             InitializeComponent();
-            NavigateCommand.Execute(_defaultView);
         }
 
         public Settings Settings { get; }
@@ -63,6 +64,18 @@ namespace Amuse.App
         }
 
 
+        /// <summary>
+        /// Navigates to the default view once the window has loaded, so the view opens with the window shown.
+        /// </summary>
+        /// <param name="sender">The sender.</param>
+        /// <param name="e">The <see cref="RoutedEventArgs"/> instance containing the event data.</param>
+        private void OnLoaded(object sender, RoutedEventArgs e)
+        {
+            Loaded -= OnLoaded;
+            NavigateCommand.Execute(_defaultView);
+        }
+
+
         private async Task NavigateAsync(View view)
         {
             View = view;
@@ -73,7 +86,12 @@ namespace Amuse.App
 
         private void OnNavigated(int viewId)
         {
-            var category = ViewManager.GetViewCategory((View)viewId);
+            // Navigation can start inside a view (Home, model controls), keep the menu selection in sync
+            var view = (View)viewId;
+            if (View != view)
+                View = view;
+
+            var category = UpdateViewMap(view);
             if (ViewCategory != category)
             {
                 ViewCategory = category;

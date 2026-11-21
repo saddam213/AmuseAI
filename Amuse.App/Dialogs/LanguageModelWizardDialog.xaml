@@ -35,7 +35,7 @@
             <UniformGrid Columns="4" >
                 <StackPanel Margin="0,0,2,0">
                     <TextBlock Text="{CommonControls:Localize Backend}" Style="{StaticResource FieldTextBlockStyle}"/>
-                    <ComboBox ItemsSource="{Binding Backends}" SelectedItem="{Binding SelectedBackend}" Style="{StaticResource EnumComboBox}" IsEnabled="False"/>
+                    <ComboBox ItemsSource="{Binding Backends}" SelectedItem="{Binding SelectedBackend}" Style="{StaticResource EnumComboBox}"/>
                 </StackPanel>
                 <StackPanel Margin="2,0,2,0">
                     <TextBlock Text="{CommonControls:Localize Pipeline}" Style="{StaticResource FieldTextBlockStyle}"/>
@@ -56,6 +56,12 @@
                 <StackPanel Visibility="{Binding SelectedSource, Converter={StaticResource EnumToVisibilityConverter}, ConverterParameter=LocalFolder}">
                     <TextBlock Text="{CommonControls:Localize ModelFolder}" Style="{StaticResource FieldTextBlockStyle}"/>
                     <CommonControls:FilePickerTextBox FileName="{Binding SelectedPath, Mode=TwoWay}" IsFolderPicker="True" IsRequired="True"/>
+                </StackPanel>
+
+                <!--File-->
+                <StackPanel Visibility="{Binding SelectedSource, Converter={StaticResource EnumToVisibilityConverter}, ConverterParameter=LocalFile}">
+                    <TextBlock Text="{CommonControls:Localize ModelFile}" Style="{StaticResource FieldTextBlockStyle}"/>
+                    <CommonControls:FilePickerTextBox FileName="{Binding SelectedPath, Mode=TwoWay}" IsFolderPicker="False" IsRequired="True" Filter="{Binding FileFilter}"/>
                 </StackPanel>
 
                 <!--Checkpoint Settings-->

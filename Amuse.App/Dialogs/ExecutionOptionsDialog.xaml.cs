@@ -19,18 +19,21 @@ namespace Amuse.App.Dialogs
         private ExecutionOptionsModel _executionOptions;
         private AutoOption _selectedConvDirect;
         private AutoOption _selectedFlashAttention;
+        private DataType[] _weightTypes;
 
         public ExecutionOptionsDialog(Settings settings)
         {
             Settings = settings;
             SaveCommand = new AsyncRelayCommand(SaveAsync, CanExecuteSave);
             CancelCommand = new AsyncRelayCommand(CancelAsync);
+            ResetCommand = new AsyncRelayCommand(ResetAsync);
             InitializeComponent();
         }
 
         public Settings Settings { get; }
         public AsyncRelayCommand SaveCommand { get; }
         public AsyncRelayCommand CancelCommand { get; }
+        public AsyncRelayCommand ResetCommand { get; }
 
         public BackendType Backend
         {
@@ -42,6 +45,12 @@ namespace Amuse.App.Dialogs
         {
             get { return _executionOptions; }
             set { SetProperty(ref _executionOptions, value); }
+        }
+
+        public DataType[] WeightTypes
+        {
+            get { return _weightTypes; }
+            set { SetProperty(ref _weightTypes, value); }
         }
 
         public AutoOption SelectedConvDirect
@@ -80,9 +89,20 @@ namespace Amuse.App.Dialogs
         public Task<bool> ShowDialogAsync(BackendType backend, ExecutionOptionsModel executionOptions)
         {
             Backend = backend;
+            WeightTypes = backend.GetWeightTypes();
             ExecutionOptions = executionOptions.DeepClone();
             SetSelectedValues();
             return base.ShowDialogAsync();
+        }
+
+        /// <summary>
+        /// Resets the options to their defaults, they are saved when the dialog is saved.
+        /// </summary>
+        private Task ResetAsync()
+        {
+            ExecutionOptions = new ExecutionOptionsModel();
+            SetSelectedValues();
+            return Task.CompletedTask;
         }
 
 

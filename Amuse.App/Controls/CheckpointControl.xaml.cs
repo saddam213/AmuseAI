@@ -23,6 +23,7 @@ namespace Amuse.App.Controls
         public static readonly DependencyProperty CheckpointProperty = DependencyProperty.Register(nameof(Checkpoint), typeof(CheckpointComponent), typeof(CheckpointControl));
         public static readonly DependencyProperty IsDiffusionCheckpointProperty = DependencyProperty.Register(nameof(IsDiffusionCheckpoint), typeof(bool), typeof(CheckpointControl));
         public static readonly DependencyProperty SupportedTypesProperty = DependencyProperty.Register(nameof(SupportedTypes), typeof(CheckpointType[]), typeof(CheckpointControl), new PropertyMetadata(Enum.GetValues<CheckpointType>()));
+        public static readonly DependencyProperty FileFilterProperty = DependencyProperty.Register(nameof(FileFilter), typeof(string), typeof(CheckpointControl), new PropertyMetadata("Model Files|*.safetensors;*.gguf;"));
 
         public Settings Settings
         {
@@ -46,6 +47,15 @@ namespace Amuse.App.Controls
         {
             get { return (CheckpointType[])GetValue(SupportedTypesProperty); }
             set { SetValue(SupportedTypesProperty, value); }
+        }
+
+        /// <summary>
+        /// Gets or sets the local file picker filter.
+        /// </summary>
+        public string FileFilter
+        {
+            get { return (string)GetValue(FileFilterProperty); }
+            set { SetValue(FileFilterProperty, value); }
         }
 
         public IReadOnlyList<string> ComponentNames { get; } =

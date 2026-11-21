@@ -255,6 +255,9 @@
   <data name="Title_AmuseUpdate" xml:space="preserve">
     <value>Amuse Update</value>
   </data>
+  <data name="Title_AmuseSetup" xml:space="preserve">
+    <value>Amuse Setup</value>
+  </data>
   <data name="Title_ComponentModel" xml:space="preserve">
     <value>Component Model</value>
   </data>
@@ -1032,9 +1035,6 @@
   <data name="Tasks" xml:space="preserve">
     <value>Tasks</value>
   </data>
-  <data name="DiversityLength" xml:space="preserve">
-    <value>Diversity Length</value>
-  </data>
   <data name="SilenceDuration" xml:space="preserve">
     <value>Silence Duration</value>
   </data>
@@ -1067,9 +1067,6 @@
   </data>
   <data name="OriginalModelDataType" xml:space="preserve">
     <value>Original Model Data Type</value>
-  </data>
-  <data name="MemoryModes" xml:space="preserve">
-    <value>Memory Modes</value>
   </data>
   <data name="Quality" xml:space="preserve">
     <value>Quality</value>
@@ -1500,6 +1497,9 @@
   <data name="EnableExternalTools" xml:space="preserve">
     <value>Enable External Tools</value>
   </data>
+  <data name="EnableDangerousTools" xml:space="preserve">
+    <value>Enable Dangerous Tools</value>
+  </data>
   <data name="References" xml:space="preserve">
     <value>References</value>
   </data>
@@ -1689,6 +1689,18 @@
   <data name="MemoryReserveGB" xml:space="preserve">
     <value>Memory Reserve (GB)</value>
   </data>
+  <data name="GpuLayers" xml:space="preserve">
+    <value>GPU Layers</value>
+  </data>
+  <data name="Threads" xml:space="preserve">
+    <value>Threads</value>
+  </data>
+  <data name="ContextSize" xml:space="preserve">
+    <value>Context Size</value>
+  </data>
+  <data name="CacheOffload" xml:space="preserve">
+    <value>GPU Cache</value>
+  </data>
   <data name="FlashAttention" xml:space="preserve">
     <value>Flash Attention</value>
   </data>
@@ -1700,9 +1712,6 @@
   </data>
   <data name="CPUExecution" xml:space="preserve">
     <value>CPU Execution</value>
-  </data>
-  <data name="VRAMGB" xml:space="preserve">
-    <value>VRAM (GB)</value>
   </data>
   <data name="MadeInNewZealand" xml:space="preserve">
     <value>Made in New Zealand</value>
@@ -1835,5 +1844,143 @@
   </data>
   <data name="ThemeChangedMessage" xml:space="preserve">
     <value>Restart Amuse to apply the new theme.</value>
+  </data>
+  <data name="ToolActionReadFile" xml:space="preserve">
+    <value>Read file: {0}</value>
+  </data>
+  <data name="ToolActionRunProgram" xml:space="preserve">
+    <value>Run program or script: {0}</value>
+  </data>
+  <data name="ToolExternalAccessTitle" xml:space="preserve">
+    <value>External Access</value>
+  </data>
+  <data name="ToolExternalAccessMessage" xml:space="preserve">
+    <value>{0} will access external data or services.
+Data from this request may be sent to retrieve or process the requested information.
+
+Do you want to continue?</value>
+  </data>
+  <data name="ToolDangerousAccessTitle" xml:space="preserve">
+    <value>Dangerous Action</value>
+  </data>
+  <data name="ToolDangerousAccessMessage" xml:space="preserve">
+    <value>{0} wants to perform an action that can change your computer or expose your data:
+
+{1}
+
+Only continue if you trust this action and asked for it.
+
+Do you want to continue?</value>
+  </data>
+  <data name="HomeTitle" xml:space="preserve">
+    <value>What do you want to create?</value>
+  </data>
+  <data name="HomeSubtitle" xml:space="preserve">
+    <value>Pick a task to get started, or jump back into a model or result you used recently.</value>
+  </data>
+  <data name="HomeImageDescription" xml:space="preserve">
+    <value>Generate, edit, inpaint and upscale images.</value>
+  </data>
+  <data name="HomeVideoDescription" xml:space="preserve">
+    <value>Create video from text or images, restyle and upscale.</value>
+  </data>
+  <data name="HomeAudioDescription" xml:space="preserve">
+    <value>Make music and speech, or transcribe audio to text.</value>
+  </data>
+  <data name="HomeTextDescription" xml:space="preserve">
+    <value>Chat, follow instructions and describe images.</value>
+  </data>
+  <data name="NewModels" xml:space="preserve">
+    <value>New Models</value>
+  </data>
+  <data name="RecommendedModels" xml:space="preserve">
+    <value>Recommended Models</value>
+  </data>
+  <data name="RecentModels" xml:space="preserve">
+    <value>Recently Used Models</value>
+  </data>
+  <data name="HomeDevices" xml:space="preserve">
+    <value>Devices and Backends</value>
+  </data>
+  <data name="ManageEnvironments" xml:space="preserve">
+    <value>Manage Environments</value>
+  </data>
+  <data name="BackendReady" xml:space="preserve">
+    <value>Ready</value>
+  </data>
+  <data name="BackendNotInstalled" xml:space="preserve">
+    <value>Not Installed</value>
+  </data>
+  <data name="BackendUnsupported" xml:space="preserve">
+    <value>Unsupported</value>
+  </data>
+  <data name="QueueDownloadTitle" xml:space="preserve">
+    <value>Queue Download</value>
+  </data>
+  <data name="QueueDownloadMessage" xml:space="preserve">
+    <value>{0} is not installed, would you like to queue it for download?</value>
+  </data>
+  <data name="ModelDownloadingTitle" xml:space="preserve">
+    <value>Model Downloading</value>
+  </data>
+  <data name="ModelDownloadingMessage" xml:space="preserve">
+    <value>{0} is downloading or queued for download.</value>
+  </data>
+  <data name="WeightType" xml:space="preserve">
+    <value>Weight Type</value>
+  </data>
+  <data name="Later" xml:space="preserve">
+    <value>Later</value>
+  </data>
+  <data name="Installing" xml:space="preserve">
+    <value>Installing</value>
+  </data>
+  <data name="Installed" xml:space="preserve">
+    <value>Installed</value>
+  </data>
+  <data name="EnvironmentUpdateRequired" xml:space="preserve">
+    <value>Update required</value>
+  </data>
+  <data name="EnvironmentSetupMessage" xml:space="preserve">
+    <value>Set Up Backend Environments</value>
+  </data>
+  <data name="EnvironmentSetupSubMessage" xml:space="preserve">
+    <value>Some backend environments are missing or need an update. Select the ones to set up now, anything left unchecked can be installed later from the Home or Settings page.</value>
+  </data>
+  <data name="EnvironmentSetupWaitMessage" xml:space="preserve">
+    <value>(This may take several minutes)</value>
+  </data>
+  <data name="EnvironmentSetupFailedMessage" xml:space="preserve">
+    <value>Some environments failed to install, see the log for details. You can retry from the Home or Settings page.</value>
+  </data>
+  <data name="BackendDescriptionStableDiffusionCpp" xml:space="preserve">
+    <value>Image and video generation</value>
+  </data>
+  <data name="BackendDescriptionAudioCpp" xml:space="preserve">
+    <value>Speech, music and audio generation</value>
+  </data>
+  <data name="BackendDescriptionLlamaCpp" xml:space="preserve">
+    <value>Chat and text assistant (language models)</value>
+  </data>
+  <data name="BackendDescriptionHuggingFace" xml:space="preserve">
+    <value>Advanced Python backend for HuggingFace models</value>
+  </data>
+  <data name="Apply" xml:space="preserve">
+    <value>Apply</value>
+  </data>
+  <data name="EnvironmentManageSubMessage" xml:space="preserve">
+    <value>Choose the environment each backend uses on your graphics cards. Tick a row and pick an environment, installed ones become the default straight away and others are installed first.</value>
+  </data>
+  <data name="Description" xml:space="preserve">
+    <value>Description</value>
+  </data>
+  <data name="DownloadSizeGB" xml:space="preserve">
+    <value>Download Size (GB)</value>
+  </data>
+  <data name="UpscaleTemporalChunkSize" xml:space="preserve">
+    <value>Temporal Chunk Size</value>
+  </data>
+  <data name="UpscaleWindowSize" xml:space="preserve">
+    <value>Window Size</value>
   </data>
 </root>

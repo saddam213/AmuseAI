@@ -70,7 +70,7 @@
                             </StackPanel>
                         </UniformGrid>
                         <UniformGrid Columns="2" Margin="0,2,0,0">
-                            <CommonControls:SliderControl Text="{CommonControls:Localize MinLength}" Value="{Binding Options.MinLength}" Maximum="{Binding Pipeline.LanguageModel.DefaultOptions.MaxLength}" TickFrequency="1" />
+                            <CommonControls:SliderControl Text="{CommonControls:Localize MinLength}" Value="{Binding Options.MinLength}" Maximum="{Binding Pipeline.LanguageModel.DefaultOptions.MaxLength}" TickFrequency="1" Visibility="{Binding IsLlamaCppPipeline, Converter={StaticResource InverseBooleanToVisibilityConverter}}" />
                             <CommonControls:SliderControl Text="{CommonControls:Localize MaxLength}" Value="{Binding Options.MaxLength}" Maximum="{Binding Pipeline.LanguageModel.DefaultOptions.MaxLength}" TickFrequency="1024" />
                         </UniformGrid>
 
@@ -88,6 +88,8 @@
                                         Height="30"
                                         IconTrue="{Binding Icon}"
                                         IconFalse="{Binding Icon}" 
+                                        IconStyleTrue="{Binding IconStyle}"
+                                        IconStyleFalse="{Binding IconStyle}"
                                         ToolTipTrue="{Binding Description}"
                                         ToolTipFalse="{Binding Description}"
                                         IsChecked="{Binding IsEnabled, Mode=TwoWay}" 
@@ -99,7 +101,7 @@
                                 </ItemsControl.ItemTemplate>
                                 <ItemsControl.ItemsPanel>
                                     <ItemsPanelTemplate>
-                                        <UniformGrid Rows="1" />
+                                        <UniformGrid Rows="2" />
                                     </ItemsPanelTemplate>
                                 </ItemsControl.ItemsPanel>
                             </ItemsControl>
@@ -164,19 +166,19 @@
                 <DockPanel Margin="0,4,0,8">
 
                     <UniformGrid DockPanel.Dock="Top" Columns="2" Margin="0,4,0,0">
-                        <CommonControls:SliderControl Text="{CommonControls:Localize Beams}" Value="{Binding Options.Beams}" Minimum="1" Maximum="20" TickFrequency="1" />
-                        <CommonControls:SliderControl Text="{CommonControls:Localize Temperature}" Value="{Binding Options.Temperature}" Minimum="0.1" Maximum="5" TickFrequency="0.01" ValueFormat="N2"/>
-                        <CommonControls:SliderControl Text="{CommonControls:Localize TopK}" Value="{Binding Options.TopK}" Minimum="1" Maximum="100" TickFrequency="1" />
-                        <CommonControls:SliderControl Text="{CommonControls:Localize TopP}" Value="{Binding Options.TopP}" Minimum="0.01" Maximum="1" TickFrequency="0.01" ValueFormat="N2"/>
-                        <CommonControls:SliderControl Text="{CommonControls:Localize TopH}" Value="{Binding Options.TopH}" Minimum="0.01" Maximum="1" TickFrequency="0.01" ValueFormat="N2"/>
-                        <CommonControls:SliderControl Text="{CommonControls:Localize TypicalP}" Value="{Binding Options.TypicalP}" Minimum="0.01" Maximum="1" TickFrequency="0.01" ValueFormat="N2"/>
-                        <CommonControls:SliderControl Text="{CommonControls:Localize LengthPenalty}" Value="{Binding Options.LengthPenalty}" Minimum="-5" Maximum="5" TickFrequency="0.05" ValueFormat="N2" />
+                        <CommonControls:SliderControl Text="{CommonControls:Localize Beams}" Value="{Binding Options.Beams}" Minimum="1" Maximum="20" TickFrequency="1" Visibility="{Binding IsLlamaCppPipeline, Converter={StaticResource InverseBooleanToVisibilityConverter}}" />
+                        <CommonControls:SliderControl Text="{CommonControls:Localize Temperature}" Value="{Binding Options.Temperature}" Minimum="0.1" Maximum="5" TickFrequency="0.01" ValueFormat="N2" IsEnabled="{Binding Options.IsSamplingEnabled}"/>
+                        <CommonControls:SliderControl Text="{CommonControls:Localize TopK}" Value="{Binding Options.TopK}" Minimum="1" Maximum="100" TickFrequency="1" IsEnabled="{Binding Options.IsSamplingEnabled}" />
+                        <CommonControls:SliderControl Text="{CommonControls:Localize TopP}" Value="{Binding Options.TopP}" Minimum="0.01" Maximum="1" TickFrequency="0.01" ValueFormat="N2" IsEnabled="{Binding Options.IsSamplingEnabled}"/>
+                        <CommonControls:SliderControl Text="{CommonControls:Localize TopH}" Value="{Binding Options.TopH}" Minimum="0.01" Maximum="1" TickFrequency="0.01" ValueFormat="N2" IsEnabled="{Binding Options.IsSamplingEnabled}" Visibility="{Binding IsLlamaCppPipeline, Converter={StaticResource InverseBooleanToVisibilityConverter}}"/>
+                        <CommonControls:SliderControl Text="{CommonControls:Localize TypicalP}" Value="{Binding Options.TypicalP}" Minimum="0.01" Maximum="1" TickFrequency="0.01" ValueFormat="N2" IsEnabled="{Binding Options.IsSamplingEnabled}"/>
+                        <CommonControls:SliderControl Text="{CommonControls:Localize LengthPenalty}" Value="{Binding Options.LengthPenalty}" Minimum="-5" Maximum="5" TickFrequency="0.05" ValueFormat="N2" Visibility="{Binding IsLlamaCppPipeline, Converter={StaticResource InverseBooleanToVisibilityConverter}}" />
                         <CommonControls:SliderControl Text="{CommonControls:Localize RepetitionPenalty}" Value="{Binding Options.RepetitionPenalty}" Minimum="0.05" Maximum="5" TickFrequency="0.05" ValueFormat="N2" />
-                        <CommonControls:SliderControl Text="{CommonControls:Localize NoRepeatNgrams}" Value="{Binding Options.NoRepeatNgramSize}" Minimum="0" Maximum="10" TickFrequency="1" ValueFormat="N0" />
+                        <CommonControls:SliderControl Text="{CommonControls:Localize NoRepeatNgrams}" Value="{Binding Options.NoRepeatNgramSize}" Minimum="0" Maximum="10" TickFrequency="1" ValueFormat="N0" Visibility="{Binding IsLlamaCppPipeline, Converter={StaticResource InverseBooleanToVisibilityConverter}}" />
                         <CheckBox Content="{CommonControls:Localize SamplingEnabled}" IsChecked="{Binding Options.IsSamplingEnabled}" Margin="4,13,0,0" FontStyle="Italic" FontSize="11" Opacity=".9"/>
                     </UniformGrid>
 
-                    <UniformGrid DockPanel.Dock="Top" Columns="2">
+                    <UniformGrid DockPanel.Dock="Top" Columns="2" Visibility="{Binding IsLlamaCppPipeline, Converter={StaticResource InverseBooleanToVisibilityConverter}}">
                         <StackPanel>
                             <TextBlock Text="{CommonControls:Localize KVCache}" Style="{StaticResource FieldTextBlockStyle}" />
                             <ComboBox ItemsSource="{Binding Source={StaticResource CacheType}}" SelectedItem="{Binding Options.CacheType}" Style="{StaticResource EnumComboBox}" />

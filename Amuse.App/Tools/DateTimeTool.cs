@@ -1,6 +1,8 @@
 ﻿using System;
+using System.Globalization;
 using System.Threading;
 using System.Threading.Tasks;
+using TensorStack.WPF.Controls;
 
 namespace Amuse.App.Tools
 {
@@ -25,10 +27,16 @@ namespace Amuse.App.Tools
         /// Gets the display name.
         /// </summary>
         public override string DisplayName => "DateTime Tool";
+
         /// <summary>
         /// Gets the tool icon.
         /// </summary>
         public override string DisplayIcon => "f017";
+
+        /// <summary>
+        ///  Gets the tool icon style.
+        /// </summary>
+        public override FontAwesomeIconStyle DisplayIconStyle { get; } = FontAwesomeIconStyle.SharpLight;
 
         /// <summary>
         /// Gets the is display order.
@@ -57,7 +65,7 @@ namespace Amuse.App.Tools
         /// </summary>
         /// <param name="settings">The settings.</param>
         /// <param name="cancellationToken">The cancellation token.</param>
-        public override Task<string> ExecuteAsync(Settings settings, CancellationToken cancellationToken)
+        public override Task<string> ExecuteAsync(Settings settings, CancellationToken cancellationToken = default)
         {
             try
             {
@@ -74,12 +82,24 @@ namespace Amuse.App.Tools
         /// <summary>
         /// DateTimeResult structure.
         /// </summary>
-        private record DateTimeResult(DateTimeOffset LocalTime, TimeZoneInfo TimeZoneInfo)
+        private sealed record DateTimeResult
         {
-            public string Date => $"{LocalTime:yyyy-MM-dd}";
-            public string Day => $"{LocalTime:dddd}";
-            public string Time => $"{LocalTime:HH:mm:ss}";
-            public string Utc => $"{LocalTime.ToUniversalTime()}";
+            public DateTimeResult(DateTimeOffset localTime, TimeZoneInfo timeZone)
+            {
+                Date = localTime.ToString("yyyy-MM-dd", CultureInfo.InvariantCulture);
+                Day = localTime.ToString("dddd", CultureInfo.InvariantCulture);
+                Time = localTime.ToString("HH:mm:ss", CultureInfo.InvariantCulture);
+                TimeZone = timeZone.IsDaylightSavingTime(localTime) ? timeZone.DaylightName : timeZone.StandardName;
+                UtcOffset = localTime.ToString("zzz", CultureInfo.InvariantCulture);
+                Utc = localTime.UtcDateTime.ToString("yyyy-MM-ddTHH:mm:ssZ", CultureInfo.InvariantCulture);
+            }
+
+            public string Date { get; }
+            public string Day { get; }
+            public string Time { get; }
+            public string TimeZone { get; }
+            public string UtcOffset { get; }
+            public string Utc { get; }
         }
     }
 }

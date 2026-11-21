@@ -43,7 +43,7 @@ namespace Amuse.Host.HuggingFace
             {
                 Template = options.Template,
                 ModelType = options.ModelType,
-                DataType = options.DataType.Cast<Amuse.Common.DataType, TensorStack.HuggingFace.DataType>(),
+                DataType = options.ExecutionOptions.WeightType.ToPythonDataType(),
                 Device = options.Device,
                 DeviceBusId = options.DeviceBusId,
                 DeviceId = options.DeviceId,
@@ -55,7 +55,7 @@ namespace Amuse.Host.HuggingFace
                 MemoryMode = options.MemoryMode.Cast<Amuse.Common.MemoryModeType, TensorStack.HuggingFace.MemoryModeType>(),
                 Pipeline = GetPipelineType(options).ToString(),
                 ProcessType = options.ProcessType.Cast<Amuse.Common.ProcessType, TensorStack.HuggingFace.ProcessType>(),
-                QuantType = options.QuantType.Cast<Amuse.Common.QuantizationType, TensorStack.HuggingFace.QuantizationType>(),
+                QuantType = options.ExecutionOptions.WeightType.ToPythonQuantType(),
                 Variant = options.Variant,
 
                 ControlNet = options.ControlNet?.ToPythonOptions(),
@@ -256,25 +256,6 @@ namespace Amuse.Host.HuggingFace
             {
                 Name = options.Name,
                 Strength = options.Strength,
-            };
-        }
-
-
-        public static Common.PipelineProgress ToProgress(this TensorStack.HuggingFace.Common.PipelineProgress pipelineProgress)
-        {
-            return new Common.PipelineProgress
-            {
-                Key = pipelineProgress.Key,
-                Subkey = pipelineProgress.Subkey,
-                ElapsedKey = pipelineProgress.ElapsedKey,
-                Timestamp = pipelineProgress.Timestamp,
-                Elapsed = pipelineProgress.Elapsed,
-                Value = pipelineProgress.Value,
-                Maximum = pipelineProgress.Maximum,
-                BatchValue = pipelineProgress.BatchValue,
-                BatchMaximum = pipelineProgress.BatchMaximum,
-                Message = pipelineProgress.Message,
-                Tensors = pipelineProgress.Tensor == null ? null : [pipelineProgress.Tensor]
             };
         }
 
@@ -1352,6 +1333,36 @@ namespace Amuse.Host.HuggingFace
             {
                 Common.SigmaScheduleType.Exponential => TensorStack.HuggingFace.Scheduler.SigmaScheduleType.Exponential,
                 _ => TensorStack.HuggingFace.Scheduler.SigmaScheduleType.Karras
+            };
+        }
+
+
+        /// <summary>
+        /// Translates the weight type to the HuggingFace load dtype, quantized and unsupported types load as bfloat16.
+        /// </summary>
+        /// <param name="weightType">The weight type.</param>
+        private static TensorStack.HuggingFace.DataType ToPythonDataType(this DataType weightType)
+        {
+            return weightType switch
+            {
+                DataType.Float32 => TensorStack.HuggingFace.DataType.Float32,
+                DataType.Float16 => TensorStack.HuggingFace.DataType.Float16,
+                _ => TensorStack.HuggingFace.DataType.Bfloat16
+            };
+        }
+
+
+        /// <summary>
+        /// Translates the weight type to the HuggingFace dynamic quantization type, anything else loads unquantized.
+        /// </summary>
+        /// <param name="weightType">The weight type.</param>
+        private static TensorStack.HuggingFace.QuantizationType ToPythonQuantType(this DataType weightType)
+        {
+            return weightType switch
+            {
+                DataType.Int8 => TensorStack.HuggingFace.QuantizationType.Q8Bit,
+                DataType.Int4 => TensorStack.HuggingFace.QuantizationType.Q4Bit,
+                _ => TensorStack.HuggingFace.QuantizationType.Q16Bit
             };
         }
 

@@ -1,5 +1,6 @@
 ﻿using Amuse.App.Tools;
 using TensorStack.WPF;
+using TensorStack.WPF.Controls;
 
 namespace Amuse.App.Common
 {
@@ -11,12 +12,14 @@ namespace Amuse.App.Common
         {
             Name = toolCall.Name;
             Icon = toolCall.DisplayIcon;
+            IconStyle = toolCall.DisplayIconStyle;
             IsEnabled = toolCall.IsDefault;
             Description = toolCall.Description;
         }
 
         public string Name { get; set; }
         public string Icon { get; set; }
+        public FontAwesomeIconStyle IconStyle { get; set; }
         public string Description { get; set; }
         public bool IsEnabled
         {

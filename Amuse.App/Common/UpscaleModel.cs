@@ -1,5 +1,6 @@
 ﻿using Amuse.App.Views;
 using Amuse.Common;
+using System.Collections.Generic;
 using System.Linq;
 using System.Text.Json.Serialization;
 using TensorStack.Common;
@@ -21,6 +22,7 @@ namespace Amuse.App.Common
         private Normalization _normalization = Normalization.ZeroToOne;
         private Normalization _outputNormalization = Normalization.OneToOne;
         private CheckpointComponent _checkpoint;
+        private CheckpointComponent _vae;
         private UpscaleInputOptions _defaultOptions;
         private ModelStatusType _status;
         private string _accessToken;
@@ -45,7 +47,7 @@ namespace Amuse.App.Common
         public PipelineType Pipeline
         {
             get { return _pipeline; }
-            set { SetProperty(ref _pipeline, value); }
+            set { SetProperty(ref _pipeline, value); NotifyPropertyChanged(nameof(IsVideoUpscaler)); }
         }
 
         [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
@@ -98,6 +100,22 @@ namespace Amuse.App.Common
             set { SetProperty(ref _checkpoint, value); }
         }
 
+        /// <summary>
+        /// Gets or sets the VAE checkpoint, used by video upscalers such as SeedVR2.
+        /// </summary>
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+        public CheckpointComponent Vae
+        {
+            get { return _vae; }
+            set { SetProperty(ref _vae, value); }
+        }
+
+        /// <summary>
+        /// Gets a value indicating whether this is a video upscaler, SeedVR2 or RelayVSR.
+        /// </summary>
+        [JsonIgnore]
+        public bool IsVideoUpscaler => _pipeline == PipelineType.SeedVR2Pipeline || _pipeline == PipelineType.RelayVSRPipeline;
+
         public UpscaleInputOptions DefaultOptions
         {
             get { return _defaultOptions; }
@@ -140,7 +158,34 @@ namespace Amuse.App.Common
 
         public void Delete(Settings settings)
         {
-            var resolvedCheckpoint = Checkpoint.Resolve(settings, settings.DirectoryUpscale);
+            DeleteCheckpoint(settings, Vae);
+            DeleteCheckpoint(settings, Checkpoint);
+        }
+
+
+        /// <summary>
+        /// Gets the model checkpoints, shared components are downloaded separately.
+        /// </summary>
+        public IEnumerable<CheckpointComponent> GetComponents()
+        {
+            if (Checkpoint is not null)
+                yield return Checkpoint;
+            if (Vae is not null)
+                yield return Vae;
+        }
+
+
+        /// <summary>
+        /// Deletes a checkpoint, shared components are kept for other models.
+        /// </summary>
+        /// <param name="settings">The settings.</param>
+        /// <param name="checkpoint">The checkpoint.</param>
+        private static void DeleteCheckpoint(Settings settings, CheckpointComponent checkpoint)
+        {
+            if (checkpoint == null || checkpoint.Type == CheckpointType.Component)
+                return;
+
+            var resolvedCheckpoint = checkpoint.Resolve(settings, settings.DirectoryUpscale);
             if (string.IsNullOrEmpty(resolvedCheckpoint))
                 return;
 
@@ -174,7 +219,8 @@ namespace Amuse.App.Common
             if (Checkpoint == null)
                 return ModelStatusType.Available;
 
-            var isValid = Checkpoint.IsInstalled(settings.DirectoryUpscale, settings.Components);
+            var isValid = Checkpoint.IsInstalled(settings.DirectoryUpscale, settings.Components)
+                && (Vae == null || Vae.IsInstalled(settings.DirectoryUpscale, settings.Components));
             if ((Status == ModelStatusType.Available || Status == ModelStatusType.Unknown) && isValid)
                 return ModelStatusType.Installed;
             else if (Status == ModelStatusType.Installed && !isValid)
@@ -201,6 +247,7 @@ namespace Amuse.App.Common
                 ScaleFactor = ScaleFactor,
                 ViewFilter = ViewFilter?.ToArray(),
                 Checkpoint = Checkpoint.DeepClone(),
+                Vae = Vae?.DeepClone(),
                 DefaultOptions = DefaultOptions.DeepClone(),
                 MemorySize = MemorySize,
                 AccessToken = AccessToken,

@@ -1,6 +1,7 @@
 ﻿
 using Amuse.App.Views;
 using Amuse.Common;
+using TensorStack.Common;
 using TensorStack.WPF;
 
 namespace Amuse.App.Common
@@ -17,7 +18,6 @@ namespace Amuse.App.Common
         private MemoryMode _memoryMode;
         private ProcessType _processType;
         private View _viewType;
-        private QualityMode _qualityMode;
         private ExecutionOptionsModel _executionOptions;
 
         public DeviceModel Device
@@ -29,13 +29,13 @@ namespace Amuse.App.Common
         public DiffusionModel DiffusionModel
         {
             get { return _diffusionModel; }
-            set { SetProperty(ref _diffusionModel, value); }
+            set { SetProperty(ref _diffusionModel, value); NotifyBackendChanged(); }
         }
 
         public LanguageModel LanguageModel
         {
             get { return _languageModel; }
-            set { SetProperty(ref _languageModel, value); }
+            set { SetProperty(ref _languageModel, value); NotifyBackendChanged(); }
         }
 
         public IGenerateModel GenerateModel
@@ -49,6 +49,14 @@ namespace Amuse.App.Common
             }
         }
 
+        public BackendType Backend => GenerateModel?.Backend ?? UpscaleModel?.Backend ?? ExtractModel?.Backend ?? default;
+
+        public PipelineType PipelineType => GenerateModel?.Pipeline ?? UpscaleModel?.Pipeline ?? ExtractModel?.Pipeline ?? default;
+
+        public bool IsUpscaleOnly => GenerateModel is null && UpscaleModel is not null;
+
+        public bool IsExtractOnly => GenerateModel is null && UpscaleModel is null && ExtractModel is not null;
+
         public ControlNetModel ControlNetModel
         {
             get { return _controlNetModel; }
@@ -58,7 +66,7 @@ namespace Amuse.App.Common
         public ExtractModel ExtractModel
         {
             get { return _extractModel; }
-            set { SetProperty(ref _extractModel, value); }
+            set { SetProperty(ref _extractModel, value); NotifyBackendChanged(); }
         }
 
         public LoraAdapterModel[] LoraAdapterModel
@@ -70,7 +78,7 @@ namespace Amuse.App.Common
         public UpscaleModel UpscaleModel
         {
             get { return _upscaleModel; }
-            set { SetProperty(ref _upscaleModel, value); }
+            set { SetProperty(ref _upscaleModel, value); NotifyBackendChanged(); }
         }
 
         public ProcessType ProcessType
@@ -91,16 +99,23 @@ namespace Amuse.App.Common
             set { SetProperty(ref _viewType, value); }
         }
 
-        public QualityMode QualityMode
-        {
-            get { return _qualityMode; }
-            set { SetProperty(ref _qualityMode, value); }
-        }
-
         public ExecutionOptionsModel ExecutionOptions
         {
             get { return _executionOptions; }
             set { SetProperty(ref _executionOptions, value); }
+        }
+
+
+        /// <summary>
+        /// Notifies the properties computed from the generate, upscale and extract models.
+        /// </summary>
+        private void NotifyBackendChanged()
+        {
+            NotifyPropertyChanged(nameof(GenerateModel));
+            NotifyPropertyChanged(nameof(Backend));
+            NotifyPropertyChanged(nameof(PipelineType));
+            NotifyPropertyChanged(nameof(IsUpscaleOnly));
+            NotifyPropertyChanged(nameof(IsExtractOnly));
         }
 
 
@@ -111,7 +126,6 @@ namespace Amuse.App.Common
                 || pipeline.DiffusionModel != _diffusionModel
                 || pipeline.LanguageModel != _languageModel
                 || pipeline.MemoryMode != _memoryMode
-                || pipeline.QualityMode != _qualityMode
                 || pipeline.ExecutionOptions != _executionOptions;
         }
 

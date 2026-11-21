@@ -168,4 +168,37 @@
   <data name="UnloadPipelineTitle" xml:space="preserve">
     <value>パイプラインをアンロード</value>
   </data>
+  <data name="ExtractedImageNotFound" xml:space="preserve">
+    <value>抽出画像の結果が見つかりません。</value>
+  </data>
+  <data name="ExtractModelNotLoaded" xml:space="preserve">
+    <value>抽出モデルが読み込まれていません。</value>
+  </data>
+  <data name="ExtractBackendNotSupported" xml:space="preserve">
+    <value>{0} バックエンドは抽出に対応していません。</value>
+  </data>
+  <data name="UpscaledImageNotFound" xml:space="preserve">
+    <value>アップスケールされた画像結果が見つかりません。</value>
+  </data>
+  <data name="UpscaledVideoNotFound" xml:space="preserve">
+    <value>アップスケールされた動画結果が見つかりません。</value>
+  </data>
+  <data name="UpscaleModelNotLoaded" xml:space="preserve">
+    <value>アップスケールモデルが読み込まれていません。</value>
+  </data>
+  <data name="UpscaleVideoOnly" xml:space="preserve">
+    <value>{0} は動画のみアップスケールできます。</value>
+  </data>
+  <data name="UpscaleBackendNotSupported" xml:space="preserve">
+    <value>{0} バックエンドはアップスケールに対応していません。</value>
+  </data>
+  <data name="UpscaleFailedTitle" xml:space="preserve">
+    <value>アップスケール失敗</value>
+  </data>
+  <data name="UpscaleFailedResultKept" xml:space="preserve">
+    <value>アップスケールに失敗しました。結果はアップスケールせずに保存されました。</value>
+  </data>
+  <data name="UpscaleCheckpointFormat" xml:space="preserve">
+    <value>{1} バックエンドのチェックポイントは {0} ファイルである必要があります</value>
+  </data>
 </root>

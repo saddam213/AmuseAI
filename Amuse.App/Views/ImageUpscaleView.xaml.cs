@@ -197,6 +197,7 @@ namespace Amuse.App.Views
             catch (OperationCanceledException)
             {
                 Statistics.Clear();
+                IsPipelineLoaded = UpscaleService.IsLoaded;
                 Logger.LogInformation("[ImageUpscale] [Execute] Executing pipeline cancelled, Elapsed: {Elapsed:c}", Stopwatch.GetElapsedTime(timestamp));
             }
             catch (Exception ex)
@@ -277,6 +278,7 @@ namespace Amuse.App.Views
             catch (OperationCanceledException)
             {
                 Statistics.Clear();
+                IsPipelineLoaded = UpscaleService.IsLoaded;
                 Logger.LogInformation("[ImageUpscale] [ExecuteAutomation] Executing pipeline cancelled, Elapsed: {Elapsed:c}", Stopwatch.GetElapsedTime(timestamp));
             }
             catch (Exception ex)

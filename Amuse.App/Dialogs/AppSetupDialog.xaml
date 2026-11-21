@@ -1,0 +1,178 @@
+<CommonControls:DialogControl x:Class="Amuse.App.Dialogs.AppSetupDialog"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:Amuse.App.Dialogs"
+        xmlns:Common="clr-namespace:Amuse.App.Common"
+        xmlns:CommonControls="clr-namespace:TensorStack.WPF.Controls;assembly=TensorStack.WPF"
+        mc:Ignorable="d"
+        MinWidth="1000"
+        MaxWidth="1000"
+        Title="{CommonControls:Localize Title_AmuseSetup}"
+        Icon="/Images/Icon.ico"
+        Style="{StaticResource {x:Type CommonControls:DialogControl}}">
+    <CommonControls:DialogControl.Resources>
+
+        <!--Status Panel-->
+        <Style x:Key="SetupStatusPanel" TargetType="{x:Type StackPanel}">
+            <Setter Property="Orientation" Value="Horizontal"/>
+            <Setter Property="VerticalAlignment" Value="Center"/>
+        </Style>
+
+        <!--Later / Cancel / Close Button-->
+        <Style x:Key="SetupLaterButton" TargetType="{x:Type Button}" BasedOn="{StaticResource {x:Type Button}}">
+            <Setter Property="Content" Value="{CommonControls:Localize Later}"/>
+            <Style.Triggers>
+                <DataTrigger Binding="{Binding IsExecuting}" Value="True">
+                    <Setter Property="Content" Value="{CommonControls:Localize Cancel}"/>
+                </DataTrigger>
+                <DataTrigger Binding="{Binding IsComplete}" Value="True">
+                    <Setter Property="Content" Value="{CommonControls:Localize Close}"/>
+                </DataTrigger>
+            </Style.Triggers>
+        </Style>
+
+    </CommonControls:DialogControl.Resources>
+    <DockPanel DataContext="{Binding RelativeSource={RelativeSource AncestorType={x:Type local:AppSetupDialog}}}" Margin="15, 15, 15, 10">
+
+        <!--Header-->
+        <DockPanel DockPanel.Dock="Top" Margin="0,0,0,10">
+            <CommonControls:FontAwesome DockPanel.Dock="Left" Size="50" Margin="0,5,0,0" Icon="f0ed" IconStyle="Light" Color="{StaticResource InfoColour}" VerticalAlignment="Top" />
+            <StackPanel Margin="20,2,0,0">
+                <TextBlock Text="{CommonControls:Localize EnvironmentSetupMessage}" FontSize="16" />
+                <TextBlock Text="{CommonControls:Localize EnvironmentSetupSubMessage}" Margin="0,3,0,0" TextWrapping="Wrap" FontStyle="Italic" FontSize="11" Opacity=".8" Visibility="{Binding IsManage, Converter={StaticResource InverseBooleanToVisibilityConverter}}" />
+                <TextBlock Text="{CommonControls:Localize EnvironmentManageSubMessage}" Margin="0,3,0,0" TextWrapping="Wrap" FontStyle="Italic" FontSize="11" Opacity=".8" Visibility="{Binding IsManage, Converter={StaticResource BooleanToVisibilityConverter}}" />
+            </StackPanel>
+        </DockPanel>
+
+        <!--Install / Later-->
+        <DockPanel DockPanel.Dock="Bottom" Height="30" Margin="0,15,0,0">
+            <UniformGrid DockPanel.Dock="Right" Columns="2" HorizontalAlignment="Right">
+                <Grid>
+                    <Button Command="{Binding InstallCommand}" Width="100" IsDefault="True" Visibility="{Binding IsComplete, Converter={StaticResource InverseBooleanToVisibilityConverter}}">
+                        <Button.Style>
+                            <Style TargetType="{x:Type Button}" BasedOn="{StaticResource {x:Type Button}}">
+                                <Setter Property="Content" Value="{CommonControls:Localize Install}"/>
+                                <Style.Triggers>
+                                    <DataTrigger Binding="{Binding IsManage}" Value="True">
+                                        <Setter Property="Content" Value="{CommonControls:Localize Apply}"/>
+                                    </DataTrigger>
+                                </Style.Triggers>
+                            </Style>
+                        </Button.Style>
+                    </Button>
+                </Grid>
+                <Button Command="{Binding LaterCommand}" Width="100" Style="{StaticResource SetupLaterButton}"/>
+            </UniformGrid>
+            <Grid IsEnabled="{Binding IsExecuting, Converter={StaticResource InverseBoolConverter}}">
+                <Grid IsEnabled="{Binding IsComplete, Converter={StaticResource InverseBoolConverter}}">
+                    <CheckBox Content="{CommonControls:Localize DontAskAgain}" IsChecked="{Binding IsDontAskAgain}" VerticalAlignment="Center" Visibility="{Binding HasMissingEnvironments, Converter={StaticResource BooleanToVisibilityConverter}}" ToolTip="{CommonControls:Localize ToolTip_EnvironmentSetupDontAskAgain}" ToolTipService.InitialShowDelay="200"/>
+                </Grid>
+            </Grid>
+        </DockPanel>
+
+        <!--Progress-->
+        <StackPanel DockPanel.Dock="Bottom" Margin="0,10,0,0">
+            <CommonControls:ProgressElement Progress="{Binding Progress}" Height="20" FontSize="10" />
+            <DockPanel Margin="0,2,0,0" TextBlock.FontSize="11" Opacity=".8" >
+                <StackPanel DockPanel.Dock="Left" Orientation="Horizontal" Visibility="{Binding DownloadSize, Converter={StaticResource NullOrEmptyVisibilityConverter}}" Width="200">
+                    <TextBlock Text="{Binding DownloadRemaining, StringFormat={}{0}}" Visibility="{Binding DownloadRemaining, Converter={StaticResource NullOrEmptyVisibilityConverter}}"/>
+                </StackPanel>
+                <Grid DockPanel.Dock="Right" Visibility="{Binding DownloadSize, Converter={StaticResource NullOrEmptyVisibilityConverter}}" Width="200">
+                    <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
+                        <TextBlock Text="{Binding DownloadSpeed, StringFormat={}{0}}" Visibility="{Binding DownloadSpeed, Converter={StaticResource NullOrEmptyVisibilityConverter}}"/>
+                        <TextBlock Text="  |  " />
+                        <TextBlock Text="{Binding DownloadSize}"/>
+                    </StackPanel>
+                </Grid>
+                <StackPanel>
+                    <TextBlock Text="{CommonControls:Localize EnvironmentSetupWaitMessage}" TextWrapping="Wrap" FontStyle="Italic" HorizontalAlignment="Center" Visibility="{Binding IsExecuting, Converter={StaticResource BooleanToVisibilityConverter}}"/>
+                    <TextBlock Text="{CommonControls:Localize EnvironmentSetupFailedMessage}" TextWrapping="Wrap" FontStyle="Italic" HorizontalAlignment="Center" Foreground="IndianRed" Opacity="1" Visibility="{Binding IsComplete, Converter={StaticResource BooleanToVisibilityConverter}}"/>
+                </StackPanel>
+            </DockPanel>
+        </StackPanel>
+
+        <!--Backends-->
+        <ItemsControl ItemsSource="{Binding Groups}">
+            <ItemsControl.ItemTemplate>
+                <DataTemplate DataType="{x:Type Common:EnvironmentSetupGroup}">
+                    <Border Background="{StaticResource ContainerBackground}" Margin="0,2" Padding="8,6">
+                        <DockPanel>
+
+                            <!--Backend-->
+                            <StackPanel DockPanel.Dock="Left" Width="180" Margin="0,2,10,0">
+                                <TextBlock Text="{Binding Backend, Converter={StaticResource EnumShortNameConverter}}" FontWeight="SemiBold" FontSize="13"/>
+                                <TextBlock Text="{Binding Description}" FontSize="11" Opacity=".7" TextWrapping="Wrap" Visibility="{Binding Description, Converter={StaticResource NullOrEmptyVisibilityConverter}}"/>
+                            </StackPanel>
+
+                            <!--Devices-->
+                            <ItemsControl ItemsSource="{Binding Items}">
+                                <ItemsControl.ItemTemplate>
+                                    <DataTemplate DataType="{x:Type Common:EnvironmentSetupItem}">
+                                        <DockPanel Margin="0,2">
+
+                                            <!--Status-->
+                                            <Grid DockPanel.Dock="Right" Width="90" Margin="10,0,0,0">
+                                                <StackPanel Style="{StaticResource SetupStatusPanel}" Visibility="{Binding Status, Converter={StaticResource EnumToVisibilityConverter}, ConverterParameter=Installing}">
+                                                    <CommonControls:FontAwesome Icon="f110" Size="12" Color="{StaticResource InfoColour}" IsSpinner="True" Margin="0,0,5,0"/>
+                                                    <TextBlock Text="{CommonControls:Localize Installing}" FontSize="11"/>
+                                                </StackPanel>
+                                                <StackPanel Style="{StaticResource SetupStatusPanel}" Visibility="{Binding Status, Converter={StaticResource EnumToVisibilityConverter}, ConverterParameter=Installed}">
+                                                    <CommonControls:FontAwesome Icon="f00c" Size="12" Color="{StaticResource SuccessColour}" Margin="0,0,5,0"/>
+                                                    <TextBlock Text="{CommonControls:Localize Installed}" FontSize="11"/>
+                                                </StackPanel>
+                                                <StackPanel Style="{StaticResource SetupStatusPanel}" Visibility="{Binding Status, Converter={StaticResource EnumToVisibilityConverter}, ConverterParameter=Failed}">
+                                                    <CommonControls:FontAwesome Icon="f00d" Size="12" Color="{StaticResource DangerColour}" Margin="0,0,5,0"/>
+                                                    <TextBlock Text="{CommonControls:Localize Failed}" FontSize="11"/>
+                                                </StackPanel>
+                                            </Grid>
+
+                                            <Grid IsEnabled="{Binding IsExecuting, RelativeSource={RelativeSource AncestorType={x:Type local:AppSetupDialog}}, Converter={StaticResource InverseBoolConverter}}">
+                                                <DockPanel IsEnabled="{Binding IsComplete, RelativeSource={RelativeSource AncestorType={x:Type local:AppSetupDialog}}, Converter={StaticResource InverseBoolConverter}}">
+                                                    <StackPanel DockPanel.Dock="Left"  Width="100" VerticalAlignment="Center">
+                                                        <DockPanel>
+                                                            <CheckBox DockPanel.Dock="Left" Style="{StaticResource SwitchBox}"   IsChecked="{Binding IsSelected}" />
+                                                            <TextBlock Text="{Binding Vendor}" FontSize="15" FontWeight="SemiBold" Margin="2,-1,0,0"/>
+                                                        </DockPanel>
+                                                        <StackPanel Margin="1,2,0,0">
+                                                            <TextBlock Text="{CommonControls:Localize EnvironmentUpdateRequired}" FontSize="11" Foreground="{StaticResource WarningColour}" Visibility="{Binding IsUpdateRequired, Converter={StaticResource BooleanToHiddenConverter}}"/>
+                                                        </StackPanel>
+                                                    </StackPanel>
+                                                    <ItemsControl ItemsSource="{Binding Options}" VerticalAlignment="Center" Margin="10,0,0,0" IsEnabled="{Binding IsSelected}">
+                                                        <ItemsControl.ItemsPanel>
+                                                            <ItemsPanelTemplate>
+                                                                <UniformGrid Columns="{Binding EnvironmentColumns, RelativeSource={RelativeSource AncestorType={x:Type local:AppSetupDialog}}}"/>
+                                                            </ItemsPanelTemplate>
+                                                        </ItemsControl.ItemsPanel>
+                                                        <ItemsControl.ItemTemplate>
+                                                            <DataTemplate DataType="{x:Type Common:EnvironmentSetupOption}">
+                                                                <RadioButton IsChecked="{Binding IsSelected}" VerticalAlignment="Top" VerticalContentAlignment="Top" Margin="0,2,10,2">
+                                                                    <StackPanel Margin="2,0,0,0">
+                                                                        <StackPanel Orientation="Horizontal">
+                                                                            <TextBlock Text="{Binding DisplayName}" FontWeight="SemiBold"/>
+                                                                            <TextBlock Text="{CommonControls:Localize Installed}" Margin="6,0,0,0" FontSize="10" VerticalAlignment="Center" Foreground="{StaticResource SuccessColour}" Visibility="{Binding IsInstalled, Converter={StaticResource BooleanToVisibilityConverter}}"/>
+                                                                            <Grid Visibility="{Binding IsInstalled, Converter={StaticResource InverseBooleanToVisibilityConverter}}">
+                                                                                <TextBlock Text="{Binding Environment.DownloadSizeText}" Margin="6,0,0,0" FontSize="10" VerticalAlignment="Center" Opacity=".6" Visibility="{Binding Environment.DownloadSizeText, Converter={StaticResource NullOrEmptyVisibilityConverter}}"/>
+                                                                            </Grid>
+                                                                        </StackPanel>
+                                                                        <TextBlock Text="{Binding Environment.Description}" Margin="0,1,0,0" FontSize="10" Opacity=".7" TextWrapping="Wrap" Visibility="{Binding Environment.Description, Converter={StaticResource NullOrEmptyVisibilityConverter}}"/>
+                                                                    </StackPanel>
+                                                                </RadioButton>
+                                                            </DataTemplate>
+                                                        </ItemsControl.ItemTemplate>
+                                                    </ItemsControl>
+                                                </DockPanel>
+                                            </Grid>
+                                        </DockPanel>
+                                    </DataTemplate>
+                                </ItemsControl.ItemTemplate>
+                            </ItemsControl>
+                        </DockPanel>
+                    </Border>
+                </DataTemplate>
+            </ItemsControl.ItemTemplate>
+        </ItemsControl>
+
+    </DockPanel>
+</CommonControls:DialogControl>

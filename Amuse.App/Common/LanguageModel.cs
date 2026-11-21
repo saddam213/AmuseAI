@@ -25,13 +25,15 @@ namespace Amuse.App.Common
         private ProcessType[] _processTypes;
         private View[] _viewFilter;
         private LanguageCheckpointModel _checkpoint;
-        private MemoryProfile[] _memoryProfile;
+        private float _memorySize;
         private GenerateDefaultOptions _defaultOptions;
         private string _accessToken;
         private bool _isDefault;
+        private bool _isNew;
+        private bool _isRecommended;
         private string _link;
         private ModelStatusType _status;
-        private QualityMode? _userQualityMode;
+        private MemoryMode? _userMemoryMode;
         private ExecutionOptionsModel _userExecutionOptions;
 
         [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingDefault)]
@@ -125,10 +127,10 @@ namespace Amuse.App.Common
             set { SetProperty(ref _checkpoint, value); }
         }
 
-        public MemoryProfile[] MemoryProfile
+        public float MemorySize
         {
-            get { return _memoryProfile; }
-            set { SetProperty(ref _memoryProfile, value); }
+            get { return _memorySize; }
+            set { SetProperty(ref _memorySize, value); }
         }
 
         public GenerateDefaultOptions DefaultOptions
@@ -157,6 +159,26 @@ namespace Amuse.App.Common
             set { SetProperty(ref _isDefault, value); }
         }
 
+        /// <summary>
+        /// Gets or sets a value indicating whether this model is new, shown on the Home view.
+        /// </summary>
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingDefault)]
+        public bool IsNew
+        {
+            get { return _isNew; }
+            set { SetProperty(ref _isNew, value); }
+        }
+
+        /// <summary>
+        /// Gets or sets a value indicating whether this model is recommended, shown on the Home view.
+        /// </summary>
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingDefault)]
+        public bool IsRecommended
+        {
+            get { return _isRecommended; }
+            set { SetProperty(ref _isRecommended, value); }
+        }
+
         [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingDefault)]
         public string Link
         {
@@ -165,10 +187,10 @@ namespace Amuse.App.Common
         }
 
         [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
-        public QualityMode? UserQualityMode
+        public MemoryMode? UserMemoryMode
         {
-            get { return _userQualityMode; }
-            set { SetProperty(ref _userQualityMode, value); }
+            get { return _userMemoryMode; }
+            set { SetProperty(ref _userMemoryMode, value); }
         }
 
         [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
@@ -244,7 +266,7 @@ namespace Amuse.App.Common
                 Vendor = Vendor?.ToArray(),
                 ViewFilter = ViewFilter?.ToArray(),
                 Checkpoint = Checkpoint.DeepClone(),
-                MemoryProfile = MemoryProfile.Copy(),
+                MemorySize = MemorySize,
                 ProcessTypes = ProcessTypes.ToArray(),
                 DefaultOptions = DefaultOptions.DeepClone()
             };

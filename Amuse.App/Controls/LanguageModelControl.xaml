@@ -119,33 +119,28 @@
                     </Button>
 
                     <!--MemoryMode-->
-                    <ComboBox SelectedItem="{Binding SelectedQualityMode}" 
-                        ItemsSource="{Binding QualityModes}"
+                    <ComboBox SelectedItem="{Binding SelectedMemoryMode}" 
+                        ItemsSource="{Binding MemoryModes}"
                         HorizontalContentAlignment="Stretch"
-                        ToolTip="{Binding SelectedQualityMode.DetectedMode, Converter={StaticResource EnumDescriptionConverter}}"
-                        ToolTipService.Placement="Right"
+                        SelectionChanged="Memory_SelectionChanged"
+                        ToolTip="{Binding SelectedMemoryMode.Description}"
+                        ToolTipService.Placement="Left"
                         ToolTipService.InitialShowDelay="600"
                         ToolTipService.VerticalOffset="-2"
-                        ToolTipService.HorizontalOffset="2"
+                        ToolTipService.HorizontalOffset="-2"
                         ToolTipService.HasDropShadow="True">
                         <ComboBox.ItemTemplate>
                             <DataTemplate>
                                 <DockPanel
                                     HorizontalAlignment="Stretch"
-                                    ToolTip="{Binding DetectedMode, Converter={StaticResource EnumDescriptionConverter}}"
-                                    ToolTipService.Placement="Right"
+                                    ToolTip="{Binding Description}"
+                                    ToolTipService.Placement="Left"
                                     ToolTipService.InitialShowDelay="300"
                                     ToolTipService.VerticalOffset="-5"
-                                    ToolTipService.HorizontalOffset="8"
+                                    ToolTipService.HorizontalOffset="-8"
                                     ToolTipService.HasDropShadow="True">
-                                    <Grid DockPanel.Dock="Right" Opacity=".7" Margin="0,1,0,0">
-                                        <StackPanel Orientation="Horizontal" Visibility="{Binding QualityMode, Converter={StaticResource InverseNullVisibilityConverter}}">
-                                            <TextBlock FontSize="10" Text="{Binding DetectedMode, Mode=OneWay, StringFormat={}{0}}" VerticalAlignment="Center" Margin="0,0,12,0" />
-                                            <TextBlock FontSize="10" Text="{Binding MemoryGB, Mode=OneWay, StringFormat={}{0}GB}"  VerticalAlignment="Center" />
-                                        </StackPanel>
-                                        <TextBlock Text="{Binding MemoryGB, StringFormat={}{0}GB}" FontSize="10"  Visibility="{Binding QualityMode, Converter={StaticResource NullVisibilityConverter}}"/>
-                                    </Grid>
-                                    <TextBlock Text="{Binding QualityMode, TargetNullValue=Auto, Converter={StaticResource EnumDisplayNameConverter}}" />
+                                    <TextBlock DockPanel.Dock="Right" Opacity=".7" FontSize="10" Text="{Binding DetectedMode, Mode=OneWay, StringFormat={}({0})}" Margin="0,1,0,0" Visibility="{Binding MemoryMode, Converter={StaticResource EnumToVisibilityConverter}, ConverterParameter=Auto}"/>
+                                    <TextBlock Text="{Binding MemoryMode, Converter={StaticResource EnumDisplayNameConverter}}" />
                                 </DockPanel>
                             </DataTemplate>
                         </ComboBox.ItemTemplate>

@@ -56,7 +56,6 @@ namespace Amuse.App.Common
         private float _temperature;
         private float _lengthPenalty;
         private EarlyStopping _earlyStopping;
-        private int _diversityLength;
         private float _topH;
         private float _typicalP;
         private float _repetitionPenalty;
@@ -384,13 +383,6 @@ namespace Amuse.App.Common
         {
             get { return _earlyStopping; }
             set { SetProperty(ref _earlyStopping, value); }
-        }
-
-        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingDefault)]
-        public int DiversityLength
-        {
-            get { return _diversityLength; }
-            set { SetProperty(ref _diversityLength, value); }
         }
 
         [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingDefault)]

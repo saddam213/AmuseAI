@@ -29,6 +29,7 @@
                                 <Grid IsEnabled="{Binding IsAutomating, Mode=OneWay, Converter={StaticResource InverseBoolConverter}}">
                                     <Controls:ModelControl
                                         x:Name="ModelControl"
+                                        ViewType="VideoUpscale"
                                         IsUpscalerEnabled="True"
                                         Settings="{Binding Settings, Mode=OneWay}" 
                                         IsPipelineLoaded="{Binding IsPipelineLoaded, Mode=OneWay}"

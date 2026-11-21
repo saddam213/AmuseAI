@@ -38,6 +38,30 @@ namespace Amuse.Common.Config
                 }
             },
             {
+                ServerType.OnnxRuntimeUpscale,  new ServerConfig
+                {
+                    Name = "OnnxRuntimeUpscale",
+                    Arguments = [nameof(ServerType.OnnxRuntimeUpscale)],
+                    Executable = "AmuseHost.OnnxRuntime.exe",
+                    ChannelCommand = "AmuseHost.OnnxRuntimeUpscale.Command",
+                    ChannelPipeName = "AmuseHost.OnnxRuntimeUpscale.PipeName",
+                    ChannelProgress = "AmuseHost.OnnxRuntimeUpscale.Progress",
+                    ChannelTensor = "AmuseHost.OnnxRuntimeUpscale.Tensor"
+                }
+            },
+            {
+                ServerType.OnnxRuntimeExtract,  new ServerConfig
+                {
+                    Name = "OnnxRuntimeExtract",
+                    Arguments = [nameof(ServerType.OnnxRuntimeExtract)],
+                    Executable = "AmuseHost.OnnxRuntime.exe",
+                    ChannelCommand = "AmuseHost.OnnxRuntimeExtract.Command",
+                    ChannelPipeName = "AmuseHost.OnnxRuntimeExtract.PipeName",
+                    ChannelProgress = "AmuseHost.OnnxRuntimeExtract.Progress",
+                    ChannelTensor = "AmuseHost.OnnxRuntimeExtract.Tensor"
+                }
+            },
+            {
                 ServerType.HuggingFace,  new ServerConfig
                 {
                     Name = "HuggingFace",
@@ -62,6 +86,18 @@ namespace Amuse.Common.Config
                 }
             },
             {
+                ServerType.StableDiffusionCppUpscale,  new ServerConfig
+                {
+                    Name = "StableDiffusionCppUpscale",
+                    Arguments = [nameof(ServerType.StableDiffusionCppUpscale)],
+                    Executable = "AmuseHost.StableDiffusionCpp.exe",
+                    ChannelCommand = "AmuseHost.StableDiffusionCppUpscale.Command",
+                    ChannelPipeName = "AmuseHost.StableDiffusionCppUpscale.PipeName",
+                    ChannelProgress = "AmuseHost.StableDiffusionCppUpscale.Progress",
+                    ChannelTensor = "AmuseHost.StableDiffusionCppUpscale.Tensor"
+                }
+            },
+            {
                 ServerType.AudioCpp,  new ServerConfig
                 {
                     Name = "AudioCpp",
@@ -71,6 +107,18 @@ namespace Amuse.Common.Config
                     ChannelPipeName = "AmuseHost.AudioCpp.PipeName",
                     ChannelProgress = "AmuseHost.AudioCpp.Progress",
                     ChannelTensor = "AmuseHost.AudioCpp.Tensor"
+                }
+            },
+            {
+                ServerType.LlamaCpp,  new ServerConfig
+                {
+                    Name = "LlamaCpp",
+                    Arguments = [nameof(ServerType.LlamaCpp)],
+                    Executable = "AmuseHost.LlamaCpp.exe",
+                    ChannelCommand = "AmuseHost.LlamaCpp.Command",
+                    ChannelPipeName = "AmuseHost.LlamaCpp.PipeName",
+                    ChannelProgress = "AmuseHost.LlamaCpp.Progress",
+                    ChannelTensor = "AmuseHost.LlamaCpp.Tensor"
                 }
             }
         };

@@ -10,7 +10,6 @@ using System.Threading;
 using System.Threading.Tasks;
 using TensorStack.Common;
 using TensorStack.Common.Tensor;
-using TensorStack.Media.Audio;
 using TensorStack.Media.Video;
 using TensorStack.WPF.Controls;
 using TensorStack.WPF.Services;
@@ -201,8 +200,8 @@ namespace Amuse.App.Views
                 Options = options,
                 Model = CurrentPipeline.DiffusionModel.Name,
                 LoraModels = CurrentPipeline.LoraAdapterModel?.Select(x => x.Name).ToArray(),
-                UpscaleModel = CurrentPipeline.UpscaleModel?.Name,
-                UpscaleOptions = CurrentPipeline.UpscaleModel is not null ? UpscaleOptions : null,
+                UpscaleModel = UpscaledModel?.Name,
+                UpscaleOptions = UpscaledModel is not null ? UpscaleOptions : null,
                 Source = View.MediaToVideo,
             });
             Logger.LogInformation("[MediaToVideo] [SaveHistory] History saved.");
@@ -242,57 +241,11 @@ namespace Amuse.App.Views
         private async Task<VideoSequence> GetReferenceFramesAsync(VideoInputStream videoReference, GenerateInputOptions options)
         {
             Progress.Clear();
-            var frames = new List<ImageTensor>();
-            await foreach (var sourceFrame in videoReference.GetAsync(options.Width, options.Height, options.FrameRate, TensorStack.Common.ResizeMode.Crop).Take(options.Frames))
-            {
-                Progress.Update(sourceFrame.Index, options.Frames, $"{AppDefault.ProcessingInputFrame}: {sourceFrame.Index}/{options.Frames}");
-                frames.Add(sourceFrame.Frame);
-            }
-
-            var duration = frames.Count / options.FrameRate;
-            var audio = await GetReferenceAudioAsync(videoReference, duration);
-            return new VideoSequence([.. frames], options.FrameRate, audio);
-        }
-
-
-        /// <summary>
-        /// Gets the reference video audio track, trimmed to the specified duration.
-        /// </summary>
-        /// <param name="videoReference">The video reference.</param>
-        /// <param name="duration">The duration in seconds.</param>
-        /// <returns>The audio, or null if the video has no audio track.</returns>
-        private async Task<AudioTensor> GetReferenceAudioAsync(VideoInputStream videoReference, float duration)
-        {
-            var audioInfo = await AudioManager.LoadInfoAsync(videoReference.SourceFile);
-            if (audioInfo is null)
-                return default;
-
             var defaultOptions = CurrentPipeline.DiffusionModel.DefaultOptions;
-            var sampleRate = defaultOptions.SampleRate > 0 ? defaultOptions.SampleRate : audioInfo.SampleRate;
-            var channels = defaultOptions.Channels > 0 ? defaultOptions.Channels : audioInfo.Channels;
-            var audio = await AudioManager.LoadTensorAsync(videoReference.SourceFile, sampleRate: sampleRate, channels: channels);
-            return TrimAudio(audio, duration);
-        }
-
-
-        /// <summary>
-        /// Trims the audio to the specified duration, from the start.
-        /// </summary>
-        /// <param name="audio">The audio.</param>
-        /// <param name="duration">The duration in seconds.</param>
-        /// <returns>The trimmed audio, or null if no samples remain.</returns>
-        private static AudioTensor TrimAudio(AudioTensor audio, float duration)
-        {
-            var samples = Math.Min(audio.Samples, (int)Math.Round(duration * audio.SampleRate));
-            if (samples <= 0)
-                return default;
-
-            if (samples == audio.Samples)
-                return audio;
-
-            // Audio data is interleaved, keep the first frames across all channels
-            var trimmed = audio.Memory[..(samples * audio.Channels)].ToArray();
-            return new Tensor<float>(trimmed, [audio.Channels, samples]).AsAudioTensor(audio.SampleRate);
+            var sampleRate = defaultOptions.SampleRate > 0 ? defaultOptions.SampleRate : default(int?);
+            var channels = defaultOptions.Channels > 0 ? defaultOptions.Channels : default(int?);
+            var progress = new Progress<int>(frame => Progress.Update(frame, options.Frames, $"{AppDefault.ProcessingInputFrame}: {frame}/{options.Frames}"));
+            return await videoReference.GetSequenceAsync(options.Width, options.Height, options.FrameRate, TensorStack.Common.ResizeMode.Crop, options.Frames, true, sampleRate, channels, progress);
         }
     }
 }

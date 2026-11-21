@@ -20,7 +20,7 @@ namespace Amuse.Host.HuggingFace
         public HostServer(ServerConfig config, ILogger logger)
             : base(config, logger)
         {
-            _progressCallback = new Progress<IRunProgress>(async (p) => await UpdateProgress(p));
+            _progressCallback = new SyncProgress<IRunProgress>(UpdateProgress);
         }
 
 
@@ -172,11 +172,11 @@ namespace Amuse.Host.HuggingFace
         }
 
 
-        private async Task UpdateProgress(IRunProgress progress)
+        private void UpdateProgress(IRunProgress progress)
         {
-            if (progress is TensorStack.HuggingFace.Common.PipelineProgress pipelineProgress)
+            if (progress is TensorStack.Common.Pipeline.PipelineProgress pipelineProgress)
             {
-                await QueueProgress(pipelineProgress.ToProgress());
+                EnqueueProgress(pipelineProgress.ToProgress());
             }
         }
 

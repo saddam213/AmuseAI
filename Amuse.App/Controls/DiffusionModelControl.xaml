@@ -185,7 +185,7 @@
                         <CommonControls:ContentComboBox
                             SelectedItem="{Binding SelectedUpscaler}" 
                             ItemsSource="{Binding UpscaleCollectionView}" 
-                            ItemTemplate="{StaticResource ComboBoxDataTemplateModel}"
+                            ItemTemplate="{StaticResource ComboBoxDataUpscaleTemplateModel}"
                             HorizontalContentAlignment="Stretch">
                             <CommonControls:ContentComboBox.BottomContent>
                                 <DockPanel>
@@ -210,74 +210,33 @@
                         <CommonControls:FontAwesome Icon="f013" Size="11" Opacity=".8" />
                     </Button>
 
-                    <UniformGrid Columns="2">
-
                         <!--MemoryMode-->
                         <ComboBox SelectedItem="{Binding SelectedMemoryMode}" 
                             ItemsSource="{Binding MemoryModes}"
                             HorizontalContentAlignment="Stretch"
                             SelectionChanged="Memory_SelectionChanged"
-                            ToolTip="{Binding SelectedMemoryMode.MemoryMode, Converter={StaticResource EnumDescriptionConverter}}"
-                            ToolTipService.Placement="Right"
+                            ToolTip="{Binding SelectedMemoryMode.Description}"
+                            ToolTipService.Placement="Left"
                             ToolTipService.InitialShowDelay="600"
                             ToolTipService.VerticalOffset="-2"
-                            ToolTipService.HorizontalOffset="2"
+                            ToolTipService.HorizontalOffset="-2"
                             ToolTipService.HasDropShadow="True">
                             <ComboBox.ItemTemplate>
                                 <DataTemplate>
                                     <DockPanel
                                         HorizontalAlignment="Stretch"
-                                        ToolTip="{Binding MemoryMode, Converter={StaticResource EnumDescriptionConverter}}"
-                                        ToolTipService.Placement="Right"
+                                        ToolTip="{Binding Description}"
+                                        ToolTipService.Placement="Left"
                                         ToolTipService.InitialShowDelay="300"
                                         ToolTipService.VerticalOffset="-5"
-                                        ToolTipService.HorizontalOffset="8"
+                                        ToolTipService.HorizontalOffset="-8"
                                         ToolTipService.HasDropShadow="True">
-                                        <Grid DockPanel.Dock="Right" Opacity=".7">
-                                            <StackPanel Orientation="Horizontal" Visibility="{Binding MemoryMode, Converter={StaticResource EnumToVisibilityConverter}, ConverterParameter=Auto}">
-                                                <TextBlock FontSize="10" Text="{Binding MemoryGB, Mode=OneWay, StringFormat={}{0}GB}" Margin="0,1,2,0"/>
-                                                <TextBlock FontSize="8" Text="{Binding DetectedMode, Mode=OneWay, StringFormat={}({0})}" Margin="0,-1,0,0" VerticalAlignment="Center"/>
-                                            </StackPanel>
-                                            <TextBlock Text="{Binding MemoryGB, StringFormat={}{0}GB}" FontSize="10" Margin="0,1,0,0" Visibility="{Binding MemoryMode, Converter={StaticResource EnumToVisibilityConverter}, ConverterParameter=Low|Medium|High}"/>
-                                        </Grid>
+                                        <TextBlock DockPanel.Dock="Right" Opacity=".7" FontSize="10" Text="{Binding DetectedMode, Mode=OneWay, StringFormat={}({0})}" Margin="0,1,0,0" Visibility="{Binding MemoryMode, Converter={StaticResource EnumToVisibilityConverter}, ConverterParameter=Auto}"/>
                                         <TextBlock Text="{Binding MemoryMode, Converter={StaticResource EnumDisplayNameConverter}}" />
                                     </DockPanel>
                                 </DataTemplate>
                             </ComboBox.ItemTemplate>
                         </ComboBox>
-
-                        <!--QualityMode-->
-                        <ComboBox SelectedItem="{Binding SelectedQualityMode}" 
-                            ItemsSource="{Binding SelectedDevice.QualityModes, TargetNullValue={x:Null}}" 
-                            SelectionChanged="Memory_SelectionChanged" 
-                            HorizontalContentAlignment="Stretch"
-                            ToolTip="{Binding SelectedQualityMode, Converter={StaticResource EnumDescriptionConverter}}"
-                            ToolTipService.Placement="Right"
-                            ToolTipService.InitialShowDelay="600"
-                            ToolTipService.VerticalOffset="-2"
-                            ToolTipService.HorizontalOffset="2"
-                            ToolTipService.HasDropShadow="True">
-                            <ComboBox.ItemTemplate>
-                                <DataTemplate>
-                                    <DockPanel
-                                        HorizontalAlignment="Stretch"
-                                        ToolTip="{Binding Converter={StaticResource EnumDescriptionConverter}}"
-                                        ToolTipService.Placement="Right"
-                                        ToolTipService.InitialShowDelay="300"
-                                        ToolTipService.VerticalOffset="-5"
-                                        ToolTipService.HorizontalOffset="8"
-                                        ToolTipService.HasDropShadow="True">
-                                        <Grid DockPanel.Dock="Right">
-                                            <TextBlock Text="4Bit" FontSize="10" Opacity=".7" Margin="0,1,0,0" Visibility="{Binding Converter={StaticResource EnumToVisibilityConverter}, ConverterParameter=Draft}"/>
-                                            <TextBlock Text="8Bit" FontSize="10" Opacity=".7" Margin="0,1,0,0" Visibility="{Binding Converter={StaticResource EnumToVisibilityConverter}, ConverterParameter=Standard}"/>
-                                            <TextBlock Text="16Bit" FontSize="10" Opacity=".7" Margin="0,1,0,0" Visibility="{Binding Converter={StaticResource EnumToVisibilityConverter}, ConverterParameter=Production}"/>
-                                        </Grid>
-                                        <TextBlock Text="{Binding Converter={StaticResource EnumDisplayNameConverter}}" />
-                                    </DockPanel>
-                                </DataTemplate>
-                            </ComboBox.ItemTemplate>
-                        </ComboBox>
-                    </UniformGrid>
                 </DockPanel>
             </StackPanel>
         </DockPanel>

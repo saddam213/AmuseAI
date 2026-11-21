@@ -1,10 +1,12 @@
-﻿using System;
+﻿using Amuse.App.Resources;
+using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Net.Http;
 using System.Text.Json;
 using System.Threading;
 using System.Threading.Tasks;
+using TensorStack.WPF.Controls;
 using TensorStack.WPF.Services;
 
 namespace Amuse.App.Tools
@@ -20,6 +22,11 @@ namespace Amuse.App.Tools
         /// Gets the tool icon.
         /// </summary>
         public abstract string DisplayIcon { get; }
+
+        /// <summary>
+        ///  Gets the tool icon style.
+        /// </summary>
+        public abstract FontAwesomeIconStyle DisplayIconStyle { get; }
 
         /// <summary>
         /// Gets the tool description.
@@ -117,6 +124,44 @@ namespace Amuse.App.Tools
 
 
         /// <summary>
+        /// Gets the url content as a string, retrying transient connection and server errors.
+        /// </summary>
+        /// <param name="url">The URL.</param>
+        /// <param name="cancellationToken">The cancellation token.</param>
+        protected async Task<string> GetStringAsync(string url, CancellationToken cancellationToken = default)
+        {
+            const int maxAttempts = 3;
+            for (int attempt = 1; ; attempt++)
+            {
+                try
+                {
+                    return await HttpClient.GetStringAsync(url, cancellationToken);
+                }
+                catch (HttpRequestException ex) when (attempt < maxAttempts && IsTransient(ex))
+                {
+                    Debug.WriteLine($"[{Name}] Request failed (attempt {attempt}), retrying: {ex.GetBaseException().Message}");
+                    await Task.Delay(500 * attempt, cancellationToken);
+                }
+            }
+        }
+
+
+        /// <summary>
+        /// Determines whether the request failure is transient.
+        /// </summary>
+        /// <param name="exception">The exception.</param>
+        private static bool IsTransient(HttpRequestException exception)
+        {
+            // No status code means the connection failed (reset, TLS handshake, DNS)
+            if (exception.StatusCode == null)
+                return true;
+
+            var statusCode = (int)exception.StatusCode.Value;
+            return statusCode == 408 || statusCode == 429 || statusCode >= 500;
+        }
+
+
+        /// <summary>
         /// Checks the extenal access.
         /// </summary>
         /// <param name="settings">The settings.</param>
@@ -125,7 +170,7 @@ namespace Amuse.App.Tools
         {
             if (!settings.IsExternalToolsAcknowledged)
             {
-                var dialogResult = await DialogService.ShowMessageAsync("External Access", $"{DisplayName} will access external data or services.\nData from this request may be sent to retrieve or process the requested information.\n\nDo you want to continue?", TensorStack.WPF.Dialogs.MessageDialogType.YesNo, TensorStack.WPF.Dialogs.MessageBoxIconType.Warning, TensorStack.WPF.Dialogs.MessageBoxStyleType.Warning, true);
+                var dialogResult = await DialogService.ShowMessageAsync(AppDefault.ToolExternalAccessTitle, string.Format(AppDefault.ToolExternalAccessMessage, DisplayName), TensorStack.WPF.Dialogs.MessageDialogType.YesNo, TensorStack.WPF.Dialogs.MessageBoxIconType.Warning, TensorStack.WPF.Dialogs.MessageBoxStyleType.Warning, true);
                 settings.IsExternalToolsEnabled = dialogResult;
                 settings.IsExternalToolsAcknowledged = dialogResult.DontAskAgain;
                 await settings.SaveAsync();
@@ -133,6 +178,27 @@ namespace Amuse.App.Tools
 
             if (!settings.IsExternalToolsEnabled)
                 throw new Exception("ToolCall external access denied.");
+        }
+
+
+        /// <summary>
+        /// Checks the dangerous access, e.g. running programs or scripts.
+        /// </summary>
+        /// <param name="settings">The settings.</param>
+        /// <param name="action">The action description shown to the user.</param>
+        /// <exception cref="System.Exception">ToolCall dangerous access denied.</exception>
+        protected async Task CheckDangerousAccess(Settings settings, string action)
+        {
+            if (!settings.IsDangerousToolsAcknowledged)
+            {
+                var dialogResult = await DialogService.ShowMessageAsync(AppDefault.ToolDangerousAccessTitle, string.Format(AppDefault.ToolDangerousAccessMessage, DisplayName, action), TensorStack.WPF.Dialogs.MessageDialogType.YesNo, TensorStack.WPF.Dialogs.MessageBoxIconType.Warning, TensorStack.WPF.Dialogs.MessageBoxStyleType.Warning, true);
+                settings.IsDangerousToolsEnabled = dialogResult;
+                settings.IsDangerousToolsAcknowledged = dialogResult.DontAskAgain;
+                await settings.SaveAsync();
+            }
+
+            if (!settings.IsDangerousToolsEnabled)
+                throw new Exception("ToolCall dangerous access denied by the user.");
         }
     }
 }

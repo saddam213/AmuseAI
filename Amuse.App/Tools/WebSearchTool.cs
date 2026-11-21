@@ -1,8 +1,8 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
+using TensorStack.WPF.Controls;
 using WebLookup;
 
 namespace Amuse.App.Tools
@@ -35,9 +35,14 @@ namespace Amuse.App.Tools
         public override string DisplayIcon => "e8a6";
 
         /// <summary>
+        ///  Gets the tool icon style.
+        /// </summary>
+        public override FontAwesomeIconStyle DisplayIconStyle { get; } = FontAwesomeIconStyle.SharpLight;
+
+        /// <summary>
         /// Gets the is display order.
         /// </summary>
-        public override int DisplayOrder => 10;
+        public override int DisplayOrder => 30;
 
         /// <summary>
         /// Gets the tool schema.
@@ -47,7 +52,7 @@ namespace Amuse.App.Tools
             "type": "function",
             "function": {
                 "name": "{{Name}}",
-                "description": "{{Description}} Use this tool when an answer requires current, or externally verifiable information, or when you need to find a specific website or page. Do not use it when existing knowledge is sufficient.",
+                "description": "{{Description}} Use this tool when an answer requires current, or externally verifiable information, or when you need to find a specific website or page. Results contain short snippets; use the web_page tool with a result url to read the full page. Do not use it when existing knowledge is sufficient.",
                 "parameters": {
                     "type": "object",
                     "properties": {
@@ -94,28 +99,34 @@ namespace Amuse.App.Tools
 
 
         /// <summary>
-        /// Gets the providers.
+        /// Gets the search provider, using the first configured provider by priority.
         /// </summary>
         /// <param name="settings">The settings.</param>
-        private ISearchProvider[] GetProviders(Settings settings)
+        private static ISearchProvider[] GetProviders(Settings settings)
         {
-            var providers = new List<ISearchProvider>();
-            foreach (var accessToken in settings.AccessTokens.Where(x => !string.IsNullOrEmpty(x.Token)))
-            {
-                if (accessToken.Name.Equals("Tavily", StringComparison.OrdinalIgnoreCase))
-                    providers.Add(new TavilySearchProvider(new TavilySearchOptions { ApiKey = accessToken.Token }));
-                else if (accessToken.Name.Equals("Mojeek", StringComparison.OrdinalIgnoreCase))
-                    providers.Add(new MojeekSearchProvider(new MojeekSearchOptions { ApiKey = accessToken.Token }));
-                else if (accessToken.Name.Equals("SearchApi", StringComparison.OrdinalIgnoreCase))
-                    providers.Add(new SearchApiProvider(new SearchApiOptions { ApiKey = accessToken.Token }));
-            }
+            // Tavily
+            var tavilyToken = GetToken(settings, "Tavily");
+            if (!string.IsNullOrEmpty(tavilyToken))
+                return [new TavilySearchProvider(new TavilySearchOptions { ApiKey = tavilyToken })];
 
-            if (providers.Count == 0)
-            {
-                // Fallback to DuckDuckGo (no API key required, but results are poor)
-                providers.Add(new DuckDuckGoSearchProvider(new DuckDuckGoSearchOptions()));
-            }
-            return [.. providers];
+            // SearchApi
+            var searchApiToken = GetToken(settings, "SearchApi");
+            if (!string.IsNullOrEmpty(searchApiToken))
+                return [new SearchApiProvider(new SearchApiOptions { ApiKey = searchApiToken })];
+
+            // Fallback to DuckDuckGo (no API key required, but results are poor)
+            return [new DuckDuckGoSearchProvider(new DuckDuckGoSearchOptions())];
+        }
+
+
+        /// <summary>
+        /// Gets the access token value.
+        /// </summary>
+        /// <param name="settings">The settings.</param>
+        /// <param name="name">The token name.</param>
+        private static string GetToken(Settings settings, string name)
+        {
+            return settings.AccessTokens?.FirstOrDefault(x => x.Name.Equals(name, StringComparison.OrdinalIgnoreCase) && !string.IsNullOrEmpty(x.Token))?.Token;
         }
     }
 }

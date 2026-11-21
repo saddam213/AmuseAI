@@ -168,4 +168,37 @@
   <data name="UnloadPipelineTitle" xml:space="preserve">
     <value>Unload Pipeline</value>
   </data>
+  <data name="ExtractedImageNotFound" xml:space="preserve">
+    <value>Extracted image result not found.</value>
+  </data>
+  <data name="ExtractModelNotLoaded" xml:space="preserve">
+    <value>No extract model is loaded.</value>
+  </data>
+  <data name="ExtractBackendNotSupported" xml:space="preserve">
+    <value>Extraction is not supported by the {0} backend.</value>
+  </data>
+  <data name="UpscaledImageNotFound" xml:space="preserve">
+    <value>Upscaled image result not found.</value>
+  </data>
+  <data name="UpscaledVideoNotFound" xml:space="preserve">
+    <value>Upscaled video result not found.</value>
+  </data>
+  <data name="UpscaleModelNotLoaded" xml:space="preserve">
+    <value>No upscale model is loaded.</value>
+  </data>
+  <data name="UpscaleVideoOnly" xml:space="preserve">
+    <value>{0} can only upscale videos.</value>
+  </data>
+  <data name="UpscaleBackendNotSupported" xml:space="preserve">
+    <value>Upscaling is not supported by the {0} backend.</value>
+  </data>
+  <data name="UpscaleFailedTitle" xml:space="preserve">
+    <value>Upscale Failed</value>
+  </data>
+  <data name="UpscaleFailedResultKept" xml:space="preserve">
+    <value>Upscaling failed, the result was kept without upscaling.</value>
+  </data>
+  <data name="UpscaleCheckpointFormat" xml:space="preserve">
+    <value>The checkpoint must be a {0} file for the {1} backend</value>
+  </data>
 </root>

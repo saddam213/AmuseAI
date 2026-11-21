@@ -276,4 +276,106 @@
   <data name="ToolTip_ModelFilterInstalled" xml:space="preserve">
     <value>Showing installed models only, click to show all models</value>
   </data>
+  <data name="ToolTip_EnvironmentFilterAll" xml:space="preserve">
+    <value>Showing all environments, click to show environments for your devices only</value>
+  </data>
+  <data name="ToolTip_EnvironmentFilterDevices" xml:space="preserve">
+    <value>Showing environments for your devices only, click to show all environments</value>
+  </data>
+  <data name="ToolTip_GpuLayers" xml:space="preserve">
+    <value>Number of model layers placed on the GPU, -1 for all layers. Lower values move the remaining layers to system memory.</value>
+  </data>
+  <data name="ToolTip_Threads" xml:space="preserve">
+    <value>CPU threads used for layers in system memory, 0 for the default.</value>
+  </data>
+  <data name="ToolTip_ContextSize" xml:space="preserve">
+    <value>Tokens reserved for the conversation and the reply, larger values use more memory.</value>
+  </data>
+  <data name="ToolTip_CacheOffload" xml:space="preserve">
+    <value>Keep the conversation (key/value) cache in GPU memory</value>
+  </data>
+  <data name="ToolTip_Home" xml:space="preserve">
+    <value>Home</value>
+  </data>
+  <data name="ToolTip_BackendReady" xml:space="preserve">
+    <value>The backend environment is installed and ready to use.</value>
+  </data>
+  <data name="ToolTip_BackendNotInstalled" xml:space="preserve">
+    <value>Supported on this device but not installed yet, install it from Manage Environments or the first time you load a model that uses it.</value>
+  </data>
+  <data name="ToolTip_BackendUnsupported" xml:space="preserve">
+    <value>This backend is not available for this device.</value>
+  </data>
+  <data name="ToolTip_MemoryMode_HuggingFace_High" xml:space="preserve">
+    <value>Loads the whole model to the GPU. Fastest, needs the most VRAM.</value>
+  </data>
+  <data name="ToolTip_MemoryMode_HuggingFace_Medium" xml:space="preserve">
+    <value>Model CPU offload: keeps each sub-model in CPU memory and moves it to the GPU while it runs.</value>
+  </data>
+  <data name="ToolTip_MemoryMode_HuggingFace_Low" xml:space="preserve">
+    <value>Sequential CPU offload: moves individual layers to the GPU only while they run. Lowest VRAM, much slower.</value>
+  </data>
+  <data name="ToolTip_MemoryMode_HuggingFace_Balanced" xml:space="preserve">
+    <value>Spreads the model weights across the available GPUs and CPU memory.</value>
+  </data>
+  <data name="ToolTip_MemoryMode_StableDiffusionCpp_High" xml:space="preserve">
+    <value>Keeps all weights on the GPU.</value>
+  </data>
+  <data name="ToolTip_MemoryMode_StableDiffusionCpp_Medium" xml:space="preserve">
+    <value>Offloads the weights to CPU memory and moves them to the GPU when needed.</value>
+  </data>
+  <data name="ToolTip_MemoryMode_StableDiffusionCpp_Low" xml:space="preserve">
+    <value>Offloads the diffusion weights to CPU memory and the VAE, text encoders and other parts to disk, loading them when needed.</value>
+  </data>
+  <data name="ToolTip_MemoryMode_StableDiffusionCpp_Balanced" xml:space="preserve">
+    <value>Auto-fit: places the weights automatically to fit the available VRAM.</value>
+  </data>
+  <data name="ToolTip_MemoryMode_AudioCpp_High" xml:space="preserve">
+    <value>Keeps the whole model loaded on the GPU.</value>
+  </data>
+  <data name="ToolTip_MemoryMode_AudioCpp_Medium" xml:space="preserve">
+    <value>Enables the memory saver to reduce VRAM use.</value>
+  </data>
+  <data name="ToolTip_MemoryMode_AudioCpp_Low" xml:space="preserve">
+    <value>Enables the memory saver to reduce VRAM use.</value>
+  </data>
+  <data name="ToolTip_MemoryMode_AudioCpp_Balanced" xml:space="preserve">
+    <value>Enables the memory saver to reduce VRAM use.</value>
+  </data>
+  <data name="ToolTip_MemoryMode_LlamaCpp_High" xml:space="preserve">
+    <value>Runs all layers on the GPU and keeps the KV cache on the GPU.</value>
+  </data>
+  <data name="ToolTip_MemoryMode_LlamaCpp_Medium" xml:space="preserve">
+    <value>Runs all layers on the GPU and keeps the KV cache in CPU memory. Saves VRAM on long contexts.</value>
+  </data>
+  <data name="ToolTip_MemoryMode_LlamaCpp_Low" xml:space="preserve">
+    <value>Runs all layers on the CPU and keeps the KV cache in CPU memory. Slowest.</value>
+  </data>
+  <data name="ToolTip_MemoryMode_LlamaCpp_Balanced" xml:space="preserve">
+    <value>Uses the GPU Layers and Cache Offload values from the execution options.</value>
+  </data>
+  <data name="ToolTip_MemoryMode_OnnxRuntime" xml:space="preserve">
+    <value>OnnxRuntime manages its own memory, this setting has no effect.</value>
+  </data>
+  <data name="ToolTip_WeightType" xml:space="preserve">
+    <value>Converts the model weights to this type when loading. Smaller types use less memory but load slower and lose some quality. Default keeps the model&apos;s own type.</value>
+  </data>
+  <data name="ToolTip_ResetExecutionOptions" xml:space="preserve">
+    <value>Resets all options to their defaults. Save to apply.</value>
+  </data>
+  <data name="ToolTip_EnvironmentSetupDontAskAgain" xml:space="preserve">
+    <value>Stop asking to install missing environments on startup. Required updates are still shown.</value>
+  </data>
+  <data name="ToolTip_UpscaleSeed" xml:space="preserve">
+    <value>Seed for the video upscaler noise</value>
+  </data>
+  <data name="ToolTip_UpscaleTemporalChunkSize" xml:space="preserve">
+    <value>Number of frames processed per chunk, lower values use less memory</value>
+  </data>
+  <data name="ToolTip_UpscaleTileSize" xml:space="preserve">
+    <value>Tile size in pixels, smaller tiles use less memory, 0 uses the default</value>
+  </data>
+  <data name="ToolTip_UpscaleWindowSize" xml:space="preserve">
+    <value>Spacing of the reference frames, a window of 16 uses frames 0, 15, 30 and so on, the last frame is always included</value>
+  </data>
 </root>

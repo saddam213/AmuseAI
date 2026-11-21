@@ -27,6 +27,11 @@ namespace Amuse.App.Dialogs
         private string _message;
         private string _subMessage;
         private string _waitMessage;
+        private string _downloadPercent;
+        private string _downloadSize;
+        private string _downloadSpeed;
+        private string _downloadRemaining;
+        private EnvironmentSetupItem _setupItem;
 
         public EnvironmentDialog(IEnvironmentService environmentService, IGenerateService generateService)
         {
@@ -75,6 +80,43 @@ namespace Amuse.App.Dialogs
             set { SetProperty(ref _waitMessage, value); }
         }
 
+        public string DownloadPercent
+        {
+            get { return _downloadPercent; }
+            set { SetProperty(ref _downloadPercent, value); }
+        }
+
+        public string DownloadSize
+        {
+            get { return _downloadSize; }
+            set { SetProperty(ref _downloadSize, value); }
+        }
+
+        public string DownloadSpeed
+        {
+            get { return _downloadSpeed; }
+            set { SetProperty(ref _downloadSpeed, value); }
+        }
+
+        public string DownloadRemaining
+        {
+            get { return _downloadRemaining; }
+            set { SetProperty(ref _downloadRemaining, value); }
+        }
+
+        public EnvironmentSetupItem SetupItem
+        {
+            get { return _setupItem; }
+            set { SetProperty(ref _setupItem, value); NotifyPropertyChanged(nameof(HasOptions)); }
+        }
+
+        public bool HasOptions => _setupItem?.Options.Count > 1;
+
+        /// <summary>
+        /// Gets the environment that was set up, the one the user chose when options are shown.
+        /// </summary>
+        public EnvironmentModel Environment => _setupItem?.Environment ?? _environment;
+
 
         private void SetMessages(BackendType backendType)
         {
@@ -107,6 +149,7 @@ namespace Amuse.App.Dialogs
                 BackendType.HuggingFace => "Python Virtual",
                 BackendType.StableDiffusionCpp => "StableDiffusion.cpp",
                 BackendType.AudioCpp => "Audio.cpp",
+                BackendType.LlamaCpp => "Llama.cpp",
                 BackendType.OnnxRuntime => "OnnxRuntime",
                 _ => "Virtual"
             };
@@ -118,15 +161,29 @@ namespace Amuse.App.Dialogs
             IsCreate = true;
             _pipeline = pipeline;
             NotifyPropertyChanged(nameof(IsCreate));
-            SetMessages(pipeline.GenerateModel.Backend);
+            SetMessages(pipeline.Backend);
             return base.ShowDialogAsync();
         }
 
 
         public Task<bool> CreateAsync(EnvironmentModel environment)
         {
+            return CreateAsync(environment, false);
+        }
+
+
+        /// <summary>
+        /// Shows the dialog to create an environment.
+        /// </summary>
+        /// <param name="environment">The environment.</param>
+        /// <param name="isSelectable">if set to <c>true</c> the user can choose any environment in the same group, the chosen one becomes the default.</param>
+        public Task<bool> CreateAsync(EnvironmentModel environment, bool isSelectable)
+        {
             IsCreate = true;
             _environment = environment;
+            if (isSelectable)
+                SetupItem = new EnvironmentSetupItem(environment.Backend, environment.Vendor, _environmentService.GetEnvironmentGroup(environment), false, true, _environmentService.Exists);
+
             NotifyPropertyChanged(nameof(IsCreate));
             SetMessages(environment.Backend);
             return base.ShowDialogAsync();
@@ -166,8 +223,19 @@ namespace Amuse.App.Dialogs
 
                 if (_pipeline != null)
                     await _environmentService.CreateAsync(_pipeline, _progressCallback, _cancellation.Token);
-                if (_environment != null)
+
+                if (_setupItem != null)
+                {
+                    // Chosen, install it unless already installed, then make it the default so inference uses it
+                    if (!_environmentService.Exists(_setupItem.Environment))
+                        await _environmentService.CreateAsync(_setupItem.Environment, _progressCallback, _cancellation.Token);
+
+                    await _environmentService.SetDefaultAsync(_setupItem.Environment);
+                }
+                else if (_environment != null)
+                {
                     await _environmentService.CreateAsync(_environment, _progressCallback, _cancellation.Token);
+                }
                 await base.SaveAsync();
             }
             catch (OperationCanceledException)
@@ -228,6 +296,26 @@ namespace Amuse.App.Dialogs
 
         private void OnProgressUpdate(PipelineProgress progress)
         {
+            // Download
+            if (progress.IsDownload())
+            {
+                if (progress.BatchMaximum > 0)
+                    Progress.Update(progress.BatchValue, progress.BatchMaximum, progress.Message);
+                else
+                    Progress.Indeterminate(progress.Message);
+
+                DownloadPercent = progress.GetDownloadPercentText();
+                DownloadSize = progress.GetDownloadSizeText();
+                DownloadSpeed = progress.GetDownloadSpeedText();
+                DownloadRemaining = progress.GetDownloadRemainingText();
+                return;
+            }
+
+            // Message
+            DownloadPercent = null;
+            DownloadSize = null;
+            DownloadSpeed = null;
+            DownloadRemaining = null;
             Progress.Indeterminate(progress.Message);
         }
     }

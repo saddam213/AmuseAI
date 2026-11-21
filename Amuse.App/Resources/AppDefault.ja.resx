@@ -255,6 +255,9 @@
   <data name="Title_AmuseUpdate" xml:space="preserve">
     <value>Amuseのアップデート</value>
   </data>
+  <data name="Title_AmuseSetup" xml:space="preserve">
+    <value>Amuseのセットアップ</value>
+  </data>
   <data name="Title_ComponentModel" xml:space="preserve">
     <value>コンポーネントモデル</value>
   </data>
@@ -1032,9 +1035,6 @@
   <data name="Tasks" xml:space="preserve">
     <value>タスク</value>
   </data>
-  <data name="DiversityLength" xml:space="preserve">
-    <value>多様性の長さ</value>
-  </data>
   <data name="SilenceDuration" xml:space="preserve">
     <value>無音時間</value>
   </data>
@@ -1067,9 +1067,6 @@
   </data>
   <data name="OriginalModelDataType" xml:space="preserve">
     <value>元のモデルデータ型</value>
-  </data>
-  <data name="MemoryModes" xml:space="preserve">
-    <value>メモリモード</value>
   </data>
   <data name="Quality" xml:space="preserve">
     <value>品質</value>
@@ -1370,6 +1367,9 @@
   </data>
   <data name="EnableExternalTools" xml:space="preserve">
     <value>外部ツールを有効化</value>
+  </data>
+  <data name="EnableDangerousTools" xml:space="preserve">
+    <value>危険なツールを有効化</value>
   </data>
   <data name="Interpolate" xml:space="preserve">
     <value>補間</value>
@@ -1689,6 +1689,18 @@
   <data name="MemoryReserveGB" xml:space="preserve">
     <value>Memory Reserve (GB)</value>
   </data>
+  <data name="GpuLayers" xml:space="preserve">
+    <value>GPUレイヤー</value>
+  </data>
+  <data name="Threads" xml:space="preserve">
+    <value>スレッド数</value>
+  </data>
+  <data name="ContextSize" xml:space="preserve">
+    <value>コンテキストサイズ</value>
+  </data>
+  <data name="CacheOffload" xml:space="preserve">
+    <value>GPUキャッシュ</value>
+  </data>
   <data name="FlashAttention" xml:space="preserve">
     <value>Flash Attention</value>
   </data>
@@ -1700,9 +1712,6 @@
   </data>
   <data name="CPUExecution" xml:space="preserve">
     <value>CPU Execution</value>
-  </data>
-  <data name="VRAMGB" xml:space="preserve">
-    <value>VRAM (GB)</value>
   </data>
   <data name="MadeInNewZealand" xml:space="preserve">
     <value>Made in New Zealand</value>
@@ -1835,5 +1844,143 @@
   </data>
   <data name="ThemeChangedMessage" xml:space="preserve">
     <value>新しいテーマを適用するにはAmuseを再起動してください。</value>
+  </data>
+  <data name="ToolActionReadFile" xml:space="preserve">
+    <value>ファイルの読み取り: {0}</value>
+  </data>
+  <data name="ToolActionRunProgram" xml:space="preserve">
+    <value>プログラムまたはスクリプトの実行: {0}</value>
+  </data>
+  <data name="ToolExternalAccessTitle" xml:space="preserve">
+    <value>外部アクセス</value>
+  </data>
+  <data name="ToolExternalAccessMessage" xml:space="preserve">
+    <value>{0} は外部のデータまたはサービスにアクセスします。
+要求された情報を取得または処理するために、このリクエストのデータが送信される場合があります。
+
+続行しますか？</value>
+  </data>
+  <data name="ToolDangerousAccessTitle" xml:space="preserve">
+    <value>危険な操作</value>
+  </data>
+  <data name="ToolDangerousAccessMessage" xml:space="preserve">
+    <value>{0} は、コンピューターを変更したりデータを公開したりする可能性のある操作を実行しようとしています：
+
+{1}
+
+この操作を信頼し、自分で依頼した場合にのみ続行してください。
+
+続行しますか？</value>
+  </data>
+  <data name="HomeTitle" xml:space="preserve">
+    <value>何を作りますか？</value>
+  </data>
+  <data name="HomeSubtitle" xml:space="preserve">
+    <value>タスクを選んで始めるか、最近使ったモデルや結果に戻りましょう。</value>
+  </data>
+  <data name="HomeImageDescription" xml:space="preserve">
+    <value>画像の生成、編集、インペイント、アップスケール。</value>
+  </data>
+  <data name="HomeVideoDescription" xml:space="preserve">
+    <value>テキストや画像から動画を作成し、スタイル変換やアップスケールを行います。</value>
+  </data>
+  <data name="HomeAudioDescription" xml:space="preserve">
+    <value>音楽や音声を作成し、音声をテキストに書き起こします。</value>
+  </data>
+  <data name="HomeTextDescription" xml:space="preserve">
+    <value>チャット、指示の実行、画像の説明。</value>
+  </data>
+  <data name="NewModels" xml:space="preserve">
+    <value>新しいモデル</value>
+  </data>
+  <data name="RecommendedModels" xml:space="preserve">
+    <value>おすすめのモデル</value>
+  </data>
+  <data name="RecentModels" xml:space="preserve">
+    <value>最近使ったモデル</value>
+  </data>
+  <data name="HomeDevices" xml:space="preserve">
+    <value>デバイスとバックエンド</value>
+  </data>
+  <data name="ManageEnvironments" xml:space="preserve">
+    <value>環境を管理</value>
+  </data>
+  <data name="BackendReady" xml:space="preserve">
+    <value>準備完了</value>
+  </data>
+  <data name="BackendNotInstalled" xml:space="preserve">
+    <value>未インストール</value>
+  </data>
+  <data name="BackendUnsupported" xml:space="preserve">
+    <value>非対応</value>
+  </data>
+  <data name="QueueDownloadTitle" xml:space="preserve">
+    <value>ダウンロードをキューに追加</value>
+  </data>
+  <data name="QueueDownloadMessage" xml:space="preserve">
+    <value>{0} はインストールされていません。ダウンロードのキューに追加しますか？</value>
+  </data>
+  <data name="ModelDownloadingTitle" xml:space="preserve">
+    <value>モデルをダウンロード中</value>
+  </data>
+  <data name="ModelDownloadingMessage" xml:space="preserve">
+    <value>{0} はダウンロード中、またはダウンロード待ちです。</value>
+  </data>
+  <data name="WeightType" xml:space="preserve">
+    <value>重みの型</value>
+  </data>
+  <data name="Later" xml:space="preserve">
+    <value>後で</value>
+  </data>
+  <data name="Installing" xml:space="preserve">
+    <value>インストール中</value>
+  </data>
+  <data name="Installed" xml:space="preserve">
+    <value>インストール済み</value>
+  </data>
+  <data name="EnvironmentUpdateRequired" xml:space="preserve">
+    <value>更新が必要</value>
+  </data>
+  <data name="EnvironmentSetupMessage" xml:space="preserve">
+    <value>バックエンド環境のセットアップ</value>
+  </data>
+  <data name="EnvironmentSetupSubMessage" xml:space="preserve">
+    <value>一部のバックエンド環境が不足しているか、更新が必要です。今すぐセットアップするものを選択してください。チェックを外したものは後でホームまたは設定ページからインストールできます。</value>
+  </data>
+  <data name="EnvironmentSetupWaitMessage" xml:space="preserve">
+    <value>（数分かかる場合があります）</value>
+  </data>
+  <data name="EnvironmentSetupFailedMessage" xml:space="preserve">
+    <value>一部の環境のインストールに失敗しました。詳細はログを確認してください。ホームまたは設定ページから再試行できます。</value>
+  </data>
+  <data name="BackendDescriptionStableDiffusionCpp" xml:space="preserve">
+    <value>画像と動画の生成</value>
+  </data>
+  <data name="BackendDescriptionAudioCpp" xml:space="preserve">
+    <value>音声、音楽、オーディオの生成</value>
+  </data>
+  <data name="BackendDescriptionLlamaCpp" xml:space="preserve">
+    <value>チャットとテキストアシスタント（言語モデル）</value>
+  </data>
+  <data name="BackendDescriptionHuggingFace" xml:space="preserve">
+    <value>HuggingFaceモデル用の上級者向けPythonバックエンド</value>
+  </data>
+  <data name="Apply" xml:space="preserve">
+    <value>適用</value>
+  </data>
+  <data name="EnvironmentManageSubMessage" xml:space="preserve">
+    <value>各バックエンドがグラフィックカードで使用する環境を選択します。行にチェックを入れて環境を選ぶと、インストール済みの環境はすぐに既定になり、それ以外は先にインストールされます。</value>
+  </data>
+  <data name="Description" xml:space="preserve">
+    <value>説明</value>
+  </data>
+  <data name="DownloadSizeGB" xml:space="preserve">
+    <value>ダウンロードサイズ (GB)</value>
+  </data>
+  <data name="UpscaleTemporalChunkSize" xml:space="preserve">
+    <value>時間チャンクサイズ</value>
+  </data>
+  <data name="UpscaleWindowSize" xml:space="preserve">
+    <value>ウィンドウサイズ</value>
   </data>
 </root>

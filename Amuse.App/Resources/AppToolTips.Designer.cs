@@ -79,6 +79,87 @@ namespace Amuse.App.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Supported on this device but not installed yet, install it from Manage Environments or the first time you load a model that uses it..
+        /// </summary>
+        public static string ToolTip_BackendNotInstalled {
+            get {
+                return ResourceManager.GetString("ToolTip_BackendNotInstalled", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The backend environment is installed and ready to use..
+        /// </summary>
+        public static string ToolTip_BackendReady {
+            get {
+                return ResourceManager.GetString("ToolTip_BackendReady", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to This backend is not available for this device..
+        /// </summary>
+        public static string ToolTip_BackendUnsupported {
+            get {
+                return ResourceManager.GetString("ToolTip_BackendUnsupported", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Stop asking to install missing environments on startup. Required updates are still shown..
+        /// </summary>
+        public static string ToolTip_EnvironmentSetupDontAskAgain {
+            get {
+                return ResourceManager.GetString("ToolTip_EnvironmentSetupDontAskAgain", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Number of model layers placed on the GPU, -1 for all layers. Lower values move the remaining layers to system memory..
+        /// </summary>
+        public static string ToolTip_GpuLayers {
+            get {
+                return ResourceManager.GetString("ToolTip_GpuLayers", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Home.
+        /// </summary>
+        public static string ToolTip_Home {
+            get {
+                return ResourceManager.GetString("ToolTip_Home", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to CPU threads used for layers in system memory, 0 for the default..
+        /// </summary>
+        public static string ToolTip_Threads {
+            get {
+                return ResourceManager.GetString("ToolTip_Threads", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Tokens reserved for the conversation and the reply, larger values use more memory..
+        /// </summary>
+        public static string ToolTip_ContextSize {
+            get {
+                return ResourceManager.GetString("ToolTip_ContextSize", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Keep the conversation (key/value) cache in GPU memory.
+        /// </summary>
+        public static string ToolTip_CacheOffload {
+            get {
+                return ResourceManager.GetString("ToolTip_CacheOffload", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Immediately stops generation by closing the backend process..
         /// </summary>
         public static string ToolTip_GenerateStop {
@@ -102,6 +183,24 @@ namespace Amuse.App.Resources {
         public static string ToolTip_ModelFilterInstalled {
             get {
                 return ResourceManager.GetString("ToolTip_ModelFilterInstalled", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to Showing all environments, click to show environments for your devices only.
+        /// </summary>
+        public static string ToolTip_EnvironmentFilterAll {
+            get {
+                return ResourceManager.GetString("ToolTip_EnvironmentFilterAll", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to Showing environments for your devices only, click to show all environments.
+        /// </summary>
+        public static string ToolTip_EnvironmentFilterDevices {
+            get {
+                return ResourceManager.GetString("ToolTip_EnvironmentFilterDevices", resourceCulture);
             }
         }
 
@@ -534,6 +633,213 @@ namespace Amuse.App.Resources {
         public static string ToolTop_MemoryEstimate {
             get {
                 return ResourceManager.GetString("ToolTop_MemoryEstimate", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Loads the whole model to the GPU. Fastest, needs the most VRAM.
+        /// </summary>
+        public static string ToolTip_MemoryMode_HuggingFace_High {
+            get {
+                return ResourceManager.GetString("ToolTip_MemoryMode_HuggingFace_High", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Model CPU offload: keeps each sub-model in CPU memory and moves it to the GPU while it runs.
+        /// </summary>
+        public static string ToolTip_MemoryMode_HuggingFace_Medium {
+            get {
+                return ResourceManager.GetString("ToolTip_MemoryMode_HuggingFace_Medium", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Sequential CPU offload: moves individual layers to the GPU only while they run. Lowest VRAM, much slower.
+        /// </summary>
+        public static string ToolTip_MemoryMode_HuggingFace_Low {
+            get {
+                return ResourceManager.GetString("ToolTip_MemoryMode_HuggingFace_Low", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Spreads the model weights across the available GPUs and CPU memory.
+        /// </summary>
+        public static string ToolTip_MemoryMode_HuggingFace_Balanced {
+            get {
+                return ResourceManager.GetString("ToolTip_MemoryMode_HuggingFace_Balanced", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Keeps all weights on the GPU.
+        /// </summary>
+        public static string ToolTip_MemoryMode_StableDiffusionCpp_High {
+            get {
+                return ResourceManager.GetString("ToolTip_MemoryMode_StableDiffusionCpp_High", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Offloads the weights to CPU memory and moves them to the GPU when needed.
+        /// </summary>
+        public static string ToolTip_MemoryMode_StableDiffusionCpp_Medium {
+            get {
+                return ResourceManager.GetString("ToolTip_MemoryMode_StableDiffusionCpp_Medium", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Offloads the diffusion weights to CPU memory and the VAE, text encoders and other parts to disk, loading them when needed.
+        /// </summary>
+        public static string ToolTip_MemoryMode_StableDiffusionCpp_Low {
+            get {
+                return ResourceManager.GetString("ToolTip_MemoryMode_StableDiffusionCpp_Low", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Auto-fit: places the weights automatically to fit the available VRAM.
+        /// </summary>
+        public static string ToolTip_MemoryMode_StableDiffusionCpp_Balanced {
+            get {
+                return ResourceManager.GetString("ToolTip_MemoryMode_StableDiffusionCpp_Balanced", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Keeps the whole model loaded on the GPU.
+        /// </summary>
+        public static string ToolTip_MemoryMode_AudioCpp_High {
+            get {
+                return ResourceManager.GetString("ToolTip_MemoryMode_AudioCpp_High", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Enables the memory saver to reduce VRAM use.
+        /// </summary>
+        public static string ToolTip_MemoryMode_AudioCpp_Medium {
+            get {
+                return ResourceManager.GetString("ToolTip_MemoryMode_AudioCpp_Medium", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Enables the memory saver to reduce VRAM use.
+        /// </summary>
+        public static string ToolTip_MemoryMode_AudioCpp_Low {
+            get {
+                return ResourceManager.GetString("ToolTip_MemoryMode_AudioCpp_Low", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Enables the memory saver to reduce VRAM use.
+        /// </summary>
+        public static string ToolTip_MemoryMode_AudioCpp_Balanced {
+            get {
+                return ResourceManager.GetString("ToolTip_MemoryMode_AudioCpp_Balanced", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Runs all layers on the GPU and keeps the KV cache on the GPU.
+        /// </summary>
+        public static string ToolTip_MemoryMode_LlamaCpp_High {
+            get {
+                return ResourceManager.GetString("ToolTip_MemoryMode_LlamaCpp_High", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Runs all layers on the GPU and keeps the KV cache in CPU memory. Saves VRAM on long contexts.
+        /// </summary>
+        public static string ToolTip_MemoryMode_LlamaCpp_Medium {
+            get {
+                return ResourceManager.GetString("ToolTip_MemoryMode_LlamaCpp_Medium", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Runs all layers on the CPU and keeps the KV cache in CPU memory. Slowest.
+        /// </summary>
+        public static string ToolTip_MemoryMode_LlamaCpp_Low {
+            get {
+                return ResourceManager.GetString("ToolTip_MemoryMode_LlamaCpp_Low", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Uses the GPU Layers and Cache Offload values from the execution options.
+        /// </summary>
+        public static string ToolTip_MemoryMode_LlamaCpp_Balanced {
+            get {
+                return ResourceManager.GetString("ToolTip_MemoryMode_LlamaCpp_Balanced", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to OnnxRuntime manages its own memory, this setting has no effect.
+        /// </summary>
+        public static string ToolTip_MemoryMode_OnnxRuntime {
+            get {
+                return ResourceManager.GetString("ToolTip_MemoryMode_OnnxRuntime", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Converts the model weights to this type when loading. Smaller types use less memory but load slower and lose some quality. Default keeps the model&apos;s own type.
+        /// </summary>
+        public static string ToolTip_WeightType {
+            get {
+                return ResourceManager.GetString("ToolTip_WeightType", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Resets all options to their defaults. Save to apply.
+        /// </summary>
+        public static string ToolTip_ResetExecutionOptions {
+            get {
+                return ResourceManager.GetString("ToolTip_ResetExecutionOptions", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Seed for the video upscaler noise.
+        /// </summary>
+        public static string ToolTip_UpscaleSeed {
+            get {
+                return ResourceManager.GetString("ToolTip_UpscaleSeed", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Number of frames processed per chunk, lower values use less memory.
+        /// </summary>
+        public static string ToolTip_UpscaleTemporalChunkSize {
+            get {
+                return ResourceManager.GetString("ToolTip_UpscaleTemporalChunkSize", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Tile size in pixels, smaller tiles use less memory, 0 uses the default.
+        /// </summary>
+        public static string ToolTip_UpscaleTileSize {
+            get {
+                return ResourceManager.GetString("ToolTip_UpscaleTileSize", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Spacing of the reference frames, a window of 16 uses frames 0, 15, 30 and so on, the last frame is always included.
+        /// </summary>
+        public static string ToolTip_UpscaleWindowSize {
+            get {
+                return ResourceManager.GetString("ToolTip_UpscaleWindowSize", resourceCulture);
             }
         }
     }

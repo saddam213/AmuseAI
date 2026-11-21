@@ -126,7 +126,8 @@ namespace Amuse.App.Services
                     }, progressCallback, cancellationToken: cancellationToken);
 
 
-                    return await _mediaService.SaveWithAudioAsync(processedVideo, options.VideoStream.SourceFile, videoFileName, cancellationToken);
+                    await processedVideo.SaveAsync(videoFileName, audioSourceFile: options.VideoStream.SourceFile, cancellationToken: cancellationToken);
+                    return await VideoInputStream.CreateAsync(videoFileName);
                 }
             }
             finally

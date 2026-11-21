@@ -4,6 +4,7 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Diagnostics;
+using System.IO;
 using System.Linq;
 using System.Management;
 using System.Runtime.InteropServices;
@@ -473,6 +474,34 @@ namespace Amuse.App.Services
 
 
         /// <summary>
+        /// Gets the ready fixed and removable disks.
+        /// </summary>
+        public IReadOnlyList<DiskDevice> GetDisks()
+        {
+            var disks = new List<DiskDevice>();
+            foreach (var drive in DriveInfo.GetDrives())
+            {
+                try
+                {
+                    if (!drive.IsReady || (drive.DriveType != DriveType.Fixed && drive.DriveType != DriveType.Removable))
+                        continue;
+
+                    disks.Add(new DiskDevice(drive.Name, drive.VolumeLabel, drive.DriveFormat, drive.DriveType.ToString(), drive.TotalSize / 1024f / 1024f, drive.AvailableFreeSpace / 1024f / 1024f));
+                }
+                catch (IOException)
+                {
+                    // Drive became unavailable
+                }
+                catch (UnauthorizedAccessException)
+                {
+                    // Drive not accessible
+                }
+            }
+            return disks;
+        }
+
+
+        /// <summary>
         /// Pauses this instance.
         /// </summary>
         public void Pause()
@@ -612,7 +641,14 @@ namespace Amuse.App.Services
         void Resume();
 
         IReadOnlyList<DeviceModel> GetGPUDevices();
+        IReadOnlyList<DiskDevice> GetDisks();
     }
+
+
+    /// <summary>
+    /// DiskDevice structure, sizes in MB.
+    /// </summary>
+    public record DiskDevice(string Name, string Label, string Format, string DriveType, float SizeTotal, float SizeAvailable);
 
 
 

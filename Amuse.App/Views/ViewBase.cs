@@ -1,7 +1,10 @@
-﻿using Amuse.App.Services;
+﻿using Amuse.App.Common;
+using Amuse.App.Controls;
+using Amuse.App.Services;
 using Microsoft.Extensions.Logging;
 using System.Threading;
 using System.Threading.Tasks;
+using System.Windows.Threading;
 using TensorStack.WPF;
 using TensorStack.WPF.Controls;
 using TensorStack.WPF.Services;
@@ -85,6 +88,34 @@ namespace Amuse.App.Views
         {
             get { return _isViewBusy; }
             set { SetProperty(ref _isViewBusy, value); }
+        }
+
+
+        /// <summary>
+        /// On View Open
+        /// </summary>
+        /// <param name="args">The arguments.</param>
+        public override Task OpenAsync(OpenViewArgs args = null)
+        {
+            // Select after the derived view has restored its pipeline
+            if (args is ModelOpenArgs modelOpenArgs)
+                Dispatcher.BeginInvoke(DispatcherPriority.Loaded, () => SelectModel(modelOpenArgs.Model));
+
+            return base.OpenAsync(args);
+        }
+
+
+        /// <summary>
+        /// Selects the model in the view's model control, if the view has one.
+        /// </summary>
+        /// <param name="model">The model.</param>
+        private void SelectModel(IGenerateModel model)
+        {
+            var modelControl = FindName("ModelControl");
+            if (modelControl is DiffusionModelControl diffusionModelControl && model is DiffusionModel diffusionModel)
+                diffusionModelControl.SelectModel(diffusionModel);
+            else if (modelControl is LanguageModelControl languageModelControl && model is LanguageModel languageModel)
+                languageModelControl.SelectModel(languageModel);
         }
 
 

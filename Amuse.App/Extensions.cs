@@ -1,4 +1,5 @@
 ﻿using Amuse.App.Common;
+using Amuse.App.Resources;
 using Amuse.App.Services;
 using System;
 using System.Buffers;
@@ -40,25 +41,99 @@ namespace Amuse.App
         }
 
 
-        public static int GetIndex(this MemoryProfile profile, int deviceMemory)
+        /// <summary>
+        /// Resolves the Auto memory mode from the model memory size and the device memory.
+        /// </summary>
+        /// <param name="memorySize">The model memory size in GB, 0 if unknown.</param>
+        /// <param name="deviceMemory">The device memory in GB.</param>
+        public static MemoryMode ResolveMemoryMode(float memorySize, int deviceMemory)
         {
-            int bestIndex = -1;
-            int bestValue = int.MinValue;
+            if (memorySize <= 0 || memorySize <= deviceMemory)
+                return MemoryMode.High;
+            if (memorySize * 0.6f <= deviceMemory)
+                return MemoryMode.Medium;
 
-            for (int i = 0; i < profile.MemoryModes.Length; i++)
+            return MemoryMode.Low;
+        }
+
+
+        /// <summary>
+        /// Gets the data types the backend can load model weights from.
+        /// </summary>
+        /// <param name="backend">The backend.</param>
+        public static DataType[] GetDataTypes(this BackendType backend)
+        {
+            return backend switch
             {
-                int value = profile.MemoryModes[i];
-                if (value <= deviceMemory && value >= bestValue)
-                {
-                    bestValue = value;
-                    bestIndex = i;
-                }
-            }
+                BackendType.HuggingFace =>
+                [
+                    DataType.BFloat16, DataType.Float16, DataType.Float32, DataType.Float8
+                ],
+                BackendType.StableDiffusionCpp =>
+                [
+                    DataType.BFloat16, DataType.Float16, DataType.Float32, DataType.Float8,
+                    DataType.Q8_0, DataType.Q6_K, DataType.Q5_K, DataType.Q5_1, DataType.Q5_0, DataType.Q4_K, DataType.Q4_1, DataType.Q4_0, DataType.Q3_K, DataType.Q2_K
+                ],
+                BackendType.AudioCpp =>
+                [
+                    DataType.BFloat16, DataType.Float16, DataType.Float32,
+                    DataType.Q8_0, DataType.Q4_K, DataType.Q4_0
+                ],
+                BackendType.LlamaCpp =>
+                [
+                    DataType.BFloat16, DataType.Float16, DataType.Float32,
+                    DataType.Q8_0, DataType.Q6_K, DataType.Q5_K, DataType.Q5_0, DataType.Q4_K, DataType.Q4_0, DataType.Q3_K, DataType.Q2_K,
+                    DataType.IQ4_XS, DataType.IQ4_NL, DataType.MXFP4
+                ],
+                BackendType.OnnxRuntime =>
+                [
+                    DataType.Float16, DataType.Float32, DataType.Int8
+                ],
+                _ => []
+            };
+        }
 
-            if (bestIndex < 0)
-                bestIndex = 0;
 
-            return bestIndex;
+        /// <summary>
+        /// Gets the weight types the backend can convert model weights to when loading, empty if it cannot.
+        /// </summary>
+        /// <param name="backend">The backend.</param>
+        public static DataType[] GetWeightTypes(this BackendType backend)
+        {
+            return backend switch
+            {
+                BackendType.HuggingFace =>
+                [
+                    DataType.Default, DataType.BFloat16, DataType.Float16, DataType.Float32, DataType.Int8, DataType.Int4
+                ],
+                BackendType.StableDiffusionCpp =>
+                [
+                    DataType.Default, DataType.BFloat16, DataType.Float16, DataType.Float32,
+                    DataType.Q8_0, DataType.Q6_K, DataType.Q5_K, DataType.Q5_0, DataType.Q4_K, DataType.Q4_0, DataType.Q3_K, DataType.Q2_K
+                ],
+                BackendType.AudioCpp =>
+                [
+                    DataType.Default, DataType.BFloat16, DataType.Float16, DataType.Float32,
+                    DataType.Q8_0, DataType.Q4_K, DataType.Q4_0
+                ],
+                _ => []
+            };
+        }
+
+
+        /// <summary>
+        /// Gets the description of what the memory mode does on the backend, falling back to the generic description.
+        /// </summary>
+        /// <param name="memoryMode">The memory mode.</param>
+        /// <param name="backend">The backend, null if no model is selected.</param>
+        public static string GetDescription(this MemoryMode memoryMode, BackendType? backend)
+        {
+            if (backend is null || memoryMode == MemoryMode.Auto)
+                return memoryMode.GetDescription();
+
+            return AppToolTips.ResourceManager.GetString($"ToolTip_MemoryMode_{backend}_{memoryMode}", AppToolTips.Culture)
+                ?? AppToolTips.ResourceManager.GetString($"ToolTip_MemoryMode_{backend}", AppToolTips.Culture)
+                ?? memoryMode.GetDescription();
         }
 
 
@@ -97,19 +172,6 @@ namespace Amuse.App
         }
 
 
-        public static MemoryProfile[] Copy(this MemoryProfile[] collection)
-        {
-            if (collection.IsNullOrEmpty())
-                return [];
-
-            return collection.Select(x => new MemoryProfile
-            {
-                QualityMode = x.QualityMode,
-                MemoryModes = x.MemoryModes.ToArray(),
-            }).ToArray();
-        }
-
-
         public static SizeOption[] Copy(this SizeOption[] collection)
         {
             if (collection.IsNullOrEmpty())
@@ -121,6 +183,26 @@ namespace Amuse.App
                 Width = x.Width,
                 IsDefault = x.IsDefault
             }).ToArray();
+        }
+
+
+        /// <summary>
+        /// Determines whether the model can run on the device, the device supports the model backend and vendor.
+        /// </summary>
+        /// <param name="model">The model.</param>
+        /// <param name="device">The device.</param>
+        public static bool IsCompatible(this IGenerateModel model, DeviceModel device)
+        {
+            if (model is null || device is null)
+                return false;
+
+            if (!device.SupportedBackends.Contains(model.Backend))
+                return false;
+
+            if (!model.Vendor.IsNullOrEmpty() && !model.Vendor.Contains(device.Vendor))
+                return false;
+
+            return true;
         }
 
 
@@ -197,32 +279,15 @@ namespace Amuse.App
     {
         public const int FixedIdRange = 1000;
 
-        public static MemoryProfile[] GetMemoryProfile(double parameterCount)
+        /// <summary>
+        /// Estimates the memory size in GB of a model from its parameter count, assuming an 8-bit quant.
+        /// </summary>
+        /// <param name="parameterCount">The parameter count in billions.</param>
+        public static float GetMemorySize(double parameterCount)
         {
-            const double size4Bit = 0.5;
             const double size8Bit = 1.0;
-            const double size16Bit = 2.0;
-            const double overhead4Bit = 1.3;
             const double overhead8Bit = 1.1;
-            const double overhead16Bit = 1.1;
-            return
-            [
-                new MemoryProfile
-                {
-                    QualityMode = QualityMode.Draft,
-                    MemoryModes = [Estimate(parameterCount, size4Bit, overhead4Bit)]
-                },
-                 new MemoryProfile
-                {
-                    QualityMode = QualityMode.Standard,
-                    MemoryModes = [Estimate(parameterCount, size8Bit, overhead8Bit)]
-                },
-                 new MemoryProfile
-                {
-                    QualityMode = QualityMode.Production,
-                    MemoryModes = [Estimate(parameterCount, size16Bit, overhead16Bit)]
-                }
-            ];
+            return Estimate(parameterCount, size8Bit, overhead8Bit);
         }
 
 
@@ -306,6 +371,92 @@ namespace Amuse.App
             {
                 return JsonSerializer.SerializeToElement(value);
             }
+        }
+
+
+        /// <summary>
+        /// Determines whether the progress is a file download progress.
+        /// </summary>
+        /// <param name="progress">The progress.</param>
+        public static bool IsDownload(this Amuse.Common.PipelineProgress progress)
+        {
+            return progress.Key == "Download";
+        }
+
+
+        /// <summary>
+        /// Gets the download percent text, e.g. "49%", null if the size is unknown.
+        /// </summary>
+        /// <param name="progress">The download progress, sizes in KB.</param>
+        public static string GetDownloadPercentText(this Amuse.Common.PipelineProgress progress)
+        {
+            if (progress.BatchMaximum <= 0)
+                return null;
+
+            return $"{progress.BatchValue * 100L / progress.BatchMaximum}%";
+        }
+
+
+        /// <summary>
+        /// Gets the download size text, e.g. "12.3 MB / 25.0 MB".
+        /// </summary>
+        /// <param name="progress">The download progress, sizes in KB.</param>
+        public static string GetDownloadSizeText(this Amuse.Common.PipelineProgress progress)
+        {
+            if (progress.BatchMaximum <= 0)
+                return FormatSizeKB(progress.BatchValue);
+
+            return $"{FormatSizeKB(progress.BatchValue)} / {FormatSizeKB(progress.BatchMaximum)}";
+        }
+
+
+        /// <summary>
+        /// Gets the download speed text, e.g. "12.3 MB/s", null if the speed is unknown.
+        /// </summary>
+        /// <param name="progress">The download progress, speed (KB/s) in Elapsed.</param>
+        public static string GetDownloadSpeedText(this Amuse.Common.PipelineProgress progress)
+        {
+            if (progress.Elapsed <= 0)
+                return null;
+
+            return progress.Elapsed < 1024
+                ? $"{progress.Elapsed:N0} KB/s"
+                : $"{progress.Elapsed / 1024f:N1} MB/s";
+        }
+
+
+        /// <summary>
+        /// Gets the download time remaining text, e.g. "1m 20s remaining", null if unknown.
+        /// </summary>
+        /// <param name="progress">The download progress, sizes in KB, speed (KB/s) in Elapsed.</param>
+        public static string GetDownloadRemainingText(this Amuse.Common.PipelineProgress progress)
+        {
+            var remainingKB = progress.BatchMaximum - progress.BatchValue;
+            if (progress.Elapsed <= 0 || progress.BatchMaximum <= 0 || remainingKB <= 0)
+                return null;
+
+            var remaining = AppDefault.Remaining.ToLower();
+            var timeSpan = TimeSpan.FromSeconds(remainingKB / progress.Elapsed);
+            if (timeSpan.TotalDays >= 1)
+                return $"{timeSpan.Days}d {timeSpan.Hours}h {remaining}";
+            if (timeSpan.TotalHours >= 1)
+                return $"{timeSpan.Hours}h {timeSpan.Minutes}m {remaining}";
+            if (timeSpan.TotalMinutes >= 1)
+                return $"{timeSpan.Minutes}m {timeSpan.Seconds}s {remaining}";
+
+            return $"{timeSpan.Seconds}s {remaining}";
+        }
+
+
+        /// <summary>
+        /// Formats a size in KB as MB or GB.
+        /// </summary>
+        /// <param name="sizeKB">The size in KB.</param>
+        private static string FormatSizeKB(int sizeKB)
+        {
+            return sizeKB < 1024 * 1024
+                ? $"{sizeKB / 1024f:N1} MB"
+                : $"{sizeKB / (1024f * 1024f):N2} GB";
         }
     }
 

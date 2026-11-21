@@ -112,7 +112,7 @@
                     <Grid Visibility="{Binding Checkpoint.Type, Converter={StaticResource EnumToVisibilityConverter}, ConverterParameter=LocalFile}">
                         <StackPanel >
                             <TextBlock Text="{CommonControls:Localize ModelFile}" Style="{StaticResource FieldTextBlockStyle}"/>
-                            <CommonControls:FilePickerTextBox FileName="{Binding Checkpoint.Path, Mode=TwoWay}" IsFolderPicker="False" IsRequired="True" Filter="Model Files|*.safetensors;*.gguf;" DefaultExt="safetensors" />
+                            <CommonControls:FilePickerTextBox FileName="{Binding Checkpoint.Path, Mode=TwoWay}" IsFolderPicker="False" IsRequired="True" Filter="{Binding FileFilter}" DefaultExt="safetensors" />
                         </StackPanel>
                     </Grid>
 

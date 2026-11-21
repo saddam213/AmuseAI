@@ -22,7 +22,7 @@ namespace Amuse.App.Services
                     AutomaticDecompression = System.Net.DecompressionMethods.GZip | System.Net.DecompressionMethods.Deflate
                 }
             });
-            Client.DefaultRequestHeaders.UserAgent.ParseAdd($"Amuse/{App.AppVersionDisplay}");
+            Client.DefaultRequestHeaders.UserAgent.ParseAdd(settings.UserAgent);
         }
 
         public HttpClient Client { get; }
@@ -33,9 +33,12 @@ namespace Amuse.App.Services
             if (string.IsNullOrEmpty(url))
                 return null;
 
-            if (Uri.TryCreate(url, UriKind.Absolute, out var uri))
+            if (Uri.TryCreate(url, UriKind.Absolute, out var uri) && uri.Scheme == Uri.UriSchemeHttps)
             {
-                var accessToken = _settings.AccessTokens?.FirstOrDefault(x => url.Contains(x.Domain, StringComparison.OrdinalIgnoreCase));
+                // Match the host exactly or a subdomain, never a substring of the full url
+                var host = uri.Host;
+                var accessToken = _settings.AccessTokens?.FirstOrDefault(x => !string.IsNullOrEmpty(x.Domain)
+                    && (host.Equals(x.Domain, StringComparison.OrdinalIgnoreCase) || host.EndsWith($".{x.Domain}", StringComparison.OrdinalIgnoreCase)));
                 if (accessToken != null)
                     return accessToken.Token;
             }

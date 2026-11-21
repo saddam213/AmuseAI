@@ -22,11 +22,21 @@ namespace Amuse.App.Views
     {
         private EnvironmentModel _selectedEnvironment;
         private string _filterText;
+        private string _filterBackend;
+        private string _filterVendor;
+        private string _filterType;
+        private bool _isDeviceFilterEnabled = true;
 
         public SettingsEnvironmentView(Settings settings, NavigationService navigationService, IModelDownloadService downloadService, IHistoryService historyService, IEnvironmentService environmentService, ILogger<SettingsEnvironmentView> logger)
             : base(settings, navigationService, downloadService, historyService, logger)
         {
             EnvironmentService = environmentService;
+            FilterBackends = ["Show All", .. Enum.GetValues<BackendType>().Where(x => x != BackendType.PyTorch && x != BackendType.OnnxRuntime).Select(x => x.ToString())];
+            FilterVendors = ["Show All", .. Enum.GetValues<VendorType>().Where(x => x !=  VendorType.CPU).Select(x => x.ToString())];
+            FilterTypes = ["Show All", .. Enum.GetNames<EnvironmentType>()];
+            _filterBackend = FilterBackends[0];
+            _filterVendor = FilterVendors[0];
+            _filterType = FilterTypes[0];
             SaveCommand = new AsyncRelayCommand(SaveAsync);
             AddEnvironmentCommand = new AsyncRelayCommand(AddEnvironmentAsync);
             AddEnvironmentWizardCommand = new AsyncRelayCommand(AddEnvironmentWizardAsync);
@@ -41,9 +51,10 @@ namespace Amuse.App.Views
             EnvironmentServiceDeleteCommand = new AsyncRelayCommand(EnvironmentDeleteAsync, CanEnvironmentUpdate);
             EnvironmentDefaultCommand = new AsyncRelayCommand(EnvironmentDefaultAsync, CanEnvironmentDefault);
             FilterClearCommand = new AsyncRelayCommand(FilterClearAsync, CanClearFilter);
-            ModelCollection = new ListCollectionView(settings.Environments) { Filter = CollectionFilter(), IsLiveSorting = true, IsLiveFiltering = true };
-            ModelCollection.SortDescriptions.Add(new SortDescription(nameof(EnvironmentModel.Backend), ListSortDirection.Ascending));
+            ModelCollection = new ListCollectionView(settings.Environments) { Filter = CollectionFilter(), IsLiveSorting = true, IsLiveFiltering = true, IsLiveGrouping = true };
+            ModelCollection.GroupDescriptions.Add(new PropertyGroupDescription(nameof(EnvironmentModel.Vendor)));
             ModelCollection.SortDescriptions.Add(new SortDescription(nameof(EnvironmentModel.Vendor), ListSortDirection.Ascending));
+            ModelCollection.SortDescriptions.Add(new SortDescription(nameof(EnvironmentModel.Backend), ListSortDirection.Ascending));
             ModelCollection.SortDescriptions.Add(new SortDescription(nameof(EnvironmentModel.Name), ListSortDirection.Ascending));
             ModelCollection.MoveCurrentToFirst();
             SelectedEnvironment = ModelCollection.CurrentItem as EnvironmentModel;
@@ -68,6 +79,21 @@ namespace Amuse.App.Views
         public AsyncRelayCommand FilterClearCommand { get; }
         public ListCollectionView ModelCollection { get; }
 
+        /// <summary>
+        /// Gets the backend filter options.
+        /// </summary>
+        public string[] FilterBackends { get; }
+
+        /// <summary>
+        /// Gets the vendor filter options.
+        /// </summary>
+        public string[] FilterVendors { get; }
+
+        /// <summary>
+        /// Gets the environment type filter options.
+        /// </summary>
+        public string[] FilterTypes { get; }
+
         public EnvironmentModel SelectedEnvironment
         {
             get { return _selectedEnvironment; }
@@ -80,9 +106,52 @@ namespace Amuse.App.Views
             set { SetProperty(ref _filterText, value); ModelCollection?.Refresh(); }
         }
 
+        /// <summary>
+        /// Gets or sets the backend filter.
+        /// </summary>
+        public string FilterBackend
+        {
+            get { return _filterBackend; }
+            set { SetProperty(ref _filterBackend, value); ModelCollection?.Refresh(); }
+        }
+
+        /// <summary>
+        /// Gets or sets the vendor filter.
+        /// </summary>
+        public string FilterVendor
+        {
+            get { return _filterVendor; }
+            set { SetProperty(ref _filterVendor, value); ModelCollection?.Refresh(); }
+        }
+
+        /// <summary>
+        /// Gets or sets the environment type filter.
+        /// </summary>
+        public string FilterType
+        {
+            get { return _filterType; }
+            set { SetProperty(ref _filterType, value); ModelCollection?.Refresh(); }
+        }
+
+        /// <summary>
+        /// Gets or sets a value indicating whether only environments usable by the installed devices are shown.
+        /// </summary>
+        public bool IsDeviceFilterEnabled
+        {
+            get { return _isDeviceFilterEnabled; }
+            set { SetProperty(ref _isDeviceFilterEnabled, value); ModelCollection?.Refresh(); }
+        }
+
 
         public override Task OpenAsync(OpenViewArgs args = null)
         {
+            // Devices may be detected after construction
+            ModelCollection.Refresh();
+            if (SelectedEnvironment is null || !ModelCollection.Contains(SelectedEnvironment))
+            {
+                ModelCollection.MoveCurrentToFirst();
+                SelectedEnvironment = ModelCollection.CurrentItem as EnvironmentModel;
+            }
             return base.OpenAsync(args);
         }
 
@@ -94,25 +163,64 @@ namespace Amuse.App.Views
                 if (obj is not EnvironmentModel model)
                     return false;
 
+                // Devices
+                if (_isDeviceFilterEnabled && !IsDeviceSupported(model))
+                    return false;
+
+                // Backend
+                if (Enum.TryParse<BackendType>(_filterBackend, out var backendType) && model.Backend != backendType)
+                    return false;
+
+                // Vendor
+                if (Enum.TryParse<VendorType>(_filterVendor, out var vendorType) && model.Vendor != vendorType)
+                    return false;
+
+                // Type
+                if (Enum.TryParse<EnvironmentType>(_filterType, out var environmentType) && model.Type != environmentType)
+                    return false;
+
+                // Text
                 if (!string.IsNullOrEmpty(_filterText))
-                {
                     return model.Name.Contains(_filterText, StringComparison.OrdinalIgnoreCase);
-                }
+
                 return true;
             };
+        }
+
+
+        /// <summary>
+        /// Determines whether any installed device can use the environment.
+        /// </summary>
+        /// <param name="model">The environment model.</param>
+        private bool IsDeviceSupported(EnvironmentModel model)
+        {
+            // CPU environments run on any machine
+            if (model.Vendor == VendorType.CPU)
+                return true;
+
+            return (Settings.Devices ?? [])
+                .Where(x => x.Vendor == model.Vendor)
+                .Where(x => x.SupportedBackends is null || x.SupportedBackends.Contains(model.Backend))
+                .Any(x => model.Type != EnvironmentType.Device || x.HardwareID == model.Device);
         }
 
 
         private Task FilterClearAsync()
         {
             FilterText = null;
+            FilterBackend = FilterBackends[0];
+            FilterVendor = FilterVendors[0];
+            FilterType = FilterTypes[0];
             return Task.CompletedTask;
         }
 
 
         private bool CanClearFilter()
         {
-            return !string.IsNullOrWhiteSpace(_filterText);
+            return !string.IsNullOrWhiteSpace(_filterText)
+                || _filterBackend != FilterBackends[0]
+                || _filterVendor != FilterVendors[0]
+                || _filterType != FilterTypes[0];
         }
 
 
@@ -255,18 +363,7 @@ namespace Amuse.App.Views
             if (SelectedEnvironment is null)
                 return;
 
-            var environments = SelectedEnvironment.Type switch
-            {
-                EnvironmentType.Vendor => Settings.Environments.Where(x => x.Backend == SelectedEnvironment.Backend && x.Type == EnvironmentType.Vendor && x.Vendor == SelectedEnvironment.Vendor),
-                EnvironmentType.Device => Settings.Environments.Where(x => x.Backend == SelectedEnvironment.Backend && x.Type == EnvironmentType.Device && x.Device == SelectedEnvironment.Device),
-                _ => Settings.Environments.Where(x => x.Backend == SelectedEnvironment.Backend && x.Type == EnvironmentType.Pipeline && x.Pipeline == SelectedEnvironment.Pipeline),
-            };
-
-            foreach (var env in environments)
-                env.IsDefault = false;
-
-            SelectedEnvironment.IsDefault = true;
-            await Settings.SaveAsync();
+            await EnvironmentService.SetDefaultAsync(SelectedEnvironment);
         }
 
 

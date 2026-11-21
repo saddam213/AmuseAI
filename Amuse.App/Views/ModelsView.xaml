@@ -328,7 +328,7 @@
                                                 <RowDefinition/>
                                             </Grid.RowDefinitions>
                                             <TextBlock Grid.Row="0" Grid.Column="0" FontStyle="Italic" Opacity=".7" Text="{CommonControls:Localize Memory, Append=:}" />
-                                            <TextBlock Grid.Row="0" Grid.Column="1" Text="{Binding MemoryProfile[1].Recommended}" />
+                                            <TextBlock Grid.Row="0" Grid.Column="1" Text="{Binding MemorySize, StringFormat={}{0}GB}" />
                                             <TextBlock Grid.Row="0" Grid.Column="2" FontStyle="Italic" Opacity=".7" Text="{CommonControls:Localize Type, Append=:}" />
                                             <TextBlock Grid.Row="0" Grid.Column="3" Text="{Binding ModelType}" />
                                             <TextBlock Grid.Row="1" Grid.Column="0" FontStyle="Italic" Opacity=".7" Text="{CommonControls:Localize Status, Append=:}" />
@@ -382,7 +382,7 @@
                                                 <RowDefinition/>
                                             </Grid.RowDefinitions>
                                             <TextBlock Grid.Row="0" Grid.Column="0" FontStyle="Italic" Opacity=".7" Text="{CommonControls:Localize Memory, Append=:}" />
-                                            <TextBlock Grid.Row="0" Grid.Column="1" Text="{Binding MemoryProfile[1].Recommended}" />
+                                            <TextBlock Grid.Row="0" Grid.Column="1" Text="{Binding MemorySize, StringFormat={}{0}GB}" />
                                             <TextBlock Grid.Row="0" Grid.Column="2" FontStyle="Italic" Opacity=".7" Text="{CommonControls:Localize Type, Append=:}" />
                                             <TextBlock Grid.Row="0" Grid.Column="3" Text="{Binding ModelType}" />
                                             <TextBlock Grid.Row="1" Grid.Column="0" FontStyle="Italic" Opacity=".7" Text="{CommonControls:Localize Status, Append=:}" />

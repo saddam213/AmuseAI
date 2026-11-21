@@ -212,5 +212,104 @@ namespace Amuse.App.Resources {
                 return ResourceManager.GetString("UnloadPipelineTitle", resourceCulture);
             }
         }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Extracted image result not found..
+        /// </summary>
+        public static string ExtractedImageNotFound {
+            get {
+                return ResourceManager.GetString("ExtractedImageNotFound", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to No extract model is loaded..
+        /// </summary>
+        public static string ExtractModelNotLoaded {
+            get {
+                return ResourceManager.GetString("ExtractModelNotLoaded", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to Extraction is not supported by the {0} backend..
+        /// </summary>
+        public static string ExtractBackendNotSupported {
+            get {
+                return ResourceManager.GetString("ExtractBackendNotSupported", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to Upscaled image result not found..
+        /// </summary>
+        public static string UpscaledImageNotFound {
+            get {
+                return ResourceManager.GetString("UpscaledImageNotFound", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Upscaled video result not found..
+        /// </summary>
+        public static string UpscaledVideoNotFound {
+            get {
+                return ResourceManager.GetString("UpscaledVideoNotFound", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to No upscale model is loaded..
+        /// </summary>
+        public static string UpscaleModelNotLoaded {
+            get {
+                return ResourceManager.GetString("UpscaleModelNotLoaded", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to {0} can only upscale videos..
+        /// </summary>
+        public static string UpscaleVideoOnly {
+            get {
+                return ResourceManager.GetString("UpscaleVideoOnly", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Upscaling is not supported by the {0} backend..
+        /// </summary>
+        public static string UpscaleBackendNotSupported {
+            get {
+                return ResourceManager.GetString("UpscaleBackendNotSupported", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Upscale Failed.
+        /// </summary>
+        public static string UpscaleFailedTitle {
+            get {
+                return ResourceManager.GetString("UpscaleFailedTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Upscaling failed, the result was kept without upscaling..
+        /// </summary>
+        public static string UpscaleFailedResultKept {
+            get {
+                return ResourceManager.GetString("UpscaleFailedResultKept", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The checkpoint must be a {0} file for the {1} backend.
+        /// </summary>
+        public static string UpscaleCheckpointFormat {
+            get {
+                return ResourceManager.GetString("UpscaleCheckpointFormat", resourceCulture);
+            }
+        }
     }
 }

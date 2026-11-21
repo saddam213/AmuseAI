@@ -1,8 +1,14 @@
-﻿namespace Amuse.Common
+﻿using TensorStack.Common;
+
+namespace Amuse.Common
 {
     public sealed record ExecutionOptions
     {
         public int MemoryReserve { get; set; } = 1;
+        public int GpuLayers { get; set; } = -1;
+        public int ContextSize { get; set; } = 16384;
+        public int Threads { get; set; }
+        public bool IsCacheOffloadEnabled { get; set; } = true;
         public bool IsPrefetchEnabled { get; set; } = true;
         public bool IsSegmentedComputeEnabled { get; set; } = true;
         public bool IsAutoEncoderCpuEnabled { get; set; }
@@ -23,5 +29,6 @@
         public bool IsOptimizeDeviceEnabled { get; set; }
         public bool IsOptimizeChannelsEnabled { get; set; }
         public bool IsDeviceQuantizationEnabled { get; set; }
+        public DataType WeightType { get; set; }
     }
 }

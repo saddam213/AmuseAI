@@ -64,14 +64,20 @@
                             </StackPanel>
 
                             <!--Scheduler-->
-                            <StackPanel Margin="2,0,0,0">
+                            <StackPanel Margin="2,0,0,0" Visibility="{Binding IsSchedulerSupported, Converter={StaticResource BooleanToVisibilityConverter}}">
                                 <Controls:SchedulerControl Options="{Binding Schedulers}" SelectedOptions="{Binding Options.SchedulerOptions, Mode=TwoWay}" IsSelectorOnly="True"/>
+                            </StackPanel>
+
+                            <!--Task-->
+                            <StackPanel Margin="2,0,0,0" Visibility="{Binding Pipeline.DiffusionModel.DefaultOptions.Tasks, Converter={StaticResource InverseEmptyToVisibilityConverter}}">
+                                <TextBlock Text="{CommonControls:Localize Task}" Style="{StaticResource FieldTextBlockStyle}" />
+                                <ComboBox ItemsSource="{Binding Pipeline.DiffusionModel.DefaultOptions.Tasks}" SelectedItem="{Binding Options.Task}" />
                             </StackPanel>
 
                         </UniformGrid>
 
                         <!--Steps-->
-                        <StackPanel>
+                        <StackPanel Visibility="{Binding Pipeline.DiffusionModel.DefaultOptions.Steps, Converter={StaticResource GreaterThanToVisibilityConverter}, ConverterParameter=0}">
                             <CommonControls:SliderControl Text="{CommonControls:Localize Steps}" Value="{Binding Options.Steps}" Minimum="1" Maximum="100" TickFrequency="1" />
                         </StackPanel>
 
@@ -81,12 +87,12 @@
                         </StackPanel>
 
                         <!--Strength-->
-                        <StackPanel>
+                        <StackPanel Visibility="{Binding IsStrengthSupported, Converter={StaticResource BooleanToVisibilityConverter}}">
                             <CommonControls:SliderControl Text="{CommonControls:Localize Strength}" Value="{Binding Options.Strength}"  IsPercent="True"  Minimum="0.01" Maximum="1" TickFrequency="0.01"/>
                         </StackPanel>
 
                         <!--BPM-->
-                        <StackPanel>
+                        <StackPanel Visibility="{Binding Pipeline.DiffusionModel.DefaultOptions.BPM, Converter={StaticResource GreaterThanToVisibilityConverter}, ConverterParameter=0}">
                             <CommonControls:SliderControl Text="{CommonControls:Localize BPM}" Value="{Binding Options.Bpm}" Minimum="30" Maximum="300" TickFrequency="1"/>
                         </StackPanel>
 
@@ -108,12 +114,12 @@
                                 </Grid>
                             </DockPanel>
 
-                            <StackPanel Margin="2,0,0,0">
+                            <StackPanel Margin="2,0,0,0" Visibility="{Binding Pipeline.DiffusionModel.DefaultOptions.BPM, Converter={StaticResource GreaterThanToVisibilityConverter}, ConverterParameter=0}">
                                 <TextBlock Text="{CommonControls:Localize TimeSignature}" Style="{StaticResource FieldTextBlockStyle}" />
                                 <ComboBox ItemsSource="{Binding TimeSignatures}" SelectedValue="{Binding Options.TimeSignature}" SelectedValuePath="Value" DisplayMemberPath="Label"/>
                             </StackPanel>
 
-                            <StackPanel Margin="0,0,2,0">
+                            <StackPanel Margin="0,0,2,0" Visibility="{Binding Pipeline.DiffusionModel.DefaultOptions.BPM, Converter={StaticResource GreaterThanToVisibilityConverter}, ConverterParameter=0}">
                                 <TextBlock Text="{CommonControls:Localize Keyscale}" Style="{StaticResource FieldTextBlockStyle}" />
                                 <ComboBox ItemsSource="{Binding KeyScales}" SelectedValue="{Binding Options.Keyscale}" SelectedValuePath="Value" DisplayMemberPath="Label" />
                             </StackPanel>
@@ -134,18 +140,18 @@
                             </StackPanel>
 
                             <!--Scheduler-->
-                            <StackPanel Margin="2,0,0,0" Visibility="{Binding IsSupertonicPipeline, Converter={StaticResource InverseBooleanToVisibilityConverter}}">
+                            <StackPanel Margin="2,0,0,0" Visibility="{Binding IsSchedulerSupported, Converter={StaticResource BooleanToVisibilityConverter}}">
                                 <Controls:SchedulerControl Options="{Binding Schedulers}" SelectedOptions="{Binding Options.SchedulerOptions, Mode=TwoWay}" IsSelectorOnly="True"/>
                             </StackPanel>
 
                             <!--VoiceStyle-->
-                            <StackPanel Margin="2,0,0,0" Visibility="{Binding IsSupertonicPipeline, Converter={StaticResource BooleanToVisibilityConverter}}">
+                            <StackPanel Margin="2,0,0,0" Visibility="{Binding Pipeline.DiffusionModel.DefaultOptions.Tasks, Converter={StaticResource InverseEmptyToVisibilityConverter}}">
                                 <TextBlock Text="{CommonControls:Localize VoiceStyle}" Style="{StaticResource FieldTextBlockStyle}" />
                                 <ComboBox ItemsSource="{Binding Pipeline.DiffusionModel.DefaultOptions.Tasks}" SelectedItem="{Binding Options.Task}" />
                             </StackPanel>
 
                             <!--Language-->
-                            <StackPanel Margin="0,0,2,0" Visibility="{Binding IsSupertonicPipeline, Converter={StaticResource BooleanToVisibilityConverter}}">
+                            <StackPanel Margin="0,0,2,0" Visibility="{Binding Pipeline.DiffusionModel.DefaultOptions.Languages, Converter={StaticResource InverseEmptyToVisibilityConverter}}">
                                 <TextBlock Text="{CommonControls:Localize Language}" Style="{StaticResource FieldTextBlockStyle}" />
                                 <ComboBox ItemsSource="{Binding Pipeline.DiffusionModel.DefaultOptions.Languages}" SelectedItem="{Binding Options.Language}" />
                             </StackPanel>
@@ -153,21 +159,21 @@
                         </UniformGrid>
 
                         <!--Steps-->
-                        <StackPanel>
+                        <StackPanel Visibility="{Binding Pipeline.DiffusionModel.DefaultOptions.Steps, Converter={StaticResource GreaterThanToVisibilityConverter}, ConverterParameter=0}">
                             <CommonControls:SliderControl Text="{CommonControls:Localize Steps}" Value="{Binding Options.Steps}" Minimum="1" Maximum="100" TickFrequency="1" />
                         </StackPanel>
 
                         <!--Guidance Scale-->
-                        <StackPanel Visibility="{Binding IsSupertonicPipeline, Converter={StaticResource InverseBooleanToVisibilityConverter}}">
+                        <StackPanel Visibility="{Binding Pipeline.DiffusionModel.DefaultOptions.GuidanceScale, Converter={StaticResource GreaterThanToVisibilityConverter}, ConverterParameter=0}">
                             <CommonControls:SliderControl Text="{CommonControls:Localize Guidance}" Value="{Binding Options.GuidanceScale}" Minimum="1" Maximum="20" TickFrequency="0.1" ValueFormat="F2"/>
                         </StackPanel>
 
                         <!--Speed-->
-                        <StackPanel Margin="0,4,0,0" Visibility="{Binding IsSupertonicPipeline, Converter={StaticResource BooleanToVisibilityConverter}}">
+                        <StackPanel Margin="0,4,0,0" Visibility="{Binding Pipeline.DiffusionModel.DefaultOptions.Speed, Converter={StaticResource GreaterThanToVisibilityConverter}, ConverterParameter=0}">
                             <CommonControls:SliderControl Value="{Binding Options.Speed}" Text="{CommonControls:Localize Speed}" Minimum="0.5" Maximum="5" TickFrequency="0.01" ValuePostFix="x" ValueFormat="N1"/>
                         </StackPanel>
 
-                        <DockPanel Margin="0,0,0,0" Visibility="{Binding IsSupertonicPipeline, Converter={StaticResource InverseBooleanToVisibilityConverter}}">
+                        <DockPanel Margin="0,0,0,0" Visibility="{Binding IsSpeechPipeline, Converter={StaticResource InverseBooleanToVisibilityConverter}}">
                             <ToggleButton x:Name="ToggleButtonDurations2" DockPanel.Dock="Right" Style="{StaticResource ToggleButtonBasic}" Width="25" Height="22" VerticalAlignment="Bottom">
                                 <CommonControls:FontAwesome Icon="f1ec" IconStyle="Light" Size="12"/>
                             </ToggleButton>
@@ -191,11 +197,11 @@
 
                         <UniformGrid Columns="2" >
                             <DockPanel>
-                                <StackPanel DockPanel.Dock="Right" Width="60" Margin="0,0,2,0">
+                                <StackPanel DockPanel.Dock="Right" Width="60" Margin="0,0,2,0" Visibility="{Binding Pipeline.DiffusionModel.DefaultOptions.Languages, Converter={StaticResource InverseEmptyToVisibilityConverter}}">
                                     <TextBlock Text="{CommonControls:Localize Language}" Style="{StaticResource FieldTextBlockStyle}" />
                                     <Controls:LanguageControl SupportedLanguages="{Binding Pipeline.DiffusionModel.DefaultOptions.Languages}" SelectedLanguage="{Binding Options.Language}" />
                                 </StackPanel>
-                                <StackPanel>
+                                <StackPanel Visibility="{Binding Pipeline.DiffusionModel.DefaultOptions.Tasks, Converter={StaticResource InverseEmptyToVisibilityConverter}}">
                                     <TextBlock Text="{CommonControls:Localize Task}" Style="{StaticResource FieldTextBlockStyle}" />
                                     <ComboBox ItemsSource="{Binding Pipeline.DiffusionModel.DefaultOptions.Tasks}" SelectedItem="{Binding Options.Task}" />
                                 </StackPanel>
@@ -206,7 +212,8 @@
                             </StackPanel>
                         </UniformGrid>
 
-                        <UniformGrid Columns="2" Margin="0,4,0,0">
+                        <!--Whisper-->
+                        <UniformGrid Columns="2" Margin="0,4,0,0" Visibility="{Binding IsWhisperPipeline, Converter={StaticResource BooleanToVisibilityConverter}}">
                             <CommonControls:SliderControl Text="{CommonControls:Localize Beams}" Value="{Binding Options.Beams}" Minimum="0" Maximum="20" TickFrequency="1" />
                             <CommonControls:SliderControl Text="{CommonControls:Localize Temperature}" Value="{Binding Options.Temperature}" Minimum="0.1" Maximum="5" TickFrequency="0.01" ValueFormat="N2"/>
                             <CommonControls:SliderControl Text="{CommonControls:Localize TopK}" Value="{Binding Options.TopK}" Minimum="1" Maximum="100" TickFrequency="1" />
@@ -217,7 +224,12 @@
                             <CommonControls:SliderControl Text="{CommonControls:Localize ChunkSize}" Value="{Binding Options.ChunkSize}" Minimum="2" Maximum="30" TickFrequency="1" />
                         </UniformGrid>
 
-                        <UniformGrid Columns="2"  Margin="0,4,0,0">
+                        <!--ChunkSize, 0 uses the model default-->
+                        <StackPanel Margin="0,4,0,0" Visibility="{Binding IsWhisperPipeline, Converter={StaticResource InverseBooleanToVisibilityConverter}}">
+                            <CommonControls:SliderControl Text="{CommonControls:Localize ChunkSize}" Value="{Binding Options.ChunkSize}" Minimum="0" Maximum="30" TickFrequency="1" />
+                        </StackPanel>
+
+                        <UniformGrid Columns="2"  Margin="0,4,0,0" Visibility="{Binding IsWhisperPipeline, Converter={StaticResource BooleanToVisibilityConverter}}">
                             <StackPanel>
                                 <TextBlock Text="{CommonControls:Localize EarlyStopping}" Style="{StaticResource FieldTextBlockStyle}" />
                                 <ComboBox ItemsSource="{Binding Source={StaticResource EarlyStopping}}" SelectedItem="{Binding Options.EarlyStopping}" Style="{StaticResource EnumComboBox}"/>
@@ -225,6 +237,16 @@
                             <CheckBox Content="{CommonControls:Localize AllBeamsResults}" IsChecked="{Binding IsMultipleResult}" Margin="0,21,0,0" HorizontalAlignment="Right"/>
                         </UniformGrid>
 
+                    </StackPanel>
+
+                    <!--Negative Prompt-->
+                    <StackPanel DockPanel.Dock="Top" Visibility="{Binding IsNegativePromptSupported, Converter={StaticResource BooleanToVisibilityConverter}}">
+                        <DockPanel Margin="0,4,0,0" Visibility="{Binding Options.GuidanceScale, Converter={StaticResource GreaterThanToVisibilityConverter}, ConverterParameter=1, FallbackValue=Collapsed}">
+                            <TextBlock DockPanel.Dock="Top" Text="{CommonControls:Localize NegativePrompt}" Style="{StaticResource FieldTextBlockStyle}" />
+                            <Border Style="{StaticResource TextDropZoneStyle}" Height="60">
+                                <CommonControls:PlaceholderTextBox Text="{Binding Options.NegativePrompt, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" TextWrapping="Wrap" AcceptsReturn="True" VerticalScrollBarVisibility="Auto" />
+                            </Border>
+                        </DockPanel>
                     </StackPanel>
 
                     <!--Lora Strength-->
@@ -287,15 +309,9 @@
                     <Style TargetType="{x:Type TabItem}" BasedOn="{StaticResource DiffusionInputTab}">
                         <Setter Property="Visibility" Value="Collapsed"/>
                         <Style.Triggers>
-                            <MultiDataTrigger>
-                                <MultiDataTrigger.Conditions>
-                                    <Condition Binding="{Binding IsWhisperPipeline}" Value="False"/>
-                                    <Condition Binding="{Binding IsSupertonicPipeline}" Value="False"/>
-                                </MultiDataTrigger.Conditions>
-                                <MultiDataTrigger.Setters>
-                                    <Setter Property="Visibility" Value="Visible"/>
-                                </MultiDataTrigger.Setters>
-                            </MultiDataTrigger>
+                            <DataTrigger Binding="{Binding IsSchedulerSupported}" Value="True">
+                                <Setter Property="Visibility" Value="Visible"/>
+                            </DataTrigger>
                             <DataTrigger Binding="{Binding ProcessType}" Value="AudioToText">
                                 <Setter Property="Visibility" Value="Collapsed"/>
                             </DataTrigger>

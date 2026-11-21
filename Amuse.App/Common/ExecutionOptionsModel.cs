@@ -1,5 +1,6 @@
 ﻿using Amuse.Common;
 using System.Text.Json.Serialization;
+using TensorStack.Common;
 using TensorStack.WPF;
 
 namespace Amuse.App.Common
@@ -9,6 +10,10 @@ namespace Amuse.App.Common
         private bool _isPrefetchEnabled = true;
         private bool _isSegmentedComputeEnabled = true;
         private int _memoryReserve = 1;
+        private int _gpuLayers = -1;
+        private int _contextSize = 16384;
+        private int _threads;
+        private bool _isCacheOffloadEnabled = true;
         private bool _isControlNetCpuEnabled;
         private bool _isTextEncoderCpuEnabled;
         private bool _isAutoEncoderCpuEnabled;
@@ -24,6 +29,7 @@ namespace Amuse.App.Common
         private bool _isOptimizeDeviceEnabled;
         private bool _isOptimizeChannelsEnabled;
         private bool _isDeviceQuantizationEnabled;
+        private DataType _weightType;
 
         [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingDefault)]
         public bool IsPrefetchEnabled
@@ -43,6 +49,31 @@ namespace Amuse.App.Common
         {
             get { return _memoryReserve; }
             set { SetProperty(ref _memoryReserve, value); }
+        }
+
+        public int GpuLayers
+        {
+            get { return _gpuLayers; }
+            set { SetProperty(ref _gpuLayers, value); }
+        }
+
+        public int ContextSize
+        {
+            get { return _contextSize; }
+            set { SetProperty(ref _contextSize, value); }
+        }
+
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingDefault)]
+        public int Threads
+        {
+            get { return _threads; }
+            set { SetProperty(ref _threads, value); }
+        }
+
+        public bool IsCacheOffloadEnabled
+        {
+            get { return _isCacheOffloadEnabled; }
+            set { SetProperty(ref _isCacheOffloadEnabled, value); }
         }
 
         [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingDefault)]
@@ -151,6 +182,16 @@ namespace Amuse.App.Common
             set { SetProperty(ref _isDeviceQuantizationEnabled, value); }
         }
 
+        /// <summary>
+        /// Gets or sets the type the model weights are converted to when loading, Default keeps the model's own type.
+        /// </summary>
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingDefault)]
+        public DataType WeightType
+        {
+            get { return _weightType; }
+            set { SetProperty(ref _weightType, value); }
+        }
+
 
         public ExecutionOptionsModel DeepClone()
         {
@@ -159,6 +200,10 @@ namespace Amuse.App.Common
                 IsPrefetchEnabled = _isPrefetchEnabled,
                 IsSegmentedComputeEnabled = _isSegmentedComputeEnabled,
                 MemoryReserve = _memoryReserve,
+                GpuLayers = _gpuLayers,
+                ContextSize = _contextSize,
+                Threads = _threads,
+                IsCacheOffloadEnabled = _isCacheOffloadEnabled,
                 IsAutoEncoderCpuEnabled = _isAutoEncoderCpuEnabled,
                 IsControlNetCpuEnabled = _isControlNetCpuEnabled,
                 IsTextEncoderCpuEnabled = _isTextEncoderCpuEnabled,
@@ -173,7 +218,8 @@ namespace Amuse.App.Common
                 IsSageAttentionEnabled = _isSageAttentionEnabled,
                 IsOptimizeChannelsEnabled = _isOptimizeChannelsEnabled,
                 IsOptimizeDeviceEnabled = _isOptimizeDeviceEnabled,
-                IsDeviceQuantizationEnabled = _isDeviceQuantizationEnabled
+                IsDeviceQuantizationEnabled = _isDeviceQuantizationEnabled,
+                WeightType = _weightType
             };
         }
     }

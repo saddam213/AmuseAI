@@ -115,6 +115,7 @@
                                 <UniformGrid Rows="1" >
                                     <CheckBox Content="{CommonControls:Localize EnableExternalLinks}" IsChecked="{Binding Settings.IsExternalLinksEnabled}" />
                                     <CheckBox Content="{CommonControls:Localize EnableExternalTools}" IsChecked="{Binding Settings.IsExternalToolsEnabled}" />
+                                    <CheckBox Content="{CommonControls:Localize EnableDangerousTools}" IsChecked="{Binding Settings.IsDangerousToolsEnabled}" />
                                 </UniformGrid>
                             </DockPanel>
                           

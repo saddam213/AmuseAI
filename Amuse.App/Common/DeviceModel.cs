@@ -14,36 +14,21 @@ namespace Amuse.App.Common
         {
             _baseDevice = gpuDevice;
             DeviceCode = GetDeviceCode(Vendor);
-            QualityModes = GetQualityModes(Vendor);
             SupportedBackends = GetSupportedBackends(Vendor, DeviceType);
-            DefaultQualityMode = QualityModes.Contains(QualityMode.Standard) ? QualityMode.Standard : QualityMode.Production;
         }
 
         public int PCIBusId => _baseDevice.PCIBusId;
         public string DeviceType => _baseDevice.DeviceType;
         public string DeviceCode { get; init; }
-        public QualityMode[] QualityModes { get; init; }
-        public QualityMode DefaultQualityMode { get; init; }
         public BackendType[] SupportedBackends { get; init; }
         public int VendorIndex { get; set; }
-
-        private static QualityMode[] GetQualityModes(VendorType vendor)
-        {
-            return vendor switch
-            {
-                VendorType.AMD => [QualityMode.Draft, QualityMode.Standard, QualityMode.Production],
-                VendorType.Nvidia => [QualityMode.Draft, QualityMode.Standard, QualityMode.Production],
-                _ => [QualityMode.Production]
-            };
-        }
-
 
         private static BackendType[] GetSupportedBackends(VendorType vendor, string deviceType)
         {
             if (vendor == VendorType.Intel)
-                return [BackendType.OnnxRuntime, BackendType.StableDiffusionCpp, BackendType.AudioCpp];
+                return [BackendType.OnnxRuntime, BackendType.StableDiffusionCpp, BackendType.AudioCpp, BackendType.LlamaCpp];
 
-            return [BackendType.HuggingFace, BackendType.OnnxRuntime, BackendType.StableDiffusionCpp, BackendType.AudioCpp];
+            return [BackendType.HuggingFace, BackendType.OnnxRuntime, BackendType.StableDiffusionCpp, BackendType.AudioCpp, BackendType.LlamaCpp];
         }
 
 

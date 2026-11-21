@@ -19,16 +19,23 @@
                 <Button Content="{CommonControls:Localize Save}" Command="{Binding SaveCommand}" Width="100" IsDefault="True"/>
                 <Button Content="{CommonControls:Localize Cancel}" Command="{Binding CancelCommand}"/>
             </UniformGrid>
-            <TextBlock/>
+            <Button DockPanel.Dock="Left" Content="{CommonControls:Localize Reset}" Command="{Binding ResetCommand}" Width="100" HorizontalAlignment="Left" ToolTip="{CommonControls:Localize ToolTip_ResetExecutionOptions}" ToolTipService.InitialShowDelay="200"/>
         </DockPanel>
 
+
         <!--HuggingFace-->
-        <StackPanel Visibility="{Binding Backend, Converter={StaticResource EnumToVisibilityConverter}, ConverterParameter=HuggingFace}">
+        <StackPanel DockPanel.Dock="Top" Visibility="{Binding Backend, Converter={StaticResource EnumToVisibilityConverter}, ConverterParameter=HuggingFace}">
 
             <!--Memory-->
             <GroupBox Header="{CommonControls:Localize Memory}" Margin="0, 0, 0, 0" Padding="5,2,5,5">
                 <StackPanel>
-                    <StackPanel Margin="0,4,0,0">
+                    <UniformGrid Columns="2">
+                        <StackPanel>
+                            <TextBlock Text="{CommonControls:Localize WeightType}" Style="{StaticResource FieldTextBlockStyle}"/>
+                            <ComboBox ItemsSource="{Binding WeightTypes}" SelectedItem="{Binding ExecutionOptions.WeightType}" Style="{StaticResource EnumComboBox}" ToolTip="{CommonControls:Localize ToolTip_WeightType}" ToolTipService.InitialShowDelay="200" ToolTipService.Placement="Bottom"/>
+                        </StackPanel>
+                    </UniformGrid>
+                    <StackPanel Margin="0,12,0,0">
                         <CheckBox Content="{CommonControls:Localize OptimizeDevice}" IsChecked="{Binding ExecutionOptions.IsOptimizeDeviceEnabled}"/>
                         <TextBlock Text="{CommonControls:Localize OptimizeDeviceMessage}" FontSize="11" FontStyle="Italic" Opacity=".6" Margin="22,0,0,0"/>
                     </StackPanel>
@@ -45,20 +52,60 @@
         </StackPanel>
 
 
+        <!--LlamaCpp-->
+        <DockPanel DockPanel.Dock="Top" Visibility="{Binding Backend, Converter={StaticResource EnumToVisibilityConverter}, ConverterParameter=LlamaCpp}" >
+
+            <!--Memory-->
+            <GroupBox DockPanel.Dock="Top" Header="{CommonControls:Localize Memory}" Margin="0, 0, 0, 0" Padding="5,2,5,5">
+                <StackPanel>
+                    <UniformGrid Columns="3">
+                        <StackPanel>
+                            <TextBlock Text="{CommonControls:Localize Threads}" Style="{StaticResource FieldTextBlockStyle}"/>
+                            <TextBox Text="{Binding ExecutionOptions.Threads}" ToolTip="{CommonControls:Localize ToolTip_Threads}" ToolTipService.InitialShowDelay="200" ToolTipService.Placement="Bottom"/>
+                        </StackPanel>
+                        <StackPanel >
+                            <TextBlock Text="{CommonControls:Localize GpuLayers}" Style="{StaticResource FieldTextBlockStyle}"/>
+                            <TextBox Text="{Binding ExecutionOptions.GpuLayers}" ToolTip="{CommonControls:Localize ToolTip_GpuLayers}" ToolTipService.InitialShowDelay="200" ToolTipService.Placement="Bottom"/>
+                        </StackPanel>
+                        <StackPanel>
+                            <TextBlock Text="{CommonControls:Localize ContextSize}" Style="{StaticResource FieldTextBlockStyle}"/>
+                            <TextBox Text="{Binding ExecutionOptions.ContextSize}" ToolTip="{CommonControls:Localize ToolTip_ContextSize}" ToolTipService.InitialShowDelay="200" ToolTipService.Placement="Bottom"/>
+                        </StackPanel>
+                    </UniformGrid>
+                    <StackPanel Margin="0,6,0,0">
+                        <CheckBox Content="{CommonControls:Localize CacheOffload}" IsChecked="{Binding ExecutionOptions.IsCacheOffloadEnabled}" ToolTip="{CommonControls:Localize ToolTip_CacheOffload}" ToolTipService.InitialShowDelay="200" ToolTipService.Placement="Bottom"/>
+                    </StackPanel>
+                </StackPanel>
+            </GroupBox>
+
+            <!--Flash Attention-->
+            <GroupBox Header="{CommonControls:Localize FlashAttention}" Margin="0, 10, 0, 0" Padding="5">
+                <UniformGrid Columns="3">
+                    <ComboBox ItemsSource="{Binding Source={StaticResource AutoOption}}" SelectedItem="{Binding ExecutionOptions.TextEncoderFlashAttention}" Style="{StaticResource EnumComboBox}"/>
+                </UniformGrid>
+            </GroupBox>
+        </DockPanel>
+
+
         <!--StableDiffusionCpp-->
-        <StackPanel Visibility="{Binding Backend, Converter={StaticResource EnumToVisibilityConverter}, ConverterParameter=StableDiffusionCpp}">
+        <StackPanel DockPanel.Dock="Top" Visibility="{Binding Backend, Converter={StaticResource EnumToVisibilityConverter}, ConverterParameter=StableDiffusionCpp}">
 
             <!--Memory-->
             <GroupBox Header="{CommonControls:Localize Memory}" Margin="0, 0, 0, 0" Padding="5,2,5,5">
-                <UniformGrid Columns="3">
-                    <StackPanel Margin="0, 6, 0, 0">
+                <UniformGrid Columns="2">
+                    <StackPanel>
+                        <StackPanel>
+                            <TextBlock Text="{CommonControls:Localize WeightType}" Style="{StaticResource FieldTextBlockStyle}"/>
+                            <ComboBox ItemsSource="{Binding WeightTypes}" SelectedItem="{Binding ExecutionOptions.WeightType}" Style="{StaticResource EnumComboBox}" ToolTip="{CommonControls:Localize ToolTip_WeightType}" ToolTipService.InitialShowDelay="200" ToolTipService.Placement="Bottom"/>
+                        </StackPanel>
+                        <StackPanel>
+                            <TextBlock Text="{CommonControls:Localize MemoryReserveGB}" Style="{StaticResource FieldTextBlockStyle}"/>
+                            <TextBox Text="{Binding ExecutionOptions.MemoryReserve}"/>
+                        </StackPanel>
+                    </StackPanel>
+                    <StackPanel Margin="16, 18, 0, 0">
                         <CheckBox Content="{CommonControls:Localize SegmentPrefetch}" IsChecked="{Binding ExecutionOptions.IsPrefetchEnabled}"/>
                         <CheckBox Content="{CommonControls:Localize SegmentedCompute}" IsChecked="{Binding ExecutionOptions.IsSegmentedComputeEnabled}"/>
-                    </StackPanel>
-                    <StackPanel></StackPanel>
-                    <StackPanel>
-                        <TextBlock Text="{CommonControls:Localize MemoryReserveGB}" Style="{StaticResource FieldTextBlockStyle}"/>
-                        <TextBox Text="{Binding ExecutionOptions.MemoryReserve}"/>
                     </StackPanel>
                 </UniformGrid>
             </GroupBox>
@@ -126,6 +173,17 @@
                     <CheckBox Content="{CommonControls:Localize ControlNet}" IsChecked="{Binding ExecutionOptions.IsControlNetCpuEnabled}" HorizontalAlignment="Right"/>
                 </UniformGrid>
             </GroupBox>
+        </StackPanel>
+
+
+        <!--AudioCpp-->
+        <StackPanel DockPanel.Dock="Top" Visibility="{Binding Backend, Converter={StaticResource EnumToVisibilityConverter}, ConverterParameter=AudioCpp}">
+            <UniformGrid Columns="2">
+                <StackPanel>
+                    <TextBlock Text="{CommonControls:Localize WeightType}" Style="{StaticResource FieldTextBlockStyle}"/>
+                    <ComboBox ItemsSource="{Binding WeightTypes}" SelectedItem="{Binding ExecutionOptions.WeightType}" Style="{StaticResource EnumComboBox}" ToolTip="{CommonControls:Localize ToolTip_WeightType}" ToolTipService.InitialShowDelay="200" ToolTipService.Placement="Bottom"/>
+                </StackPanel>
+            </UniformGrid>
         </StackPanel>
 
     </DockPanel>

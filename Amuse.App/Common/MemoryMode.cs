@@ -20,16 +20,4 @@ namespace Amuse.App.Common
         [Display(Name = "MemoryMode4", Description = "MemoryMode4_Description", ResourceType = typeof(AppEnums))]
         High = 4
     }
-
-    public enum QualityMode
-    {
-        [Display(Name = "QualityMode0", Description = "QualityMode0_Description", ResourceType = typeof(AppEnums))]
-        Draft = 0,
-
-        [Display(Name = "QualityMode1", Description = "QualityMode1_Description", ResourceType = typeof(AppEnums))]
-        Standard = 1,
-
-        [Display(Name = "QualityMode2", Description = "QualityMode2_Description", ResourceType = typeof(AppEnums))]
-        Production = 2
-    }
 }

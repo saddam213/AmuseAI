@@ -1,17 +1,27 @@
-﻿using System;
+﻿using Amuse.App.Resources;
+using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
+using TensorStack.WPF.Controls;
 
 namespace Amuse.App.Tools
 {
     public sealed class ApplicationTool : ToolCallBase
     {
         private static ApplicationName[] _applications;
+        private static readonly HashSet<string> ProgramExtensions =new HashSet<string>(StringComparer.OrdinalIgnoreCase)
+        {
+            ".exe", ".com", ".bat", ".cmd", ".ps1", ".psm1", ".vbs", ".vbe", ".js", ".jse", ".wsf", ".wsh", ".hta",
+            ".msi", ".msp", ".scr", ".pif", ".cpl", ".lnk", ".url", ".reg", ".jar", ".appref-ms", ".application", ".library-ms"
+        };
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="ApplicationTool"/> class.
+        /// </summary>
         public ApplicationTool()
         {
             _applications ??= [.. GetApplications()];
@@ -25,7 +35,7 @@ namespace Amuse.App.Tools
         /// <summary>
         /// Gets the tool description.
         /// </summary>
-        public override string Description => "Manage Windows applications by listing installed applications or starting an application by name.";
+        public override string Description => "Start or list installed Windows applications, open a web page in the default browser, open a file in its default application, or show a file or folder in File Explorer.";
 
         /// <summary>
         /// Gets the is default enabled.
@@ -43,9 +53,14 @@ namespace Amuse.App.Tools
         public override string DisplayIcon => "f40e";
 
         /// <summary>
+        ///  Gets the tool icon style.
+        /// </summary>
+        public override FontAwesomeIconStyle DisplayIconStyle { get; } = FontAwesomeIconStyle.SharpLight;
+
+        /// <summary>
         /// Gets the is display order.
         /// </summary>
-        public override int DisplayOrder => 20;
+        public override int DisplayOrder => 12;
 
         /// <summary>
         /// Gets the tool schema.
@@ -55,82 +70,163 @@ namespace Amuse.App.Tools
             "type": "function",
             "function": {
                 "name": "{{Name}}",
-                "description": "{{Description}} Use this tool when you need to find available applications or start a Windows application.",
+                "description": "{{Description}} Use this tool only when the user asks to start an application, or to open, view or show a link, file or folder.",
                 "parameters": {
                     "type": "object",
                     "properties": {
-                        "name": {
-                            "type": "string",
-                            "description": "The application name to start, or a search term to filter the application list."
-                        },
                         "action": {
                             "type": "string",
-                            "enum": ["start", "list"],
-                            "description": "The action to perform: 'list' to find applications or 'start' to start an application.",
+                            "enum": ["start", "list", "open", "reveal"],
+                            "description": "'start' starts an installed application by name, 'list' finds installed applications matching name, 'open' opens a url, file or folder, 'reveal' shows a file or folder selected in File Explorer.",
                             "default": "start"
+                        },
+                        "name": {
+                            "type": "string",
+                            "description": "For 'start' and 'list': the application name, or a search term to filter the application list."
+                        },
+                        "target": {
+                            "type": "string",
+                            "description": "For 'open' and 'reveal': an http or https url, or the full path of a file or folder."
                         },
                         "arg1": {
                             "type": "string",
-                            "description": "The first optional argument to pass to the application when starting it."
+                            "description": "For 'start': the first optional argument to pass to the application."
                         },
                         "arg2": {
                             "type": "string",
-                            "description": "The second optional argument to pass to the application when starting it."
+                            "description": "For 'start': the second optional argument to pass to the application."
                         }
                     },
-                    "required": ["name"]
+                    "required": ["action"]
                 }
             }
         }
         """;
+
 
         /// <summary>
         /// Executes the tool.
         /// </summary>
         /// <param name="settings">The settings.</param>
         /// <param name="cancellationToken">The cancellation token.</param>
-        public override Task<string> ExecuteAsync(Settings settings, CancellationToken cancellationToken = default)
+        public override async Task<string> ExecuteAsync(Settings settings, CancellationToken cancellationToken = default)
         {
             try
             {
-                var name = GetArgument<string>("name");
-
-                var action = GetArgumentOrDefault("action", "start");
-                if (action == "list")
+                var action = GetArgumentOrDefault("action", "start")?.ToLowerInvariant();
+                object result = action switch
                 {
-                    var applications = _applications
-                        .Where(x => x.Name.Contains(name, StringComparison.OrdinalIgnoreCase))
-                        .Select(x => x.Name)
-                        .ToArray();
-                    return Task.FromResult(SuccessResult(applications));
-                }
-                else
-                {
-                    var application = _applications.FirstOrDefault(x => x.Name.Equals(name, StringComparison.OrdinalIgnoreCase))
-                                    ?? _applications.FirstOrDefault(x => x.Name.StartsWith(name, StringComparison.OrdinalIgnoreCase))
-                                    ?? _applications.FirstOrDefault(x => x.Name.Contains(name, StringComparison.OrdinalIgnoreCase))
-                                    ?? throw new Exception($"Application '{name}' not found.");
-
-                    var arg1 = GetArgumentOrDefault<string>("arg1");
-                    var arg2 = GetArgumentOrDefault<string>("arg2");
-                    var processInfo = new ProcessStartInfo
-                    {
-                        FileName = application.Shortcut,
-                        UseShellExecute = true
-                    };
-                    if (!string.IsNullOrEmpty(arg1))
-                        processInfo.ArgumentList.Add(arg1);
-                    if (!string.IsNullOrEmpty(arg2))
-                        processInfo.ArgumentList.Add(arg2);
-
-                    Process.Start(processInfo);
-                    return Task.FromResult(SuccessResult(application));
-                }
+                    "list" => ListApplications(GetArgumentOrDefault("name", string.Empty)),
+                    "open" => await OpenAsync(settings, GetTarget(), false),
+                    "reveal" => await OpenAsync(settings, GetTarget(), true),
+                    _ => StartApplication(GetArgument<string>("name"), GetArgumentOrDefault<string>("arg1"), GetArgumentOrDefault<string>("arg2"))
+                };
+                return SuccessResult(result);
             }
             catch (Exception ex)
             {
-                return Task.FromResult(ErrorResult(ex));
+                return ErrorResult(ex);
             }
+        }
+
+
+        /// <summary>
+        /// Lists the applications matching the name.
+        /// </summary>
+        /// <param name="name">The name filter.</param>
+        private static string[] ListApplications(string name)
+        {
+            return _applications
+                .Where(x => string.IsNullOrWhiteSpace(name) || x.Name.Contains(name, StringComparison.OrdinalIgnoreCase))
+                .Select(x => x.Name)
+                .Distinct(StringComparer.OrdinalIgnoreCase)
+                .Order(StringComparer.OrdinalIgnoreCase)
+                .ToArray();
+        }
+
+
+        /// <summary>
+        /// Starts the application.
+        /// </summary>
+        /// <param name="name">The application name.</param>
+        /// <param name="arg1">The first argument.</param>
+        /// <param name="arg2">The second argument.</param>
+        private static ApplicationName StartApplication(string name, string arg1, string arg2)
+        {
+            var application = _applications.FirstOrDefault(x => x.Name.Equals(name, StringComparison.OrdinalIgnoreCase))
+                            ?? _applications.FirstOrDefault(x => x.Name.StartsWith(name, StringComparison.OrdinalIgnoreCase))
+                            ?? _applications.FirstOrDefault(x => x.Name.Contains(name, StringComparison.OrdinalIgnoreCase))
+                            ?? throw new Exception($"Application '{name}' not found. Use the 'list' action to find installed applications.");
+
+            var processInfo = new ProcessStartInfo
+            {
+                FileName = application.Shortcut,
+                UseShellExecute = true
+            };
+            if (!string.IsNullOrEmpty(arg1))
+                processInfo.ArgumentList.Add(arg1);
+            if (!string.IsNullOrEmpty(arg2))
+                processInfo.ArgumentList.Add(arg2);
+
+            Process.Start(processInfo);
+            return application;
+        }
+
+
+        /// <summary>
+        /// Opens a url, file or folder, or reveals a file or folder in File Explorer.
+        /// </summary>
+        /// <param name="settings">The settings.</param>
+        /// <param name="target">The target.</param>
+        /// <param name="isReveal">if set to <c>true</c> reveal in File Explorer.</param>
+        private async Task<OpenResult> OpenAsync(Settings settings, string target, bool isReveal)
+        {
+            // Url
+            if (target.StartsWith("http://", StringComparison.OrdinalIgnoreCase) || target.StartsWith("https://", StringComparison.OrdinalIgnoreCase))
+            {
+                var uri = ToolHelper.GetWebUri(target);
+                Process.Start(new ProcessStartInfo { FileName = uri.AbsoluteUri, UseShellExecute = true });
+                return new OpenResult(uri.AbsoluteUri, "open", "Url");
+            }
+
+            // Path
+            var path = Path.GetFullPath(Environment.ExpandEnvironmentVariables(target));
+            var isDirectory = Directory.Exists(path);
+            if (!isDirectory && !File.Exists(path))
+                throw new FileNotFoundException($"'{target}' is not a valid url, file or folder.");
+
+            // Windows paths cannot contain quotes, so quoting is safe here
+            if (isReveal)
+            {
+                Process.Start(new ProcessStartInfo { FileName = "explorer.exe", Arguments = $"/select,\"{path}\"", UseShellExecute = false });
+                return new OpenResult(path, "reveal", isDirectory ? "Folder" : "File");
+            }
+
+            if (isDirectory)
+            {
+                Process.Start(new ProcessStartInfo { FileName = "explorer.exe", Arguments = $"\"{path}\"", UseShellExecute = false });
+                return new OpenResult(path, "open", "Folder");
+            }
+
+            // Programs and scripts
+            if (ProgramExtensions.Contains(Path.GetExtension(path)))
+                await CheckDangerousAccess(settings, string.Format(AppDefault.ToolActionRunProgram, path));
+
+            Process.Start(new ProcessStartInfo { FileName = path, UseShellExecute = true });
+            return new OpenResult(path, "open", "File");
+        }
+
+
+        /// <summary>
+        /// Gets the open or reveal target.
+        /// </summary>
+        /// <exception cref="System.ArgumentNullException">target</exception>
+        private string GetTarget()
+        {
+            var target = GetArgumentOrDefault<string>("target") ?? GetArgumentOrDefault<string>("name");
+            if (string.IsNullOrWhiteSpace(target))
+                throw new ArgumentNullException("target");
+            return target.Trim().Trim('"');
         }
 
 
@@ -156,6 +252,16 @@ namespace Amuse.App.Tools
             }
         }
 
-        private record ApplicationName(string Name, string Shortcut);
+
+        /// <summary>
+        /// ApplicationName structure.
+        /// </summary>
+        private sealed record ApplicationName(string Name, string Shortcut);
+
+
+        /// <summary>
+        /// OpenResult structure.
+        /// </summary>
+        private sealed record OpenResult(string Target, string Action, string Type);
     }
 }

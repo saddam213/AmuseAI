@@ -14,6 +14,7 @@ using System.Windows.Input;
 using System.Windows.Threading;
 using TensorStack.Common;
 using TensorStack.Common.Audio;
+using TensorStack.Common.Common;
 using TensorStack.Common.Tensor;
 using TensorStack.Common.Video;
 using TensorStack.Media.Audio;
@@ -286,15 +287,21 @@ namespace Amuse.App.Controls
                 using (CancellationTokenSource = new CancellationTokenSource())
                 {
                     var tempFilename = MediaService.GetTempFile(MediaType.Video);
-                    await VideoManager.WriteVideoStreamAsync(tempFilename, GetOutputVideoFrames(_cancellationTokenSource.Token), cancellationToken: _cancellationTokenSource.Token);
-
-                    var resultStream = await VideoInputStream.CreateAsync(tempFilename);
-                    if (_isAudioEnabled)
+                    var audioFile = default(string);
+                    try
                     {
-                        var audioTimeline = await CreateAudioTimeline();
-                        resultStream = await MediaService.SaveWithAudioAsync(resultStream, audioTimeline);
+                        // Audio, mixed first so it is written with the frames
+                        if (_isAudioEnabled)
+                            audioFile = await AudioManager.CreateAudioTimelineAsync(await CreateAudioTimeline(), _cancellationTokenSource.Token);
+
+                        await GetOutputVideoFrames(_cancellationTokenSource.Token).SaveAsync(tempFilename, audioSourceFile: audioFile, cancellationToken: _cancellationTokenSource.Token);
+                    }
+                    finally
+                    {
+                        FileHelper.DeleteFile(audioFile);
                     }
 
+                    var resultStream = await VideoInputStream.CreateAsync(tempFilename);
                     OnVideoCreated?.Invoke(this, resultStream);
                 }
             }
@@ -670,8 +677,7 @@ namespace Amuse.App.Controls
         private async Task CreateVideoTimelineAsync(VideoInputStream videoStream)
         {
             IsControlBusy = true;
-            var audioInfo = await AudioManager.LoadInfoAsync(videoStream.SourceFile);
-            var timelineSegment = new TimelineSegment(videoStream, audioInfo != null);
+            var timelineSegment = new TimelineSegment(videoStream, videoStream.HasAudio);
             try
             {
                 using (CancellationTokenSource = new CancellationTokenSource())
@@ -789,8 +795,7 @@ namespace Amuse.App.Controls
                     TimelineSegements.Add(timelineSegment);
 
                     var frameIndex = 0;
-                    var durationSeconds = (double)audioInput.Samples / audioInput.SampleRate;
-                    var frameCount = (int)Math.Round(durationSeconds * _timelineFrameRate.Value);
+                    var frameCount = (int)Math.Round(audioInput.Duration.TotalSeconds * _timelineFrameRate.Value);
                     for (int i = 0; i < frameCount; i++)
                     {
                         timelineSegment.AddFrame(i);

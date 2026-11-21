@@ -4,10 +4,11 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Amuse.App.Dialogs"
+        xmlns:Common="clr-namespace:Amuse.App.Common"
         xmlns:CommonControls="clr-namespace:TensorStack.WPF.Controls;assembly=TensorStack.WPF"
         mc:Ignorable="d"
-        MinWidth="480"
-        MaxWidth="480"
+        MinWidth="730"
+        MaxWidth="730"
         x:Name="UI"
         Title="{CommonControls:Localize Title_EnvironmentSetup}"
         Icon="/Images/Icon.ico"
@@ -30,9 +31,21 @@
         <Grid  DockPanel.Dock="Bottom">
             <StackPanel>
                 <CommonControls:ProgressElement Progress="{Binding Progress}" Height="20" FontSize="10" />
-                <Grid TextBlock.FontStyle="Italic" TextBlock.FontSize="11" Opacity=".8">
-                    <TextBlock Text="{Binding WaitMessage}" FontSize="11" TextWrapping="Wrap" FontStyle="Italic" HorizontalAlignment="Center" />
-                </Grid>
+                <DockPanel Margin="0,2,0,0" TextBlock.FontSize="11" Opacity=".8" >
+                    <StackPanel DockPanel.Dock="Left" Orientation="Horizontal" Visibility="{Binding DownloadSize, Converter={StaticResource NullOrEmptyVisibilityConverter}}" Width="200">
+                        <TextBlock Text="{Binding DownloadRemaining, StringFormat={}{0}}" Visibility="{Binding DownloadRemaining, Converter={StaticResource NullOrEmptyVisibilityConverter}}"/>
+                    </StackPanel>
+                    <Grid DockPanel.Dock="Right" Visibility="{Binding DownloadSize, Converter={StaticResource NullOrEmptyVisibilityConverter}}" Width="200">
+                        <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
+                            <TextBlock Text="{Binding DownloadSpeed, StringFormat={}{0}}" Visibility="{Binding DownloadSpeed, Converter={StaticResource NullOrEmptyVisibilityConverter}}"/>
+                            <TextBlock Text="  |  " />
+                            <TextBlock Text="{Binding DownloadSize}"/>
+                        </StackPanel>
+                    </Grid>
+                    <StackPanel>
+                        <TextBlock Text="{CommonControls:Localize EnvironmentSetupWaitMessage}" TextWrapping="Wrap" FontStyle="Italic" HorizontalAlignment="Center" Visibility="{Binding IsExecuting, Converter={StaticResource BooleanToVisibilityConverter}}"/>
+                    </StackPanel>
+                </DockPanel>
             </StackPanel>
         </Grid>
 
@@ -50,6 +63,41 @@
                     <TextBlock TextWrapping="Wrap">
                         <Run Text="{Binding SubMessage, Mode=OneWay}"/>
                     </TextBlock>
+                </Grid>
+
+                <!--Environment Options-->
+                <Grid Margin="0,10,0,10" Visibility="{Binding HasOptions, Converter={StaticResource BooleanToVisibilityConverter}}" IsEnabled="{Binding IsExecuting, Converter={StaticResource InverseBoolConverter}}">
+                    <ItemsControl ItemsSource="{Binding SetupItem.Options}">
+                        <ItemsControl.ItemTemplate>
+                            <DataTemplate DataType="{x:Type Common:EnvironmentSetupOption}">
+                                <Border Margin="0,2" BorderThickness="1">
+                                    <Border.Style>
+                                        <Style TargetType="{x:Type Border}">
+                                            <Setter Property="Background" Value="{StaticResource ListBoxBackground}"/>
+                                            <Setter Property="BorderBrush" Value="{StaticResource ControlBrightDefaultBorderBrush}"/>
+                                            <Style.Triggers>
+                                                <DataTrigger Binding="{Binding IsSelected}" Value="True">
+                                                    <Setter Property="Background" Value="{StaticResource ControlMouseOverBackground}"/>
+                                                </DataTrigger>
+                                            </Style.Triggers>
+                                        </Style>
+                                    </Border.Style>
+                                    <RadioButton IsChecked="{Binding IsSelected}" VerticalContentAlignment="Top" Margin="8,6">
+                                        <StackPanel Margin="2,0,0,0">
+                                            <StackPanel Orientation="Horizontal">
+                                                <TextBlock Text="{Binding DisplayName}" FontWeight="SemiBold"/>
+                                                <TextBlock Text="{CommonControls:Localize Installed}" Margin="6,0,0,0" FontSize="10" VerticalAlignment="Center" Foreground="{StaticResource SuccessColour}" Visibility="{Binding IsInstalled, Converter={StaticResource BooleanToVisibilityConverter}}"/>
+                                                <Grid Visibility="{Binding IsInstalled, Converter={StaticResource InverseBooleanToVisibilityConverter}}">
+                                                    <TextBlock Text="{Binding Environment.DownloadSizeText}" Margin="6,0,0,0" FontSize="10" VerticalAlignment="Center" Opacity=".6" Visibility="{Binding Environment.DownloadSizeText, Converter={StaticResource NullOrEmptyVisibilityConverter}}"/>
+                                                </Grid>
+                                            </StackPanel>
+                                            <TextBlock Text="{Binding Environment.Description}" Margin="0,1,0,0" FontSize="10" Opacity=".7" TextWrapping="Wrap" Visibility="{Binding Environment.Description, Converter={StaticResource NullOrEmptyVisibilityConverter}}"/>
+                                        </StackPanel>
+                                    </RadioButton>
+                                </Border>
+                            </DataTemplate>
+                        </ItemsControl.ItemTemplate>
+                    </ItemsControl>
                 </Grid>
 
             </StackPanel>

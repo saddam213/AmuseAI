@@ -9,6 +9,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Data;
+using TensorStack.Common;
 using TensorStack.WPF;
 using TensorStack.WPF.Controls;
 using TensorStack.WPF.Services;
@@ -247,6 +248,12 @@ namespace Amuse.App.Controls
                     return false;
 
                 if (_selectedDevice is null)
+                    return false;
+
+                if (!_selectedDevice.SupportedBackends.Contains(viewModel.Backend))
+                    return false;
+
+                if (!viewModel.ViewFilter.IsNullOrEmpty() && !viewModel.ViewFilter.Contains(ViewType))
                     return false;
 
                 return true;

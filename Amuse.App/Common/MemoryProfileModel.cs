@@ -4,53 +4,35 @@ namespace Amuse.App.Common
 {
     public sealed class MemoryProfileModel : BaseModel
     {
-        private int _memoryGB;
         private MemoryMode _memoryMode;
         private MemoryMode _detectedMode;
+        private string _description;
 
+        /// <summary>
+        /// Gets or sets the memory mode.
+        /// </summary>
         public MemoryMode MemoryMode
         {
             get { return _memoryMode; }
             set { SetProperty(ref _memoryMode, value); }
         }
 
-        public int MemoryGB
-        {
-            get { return _memoryGB; }
-            set { SetProperty(ref _memoryGB, value); }
-        }
-
+        /// <summary>
+        /// Gets or sets the mode Auto resolves to.
+        /// </summary>
         public MemoryMode DetectedMode
         {
             get { return _detectedMode; }
             set { SetProperty(ref _detectedMode, value); }
         }
-    }
 
-
-    public sealed class QualityProfileModel : BaseModel
-    {
-        private int _memoryGB;
-        private QualityMode? _qualityMode;
-        private QualityMode _detectedMode;
-        public MemoryMode MemoryMode { get; set; }
-
-        public QualityMode? QualityMode
+        /// <summary>
+        /// Gets or sets the description of what this mode does on the selected backend.
+        /// </summary>
+        public string Description
         {
-            get { return _qualityMode; }
-            set { SetProperty(ref _qualityMode, value); }
-        }
-
-        public int MemoryGB
-        {
-            get { return _memoryGB; }
-            set { SetProperty(ref _memoryGB, value); }
-        }
-
-        public QualityMode DetectedMode
-        {
-            get { return _detectedMode; }
-            set { SetProperty(ref _detectedMode, value); }
+            get { return _description; }
+            set { SetProperty(ref _description, value); }
         }
     }
 }

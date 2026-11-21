@@ -27,6 +27,7 @@ namespace Amuse.App.Dialogs
         private readonly string[] _pythonVersions = ["3.12", "3.13", "3.14"];
         private readonly string[] _stableDiffusionCppVersions = ["Vulkan", "CUDA", "ROCM"];
         private readonly string[] _audioCppVersions = ["Vulkan", "CUDA", "CPU"];
+        private readonly string[] _llamaCppVersions = ["Vulkan", "CUDA", "ROCM"];
         private List<string> _hostVersions;
         private BackendType _backendType;
         private bool _isCreate;
@@ -97,6 +98,8 @@ namespace Amuse.App.Dialogs
                     HostVersions = [.. _stableDiffusionCppVersions];
                 else if (_backendType == BackendType.AudioCpp)
                     HostVersions = [.. _audioCppVersions];
+                else if (_backendType == BackendType.LlamaCpp)
+                    HostVersions = [.. _llamaCppVersions];
                 else
                     HostVersions = [];
             }

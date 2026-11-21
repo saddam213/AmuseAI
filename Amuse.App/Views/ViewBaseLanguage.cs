@@ -11,6 +11,7 @@ using TensorStack.Common.Pipeline;
 using TensorStack.WPF;
 using TensorStack.WPF.Controls;
 using TensorStack.WPF.Services;
+using PipelineProgress = Amuse.Common.PipelineProgress;
 
 namespace Amuse.App.Views
 {

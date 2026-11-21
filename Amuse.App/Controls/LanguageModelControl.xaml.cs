@@ -28,11 +28,11 @@ namespace Amuse.App.Controls
         private ProcessType _processType;
         private DeviceModel _selectedDevice;
         private LanguageModel _selectedModel;
-        private QualityProfileModel _selectedQualityMode;
+        private MemoryProfileModel _selectedMemoryMode;
         private ExecutionOptionsModel _selectedExecutionOptions;
         private DeviceModel _currentDevice;
         private LanguageModel _currentModel;
-        private QualityMode _currentQualityMode;
+        private MemoryMode _currentMemoryMode;
         private ExecutionOptionsModel _currentExecutionOptions;
 
         /// <summary>
@@ -40,7 +40,14 @@ namespace Amuse.App.Controls
         /// </summary>
         public LanguageModelControl()
         {
-            QualityModes = [];
+            MemoryModes =
+            [
+                new MemoryProfileModel{ MemoryMode = MemoryMode.Auto },
+                new MemoryProfileModel{ MemoryMode = MemoryMode.Balanced },
+                new MemoryProfileModel{ MemoryMode = MemoryMode.Low },
+                new MemoryProfileModel{ MemoryMode = MemoryMode.Medium },
+                new MemoryProfileModel{ MemoryMode = MemoryMode.High }
+            ];
             LoadCommand = new AsyncRelayCommand(LoadAsync, CanLoad);
             UnloadCommand = new AsyncRelayCommand(UnloadAsync, CanUnload);
             InstallCommand = new AsyncRelayCommand<string>(OnInstall);
@@ -63,7 +70,7 @@ namespace Amuse.App.Controls
         public AsyncRelayCommand<string> DownloadCommand { get; }
         public AsyncRelayCommand<string> SettingsCommand { get; }
         public AsyncRelayCommand ExecutionOptionsCommand { get; }
-        public ObservableCollection<QualityProfileModel> QualityModes { get; }
+        public MemoryProfileModel[] MemoryModes { get; }
 
         public Settings Settings
         {
@@ -113,10 +120,10 @@ namespace Amuse.App.Controls
             set { SetProperty(ref _selectedModel, value); ValidateSelection(); }
         }
 
-        public QualityProfileModel SelectedQualityMode
+        public MemoryProfileModel SelectedMemoryMode
         {
-            get { return _selectedQualityMode; }
-            set { SetProperty(ref _selectedQualityMode, value); ValidateSelection(); }
+            get { return _selectedMemoryMode; }
+            set { SetProperty(ref _selectedMemoryMode, value); ValidateSelection(); }
         }
 
         public ExecutionOptionsModel SelectedExecutionOptions
@@ -144,15 +151,14 @@ namespace Amuse.App.Controls
 
             _currentDevice = SelectedDevice;
             _currentModel = SelectedModel;
-            _currentQualityMode = _selectedQualityMode.DetectedMode;
+            _currentMemoryMode = _selectedMemoryMode.MemoryMode;
             _currentExecutionOptions = _selectedExecutionOptions;
 
             var pipeline = new PipelineModel
             {
                 Device = _currentDevice,
                 LanguageModel = _currentModel,
-                MemoryMode = _selectedQualityMode.MemoryMode,
-                QualityMode = _selectedQualityMode.DetectedMode,
+                MemoryMode = _currentMemoryMode,
                 ExecutionOptions = _currentExecutionOptions,
                 ProcessType = _processType,
                 ViewType = ViewType
@@ -178,8 +184,7 @@ namespace Amuse.App.Controls
             var pipeline = new PipelineModel
             {
                 Device = _selectedDevice,
-                MemoryMode = _selectedQualityMode.MemoryMode,
-                QualityMode = _selectedQualityMode.DetectedMode,
+                MemoryMode = _selectedMemoryMode.MemoryMode,
                 ProcessType = _processType,
                 ViewType = ViewType
             };
@@ -234,7 +239,7 @@ namespace Amuse.App.Controls
         {
             return _currentDevice != SelectedDevice
                 || _currentModel != SelectedModel
-                || _currentQualityMode != _selectedQualityMode?.DetectedMode
+                || _currentMemoryMode != _selectedMemoryMode?.MemoryMode
                 || _currentExecutionOptions != SelectedExecutionOptions;
         }
 
@@ -268,16 +273,10 @@ namespace Amuse.App.Controls
                 if (Settings.IsInstalledModelsOnly && viewModel.Status == ModelStatusType.Available)
                     return false;
 
-                if (_selectedDevice is null)
-                    return false;
-
-                if (!_selectedDevice.SupportedBackends.Contains(viewModel.Backend))
+                if (!viewModel.IsCompatible(_selectedDevice))
                     return false;
 
                 if (!viewModel.ProcessTypes.Contains(_processType))
-                    return false;
-
-                if (!viewModel.Vendor.IsNullOrEmpty() && !viewModel.Vendor.Contains(_selectedDevice.Vendor))
                     return false;
 
                 if (!viewModel.ViewFilter.IsNullOrEmpty() && !viewModel.ViewFilter.Contains(ViewType))
@@ -308,7 +307,6 @@ namespace Amuse.App.Controls
 
         private void Device_SelectionChanged(object sender, System.Windows.Controls.SelectionChangedEventArgs e)
         {
-            SetDeviceDataTypes();
             if (ModelCollectionView is not null)
             {
                 ModelCollectionView.Refresh();
@@ -326,49 +324,36 @@ namespace Amuse.App.Controls
                 return;
 
             RefreshMemoryProfile();
-            SelectedQualityMode = QualityModes.FirstOrDefault(x => x.QualityMode == _selectedModel.UserQualityMode);
+            SelectedMemoryMode = _selectedModel.UserMemoryMode is null
+                ? MemoryModes.FirstOrDefault(x => x.MemoryMode == MemoryMode.Auto)
+                : MemoryModes.FirstOrDefault(x => x.MemoryMode == _selectedModel.UserMemoryMode.Value);
             SelectedExecutionOptions = _selectedModel.UserExecutionOptions ?? new ExecutionOptionsModel();
         }
 
 
-        private void SetDeviceDataTypes()
+        /// <summary>
+        /// Handles the memory mode selection changed event.
+        /// </summary>
+        /// <param name="sender">The sender.</param>
+        /// <param name="e">The <see cref="System.Windows.Controls.SelectionChangedEventArgs"/> instance containing the event data.</param>
+        private void Memory_SelectionChanged(object sender, System.Windows.Controls.SelectionChangedEventArgs e)
         {
-            if (_selectedDevice is null)
-                return;
-
-            QualityModes.Clear();
-            foreach (var qualityProfile in CreateQualityProfiles(_selectedDevice.QualityModes))
-            {
-                QualityModes.Add(qualityProfile);
-            }
-
-            if (_selectedQualityMode == null || !_selectedDevice.QualityModes.Contains(_selectedQualityMode.DetectedMode))
-                SelectedQualityMode = QualityModes.FirstOrDefault();
+            RefreshMemoryProfile();
         }
 
 
+        /// <summary>
+        /// Refreshes the backend descriptions and the mode Auto resolves to for the selected model and device.
+        /// </summary>
         private void RefreshMemoryProfile()
         {
+            foreach (var memoryMode in MemoryModes)
+                memoryMode.Description = memoryMode.MemoryMode.GetDescription(_selectedModel?.Backend);
+
             if (_selectedDevice is null || _selectedModel is null)
                 return;
 
-            var deviceMemory = _selectedDevice.MemoryGB;
-            var autoIndex = GetQualityProfileIndex(_selectedModel.MemoryProfile, _selectedDevice.QualityModes, deviceMemory);
-            var autoProfile = _selectedModel.MemoryProfile.ElementAtOrDefault(autoIndex);
-            if (autoProfile is null)
-                return;
-
-            // Auto
-            QualityModes[0].MemoryGB = autoProfile.MemoryModes.ElementAtOrDefault(0);
-            QualityModes[0].DetectedMode = Enum.GetValues<QualityMode>()[autoIndex];
-            foreach (var profile in _selectedModel.MemoryProfile)
-            {
-                var memoryMode = QualityModes.FirstOrDefault(x => x.QualityMode == profile.QualityMode);
-                if (memoryMode == null)
-                    continue;
-
-                memoryMode.MemoryGB = profile.MemoryModes.ElementAtOrDefault(0);
-            }
+            MemoryModes[0].DetectedMode = Extensions.ResolveMemoryMode(_selectedModel.MemorySize, _selectedDevice.MemoryGB);
         }
 
 
@@ -383,10 +368,23 @@ namespace Amuse.App.Controls
 
             SelectedDevice = pipeline.Device;
             SelectedModel = pipeline.LanguageModel;
-            SelectedQualityMode = pipeline.MemoryMode == MemoryMode.Auto
-                ? QualityModes.FirstOrDefault(x => x.MemoryMode == MemoryMode.Auto)
-                : QualityModes.FirstOrDefault(x => x.QualityMode == pipeline.QualityMode);
+            SelectedMemoryMode = MemoryModes.FirstOrDefault(x => x.MemoryMode == pipeline.MemoryMode);
             SelectedExecutionOptions = _selectedModel?.UserExecutionOptions ?? new ExecutionOptionsModel();
+            ValidateSelection();
+        }
+
+
+        /// <summary>
+        /// Selects the model if it is available for the current view and device.
+        /// </summary>
+        /// <param name="model">The model.</param>
+        public void SelectModel(LanguageModel model)
+        {
+            RefreshSelection();
+            if (model == null || !ModelCollectionView.Contains(model))
+                return;
+
+            SelectedModel = model;
             ValidateSelection();
         }
 
@@ -432,68 +430,6 @@ namespace Amuse.App.Controls
         private List<ModelStatusType> GetPipelineStatus()
         {
             return [_selectedModel.Status];
-        }
-
-
-        private static IEnumerable<QualityProfileModel> CreateQualityProfiles(QualityMode[] qualityModes)
-        {
-            yield return new QualityProfileModel
-            {
-                QualityMode = default,
-                MemoryMode = MemoryMode.Auto
-            };
-            if (qualityModes.Contains(QualityMode.Draft))
-                yield return new QualityProfileModel
-                {
-                    QualityMode = QualityMode.Draft,
-                    DetectedMode = QualityMode.Draft,
-                    MemoryMode = MemoryMode.High
-                };
-            if (qualityModes.Contains(QualityMode.Standard))
-                yield return new QualityProfileModel
-                {
-                    QualityMode = QualityMode.Standard,
-                    DetectedMode = QualityMode.Standard,
-                    MemoryMode = MemoryMode.High
-                };
-            if (qualityModes.Contains(QualityMode.Production))
-                yield return new QualityProfileModel
-                {
-                    QualityMode = QualityMode.Production,
-                    DetectedMode = QualityMode.Production,
-                    MemoryMode = MemoryMode.High
-                };
-        }
-
-
-        private static int GetQualityProfileIndex(MemoryProfile[] memoryProfile, QualityMode[] qualityModes, int deviceMemory)
-        {
-            int bestIndex = -1;
-            int bestValue = int.MinValue;
-            for (int i = 0; i < memoryProfile.Length; i++)
-            {
-                var profile = memoryProfile[i];
-                if (!qualityModes.Contains(profile.QualityMode))
-                    continue;
-
-                int value = profile.MemoryModes[0];
-                if (value <= deviceMemory && value >= bestValue)
-                {
-                    bestValue = value;
-                    bestIndex = i;
-                }
-            }
-
-            if (bestIndex < 0)
-            {
-                var defaultProfile = memoryProfile.FirstOrDefault(x => x.QualityMode == qualityModes.FirstOrDefault());
-                if (defaultProfile != null)
-                {
-                    bestIndex = Array.IndexOf(memoryProfile, defaultProfile);
-                }
-            }
-
-            return bestIndex;
         }
 
 

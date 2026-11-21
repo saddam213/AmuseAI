@@ -2,6 +2,7 @@
 using System.IO;
 using System.Threading;
 using System.Threading.Tasks;
+using TensorStack.Common.Common;
 using TensorStack.WPF;
 using TensorStack.WPF.Controls;
 using TensorStack.WPF.Services;
@@ -15,7 +16,7 @@ namespace Amuse.App.Dialogs
     {
         private readonly Settings _settings;
         private readonly DownloadService _downloadService;
-        private readonly IProgress<DownloadProgress> _updateProgress;
+        private readonly IProgress<FileDownloadProgress> _updateProgress;
         private AppUpdate _appUpdate;
         private AppAsset _appAsset;
         private CancellationTokenSource _cancellationTokenSource;
@@ -32,7 +33,7 @@ namespace Amuse.App.Dialogs
         {
             _settings = settings;
             _downloadService = downloadService;
-            _updateProgress = new Progress<DownloadProgress>(UpdateProgress);
+            _updateProgress = new Progress<FileDownloadProgress>(UpdateProgress);
             DownloadCommand = new AsyncRelayCommand(Download);
             InitializeComponent();
         }
@@ -144,7 +145,7 @@ namespace Amuse.App.Dialogs
         }
 
 
-        private void UpdateProgress(DownloadProgress progress)
+        private void UpdateProgress(FileDownloadProgress progress)
         {
             if (DateTime.UtcNow > _lastUpdate)
             {

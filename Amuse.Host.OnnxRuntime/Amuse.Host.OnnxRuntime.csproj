@@ -32,12 +32,14 @@
   <!--Debug-->
   <ItemGroup Condition="'$(Configuration)' == 'Debug'">
     <ProjectReference Include="..\..\TensorStack.OnnxRuntime\TensorStack.OnnxRuntime.csproj" />
+    <ProjectReference Include="..\..\TensorStack.OnnxRuntime.Vision\TensorStack.OnnxRuntime.Vision.csproj" />
     <ProjectReference Include="..\..\TensorStack.OnnxRuntime.LLM\TensorStack.OnnxRuntime.LLM.csproj" />
   </ItemGroup>
 
   <!--Release-->
   <ItemGroup Condition="'$(Configuration)' == 'Release' OR '$(Configuration)' == 'Release_Installer'">
     <PackageReference Include="TensorStack.OnnxRuntime" Version="$(PackageVersion)" />
+    <PackageReference Include="TensorStack.OnnxRuntime.Vision" Version="$(PackageVersion)" />
     <PackageReference Include="TensorStack.OnnxRuntime.LLM" Version="$(PackageVersion)" />
   </ItemGroup>
 

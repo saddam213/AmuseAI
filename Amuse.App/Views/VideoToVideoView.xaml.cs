@@ -214,8 +214,8 @@ namespace Amuse.App.Views
                 Options = options,
                 Model = CurrentPipeline.DiffusionModel.Name,
                 LoraModels = CurrentPipeline.LoraAdapterModel?.Select(x => x.Name).ToArray(),
-                UpscaleModel = CurrentPipeline.UpscaleModel?.Name,
-                UpscaleOptions = CurrentPipeline.UpscaleModel is not null ? UpscaleOptions : null,
+                UpscaleModel = UpscaledModel?.Name,
+                UpscaleOptions = UpscaledModel is not null ? UpscaleOptions : null,
                 ExtractModel = CurrentPipeline.ExtractModel?.Name,
                 ExtractorType = CurrentPipeline.ExtractModel?.Type,
                 ExtractOptions = CurrentPipeline.ExtractModel is not null ? ExtractOptions : null,
@@ -229,14 +229,10 @@ namespace Amuse.App.Views
         private async Task<VideoSequence> GetInputFramesAsync()
         {
             Progress.Clear();
-            var frames = new List<ImageTensor>();
-            await foreach (var sourceFrame in _sourceVideo.GetAsync(Options.Width, Options.Height, Options.FrameRate, TensorStack.Common.ResizeMode.Crop).Take(Options.Frames))
-            {
-                Progress.Update(sourceFrame.Index, Options.Frames, $"{AppDefault.ProcessingInputFrame}: {sourceFrame.Index}/{Options.Frames}");
-                frames.Add(sourceFrame.Frame);
-            }
+            var progress = new Progress<int>(frame => Progress.Update(frame, Options.Frames, $"{AppDefault.ProcessingInputFrame}: {frame}/{Options.Frames}"));
+            var videoSequence = await _sourceVideo.GetSequenceAsync(Options.Width, Options.Height, Options.FrameRate, TensorStack.Common.ResizeMode.Crop, Options.Frames, progress: progress);
             Progress.Indeterminate($"{AppDefault.EncodingVideoFrames}...");
-            return new VideoSequence([.. frames], Options.FrameRate);
+            return videoSequence;
         }
     }
 }

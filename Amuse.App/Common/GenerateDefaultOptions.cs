@@ -117,9 +117,6 @@ namespace Amuse.App.Common
         public EarlyStopping EarlyStopping { get; set; }
 
         [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingDefault)]
-        public int DiversityLength { get; set; }
-
-        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingDefault)]
         public float TopH { get; set; }
 
         [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingDefault)]
@@ -196,7 +193,6 @@ namespace Amuse.App.Common
                 Beams = Beams,
                 BPM = BPM,
                 ChunkSize = ChunkSize,
-                DiversityLength = DiversityLength,
                 Duration = Duration,
                 EarlyStopping = EarlyStopping,
                 LengthPenalty = LengthPenalty,

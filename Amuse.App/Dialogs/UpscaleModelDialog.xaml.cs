@@ -1,6 +1,7 @@
 ﻿// Copyright (c) Adam Clark. All rights reserved.
 // Licensed under the Apache 2.0 License.
 using Amuse.App.Common;
+using Amuse.App.Resources;
 using Amuse.Common;
 using System;
 using System.Collections.Generic;
@@ -36,6 +37,21 @@ namespace Amuse.App.Dialogs
         public AsyncRelayCommand CancelCommand { get; }
         public ObservableCollection<string> Errors { get; }
         public CheckpointType[] CheckpointTypes { get; } = [CheckpointType.OnlineFile, CheckpointType.LocalFile];
+
+        /// <summary>
+        /// Gets the VAE checkpoint types, a VAE can be a shared component.
+        /// </summary>
+        public CheckpointType[] VaeCheckpointTypes { get; } = [CheckpointType.OnlineFile, CheckpointType.LocalFile, CheckpointType.Component];
+
+        /// <summary>
+        /// Gets the backends that support upscaling.
+        /// </summary>
+        public BackendType[] Backends { get; } = [BackendType.OnnxRuntime, BackendType.StableDiffusionCpp];
+
+        /// <summary>
+        /// Gets the local file picker filter, every file type an upscale backend can load.
+        /// </summary>
+        public string FileFilter { get; } = "Model Files|*.onnx;*.gguf;*.pth;*.safetensors;";
         public bool IsUpdateMode => _originalUpscaleModel is not null;
 
         public UpscaleModel UpscaleModel
@@ -191,6 +207,49 @@ namespace Amuse.App.Dialogs
             // Checkpoint
             if (!UpscaleModel.Checkpoint.IsValid(out var checkpointValidation))
                 yield return checkpointValidation;
+            if (UpscaleModel.Vae is not null && !UpscaleModel.Vae.IsValid(out var vaeValidation))
+                yield return vaeValidation;
+
+            // Checkpoint file type must match the backend
+            var supportedExtensions = GetSupportedExtensions(UpscaleModel);
+            if (!IsSupportedFile(UpscaleModel.Checkpoint, supportedExtensions))
+                yield return string.Format(AppErrors.UpscaleCheckpointFormat, string.Join(", ", supportedExtensions), UpscaleModel.Backend);
+        }
+
+
+        /// <summary>
+        /// Gets the checkpoint file extensions the model's backend and pipeline can load.
+        /// </summary>
+        /// <param name="model">The model.</param>
+        private static string[] GetSupportedExtensions(UpscaleModel model)
+        {
+            if (model.Backend == BackendType.OnnxRuntime)
+                return [".onnx"];
+            if (model.IsVideoUpscaler)
+                return [".safetensors", ".gguf"];
+
+            return [".gguf", ".pth", ".safetensors"];
+        }
+
+
+        /// <summary>
+        /// Determines whether the checkpoint file has a supported extension, folders and components are not checked.
+        /// </summary>
+        /// <param name="checkpoint">The checkpoint.</param>
+        /// <param name="supportedExtensions">The supported extensions.</param>
+        private static bool IsSupportedFile(CheckpointComponent checkpoint, string[] supportedExtensions)
+        {
+            var fileName = checkpoint?.Type switch
+            {
+                CheckpointType.LocalFile => checkpoint.Path,
+                CheckpointType.OnlineFile => checkpoint.DownloadFiles?.FirstOrDefault(),
+                _ => null
+            };
+            if (string.IsNullOrEmpty(fileName))
+                return true;
+
+            var extension = System.IO.Path.GetExtension(fileName);
+            return supportedExtensions.Any(x => x.Equals(extension, StringComparison.OrdinalIgnoreCase));
         }
     }
 }

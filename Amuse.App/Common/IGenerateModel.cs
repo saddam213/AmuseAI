@@ -13,11 +13,14 @@ namespace Amuse.App.Common
         string Template { get; set; }
         DataType BaseType { get; set; }
         MediaType MediaType { get; set; }
+        ProcessType[] ProcessTypes { get; set; }
         View[] ViewFilter { get; set; }
         VendorType[] Vendor { get; set; }
-        MemoryProfile[] MemoryProfile { get; set; }
+        float MemorySize { get; set; }
         GenerateDefaultOptions DefaultOptions { get; set; }
         bool IsDefault { get; set; }
+        bool IsNew { get; set; }
+        bool IsRecommended { get; set; }
 
         public IEnumerable<CheckpointComponent> GetComponents();
     }

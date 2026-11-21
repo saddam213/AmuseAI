@@ -40,9 +40,14 @@ namespace Amuse.App.Tools
         public override string DisplayIcon => "e0da";
 
         /// <summary>
+        ///  Gets the tool icon style.
+        /// </summary>
+        public override FontAwesomeIconStyle DisplayIconStyle { get; } = FontAwesomeIconStyle.SharpLight;
+
+        /// <summary>
         /// Gets the is display order.
         /// </summary>
-        public override int DisplayOrder => int.MaxValue;
+        public override int DisplayOrder => 4;
 
         /// <summary>
         /// Gets the tool schema.

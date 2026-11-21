@@ -106,6 +106,7 @@ namespace Amuse.App.Controls
 
         private bool _isPromptEnabled;
         private bool _isInputImagesEnabled;
+        private bool _isLlamaCppPipeline;
 
         public bool IsPromptEnabled
         {
@@ -117,6 +118,15 @@ namespace Amuse.App.Controls
         {
             get { return _isInputImagesEnabled; }
             set { SetProperty(ref _isInputImagesEnabled, value); }
+        }
+
+        /// <summary>
+        /// Gets or sets a value indicating whether the model runs on llama.cpp, which does not use MinLength, Beams, TopH, LengthPenalty, NoRepeatNgramSize or CacheType.
+        /// </summary>
+        public bool IsLlamaCppPipeline
+        {
+            get { return _isLlamaCppPipeline; }
+            set { SetProperty(ref _isLlamaCppPipeline, value); }
         }
 
 
@@ -134,6 +144,13 @@ namespace Amuse.App.Controls
             var newModel = newPipeline?.LanguageModel;
             var newOptions = newModel?.DefaultOptions;
 
+            // llama.cpp stops at the context size, so the default length is clamped to it
+            IsLlamaCppPipeline = newModel.Backend == BackendType.LlamaCpp;
+            var maxLength = newOptions.MaxLength;
+            var contextSize = newPipeline.ExecutionOptions?.ContextSize ?? 0;
+            if (IsLlamaCppPipeline && contextSize > 0)
+                maxLength = Math.Min(maxLength, contextSize);
+
             var previousOptions = Options;
             Options = new GenerateInputOptions
             {
@@ -143,7 +160,7 @@ namespace Amuse.App.Controls
                 IsThinkingEnabled = previousOptions?.IsThinkingEnabled ?? newOptions?.IsThinkingEnabled ?? false,
 
                 MinLength = newOptions.MinLength,
-                MaxLength = newOptions.MaxLength,
+                MaxLength = maxLength,
                 IsSamplingEnabled = newOptions.IsSamplingEnabled,
                 Beams = newOptions.Beams,
                 Temperature = newOptions.Temperature,

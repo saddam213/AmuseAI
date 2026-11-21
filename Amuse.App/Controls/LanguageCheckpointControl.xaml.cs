@@ -14,6 +14,7 @@ namespace Amuse.App.Controls
     public partial class LanguageCheckpointControl : BaseControl
     {
         private int _selectedIndex;
+        private CheckpointType[] _checkpointTypes;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="LanguageCheckpointControl"/> class.
@@ -27,9 +28,14 @@ namespace Amuse.App.Controls
 
         public static readonly DependencyProperty SettingsProperty = DependencyProperty.Register(nameof(Settings), typeof(Settings), typeof(LanguageCheckpointControl));
         public static readonly DependencyProperty CheckpointProperty = DependencyProperty.Register(nameof(Checkpoint), typeof(LanguageCheckpointModel), typeof(LanguageCheckpointControl), new PropertyMetadata<LanguageCheckpointControl, LanguageCheckpointModel>((c, o, n) => c.OnCheckpointChanged(o, n)));
-        public static readonly DependencyProperty BackendProperty = DependencyProperty.Register(nameof(Backend), typeof(BackendType), typeof(LanguageCheckpointControl));
+        public static readonly DependencyProperty BackendProperty = DependencyProperty.Register(nameof(Backend), typeof(BackendType), typeof(LanguageCheckpointControl), new PropertyMetadata<LanguageCheckpointControl>((c) => c.OnBackendChanged()));
         public ObservableCollection<CheckpointComponent> Components { get; }
-        public CheckpointType[] CheckpointTypes { get; }
+
+        public CheckpointType[] CheckpointTypes
+        {
+            get { return _checkpointTypes; }
+            set { SetProperty(ref _checkpointTypes, value); }
+        }
 
         public Settings Settings
         {
@@ -71,5 +77,16 @@ namespace Amuse.App.Controls
             return Task.CompletedTask;
         }
 
+
+        /// <summary>
+        /// Called when the backend changes, llama.cpp models are GGUF files while the other backends load model folders.
+        /// </summary>
+        private Task OnBackendChanged()
+        {
+            CheckpointTypes = Backend == BackendType.LlamaCpp
+                ? [CheckpointType.LocalFile, CheckpointType.OnlineFile, CheckpointType.OnlineFolder]
+                : [CheckpointType.LocalFolder, CheckpointType.OnlineFolder];
+            return Task.CompletedTask;
+        }
     }
 }

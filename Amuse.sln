@@ -20,6 +20,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Amuse.Host.StableDiffusionC
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Amuse.Host.AudioCpp", "Amuse.Host.AudioCpp\Amuse.Host.AudioCpp.csproj", "{7B0C58EC-2C30-48B7-80C9-274171688B0F}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Amuse.Host.LlamaCpp", "Amuse.Host.LlamaCpp\Amuse.Host.LlamaCpp.csproj", "{C3E9F1B2-6D4A-4F7C-8B25-9A1E0D3C5F42}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -102,6 +104,18 @@ Global
 		{7B0C58EC-2C30-48B7-80C9-274171688B0F}.Release|Any CPU.Build.0 = Release|Any CPU
 		{7B0C58EC-2C30-48B7-80C9-274171688B0F}.Release|x64.ActiveCfg = Release|Any CPU
 		{7B0C58EC-2C30-48B7-80C9-274171688B0F}.Release|x64.Build.0 = Release|Any CPU
+		{C3E9F1B2-6D4A-4F7C-8B25-9A1E0D3C5F42}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C3E9F1B2-6D4A-4F7C-8B25-9A1E0D3C5F42}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C3E9F1B2-6D4A-4F7C-8B25-9A1E0D3C5F42}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{C3E9F1B2-6D4A-4F7C-8B25-9A1E0D3C5F42}.Debug|x64.Build.0 = Debug|Any CPU
+		{C3E9F1B2-6D4A-4F7C-8B25-9A1E0D3C5F42}.Release_Installer|Any CPU.ActiveCfg = Release_Installer|Any CPU
+		{C3E9F1B2-6D4A-4F7C-8B25-9A1E0D3C5F42}.Release_Installer|Any CPU.Build.0 = Release_Installer|Any CPU
+		{C3E9F1B2-6D4A-4F7C-8B25-9A1E0D3C5F42}.Release_Installer|x64.ActiveCfg = Release_Installer|Any CPU
+		{C3E9F1B2-6D4A-4F7C-8B25-9A1E0D3C5F42}.Release_Installer|x64.Build.0 = Release_Installer|Any CPU
+		{C3E9F1B2-6D4A-4F7C-8B25-9A1E0D3C5F42}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C3E9F1B2-6D4A-4F7C-8B25-9A1E0D3C5F42}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C3E9F1B2-6D4A-4F7C-8B25-9A1E0D3C5F42}.Release|x64.ActiveCfg = Release|Any CPU
+		{C3E9F1B2-6D4A-4F7C-8B25-9A1E0D3C5F42}.Release|x64.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

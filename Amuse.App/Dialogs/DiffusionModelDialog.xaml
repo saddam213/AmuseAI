@@ -67,26 +67,10 @@
                                 <ComboBox ItemsSource="{Binding DataTypes}" SelectedItem="{Binding DiffusionModel.BaseType}" Style="{StaticResource EnumComboBox}"/>
                             </StackPanel>
 
-                            <TextBlock Text="{CommonControls:Localize MemoryModes}" Style="{StaticResource FieldTextBlockStyle}" Margin="0,10,0,0"/>
-                            <UniformGrid Columns="4" >
-                                <TextBlock Text="{CommonControls:Localize Quality}" Style="{StaticResource FieldTextBlockStyle}"/>
-                                <TextBlock Text="{CommonControls:Localize Low}" Style="{StaticResource FieldTextBlockStyle}"/>
-                                <TextBlock Text="{CommonControls:Localize Medium}" Style="{StaticResource FieldTextBlockStyle}"/>
-                                <TextBlock Text="{CommonControls:Localize High}" Style="{StaticResource FieldTextBlockStyle}" />
-                            </UniformGrid>
-
-                            <ItemsControl ItemsSource="{Binding DiffusionModel.MemoryProfile}">
-                                <ItemsControl.ItemTemplate>
-                                    <DataTemplate>
-                                        <UniformGrid Columns="4">
-                                            <TextBlock Text="{Binding QualityMode}" Margin="0,3,0,0"/>
-                                            <TextBox Text="{Binding MemoryModes[0], UpdateSourceTrigger=PropertyChanged}" />
-                                            <TextBox Text="{Binding MemoryModes[1], UpdateSourceTrigger=PropertyChanged}" />
-                                            <TextBox Text="{Binding MemoryModes[2], UpdateSourceTrigger=PropertyChanged}" />
-                                        </UniformGrid>
-                                    </DataTemplate>
-                                </ItemsControl.ItemTemplate>
-                            </ItemsControl>
+                            <StackPanel>
+                                <TextBlock Text="{CommonControls:Localize MemorySize}" Style="{StaticResource FieldTextBlockStyle}"/>
+                                <TextBox Text="{Binding DiffusionModel.MemorySize, UpdateSourceTrigger=PropertyChanged}" />
+                            </StackPanel>
                         </StackPanel>
                     </GroupBox>
 
@@ -362,10 +346,6 @@
                                             <StackPanel Visibility="{Binding DiffusionModel.Pipeline, Converter={StaticResource EnumToVisibilityConverter}, ConverterParameter=WhisperPipeline}">
                                                 <TextBlock Text="{CommonControls:Localize NoRepeatNgrams}" Style="{StaticResource FieldTextBlockStyle}"/>
                                                 <TextBox Text="{Binding DiffusionModel.DefaultOptions.NoRepeatNgramSize, UpdateSourceTrigger=PropertyChanged}"  />
-                                            </StackPanel>
-                                            <StackPanel Visibility="{Binding DiffusionModel.Pipeline, Converter={StaticResource EnumToVisibilityConverter}, ConverterParameter=WhisperPipeline}">
-                                                <TextBlock Text="{CommonControls:Localize DiversityLength}" Style="{StaticResource FieldTextBlockStyle}"/>
-                                                <TextBox Text="{Binding DiffusionModel.DefaultOptions.DiversityLength, UpdateSourceTrigger=PropertyChanged}"  />
                                             </StackPanel>
                                             <StackPanel Visibility="{Binding DiffusionModel.Pipeline, Converter={StaticResource EnumToVisibilityConverter}, ConverterParameter=WhisperPipeline}">
                                                 <TextBlock Text="{CommonControls:Localize EarlyStopping}" Style="{StaticResource FieldTextBlockStyle}"/>

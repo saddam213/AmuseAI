@@ -116,6 +116,7 @@ namespace Amuse.App.Services
                     BackendType.OnnxRuntime => new OnnxBackendClient(_settings, _toolService, _mediaService, _logger),
                     BackendType.StableDiffusionCpp => new StableDiffusionCppClient(_settings, _toolService, _mediaService, _environmentService, _logger),
                     BackendType.AudioCpp => new AudioCppClient(_settings, _toolService, _mediaService, _environmentService, _logger),
+                    BackendType.LlamaCpp => new LlamaCppClient(_settings, _toolService, _mediaService, _environmentService, _logger),
                     _ => throw new NotImplementedException()
                 };
 

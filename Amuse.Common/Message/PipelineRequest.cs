@@ -54,6 +54,12 @@ namespace Amuse.Common.Message
                 return PackTensors(RunOptions.AudioOptions);
             if (RunOptions?.TextOptions != null)
                 return PackTensors(RunOptions.TextOptions);
+            if (RunOptions?.UpscaleImageOptions != null)
+                return PackTensors(RunOptions.UpscaleImageOptions);
+            if (RunOptions?.UpscaleVideoOptions != null)
+                return PackTensors(RunOptions.UpscaleVideoOptions);
+            if (RunOptions?.ExtractImageOptions != null)
+                return PackTensors(RunOptions.ExtractImageOptions);
             return [];
         }
 
@@ -68,6 +74,12 @@ namespace Amuse.Common.Message
                 UnpackTensors(packedTensors, RunOptions.AudioOptions);
             if (RunOptions.TextOptions != null)
                 UnpackTensors(packedTensors, RunOptions.TextOptions);
+            if (RunOptions.UpscaleImageOptions != null)
+                UnpackTensors(packedTensors, RunOptions.UpscaleImageOptions);
+            if (RunOptions.UpscaleVideoOptions != null)
+                UnpackTensors(packedTensors, RunOptions.UpscaleVideoOptions);
+            if (RunOptions.ExtractImageOptions != null)
+                UnpackTensors(packedTensors, RunOptions.ExtractImageOptions);
         }
 
 

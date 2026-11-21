@@ -1,6 +1,7 @@
 ﻿// Copyright (c) Adam Clark. All rights reserved.
 // Licensed under the Apache 2.0 License.
 using Amuse.App.Common;
+using Amuse.Common;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -23,6 +24,7 @@ namespace Amuse.App.Dialogs
         private WizardOptionModel _selectedTemplateOption;
         private LanguageModel _selectedTemplate;
         private ModelSourceType _selectedSource;
+        private ModelSourceType[] _modelSources;
         private string _selectedFile;
         private string _selectedPath;
         private string _selectedName;
@@ -34,12 +36,10 @@ namespace Amuse.App.Dialogs
             Settings = settings;
             PipelineOptions = new ObservableCollection<WizardItemModel>();
             SelectedBackend = BackendType.HuggingFace;
-            Backends = [BackendType.HuggingFace];
+            Backends = [BackendType.HuggingFace, BackendType.LlamaCpp];
             Errors = new ObservableCollection<string>();
             CancelCommand = new AsyncRelayCommand(CancelAsync);
             SaveCommand = new AsyncRelayCommand(SaveAsync, CanExecuteSave);
-            SelectedSource = ModelSourceType.LocalFolder;
-            ModelSources = [ModelSourceType.LocalFolder, ModelSourceType.Checkpoint];
             InitializeComponent();
         }
 
@@ -47,14 +47,19 @@ namespace Amuse.App.Dialogs
         public AsyncRelayCommand SaveCommand { get; }
         public AsyncRelayCommand CancelCommand { get; }
         public ObservableCollection<string> Errors { get; }
-        public ModelSourceType[] ModelSources { get; }
         public ObservableCollection<WizardItemModel> PipelineOptions { get; }
         public BackendType[] Backends { get; }
 
         public BackendType SelectedBackend
         {
             get { return _selectedBackend; }
-            set { SetProperty(ref _selectedBackend, value); FilterPipelineOptions(); SetFileFilter(); }
+            set { SetProperty(ref _selectedBackend, value); SetModelSources(); FilterPipelineOptions(); SetFileFilter(); }
+        }
+
+        public ModelSourceType[] ModelSources
+        {
+            get { return _modelSources; }
+            set { SetProperty(ref _modelSources, value); }
         }
 
         public WizardItemModel SelectedPipelineOption
@@ -139,10 +144,23 @@ namespace Amuse.App.Dialogs
                     };
                 }
             }
+            else if (_selectedSource == ModelSourceType.LocalFile)
+            {
+                // A single model file, text only so the optional second file (multimodal projector) is not used
+                _selectedTemplate.ModelType = "Base";
+                _selectedTemplate.ProcessTypes = [ProcessType.TextToText];
+                _selectedTemplate.Checkpoint.TextModel2 = null;
+                _selectedTemplate.Checkpoint.TextModel = new CheckpointComponent
+                {
+                    Name = "TextModel",
+                    Path = _selectedPath,
+                    Type = CheckpointType.LocalFile,
+                };
+            }
 
             _selectedTemplate.ModelParams = _selectedTemplateOption.ModelParams;
             _selectedTemplate.DefaultOptions.MaxLength = _selectedTemplateOption.ModelMaxLength;
-            _selectedTemplate.MemoryProfile = Utils.GetMemoryProfile(_selectedTemplate.ModelParams);
+            _selectedTemplate.MemorySize = Utils.GetMemorySize(_selectedTemplate.ModelParams);
             _selectedTemplate.Initialize(Settings);
             Settings.LanguageModels.Add(_selectedTemplate);
             return base.SaveAsync();
@@ -173,7 +191,20 @@ namespace Amuse.App.Dialogs
 
         private void Reset()
         {
-            SelectedSource = ModelSourceType.LocalFolder;
+            SelectedSource = _modelSources.First();
+        }
+
+
+        /// <summary>
+        /// Sets the model sources of the backend, llama.cpp models are GGUF files while HuggingFace models are folders.
+        /// </summary>
+        private void SetModelSources()
+        {
+            ModelSources = _selectedBackend == BackendType.LlamaCpp
+                ? [ModelSourceType.LocalFile, ModelSourceType.Checkpoint]
+                : [ModelSourceType.LocalFolder, ModelSourceType.Checkpoint];
+            SelectedPath = null;
+            SelectedSource = _modelSources.First();
         }
 
 
@@ -209,7 +240,12 @@ namespace Amuse.App.Dialogs
 
         private void SetFileFilter()
         {
-            FileFilter = _selectedBackend == BackendType.OnnxRuntime ? "Model Files|*.onnx;" : "Model Files|*.safetensors;*.gguf;";
+            FileFilter = _selectedBackend switch
+            {
+                BackendType.OnnxRuntime => "Model Files|*.onnx;",
+                BackendType.LlamaCpp => "Model Files|*.gguf;",
+                _ => "Model Files|*.safetensors;*.gguf;"
+            };
         }
 
 
@@ -242,6 +278,13 @@ namespace Amuse.App.Dialogs
             {
                 if (string.IsNullOrEmpty(_selectedPath))
                     yield return "Model folder name cannot be empty";
+            }
+            else if (_selectedSource == ModelSourceType.LocalFile)
+            {
+                if (string.IsNullOrEmpty(_selectedPath))
+                    yield return "Model file name cannot be empty";
+                else if (!File.Exists(_selectedPath))
+                    yield return "Model file not found";
             }
             else if (_selectedSource == ModelSourceType.Checkpoint)
             {

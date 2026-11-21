@@ -109,7 +109,7 @@ namespace Amuse.App.Services
             MoveMigration[] moveMigrations =
             [
                 new MoveMigration(Path.Combine(loraDirectory, "Anima", "anima-greg-rutkowski-style.safetensors"), Path.Combine(loraDirectory, "anima-greg-rutkowski-style.safetensors")),
-                new MoveMigration(Path.Combine(loraDirectory, "Anima", "anima-highres-aesthetic-boost.safetensors"), Path.Combine(loraDirectory, "anima-greg-rutkowski-style.safetensors")),
+                new MoveMigration(Path.Combine(loraDirectory, "Anima", "anima-highres-aesthetic-boost.safetensors"), Path.Combine(loraDirectory, "anima-highres-aesthetic-boost.safetensors")),
                 new MoveMigration(Path.Combine(loraDirectory, "Anima", "anima-rl-v0.1.safetensors"), Path.Combine(loraDirectory,"anima-rl-v0.1.safetensors")),
                 new MoveMigration(Path.Combine(loraDirectory, "Anima", "anima-turbo-lora-v0.2.safetensors"), Path.Combine(loraDirectory, "anima-turbo-lora-v0.2.safetensors")),
                 new MoveMigration(Path.Combine(loraDirectory, "Flux1", "Hyper-FLUX.1-dev-8steps-lora.safetensors"), Path.Combine(loraDirectory, "Hyper-FLUX.1-dev-8steps-lora.safetensors")),

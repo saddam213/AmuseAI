@@ -24,11 +24,11 @@ namespace Amuse.App.Dialogs
         private LanguageModel _originalLanguageModel;
         private LanguageCheckpointModel _checkpointModel;
         private SchedulerInputOptions[] _schedulers;
+        private DataType[] _dataTypes;
 
         public LanguageModelDialog(Settings settings)
         {
             Settings = settings;
-            DataTypes = [DataType.Bfloat16, DataType.Float16, DataType.Float8, DataType.Int8];
             SaveCommand = new AsyncRelayCommand(SaveAsync, CanExecuteSave);
             CancelCommand = new AsyncRelayCommand(CancelAsync);
             EstimateMemoryCommand = new AsyncRelayCommand(EstimateMemoryAsync);
@@ -43,7 +43,14 @@ namespace Amuse.App.Dialogs
         public AsyncRelayCommand EstimateMemoryCommand { get; }
         public ObservableCollection<string> Errors { get; }
         public bool IsUpdateMode => _originalLanguageModel is not null;
-        public DataType[] DataTypes { get; }
+        /// <summary>
+        /// Gets or sets the data types the model backend can load.
+        /// </summary>
+        public DataType[] DataTypes
+        {
+            get { return _dataTypes; }
+            set { SetProperty(ref _dataTypes, value); }
+        }
         public AccessToken[] AccessTokens { get; }
 
         public LanguageModel LanguageModel
@@ -161,6 +168,10 @@ namespace Amuse.App.Dialogs
 
         private void Populate()
         {
+            // DataTypes, keep the current type if the backend list does not have it
+            var dataTypes = LanguageModel.Backend.GetDataTypes();
+            DataTypes = dataTypes.Contains(LanguageModel.BaseType) ? dataTypes : [.. dataTypes, LanguageModel.BaseType];
+
             if (LanguageModel.DefaultOptions.Schedulers != null)
                 Schedulers = LanguageModel.DefaultOptions.Schedulers.Copy();
 
@@ -219,12 +230,9 @@ namespace Amuse.App.Dialogs
             if (LanguageModel.DefaultOptions.ChunkSize < 0)
                 yield return "ChunkSize must be be >= 0";
 
-            // MemoryProfile
-            foreach (var profile in LanguageModel.MemoryProfile)
-            {
-                if (profile.MemoryModes.Any(x => x < 0))
-                    yield return "MemoryMode must be >= 0";
-            }
+            // Memory
+            if (LanguageModel.MemorySize < 0)
+                yield return "Memory Size must be >= 0";
 
             // ProcessTypes
             var processTypes = GetProcessTypes();
@@ -306,8 +314,7 @@ namespace Amuse.App.Dialogs
         {
             if (_languageModel.ModelParams > 0)
             {
-                _languageModel.MemoryProfile = Utils.GetMemoryProfile(_languageModel.ModelParams);
-                _languageModel.NotifyPropertyChanged(nameof(MemoryProfile));
+                _languageModel.MemorySize = Utils.GetMemorySize(_languageModel.ModelParams);
             }
             return Task.CompletedTask;
         }

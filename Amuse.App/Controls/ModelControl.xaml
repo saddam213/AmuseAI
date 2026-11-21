@@ -68,7 +68,7 @@
 
             </DockPanel>
 
-            <UniformGrid Columns="1">
+            <StackPanel>
 
                 <!--Device-->
                 <DockPanel>
@@ -117,7 +117,7 @@
                         <CommonControls:ContentComboBox 
                             SelectedItem="{Binding SelectedUpscaler}" 
                             ItemsSource="{Binding UpscaleCollectionView}" 
-                            ItemTemplate="{StaticResource ComboBoxDataTemplateModel}"
+                            ItemTemplate="{StaticResource ComboBoxDataUpscaleTemplateModel}"
                             HorizontalContentAlignment="Stretch" >
                             <CommonControls:ContentComboBox.BottomContent>
                                 <DockPanel>
@@ -136,7 +136,7 @@
                     </Grid>
                 </DockPanel>
 
-            </UniformGrid>
+            </StackPanel>
         </DockPanel>
 
     </Grid>

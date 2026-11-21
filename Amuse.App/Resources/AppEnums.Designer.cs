@@ -367,7 +367,7 @@ namespace Amuse.App.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Loads model weights across GPUs and CPU..
+        ///   Looks up a localized string similar to Fits model weights across GPU and CPU memory automatically.
         /// </summary>
         public static string MemoryMode1_Description {
             get {
@@ -385,7 +385,7 @@ namespace Amuse.App.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Loads tensor weights to GPU only when needed..
+        ///   Looks up a localized string similar to Keeps model weights in CPU memory or on disk and moves them to the GPU when needed. Lowest VRAM, slowest.
         /// </summary>
         public static string MemoryMode2_Description {
             get {
@@ -403,7 +403,7 @@ namespace Amuse.App.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Loads model weights to GPU only when needed..
+        ///   Looks up a localized string similar to Keeps model weights in CPU memory and moves them to the GPU when needed.
         /// </summary>
         public static string MemoryMode3_Description {
             get {
@@ -651,60 +651,6 @@ namespace Amuse.App.Resources {
         public static string PaintDrawingTool3 {
             get {
                 return ResourceManager.GetString("PaintDrawingTool3", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Draft.
-        /// </summary>
-        public static string QualityMode0 {
-            get {
-                return ResourceManager.GetString("QualityMode0", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Uses 4-bit quantization (int4). Maximum memory savings with a noticeable loss in fine detail and texture clarity..
-        /// </summary>
-        public static string QualityMode0_Description {
-            get {
-                return ResourceManager.GetString("QualityMode0_Description", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Standard.
-        /// </summary>
-        public static string QualityMode1 {
-            get {
-                return ResourceManager.GetString("QualityMode1", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Uses 8-bit quantization (float8). High visual fidelity with significant memory optimization; indistinguishable from high for most users..
-        /// </summary>
-        public static string QualityMode1_Description {
-            get {
-                return ResourceManager.GetString("QualityMode1_Description", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Production.
-        /// </summary>
-        public static string QualityMode2 {
-            get {
-                return ResourceManager.GetString("QualityMode2", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Uses 16-bit precision (bfloat16). Original model weights with zero quality loss; requires the most VRAM for maximum accuracy..
-        /// </summary>
-        public static string QualityMode2_Description {
-            get {
-                return ResourceManager.GetString("QualityMode2_Description", resourceCulture);
             }
         }
         

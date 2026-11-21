@@ -20,8 +20,11 @@ namespace Amuse.App.Controls
         private bool _isAudioInputEnabled;
         private SchedulerInputOptions[] _schedulers;
         private InputTabOption _selectedOption;
-        private bool _isSupertonicPipeline;
+        private bool _isSpeechPipeline;
         private bool _isWhisperPipeline;
+        private bool _isSchedulerSupported;
+        private bool _isStrengthSupported;
+        private bool _isNegativePromptSupported;
 
         public AudioDiffusionInputControl()
         {
@@ -106,16 +109,43 @@ namespace Amuse.App.Controls
             set { SetProperty(ref _selectedOption, value); }
         }
 
-        public bool IsSupertonicPipeline
+        public bool IsSpeechPipeline
         {
-            get { return _isSupertonicPipeline; }
-            set { SetProperty(ref _isSupertonicPipeline, value); }
+            get { return _isSpeechPipeline; }
+            set { SetProperty(ref _isSpeechPipeline, value); }
         }
 
         public bool IsWhisperPipeline
         {
             get { return _isWhisperPipeline; }
             set { SetProperty(ref _isWhisperPipeline, value); }
+        }
+
+        /// <summary>
+        /// Gets or sets a value indicating whether the scheduler and advanced options are used, audio.cpp and speech pipelines do not use them.
+        /// </summary>
+        public bool IsSchedulerSupported
+        {
+            get { return _isSchedulerSupported; }
+            set { SetProperty(ref _isSchedulerSupported, value); }
+        }
+
+        /// <summary>
+        /// Gets or sets a value indicating whether the strength is used, audio.cpp only uses it for Stable Audio input audio.
+        /// </summary>
+        public bool IsStrengthSupported
+        {
+            get { return _isStrengthSupported; }
+            set { SetProperty(ref _isStrengthSupported, value); }
+        }
+
+        /// <summary>
+        /// Gets or sets a value indicating whether the pipeline accepts a negative prompt, it is shown while guidance is above 1.
+        /// </summary>
+        public bool IsNegativePromptSupported
+        {
+            get { return _isNegativePromptSupported; }
+            set { SetProperty(ref _isNegativePromptSupported, value); }
         }
 
 
@@ -176,7 +206,6 @@ namespace Amuse.App.Controls
                 MinLength = newOptions.MinLength,
                 MaxLength = newOptions.MaxLength,
                 Beams = newOptions.Beams,
-                DiversityLength = newOptions.DiversityLength,
                 LengthPenalty = newOptions.LengthPenalty,
                 NoRepeatNgramSize = newOptions.NoRepeatNgramSize,
                 Temperature = newOptions.Temperature,
@@ -186,8 +215,18 @@ namespace Amuse.App.Controls
                 EarlyStopping = newOptions.EarlyStopping
             };
 
-            IsWhisperPipeline = newModel.Pipeline == PipelineType.WanPipeline;
-            IsSupertonicPipeline = newModel.Pipeline == PipelineType.SupertonicPipeline;
+            var isAudioCpp = newModel.Backend == BackendType.AudioCpp;
+            IsWhisperPipeline = newModel.Pipeline == PipelineType.WhisperPipeline;
+            IsSpeechPipeline = newModel.Pipeline == PipelineType.SupertonicPipeline
+                || newModel.Pipeline == PipelineType.VoxtralTTSPipeline
+                || newModel.Pipeline == PipelineType.Qwen3TTSPipeline
+                || newModel.Pipeline == PipelineType.ChatterboxPipeline
+                || newModel.Pipeline == PipelineType.OmniVoicePipeline;
+            IsSchedulerSupported = !isAudioCpp && !IsSpeechPipeline && !IsWhisperPipeline;
+            IsStrengthSupported = !isAudioCpp || newModel.Pipeline == PipelineType.StableAudioPipeline;
+            IsNegativePromptSupported = newModel.Pipeline == PipelineType.StableAudioPipeline
+                || newModel.Pipeline == PipelineType.MossSoundEffectPipeline
+                || newModel.Pipeline == PipelineType.LongCatAudioPipeline;
 
             //Schedulers
             if (!newOptions.Schedulers.IsNullOrEmpty())

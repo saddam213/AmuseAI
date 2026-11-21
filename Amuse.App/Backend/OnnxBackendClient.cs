@@ -14,6 +14,8 @@ namespace Amuse.App.Runtime
     /// <seealso cref="Amuse.App.Runtime.BackendClient" />
     public sealed class OnnxBackendClient : BackendClient
     {
+        private readonly ServerType _serverType;
+
         /// <summary>
         /// Initializes a new instance of the <see cref="OnnxBackendClient"/> class.
         /// </summary>
@@ -21,7 +23,22 @@ namespace Amuse.App.Runtime
         /// <param name="mediaService">The media service.</param>
         /// <param name="logger">The logger.</param>
         public OnnxBackendClient(Settings settings, IToolService toolService, IMediaService mediaService, ILogger logger)
-            : base(settings, toolService, mediaService, logger) { }
+            : this(settings, toolService, mediaService, logger, ServerType.OnnxRuntime) { }
+
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="OnnxBackendClient"/> class.
+        /// </summary>
+        /// <param name="settings">The settings.</param>
+        /// <param name="toolService">The tool service.</param>
+        /// <param name="mediaService">The media service.</param>
+        /// <param name="logger">The logger.</param>
+        /// <param name="serverType">The server type, a separate host instance with its own mutex and channels.</param>
+        public OnnxBackendClient(Settings settings, IToolService toolService, IMediaService mediaService, ILogger logger, ServerType serverType)
+            : base(settings, toolService, mediaService, logger)
+        {
+            _serverType = serverType;
+        }
 
 
         /// <summary>
@@ -35,7 +52,7 @@ namespace Amuse.App.Runtime
             var clientConfig = new ClientConfig
             {
                 ServerPath = App.DirectoryServer,
-                ServerType = ServerType.OnnxRuntime,
+                ServerType = _serverType,
                 IsDebugMode = Settings.IsServerDebugEnabled,
             };
             return await CreatePipelineClientAsync(clientConfig, createOptions, cancellationToken);

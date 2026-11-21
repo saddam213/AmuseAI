@@ -185,8 +185,8 @@ namespace Amuse.App.Views
                 Options = options,
                 Model = CurrentPipeline.DiffusionModel.Name,
                 LoraModels = CurrentPipeline.LoraAdapterModel?.Select(x => x.Name).ToArray(),
-                UpscaleModel = CurrentPipeline.UpscaleModel?.Name,
-                UpscaleOptions = CurrentPipeline.UpscaleModel is not null ? UpscaleOptions : null,
+                UpscaleModel = UpscaledModel?.Name,
+                UpscaleOptions = UpscaledModel is not null ? UpscaleOptions : null,
                 Source = View.TextToImage,
             });
             Logger.LogInformation($"[TextToImage] [SaveHistory] History saved.");

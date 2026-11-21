@@ -5,9 +5,13 @@ namespace Amuse.Common
     public enum ServerType
     {
         OnnxRuntime = 0,
+        OnnxRuntimeUpscale = 1,
+        OnnxRuntimeExtract = 2,
         HuggingFace = 10,
         StableDiffusionCpp = 20,
-        AudioCpp = 30
+        StableDiffusionCppUpscale = 21,
+        AudioCpp = 30,
+        LlamaCpp = 40
     }
 
     public enum PipelineType
@@ -149,10 +153,19 @@ namespace Amuse.Common
         [Display(Name = "YuE Pipeline", ShortName = "YuE", Description = "YuE is an open lyrics-to-song model family that generates full songs with vocals and accompaniment from lyrics and a style prompt, using symbolic score planning followed by acoustic rendering.")]
         YuEPipeline = 215,
 
+        [Display(Name = "MOSS SoundEffect Pipeline", ShortName = "MOSS-SFX", Description = "MOSS-SoundEffect is an open text-to-sound-effect model that generates short, high-fidelity sound effects, ambiences and foley from natural-language descriptions.")]
+        MossSoundEffectPipeline = 216,
+
 
         // Other
         [Display(Name = "Upscale Pipeline", ShortName = "Upscale", Description = "General-purpose image upscaling pipeline designed to increase resolution and enhance visual detail while preserving the original image content.")]
         UpscalePipeline = 500,
+
+        [Display(Name = "SeedVR2 Pipeline", ShortName = "SeedVR2", Description = "SeedVR2 is a one-step diffusion video restoration and upscaling model that increases the resolution of a whole video while keeping detail consistent from frame to frame, processing frames in temporal chunks.")]
+        SeedVR2Pipeline = 520,
+
+        [Display(Name = "RelayVSR Pipeline", ShortName = "RelayVSR", Description = "RelayVSR is a diffusion video super-resolution model that upscales a whole video by 2x or 4x, using a window of reference frames to keep detail consistent across the video.")]
+        RelayVSRPipeline = 521,
 
         [Display(Name = "Extract Pipeline", ShortName = "Extract", Description = "General-purpose feature extraction pipeline for extracting useful representations, embeddings, metadata, or other features from supported inputs.")]
         ExtractPipeline = 501,
@@ -165,6 +178,27 @@ namespace Amuse.Common
 
         [Display(Name = "Parakeet Pipeline", ShortName = "Parakeet", Description = "NVIDIA's Parakeet-TDT is a fast, accurate automatic speech recognition model covering 25 European languages with automatic language detection. It transcribes spoken audio into punctuated text and is well suited to quick local speech-to-text workflows.")]
         ParakeetPipeline = 504,
+
+        [Display(Name = "Voxtral TTS Pipeline", ShortName = "Voxtral", Description = "Mistral's Voxtral TTS is a multilingual text-to-speech model with a set of built-in preset voices covering English and several European, Arabic and Hindi voices, producing natural, expressive speech.")]
+        VoxtralTTSPipeline = 505,
+
+        [Display(Name = "Qwen3 TTS Pipeline", ShortName = "Qwen3-TTS", Description = "Alibaba's Qwen3-TTS is a multilingual text-to-speech model family. The CustomVoice variant provides a set of packaged speakers with natural prosody across Chinese, English and other major languages.")]
+        Qwen3TTSPipeline = 506,
+
+        [Display(Name = "Chatterbox Pipeline", ShortName = "Chatterbox", Description = "Resemble AI's Chatterbox Turbo is a fast, lightweight English text-to-speech model with a built-in default voice, designed for low-latency local speech synthesis.")]
+        ChatterboxPipeline = 507,
+
+        [Display(Name = "OmniVoice Pipeline", ShortName = "OmniVoice", Description = "OmniVoice is a massively multilingual text-to-speech model covering hundreds of languages, generating speech with an automatic voice when no reference is supplied.")]
+        OmniVoicePipeline = 508,
+
+        [Display(Name = "Qwen3 ASR Pipeline", ShortName = "Qwen3-ASR", Description = "Alibaba's Qwen3-ASR is a multilingual automatic speech recognition model with automatic language detection, robust to noise, accents and singing, producing punctuated transcripts.")]
+        Qwen3ASRPipeline = 509,
+
+        [Display(Name = "Canary Pipeline", ShortName = "Canary", Description = "NVIDIA's Canary Flash is a compact, fast speech recognition and translation model for English, German, Spanish and French, producing punctuated and capitalized transcripts.")]
+        CanaryPipeline = 510,
+
+        [Display(Name = "Cohere Transcribe Pipeline", ShortName = "Cohere", Description = "Cohere Transcribe is an open automatic speech recognition model designed for accurate, multilingual transcription of long-form audio.")]
+        CohereASRPipeline = 511,
 
 
         // Text
@@ -232,23 +266,6 @@ namespace Amuse.Common
 
         [Display(Name = "ImageToText", ShortName = "I2T", Description = "")]
         ImageToText = 801
-    }
-
-    public enum DataType
-    {
-        Float32 = 0,
-        Bfloat16 = 1,
-        Float16 = 2,
-        Float8 = 3,
-        Int8 = 6,
-        Int4 = 7
-    }
-
-    public enum QuantizationType
-    {
-        Q16Bit = 0,
-        Q8Bit = 1,
-        Q4Bit = 2
     }
 
     public enum MemoryModeType
@@ -908,5 +925,20 @@ namespace Amuse.Common
 
         [Display(Name = "Disabled", ShortName = "off")]
         Disabled = 2
+    }
+
+    public enum ExtractType
+    {
+        Default = 0,
+        Background = 1,
+        Pose = 2
+    }
+
+    public enum BackgroundMode
+    {
+        MaskBackground = 0,
+        MaskForeground = 1,
+        RemoveBackground = 10,
+        RemoveForeground = 11
     }
 }

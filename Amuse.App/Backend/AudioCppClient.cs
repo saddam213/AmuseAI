@@ -80,8 +80,8 @@ namespace Amuse.App.Runtime
             }
             else
             {
-                if (await environmentDialog.CreateAsync(environment))
-                    return environment;
+                if (await environmentDialog.CreateAsync(environment, true))
+                    return environmentDialog.Environment;
             }
             return null;
         }

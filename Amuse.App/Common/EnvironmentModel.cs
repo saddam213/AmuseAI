@@ -10,6 +10,7 @@ namespace Amuse.App.Common
     public sealed class EnvironmentModel : BaseModel
     {
         private string _name;
+        private string _description;
         private EnvironmentType _type;
         private VendorType _vendor;
         private int _device;
@@ -29,6 +30,25 @@ namespace Amuse.App.Common
             get { return _name; }
             set { SetProperty(ref _name, value); }
         }
+
+        public string Description
+        {
+            get { return _description; }
+            set { SetProperty(ref _description, value); }
+        }
+
+        /// <summary>
+        /// Gets or sets the approximate download size in GB.
+        /// </summary>
+        public float DownloadSize { get; set; }
+
+        /// <summary>
+        /// Gets the download size for display, in MB below 1 GB, 0 MB when unknown.
+        /// </summary>
+        [JsonIgnore]
+        public string DownloadSizeText => DownloadSize < 1
+            ? $"{DownloadSize * 1024:N0} MB"
+            : $"{DownloadSize:0.0} GB";
 
         public EnvironmentType Type
         {
@@ -82,6 +102,8 @@ namespace Amuse.App.Common
             {
                 Id = id,
                 Name = Name,
+                Description = Description,
+                DownloadSize = DownloadSize,
                 IsDefault = IsDefault,
                 Environment = Environment,
                 HostVersion = HostVersion,
@@ -93,6 +115,25 @@ namespace Amuse.App.Common
                 Type = Type,
                 Backend = Backend,
                 Version = Version,
+            };
+        }
+
+
+        /// <summary>
+        /// Determines whether another environment shares this environment's default, only one environment per group is the default.
+        /// Groups are the same backend and type, with the same vendor, device or pipeline.
+        /// </summary>
+        /// <param name="other">The other environment.</param>
+        public bool IsSameDefaultGroup(EnvironmentModel other)
+        {
+            if (other.Backend != Backend || other.Type != Type)
+                return false;
+
+            return Type switch
+            {
+                EnvironmentType.Vendor => other.Vendor == Vendor,
+                EnvironmentType.Device => other.Device == Device,
+                _ => other.Pipeline == Pipeline
             };
         }
     }

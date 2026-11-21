@@ -9,6 +9,9 @@ namespace Amuse.App.Common
         private bool _isTileEnabled;
         private int _tileSize;
         private int _tileOverlap;
+        private long _seed;
+        private int _windowSize;
+        private int _temporalChunkSize;
 
         [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingDefault)]
         public bool IsTileEnabled
@@ -34,13 +37,49 @@ namespace Amuse.App.Common
         }
 
 
+        /// <summary>
+        /// Gets or sets the video upscale seed.
+        /// </summary>
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingDefault)]
+        public long Seed
+        {
+            get { return _seed; }
+            set { SetProperty(ref _seed, value); }
+        }
+
+
+        /// <summary>
+        /// Gets or sets the video upscale window size.
+        /// </summary>
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingDefault)]
+        public int WindowSize
+        {
+            get { return _windowSize; }
+            set { SetProperty(ref _windowSize, value); }
+        }
+
+
+        /// <summary>
+        /// Gets or sets the video upscale temporal chunk size.
+        /// </summary>
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingDefault)]
+        public int TemporalChunkSize
+        {
+            get { return _temporalChunkSize; }
+            set { SetProperty(ref _temporalChunkSize, value); }
+        }
+
+
         public UpscaleInputOptions DeepClone()
         {
             return new UpscaleInputOptions
             {
                 IsTileEnabled = IsTileEnabled,
                 TileOverlap = TileOverlap,
-                TileSize = TileSize
+                TileSize = TileSize,
+                Seed = Seed,
+                WindowSize = WindowSize,
+                TemporalChunkSize = TemporalChunkSize
             };
         }
 

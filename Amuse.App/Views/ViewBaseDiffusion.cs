@@ -14,6 +14,7 @@ using TensorStack.WPF;
 using TensorStack.WPF.Controls;
 using TensorStack.WPF.Image;
 using TensorStack.WPF.Services;
+using PipelineProgress = Amuse.Common.PipelineProgress;
 
 namespace Amuse.App.Views
 {
@@ -209,6 +210,11 @@ namespace Amuse.App.Views
             get { return _upscaleOptions; }
             set { SetProperty(ref _upscaleOptions, value); }
         }
+
+        /// <summary>
+        /// Gets the upscale model that upscaled the last result, null when no upscale ran or it failed.
+        /// </summary>
+        protected UpscaleModel UpscaledModel { get; private set; }
 
         /// <summary>
         /// Gets or sets the automation options.
@@ -574,7 +580,7 @@ namespace Amuse.App.Views
             var timestamp = Stopwatch.GetTimestamp();
             if (CurrentPipeline.UpscaleModel is not null)
             {
-                if (!UpscaleService.IsLoaded || UpscaleService.Pipeline.UpscaleModel != CurrentPipeline.UpscaleModel)
+                if (!IsUpscaleModelLoaded())
                 {
                     Logger.LogInformation("[{View}] [LoadUpscaleModel] Loading upscale model {Name}...", ViewName, CurrentPipeline.UpscaleModel.Name);
                     await UpscaleService.LoadAsync(CurrentPipeline);
@@ -591,26 +597,68 @@ namespace Amuse.App.Views
 
 
         /// <summary>
+        /// Determines whether the selected upscale model is the one loaded, on the selected device.
+        /// </summary>
+        private bool IsUpscaleModelLoaded()
+        {
+            return UpscaleService.IsLoaded
+                && UpscaleService.Pipeline?.UpscaleModel == CurrentPipeline.UpscaleModel
+                && UpscaleService.Pipeline?.Device == CurrentPipeline.Device;
+        }
+
+
+        /// <summary>
+        /// Loads the selected upscale model if it is not loaded, the upscale service is shared with
+        /// the upscale views and unloads itself when its host fails.
+        /// </summary>
+        private async Task EnsureUpscaleModelAsync()
+        {
+            if (IsUpscaleModelLoaded())
+                return;
+
+            Logger.LogInformation("[{View}] [EnsureUpscaleModel] Selected upscale model {Name} is not loaded.", ViewName, CurrentPipeline.UpscaleModel.Name);
+            await LoadUpscaleModelAsync();
+        }
+
+
+        /// <summary>
         /// Execute image upscale
         /// </summary>
         /// <param name="imageInput">The image input.</param>
-        protected async Task<ImageTensor> ExecuteImageUpscaleAsync(ImageTensor imageInput)
+        /// <param name="isResultKeptOnError">Whether to keep the result without upscaling when the upscale fails, otherwise the error is thrown.</param>
+        protected async Task<ImageTensor> ExecuteImageUpscaleAsync(ImageTensor imageInput, bool isResultKeptOnError = true)
         {
-            if (!UpscaleService.IsLoaded)
+            UpscaledModel = null;
+            if (CurrentPipeline?.UpscaleModel is null)
                 return imageInput;
 
             var timestamp = Stopwatch.GetTimestamp();
-            Logger.LogInformation("[{View}] [ExecuteImageUpscale] Executing upscale...", ViewName);
-
-            Progress.Indeterminate($"{AppDefault.UpscalingImage}...");
-            imageInput = await UpscaleService.ExecuteAsync(new UpscaleImageRequest
+            try
             {
-                Image = imageInput,
-                Options = UpscaleOptions
-            }, ProgressCallback);
+                Progress.Indeterminate($"{AppDefault.UpscalingImage}...");
 
-            Logger.LogInformation("[{View}] [ExecuteImageUpscale] Upscale complete, Elapsed: {Elapsed:c}", ViewName, Stopwatch.GetElapsedTime(timestamp));
-            return imageInput;
+                // Load, the shared upscaler may hold another model or have been unloaded
+                await EnsureUpscaleModelAsync();
+
+                // Upscale
+                Logger.LogInformation("[{View}] [ExecuteImageUpscale] Executing upscale...", ViewName);
+                var upscaledImage = await UpscaleService.ExecuteAsync(new UpscaleImageRequest
+                {
+                    Image = imageInput,
+                    Options = UpscaleOptions
+                }, ProgressCallback);
+
+                // Result
+                UpscaledModel = CurrentPipeline.UpscaleModel;
+                Logger.LogInformation("[{View}] [ExecuteImageUpscale] Upscale complete, Elapsed: {Elapsed:c}", ViewName, Stopwatch.GetElapsedTime(timestamp));
+                return upscaledImage;
+            }
+            catch (Exception ex) when (isResultKeptOnError && ex is not OperationCanceledException)
+            {
+                Logger.LogError(ex, "[{View}] [ExecuteImageUpscale] An exception occurred upscaling, keeping the result without upscaling, Elapsed: {Elapsed:c}", ViewName, Stopwatch.GetElapsedTime(timestamp));
+                await ShowUpscaleErrorAsync(ex);
+                return imageInput;
+            }
         }
 
 
@@ -618,23 +666,53 @@ namespace Amuse.App.Views
         /// Execute video upscale
         /// </summary>
         /// <param name="videoInput">The video input.</param>
-        protected async Task<VideoInputStream> ExecuteVideoUpscaleAsync(VideoInputStream videoInput)
+        /// <param name="isResultKeptOnError">Whether to keep the result without upscaling when the upscale fails, otherwise the error is thrown.</param>
+        protected async Task<VideoInputStream> ExecuteVideoUpscaleAsync(VideoInputStream videoInput, bool isResultKeptOnError = true)
         {
-            if (!UpscaleService.IsLoaded)
+            UpscaledModel = null;
+            if (CurrentPipeline?.UpscaleModel is null)
                 return videoInput;
 
             var timestamp = Stopwatch.GetTimestamp();
-            Progress.Indeterminate($"{AppDefault.UpscalingVideo}...");
-            Logger.LogInformation("[{View}] [ExecuteVideoUpscale] Executing upscale...", ViewName);
-
-            videoInput = await UpscaleService.ExecuteAsync(new UpscaleVideoRequest
+            try
             {
-                VideoStream = videoInput,
-                Options = UpscaleOptions
-            }, ProgressCallback);
+                Progress.Indeterminate($"{AppDefault.UpscalingVideo}...");
 
-            Logger.LogInformation("[{View}] [ExecuteVideoUpscale] Upscale complete, Elapsed: {Elapsed:c}", ViewName, Stopwatch.GetElapsedTime(timestamp));
-            return videoInput;
+                // Load, the shared upscaler may hold another model or have been unloaded
+                await EnsureUpscaleModelAsync();
+
+                // Upscale
+                Logger.LogInformation("[{View}] [ExecuteVideoUpscale] Executing upscale...", ViewName);
+                var upscaledVideo = await UpscaleService.ExecuteAsync(new UpscaleVideoRequest
+                {
+                    VideoStream = videoInput,
+                    Options = UpscaleOptions
+                }, ProgressCallback);
+
+                // Result
+                UpscaledModel = CurrentPipeline.UpscaleModel;
+                Logger.LogInformation("[{View}] [ExecuteVideoUpscale] Upscale complete, Elapsed: {Elapsed:c}", ViewName, Stopwatch.GetElapsedTime(timestamp));
+                return upscaledVideo;
+            }
+            catch (Exception ex) when (isResultKeptOnError && ex is not OperationCanceledException)
+            {
+                Logger.LogError(ex, "[{View}] [ExecuteVideoUpscale] An exception occurred upscaling, keeping the result without upscaling, Elapsed: {Elapsed:c}", ViewName, Stopwatch.GetElapsedTime(timestamp));
+                await ShowUpscaleErrorAsync(ex);
+                return videoInput;
+            }
+        }
+
+
+        /// <summary>
+        /// Shows the upscale error, the result is kept without upscaling, automation logs it and continues.
+        /// </summary>
+        /// <param name="exception">The exception.</param>
+        private async Task ShowUpscaleErrorAsync(Exception exception)
+        {
+            if (IsAutomating)
+                return;
+
+            await DialogService.ShowErrorAsync(AppErrors.UpscaleFailedTitle, $"{AppErrors.UpscaleFailedResultKept}{Environment.NewLine}{exception.Message}");
         }
 
 

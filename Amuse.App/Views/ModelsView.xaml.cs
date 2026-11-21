@@ -12,6 +12,7 @@ using System.Threading.Tasks;
 using System.Windows.Controls;
 using System.Windows.Data;
 using System.Windows.Input;
+using System.Windows.Threading;
 using TensorStack.Common;
 using TensorStack.WPF;
 using TensorStack.WPF.Controls;
@@ -138,6 +139,34 @@ namespace Amuse.App.Views
                 NotifyPropertyChanged(nameof(FilterCategoryType));
                 ModelCollection.Refresh();
             }
+            else if (args is ModelOpenArgs modelOpenArgs)
+            {
+                await SelectModelAsync(modelOpenArgs.Model);
+            }
+        }
+
+
+        /// <summary>
+        /// Selects the model in the list, clearing the filters only when they hide it.
+        /// </summary>
+        /// <param name="model">The model.</param>
+        private async Task SelectModelAsync(IGenerateModel model)
+        {
+            if (model is null)
+                return;
+
+            // Filters
+            ModelCollection.Refresh();
+            if (!ModelCollection.Contains(model))
+                await RemoveFilters();
+
+            // Select
+            if (!ModelCollection.Contains(model))
+                return;
+
+            ModelCollection.MoveCurrentTo(model);
+            SelectedItem = model;
+            await Dispatcher.InvokeAsync(() => ListBoxControl.ScrollIntoView(model), DispatcherPriority.Loaded);
         }
 
 

@@ -109,10 +109,17 @@ namespace Amuse.App.Services
             }
 
 
-            if (model is IGenerateModel generateModel)
+            // Shared components, generate models and upscale models (SeedVR2 VAE)
+            var checkpointComponents = model switch
+            {
+                IGenerateModel generateModel => generateModel.GetComponents(),
+                UpscaleModel upscaleModel => upscaleModel.GetComponents(),
+                _ => null
+            };
+            if (checkpointComponents is not null)
             {
                 var componentsQueued = false;
-                foreach (var checkpointComponent in generateModel.GetComponents())
+                foreach (var checkpointComponent in checkpointComponents)
                 {
                     if (checkpointComponent.Type != CheckpointType.Component)
                         continue;
@@ -133,8 +140,8 @@ namespace Amuse.App.Services
                     componentsQueued = true;
                 }
 
-                // If diffusion model is already installed exit here
-                if (generateModel.Status == ModelStatusType.Installed)
+                // If the model is already installed exit here
+                if (model.Status == ModelStatusType.Installed)
                     return componentsQueued;
             }
 
@@ -184,6 +191,8 @@ namespace Amuse.App.Services
                 else if (queueItem.DownloadModel is UpscaleModel upscaleModel)
                 {
                     await DownloadCheckpointAsync(queueItem, _settings.DirectoryUpscale, upscaleModel.Checkpoint, components);
+                    if (upscaleModel.Vae is not null)
+                        await DownloadCheckpointAsync(queueItem, _settings.DirectoryUpscale, upscaleModel.Vae, components);
                 }
                 else if (queueItem.DownloadModel is ExtractModel extractModel)
                 {

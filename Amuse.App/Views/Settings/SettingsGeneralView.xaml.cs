@@ -89,6 +89,8 @@ namespace Amuse.App.Views
         {
             Settings.IsExternalLinksAcknowledged = false;
             Settings.IsExternalToolsAcknowledged = false;
+            Settings.IsDangerousToolsAcknowledged = false;
+            Settings.IsAppSetupAcknowledged = false;
             await SaveAsync();
         }
 

@@ -1,4 +1,7 @@
-﻿using System;
+﻿using Amuse.App.Common;
+using Serilog;
+using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Reflection;
@@ -44,8 +47,13 @@ namespace Amuse.App
                 // Both files missing
                 throw new FileNotFoundException(appSettingsFile);
             }
-            catch
+            catch (Exception ex)
             {
+                // Keep the user's settings before resetting to defaults
+                Log.Logger.Error(ex, "[SettingsManager] [Load] Failed to load settings, resetting to defaults, Settings: {SettingsFile}", appSettingsFile);
+                if (File.Exists(appSettingsFile))
+                    BackupFile(appSettingsFile);
+
                 File.Copy(appDefaultsFile, appSettingsFile, true);
                 return LoadSettingsFile(appSettingsFile);
             }
@@ -167,6 +175,18 @@ namespace Amuse.App
                             }
                         }
 
+                        // Keep the user's default environments, the environment chosen and installed may not be the shipped default
+                        foreach (var userDefault in currentSettings.Environments.Where(x => x.IsDefault))
+                        {
+                            var defaultEnvironment = defaultSettings.Environments.FirstOrDefault(x => x.Id == userDefault.Id);
+                            if (defaultEnvironment == null)
+                                continue;
+
+                            foreach (var other in defaultSettings.Environments.Where(defaultEnvironment.IsSameDefaultGroup))
+                                other.IsDefault = false;
+
+                            defaultEnvironment.IsDefault = true;
+                        }
                     }
                     if (property.Name == nameof(defaultSettings.UpscaleModels))
                     {
@@ -181,6 +201,7 @@ namespace Amuse.App
                     }
                     if (property.Name == nameof(defaultSettings.DiffusionModels))
                     {
+                        var migrateDiffusionModels = new List<DiffusionModel>();
                         foreach (var diffusionModel in currentSettings.DiffusionModels)
                         {
                             if (diffusionModel.Id > 1000)
@@ -197,18 +218,33 @@ namespace Amuse.App
                             {
                                 var defaultDiffusionModel = defaultSettings.DiffusionModels.FirstOrDefault(x => x.Id == diffusionModel.Id);
                                 if (defaultDiffusionModel == null)
+                                {
+                                    // Installed built-in HuggingFace models become user models
+                                    if (IsMigrateHuggingFace(diffusionModel.Backend, diffusionModel.Status))
+                                        migrateDiffusionModels.Add(diffusionModel);
+
                                     continue;
+                                }
 
                                 // Merge any user settings
                                 defaultDiffusionModel.Status = diffusionModel.Status;
-                                defaultDiffusionModel.UserQualityMode = diffusionModel.UserQualityMode;
                                 defaultDiffusionModel.UserMemoryMode = diffusionModel.UserMemoryMode;
                                 defaultDiffusionModel.UserExecutionOptions = diffusionModel.UserExecutionOptions;
                             }
                         }
+
+                        // Migrate HuggingFace
+                        foreach (var diffusionModel in migrateDiffusionModels)
+                        {
+                            diffusionModel.Id = defaultSettings.DiffusionModels.NextId();
+                            diffusionModel.Name = GetLegacyName(diffusionModel.Name);
+                            diffusionModel.Backend = TensorStack.Common.BackendType.HuggingFace;
+                            defaultSettings.DiffusionModels.Add(diffusionModel);
+                        }
                     }
                     if (property.Name == nameof(defaultSettings.LanguageModels))
                     {
+                        var migrateLanguageModels = new List<LanguageModel>();
                         foreach (var languageModel in currentSettings.LanguageModels)
                         {
                             if (languageModel.Id > 1000)
@@ -221,15 +257,30 @@ namespace Amuse.App
                             }
                             else
                             {
-                                var defaultDiffusionModel = defaultSettings.LanguageModels.FirstOrDefault(x => x.Id == languageModel.Id);
-                                if (defaultDiffusionModel == null)
+                                var defaultLanguageModel = defaultSettings.LanguageModels.FirstOrDefault(x => x.Id == languageModel.Id);
+                                if (defaultLanguageModel == null)
+                                {
+                                    // Installed built-in HuggingFace models become user models
+                                    if (IsMigrateHuggingFace(languageModel.Backend, languageModel.Status))
+                                        migrateLanguageModels.Add(languageModel);
+
                                     continue;
+                                }
 
                                 // Merge any user settings
-                                defaultDiffusionModel.Status = languageModel.Status;
-                                defaultDiffusionModel.UserQualityMode = languageModel.UserQualityMode;
-                                defaultDiffusionModel.UserExecutionOptions = languageModel.UserExecutionOptions;
+                                defaultLanguageModel.Status = languageModel.Status;
+                                defaultLanguageModel.UserMemoryMode = languageModel.UserMemoryMode;
+                                defaultLanguageModel.UserExecutionOptions = languageModel.UserExecutionOptions;
                             }
+                        }
+
+                        // Migrate HuggingFace
+                        foreach (var languageModel in migrateLanguageModels)
+                        {
+                            languageModel.Id = defaultSettings.LanguageModels.NextId();
+                            languageModel.Name = GetLegacyName(languageModel.Name);
+                            languageModel.Backend = TensorStack.Common.BackendType.HuggingFace;
+                            defaultSettings.LanguageModels.Add(languageModel);
                         }
                     }
                     if (property.Name == nameof(defaultSettings.LoraAdapterModels))
@@ -271,6 +322,34 @@ namespace Amuse.App
             }
 
             return defaultSettings;
+        }
+
+
+        /// <summary>
+        /// Determines whether a built-in model removed from the defaults should be migrated to a user model.
+        /// </summary>
+        /// <param name="backend">The model backend.</param>
+        /// <param name="status">The model status.</param>
+        private static bool IsMigrateHuggingFace(BackendType backend, ModelStatusType status)
+        {
+            if (backend != BackendType.HuggingFace && backend != BackendType.PyTorch)
+                return false;
+
+            return status == ModelStatusType.Installed;
+        }
+
+
+        /// <summary>
+        /// Gets the name of a migrated model, marked as legacy.
+        /// </summary>
+        /// <param name="name">The model name.</param>
+        private static string GetLegacyName(string name)
+        {
+            const string legacySuffix = " (Legacy)";
+            if (name.EndsWith(legacySuffix, StringComparison.OrdinalIgnoreCase))
+                return name;
+
+            return name + legacySuffix;
         }
 
 

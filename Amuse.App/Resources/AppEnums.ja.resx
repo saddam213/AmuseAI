@@ -184,43 +184,25 @@
     <value>Balanced</value>
   </data>
   <data name="MemoryMode1_Description" xml:space="preserve">
-    <value>Loads model weights across GPUs and CPU.</value>
+    <value>Fits model weights across GPU and CPU memory automatically.</value>
   </data>
   <data name="MemoryMode2" xml:space="preserve">
     <value>Low</value>
   </data>
   <data name="MemoryMode2_Description" xml:space="preserve">
-    <value>Loads tensor weights to GPU only when needed.</value>
+    <value>Keeps model weights in CPU memory or on disk and moves them to the GPU when needed. Lowest VRAM, slowest.</value>
   </data>
   <data name="MemoryMode3" xml:space="preserve">
     <value>Medium</value>
   </data>
   <data name="MemoryMode3_Description" xml:space="preserve">
-    <value>Loads model weights to GPU only when needed.</value>
+    <value>Keeps model weights in CPU memory and moves them to the GPU when needed.</value>
   </data>
   <data name="MemoryMode4" xml:space="preserve">
     <value>High</value>
   </data>
   <data name="MemoryMode4_Description" xml:space="preserve">
     <value>Loads all weights to GPU for peak performance.</value>
-  </data>
-  <data name="QualityMode0" xml:space="preserve">
-    <value>Draft</value>
-  </data>
-  <data name="QualityMode0_Description" xml:space="preserve">
-    <value>Uses 4-bit quantization (int4). Maximum memory savings with a noticeable loss in fine detail and texture clarity.</value>
-  </data>
-  <data name="QualityMode1" xml:space="preserve">
-    <value>Standard</value>
-  </data>
-  <data name="QualityMode1_Description" xml:space="preserve">
-    <value>Uses 8-bit quantization (float8). High visual fidelity with significant memory optimization; indistinguishable from high for most users.</value>
-  </data>
-  <data name="QualityMode2" xml:space="preserve">
-    <value>Production</value>
-  </data>
-  <data name="QualityMode2_Description" xml:space="preserve">
-    <value>Uses 16-bit precision (bfloat16). Original model weights with zero quality loss; requires the most VRAM for maximum accuracy.</value>
   </data>
   <data name="ModelCategoryType0" xml:space="preserve">
     <value>Diffusion</value>

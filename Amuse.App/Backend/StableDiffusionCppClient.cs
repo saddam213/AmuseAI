@@ -20,6 +20,7 @@ namespace Amuse.App.Runtime
     public sealed class StableDiffusionCppClient : BackendClient
     {
         private readonly IEnvironmentService _environmentService;
+        private readonly ServerType _serverType;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="StableDiffusionCppClient"/> class.
@@ -28,8 +29,22 @@ namespace Amuse.App.Runtime
         /// <param name="mediaService">The media service.</param>
         /// <param name="logger">The logger.</param>
         public StableDiffusionCppClient(Settings settings, IToolService toolService, IMediaService mediaService, IEnvironmentService environmentService, ILogger logger)
+            : this(settings, toolService, mediaService, environmentService, logger, ServerType.StableDiffusionCpp) { }
+
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="StableDiffusionCppClient"/> class.
+        /// </summary>
+        /// <param name="settings">The settings.</param>
+        /// <param name="toolService">The tool service.</param>
+        /// <param name="mediaService">The media service.</param>
+        /// <param name="environmentService">The environment service.</param>
+        /// <param name="logger">The logger.</param>
+        /// <param name="serverType">The server type, a separate host instance with its own mutex and channels.</param>
+        public StableDiffusionCppClient(Settings settings, IToolService toolService, IMediaService mediaService, IEnvironmentService environmentService, ILogger logger, ServerType serverType)
             : base(settings, toolService, mediaService, logger)
         {
+            _serverType = serverType;
             _environmentService = environmentService;
             StopHostOnException = true;
             ResolveComponentFiles = true;
@@ -48,7 +63,7 @@ namespace Amuse.App.Runtime
             var clientConfig = new ClientConfig
             {
                 ServerPath = App.DirectoryServer,
-                ServerType = ServerType.StableDiffusionCpp,
+                ServerType = _serverType,
                 IsDebugMode = Settings.IsServerDebugEnabled,
                 ServerVariables = createOptions.Variables
             };
@@ -61,7 +76,7 @@ namespace Amuse.App.Runtime
         /// </summary>
         private async Task<EnvironmentModel> InitializeEnvironmentAsync()
         {
-            var environment = _environmentService.GetEnvironment(Pipeline.Device, Pipeline.GenerateModel.Backend, Pipeline.GenerateModel.Pipeline);
+            var environment = _environmentService.GetEnvironment(Pipeline.Device, Pipeline.Backend, Pipeline.PipelineType);
             if ((environment.Status == BackendStatus.Create || environment.Status == BackendStatus.Load) && _environmentService.Exists(environment))
                 return environment;
 
@@ -78,8 +93,8 @@ namespace Amuse.App.Runtime
             }
             else
             {
-                if (await environmentDialog.CreateAsync(environment))
-                    return environment;
+                if (await environmentDialog.CreateAsync(environment, true))
+                    return environmentDialog.Environment;
             }
             return null;
         }

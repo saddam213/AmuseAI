@@ -312,6 +312,16 @@ namespace Amuse.Common
 
 
         /// <summary>
+        /// Queues the progress synchronously, the queue is unbounded so the write always succeeds and reports keep their order.
+        /// </summary>
+        /// <param name="progress">The progress.</param>
+        protected void EnqueueProgress(PipelineProgress progress)
+        {
+            _progressQueue.Writer.TryWrite(progress);
+        }
+
+
+        /// <summary>
         /// Called when the Channel is opened.
         /// </summary>
         /// <returns>Task.</returns>

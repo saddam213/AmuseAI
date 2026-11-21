@@ -1,9 +1,9 @@
 ﻿using System;
 using System.Threading;
 using TensorStack.Common;
+using TensorStack.Common.Common;
 using TensorStack.WPF;
 using TensorStack.WPF.Controls;
-using TensorStack.WPF.Services;
 
 namespace Amuse.App.Common
 {
@@ -22,7 +22,7 @@ namespace Amuse.App.Common
             DownloadModel = model;
             Progress = new ProgressInfo();
             TotalProgress = new ProgressInfo();
-            ProgressCallback = new Progress<DownloadProgress>(OnProgress);
+            ProgressCallback = new Progress<FileDownloadProgress>(OnProgress);
             _description = GetDescription();
             _cancellationTokenSource = new CancellationTokenSource();
         }
@@ -30,7 +30,7 @@ namespace Amuse.App.Common
         public int Index { get; set; }
         public ProgressInfo Progress { get; }
         public ProgressInfo TotalProgress { get; }
-        public IProgress<DownloadProgress> ProgressCallback { get; }
+        public IProgress<FileDownloadProgress> ProgressCallback { get; }
         public CancellationToken CancellationToken => _cancellationTokenSource.Token;
         public ModelStatusType Status => DownloadModel.Status;
         public string Name => DownloadModel?.Name;
@@ -71,7 +71,7 @@ namespace Amuse.App.Common
         }
 
 
-        private void OnProgress(DownloadProgress progress)
+        private void OnProgress(FileDownloadProgress progress)
         {
             if ((DateTime.UtcNow > _lastUpdate))
             {

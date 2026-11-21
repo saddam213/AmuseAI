@@ -175,5 +175,28 @@ namespace Amuse.Common
             }
             return buffer;
         }
+
+
+        /// <summary>
+        /// Converts a TensorStack backend progress to an IPC progress message.
+        /// </summary>
+        /// <param name="progress">The progress.</param>
+        public static PipelineProgress ToProgress(this TensorStack.Common.Pipeline.PipelineProgress progress)
+        {
+            return new PipelineProgress
+            {
+                Key = progress.Key,
+                Subkey = progress.Subkey,
+                ElapsedKey = progress.ElapsedKey,
+                Timestamp = progress.Timestamp,
+                Elapsed = progress.Elapsed,
+                Value = progress.Value,
+                Maximum = progress.Maximum,
+                BatchValue = progress.BatchValue,
+                BatchMaximum = progress.BatchMaximum,
+                Message = progress.Message,
+                Tensors = progress.Tensors
+            };
+        }
     }
 }

@@ -1,4 +1,6 @@
-﻿using System.Collections.Generic;
+﻿using Amuse.App.Common;
+using Amuse.Common;
+using System.Collections.Generic;
 
 namespace Amuse.App.Views
 {
@@ -77,6 +79,7 @@ namespace Amuse.App.Views
         private static readonly Dictionary<View, ViewCategory> ViewCategoryMap = new Dictionary<View, ViewCategory>
         {
             // General
+            { View.Home, ViewCategory.Other  },
             { View.Gallery, ViewCategory.Other  },
             { View.Models, ViewCategory.Other  },
 
@@ -143,6 +146,49 @@ namespace Amuse.App.Views
         internal static ViewCategory GetViewCategory(View view)
         {
             return ViewCategoryMap[view];
+        }
+
+
+        /// <summary>
+        /// Gets the view that runs the process type.
+        /// </summary>
+        /// <param name="processType">Type of the process.</param>
+        internal static View GetView(ProcessType processType)
+        {
+            return processType switch
+            {
+                ProcessType.TextToImage => View.TextToImage,
+                ProcessType.ImageToImage => View.ImageToImage,
+                ProcessType.ImageEdit => View.ImageEdit,
+                ProcessType.ImageInpaint => View.ImageInpaint,
+                ProcessType.ImageControlNet => View.TextToImage,
+                ProcessType.ImageToImageControlNet => View.ImageToImage,
+                ProcessType.TextToVideo => View.TextToVideo,
+                ProcessType.ImageToVideo => View.ImageToVideo,
+                ProcessType.VideoToVideo => View.VideoToVideo,
+                ProcessType.MediaToVideo => View.MediaToVideo,
+                ProcessType.TextToAudio => View.TextToAudio,
+                ProcessType.AudioToText => View.AudioToText,
+                ProcessType.TextToText => View.TextInstruct,
+                ProcessType.ImageToText => View.ImageToText,
+                _ => View.Models
+            };
+        }
+
+
+        /// <summary>
+        /// Gets the view a model opens in, its first view filter or the view of its first process type.
+        /// </summary>
+        /// <param name="model">The model.</param>
+        internal static View GetView(IGenerateModel model)
+        {
+            if (model.ViewFilter is { Length: > 0 })
+                return model.ViewFilter[0];
+
+            if (model.ProcessTypes is { Length: > 0 })
+                return GetView(model.ProcessTypes[0]);
+
+            return View.Models;
         }
     }
 }

@@ -35,7 +35,7 @@ namespace Amuse.Host.StableDiffusionCpp
 
                 // Memory
                 MaxVram = $"-{pipelineOptions.ExecutionOptions.MemoryReserve}",
-                DataType = Pipeline.DataType.Default,
+                DataType = pipelineOptions.ExecutionOptions.WeightType.ToNativeDataType(),
                 EagerLoad = false,
                 IsPrefetchEnabled = pipelineOptions.ExecutionOptions.IsPrefetchEnabled,
                 IsSegmentedComputeEnabled = pipelineOptions.ExecutionOptions.IsSegmentedComputeEnabled,
@@ -224,6 +224,93 @@ namespace Amuse.Host.StableDiffusionCpp
 
             // Pipeline not supported
             throw new NotImplementedException(nameof(pipelineOptions.Pipeline));
+        }
+
+
+        /// <summary>
+        /// Determines whether the pipeline is an upscale-only pipeline.
+        /// </summary>
+        /// <param name="pipelineOptions">The pipeline options.</param>
+        internal static bool IsUpscalePipeline(this PipelineLoadOptions pipelineOptions)
+        {
+            return pipelineOptions.Pipeline == PipelineType.UpscalePipeline
+                || IsVideoUpscalePipeline(pipelineOptions.Pipeline);
+        }
+
+
+        /// <summary>
+        /// Determines whether the pipeline is a video upscaler, a diffusion model and VAE upscaling whole videos.
+        /// </summary>
+        /// <param name="pipeline">The pipeline.</param>
+        internal static bool IsVideoUpscalePipeline(PipelineType pipeline)
+        {
+            return pipeline == PipelineType.SeedVR2Pipeline
+                || pipeline == PipelineType.RelayVSRPipeline;
+        }
+
+
+        /// <summary>
+        /// Creates the upscale options.
+        /// </summary>
+        /// <param name="options">The options.</param>
+        /// <param name="pipelineOptions">The pipeline options.</param>
+        /// <returns>PipelineCommon.UpscaleOptions, or null if no upscaler is configured.</returns>
+        internal static PipelineCommon.UpscaleOptions CreateUpscaleOptions(this PipelineCreateOptions options, PipelineLoadOptions pipelineOptions)
+        {
+            var upscaleConfig = pipelineOptions.UpscaleConfig;
+            if (upscaleConfig == null)
+                return null;
+
+            var backendType = GetBackendType(options);
+            var deviceId = backendType == Pipeline.SDBackendType.Vulkan
+                ? pipelineOptions.DeviceId
+                : pipelineOptions.DeviceVendorIndex;
+            var upscaleOptions = new PipelineCommon.UpscaleOptions
+            {
+                Backend = $"*={backendType.GetShortName()}{deviceId}",
+                ParamsBackend = GetParamsBackend(pipelineOptions),
+                TileSize = upscaleConfig.TileSize,
+                ScaleFactor = upscaleConfig.ScaleFactor
+            };
+
+            // Video upscaler, SeedVR2 or RelayVSR, per-component attention and convolution modes
+            var executionOptions = pipelineOptions.ExecutionOptions;
+            if (IsVideoUpscalePipeline(upscaleConfig.Pipeline))
+            {
+                return upscaleOptions with
+                {
+                    DiffusionModelPath = upscaleConfig.DiffusionModelPath,
+                    VaePath = upscaleConfig.VaePath,
+                    FlashAttnMode = executionOptions is null ? null : GetFlashAttention(pipelineOptions),
+                    ConvDirectMode = executionOptions is null ? null : GetConvDirect(pipelineOptions)
+                };
+            }
+
+            // Image upscaler, a single convolution mode, "on" enables it
+            return upscaleOptions with
+            {
+                ModelPath = upscaleConfig.ModelPath,
+                ConvDirectMode = executionOptions?.DiffusionConvDirect.GetShortName()
+            };
+        }
+
+
+        /// <summary>
+        /// Creates the upscale video options, zero values fall back to the defaults.
+        /// </summary>
+        /// <param name="seed">The seed.</param>
+        /// <param name="windowSize">Size of the window.</param>
+        /// <param name="temporalChunkSize">Size of the temporal chunk.</param>
+        /// <returns>PipelineCommon.UpscaleVideoOptions.</returns>
+        internal static PipelineCommon.UpscaleVideoOptions CreateUpscaleVideoOptions(long seed, int windowSize, int temporalChunkSize)
+        {
+            var defaultOptions = new PipelineCommon.UpscaleVideoOptions();
+            return defaultOptions with
+            {
+                Seed = seed > 0 ? seed : defaultOptions.Seed,
+                WindowSize = windowSize > 0 ? windowSize : defaultOptions.WindowSize,
+                TemporalChunkSize = temporalChunkSize > 0 ? temporalChunkSize : defaultOptions.TemporalChunkSize
+            };
         }
 
 
@@ -808,26 +895,6 @@ namespace Amuse.Host.StableDiffusionCpp
 
 
         /// <summary>
-        /// Gets the DataType.
-        /// </summary>
-        /// <param name="quantType">Type of the quant.</param>
-        /// <param name="memoryMode">The memory mode.</param>
-        private static Pipeline.DataType GetDataType(QuantizationType quantType, MemoryModeType memoryMode)
-        {
-            if (memoryMode != MemoryModeType.Device)
-                return Pipeline.DataType.Default;
-
-            return quantType switch
-            {
-                QuantizationType.Q4Bit => Pipeline.DataType.Q4_0,
-                QuantizationType.Q8Bit => Pipeline.DataType.Q8_0,
-                QuantizationType.Q16Bit => Pipeline.DataType.BF16,
-                _ => Pipeline.DataType.Default
-            };
-        }
-
-
-        /// <summary>
         /// Return default string if its only white space.
         /// </summary>
         /// <param name="value">The value.</param>
@@ -837,6 +904,34 @@ namespace Amuse.Host.StableDiffusionCpp
                 return default;
 
             return value;
+        }
+
+
+        /// <summary>
+        /// Translates the data type to the stable-diffusion.cpp weight type, unsupported types fall back to the model default.
+        /// </summary>
+        /// <param name="dataType">The data type.</param>
+        internal static Pipeline.DataType ToNativeDataType(this DataType dataType)
+        {
+            return dataType switch
+            {
+                // Float
+                DataType.Float32 => Pipeline.DataType.F32,
+                DataType.Float16 => Pipeline.DataType.F16,
+                DataType.BFloat16 => Pipeline.DataType.BF16,
+                DataType.Float8 => Pipeline.DataType.F8_E4M3,
+                DataType.Float8E5M2 => Pipeline.DataType.F8_E5M2,
+                DataType.Float64 => Pipeline.DataType.F64,
+
+                // Integer
+                DataType.Int8 => Pipeline.DataType.I8,
+                DataType.Int16 => Pipeline.DataType.I16,
+                DataType.Int32 => Pipeline.DataType.I32,
+                DataType.Int64 => Pipeline.DataType.I64,
+
+                // GGML, the quantization names match
+                _ => Enum.TryParse<Pipeline.DataType>(dataType.ToString(), out var native) ? native : Pipeline.DataType.Default
+            };
         }
     }
 }

@@ -5,10 +5,12 @@ using Microsoft.Extensions.Logging;
 using System;
 using System.Diagnostics;
 using System.IO;
+using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using TensorStack.Common.Pipeline;
 using TensorStack.StableDiffusionCpp;
+using PipelineProgress = Amuse.Common.PipelineProgress;
 
 namespace Amuse.Host.StableDiffusionCpp
 {
@@ -27,7 +29,7 @@ namespace Amuse.Host.StableDiffusionCpp
         public HostServer(ServerConfig channelConfig, ILogger logger)
             : base(channelConfig, logger)
         {
-            _progressCallback = new Progress<IRunProgress>(async (p) => await UpdateProgress(p));
+            _progressCallback = new SyncProgress<IRunProgress>(UpdateProgress);
         }
 
 
@@ -100,10 +102,21 @@ namespace Amuse.Host.StableDiffusionCpp
                 await SendLoadingProgress();
                 _pipelineOptions = request.LoadOptions;
 
-                var contextOptions = _options.CreateContextOptions(_pipelineOptions);
                 var backendDirectory = Path.Combine(_options.Directory, _options.Environment);
                 _pipeline = new StableDiffusionPipeline(backendDirectory, _progressCallback, Logger);
-                await _pipeline.LoadAsync(contextOptions, cancellationToken: cancellationToken);
+                if (_pipelineOptions.IsUpscalePipeline())
+                {
+                    // Upscale
+                    var upscaleOptions = _options.CreateUpscaleOptions(_pipelineOptions)
+                        ?? throw new Exception("Upscale pipeline requires an upscale configuration.");
+                    await _pipeline.LoadAsync(upscaleOptions, cancellationToken);
+                }
+                else
+                {
+                    // Diffusion
+                    var contextOptions = _options.CreateContextOptions(_pipelineOptions);
+                    await _pipeline.LoadAsync(contextOptions, cancellationToken: cancellationToken);
+                }
 
                 await SendResponse(cancellationToken);
             }
@@ -174,8 +187,28 @@ namespace Amuse.Host.StableDiffusionCpp
                 {
                     ReadTensorRequest(request);
 
-                    if (request.RunOptions.ImageOptions != null)
+                    if (request.RunOptions.UpscaleImageOptions != null)
                     {
+                        // Upscale Image
+                        ThrowIfNotUpscalePipeline();
+                        var options = request.RunOptions.UpscaleImageOptions;
+                        var inputImage = options.InputImages.FirstOrDefault() ?? throw new Exception("No input image to upscale.");
+                        var imageResult = await _pipeline.UpscaleImageAsync(inputImage, cancellationToken: PipelineCancellation.Token);
+                        await SendTensorResponse(cancellationToken, imageResult);
+                    }
+                    else if (request.RunOptions.UpscaleVideoOptions != null)
+                    {
+                        // Upscale Video
+                        ThrowIfNotUpscalePipeline();
+                        var options = request.RunOptions.UpscaleVideoOptions;
+                        var inputVideo = options.InputVideos.FirstOrDefault() ?? throw new Exception("No input video to upscale.");
+                        var upscaleOptions = Extensions.CreateUpscaleVideoOptions(options.Seed, options.WindowSize, options.TemporalChunkSize);
+                        var videoResult = await _pipeline.UpscaleVideoAsync(inputVideo, upscaleOptions, PipelineCancellation.Token);
+                        await SendTensorResponse(cancellationToken, videoResult);
+                    }
+                    else if (request.RunOptions.ImageOptions != null)
+                    {
+                        ThrowIfUpscalePipeline();
                         var options = request.RunOptions.ImageOptions;
                         var generateOptions = _pipeline.DefaultImageOptions.CreateImageOptions(options, _pipelineOptions);
                         var imageResult = await _pipeline.GenerateImageAsync(generateOptions, PipelineCancellation.Token);
@@ -183,6 +216,7 @@ namespace Amuse.Host.StableDiffusionCpp
                     }
                     else if (request.RunOptions.VideoOptions != null)
                     {
+                        ThrowIfUpscalePipeline();
                         var options = request.RunOptions.VideoOptions;
                         var generateVideoOptions = _pipeline.DefaultVideoOptions.CreateVideoOptions(options, _pipelineOptions);
                         var videoResult = await _pipeline.GenerateVideoAsync(generateVideoOptions, PipelineCancellation.Token);
@@ -207,25 +241,32 @@ namespace Amuse.Host.StableDiffusionCpp
         /// Updates the progress.
         /// </summary>
         /// <param name="progress">The progress.</param>
-        private async Task UpdateProgress(IRunProgress progress)
+        private void UpdateProgress(IRunProgress progress)
         {
-            if (progress is TensorStack.StableDiffusionCpp.Common.PipelineProgress pipelineProgress)
+            if (progress is TensorStack.Common.Pipeline.PipelineProgress pipelineProgress)
             {
-                await QueueProgress(new PipelineProgress
-                {
-                    BatchMaximum = pipelineProgress.BatchMaximum,
-                    BatchValue = pipelineProgress.BatchValue,
-                    Elapsed = pipelineProgress.Elapsed,
-                    ElapsedKey = pipelineProgress.ElapsedKey,
-                    Key = pipelineProgress.Key,
-                    Maximum = pipelineProgress.Maximum,
-                    Message = pipelineProgress.Message,
-                    Subkey = pipelineProgress.Subkey,
-                    Timestamp = pipelineProgress.Timestamp,
-                    Value = pipelineProgress.Value,
-                    Tensors = pipelineProgress.Tensors
-                });
+                EnqueueProgress(pipelineProgress.ToProgress());
             }
+        }
+
+
+        /// <summary>
+        /// Throws if the loaded pipeline is not an upscale pipeline.
+        /// </summary>
+        private void ThrowIfNotUpscalePipeline()
+        {
+            if (_pipeline == null || !_pipelineOptions.IsUpscalePipeline())
+                throw new Exception("Upscale requires an upscale pipeline to be loaded.");
+        }
+
+
+        /// <summary>
+        /// Throws if the loaded pipeline is an upscale-only pipeline.
+        /// </summary>
+        private void ThrowIfUpscalePipeline()
+        {
+            if (_pipeline == null || _pipelineOptions.IsUpscalePipeline())
+                throw new Exception("Generate requires a diffusion pipeline to be loaded.");
         }
 
 

@@ -10,6 +10,7 @@ using System.Threading.Tasks;
 using TensorStack.AudioCpp;
 using TensorStack.Common;
 using TensorStack.Common.Pipeline;
+using PipelineProgress = Amuse.Common.PipelineProgress;
 
 namespace Amuse.Host.AudioCpp
 {
@@ -28,7 +29,7 @@ namespace Amuse.Host.AudioCpp
         public HostServer(ServerConfig channelConfig, ILogger logger)
             : base(channelConfig, logger)
         {
-            _progressCallback = new Progress<IRunProgress>(async (p) => await UpdateProgress(p));
+            _progressCallback = new SyncProgress<IRunProgress>(UpdateProgress);
         }
 
 
@@ -177,7 +178,7 @@ namespace Amuse.Host.AudioCpp
                     if (request.RunOptions.AudioOptions != null)
                     {
                         // Audio
-                        var audioOptions = request.RunOptions.AudioOptions.CreateAudioOptions();
+                        var audioOptions = request.RunOptions.AudioOptions.CreateAudioOptions(_pipelineOptions, Logger);
                         await SendGenerateProgress();
                         var audioResult = await _pipeline.GenerateAudioAsync(audioOptions, PipelineCancellation.Token);
                         await SendTensorResponse(cancellationToken, audioResult);
@@ -213,24 +214,11 @@ namespace Amuse.Host.AudioCpp
         /// Updates the progress.
         /// </summary>
         /// <param name="progress">The progress.</param>
-        private async Task UpdateProgress(IRunProgress progress)
+        private void UpdateProgress(IRunProgress progress)
         {
-            if (progress is TensorStack.AudioCpp.Common.PipelineProgress pipelineProgress)
+            if (progress is TensorStack.Common.Pipeline.PipelineProgress pipelineProgress)
             {
-                await QueueProgress(new PipelineProgress
-                {
-                    BatchMaximum = pipelineProgress.BatchMaximum,
-                    BatchValue = pipelineProgress.BatchValue,
-                    Elapsed = pipelineProgress.Elapsed,
-                    ElapsedKey = pipelineProgress.ElapsedKey,
-                    Key = pipelineProgress.Key,
-                    Maximum = pipelineProgress.Maximum,
-                    Message = pipelineProgress.Message,
-                    Subkey = pipelineProgress.Subkey,
-                    Timestamp = pipelineProgress.Timestamp,
-                    Value = pipelineProgress.Value,
-                    Tensors = pipelineProgress.Tensors
-                });
+                EnqueueProgress(pipelineProgress.ToProgress());
             }
         }
 

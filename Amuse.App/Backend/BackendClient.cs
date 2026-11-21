@@ -40,6 +40,11 @@ namespace Amuse.App.Runtime
         public GenerateDefaultOptions DefaultOptions { get; protected set; }
         public bool StopHostOnException { get; protected set; }
         public bool ResolveComponentFiles { get; protected set; }
+
+        /// <summary>
+        /// Gets a value indicating whether the client is connected to its host, false once the host closed unexpectedly.
+        /// </summary>
+        public bool IsConnected => PipelineClient is not null;
         protected ILogger Logger { get; }
         protected Settings Settings { get; }
         protected IToolService ToolService { get; }
@@ -65,9 +70,14 @@ namespace Amuse.App.Runtime
 
                     Pipeline = pipeline;
                     ProgressCallback = progressCallback;
-                    DefaultOptions = Pipeline.GenerateModel.DefaultOptions;
+                    DefaultOptions = Pipeline.GenerateModel?.DefaultOptions;
                     PipelineClient = await CreatePipelineClientAsync(CancellationTokenSource.Token);
-                    Pipeline.GenerateModel.Status = ModelStatusType.Installed;
+                    if (Pipeline.GenerateModel is not null)
+                        Pipeline.GenerateModel.Status = ModelStatusType.Installed;
+                    if (Pipeline.IsUpscaleOnly)
+                        Pipeline.UpscaleModel.Status = ModelStatusType.Installed;
+                    if (Pipeline.IsExtractOnly)
+                        Pipeline.ExtractModel.Status = ModelStatusType.Installed;
                     Settings.ScanModels();
                 }
             }
@@ -166,6 +176,8 @@ namespace Amuse.App.Runtime
             catch (Exception) { }
             finally
             {
+                // Release the channels and progress loop, not just the reference
+                PipelineClient?.Dispose();
                 PipelineClient = null;
             }
         }
@@ -230,9 +242,8 @@ namespace Amuse.App.Runtime
                 var generateOptions = GenerateVideoOptions(options, videoFileName);
                 foreach (var inputAudio in options.InputAudios)
                 {
-                    var sampleRate = DefaultOptions.SampleRate > 0 ? DefaultOptions.SampleRate : inputAudio.SampleRate;
-                    var channels = DefaultOptions.Channels > 0 ? DefaultOptions.Channels : inputAudio.Channels;
-                    generateOptions.InputAudios.Add(await inputAudio.GetAsync(sampleRate, channels));
+                    // A default of zero keeps the source sample rate or channels
+                    generateOptions.InputAudios.Add(await inputAudio.GetAsync(DefaultOptions.SampleRate, DefaultOptions.Channels));
                 }
 
                 var videoSequences = await PipelineClient.GenerateVideoAsync(generateOptions);
@@ -355,6 +366,118 @@ namespace Amuse.App.Runtime
                 textResult = await GenerateTextLoopAsync(options);
             }
             return textResult;
+        }
+
+
+        /// <summary>
+        /// Upscale image
+        /// </summary>
+        /// <param name="inputImage">The input image.</param>
+        /// <param name="options">The upscale options.</param>
+        /// <exception cref="Exception">Upscaled image result not found.</exception>
+        /// <exception cref="Exception">Pipeline Closed Unexpectedly</exception>
+        public async Task<ImageTensor> UpscaleImageAsync(ImageTensor inputImage, UpscaleInputOptions options)
+        {
+            try
+            {
+                var upscaleOptions = new UpscaleImageRunOptions
+                {
+                    IsTileEnabled = options?.IsTileEnabled ?? false,
+                    TileSize = options?.TileSize ?? 0,
+                    TileOverlap = options?.TileOverlap ?? 0,
+                    InputImages = [inputImage]
+                };
+
+                var imageTensors = await PipelineClient.UpscaleImageAsync(upscaleOptions);
+                if (imageTensors.IsNullOrEmpty())
+                    throw new Exception(AppErrors.UpscaledImageNotFound);
+
+                return imageTensors[0];
+            }
+            catch (IOException ex)
+            {
+                HandlePipelineClientError(ex);
+                throw new Exception(AppErrors.PipelineClosedUnexpectedly);
+            }
+        }
+
+
+        /// <summary>
+        /// Upscale video
+        /// </summary>
+        /// <param name="inputVideo">The input video.</param>
+        /// <param name="options">The upscale options.</param>
+        /// <exception cref="Exception">Upscaled video result not found.</exception>
+        /// <exception cref="Exception">Pipeline Closed Unexpectedly</exception>
+        public async Task<VideoSequence> UpscaleVideoAsync(VideoSequence inputVideo, UpscaleInputOptions options)
+        {
+            try
+            {
+                var upscaleOptions = new UpscaleVideoRunOptions
+                {
+                    Seed = options?.Seed > 0 ? options.Seed : Random.Shared.Next(1, int.MaxValue),
+                    WindowSize = options?.WindowSize ?? 0,
+                    TemporalChunkSize = options?.TemporalChunkSize ?? 0,
+                    InputVideos = [inputVideo]
+                };
+
+                var videoSequences = await PipelineClient.UpscaleVideoAsync(upscaleOptions);
+                if (videoSequences.IsNullOrEmpty())
+                    throw new Exception(AppErrors.UpscaledVideoNotFound);
+
+                return videoSequences[0];
+            }
+            catch (IOException ex)
+            {
+                HandlePipelineClientError(ex);
+                throw new Exception(AppErrors.PipelineClosedUnexpectedly);
+            }
+        }
+
+
+        /// <summary>
+        /// Extract image
+        /// </summary>
+        /// <param name="inputImage">The input image.</param>
+        /// <param name="options">The extract options.</param>
+        /// <param name="isTransparentSupported">Whether a transparent result is supported, background extractors.</param>
+        /// <exception cref="Exception">Extracted image result not found.</exception>
+        /// <exception cref="Exception">Pipeline Closed Unexpectedly</exception>
+        public async Task<ImageTensor> ExtractImageAsync(ImageTensor inputImage, ExtractInputOptions options, bool isTransparentSupported = true)
+        {
+            try
+            {
+                var extractOptions = new ExtractImageRunOptions
+                {
+                    IsTileEnabled = options?.IsTileEnabled ?? false,
+                    TileSize = options?.TileSize ?? 0,
+                    TileOverlap = options?.TileOverlap ?? 0,
+                    IsInverted = options?.IsInverted ?? false,
+                    MergeInput = options?.MergeInput ?? false,
+                    Mode = options?.Mode ?? default,
+                    IsTransparentSupported = isTransparentSupported,
+                    Detections = options?.Detections ?? 0,
+                    BodyConfidence = options?.BodyConfidence ?? 0,
+                    JointConfidence = options?.JointConfidence ?? 0,
+                    ColorAlpha = options?.ColorAlpha ?? 0,
+                    JointRadius = options?.JointRadius ?? 0,
+                    BoneRadius = options?.BoneRadius ?? 0,
+                    BoneThickness = options?.BoneThickness ?? 0,
+                    IsTransparent = options?.IsTransparent ?? false,
+                    InputImages = [inputImage]
+                };
+
+                var imageTensors = await PipelineClient.ExtractImageAsync(extractOptions);
+                if (imageTensors.IsNullOrEmpty())
+                    throw new Exception(AppErrors.ExtractedImageNotFound);
+
+                return imageTensors[0];
+            }
+            catch (IOException ex)
+            {
+                HandlePipelineClientError(ex);
+                throw new Exception(AppErrors.PipelineClosedUnexpectedly);
+            }
         }
 
 
@@ -592,8 +715,111 @@ namespace Amuse.App.Runtime
         {
             if (Pipeline.LanguageModel != null)
                 return GetPipelineLoadOptions(Pipeline.LanguageModel);
+            if (Pipeline.DiffusionModel != null)
+                return GetPipelineLoadOptions(Pipeline.DiffusionModel);
+            if (Pipeline.IsExtractOnly)
+                return GetPipelineLoadOptions(Pipeline.ExtractModel);
 
-            return GetPipelineLoadOptions(Pipeline.DiffusionModel);
+            return GetPipelineLoadOptions(Pipeline.UpscaleModel);
+        }
+
+
+        /// <summary>
+        /// Gets the load options for an extract-only pipeline.
+        /// </summary>
+        /// <param name="model">The extract model.</param>
+        private PipelineLoadOptions GetPipelineLoadOptions(ExtractModel model)
+        {
+            var device = Pipeline.Device;
+            return new PipelineLoadOptions
+            {
+                Pipeline = model.Pipeline,
+                ProcessType = Pipeline.ProcessType,
+                Device = device.DeviceCode,
+                DeviceId = device.DeviceId,
+                DeviceBusId = device.PCIBusId,
+                DeviceVendor = device.Vendor,
+                DeviceVendorIndex = device.VendorIndex,
+                MemoryMode = GetMemoryMode(model.MemorySize),
+                ExecutionOptions = GetExecutionOptions(),
+                ExtractConfig = GetExtractConfig(model)
+            };
+        }
+
+
+        /// <summary>
+        /// Gets the extract configuration, resolving the checkpoint path.
+        /// </summary>
+        /// <param name="model">The extract model.</param>
+        private ExtractConfig GetExtractConfig(ExtractModel model)
+        {
+            if (model is null)
+                return null;
+
+            return new ExtractConfig
+            {
+                Type = (ExtractType)model.Type,
+                DeviceType = Pipeline.Device.Type,
+                ModelPath = model.Checkpoint?.Resolve(Settings, Settings.DirectoryExtract, ResolveComponentFiles),
+                Channels = model.Channels,
+                SampleSize = model.SampleSize,
+                Normalization = model.Normalization,
+                OutputNormalization = model.OutputNormalization,
+                OutputChannels = model.OutputChannels,
+                IsDynamicOutput = model.IsDynamicOutput
+            };
+        }
+
+
+        /// <summary>
+        /// Gets the load options for an upscale-only pipeline.
+        /// </summary>
+        /// <param name="model">The upscale model.</param>
+        private PipelineLoadOptions GetPipelineLoadOptions(UpscaleModel model)
+        {
+            var device = Pipeline.Device;
+            return new PipelineLoadOptions
+            {
+                Pipeline = model.Pipeline,
+                ProcessType = Pipeline.ProcessType,
+                Device = device.DeviceCode,
+                DeviceId = device.DeviceId,
+                DeviceBusId = device.PCIBusId,
+                DeviceVendor = device.Vendor,
+                DeviceVendorIndex = device.VendorIndex,
+                MemoryMode = GetMemoryMode(model.MemorySize),
+                ExecutionOptions = GetExecutionOptions(),
+                UpscaleConfig = GetUpscaleConfig(model)
+            };
+        }
+
+
+        /// <summary>
+        /// Gets the upscale configuration, resolving the checkpoint paths.
+        /// </summary>
+        /// <param name="model">The upscale model.</param>
+        private UpscaleConfig GetUpscaleConfig(UpscaleModel model)
+        {
+            if (model is null)
+                return null;
+
+            var resolveFiles = ResolveComponentFiles;
+            var modelPath = model.Checkpoint?.Resolve(Settings, Settings.DirectoryUpscale, resolveFiles);
+            var vaePath = model.Vae?.Resolve(Settings, Settings.DirectoryUpscale, resolveFiles);
+            return new UpscaleConfig
+            {
+                Pipeline = model.Pipeline,
+                DeviceType = Pipeline.Device.Type,
+                ModelPath = model.IsVideoUpscaler ? null : modelPath,
+                DiffusionModelPath = model.IsVideoUpscaler ? modelPath : null,
+                VaePath = vaePath,
+                ScaleFactor = model.ScaleFactor,
+                TileSize = model.DefaultOptions?.TileSize ?? 0,
+                Channels = model.Channels,
+                SampleSize = model.SampleSize,
+                Normalization = model.Normalization,
+                OutputNormalization = model.OutputNormalization
+            };
         }
 
 
@@ -613,9 +839,7 @@ namespace Amuse.App.Runtime
                 DeviceBusId = device.PCIBusId,
                 DeviceVendor = device.Vendor,
                 DeviceVendorIndex = device.VendorIndex,
-                DataType = model.BaseType,
-                MemoryMode = GetMemoryMode(model.MemoryProfile),
-                QuantType = GetQuantizationType(),
+                MemoryMode = GetMemoryMode(model.MemorySize),
                 ControlNet = ControlNetConfig(),
                 LoraAdapters = GetLoraAdapters(),
                 CheckpointConfig = GetCheckpoint(model.Checkpoint, Settings.DirectoryDiffusion),
@@ -639,9 +863,8 @@ namespace Amuse.App.Runtime
                 DeviceId = device.DeviceId,
                 DeviceBusId = device.PCIBusId,
                 DeviceVendor = device.Vendor,
-                DataType = model.BaseType,
-                MemoryMode = MemoryModeType.Device,
-                QuantType = GetQuantizationType(),
+                DeviceVendorIndex = device.VendorIndex,
+                MemoryMode = GetMemoryMode(model.MemorySize),
                 LoraAdapters = GetLoraAdapters(),
                 CheckpointConfig = GetCheckpoint(model.Checkpoint, Settings.DirectoryLangaugeModel),
                 ExecutionOptions = GetExecutionOptions()
@@ -678,28 +901,25 @@ namespace Amuse.App.Runtime
 
         private CheckpointConfig GetCheckpoint(LanguageCheckpointModel checkpoint, string modelDirectory)
         {
+            var resolveFiles = ResolveComponentFiles;
             var checkpointConfig = new CheckpointConfig
             {
-                TextEncoder = checkpoint.TextModel?.Resolve(Settings, modelDirectory),
-                TextEncoder2 = checkpoint.TextModel2?.Resolve(Settings, modelDirectory),
+                TextEncoder = checkpoint.TextModel?.Resolve(Settings, modelDirectory, resolveFiles),
+                TextEncoder2 = checkpoint.TextModel2?.Resolve(Settings, modelDirectory, resolveFiles),
             };
             return checkpointConfig;
         }
 
 
-        private MemoryModeType GetMemoryMode(MemoryProfile[] memoryProfiles)
+        /// <summary>
+        /// Gets the backend memory mode, resolving Auto from the model memory size and device memory.
+        /// </summary>
+        /// <param name="memorySize">The model memory size in GB.</param>
+        private MemoryModeType GetMemoryMode(float memorySize)
         {
             var memoryMode = Pipeline.MemoryMode;
             if (memoryMode == MemoryMode.Auto)
-            {
-                var memoryProfile = memoryProfiles.FirstOrDefault(x => x.QualityMode == Pipeline.QualityMode);
-                if (memoryProfile != null)
-                {
-                    var deviceMemory = Pipeline.Device.MemoryGB;
-                    var modeIndex = memoryProfile.GetIndex(deviceMemory);
-                    memoryMode = Enum.GetValues<MemoryMode>()[modeIndex + 2];
-                }
-            }
+                memoryMode = Extensions.ResolveMemoryMode(memorySize, Pipeline.Device.MemoryGB);
 
             return memoryMode switch
             {
@@ -707,19 +927,7 @@ namespace Amuse.App.Runtime
                 MemoryMode.Low => MemoryModeType.OffloadCPU,
                 MemoryMode.Medium => MemoryModeType.OffloadModel,
                 MemoryMode.High => MemoryModeType.Device,
-                _ => MemoryModeType.OffloadCPU,
-            };
-        }
-
-
-        private QuantizationType GetQuantizationType()
-        {
-            return Pipeline.QualityMode switch
-            {
-                QualityMode.Draft => QuantizationType.Q4Bit,
-                QualityMode.Standard => QuantizationType.Q8Bit,
-                QualityMode.Production => QuantizationType.Q16Bit,
-                _ => QuantizationType.Q8Bit,
+                _ => MemoryModeType.Device,
             };
         }
 
@@ -769,11 +977,18 @@ namespace Amuse.App.Runtime
         private ExecutionOptions GetExecutionOptions()
         {
             var options = Pipeline.ExecutionOptions;
+            if (options is null)
+                return null;
+
             return new ExecutionOptions
             {
                 IsPrefetchEnabled = options.IsPrefetchEnabled,
                 IsSegmentedComputeEnabled = options.IsSegmentedComputeEnabled,
                 MemoryReserve = options.MemoryReserve,
+                GpuLayers = options.GpuLayers,
+                ContextSize = options.ContextSize,
+                Threads = options.Threads,
+                IsCacheOffloadEnabled = options.IsCacheOffloadEnabled,
                 IsControlNetCpuEnabled = options.IsControlNetCpuEnabled,
                 IsAutoEncoderCpuEnabled = options.IsAutoEncoderCpuEnabled,
                 IsTextEncoderCpuEnabled = options.IsTextEncoderCpuEnabled,
@@ -789,6 +1004,7 @@ namespace Amuse.App.Runtime
                 IsDeviceQuantizationEnabled = options.IsDeviceQuantizationEnabled,
                 IsOptimizeDeviceEnabled = options.IsOptimizeDeviceEnabled,
                 IsOptimizeChannelsEnabled = options.IsOptimizeChannelsEnabled,
+                WeightType = options.WeightType,
             };
         }
 
