@@ -112,26 +112,28 @@
                     </Grid>
                 </DockPanel>
 
+
                 <DockPanel>
                     <TextBox DockPanel.Dock="Left" Text="{CommonControls:Localize Memory}" IsReadOnly="True" IsHitTestVisible="False" Width="60" FontStyle="Italic" FontSize="11" Opacity="0.7" Padding="4,2,0,0"/>
-                    <Button DockPanel.Dock="Right" Height="22" Width="22" Command="{Binding ExecutionOptionsCommand}" >
+                    <Button DockPanel.Dock="Right" Height="22" Width="22" Command="{Binding ExecutionOptionsCommand}" Visibility="{Binding SelectedModel.Backend, Converter={StaticResource EnumToVisibilityConverter}, ConverterParameter=StableDiffusionCpp|LlamaCpp|AudioCpp}">
                         <CommonControls:FontAwesome Icon="f013" Size="11" Opacity=".8" />
                     </Button>
+                    <UniformGrid Rows="1">
 
-                    <!--MemoryMode-->
-                    <ComboBox SelectedItem="{Binding SelectedMemoryMode}" 
-                        ItemsSource="{Binding MemoryModes}"
-                        HorizontalContentAlignment="Stretch"
-                        SelectionChanged="Memory_SelectionChanged"
-                        ToolTip="{Binding SelectedMemoryMode.Description}"
-                        ToolTipService.Placement="Left"
-                        ToolTipService.InitialShowDelay="600"
-                        ToolTipService.VerticalOffset="-2"
-                        ToolTipService.HorizontalOffset="-2"
-                        ToolTipService.HasDropShadow="True">
-                        <ComboBox.ItemTemplate>
-                            <DataTemplate>
-                                <DockPanel
+                        <!--MemoryMode-->
+                        <ComboBox SelectedItem="{Binding SelectedMemoryMode}" 
+                            ItemsSource="{Binding MemoryModes}"
+                            HorizontalContentAlignment="Stretch"
+                            SelectionChanged="Memory_SelectionChanged"
+                            ToolTip="{Binding SelectedMemoryMode.Description}"
+                            ToolTipService.Placement="Left"
+                            ToolTipService.InitialShowDelay="600"
+                            ToolTipService.VerticalOffset="-2"
+                            ToolTipService.HorizontalOffset="-2"
+                            ToolTipService.HasDropShadow="True">
+                            <ComboBox.ItemTemplate>
+                                <DataTemplate>
+                                    <DockPanel
                                     HorizontalAlignment="Stretch"
                                     ToolTip="{Binding Description}"
                                     ToolTipService.Placement="Left"
@@ -139,13 +141,32 @@
                                     ToolTipService.VerticalOffset="-5"
                                     ToolTipService.HorizontalOffset="-8"
                                     ToolTipService.HasDropShadow="True">
-                                    <TextBlock DockPanel.Dock="Right" Opacity=".7" FontSize="10" Text="{Binding DetectedMode, Mode=OneWay, StringFormat={}({0})}" Margin="0,1,0,0" Visibility="{Binding MemoryMode, Converter={StaticResource EnumToVisibilityConverter}, ConverterParameter=Auto}"/>
-                                    <TextBlock Text="{Binding MemoryMode, Converter={StaticResource EnumDisplayNameConverter}}" />
-                                </DockPanel>
-                            </DataTemplate>
-                        </ComboBox.ItemTemplate>
-                    </ComboBox>
+                                        <TextBlock DockPanel.Dock="Right" Opacity=".7" FontSize="10" Text="{Binding DetectedMode, Mode=OneWay, Converter={StaticResource EnumDisplayNameConverter}, StringFormat={}({0})}" Margin="0,1,0,0" Visibility="{Binding MemoryMode, Converter={StaticResource EnumToVisibilityConverter}, ConverterParameter=Auto}"/>
+                                        <TextBlock Text="{Binding MemoryMode, Converter={StaticResource EnumDisplayNameConverter}}" />
+                                    </DockPanel>
+                                </DataTemplate>
+                            </ComboBox.ItemTemplate>
+                        </ComboBox>
 
+                        <!--Quant-->
+                        <DockPanel Visibility="{Binding SelectedModel.HasCheckpointSets, Converter={StaticResource BooleanToVisibilityConverter}, FallbackValue=Collapsed}">
+                            <ComboBox
+                                ItemsSource="{Binding CheckpointCollection}"
+                                SelectedItem="{Binding SelectedCheckpoint}"
+                                HorizontalContentAlignment="Stretch">
+                                <ComboBox.ItemTemplate>
+                                    <DataTemplate>
+                                        <DockPanel HorizontalAlignment="Stretch">
+                                            <CommonControls:FontAwesome DockPanel.Dock="Right" Style="{StaticResource CheckpointStatusFontAwesome}" Size="10" IconStyle="Solid" Width="15" ToolTipService.InitialShowDelay="200"/>
+                                            <TextBlock DockPanel.Dock="Right" Opacity=".7" FontSize="10" Text="{Binding MemorySize, StringFormat={}{0:0.#}GB}" Margin="0,1,4,0"/>
+                                            <TextBlock Text="{Binding Type, Converter={StaticResource EnumDisplayNameConverter}}" />
+                                        </DockPanel>
+                                    </DataTemplate>
+                                </ComboBox.ItemTemplate>
+                            </ComboBox>
+                        </DockPanel>
+
+                    </UniformGrid>
                 </DockPanel>
             </StackPanel>
         </DockPanel>

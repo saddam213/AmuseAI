@@ -33,7 +33,7 @@ namespace Amuse.App.Tools
         /// <summary>
         /// Gets the display name.
         /// </summary>
-        public override string DisplayName => "File Read Tool";
+        public override string DisplayName => AppDefault.ToolFileRead;
 
         /// <summary>
         /// Gets the tool icon.
@@ -93,7 +93,7 @@ namespace Amuse.App.Tools
             try
             {
                 // Arguments
-                var path = Environment.ExpandEnvironmentVariables(GetArgument<string>("path").Trim().Trim('"'));
+                var path = ToolHelper.GetLocalPath(GetArgument<string>("path"));
                 var offset = Math.Max(0, GetArgumentOrDefault("offset", 0));
                 var maxChars = Math.Clamp(GetArgumentOrDefault("max_chars", 16000), 500, 100000);
 

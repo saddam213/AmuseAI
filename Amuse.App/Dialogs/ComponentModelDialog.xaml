@@ -6,8 +6,8 @@
         xmlns:local="clr-namespace:Amuse.App.Dialogs"
         xmlns:Controls="clr-namespace:Amuse.App.Controls"
         xmlns:CommonControls="clr-namespace:TensorStack.WPF.Controls;assembly=TensorStack.WPF"
-        MinWidth="900"
-        MaxWidth="900"
+        MinWidth="800"
+        MaxWidth="800"
         Title="{CommonControls:Localize Title_ComponentModel}"
         Icon="/Images/Icon.ico"
         Style="{StaticResource {x:Type CommonControls:DialogControl}}">
@@ -31,51 +31,58 @@
         <!--Main Content-->
         <StackPanel>
 
-            <!--Model Settings-->
-            <GroupBox Header="{CommonControls:Localize Settings}" Padding="4">
-                <StackPanel>
-                    <UniformGrid Rows="1">
-                        <StackPanel Margin="2,0,2,0">
-                            <TextBlock Text="{CommonControls:Localize Name}" Style="{StaticResource FieldTextBlockStyle}"/>
-                            <TextBox Text="{Binding ComponentModel.Name, UpdateSourceTrigger=PropertyChanged}" />
-                        </StackPanel>
-                        <StackPanel Margin="2,0,0,0">
-                            <TextBlock Text="{CommonControls:Localize Key}" Style="{StaticResource FieldTextBlockStyle}"/>
-                            <TextBox Text="{Binding ComponentModel.Key, UpdateSourceTrigger=PropertyChanged}" />
-                        </StackPanel>
-                    </UniformGrid>
-                    <StackPanel Margin="0,0,0,0">
-                        <TextBlock Text="{CommonControls:Localize Link}" Style="{StaticResource FieldTextBlockStyle}"/>
-                        <TextBox Text="{Binding ComponentModel.Link, UpdateSourceTrigger=PropertyChanged}" />
+            <!--Model-->
+            <Border Style="{StaticResource WizardSection}">
+                <DockPanel>
+                    <StackPanel Style="{StaticResource WizardSectionHeader}">
+                        <TextBlock Text="{CommonControls:Localize Component}" FontWeight="SemiBold" FontSize="13"/>
+                        <TextBlock Text="{CommonControls:Localize ComponentWizardKeyHint}" FontSize="11" Opacity=".7" TextWrapping="Wrap"/>
                     </StackPanel>
-
-                    <DockPanel>
-                        <UniformGrid DockPanel.Dock="Top" Columns="2">
+                    <StackPanel VerticalAlignment="Top">
+                        <UniformGrid Columns="2">
                             <StackPanel Margin="0,0,2,0">
-                                <TextBlock Text="{CommonControls:Localize Type}" Style="{StaticResource FieldTextBlockStyle}"/>
-                                <ComboBox SelectedItem="{Binding ComponentModel.Checkpoint.Type, UpdateSourceTrigger=PropertyChanged}" ItemsSource="{Binding CheckpointTypes}" />
+                                <TextBlock Text="{CommonControls:Localize ModelName}" Style="{StaticResource FieldTextBlockStyle}"/>
+                                <TextBox Text="{Binding ComponentModel.Name, UpdateSourceTrigger=PropertyChanged}" />
                             </StackPanel>
                             <StackPanel Margin="2,0,0,0">
-                                <TextBlock Text="{CommonControls:Localize Folder}" Style="{StaticResource FieldTextBlockStyle}"/>
-                                <TextBox Text="{Binding ComponentModel.Checkpoint.Folder, UpdateSourceTrigger=PropertyChanged}" />
-                            </StackPanel>
-                            <StackPanel Margin="0,0,2,0">
-                                <TextBlock Text="{CommonControls:Localize Path}" Style="{StaticResource FieldTextBlockStyle}"/>
-                                <TextBox Text="{Binding ComponentModel.Checkpoint.Path, UpdateSourceTrigger=PropertyChanged}" />
-                            </StackPanel>
-                            <StackPanel Margin="2,0,0,0">
-                                <TextBlock Text="{CommonControls:Localize MainFile}" Style="{StaticResource FieldTextBlockStyle}"/>
-                                <TextBox Text="{Binding ComponentModel.Checkpoint.MainFile, UpdateSourceTrigger=PropertyChanged}" />
+                                <TextBlock Text="{CommonControls:Localize Key}" Style="{StaticResource FieldTextBlockStyle}"/>
+                                <TextBox Text="{Binding ComponentModel.Key, UpdateSourceTrigger=PropertyChanged}" CharacterCasing="Upper" IsReadOnly="{Binding IsKeyReadOnly}" />
                             </StackPanel>
                         </UniformGrid>
-                        <DockPanel Visibility="{Binding ComponentModel.Checkpoint.Type, Converter={StaticResource EnumToVisibilityConverter}, ConverterParameter=OnlineFolder|OnlineFile, UpdateSourceTrigger=PropertyChanged}" MinHeight="120">
-                            <TextBlock DockPanel.Dock="Top" Text="{CommonControls:Localize DownloadFiles}" Style="{StaticResource FieldTextBlockStyle}"/>
-                            <TextBox Text="{Binding ComponentModel.Checkpoint.DownloadFiles, Converter={StaticResource StringArrayConverter}}" AcceptsReturn="True" VerticalScrollBarVisibility="Visible" />
-                        </DockPanel>
-                    </DockPanel>
+                        <StackPanel Margin="0,4,0,0">
+                            <TextBlock Text="{CommonControls:Localize ModelLink}" Style="{StaticResource FieldTextBlockStyle}"/>
+                            <TextBox Text="{Binding ComponentModel.Link, UpdateSourceTrigger=PropertyChanged}" />
+                        </StackPanel>
+                    </StackPanel>
+                </DockPanel>
+            </Border>
 
-                </StackPanel>
-            </GroupBox>
+            <!--File-->
+            <Border Style="{StaticResource WizardSection}">
+                <DockPanel>
+                    <StackPanel Style="{StaticResource WizardSectionHeader}">
+                        <TextBlock Text="{CommonControls:Localize ModelFile}" FontWeight="SemiBold" FontSize="13"/>
+                        <TextBlock Text="{CommonControls:Localize ModelFileDescription}" FontSize="11" Opacity=".7" TextWrapping="Wrap"/>
+                    </StackPanel>
+                    <StackPanel>
+                        <Controls:CheckpointControl Margin="-4" Settings="{Binding Settings}" Checkpoint="{Binding ComponentModel.Checkpoint}" SupportedTypes="{Binding CheckpointTypes, Mode=OneWay}">
+                            <Controls:CheckpointControl.Style>
+                                <Style TargetType="{x:Type Controls:CheckpointControl}">
+                                    <Style.Triggers>
+                                        <DataTrigger Binding="{Binding ComponentModel.Checkpoint.Type}" Value="OnlineFile">
+                                            <Setter Property="Height" Value="150"/>
+                                        </DataTrigger>
+                                        <DataTrigger Binding="{Binding ComponentModel.Checkpoint.Type}" Value="OnlineFolder">
+                                            <Setter Property="Height" Value="195"/>
+                                        </DataTrigger>
+                                    </Style.Triggers>
+                                </Style>
+                            </Controls:CheckpointControl.Style>
+                        </Controls:CheckpointControl>
+                    </StackPanel>
+                </DockPanel>
+            </Border>
+
         </StackPanel>
     </DockPanel>
 </CommonControls:DialogControl>

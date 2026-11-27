@@ -1,0 +1,130 @@
+﻿<CommonControls:DialogControl x:Class="Amuse.App.Dialogs.ModelLoadedListDialog"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:Amuse.App.Dialogs"
+        xmlns:Common="clr-namespace:Amuse.App.Common"
+        xmlns:CommonControls="clr-namespace:TensorStack.WPF.Controls;assembly=TensorStack.WPF"
+        mc:Ignorable="d"
+        MinWidth="560"
+        MaxWidth="560"
+        Icon="/Images/Icon.ico"
+        Style="{StaticResource {x:Type CommonControls:DialogControl}}">
+    <CommonControls:DialogControl.Resources>
+
+        <!--Status Panel-->
+        <Style x:Key="ModelStatusPanel" TargetType="{x:Type StackPanel}">
+            <Setter Property="Orientation" Value="Horizontal"/>
+            <Setter Property="HorizontalAlignment" Value="Center"/>
+            <Setter Property="VerticalAlignment" Value="Center"/>
+        </Style>
+
+        <!--Model Panel, dimmed once the model is unloaded-->
+        <Style x:Key="ModelPanel" TargetType="{x:Type DockPanel}">
+            <Style.Triggers>
+                <DataTrigger Binding="{Binding Status}" Value="Unloaded">
+                    <Setter Property="Opacity" Value=".5"/>
+                </DataTrigger>
+            </Style.Triggers>
+        </Style>
+
+        <!--Memory, hidden when the memory of the model is not known-->
+        <Style x:Key="ModelMemoryTextBlock" TargetType="{x:Type TextBlock}" BasedOn="{StaticResource {x:Type TextBlock}}">
+            <Setter Property="FontSize" Value="13"/>
+            <Setter Property="Opacity" Value=".8"/>
+            <Setter Property="Margin" Value="10,0,0,0"/>
+            <Setter Property="VerticalAlignment" Value="Center"/>
+            <Style.Triggers>
+                <DataTrigger Binding="{Binding MemorySize}" Value="0">
+                    <Setter Property="Visibility" Value="Collapsed"/>
+                </DataTrigger>
+            </Style.Triggers>
+        </Style>
+
+    </CommonControls:DialogControl.Resources>
+    <DockPanel DataContext="{Binding RelativeSource={RelativeSource AncestorType={x:Type local:ModelLoadedListDialog}}}" Margin="15, 15, 15, 10">
+
+        <!--Unload All / Continue / Cancel-->
+        <Grid DockPanel.Dock="Bottom" Margin="0,15,0,0" IsEnabled="{Binding IsBusy, Converter={StaticResource InverseBoolConverter}}">
+            <UniformGrid Columns="3" Height="30" HorizontalAlignment="Right">
+                <Button Content="{CommonControls:Localize ModelLoadedUnloadAll}" Command="{Binding UnloadAllCommand}" Width="110" IsDefault="True" />
+                <Button Content="{CommonControls:Localize ModelLoadedContinue}" Command="{Binding ContinueCommand}" Width="110" />
+                <Button Content="{CommonControls:Localize Cancel}" Command="{Binding CancelCommand}" Width="110" IsCancel="True" />
+            </UniformGrid>
+        </Grid>
+
+        <!--Header-->
+        <DockPanel DockPanel.Dock="Top" Margin="0,0,0,10">
+            <CommonControls:FontAwesome DockPanel.Dock="Left" Size="50" Margin="0,5,0,0" Icon="f071" IconStyle="Light" Color="{StaticResource WarningColour}" VerticalAlignment="Top" />
+            <StackPanel Margin="20,2,0,0">
+
+                <!--Title-->
+                <TextBlock Text="{CommonControls:Localize ModelLoadedListMessage}" FontSize="16" />
+
+                <!--Message-->
+                <TextBlock Text="{CommonControls:Localize ModelLoadedListDetail}" Margin="0,3,0,0" TextWrapping="Wrap" FontStyle="Italic" FontSize="13" Opacity=".8" />
+
+            </StackPanel>
+        </DockPanel>
+
+        <!--Devices-->
+        <ItemsControl DockPanel.Dock="Top" ItemsSource="{Binding Devices}" Margin="0,0,0,2">
+            <ItemsControl.ItemTemplate>
+                <DataTemplate DataType="{x:Type Common:ModelLoadedDevice}">
+                    <StackPanel Margin="10,0,8,6">
+                        <DockPanel TextBlock.FontSize="12">
+                            <StackPanel DockPanel.Dock="Right" Orientation="Horizontal" Margin="10,0,0,0">
+                                <TextBlock Text="{CommonControls:Localize Remaining, Append=:}" FontStyle="Italic" Opacity=".7" Margin="0,0,4,0"/>
+                                <TextBlock Text="{Binding MemoryRemaining, StringFormat={}{0:0.#} GB}"/>
+                                <TextBlock Text=" / " FontStyle="Italic" Opacity=".7"/>
+                                <TextBlock Text="{Binding MemoryGB, StringFormat={}{0} GB}"/>
+                            </StackPanel>
+                            <TextBlock Text="{Binding Name}" FontWeight="SemiBold" TextTrimming="CharacterEllipsis"/>
+                        </DockPanel>
+                        <ProgressBar Maximum="{Binding MemoryGB}" Value="{Binding MemoryUsage, Mode=OneWay}" Height="4" Margin="0,3,0,0"/>
+                    </StackPanel>
+                </DataTemplate>
+            </ItemsControl.ItemTemplate>
+        </ItemsControl>
+
+        <!--Loaded Models-->
+        <ItemsControl ItemsSource="{Binding Items}">
+            <ItemsControl.ItemTemplate>
+                <DataTemplate DataType="{x:Type Common:ModelLoadedItem}">
+                    <Border Background="{StaticResource ContainerGlassBackground}" Margin="0,2" Padding="10,6,8,6" MinHeight="46">
+                        <DockPanel>
+
+                            <!--Unload / Status-->
+                            <Grid DockPanel.Dock="Right" Width="110" Margin="10,0,0,0">
+                                <Grid IsEnabled="{Binding IsBusy, RelativeSource={RelativeSource AncestorType={x:Type local:ModelLoadedListDialog}}, Converter={StaticResource InverseBoolConverter}}" Visibility="{Binding Status, Converter={StaticResource EnumToVisibilityConverter}, ConverterParameter=Loaded}">
+                                    <Button Content="{CommonControls:Localize ModelLoadedUnload}" Command="{Binding UnloadCommand, RelativeSource={RelativeSource AncestorType={x:Type local:ModelLoadedListDialog}}}" CommandParameter="{Binding}" Height="26" VerticalAlignment="Center" />
+                                </Grid>
+                                <StackPanel Style="{StaticResource ModelStatusPanel}" Visibility="{Binding Status, Converter={StaticResource EnumToVisibilityConverter}, ConverterParameter=Unloading}">
+                                    <CommonControls:FontAwesome Icon="f110" Size="12" Color="{StaticResource InfoColour}" IsSpinner="True" Margin="0,0,5,0"/>
+                                    <TextBlock Text="{CommonControls:Localize ModelLoadedUnloading}" FontSize="11"/>
+                                </StackPanel>
+                                <StackPanel Style="{StaticResource ModelStatusPanel}" Visibility="{Binding Status, Converter={StaticResource EnumToVisibilityConverter}, ConverterParameter=Unloaded}">
+                                    <CommonControls:FontAwesome Icon="f00c" Size="12" Color="{StaticResource SuccessColour}" Margin="0,0,5,0"/>
+                                    <TextBlock Text="{CommonControls:Localize ModelLoadedUnloaded}" FontSize="11"/>
+                                </StackPanel>
+                            </Grid>
+
+                            <!--Model / Memory-->
+                            <DockPanel Style="{StaticResource ModelPanel}">
+                                <TextBlock DockPanel.Dock="Right" Text="{Binding MemorySize, StringFormat={}{0:0.#} GB}" Style="{StaticResource ModelMemoryTextBlock}"/>
+                                <StackPanel VerticalAlignment="Center">
+                                    <TextBlock Text="{Binding Name}" FontWeight="SemiBold" FontSize="13" TextTrimming="CharacterEllipsis"/>
+                                    <TextBlock Text="{Binding Detail}" FontSize="11" Opacity=".7" TextTrimming="CharacterEllipsis" Visibility="{Binding Detail, Converter={StaticResource NullOrEmptyVisibilityConverter}}"/>
+                                    <TextBlock Text="{Binding Note}" FontSize="11" Foreground="{StaticResource WarningColour}" TextWrapping="Wrap" Visibility="{Binding Note, Converter={StaticResource NullOrEmptyVisibilityConverter}}"/>
+                                </StackPanel>
+                            </DockPanel>
+
+                        </DockPanel>
+                    </Border>
+                </DataTemplate>
+            </ItemsControl.ItemTemplate>
+        </ItemsControl>
+
+    </DockPanel>
+</CommonControls:DialogControl>

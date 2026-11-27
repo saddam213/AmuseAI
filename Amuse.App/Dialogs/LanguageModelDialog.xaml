@@ -9,16 +9,23 @@
         mc:Ignorable="d"
         MinWidth="1000"
         MaxWidth="1000"
-        MinHeight="620"
-        MaxHeight="800"
+        MaxHeight="900"
         Title="{CommonControls:Localize Title_LanguageModel}"
         Icon="/Images/Icon.ico"
         Style="{StaticResource {x:Type CommonControls:DialogControl}}">
+    <CommonControls:DialogControl.Resources>
+
+        <!--Option Field-->
+        <Style x:Key="OptionField" TargetType="{x:Type StackPanel}">
+            <Setter Property="Margin" Value="0,0,4,4"/>
+        </Style>
+
+    </CommonControls:DialogControl.Resources>
     <DockPanel DataContext="{Binding RelativeSource={RelativeSource AncestorType={x:Type local:LanguageModelDialog}}}" Margin="15, 15, 15, 10">
 
         <!--Save/Cancel/Errors-->
-        <DockPanel DockPanel.Dock="Bottom" Height="30" Margin="0,15,0,0">
-            <UniformGrid DockPanel.Dock="Right" Columns="2" >
+        <DockPanel DockPanel.Dock="Bottom" MinHeight="30" Margin="0,15,0,0">
+            <UniformGrid DockPanel.Dock="Right" Columns="2" Height="30" VerticalAlignment="Bottom">
                 <Button Content="{CommonControls:Localize Save}" Command="{Binding SaveCommand}" Width="100" IsDefault="True"/>
                 <Button Content="{CommonControls:Localize Cancel}" Command="{Binding CancelCommand}"/>
             </UniformGrid>
@@ -31,200 +38,195 @@
             </ItemsControl>
         </DockPanel>
 
-        <StackPanel DockPanel.Dock="Top">
+        <!--Main Content-->
+        <ScrollViewer VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Disabled">
+            <StackPanel Margin="0,0,4,0">
 
-            <!--Model Settings-->
-            <GroupBox Header="{CommonControls:Localize Model}" Margin="0,0,0,0">
-                <UniformGrid Rows="1">
-                    <StackPanel Margin="0,0,2,0">
-                        <TextBlock Text="{CommonControls:Localize Backend}" Style="{StaticResource FieldTextBlockStyle}"/>
-                        <ComboBox ItemsSource="{Binding Source={StaticResource BackendType}}" SelectedItem="{Binding LanguageModel.Backend}" IsEnabled="False" Style="{StaticResource EnumComboBox}"/>
-                    </StackPanel>
-                    <StackPanel Margin="2,0,2,0">
-                        <TextBlock Text="{CommonControls:Localize Pipeline}" Style="{StaticResource FieldTextBlockStyle}"/>
-                        <ComboBox ItemsSource="{Binding Settings.Pipelines}" SelectedItem="{Binding LanguageModel.Pipeline}" IsEnabled="False" Style="{StaticResource EnumComboBox}"/>
-                    </StackPanel>
-                    <StackPanel Margin="2,0,2,0">
-                        <TextBlock Text="{CommonControls:Localize Name}" Style="{StaticResource FieldTextBlockStyle}"/>
-                        <TextBox Text="{Binding LanguageModel.Name, UpdateSourceTrigger=PropertyChanged}" />
-                    </StackPanel>
-                </UniformGrid>
-            </GroupBox>
-
-            <Grid  Margin="0,6,0,0">
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="2*"/>
-                    <ColumnDefinition Width="5*"/>
-                </Grid.ColumnDefinitions>
-
-                <Grid Grid.Column="0">
-
-                    <!--Memory Settings-->
-                    <GroupBox Header="{CommonControls:Localize MemoryProfile}" Margin="0,0,4,0">
-                        <StackPanel>
-                            <StackPanel>
-                                <TextBlock Text="{CommonControls:Localize OriginalModelDataType}" Style="{StaticResource FieldTextBlockStyle}"/>
-                                <ComboBox ItemsSource="{Binding DataTypes}" SelectedItem="{Binding LanguageModel.BaseType}" Style="{StaticResource EnumComboBox}"/>
-                            </StackPanel>
-
-                            <UniformGrid Rows="1">
+                <!--Model-->
+                <Border Style="{StaticResource WizardSection}">
+                    <DockPanel>
+                        <StackPanel Style="{StaticResource WizardSectionHeader}">
+                            <TextBlock Text="{CommonControls:Localize Model}" FontWeight="SemiBold" FontSize="13"/>
+                            <TextBlock Text="{CommonControls:Localize EditModelDescription}" FontSize="11" Opacity=".7" TextWrapping="Wrap"/>
+                        </StackPanel>
+                        <StackPanel VerticalAlignment="Top">
+                            <UniformGrid Columns="2">
                                 <StackPanel Margin="0,0,2,0">
-                                    <TextBlock Text="{CommonControls:Localize ModelParametersB}" Style="{StaticResource FieldTextBlockStyle}"/>
-                                    <DockPanel>
-                                        <CommonControls:AddOnButton  DockPanel.Dock="Right" Icon="f1ec" IconSize="11" IconColor="{StaticResource DefaultForeground}" Width="23" ToolTip="{CommonControls:Localize ToolTop_MemoryEstimate}" Command="{Binding EstimateMemoryCommand}"/>
-                                        <TextBox Text="{Binding LanguageModel.ModelParams, UpdateSourceTrigger=PropertyChanged}"/>
-                                    </DockPanel>
+                                    <TextBlock Text="{CommonControls:Localize ModelName}" Style="{StaticResource FieldTextBlockStyle}"/>
+                                    <TextBox Text="{Binding LanguageModel.Name, UpdateSourceTrigger=PropertyChanged}" />
                                 </StackPanel>
                                 <StackPanel Margin="2,0,0,0">
+                                    <TextBlock Text="{CommonControls:Localize RepositoryLink}" Style="{StaticResource FieldTextBlockStyle}"/>
+                                    <TextBox Text="{Binding LanguageModel.Link, UpdateSourceTrigger=PropertyChanged}" />
+                                </StackPanel>
+                            </UniformGrid>
+                            <UniformGrid Columns="4" Margin="0,4,0,0">
+                                <StackPanel Margin="0,0,4,0">
+                                    <TextBlock Text="{CommonControls:Localize ModelParametersB}" Style="{StaticResource FieldTextBlockStyle}"/>
+                                    <TextBox Text="{Binding LanguageModel.ModelParams, UpdateSourceTrigger=PropertyChanged}"/>
+                                </StackPanel>
+                                <StackPanel Margin="0,0,4,0">
                                     <TextBlock Text="{CommonControls:Localize ModelSizeGB}" Style="{StaticResource FieldTextBlockStyle}"/>
                                     <TextBox Text="{Binding LanguageModel.ModelSize, UpdateSourceTrigger=PropertyChanged}" />
                                 </StackPanel>
-                             
+                            </UniformGrid>
+                            <TextBlock Margin="0,4,0,0" FontSize="11" Opacity=".7">
+                                <Run Text="{CommonControls:Localize Pipeline, Append=:}"/>
+                                <Run Text="{Binding LanguageModel.Pipeline, Converter={StaticResource EnumDisplayNameConverter}, Mode=OneWay}" FontWeight="SemiBold"/>
+                                <Run Text="   "/>
+                                <Run Text="{CommonControls:Localize Backend, Append=:}"/>
+                                <Run Text="{Binding LanguageModel.Backend, Converter={StaticResource EnumDisplayNameConverter}, Mode=OneWay}" FontWeight="SemiBold"/>
+                            </TextBlock>
+                        </StackPanel>
+                    </DockPanel>
+                </Border>
+
+                <!--Options-->
+                <Border Style="{StaticResource WizardSection}">
+                    <DockPanel>
+                        <StackPanel Style="{StaticResource WizardSectionHeader}">
+                            <TextBlock Text="{CommonControls:Localize Options}" FontWeight="SemiBold" FontSize="13"/>
+                            <TextBlock Text="{CommonControls:Localize ModelOptionsDescription}" FontSize="11" Opacity=".7" TextWrapping="Wrap"/>
+                        </StackPanel>
+                        <StackPanel VerticalAlignment="Top">
+                            <UniformGrid Columns="6">
+                                <StackPanel Style="{StaticResource OptionField}">
+                                    <TextBlock Text="{CommonControls:Localize MinLength}" Style="{StaticResource FieldTextBlockStyle}"/>
+                                    <TextBox Text="{Binding LanguageModel.DefaultOptions.MinLength, UpdateSourceTrigger=PropertyChanged}" />
+                                </StackPanel>
+                                <StackPanel Style="{StaticResource OptionField}">
+                                    <TextBlock Text="{CommonControls:Localize MaxLength}" Style="{StaticResource FieldTextBlockStyle}"/>
+                                    <TextBox Text="{Binding LanguageModel.DefaultOptions.MaxLength, UpdateSourceTrigger=PropertyChanged}" />
+                                </StackPanel>
+                                <StackPanel Style="{StaticResource OptionField}">
+                                    <TextBlock Text="{CommonControls:Localize ChunkSize}" Style="{StaticResource FieldTextBlockStyle}"/>
+                                    <TextBox Text="{Binding LanguageModel.DefaultOptions.ChunkSize, UpdateSourceTrigger=PropertyChanged}" />
+                                </StackPanel>
+                                <StackPanel Style="{StaticResource OptionField}">
+                                    <TextBlock Text="{CommonControls:Localize Beams}" Style="{StaticResource FieldTextBlockStyle}"/>
+                                    <TextBox Text="{Binding LanguageModel.DefaultOptions.Beams, UpdateSourceTrigger=PropertyChanged}" />
+                                </StackPanel>
+                                <StackPanel Style="{StaticResource OptionField}">
+                                    <TextBlock Text="{CommonControls:Localize TopK}" Style="{StaticResource FieldTextBlockStyle}"/>
+                                    <TextBox Text="{Binding LanguageModel.DefaultOptions.TopK, UpdateSourceTrigger=PropertyChanged}" />
+                                </StackPanel>
+                                <StackPanel Style="{StaticResource OptionField}">
+                                    <TextBlock Text="{CommonControls:Localize TopP}" Style="{StaticResource FieldTextBlockStyle}"/>
+                                    <CommonControls:FloatBox FloatValue="{Binding LanguageModel.DefaultOptions.TopP, UpdateSourceTrigger=PropertyChanged}" />
+                                </StackPanel>
+                                <StackPanel Style="{StaticResource OptionField}">
+                                    <TextBlock Text="{CommonControls:Localize TopH}" Style="{StaticResource FieldTextBlockStyle}"/>
+                                    <CommonControls:FloatBox FloatValue="{Binding LanguageModel.DefaultOptions.TopH, UpdateSourceTrigger=PropertyChanged}" />
+                                </StackPanel>
+                                <StackPanel Style="{StaticResource OptionField}">
+                                    <TextBlock Text="{CommonControls:Localize TypicalP}" Style="{StaticResource FieldTextBlockStyle}"/>
+                                    <CommonControls:FloatBox FloatValue="{Binding LanguageModel.DefaultOptions.TypicalP, UpdateSourceTrigger=PropertyChanged}" />
+                                </StackPanel>
+                                <StackPanel Style="{StaticResource OptionField}">
+                                    <TextBlock Text="{CommonControls:Localize Temperature}" Style="{StaticResource FieldTextBlockStyle}"/>
+                                    <CommonControls:FloatBox FloatValue="{Binding LanguageModel.DefaultOptions.Temperature, UpdateSourceTrigger=PropertyChanged}" />
+                                </StackPanel>
+                                <StackPanel Style="{StaticResource OptionField}">
+                                    <TextBlock Text="{CommonControls:Localize LengthPenalty}" Style="{StaticResource FieldTextBlockStyle}"/>
+                                    <CommonControls:FloatBox FloatValue="{Binding LanguageModel.DefaultOptions.LengthPenalty, UpdateSourceTrigger=PropertyChanged}" />
+                                </StackPanel>
+                                <StackPanel Style="{StaticResource OptionField}">
+                                    <TextBlock Text="{CommonControls:Localize RepetitionPenalty}" Style="{StaticResource FieldTextBlockStyle}"/>
+                                    <CommonControls:FloatBox FloatValue="{Binding LanguageModel.DefaultOptions.RepetitionPenalty, UpdateSourceTrigger=PropertyChanged}" />
+                                </StackPanel>
+                                <StackPanel Style="{StaticResource OptionField}">
+                                    <TextBlock Text="{CommonControls:Localize NoRepeatNgrams}" Style="{StaticResource FieldTextBlockStyle}"/>
+                                    <TextBox Text="{Binding LanguageModel.DefaultOptions.NoRepeatNgramSize, UpdateSourceTrigger=PropertyChanged}" />
+                                </StackPanel>
+                                <StackPanel Style="{StaticResource OptionField}">
+                                    <CheckBox Content="{CommonControls:Localize SamplingEnabled}" IsChecked="{Binding LanguageModel.DefaultOptions.IsSamplingEnabled}" Margin="0,4,0,0"/>
+                                </StackPanel>
                             </UniformGrid>
 
-
-                            <StackPanel>
-                                <TextBlock Text="{CommonControls:Localize MemorySize}" Style="{StaticResource FieldTextBlockStyle}"/>
-                                <TextBox Text="{Binding LanguageModel.MemorySize, UpdateSourceTrigger=PropertyChanged}" />
-                            </StackPanel>
-                        </StackPanel>
-                    </GroupBox>
-
-                </Grid>
-
-                <Grid Grid.Column="1">
-
-                    <!--Default Settings-->
-                    <GroupBox Header="{CommonControls:Localize DefaultOptions}" Margin="4,0,0,0">
-                        <DockPanel>
-
-                            <!--DefaultOptions General-->
-                            <DockPanel DockPanel.Dock="Bottom" Margin="0,4,0,0">
-                                <DockPanel DockPanel.Dock="Bottom">
-                                    <StackPanel DockPanel.Dock="Right" Width="100">
-                                        <TextBlock Text="{CommonControls:Localize AccessToken}" Style="{StaticResource FieldTextBlockStyle}"/>
-                                        <ComboBox SelectedIndex="0" ItemsSource="{Binding AccessTokens}" SelectedValue="{Binding LanguageModel.AccessToken}" SelectedValuePath="Value" DisplayMemberPath="Name" />
-                                    </StackPanel>
-                                    <StackPanel>
-                                        <TextBlock Text="{CommonControls:Localize RepositoryLink}" Style="{StaticResource FieldTextBlockStyle}"/>
-                                        <TextBox Text="{Binding LanguageModel.Link, UpdateSourceTrigger=PropertyChanged}" />
-                                    </StackPanel>
-                                </DockPanel>
-                                <DockPanel Visibility="{Binding LanguageModel.DefaultOptions.Tasks, Converter={StaticResource NullOrEmptyVisibilityConverter}}">
-                                    <StackPanel DockPanel.Dock="Left" Width="140">
-                                        <TextBlock Text="{CommonControls:Localize Task}" Style="{StaticResource FieldTextBlockStyle}"/>
-                                        <TextBox Text="{Binding LanguageModel.DefaultOptions.Task, UpdateSourceTrigger=PropertyChanged}"  />
-                                    </StackPanel>
-                                    <StackPanel>
-                                        <TextBlock Text="{CommonControls:Localize Tasks}" Style="{StaticResource FieldTextBlockStyle}"/>
-                                        <TextBox Text="{Binding LanguageModel.DefaultOptions.Tasks, UpdateSourceTrigger=PropertyChanged, Converter={StaticResource StringArrayCommaConverter}}"  />
-                                    </StackPanel>
-                                </DockPanel>
+                            <!--Tasks-->
+                            <DockPanel Margin="0,2,0,0" Visibility="{Binding LanguageModel.DefaultOptions.Tasks, Converter={StaticResource NullOrEmptyVisibilityConverter}}">
+                                <StackPanel DockPanel.Dock="Left" Width="150" Margin="0,0,4,0">
+                                    <TextBlock Text="{CommonControls:Localize Task}" Style="{StaticResource FieldTextBlockStyle}"/>
+                                    <TextBox Text="{Binding LanguageModel.DefaultOptions.Task, UpdateSourceTrigger=PropertyChanged}" />
+                                </StackPanel>
+                                <StackPanel>
+                                    <TextBlock Text="{CommonControls:Localize Tasks}" Style="{StaticResource FieldTextBlockStyle}"/>
+                                    <TextBox Text="{Binding LanguageModel.DefaultOptions.Tasks, UpdateSourceTrigger=PropertyChanged, Converter={StaticResource StringArrayCommaConverter}}" />
+                                </StackPanel>
                             </DockPanel>
+                        </StackPanel>
+                    </DockPanel>
+                </Border>
 
-                            <!--DefaultOptions-->
-                            <Grid>
+                <!--Functions-->
+                <Border Style="{StaticResource WizardSection}">
+                    <DockPanel>
+                        <StackPanel Style="{StaticResource WizardSectionHeader}">
+                            <TextBlock Text="{CommonControls:Localize SupportedFunctions}" FontWeight="SemiBold" FontSize="13"/>
+                            <TextBlock Text="{CommonControls:Localize FunctionsDescription}" FontSize="11" Opacity=".7" TextWrapping="Wrap"/>
+                        </StackPanel>
+                        <StackPanel VerticalAlignment="Top">
+                            <TextBlock Text="{CommonControls:Localize SupportedFunctions}" Style="{StaticResource FieldTextBlockStyle}"/>
+                            <UniformGrid Columns="4" Margin="0,0,0,6">
+                                <CheckBox x:Name="CheckBoxTextToText" Content="{CommonControls:Localize Function_TextToText}" Margin="0,2"/>
+                                <CheckBox x:Name="CheckBoxImageToText" Content="{CommonControls:Localize Function_ImageToText}" Margin="0,2"/>
+                            </UniformGrid>
+                            <StackPanel Orientation="Horizontal">
+                                <TextBlock Text="{CommonControls:Localize ViewFilter}" Style="{StaticResource FieldTextBlockStyle}"/>
+                                <TextBlock Text="{CommonControls:Localize TagOptional}" Style="{StaticResource FieldTextBlockStyle}" FontSize="9" Margin="4,0,0,2" VerticalAlignment="Bottom"/>
+                            </StackPanel>
+                            <UniformGrid Columns="4">
+                                <CheckBox x:Name="CheckBoxViewImageToText" Content="{CommonControls:Localize Menu_ImageToText}" Margin="0,2"/>
+                                <CheckBox x:Name="CheckBoxViewTextInstruct" Content="{CommonControls:Localize Menu_TextInstruct}" Margin="0,2"/>
+                                <CheckBox x:Name="CheckBoxViewTextConverse" Content="{CommonControls:Localize Menu_TextConverse}" Margin="0,2"/>
+                            </UniformGrid>
+                        </StackPanel>
+                    </DockPanel>
+                </Border>
 
-                                <!--Audio-->
-                                <Grid Visibility="{Binding LanguageModel.MediaType, Converter={StaticResource EnumToVisibilityConverter}, ConverterParameter=Text}">
-                                    <StackPanel>
-                                         <UniformGrid Columns="5">
-                                            <StackPanel>
-                                                <TextBlock Text="{CommonControls:Localize MinLength}" Style="{StaticResource FieldTextBlockStyle}"/>
-                                                <TextBox Text="{Binding LanguageModel.DefaultOptions.MinLength, UpdateSourceTrigger=PropertyChanged}" />
-                                            </StackPanel>
-                                            <StackPanel>
-                                                <TextBlock Text="{CommonControls:Localize MaxLength}" Style="{StaticResource FieldTextBlockStyle}"/>
-                                                <TextBox Text="{Binding LanguageModel.DefaultOptions.MaxLength, UpdateSourceTrigger=PropertyChanged}" />
-                                            </StackPanel>
-                                           <StackPanel>
-                                                <TextBlock Text="{CommonControls:Localize ChunkSize}" Style="{StaticResource FieldTextBlockStyle}"/>
-                                                <TextBox Text="{Binding LanguageModel.DefaultOptions.ChunkSize, UpdateSourceTrigger=PropertyChanged}"  />
-                                            </StackPanel>
-                                            <StackPanel>
-                                                <TextBlock Text="{CommonControls:Localize Beams}" Style="{StaticResource FieldTextBlockStyle}"/>
-                                                <TextBox Text="{Binding LanguageModel.DefaultOptions.Beams, UpdateSourceTrigger=PropertyChanged}"  />
-                                            </StackPanel>
-                                            <StackPanel>
-                                                <TextBlock Text="{CommonControls:Localize TopK}" Style="{StaticResource FieldTextBlockStyle}"/>
-                                                <TextBox Text="{Binding LanguageModel.DefaultOptions.TopK, UpdateSourceTrigger=PropertyChanged}"  />
-                                            </StackPanel>
-                                            <StackPanel>
-                                                <TextBlock Text="{CommonControls:Localize TopP}" Style="{StaticResource FieldTextBlockStyle}"/>
-                                                <CommonControls:FloatBox FloatValue="{Binding LanguageModel.DefaultOptions.TopP, UpdateSourceTrigger=PropertyChanged}"  />
-                                            </StackPanel>
-                                            <StackPanel>
-                                                <TextBlock Text="{CommonControls:Localize TopH}" Style="{StaticResource FieldTextBlockStyle}"/>
-                                                <CommonControls:FloatBox FloatValue="{Binding LanguageModel.DefaultOptions.TopH, UpdateSourceTrigger=PropertyChanged}"  />
-                                            </StackPanel>
-                                            <StackPanel>
-                                                <TextBlock Text="{CommonControls:Localize TypicalP}" Style="{StaticResource FieldTextBlockStyle}"/>
-                                                <CommonControls:FloatBox FloatValue="{Binding LanguageModel.DefaultOptions.TypicalP, UpdateSourceTrigger=PropertyChanged}"  />
-                                            </StackPanel>
-                                            <StackPanel>
-                                                <TextBlock Text="{CommonControls:Localize Temperature}" Style="{StaticResource FieldTextBlockStyle}"/>
-                                                <CommonControls:FloatBox FloatValue="{Binding LanguageModel.DefaultOptions.Temperature, UpdateSourceTrigger=PropertyChanged}"  />
-                                            </StackPanel>
-                                            <StackPanel>
-                                                <TextBlock Text="{CommonControls:Localize LengthPenalty}" Style="{StaticResource FieldTextBlockStyle}"/>
-                                                <CommonControls:FloatBox FloatValue="{Binding LanguageModel.DefaultOptions.LengthPenalty, UpdateSourceTrigger=PropertyChanged}"  />
-                                            </StackPanel>
-                                            <StackPanel>
-                                                <TextBlock Text="{CommonControls:Localize RepetitionPenalty}" Style="{StaticResource FieldTextBlockStyle}"/>
-                                                <CommonControls:FloatBox FloatValue="{Binding LanguageModel.DefaultOptions.RepetitionPenalty, UpdateSourceTrigger=PropertyChanged}"  />
-                                            </StackPanel>
-                                            <StackPanel>
-                                                <TextBlock Text="{CommonControls:Localize NoRepeatNgrams}" Style="{StaticResource FieldTextBlockStyle}"/>
-                                                <TextBox Text="{Binding LanguageModel.DefaultOptions.NoRepeatNgramSize, UpdateSourceTrigger=PropertyChanged}"  />
-                                            </StackPanel>
-                                            <StackPanel>
-                                                <CheckBox Content="{CommonControls:Localize SamplingEnabled}" IsChecked="{Binding DiffusionModel.DefaultOptions.IsSamplingEnabled}" Margin="4,20,0,0"/>
-                                            </StackPanel>
-                                        </UniformGrid>
-
+                <!--Quality-->
+                <Border Style="{StaticResource WizardSection}">
+                    <DockPanel>
+                        <StackPanel Style="{StaticResource WizardSectionHeader}">
+                            <TextBlock Text="{CommonControls:Localize Quants}" FontWeight="SemiBold" FontSize="13"/>
+                            <TextBlock Text="{CommonControls:Localize QualityDescription}" FontSize="11" Opacity=".7" TextWrapping="Wrap"/>
+                        </StackPanel>
+                        <StackPanel>
+                            <DockPanel>
+                                <UniformGrid DockPanel.Dock="Right" Rows="1" VerticalAlignment="Bottom" Margin="4,0,0,0">
+                                    <Button Content="{CommonControls:Localize Add}" Command="{Binding AddCheckpointCommand}" Width="80" Margin="0,0,2,0"/>
+                                    <Button Content="{CommonControls:Localize Remove}" Command="{Binding RemoveCheckpointCommand}" Width="80" Margin="2,0,0,0"/>
+                                </UniformGrid>
+                                <UniformGrid Columns="3">
+                                    <StackPanel Margin="0,0,2,0">
+                                        <TextBlock Text="{CommonControls:Localize Quant}" Style="{StaticResource FieldTextBlockStyle}"/>
+                                        <ComboBox ItemsSource="{Binding LanguageModel.Checkpoints}" SelectedItem="{Binding CheckpointModel}">
+                                            <ComboBox.ItemTemplate>
+                                                <DataTemplate>
+                                                    <TextBlock Text="{Binding Type, Converter={StaticResource EnumDisplayNameConverter}}" />
+                                                </DataTemplate>
+                                            </ComboBox.ItemTemplate>
+                                        </ComboBox>
                                     </StackPanel>
-                                </Grid>
-                            </Grid>
-                        </DockPanel>
-                    </GroupBox>
-
-                </Grid>
-            </Grid>
-
-
-            <UniformGrid Rows="1" Margin="0,6,0,0">
-
-                <!--Process Settings-->
-                <GroupBox DockPanel.Dock="Top" Header="{CommonControls:Localize SupportedFunctions}" Margin="0,0,4,0">
-                    <Grid Margin="4">
-                        <StackPanel VerticalAlignment="Top"  Visibility="{Binding LanguageModel.MediaType, Converter={StaticResource EnumToVisibilityConverter}, ConverterParameter=Text}">
-                            <UniformGrid Columns="3" >
-                                <CheckBox x:Name="CheckBoxTextToText" Content="{CommonControls:Localize Function_TextToText}" />
-                                <CheckBox x:Name="CheckBoxImageToText" Content="{CommonControls:Localize Function_ImageToText}" />
-                            </UniformGrid>
+                                    <StackPanel Margin="2,0,2,0">
+                                        <TextBlock Text="{CommonControls:Localize Type}" Style="{StaticResource FieldTextBlockStyle}"/>
+                                        <ComboBox ItemsSource="{Binding CheckpointTypes}" SelectedItem="{Binding CheckpointModel.Type}" Style="{StaticResource EnumComboBox}"/>
+                                    </StackPanel>
+                                    <StackPanel Margin="2,0,0,0">
+                                        <TextBlock Text="{CommonControls:Localize MemorySize}" Style="{StaticResource FieldTextBlockStyle}"/>
+                                        <DockPanel>
+                                            <CommonControls:AddOnButton DockPanel.Dock="Right" Icon="f1ec" IconSize="11" IconColor="{StaticResource DefaultForeground}" Width="23" ToolTip="{CommonControls:Localize ToolTip_MemoryEstimate}" ToolTipService.InitialShowDelay="200" Command="{Binding EstimateMemoryCommand}"/>
+                                            <TextBox Text="{Binding CheckpointModel.MemorySize, UpdateSourceTrigger=PropertyChanged}" />
+                                        </DockPanel>
+                                    </StackPanel>
+                                </UniformGrid>
+                            </DockPanel>
+                            <Controls:LanguageCheckpointControl Settings="{Binding Settings}" Checkpoint="{Binding CheckpointModel}" Backend="{Binding LanguageModel.Backend}" Margin="0,10,0,0" MinHeight="120"/>
                         </StackPanel>
-                    </Grid>
-                </GroupBox>
+                    </DockPanel>
+                </Border>
 
-                <!--View Filters-->
-                <GroupBox DockPanel.Dock="Top" Header="{CommonControls:Localize ViewFilter}" Margin="4,0,0,0">
-                    <Grid Margin="4">
-                        <StackPanel VerticalAlignment="Top"  Visibility="{Binding LanguageModel.MediaType, Converter={StaticResource EnumToVisibilityConverter}, ConverterParameter=Text}">
-                            <UniformGrid Columns="3" >
-                                <CheckBox x:Name="CheckBoxViewImageToText" Content="{CommonControls:Localize Function_ImageToText}" />
-                                <CheckBox x:Name="CheckBoxViewTextInstruct" Content="{CommonControls:Localize Function_TextInstruct}" />
-                                <CheckBox x:Name="CheckBoxViewTextConverse" Content="{CommonControls:Localize Function_TextConverse}" />
-                            </UniformGrid>
-                        </StackPanel>
-                    </Grid>
-                </GroupBox>
-
-            </UniformGrid>
-        </StackPanel>
-
-        <!--Checkpoint Settings-->
-        <Grid Margin="0,10,0,0" >
-            <Controls:LanguageCheckpointControl Settings="{Binding Settings}" Checkpoint="{Binding CheckpointModel}" Backend="{Binding LanguageModel.Backend}"/>
-        </Grid>
+            </StackPanel>
+        </ScrollViewer>
     </DockPanel>
 </CommonControls:DialogControl>

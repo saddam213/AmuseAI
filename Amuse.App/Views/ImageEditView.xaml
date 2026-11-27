@@ -26,7 +26,7 @@
                         <!--ModelControl-->
                         <Grid DockPanel.Dock="Top" IsEnabled="{Binding GenerateService.IsLoading, Converter={StaticResource InverseBoolConverter}}">
                             <Grid IsEnabled="{Binding GenerateService.IsExecuting, Converter={StaticResource InverseBoolConverter}}">
-                                <Grid IsEnabled="{Binding IsAutomating, Converter={StaticResource InverseBoolConverter}}">
+                                <Grid IsEnabled="{Binding IsPipelineBusy, Converter={StaticResource InverseBoolConverter}}">
                                     <Controls:DiffusionModelControl
                                         x:Name="ModelControl"
                                         ViewType="ImageEdit"
@@ -54,7 +54,7 @@
                                         <Button Command="{Binding CancelCommand}" >
                                             <Button.Style>
                                                 <Style TargetType="{x:Type Button}" BasedOn="{StaticResource {x:Type Button}}">
-                                                    <Setter Property="Content" Value="Cancel" />
+                                                    <Setter Property="Content" Value="{CommonControls:Localize Cancel}" />
                                                     <Style.Triggers>
                                                         <DataTrigger Binding="{Binding GenerateService.IsCanceling}" Value="True">
                                                             <Setter Property="Content" Value="{CommonControls:Localize Canceling}" />

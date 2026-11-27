@@ -33,6 +33,9 @@ namespace Amuse.App.Controls
             _currentResultStream = new StringBuilder();
             _conversation = new ObservableCollection<ConversationModel>();
             _streamUpdateTimer = new DispatcherTimer(TimeSpan.FromMilliseconds(_streamUpdateInterval), DispatcherPriority.Background, OnStreamUpdate, Dispatcher);
+            _streamUpdateTimer.Stop();
+            Loaded += (s, e) => _streamUpdateTimer.Start();
+            Unloaded += (s, e) => _streamUpdateTimer.Stop();
             ClearCommand = new AsyncRelayCommand(ClearAsync, CanClear);
             Progress = new ProgressInfo();
         }

@@ -3,7 +3,6 @@ using Amuse.App.Resources;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
-using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Management;
@@ -17,38 +16,42 @@ namespace Amuse.App.Services
 {
     public sealed class HardwareService : IHardwareService
     {
+        private const string CounterGPUEngine = @"\GPU Engine(*)\Utilization Percentage";
+        private const string CounterGPUDedicatedUsage = @"\GPU Adapter Memory(*)\Dedicated Usage";
+        private const string CounterGPUSharedUsage = @"\GPU Adapter Memory(*)\Shared Usage";
+        private const string CounterGPUProcessDedicatedUsage = @"\GPU Process Memory(*)\Dedicated Usage";
+        private const string CounterGPUProcessSharedUsage = @"\GPU Process Memory(*)\Shared Usage";
+
         private readonly int _refreshRate = 500;
+        private readonly TimeSpan _shutdownTimeout = TimeSpan.FromSeconds(2);
+        private readonly int _processId;
         private readonly CPUDevice _cpuDevice;
         private readonly NPUDevice _npuDevice;
         private readonly GPUDevice[] _gpuDevices;
-        private readonly ManagementObjectSearcher _objectSearcherDriver;
-        private readonly ManagementObjectSearcher _objectSearcherProcessor;
-        private readonly ManagementObjectSearcher _objectSearcherGPUEngine;
-        private readonly ManagementObjectSearcher _objectSearcherGPUMemory;
-        private readonly ManagementObjectSearcher _objectSearcherGPUProcessMemory;
-        private readonly ManagementObjectSearcher _objectSearcherProcessorPercent;
+        private readonly AdapterInfo[] _adapters;
+        private readonly DeviceInfo[] _deviceInfo;
         private readonly ManualResetEvent _updateThreadResetEvent;
         private readonly CancellationTokenSource _cancellationTokenSource;
-        private readonly Settings _hardwareSettings;
+        private readonly PerformanceCounterQuery _gpuCounterQuery;
         private Thread _cpuUpdateThread;
         private Thread _gpuUpdateThread;
         private CPUStatus _cpuStatus;
         private NPUStatus _npuStatus;
         private GPUStatus[] _gpuStatus;
-        private AdapterInfo[] _adapters;
-        private DeviceInfo[] _deviceInfo;
+        private HashSet<int> _processIds;
+        private CPUTimes _cpuTimes;
+        private bool _isDisposed;
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="HardwareService"/> class.
+        /// </summary>
+        /// <param name="hardwareSettings">The hardware settings.</param>
         public HardwareService(Settings hardwareSettings)
         {
             Provider.Initialize();
-            _hardwareSettings = hardwareSettings;
+            _processId = Environment.ProcessId;
+            _processIds = [_processId];
             _cancellationTokenSource = new CancellationTokenSource();
-            _objectSearcherDriver = new ManagementObjectSearcher("root\\CIMV2", "SELECT DeviceID, DeviceName, DriverVersion, Location FROM Win32_PnPSignedDriver");
-            _objectSearcherProcessor = new ManagementObjectSearcher("root\\CIMV2", "SELECT Name FROM Win32_Processor");
-            _objectSearcherGPUEngine = new ManagementObjectSearcher("root\\CIMV2", $"SELECT Name, UtilizationPercentage FROM Win32_PerfFormattedData_GPUPerformanceCounters_GPUEngine");
-            _objectSearcherGPUMemory = new ManagementObjectSearcher("root\\CIMV2", "SELECT Name, SharedUsage, DedicatedUsage, TotalCommitted FROM Win32_PerfFormattedData_GPUPerformanceCounters_GPUAdapterMemory");
-            _objectSearcherGPUProcessMemory = new ManagementObjectSearcher("root\\CIMV2", $"SELECT Name, SharedUsage, DedicatedUsage, TotalCommitted FROM Win32_PerfFormattedData_GPUPerformanceCounters_GPUProcessMemory");
-            _objectSearcherProcessorPercent = new ManagementObjectSearcher("root\\CIMV2", "SELECT PercentProcessorTime FROM Win32_PerfFormattedData_PerfOS_Processor WHERE Name='_Total'");
             _adapters = hardwareSettings.IsLegacyDeviceDetection
                 ? DeviceInterop.GetAdaptersLegacy()
                 : DeviceInterop.GetAdapters();
@@ -56,6 +59,8 @@ namespace Amuse.App.Services
             _cpuDevice = CreateDeviceCPU();
             _gpuDevices = CreateDeviceGPU();
             _npuDevice = CreateDeviceNPU();
+            _cpuTimes = DeviceInterop.GetCPUTimes();
+            _gpuCounterQuery = new PerformanceCounterQuery(CounterGPUEngine, CounterGPUDedicatedUsage, CounterGPUSharedUsage, CounterGPUProcessDedicatedUsage, CounterGPUProcessSharedUsage);
             _updateThreadResetEvent = new ManualResetEvent(true);
             CreateUpdateThreadCPU(_refreshRate, _cancellationTokenSource.Token);
             CreateUpdateThreadGPU(_refreshRate, _cancellationTokenSource.Token);
@@ -73,6 +78,10 @@ namespace Amuse.App.Services
 
         public AdapterInfo[] Adapters => _adapters ?? [];
 
+
+        /// <summary>
+        /// Gets the GPU devices supported by the execution providers.
+        /// </summary>
         public IReadOnlyList<DeviceModel> GetGPUDevices()
         {
             var outputDevices = new Dictionary<VendorType, List<DeviceModel>>();
@@ -97,184 +106,61 @@ namespace Amuse.App.Services
         }
 
 
+        /// <summary>
+        /// Creates the CPU device.
+        /// </summary>
         private CPUDevice CreateDeviceCPU()
         {
+            var cpuName = AppDefault.UnknownCPU;
             try
             {
-                string cpuName = "Unknown CPU";
-                using (var results = _objectSearcherProcessor.Get())
+                using (var objectSearcher = new ManagementObjectSearcher("root\\CIMV2", "SELECT Name FROM Win32_Processor"))
                 {
-                    foreach (var result in results)
+                    using (var results = objectSearcher.Get())
                     {
-                        using (result)
+                        foreach (var result in results)
                         {
-                            cpuName = result["Name"].ToString().Trim();
+                            using (result)
+                            {
+                                cpuName = result["Name"]?.ToString().Trim() ?? cpuName;
+                            }
                         }
                     }
                 }
-
-                var deviceInfo = _deviceInfo.FirstOrDefault(d => d.Name == cpuName);
-                var memStatus = DeviceInterop.GetMemoryStatus();
-                return new CPUDevice
-                {
-                    Name = cpuName,
-                    MemoryTotal = memStatus.TotalPhysicalMemory / 1024f / 1024f
-                };
             }
             catch (Exception)
             {
-                return default;
+                // Keep the default CPU name
             }
+
+            var memStatus = DeviceInterop.GetMemoryStatus();
+            return new CPUDevice
+            {
+                Name = cpuName,
+                MemoryTotal = memStatus.TotalPhysicalMemory / 1024f / 1024f
+            };
         }
 
 
+        /// <summary>
+        /// Creates the CPU status and refreshes the Amuse process tree.
+        /// </summary>
         private CPUStatus CreateStatusCPU()
         {
             try
             {
-                ulong processorUsage = 0;
-                using (var results = _objectSearcherProcessorPercent.Get())
-                {
-                    foreach (var result in results)
-                    {
-                        using (result)
-                        {
-                            processorUsage = (ulong)result["PercentProcessorTime"];
-                        }
-                    }
-                }
-
+                var cpuTimes = DeviceInterop.GetCPUTimes();
                 var memStatus = DeviceInterop.GetMemoryStatus();
-                return new CPUStatus(_cpuDevice)
+                var processIds = DeviceInterop.GetProcessTree(_processId);
+                var result = new CPUStatus(_cpuDevice)
                 {
-                    Usage = (int)processorUsage,
+                    Usage = GetUsageCPU(_cpuTimes, cpuTimes),
                     MemoryUsage = (int)memStatus.MemoryLoad,
-                    MemoryAvailable = memStatus.AvailablePhysicalMemory / 1024f / 1024f
+                    MemoryAvailable = memStatus.AvailablePhysicalMemory / 1024f / 1024f,
+                    ProcessMemoryUsage = DeviceInterop.GetWorkingSet(processIds) / 1024f / 1024f
                 };
-            }
-            catch (Exception)
-            {
-                return default;
-            }
-        }
-
-
-        private GPUDevice[] CreateDeviceGPU()
-        {
-            try
-            {
-                var devices = new List<GPUDevice>();
-                foreach (var device in _adapters.Where(x => x.Type == AdapterType.GPU))
-                {
-                    var deviceInfo = _deviceInfo.FirstOrDefault(d => d.Name == device.Description);
-                    devices.Add(new GPUDevice(device, deviceInfo));
-                }
-                return devices.ToArray();
-            }
-            catch (Exception)
-            {
-                return [];
-            }
-        }
-
-
-        private GPUStatus[] CreateStatusGPU(Dictionary<string, GPUUtilization[]> gpuUtilization, Dictionary<string, GPUMemory> gpuMemoryUsage, Dictionary<string, GPUMemory> gpuProcessUsage)
-        {
-            var results = new GPUStatus[_gpuDevices.Length];
-            for (int i = 0; i < _gpuDevices.Length; i++)
-            {
-                try
-                {
-                    var device = _gpuDevices[i];
-                    var result = new GPUStatus(device);
-
-                    if (gpuMemoryUsage.TryGetValue(device.AdapterId, out var memoryUsage))
-                    {
-                        result.MemoryUsage = memoryUsage.DedicatedUsage / 1024f / 1024f;
-                        result.SharedMemoryUsage = memoryUsage.SharedUsage / 1024f / 1024f;
-                    }
-
-                    if (gpuProcessUsage.TryGetValue(device.AdapterId, out var processUsage))
-                    {
-                        result.ProcessMemoryTotal = processUsage.DedicatedUsage / 1024f / 1024f;
-                        result.ProcessSharedMemoryUsage = processUsage.SharedUsage / 1024f / 1024f;
-                    }
-
-                    if (gpuUtilization.TryGetValue(device.AdapterId, out var deviceUtilization))
-                    {
-                        var utilization = deviceUtilization
-                            .GroupBy(x => x.Instance)
-                            .ToDictionary(u => u.Key, y => y.Sum(x => (int)x.Utilization));
-                        utilization.TryGetValue("Cuda", out var engineCuda);
-                        utilization.TryGetValue("3D", out var engineGraphics);
-                        utilization.TryGetValue("Graphics1", out var engineGraphics1);
-                        utilization.TryGetValue("Compute", out var engineCompute);
-                        utilization.TryGetValue("Compute0", out var engineCompute0);
-                        utilization.TryGetValue("Compute1", out var engineCompute1);
-                        result.UsageCuda = engineCuda;
-                        result.UsageCompute = Math.Max(engineCompute, engineCompute0);
-                        result.UsageCompute1 = engineCompute1;
-                        result.UsageGraphics = engineGraphics;
-                        result.UsageGraphics1 = engineGraphics1;
-                    }
-
-                    results[i] = result;
-                }
-                catch (Exception)
-                {
-
-                }
-            }
-            return results;
-        }
-
-
-        private NPUDevice CreateDeviceNPU()
-        {
-            try
-            {
-                var devices = new List<NPUDevice>();
-                foreach (var device in _adapters.Where(x => x.IsHardware && x.Type == AdapterType.NPU))
-                {
-                    var deviceInfo = _deviceInfo.FirstOrDefault(d => d.Name == device.Description);
-                    devices.Add(new NPUDevice(device, deviceInfo));
-                }
-                return devices.FirstOrDefault();
-            }
-            catch (Exception)
-            {
-                return default;
-            }
-        }
-
-
-        private NPUStatus CreateStatusNPU(Dictionary<string, GPUUtilization[]> gpuUtilization, Dictionary<string, GPUMemory> gpuMemoryUsage, Dictionary<string, GPUMemory> gpuProcessUsage)
-        {
-            try
-            {
-                if (_npuDevice == default)
-                    return default;
-
-                var result = new NPUStatus(_npuDevice);
-                if (gpuMemoryUsage.TryGetValue(_npuDevice.AdapterId, out var memoryUsage))
-                {
-                    result.MemoryUsage = memoryUsage.SharedUsage / 1024f / 1024f;
-                }
-
-                if (gpuProcessUsage.TryGetValue(_npuDevice.AdapterId, out var processUsage))
-                {
-                    result.ProcessMemoryTotal = processUsage.DedicatedUsage / 1024f / 1024f;
-                    result.ProcessSharedMemoryUsage = processUsage.SharedUsage / 1024f / 1024f;
-                }
-
-                if (gpuUtilization.TryGetValue(_npuDevice.AdapterId, out var deviceUtilization))
-                {
-                    var utilization = deviceUtilization
-                        .GroupBy(x => x.Instance)
-                        .ToDictionary(u => u.Key, y => y.Sum(x => (int)x.Utilization));
-                    utilization.TryGetValue("Compute", out var engineCompute);
-                    result.Usage = engineCompute > 100 ? engineCompute - 100 : engineCompute;
-                }
+                _cpuTimes = cpuTimes;
+                _processIds = processIds;
                 return result;
             }
             catch (Exception)
@@ -284,132 +170,291 @@ namespace Amuse.App.Services
         }
 
 
+        /// <summary>
+        /// Gets the CPU usage percentage between two samples.
+        /// </summary>
+        /// <param name="previous">The previous sample.</param>
+        /// <param name="current">The current sample.</param>
+        private static int GetUsageCPU(CPUTimes previous, CPUTimes current)
+        {
+            var idle = current.Idle - previous.Idle;
+            var total = (current.Kernel - previous.Kernel) + (current.User - previous.User);
+            if (total == 0 || idle > total)
+                return 0;
+
+            return (int)Math.Round((total - idle) * 100.0 / total);
+        }
+
+
+        /// <summary>
+        /// Creates the GPU devices.
+        /// </summary>
+        private GPUDevice[] CreateDeviceGPU()
+        {
+            try
+            {
+                return _adapters
+                    .Where(x => x.Type == AdapterType.GPU)
+                    .Select(x => new GPUDevice(x, _deviceInfo.FirstOrDefault(d => d.Name == x.Description)))
+                    .ToArray();
+            }
+            catch (Exception)
+            {
+                return [];
+            }
+        }
+
+
+        /// <summary>
+        /// Creates the GPU status for each GPU device.
+        /// </summary>
+        /// <param name="gpuUtilization">The engine utilization per adapter.</param>
+        /// <param name="gpuMemoryUsage">The memory usage per adapter.</param>
+        /// <param name="gpuProcessUsage">The Amuse process memory usage per adapter.</param>
+        private GPUStatus[] CreateStatusGPU(Dictionary<string, Dictionary<string, double>> gpuUtilization, Dictionary<string, GPUMemory> gpuMemoryUsage, Dictionary<string, GPUMemory> gpuProcessUsage)
+        {
+            var results = new GPUStatus[_gpuDevices.Length];
+            for (int i = 0; i < _gpuDevices.Length; i++)
+            {
+                var device = _gpuDevices[i];
+                var result = new GPUStatus(device);
+                if (gpuMemoryUsage.TryGetValue(device.AdapterId, out var memoryUsage))
+                {
+                    result.MemoryUsage = memoryUsage.DedicatedUsage / 1024f / 1024f;
+                    result.SharedMemoryUsage = memoryUsage.SharedUsage / 1024f / 1024f;
+                }
+
+                if (gpuProcessUsage.TryGetValue(device.AdapterId, out var processUsage))
+                {
+                    result.ProcessMemoryUsage = processUsage.DedicatedUsage / 1024f / 1024f;
+                    result.ProcessSharedMemoryUsage = processUsage.SharedUsage / 1024f / 1024f;
+                }
+
+                if (gpuUtilization.TryGetValue(device.AdapterId, out var utilization))
+                {
+                    result.UsageCuda = GetEngineUsage(utilization, "Cuda");
+                    result.UsageCompute = Math.Max(GetEngineUsage(utilization, "Compute"), GetEngineUsage(utilization, "Compute0"));
+                    result.UsageCompute1 = GetEngineUsage(utilization, "Compute1");
+                    result.UsageGraphics = GetEngineUsage(utilization, "3D");
+                    result.UsageGraphics1 = GetEngineUsage(utilization, "Graphics1");
+                }
+
+                results[i] = result;
+            }
+            return results;
+        }
+
+
+        /// <summary>
+        /// Creates the NPU device.
+        /// </summary>
+        private NPUDevice CreateDeviceNPU()
+        {
+            try
+            {
+                return _adapters
+                    .Where(x => x.IsHardware && x.Type == AdapterType.NPU)
+                    .Select(x => new NPUDevice(x, _deviceInfo.FirstOrDefault(d => d.Name == x.Description)))
+                    .FirstOrDefault();
+            }
+            catch (Exception)
+            {
+                return default;
+            }
+        }
+
+
+        /// <summary>
+        /// Creates the NPU status.
+        /// </summary>
+        /// <param name="gpuUtilization">The engine utilization per adapter.</param>
+        /// <param name="gpuMemoryUsage">The memory usage per adapter.</param>
+        /// <param name="gpuProcessUsage">The Amuse process memory usage per adapter.</param>
+        private NPUStatus CreateStatusNPU(Dictionary<string, Dictionary<string, double>> gpuUtilization, Dictionary<string, GPUMemory> gpuMemoryUsage, Dictionary<string, GPUMemory> gpuProcessUsage)
+        {
+            if (_npuDevice == default)
+                return default;
+
+            var result = new NPUStatus(_npuDevice);
+            if (gpuMemoryUsage.TryGetValue(_npuDevice.AdapterId, out var memoryUsage))
+            {
+                result.MemoryUsage = memoryUsage.SharedUsage / 1024f / 1024f;
+            }
+
+            if (gpuProcessUsage.TryGetValue(_npuDevice.AdapterId, out var processUsage))
+            {
+                result.ProcessMemoryUsage = processUsage.DedicatedUsage / 1024f / 1024f;
+                result.ProcessSharedMemoryUsage = processUsage.SharedUsage / 1024f / 1024f;
+            }
+
+            if (gpuUtilization.TryGetValue(_npuDevice.AdapterId, out var utilization))
+            {
+                var engineCompute = GetEngineUsage(utilization, "Compute");
+                result.Usage = engineCompute > 100 ? engineCompute - 100 : engineCompute;
+            }
+            return result;
+        }
+
+
+        /// <summary>
+        /// Gets the memory usage of each adapter, in bytes.
+        /// </summary>
         private Dictionary<string, GPUMemory> GetMemoryUsageGPU()
         {
             var gpuMemory = new Dictionary<string, GPUMemory>();
             try
             {
-                using (var results = _objectSearcherGPUMemory.Get())
+                var dedicatedUsage = _gpuCounterQuery.GetValues(CounterGPUDedicatedUsage);
+                var sharedUsage = _gpuCounterQuery.GetValues(CounterGPUSharedUsage);
+                foreach (var adapterId in dedicatedUsage.Keys.Union(sharedUsage.Keys))
                 {
-                    foreach (var result in results)
-                    {
-                        using (result)
-                        {
-                            var adapterId = result["Name"]?.ToString();
-                            var sharedUsage = (ulong)result.Properties["SharedUsage"].Value;
-                            var dedicatedUsage = (ulong)result.Properties["DedicatedUsage"].Value;
-                            var totalCommitted = (ulong)result.Properties["TotalCommitted"].Value;
-                            gpuMemory[adapterId] = new GPUMemory(adapterId, sharedUsage, dedicatedUsage, totalCommitted, 0);
-                        }
-                    }
+                    dedicatedUsage.TryGetValue(adapterId, out var dedicated);
+                    sharedUsage.TryGetValue(adapterId, out var shared);
+                    gpuMemory[adapterId] = new GPUMemory((ulong)shared, (ulong)dedicated);
                 }
             }
             catch (Exception)
             {
-
+                // Counters unavailable
             }
             return gpuMemory;
         }
 
 
-
-        private Dictionary<string, GPUMemory> GetProcessMemoryUsageGPU()
+        /// <summary>
+        /// Gets the memory usage of the Amuse process tree on each adapter, in bytes.
+        /// </summary>
+        /// <param name="processIds">The Amuse process ids.</param>
+        private Dictionary<string, GPUMemory> GetProcessMemoryUsageGPU(HashSet<int> processIds)
         {
             var gpuMemory = new Dictionary<string, GPUMemory>();
             try
             {
-                using (var results = _objectSearcherGPUProcessMemory.Get())
+                var dedicatedUsage = SumProcessUsage(_gpuCounterQuery.GetValues(CounterGPUProcessDedicatedUsage), processIds);
+                var sharedUsage = SumProcessUsage(_gpuCounterQuery.GetValues(CounterGPUProcessSharedUsage), processIds);
+                foreach (var adapterId in dedicatedUsage.Keys.Union(sharedUsage.Keys))
                 {
-                    foreach (var result in results)
-                    {
-                        using (result)
-                        {
-                            var parts = result.Properties["Name"].Value.ToString().Split('_');
-                            int.TryParse(parts[1], out int pid);
-                            var adapterId = string.Join('_', parts.Skip(2));
-                            var sharedUsage = (ulong)result.Properties["SharedUsage"].Value;
-                            var dedicatedUsage = (ulong)result.Properties["DedicatedUsage"].Value;
-                            var totalCommitted = (ulong)result.Properties["TotalCommitted"].Value;
-                            gpuMemory[adapterId] = new GPUMemory(adapterId, sharedUsage, dedicatedUsage, totalCommitted, pid);
-                        }
-                    }
+                    dedicatedUsage.TryGetValue(adapterId, out var dedicated);
+                    sharedUsage.TryGetValue(adapterId, out var shared);
+                    gpuMemory[adapterId] = new GPUMemory((ulong)shared, (ulong)dedicated);
                 }
             }
             catch (Exception)
             {
-
+                // Counters unavailable
             }
             return gpuMemory;
         }
 
 
-
-        private Dictionary<string, GPUUtilization[]> GetUtilizationGPU()
+        /// <summary>
+        /// Sums per-process counter values by adapter for the given processes.
+        /// </summary>
+        /// <param name="values">The counter values keyed by instance, e.g. pid_1234_luid_0x00000000_0x0000D1AB_phys_0.</param>
+        /// <param name="processIds">The process ids to include.</param>
+        private static Dictionary<string, double> SumProcessUsage(Dictionary<string, double> values, HashSet<int> processIds)
         {
-            var gpuUtilization = new List<GPUUtilization>();
+            var results = new Dictionary<string, double>();
+            foreach (var value in values)
+            {
+                var parts = value.Key.Split('_');
+                if (parts.Length < 3 || !int.TryParse(parts[1], out var pid) || !processIds.Contains(pid))
+                    continue;
+
+                var adapterId = string.Join('_', parts.Skip(2));
+                results.TryGetValue(adapterId, out var total);
+                results[adapterId] = total + value.Value;
+            }
+            return results;
+        }
+
+
+        /// <summary>
+        /// Gets the utilization of each engine type, summed over all processes, for each adapter.
+        /// </summary>
+        private Dictionary<string, Dictionary<string, double>> GetUtilizationGPU()
+        {
+            var gpuUtilization = new Dictionary<string, Dictionary<string, double>>();
             try
             {
-                using (var results = _objectSearcherGPUEngine.Get())
+                foreach (var value in _gpuCounterQuery.GetValues(CounterGPUEngine))
                 {
-                    foreach (var result in results)
-                    {
-                        using (result)
-                        {
-                            var percentage = (ulong)result.Properties["UtilizationPercentage"].Value;
-                            if (percentage == 0)
-                                continue;
+                    if (value.Value <= 0)
+                        continue;
 
-                            string instanceName = result["Name"]?.ToString();
-                            if (instanceName.Contains("engtype_Cuda") || instanceName.Contains("engtype_3D") || instanceName.Contains("engtype_Graphics") || instanceName.Contains("engtype_Compute"))
-                            {
-                                var parts = result.Properties["Name"].Value.ToString().Split('_');
-                                int.TryParse(parts[1], out int pid);
-                                var instance = string.Concat(parts.Skip(10)).Replace(" ", string.Empty);
-                                var adapterId = string.Join('_', parts.Skip(2).Take(5));
-                                gpuUtilization.Add(new GPUUtilization(adapterId, instance, percentage, pid));
-                            }
-                        }
+                    var instanceName = value.Key;
+                    if (!instanceName.Contains("engtype_Cuda") && !instanceName.Contains("engtype_3D") && !instanceName.Contains("engtype_Graphics") && !instanceName.Contains("engtype_Compute"))
+                        continue;
+
+                    var parts = instanceName.Split('_');
+                    if (parts.Length < 11)
+                        continue;
+
+                    var adapterId = string.Join('_', parts.Skip(2).Take(5));
+                    var instance = string.Concat(parts.Skip(10)).Replace(" ", string.Empty);
+                    if (!gpuUtilization.TryGetValue(adapterId, out var adapterUtilization))
+                    {
+                        adapterUtilization = new Dictionary<string, double>();
+                        gpuUtilization[adapterId] = adapterUtilization;
                     }
+
+                    adapterUtilization.TryGetValue(instance, out var total);
+                    adapterUtilization[instance] = total + value.Value;
                 }
             }
             catch (Exception)
             {
-
+                // Counters unavailable
             }
-
-            return gpuUtilization
-                .GroupBy(x => x.AdapterId)
-                .ToDictionary(k => k.Key, v => v.ToArray());
+            return gpuUtilization;
         }
 
 
+        /// <summary>
+        /// Gets the usage percentage of an engine type.
+        /// </summary>
+        /// <param name="utilization">The adapter engine utilization.</param>
+        /// <param name="engine">The engine type.</param>
+        private static int GetEngineUsage(Dictionary<string, double> utilization, string engine)
+        {
+            return utilization.TryGetValue(engine, out var usage) ? (int)Math.Round(usage) : 0;
+        }
+
+
+        /// <summary>
+        /// Gets the driver information for each adapter.
+        /// </summary>
         private DeviceInfo[] GetDeviceInfo()
         {
             try
             {
                 var versions = new List<DeviceInfo>();
-                var devices = _adapters.Select(x => x.Description).ToArray();
-
-                using (var results = _objectSearcherDriver.Get())
+                var devices = _adapters.Select(x => x.Description).ToHashSet();
+                using (var objectSearcher = new ManagementObjectSearcher("root\\CIMV2", "SELECT DeviceID, DeviceName, DriverVersion, Location FROM Win32_PnPSignedDriver"))
                 {
-                    foreach (var result in results)
+                    using (var results = objectSearcher.Get())
                     {
-                        var deviceName = result["DeviceName"]?.ToString() ?? string.Empty;
-                        if (!devices.Contains(deviceName))
-                            continue;
+                        foreach (var result in results)
+                        {
+                            using (result)
+                            {
+                                var deviceName = result["DeviceName"]?.ToString() ?? string.Empty;
+                                if (!devices.Contains(deviceName))
+                                    continue;
 
-                        var deviceType = string.Empty;
-                        var deviceIdStr = result["DeviceID"]?.ToString() ?? string.Empty;
-                        var location = result["Location"]?.ToString() ?? string.Empty;
-                        var driverVersion = result["DriverVersion"]?.ToString() ?? string.Empty;
-                        var match = Regex.Match(deviceIdStr, @"DEV_([0-9A-Fa-f]{4})");
-                        if (match.Success)
-                            deviceType = GetDeviceType(deviceIdStr, match.Groups[1].Value.ToUpper());
+                                var deviceType = string.Empty;
+                                var deviceIdStr = result["DeviceID"]?.ToString() ?? string.Empty;
+                                var location = result["Location"]?.ToString() ?? string.Empty;
+                                var driverVersion = result["DriverVersion"]?.ToString() ?? string.Empty;
+                                var match = Regex.Match(deviceIdStr, @"DEV_([0-9A-Fa-f]{4})");
+                                if (match.Success)
+                                    deviceType = GetDeviceType(deviceIdStr, match.Groups[1].Value.ToUpper());
 
-                        versions.Add(new DeviceInfo(deviceName.Trim(), driverVersion, location, deviceType));
+                                versions.Add(new DeviceInfo(deviceName.Trim(), driverVersion, location, deviceType));
+                            }
+                        }
                     }
                 }
-
                 return versions.ToArray();
             }
             catch (Exception)
@@ -419,55 +464,75 @@ namespace Amuse.App.Services
         }
 
 
+        /// <summary>
+        /// Creates the CPU update thread.
+        /// </summary>
+        /// <param name="refreshRate">The refresh rate in milliseconds.</param>
+        /// <param name="cancellationToken">The cancellation token.</param>
         private void CreateUpdateThreadCPU(int refreshRate, CancellationToken cancellationToken)
         {
             _cpuUpdateThread = new Thread(() =>
             {
-                while (true)
+                try
                 {
-                    try
+                    while (!cancellationToken.IsCancellationRequested)
                     {
                         _updateThreadResetEvent.WaitOne();
-                        cancellationToken.ThrowIfCancellationRequested();
+                        if (cancellationToken.IsCancellationRequested)
+                            break;
 
-                        var timestamp = Stopwatch.GetTimestamp();
                         _cpuStatus = CreateStatusCPU();
-                        var eplased = Stopwatch.GetElapsedTime(timestamp).TotalMilliseconds;
-                        Thread.Sleep(refreshRate);
+                        if (cancellationToken.WaitHandle.WaitOne(refreshRate))
+                            break;
                     }
-                    catch (OperationCanceledException) { break; }
-                    catch (ThreadInterruptedException) { break; }
+                }
+                catch (ObjectDisposedException)
+                {
+                    // Service disposed
                 }
             });
+            _cpuUpdateThread.Name = "HardwareService CPU";
             _cpuUpdateThread.IsBackground = true;
             _cpuUpdateThread.Start();
         }
 
 
+        /// <summary>
+        /// Creates the GPU and NPU update thread.
+        /// </summary>
+        /// <param name="refreshRate">The refresh rate in milliseconds.</param>
+        /// <param name="cancellationToken">The cancellation token.</param>
         private void CreateUpdateThreadGPU(int refreshRate, CancellationToken cancellationToken)
         {
             _gpuUpdateThread = new Thread(() =>
             {
-                while (true)
+                try
                 {
-                    try
+                    while (!cancellationToken.IsCancellationRequested)
                     {
                         _updateThreadResetEvent.WaitOne();
-                        cancellationToken.ThrowIfCancellationRequested();
+                        if (cancellationToken.IsCancellationRequested)
+                            break;
 
-                        var timestamp = Stopwatch.GetTimestamp();
-                        var gpuProcessMemoryUsage = GetProcessMemoryUsageGPU();
-                        var gpuMemoryUsage = GetMemoryUsageGPU();
-                        var gpuUtilization = GetUtilizationGPU();
-                        _gpuStatus = CreateStatusGPU(gpuUtilization, gpuMemoryUsage, gpuProcessMemoryUsage);
-                        _npuStatus = CreateStatusNPU(gpuUtilization, gpuMemoryUsage, gpuProcessMemoryUsage);
-                        var eplased = Stopwatch.GetElapsedTime(timestamp).TotalMilliseconds;
-                        Thread.Sleep(refreshRate);
+                        if (_gpuCounterQuery.Collect())
+                        {
+                            var gpuUtilization = GetUtilizationGPU();
+                            var gpuMemoryUsage = GetMemoryUsageGPU();
+                            var gpuProcessMemoryUsage = GetProcessMemoryUsageGPU(_processIds);
+                            _gpuStatus = CreateStatusGPU(gpuUtilization, gpuMemoryUsage, gpuProcessMemoryUsage);
+                            _npuStatus = CreateStatusNPU(gpuUtilization, gpuMemoryUsage, gpuProcessMemoryUsage);
+                        }
+
+                        if (cancellationToken.WaitHandle.WaitOne(refreshRate))
+                            break;
                     }
-                    catch (OperationCanceledException) { break; }
-                    catch (ThreadInterruptedException) { break; }
+                }
+                catch (ObjectDisposedException)
+                {
+                    // Service disposed
                 }
             });
+            _gpuUpdateThread.Name = "HardwareService GPU";
             _gpuUpdateThread.IsBackground = true;
             _gpuUpdateThread.Start();
         }
@@ -502,37 +567,52 @@ namespace Amuse.App.Services
 
 
         /// <summary>
-        /// Pauses this instance.
+        /// Pauses the status updates.
         /// </summary>
         public void Pause()
         {
-            _updateThreadResetEvent.Reset();
+            if (!_isDisposed)
+                _updateThreadResetEvent.Reset();
         }
 
 
         /// <summary>
-        /// Resumes this instance.
+        /// Resumes the status updates.
         /// </summary>
         public void Resume()
         {
-            _updateThreadResetEvent.Set();
+            if (!_isDisposed)
+                _updateThreadResetEvent.Set();
         }
 
 
         /// <summary>
-        /// Performs application-defined tasks associated with freeing, releasing, or resetting unmanaged resources.
+        /// Stops the update threads and releases the counters.
         /// </summary>
         public void Dispose()
         {
+            if (_isDisposed)
+                return;
+
+            _isDisposed = true;
             _cancellationTokenSource.Cancel();
             _updateThreadResetEvent.Set();
-            _cpuUpdateThread.Join();
-            _gpuUpdateThread.Join();
+            var isCPUThreadStopped = _cpuUpdateThread.Join(_shutdownTimeout);
+            var isGPUThreadStopped = _gpuUpdateThread.Join(_shutdownTimeout);
+            if (!isCPUThreadStopped || !isGPUThreadStopped)
+                return;
+
+            _gpuCounterQuery.Dispose();
             _updateThreadResetEvent.Dispose();
             _cancellationTokenSource.Dispose();
         }
 
 
+        /// <summary>
+        /// Gets the AMD gfx target for a device, or the device id for other vendors.
+        /// </summary>
+        /// <param name="device">The PnP device id string.</param>
+        /// <param name="deviceId">The 4 digit hex device id.</param>
         public static string GetDeviceType(string device, string deviceId)
         {
             if (string.IsNullOrEmpty(deviceId) || string.IsNullOrEmpty(device))
@@ -619,8 +699,7 @@ namespace Amuse.App.Services
         }
 
 
-        private record struct GPUUtilization(string AdapterId, string Instance, ulong Utilization, int ProcessId);
-        private record struct GPUMemory(string AdapterId, ulong SharedUsage, ulong DedicatedUsage, ulong TotalCommitted, int ProcessId);
+        private record struct GPUMemory(ulong SharedUsage, ulong DedicatedUsage);
     }
 
 
@@ -673,12 +752,10 @@ namespace Amuse.App.Services
 
         public float MemoryTotal { get; }
 
-
-
-
         public int Usage { get; set; }
         public int MemoryUsage { get; set; }
         public float MemoryAvailable { get; set; }
+        public float ProcessMemoryUsage { get; set; }
     }
 
     public record struct DeviceInfo(string Name, string DriverVersion, string Location, string DeviceType);
@@ -759,7 +836,7 @@ namespace Amuse.App.Services
         public float SharedMemoryTotal { get; set; }
         public float SharedMemoryUsage { get; set; }
 
-        public float ProcessMemoryTotal { get; set; }
+        public float ProcessMemoryUsage { get; set; }
         public float ProcessSharedMemoryUsage { get; set; }
 
         public int UsageCuda { get; set; }
@@ -807,7 +884,7 @@ namespace Amuse.App.Services
         public float MemoryTotal { get; set; }
         public float MemoryUsage { get; set; }
 
-        public float ProcessMemoryTotal { get; set; }
+        public float ProcessMemoryUsage { get; set; }
         public float ProcessSharedMemoryUsage { get; set; }
     }
 
@@ -894,6 +971,152 @@ namespace Amuse.App.Services
             var memStatus = new MemoryStatusEx();
             GlobalMemoryStatusEx(ref memStatus);
             return memStatus;
+        }
+
+
+        /// <summary>
+        /// Gets the system idle, kernel and user times.
+        /// </summary>
+        public static CPUTimes GetCPUTimes()
+        {
+            if (!GetSystemTimes(out var idle, out var kernel, out var user))
+                return default;
+
+            return new CPUTimes(idle, kernel, user);
+        }
+
+
+        /// <summary>
+        /// Gets a process and all of its descendant processes, e.g. Amuse and its AmuseHost processes.
+        /// </summary>
+        /// <param name="rootProcessId">The root process id.</param>
+        public static HashSet<int> GetProcessTree(int rootProcessId)
+        {
+            var processTree = new HashSet<int> { rootProcessId };
+            var snapshot = CreateToolhelp32Snapshot(TH32CS_SNAPPROCESS, 0);
+            if (snapshot == INVALID_HANDLE_VALUE)
+                return processTree;
+
+            try
+            {
+                var processes = new List<(int ProcessId, int ParentId)>();
+                var entry = new ProcessEntry32 { Size = (uint)Marshal.SizeOf<ProcessEntry32>() };
+                if (Process32FirstW(snapshot, ref entry))
+                {
+                    do
+                    {
+                        processes.Add(((int)entry.ProcessId, (int)entry.ParentProcessId));
+                    }
+                    while (Process32NextW(snapshot, ref entry));
+                }
+
+                var isChanged = true;
+                while (isChanged)
+                {
+                    isChanged = false;
+                    foreach (var (processId, parentId) in processes)
+                    {
+                        if (processId != parentId && processTree.Contains(parentId) && processTree.Add(processId))
+                            isChanged = true;
+                    }
+                }
+            }
+            finally
+            {
+                CloseHandle(snapshot);
+            }
+            return processTree;
+        }
+
+
+        /// <summary>
+        /// Gets the total working set of the given processes, in bytes.
+        /// </summary>
+        /// <param name="processIds">The process ids.</param>
+        public static ulong GetWorkingSet(IEnumerable<int> processIds)
+        {
+            ulong workingSet = 0;
+            foreach (var processId in processIds)
+            {
+                var process = OpenProcess(PROCESS_QUERY_LIMITED_INFORMATION, false, processId);
+                if (process == IntPtr.Zero)
+                    continue;
+
+                try
+                {
+                    var counters = new ProcessMemoryCounters { Size = (uint)Marshal.SizeOf<ProcessMemoryCounters>() };
+                    if (K32GetProcessMemoryInfo(process, ref counters, counters.Size))
+                        workingSet += (ulong)counters.WorkingSetSize;
+                }
+                finally
+                {
+                    CloseHandle(process);
+                }
+            }
+            return workingSet;
+        }
+
+
+        private const uint TH32CS_SNAPPROCESS = 0x00000002;
+        private const uint PROCESS_QUERY_LIMITED_INFORMATION = 0x1000;
+        private static readonly IntPtr INVALID_HANDLE_VALUE = new IntPtr(-1);
+
+        [DllImport("kernel32.dll", SetLastError = true)]
+        [return: MarshalAs(UnmanagedType.Bool)]
+        private static extern bool GetSystemTimes(out ulong idleTime, out ulong kernelTime, out ulong userTime);
+
+        [DllImport("kernel32.dll", SetLastError = true)]
+        private static extern IntPtr CreateToolhelp32Snapshot(uint flags, uint processId);
+
+        [DllImport("kernel32.dll", CharSet = CharSet.Unicode, SetLastError = true)]
+        [return: MarshalAs(UnmanagedType.Bool)]
+        private static extern bool Process32FirstW(IntPtr snapshot, ref ProcessEntry32 entry);
+
+        [DllImport("kernel32.dll", CharSet = CharSet.Unicode, SetLastError = true)]
+        [return: MarshalAs(UnmanagedType.Bool)]
+        private static extern bool Process32NextW(IntPtr snapshot, ref ProcessEntry32 entry);
+
+        [DllImport("kernel32.dll", SetLastError = true)]
+        private static extern IntPtr OpenProcess(uint desiredAccess, [MarshalAs(UnmanagedType.Bool)] bool inheritHandle, int processId);
+
+        [DllImport("kernel32.dll", SetLastError = true)]
+        [return: MarshalAs(UnmanagedType.Bool)]
+        private static extern bool K32GetProcessMemoryInfo(IntPtr process, ref ProcessMemoryCounters counters, uint size);
+
+        [DllImport("kernel32.dll", SetLastError = true)]
+        [return: MarshalAs(UnmanagedType.Bool)]
+        private static extern bool CloseHandle(IntPtr handle);
+
+        [StructLayout(LayoutKind.Sequential, CharSet = CharSet.Unicode)]
+        private struct ProcessEntry32
+        {
+            public uint Size;
+            public uint Usage;
+            public uint ProcessId;
+            public IntPtr DefaultHeapId;
+            public uint ModuleId;
+            public uint Threads;
+            public uint ParentProcessId;
+            public int PriorityClassBase;
+            public uint Flags;
+
+            [MarshalAs(UnmanagedType.ByValTStr, SizeConst = 260)]
+            public string ExeFile;
+        }
+
+        [StructLayout(LayoutKind.Sequential)]
+        private struct ProcessMemoryCounters
+        {
+            public uint Size;
+            public uint PageFaultCount;
+            public UIntPtr PeakWorkingSetSize;
+            public UIntPtr WorkingSetSize;
+            public UIntPtr QuotaPeakPagedPoolUsage;
+            public UIntPtr QuotaPagedPoolUsage;
+            public UIntPtr QuotaPeakNonPagedPoolUsage;
+            public UIntPtr QuotaNonPagedPoolUsage;
+            public UIntPtr PagefileUsage;
+            public UIntPtr PeakPagefileUsage;
         }
 
     }
@@ -997,6 +1220,12 @@ namespace Amuse.App.Services
         Other = 2
     }
 
+    /// <summary>
+    /// System CPU times in 100ns units, kernel time includes idle time.
+    /// </summary>
+    public record struct CPUTimes(ulong Idle, ulong Kernel, ulong User);
+
+
     [StructLayout(LayoutKind.Sequential)]
     public struct MemoryStatusEx
     {
@@ -1014,5 +1243,144 @@ namespace Amuse.App.Services
         {
             Length = (uint)Marshal.SizeOf(typeof(MemoryStatusEx));
         }
+    }
+
+
+    /// <summary>
+    /// Reads wildcard Windows performance counters through PDH, which is far cheaper than the WMI formatted performance classes.
+    /// </summary>
+    public sealed class PerformanceCounterQuery : IDisposable
+    {
+        private const uint PDH_FMT_DOUBLE = 0x00000200;
+        private const uint PDH_FMT_NOCAP100 = 0x00008000;
+        private const uint PDH_MORE_DATA = 0x800007D2;
+        private const uint PDH_CSTATUS_VALID_DATA = 0x00000000;
+        private const uint PDH_CSTATUS_NEW_DATA = 0x00000001;
+
+        private readonly Dictionary<string, IntPtr> _counters = new Dictionary<string, IntPtr>();
+        private IntPtr _query;
+        private bool _isDisposed;
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="PerformanceCounterQuery"/> class.
+        /// </summary>
+        /// <param name="counterPaths">The English counter paths, e.g. \GPU Engine(*)\Utilization Percentage.</param>
+        public PerformanceCounterQuery(params string[] counterPaths)
+        {
+            if (PdhOpenQuery(null, IntPtr.Zero, out _query) != 0)
+            {
+                _query = IntPtr.Zero;
+                return;
+            }
+
+            foreach (var counterPath in counterPaths)
+            {
+                if (PdhAddEnglishCounter(_query, counterPath, IntPtr.Zero, out var counter) == 0)
+                    _counters[counterPath] = counter;
+            }
+        }
+
+
+        /// <summary>
+        /// Collects a new sample for every counter in the query.
+        /// </summary>
+        /// <returns><c>true</c> if the sample was collected, otherwise <c>false</c>.</returns>
+        public bool Collect()
+        {
+            if (_isDisposed || _query == IntPtr.Zero)
+                return false;
+
+            return PdhCollectQueryData(_query) == 0;
+        }
+
+
+        /// <summary>
+        /// Gets the formatted value of each instance of a counter from the last collected sample.
+        /// Rate counters return no values until two samples have been collected.
+        /// </summary>
+        /// <param name="counterPath">The counter path.</param>
+        /// <returns>The value for each instance name.</returns>
+        public Dictionary<string, double> GetValues(string counterPath)
+        {
+            var values = new Dictionary<string, double>();
+            if (_isDisposed || !_counters.TryGetValue(counterPath, out var counter))
+                return values;
+
+            uint bufferSize = 0;
+            uint itemCount = 0;
+            var status = PdhGetFormattedCounterArray(counter, PDH_FMT_DOUBLE | PDH_FMT_NOCAP100, ref bufferSize, ref itemCount, IntPtr.Zero);
+            if (status != PDH_MORE_DATA || bufferSize == 0)
+                return values;
+
+            var buffer = Marshal.AllocHGlobal((int)bufferSize);
+            try
+            {
+                status = PdhGetFormattedCounterArray(counter, PDH_FMT_DOUBLE | PDH_FMT_NOCAP100, ref bufferSize, ref itemCount, buffer);
+                if (status != 0)
+                    return values;
+
+                var itemSize = Marshal.SizeOf<PdhCounterValueItem>();
+                for (int i = 0; i < itemCount; i++)
+                {
+                    var item = Marshal.PtrToStructure<PdhCounterValueItem>(buffer + (i * itemSize));
+                    if (item.CStatus != PDH_CSTATUS_VALID_DATA && item.CStatus != PDH_CSTATUS_NEW_DATA)
+                        continue;
+
+                    var name = Marshal.PtrToStringUni(item.Name);
+                    if (string.IsNullOrEmpty(name))
+                        continue;
+
+                    values.TryGetValue(name, out var existing);
+                    values[name] = existing + item.Value;
+                }
+            }
+            finally
+            {
+                Marshal.FreeHGlobal(buffer);
+            }
+            return values;
+        }
+
+
+        /// <summary>
+        /// Closes the query and releases its counters.
+        /// </summary>
+        public void Dispose()
+        {
+            if (_isDisposed)
+                return;
+
+            _isDisposed = true;
+            if (_query != IntPtr.Zero)
+            {
+                PdhCloseQuery(_query);
+                _query = IntPtr.Zero;
+            }
+            _counters.Clear();
+        }
+
+
+        [StructLayout(LayoutKind.Sequential)]
+        private struct PdhCounterValueItem
+        {
+            public IntPtr Name;
+            public uint CStatus;
+            public double Value;
+        }
+
+        [DllImport("pdh.dll", CharSet = CharSet.Unicode)]
+        private static extern uint PdhOpenQuery(string dataSource, IntPtr userData, out IntPtr query);
+
+        [DllImport("pdh.dll", CharSet = CharSet.Unicode)]
+        private static extern uint PdhAddEnglishCounter(IntPtr query, string counterPath, IntPtr userData, out IntPtr counter);
+
+        [DllImport("pdh.dll")]
+        private static extern uint PdhCollectQueryData(IntPtr query);
+
+        [DllImport("pdh.dll", CharSet = CharSet.Unicode)]
+        private static extern uint PdhGetFormattedCounterArray(IntPtr counter, uint format, ref uint bufferSize, ref uint itemCount, IntPtr itemBuffer);
+
+        [DllImport("pdh.dll")]
+        private static extern uint PdhCloseQuery(IntPtr query);
     }
 }

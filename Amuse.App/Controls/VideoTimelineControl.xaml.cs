@@ -1,5 +1,4 @@
 ﻿using Amuse.App.Resources;
-using Amuse.App.Services;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -20,8 +19,8 @@ using TensorStack.Common.Video;
 using TensorStack.Media.Audio;
 using TensorStack.Media.Video;
 using TensorStack.WPF;
-using TensorStack.WPF.Controls;
 using TensorStack.WPF.Image;
+using TensorStack.WPF.Resources;
 using TensorStack.WPF.Services;
 
 namespace Amuse.App.Controls
@@ -29,10 +28,11 @@ namespace Amuse.App.Controls
     /// <summary>
     /// Interaction logic for VideoTimelineControl.xaml
     /// </summary>
-    public partial class VideoTimelineControl : BaseControl
+    public partial class VideoTimelineControl : TimelineControlBase
     {
+        private const int ReferencePeakRate = 100;
+        private const double MinimumPeak = 0.03;
         private readonly DispatcherTimer _progressTimer;
-        private CancellationTokenSource _cancellationTokenSource;
         private TimelineFrameModel _previewFrame;
         private TimelineFrameModel _previewOverlay;
         private int _timelineLength;
@@ -52,6 +52,11 @@ namespace Amuse.App.Controls
         private TimelineSegment _selectedSegement;
         private TimelineFrameModel _selectedFrame;
         private bool _isAudioEnabled = true;
+        private bool _isAudioPlaying;
+        private bool _isPlaybackUpdate;
+        private AudioInputStream _referenceAudio;
+        private float[] _referencePeakSource;
+        private double[] _referencePeaks = [];
 
         /// <summary>
         /// Initializes a new instance of the <see cref="VideoTimelineControl"/> class.
@@ -62,13 +67,12 @@ namespace Amuse.App.Controls
             _progressTimer.Stop();
             TimelineSegements = [];
             TimelineMarkers = [];
-            Progress = new ProgressInfo();
-            CancelCommand = new AsyncRelayCommand(CancelAsync, CanCancel);
             SaveVideoCommand = new AsyncRelayCommand(SaveVideoAsync, CanSaveVideo);
             LoadVideoCommand = new AsyncRelayCommand(LoadVideoAsync, CanLoadVideo);
             LoadImageCommand = new AsyncRelayCommand(LoadImageAsync, CanLoadImage);
             LoadOverlayCommand = new AsyncRelayCommand(LoadOverlayAsync, CanLoadImage);
-            LoadAudioCommand = new AsyncRelayCommand(LoadAudioAsync, CanLoadImage);
+            LoadReferenceCommand = new AsyncRelayCommand(LoadReferenceAsync, CanLoadVideo);
+            RemoveReferenceCommand = new AsyncRelayCommand(RemoveReferenceAsync, CanRemoveReference);
             TimelinePlayCommand = new AsyncRelayCommand(TimelinePlayAsync, CanTimelineEditVideo);
             TimelineStopCommand = new AsyncRelayCommand(TimelineStopAsync, CanTimelineEditVideo);
             TimelinePauseCommand = new AsyncRelayCommand(TimelinePauseAsync, CanTimelineEditVideo);
@@ -91,15 +95,13 @@ namespace Amuse.App.Controls
             InitializeComponent();
         }
 
-        public static readonly DependencyProperty IsControlBusyProperty = DependencyProperty.Register(nameof(IsControlBusy), typeof(bool), typeof(VideoTimelineControl));
-        public static readonly DependencyProperty MediaServiceProperty = DependencyProperty.Register(nameof(MediaService), typeof(IMediaService), typeof(VideoTimelineControl));
         public event EventHandler<VideoInputStream> OnVideoCreated;
         public event EventHandler<ImageInput> OnImageCreated;
-        public AsyncRelayCommand CancelCommand { get; }
         public AsyncRelayCommand LoadVideoCommand { get; }
         public AsyncRelayCommand LoadImageCommand { get; }
         public AsyncRelayCommand LoadOverlayCommand { get; }
-        public AsyncRelayCommand LoadAudioCommand { get; }
+        public AsyncRelayCommand LoadReferenceCommand { get; }
+        public AsyncRelayCommand RemoveReferenceCommand { get; }
         public AsyncRelayCommand SaveVideoCommand { get; }
         public AsyncRelayCommand TimelinePlayCommand { get; }
         public AsyncRelayCommand TimelineStopCommand { get; }
@@ -122,30 +124,13 @@ namespace Amuse.App.Controls
         public AsyncRelayCommand SegmentRemoveCommand { get; }
         public ObservableCollection<TimelineSegment> TimelineSegements { get; }
         public ObservableCollection<TimeSpan> TimelineMarkers { get; }
-        public ProgressInfo Progress { get; }
-
-        public bool IsControlBusy
-        {
-            get { return (bool)GetValue(IsControlBusyProperty); }
-            set { SetValue(IsControlBusyProperty, value); }
-        }
-
-        public IMediaService MediaService
-        {
-            get { return (IMediaService)GetValue(MediaServiceProperty); }
-            set { SetValue(MediaServiceProperty, value); }
-        }
-
-        public CancellationTokenSource CancellationTokenSource
-        {
-            get { return _cancellationTokenSource; }
-            set { _cancellationTokenSource = value; CommandManager.InvalidateRequerySuggested(); }
-        }
+        public bool HasReference => _referenceAudio != null;
+        public double PlayheadLeft => _timelinePosition * _timelineFrameWidth;
 
         public double TimelineFrameWidth
         {
             get { return _timelineFrameWidth; }
-            set { SetProperty(ref _timelineFrameWidth, value); ScrollTimeline(); }
+            set { SetProperty(ref _timelineFrameWidth, value); NotifyPropertyChanged(nameof(PlayheadLeft)); ScrollTimeline(); }
         }
 
         public int PreviewFrameSize
@@ -215,7 +200,14 @@ namespace Amuse.App.Controls
         public int TimelinePosition
         {
             get { return _timelinePosition; }
-            set { SetProperty(ref _timelinePosition, value); UpdatePositionTime(); }
+            set
+            {
+                SetProperty(ref _timelinePosition, value);
+                UpdatePositionTime();
+                NotifyPropertyChanged(nameof(PlayheadLeft));
+                if (_progressTimer.IsEnabled && !_isPlaybackUpdate)
+                    SyncReferencePlayback();
+            }
         }
 
         public int TimelinePositions
@@ -260,8 +252,20 @@ namespace Amuse.App.Controls
             set { SetProperty(ref _isAudioEnabled, value); }
         }
 
-        private bool CanCancel() => _cancellationTokenSource != null;
+        public AudioInputStream ReferenceAudio
+        {
+            get { return _referenceAudio; }
+            set { SetProperty(ref _referenceAudio, value); NotifyPropertyChanged(nameof(HasReference)); }
+        }
+
+        public double[] ReferencePeaks
+        {
+            get { return _referencePeaks; }
+            set { SetProperty(ref _referencePeaks, value); }
+        }
+
         private bool CanLoadVideo() => !IsControlBusy;
+        private bool CanRemoveReference() => !IsControlBusy && HasReference;
         private bool CanLoadImage() => !IsControlBusy && TimelineFrameRate.HasValue;
         private bool CanSaveVideo() => !IsControlBusy && TimelineFrameRate.HasValue;
         private bool CanTimelineEditVideo() => !IsControlBusy && TimelineFrameRate.HasValue;
@@ -271,12 +275,6 @@ namespace Amuse.App.Controls
         private bool CanSegmentMove() => TimelineSegements.Count > 1 && _selectedSegement != null;
         private bool CanSegmentCopy() => TimelineSegements.Count > 0 && _selectedSegement != null;
         private bool CanSegmentRemove() => TimelineSegements.Count > 1 && _selectedSegement != null;
-
-
-        private async Task CancelAsync()
-        {
-            await _cancellationTokenSource.SafeCancelAsync();
-        }
 
 
         private async Task SaveVideoAsync()
@@ -292,9 +290,9 @@ namespace Amuse.App.Controls
                     {
                         // Audio, mixed first so it is written with the frames
                         if (_isAudioEnabled)
-                            audioFile = await AudioManager.CreateAudioTimelineAsync(await CreateAudioTimeline(), _cancellationTokenSource.Token);
+                            audioFile = await AudioManager.CreateAudioTimelineAsync(await CreateAudioTimeline(), CancellationTokenSource.Token);
 
-                        await GetOutputVideoFrames(_cancellationTokenSource.Token).SaveAsync(tempFilename, audioSourceFile: audioFile, cancellationToken: _cancellationTokenSource.Token);
+                        await GetOutputVideoFrames(CancellationTokenSource.Token).SaveAsync(tempFilename, audioSourceFile: audioFile, cancellationToken: CancellationTokenSource.Token);
                     }
                     finally
                     {
@@ -306,6 +304,10 @@ namespace Amuse.App.Controls
                 }
             }
             catch (OperationCanceledException) { }
+            catch (Exception ex)
+            {
+                await DialogService.ShowErrorAsync(AppErrors.UnexpectedErrorTitle, ex.Message);
+            }
             finally
             {
                 IsControlBusy = false;
@@ -317,10 +319,11 @@ namespace Amuse.App.Controls
 
         private async Task TimelineClearAsync()
         {
-            if (!await DialogService.ShowMessageAsync("Clear Timeline", "Are you sure you want to clear the timeline?", TensorStack.WPF.Dialogs.MessageDialogType.YesNo, TensorStack.WPF.Dialogs.MessageBoxIconType.Question, TensorStack.WPF.Dialogs.MessageBoxStyleType.Info))
+            if (!await DialogService.ShowMessageAsync(AppDefault.ClearTimeline, AppDefault.ClearTimelineMessage, TensorStack.WPF.Dialogs.MessageDialogType.YesNo, TensorStack.WPF.Dialogs.MessageBoxIconType.Question, TensorStack.WPF.Dialogs.MessageBoxStyleType.Info))
                 return;
 
             await TimelineStopAsync();
+            ClearReference();
             PreviewFrame = null;
             PreviewOverlay = null;
             TimelineSegements.Clear();
@@ -338,9 +341,13 @@ namespace Amuse.App.Controls
         }
 
 
+        /// <summary>
+        /// Plays the timeline from the current frame, the reference audio plays with it and the frames follow the audio.
+        /// </summary>
         private Task TimelinePlayAsync()
         {
             _progressTimer.Start();
+            SyncReferencePlayback();
             return Task.CompletedTask;
         }
 
@@ -350,20 +357,55 @@ namespace Amuse.App.Controls
             if (_progressTimer.IsEnabled)
             {
                 _progressTimer.Stop();
+                StopReferencePlayback();
+                return Task.CompletedTask;
             }
-            else
-            {
-                _progressTimer.Start();
-            }
-            return Task.CompletedTask;
+            return TimelinePlayAsync();
         }
 
 
         private Task TimelineStopAsync()
         {
             _progressTimer.Stop();
+            StopReferencePlayback();
             TimelinePosition = 0;
             return Task.CompletedTask;
+        }
+
+
+        /// <summary>
+        /// Plays the reference audio from the current frame, or stops it when the frame is past its end.
+        /// The audio file is played as it is, so playback starts and seeks straight away.
+        /// </summary>
+        private void SyncReferencePlayback()
+        {
+            if (_referenceAudio == null || _timelinePositionTime >= _referenceAudio.Duration)
+            {
+                StopReferencePlayback();
+                return;
+            }
+
+            if (_isAudioPlaying)
+            {
+                SeekPreview(_timelinePositionTime);
+                return;
+            }
+
+            OpenPreview(_referenceAudio.SourceFile);
+            PlayPreview(_timelinePositionTime);
+            _isAudioPlaying = true;
+        }
+
+
+        /// <summary>
+        /// Pauses the reference audio, the frames are advanced by the timer again.
+        /// </summary>
+        private void StopReferencePlayback()
+        {
+            if (_isAudioPlaying)
+                PausePreview();
+
+            _isAudioPlaying = false;
         }
 
 
@@ -468,13 +510,6 @@ namespace Amuse.App.Controls
                     continue;
 
                 frame.IsSelected = true;
-
-                if (splitTimeline.SegmentType == TimelineSegmentType.Audio)
-                {
-                    splitTimeline.AddFrame(frame.FrameIndex);
-                    continue;
-                }
-
                 splitTimeline.AddFrame(frame.Frame);
             }
 
@@ -576,45 +611,78 @@ namespace Amuse.App.Controls
 
         private async Task LoadVideoAsync()
         {
-            var sourceFilename = await DialogService.OpenFileAsync("Open Video", filter: "Videos|*.mp4;*.gif;|All Files|*.*;");
+            var sourceFilename = await DialogService.OpenFileAsync(Default.OpenVideo, filter: TensorStack.WPF.Common.VideoFileFilter);
             if (string.IsNullOrEmpty(sourceFilename))
                 return;
 
-            var videoInput = await VideoInputStream.CreateAsync(sourceFilename);
-            await CreateVideoTimelineAsync(videoInput);
+            try
+            {
+                var videoInput = await VideoInputStream.CreateAsync(sourceFilename);
+                await CreateVideoTimelineAsync(videoInput);
+            }
+            catch (Exception ex)
+            {
+                await DialogService.ShowErrorAsync(AppErrors.ImportErrorTitle, ex.Message);
+            }
         }
 
 
         private async Task LoadImageAsync()
         {
-            var sourceFilename = await DialogService.OpenFileAsync("Open Image", filter: "Image Files|*.bmp;*.jpg;*.jpeg;*.png;*.gif;*.tif;*.tiff|All Files|*.*");
+            var sourceFilename = await DialogService.OpenFileAsync(Default.OpenImage, filter: TensorStack.WPF.Common.ImageFileFilter);
             if (string.IsNullOrEmpty(sourceFilename))
                 return;
 
-            var imageInput = await ImageInput.CreateAsync(sourceFilename);
-            await CreateImageTimelineAsync(imageInput);
+            try
+            {
+                var imageInput = await ImageInput.CreateAsync(sourceFilename);
+                await CreateImageTimelineAsync(imageInput);
+            }
+            catch (Exception ex)
+            {
+                await DialogService.ShowErrorAsync(AppErrors.ImportErrorTitle, ex.Message);
+            }
         }
 
 
         private async Task LoadOverlayAsync()
         {
-            var sourceFilename = await DialogService.OpenFileAsync("Open Image", filter: "Image Files|*.bmp;*.jpg;*.jpeg;*.png;*.gif;*.tif;*.tiff|All Files|*.*");
+            var sourceFilename = await DialogService.OpenFileAsync(Default.OpenImage, filter: TensorStack.WPF.Common.ImageFileFilter);
             if (string.IsNullOrEmpty(sourceFilename))
                 return;
 
-            var imageInput = await ImageInput.CreateAsync(sourceFilename);
-            await CreateOverlayTimelineAsync(imageInput);
+            try
+            {
+                var imageInput = await ImageInput.CreateAsync(sourceFilename);
+                await CreateOverlayTimelineAsync(imageInput);
+            }
+            catch (Exception ex)
+            {
+                await DialogService.ShowErrorAsync(AppErrors.ImportErrorTitle, ex.Message);
+            }
         }
 
 
-        private async Task LoadAudioAsync()
+        /// <summary>
+        /// Opens an audio file and sets it as the reference audio.
+        /// </summary>
+        private async Task LoadReferenceAsync()
         {
-            var sourceFilename = await DialogService.OpenFileAsync("Load Audio", "Audio", filter: "Audio/Video files (*.mp3;*.wav;*.flac;*.m4a;*.aac;*.ogg;*.mp4;*.mov;*.mkv;*.webm)|*.mp3;*.wav;*.flac;*.m4a;*.aac;*.ogg;*.mp4;*.mov;*.mkv;*.webm", defualtExt: "wav");
+            var sourceFilename = await DialogService.OpenFileAsync(Default.LoadAudio, "Audio", filter: TensorStack.WPF.Common.AudioFileFilter, defualtExt: "wav");
             if (string.IsNullOrEmpty(sourceFilename))
                 return;
 
-            var imageInput = await AudioInputStream.CreateAsync(sourceFilename);
-            await CreateAudioTimelineAsync(imageInput);
+            await SetReferenceAsync(sourceFilename);
+        }
+
+
+        /// <summary>
+        /// Removes the reference audio, the segments are kept.
+        /// </summary>
+        private Task RemoveReferenceAsync()
+        {
+            ClearReference();
+            return Task.CompletedTask;
         }
 
 
@@ -691,7 +759,7 @@ namespace Amuse.App.Controls
                     await Dispatcher.Yield();
 
                     var frameIndex = 0;
-                    await foreach (var videoFrame in videoStream.GetAsync(widthOverride: _timelineThumbWidth, heightOverride: _timelineThumbHeight, frameRateOverride: _timelineFrameRate, resizeMode: TensorStack.Common.ResizeMode.Crop, _cancellationTokenSource.Token))
+                    await foreach (var videoFrame in videoStream.GetAsync(widthOverride: _timelineThumbWidth, heightOverride: _timelineThumbHeight, frameRateOverride: _timelineFrameRate, resizeMode: TensorStack.Common.ResizeMode.Crop, CancellationTokenSource.Token))
                     {
                         TimelineThumbWidth ??= videoFrame.Width;
 
@@ -705,6 +773,7 @@ namespace Amuse.App.Controls
                 TimelineLength += timelineSegment.FrameLength;
                 SetTimlineEndPadding();
                 TimelinePosition = _timelineLength - timelineSegment.FrameLength;
+                ExtendToReference();
                 if (TimelineSegements.Count == 1)
                     SetCurrentFrame(0);
             }
@@ -784,34 +853,32 @@ namespace Amuse.App.Controls
         }
 
 
-        private async Task CreateAudioTimelineAsync(AudioInputStream audioInput)
+        /// <summary>
+        /// Sets the reference audio, the timeline is extended to its length once it has segments and playback follows it.
+        /// </summary>
+        /// <param name="filename">The audio or video filename.</param>
+        private async Task SetReferenceAsync(string filename)
         {
-            IsControlBusy = true;
-            var timelineSegment = new TimelineSegment(audioInput);
             try
             {
+                IsControlBusy = true;
                 using (CancellationTokenSource = new CancellationTokenSource())
                 {
-                    TimelineSegements.Add(timelineSegment);
-
-                    var frameIndex = 0;
-                    var frameCount = (int)Math.Round(audioInput.Duration.TotalSeconds * _timelineFrameRate.Value);
-                    for (int i = 0; i < frameCount; i++)
-                    {
-                        timelineSegment.AddFrame(i);
-                        Progress.Update(frameIndex++, frameCount);
-                        if (frameIndex % 10 == 0)
-                            await Dispatcher.Yield();
-                    }
+                    Progress.Indeterminate();
+                    var audioStream = await AudioInputStream.CreateAsync(filename);
+                    var peaks = await CreatePeaksAsync(filename, ReferencePeakRate, CancellationTokenSource.Token);
+                    ClearReference();
+                    _referencePeakSource = peaks;
+                    ReferenceAudio = audioStream;
+                    ExtendToReference();
+                    UpdateReferencePeaks();
+                    OpenPreview(audioStream.SourceFile);
                 }
-
-                TimelineLength = Math.Max(_timelineLength, timelineSegment.FrameLength);
-                SetTimlineEndPadding();
-                TimelinePosition = 0;
             }
-            catch (OperationCanceledException)
+            catch (OperationCanceledException) { }
+            catch (Exception ex)
             {
-                TimelineSegements.Remove(timelineSegment);
+                await DialogService.ShowErrorAsync(AppErrors.ImportErrorTitle, ex.Message);
             }
             finally
             {
@@ -819,6 +886,65 @@ namespace Amuse.App.Controls
                 Progress.Clear();
                 CancellationTokenSource = null;
             }
+        }
+
+
+        /// <summary>
+        /// Stops and clears the reference audio.
+        /// </summary>
+        private void ClearReference()
+        {
+            StopReferencePlayback();
+            ClosePreview();
+            _referencePeakSource = null;
+            ReferenceAudio = null;
+            ReferencePeaks = [];
+        }
+
+
+        /// <summary>
+        /// Extends the timeline to the length of the reference audio, once the timeline has segments.
+        /// </summary>
+        private void ExtendToReference()
+        {
+            if (_referenceAudio == null || _timelineFrameRate == null || TimelineSegements.Count == 0)
+                return;
+
+            var frames = (int)Math.Ceiling(_referenceAudio.Duration.TotalSeconds * _timelineFrameRate.Value);
+            if (frames <= _timelineLength)
+                return;
+
+            TimelineLength = frames;
+            SetTimlineEndPadding();
+        }
+
+
+        /// <summary>
+        /// Updates the reference waveform, one peak for each timeline frame the reference audio covers.
+        /// </summary>
+        private void UpdateReferencePeaks()
+        {
+            if (_referencePeakSource == null || _timelineFrameRate == null)
+            {
+                ReferencePeaks = [];
+                return;
+            }
+
+            var peaksPerFrame = ReferencePeakRate / (double)_timelineFrameRate.Value;
+            var frames = Math.Min(_timelineLength, (int)Math.Ceiling(_referencePeakSource.Length / peaksPerFrame));
+            var peaks = new double[frames];
+            for (int i = 0; i < frames; i++)
+            {
+                var first = (int)(i * peaksPerFrame);
+                var last = Math.Min(_referencePeakSource.Length, Math.Max(first + 1, (int)((i + 1) * peaksPerFrame)));
+                var peak = 0f;
+                for (int p = first; p < last; p++)
+                {
+                    peak = Math.Max(peak, _referencePeakSource[p]);
+                }
+                peaks[i] = Math.Max(MinimumPeak, peak);
+            }
+            ReferencePeaks = peaks;
         }
 
 
@@ -875,6 +1001,9 @@ namespace Amuse.App.Controls
             {
                 var lastFrame = segement.Frames.LastOrDefault(x => !x.IsPadding);
                 var startFrame = segement.Frames.FirstOrDefault(x => !x.IsPadding);
+                if (startFrame == null)
+                    continue;
+
                 var startPosition = segement.Frames.IndexOf(startFrame);
 
                 var audioStart = TimeSpan.FromMilliseconds(_timelineInterval * startFrame.FrameIndex);
@@ -885,6 +1014,12 @@ namespace Amuse.App.Controls
                 audioSegment.IsFirst = startPosition == 0 || audioTimeline.Segments.Count == 0;
                 audioSegment.IsLast = audioTimeline.Segments.Count == segments.Length - 1;
                 audioTimeline.Segments.Add(audioSegment);
+            }
+
+            if (_referenceAudio != null)
+            {
+                var duration = _referenceAudio.Duration < _timelineLengthTime ? _referenceAudio.Duration : _timelineLengthTime;
+                audioTimeline.Segments.Add(new AudioSegment(_referenceAudio.SourceFile, TimeSpan.Zero, duration, TimeSpan.Zero) { IsFirst = true, IsLast = true });
             }
             return Task.FromResult(audioTimeline);
         }
@@ -903,12 +1038,62 @@ namespace Amuse.App.Controls
 
         private void UpdateProgress(object sender, EventArgs e)
         {
-            if (_timelinePosition == _timelineLength)
+            if (_isAudioPlaying)
+            {
+                if (!IsPreviewOpen)
+                    return;
+
+                var frame = (int)(PreviewPosition.TotalMilliseconds / _timelineInterval);
+                if (frame > _timelinePositions)
+                {
+                    TimelinePosition = 0;
+                    return;
+                }
+
+                _isPlaybackUpdate = true;
+                TimelinePosition = frame;
+                _isPlaybackUpdate = false;
+                return;
+            }
+
+            if (_timelinePosition >= _timelinePositions)
             {
                 TimelinePosition = 0;
                 return;
             }
+
+            _isPlaybackUpdate = true;
             TimelinePosition++;
+            _isPlaybackUpdate = false;
+        }
+
+
+        /// <summary>
+        /// The timer advances the frames when the reference audio has played to its end, the audio plays again when the timeline loops.
+        /// </summary>
+        protected override void OnPreviewEnded()
+        {
+            _isAudioPlaying = false;
+        }
+
+
+        /// <summary>
+        /// Carries on without audio when the reference audio could not be played.
+        /// </summary>
+        protected override void OnPreviewFailed()
+        {
+            _isAudioPlaying = false;
+        }
+
+
+        /// <summary>
+        /// Stops playback and closes the reference audio player when the control is unloaded.
+        /// </summary>
+        protected override void OnUnloaded()
+        {
+            _progressTimer.Stop();
+            _isAudioPlaying = false;
+            base.OnUnloaded();
         }
 
 
@@ -935,6 +1120,7 @@ namespace Amuse.App.Controls
             {
                 TimelineMarkers.Add(time);
             }
+            UpdateReferencePeaks();
         }
 
 
@@ -1056,6 +1242,18 @@ namespace Amuse.App.Controls
         }
 
 
+        /// <summary>
+        /// Moves to the frame clicked on the reference waveform.
+        /// </summary>
+        /// <param name="sender">The sender.</param>
+        /// <param name="e">The <see cref="MouseButtonEventArgs"/> instance containing the event data.</param>
+        protected void OnReferenceMouseDown(object sender, MouseButtonEventArgs e)
+        {
+            if (sender is FrameworkElement element && _timelineFrameWidth > 0)
+                TimelinePosition = Math.Clamp((int)(e.GetPosition(element).X / _timelineFrameWidth), 0, _timelinePositions);
+        }
+
+
         protected void OnTimelineSegementRequestBringIntoView(object sender, RequestBringIntoViewEventArgs e)
         {
             e.Handled = true;
@@ -1098,13 +1296,17 @@ namespace Amuse.App.Controls
         }
 
 
-        private async void OnAudioDrop(object sender, DragEventArgs e)
+        /// <summary>
+        /// Sets a dropped audio file as the reference audio.
+        /// </summary>
+        /// <param name="sender">The sender.</param>
+        /// <param name="e">The <see cref="DragEventArgs"/> instance containing the event data.</param>
+        protected async void OnReferenceDrop(object sender, DragEventArgs e)
         {
             var fileNames = (string[])e.Data.GetData(DataFormats.FileDrop);
             if (!fileNames.IsNullOrEmpty())
             {
-                var audioInput = await AudioInputStream.CreateAsync(fileNames[0]);
-                await CreateAudioTimelineAsync(audioInput);
+                await SetReferenceAsync(fileNames[0]);
                 CommandManager.InvalidateRequerySuggested();
             }
         }
@@ -1117,7 +1319,6 @@ namespace Amuse.App.Controls
     {
         private readonly ImageTensor _imageSource;
         private readonly VideoInputStream _videoStream;
-        private readonly AudioInputStream _audioStream;
         private readonly TimelineSegmentType _segmentType;
 
         public TimelineSegment(VideoInputStream videoStream, bool isAudioPresent)
@@ -1126,14 +1327,6 @@ namespace Amuse.App.Controls
             _segmentType = TimelineSegmentType.Video;
             IsAudioEnabled = isAudioPresent;
             IsAudioPresent = isAudioPresent;
-        }
-
-        public TimelineSegment(AudioInputStream audioStream)
-        {
-            _audioStream = audioStream;
-            _segmentType = TimelineSegmentType.Audio;
-            IsAudioEnabled = true;
-            IsAudioPresent = true;
         }
 
         public TimelineSegment(TimelineSegmentType segmentType, ImageTensor imageTensor)
@@ -1146,7 +1339,6 @@ namespace Amuse.App.Controls
         {
             _imageSource = timelineSegment._imageSource;
             _videoStream = timelineSegment._videoStream;
-            _audioStream = timelineSegment._audioStream;
             _segmentType = timelineSegment._segmentType;
             IsAudioEnabled = timelineSegment.IsAudioEnabled;
             IsAudioPresent = timelineSegment.IsAudioPresent;
@@ -1154,18 +1346,11 @@ namespace Amuse.App.Controls
 
         public TimelineSegmentType SegmentType => _segmentType;
         public int Length => Frames.Count;
-        public string SourceFile => _videoStream?.SourceFile ?? _audioStream?.SourceFile;
+        public string SourceFile => _videoStream?.SourceFile;
         public int FrameLength { get; set; }
         public bool IsAudioEnabled { get; set; }
         public bool IsAudioPresent { get; }
         public ObservableCollection<TimelineFrameModel> Frames { get; } = [];
-
-
-        public void AddFrame(int frameIndex)
-        {
-            Frames.Add(new TimelineFrameModel(_segmentType, frameIndex));
-            FrameLength++;
-        }
 
 
         public void AddFrame(VideoFrame videoFrame)
@@ -1294,9 +1479,6 @@ namespace Amuse.App.Controls
         [Display(Name = "TimelineSegmentType1", ResourceType = typeof(AppEnums))]
         Image = 1,
 
-        [Display(Name = "TimelineSegmentType2", ResourceType = typeof(AppEnums))]
-        Audio = 2,
-
         [Display(Name = "TimelineSegmentType3", ResourceType = typeof(AppEnums))]
         Overlay = 3
     }
@@ -1322,12 +1504,6 @@ namespace Amuse.App.Controls
             _type = type;
             Frame = frame;
             _frameIndex = frame.Index;
-        }
-
-        public TimelineFrameModel(TimelineSegmentType type, int frameIndex)
-        {
-            _type = type;
-            _frameIndex = frameIndex;
         }
 
         public TimelineFrameModel(TimelineFrameModel frame)

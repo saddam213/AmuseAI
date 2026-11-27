@@ -1,4 +1,5 @@
 ﻿using Amuse.App.Common;
+using Amuse.App.Resources;
 using Amuse.App.Services;
 using System;
 using System.Collections.Generic;
@@ -15,7 +16,9 @@ using TensorStack.Media.Audio;
 using TensorStack.Media.Video;
 using TensorStack.WPF;
 using TensorStack.WPF.Controls;
+using TensorStack.WPF.Dialogs;
 using TensorStack.WPF.Image;
+using TensorStack.WPF.Resources;
 using TensorStack.WPF.Services;
 
 namespace Amuse.App.Controls
@@ -44,6 +47,9 @@ namespace Amuse.App.Controls
             AddImageCommand = new AsyncRelayCommand(AddImageAsync, () => _imageMaxCount > 0);
             AddAudioCommand = new AsyncRelayCommand(AddAudioAsync, () => _audioMaxCount > 0);
             AddVideoCommand = new AsyncRelayCommand(AddVideoAsync, () => _videoMaxCount > 0);
+            CaptureImageCommand = new AsyncRelayCommand(CaptureImageAsync, () => _imageMaxCount > 0);
+            CaptureAudioCommand = new AsyncRelayCommand(CaptureAudioAsync, () => _audioMaxCount > 0);
+            CaptureVideoCommand = new AsyncRelayCommand(CaptureVideoAsync, () => _videoMaxCount > 0);
             ClearCommand = new AsyncRelayCommand(ClearAsync, () => ContextCollection.Count > 0 && ContextCollection.Any(x => !x.IsReadOnly));
             RemoveCommand = new AsyncRelayCommand<ContextItemModel>(RemoveAsync);
             InitializeComponent();
@@ -54,6 +60,9 @@ namespace Amuse.App.Controls
         public AsyncRelayCommand AddImageCommand { get; }
         public AsyncRelayCommand AddAudioCommand { get; }
         public AsyncRelayCommand AddVideoCommand { get; }
+        public AsyncRelayCommand CaptureImageCommand { get; }
+        public AsyncRelayCommand CaptureAudioCommand { get; }
+        public AsyncRelayCommand CaptureVideoCommand { get; }
         public AsyncRelayCommand ClearCommand { get; }
         public AsyncRelayCommand<ContextItemModel> RemoveCommand { get; }
         public ObservableCollection<ContextItemModel> ContextCollection { get; }
@@ -95,6 +104,16 @@ namespace Amuse.App.Controls
             set { SetProperty(ref _videoMaxCount, value); UpdateContextItems(); }
         }
 
+        /// <summary>
+        /// Gets or sets the sample rate audio is captured at, zero for the default.
+        /// </summary>
+        public int CaptureSampleRate { get; set; }
+
+        /// <summary>
+        /// Gets or sets the channels audio is captured with, zero for the default.
+        /// </summary>
+        public int CaptureChannels { get; set; }
+
 
         public PromptInputs GetPromptInputs(string prompt)
         {
@@ -122,83 +141,89 @@ namespace Amuse.App.Controls
 
         public async Task CreateFromConversation(Collection<ConversationModel> conversation)
         {
-            IsControlBusy = true;
-
-            var imageIndex = new Dictionary<int, string>();
-            var audioIndex = new Dictionary<int, string>();
-            var videoIndex = new Dictionary<int, string>();
-            foreach (var message in conversation)
+            try
             {
-                if (!message.ImageIndex.IsNullOrEmpty())
-                {
-                    foreach (var image in message.ImageIndex)
-                    {
-                        if (imageIndex.ContainsKey(image.Key))
-                            continue;
+                IsControlBusy = true;
 
-                        imageIndex.Add(image.Key, image.Value);
+                var imageIndex = new Dictionary<int, string>();
+                var audioIndex = new Dictionary<int, string>();
+                var videoIndex = new Dictionary<int, string>();
+                foreach (var message in conversation)
+                {
+                    if (!message.ImageIndex.IsNullOrEmpty())
+                    {
+                        foreach (var image in message.ImageIndex)
+                        {
+                            if (imageIndex.ContainsKey(image.Key))
+                                continue;
+
+                            imageIndex.Add(image.Key, image.Value);
+                        }
+                    }
+
+                    if (!message.AudioIndex.IsNullOrEmpty())
+                    {
+                        foreach (var audio in message.AudioIndex)
+                        {
+                            if (audioIndex.ContainsKey(audio.Key))
+                                continue;
+
+                            audioIndex.Add(audio.Key, audio.Value);
+                        }
+                    }
+
+                    if (!message.VideoIndex.IsNullOrEmpty())
+                    {
+                        foreach (var video in message.VideoIndex)
+                        {
+                            if (videoIndex.ContainsKey(video.Key))
+                                continue;
+
+                            videoIndex.Add(video.Key, video.Value);
+                        }
                     }
                 }
 
-                if (!message.AudioIndex.IsNullOrEmpty())
+                ContextCollection.Clear();
+                foreach (var image in imageIndex)
                 {
-                    foreach (var audio in message.AudioIndex)
+                    ContextCollection.Add(new ContextItemModel
                     {
-                        if (audioIndex.ContainsKey(audio.Key))
-                            continue;
-
-                        audioIndex.Add(audio.Key, audio.Value);
-                    }
+                        Filename = image.Value,
+                        MediaType = MediaType.Image,
+                        Id = ContextCollection.Count,
+                        Image = await ImageInput.CreateAsync(image.Value)
+                    });
+                }
+                foreach (var audio in audioIndex)
+                {
+                    ContextCollection.Add(new ContextItemModel
+                    {
+                        Filename = audio.Value,
+                        MediaType = MediaType.Audio,
+                        Id = ContextCollection.Count,
+                        Audio = await AudioInputStream.CreateAsync(audio.Value)
+                    });
+                }
+                foreach (var video in videoIndex)
+                {
+                    ContextCollection.Add(new ContextItemModel
+                    {
+                        Filename = video.Value,
+                        MediaType = MediaType.Video,
+                        Id = ContextCollection.Count,
+                        Video = await VideoInputStream.CreateAsync(video.Value)
+                    });
                 }
 
-                if (!message.VideoIndex.IsNullOrEmpty())
-                {
-                    foreach (var video in message.VideoIndex)
-                    {
-                        if (videoIndex.ContainsKey(video.Key))
-                            continue;
-
-                        videoIndex.Add(video.Key, video.Value);
-                    }
-                }
+                UpdateContextItems();
+                _currentContext = CreateContext();
+                SetContextReadOnly(true);
             }
-
-            ContextCollection.Clear();
-            foreach (var image in imageIndex)
+            finally
             {
-                ContextCollection.Add(new ContextItemModel
-                {
-                    Filename = image.Value,
-                    MediaType = MediaType.Image,
-                    Id = ContextCollection.Count,
-                    Image = await ImageInput.CreateAsync(image.Value)
-                });
+                IsControlBusy = false;
             }
-            foreach (var audio in audioIndex)
-            {
-                ContextCollection.Add(new ContextItemModel
-                {
-                    Filename = audio.Value,
-                    MediaType = MediaType.Audio,
-                    Id = ContextCollection.Count,
-                    Audio = await AudioInputStream.CreateAsync(audio.Value)
-                });
-            }
-            foreach (var video in videoIndex)
-            {
-                ContextCollection.Add(new ContextItemModel
-                {
-                    Filename = video.Value,
-                    MediaType = MediaType.Video,
-                    Id = ContextCollection.Count,
-                    Video = await VideoInputStream.CreateAsync(video.Value)
-                });
-            }
-
-            UpdateContextItems();
-            _currentContext = CreateContext();
-            SetContextReadOnly(true);
-            IsControlBusy = false;
         }
 
 
@@ -253,7 +278,7 @@ namespace Amuse.App.Controls
 
         private async Task AddTextAsync()
         {
-            var filename = await DialogService.OpenFileAsync("Import Document", filter: "Documents|*.txt;*.md;*.json;*.csv;*.pdf;*.docx;*.rtf|All Files|*.*");
+            var filename = await DialogService.OpenFileAsync(AppDefault.ImportDocument, filter: $"{AppDefault.Documents}|*.txt;*.md;*.json;*.csv;*.pdf;*.docx;*.rtf|{Default.AllFiles}|*.*");
             if (!string.IsNullOrEmpty(filename))
             {
                 await AddTextAsync(filename);
@@ -283,7 +308,7 @@ namespace Amuse.App.Controls
 
         private async Task AddImageAsync()
         {
-            var filename = await DialogService.OpenFileAsync("Import Image", filter: "Image Files|*.bmp;*.jpg;*.jpeg;*.png;*.gif;*.tif;*.tiff|All Files|*.*");
+            var filename = await DialogService.OpenFileAsync(AppDefault.ImportImage, filter: TensorStack.WPF.Common.ImageFileFilter);
             if (!string.IsNullOrEmpty(filename))
             {
                 await AddImageAsync(filename);
@@ -311,7 +336,7 @@ namespace Amuse.App.Controls
 
         private async Task AddAudioAsync()
         {
-            var filename = await DialogService.OpenFileAsync("Import Audio", "Audio", filter: "Audio/Video files (*.mp3;*.wav;*.flac;*.m4a;*.aac;*.ogg;*.mp4;*.mov;*.mkv;*.webm)|*.mp3;*.wav;*.flac;*.m4a;*.aac;*.ogg;*.mp4;*.mov;*.mkv;*.webm", defualtExt: "wav");
+            var filename = await DialogService.OpenFileAsync(AppDefault.ImportAudio, "Audio", filter: TensorStack.WPF.Common.AudioFileFilter, defualtExt: "wav");
             if (!string.IsNullOrEmpty(filename))
             {
                 await AddAudioAsync(filename);
@@ -338,7 +363,7 @@ namespace Amuse.App.Controls
 
         private async Task AddVideoAsync()
         {
-            var filename = await DialogService.OpenFileAsync("Import Video", filter: "Videos|*.mp4;*.gif;|All Files|*.*;");
+            var filename = await DialogService.OpenFileAsync(AppDefault.ImportVideo, filter: TensorStack.WPF.Common.VideoFileFilter);
             if (!string.IsNullOrEmpty(filename))
             {
                 await AddVideoAsync(filename);
@@ -360,6 +385,61 @@ namespace Amuse.App.Controls
             });
 
             UpdateContextItems();
+        }
+
+
+        /// <summary>
+        /// Captures an image from a camera and adds it to the context.
+        /// </summary>
+        private async Task CaptureImageAsync()
+        {
+            var filename = await DialogService.CaptureFileAsync(MediaType.Image, GetCaptureOptions());
+            if (!string.IsNullOrEmpty(filename))
+            {
+                await AddImageAsync(filename);
+            }
+        }
+
+
+        /// <summary>
+        /// Records audio from a microphone and adds it to the context.
+        /// </summary>
+        private async Task CaptureAudioAsync()
+        {
+            var filename = await DialogService.CaptureFileAsync(MediaType.Audio, GetCaptureOptions());
+            if (!string.IsNullOrEmpty(filename))
+            {
+                await AddAudioAsync(filename);
+            }
+        }
+
+
+        /// <summary>
+        /// Records a video from a camera and adds it to the context.
+        /// </summary>
+        private async Task CaptureVideoAsync()
+        {
+            var filename = await DialogService.CaptureFileAsync(MediaType.Video, GetCaptureOptions());
+            if (!string.IsNullOrEmpty(filename))
+            {
+                await AddVideoAsync(filename);
+            }
+        }
+
+
+        /// <summary>
+        /// Gets the capture options, audio is recorded in the format the model uses.
+        /// The capture is a file in the temporary directory, the conversation refers to it like any other file.
+        /// </summary>
+        private CaptureOptions GetCaptureOptions()
+        {
+            var captureOptions = new CaptureOptions();
+            if (CaptureSampleRate > 0)
+                captureOptions = captureOptions with { SampleRate = CaptureSampleRate };
+            if (CaptureChannels > 0)
+                captureOptions = captureOptions with { Channels = CaptureChannels };
+
+            return captureOptions;
         }
 
 
@@ -691,7 +771,7 @@ namespace Amuse.App.Controls
         {
             if (IsIgnored)
             {
-                return $"Models Maximum {MediaType} Inputs Reached";
+                return string.Format(AppDefault.MaxInputsReached, MediaType.GetLocalizedName());
             }
             return Filename;
         }

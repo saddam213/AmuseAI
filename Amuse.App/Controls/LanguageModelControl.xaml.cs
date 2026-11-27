@@ -5,7 +5,6 @@ using Amuse.App.Views;
 using Amuse.Common;
 using System;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Linq;
 using System.Threading.Tasks;
@@ -34,6 +33,9 @@ namespace Amuse.App.Controls
         private LanguageModel _currentModel;
         private MemoryMode _currentMemoryMode;
         private ExecutionOptionsModel _currentExecutionOptions;
+        private LanguageCheckpointModel _selectedCheckpoint;
+        private List<LanguageCheckpointModel> _checkpointCollection;
+        private DataType? _currentCheckpointType;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="LanguageModelControl"/> class.
@@ -120,6 +122,23 @@ namespace Amuse.App.Controls
             set { SetProperty(ref _selectedModel, value); ValidateSelection(); }
         }
 
+        public List<LanguageCheckpointModel> CheckpointCollection
+        {
+            get { return _checkpointCollection; }
+            set { SetProperty(ref _checkpointCollection, value); }
+        }
+
+        public LanguageCheckpointModel SelectedCheckpoint
+        {
+            get { return _selectedCheckpoint; }
+            set
+            {
+                SetProperty(ref _selectedCheckpoint, value);
+                RefreshMemoryProfile();
+                ValidateSelection();
+            }
+        }
+
         public MemoryProfileModel SelectedMemoryMode
         {
             get { return _selectedMemoryMode; }
@@ -146,11 +165,14 @@ namespace Amuse.App.Controls
 
         private async Task LoadAsync()
         {
-            if (await IsDownloadingAsync())
+            var isReady = await DownloadService.PrepareLoadAsync(_selectedModel, _selectedCheckpoint?.Type, []);
+            RefreshCheckpointSelection();
+            if (!isReady)
                 return;
 
             _currentDevice = SelectedDevice;
             _currentModel = SelectedModel;
+            _currentCheckpointType = _currentModel.Checkpoint?.Type;
             _currentMemoryMode = _selectedMemoryMode.MemoryMode;
             _currentExecutionOptions = _selectedExecutionOptions;
 
@@ -158,6 +180,7 @@ namespace Amuse.App.Controls
             {
                 Device = _currentDevice,
                 LanguageModel = _currentModel,
+                CheckpointType = _currentCheckpointType,
                 MemoryMode = _currentMemoryMode,
                 ExecutionOptions = _currentExecutionOptions,
                 ProcessType = _processType,
@@ -178,6 +201,7 @@ namespace Amuse.App.Controls
         private Task UnloadAsync()
         {
             _currentModel = default;
+            _currentCheckpointType = default;
             IsSelectionValid = false;
             _currentExecutionOptions = default;
 
@@ -239,6 +263,7 @@ namespace Amuse.App.Controls
         {
             return _currentDevice != SelectedDevice
                 || _currentModel != SelectedModel
+                || _currentCheckpointType != SelectedCheckpoint?.Type
                 || _currentMemoryMode != _selectedMemoryMode?.MemoryMode
                 || _currentExecutionOptions != SelectedExecutionOptions;
         }
@@ -311,6 +336,9 @@ namespace Amuse.App.Controls
             {
                 ModelCollectionView.Refresh();
                 SelectedModel = ModelCollectionView.Cast<LanguageModel>().FirstOrDefault(x => x == _currentModel)
+                             ?? ModelCollectionView.Cast<LanguageModel>().FirstOrDefault(x => x.IsDefault && x.Status == ModelStatusType.Installed && x.ProcessTypes.Contains(_processType))
+                             ?? ModelCollectionView.Cast<LanguageModel>().FirstOrDefault(x => x.Status == ModelStatusType.Installed)
+                             ?? ModelCollectionView.Cast<LanguageModel>().FirstOrDefault(x => x.IsDefault && x.ProcessTypes.Contains(_processType))
                              ?? ModelCollectionView.Cast<LanguageModel>().FirstOrDefault();
             }
 
@@ -320,6 +348,7 @@ namespace Amuse.App.Controls
 
         private void Model_SelectionChanged(object sender, System.Windows.Controls.SelectionChangedEventArgs e)
         {
+            RefreshCheckpointSelection();
             if (_selectedModel is null)
                 return;
 
@@ -328,6 +357,16 @@ namespace Amuse.App.Controls
                 ? MemoryModes.FirstOrDefault(x => x.MemoryMode == MemoryMode.Auto)
                 : MemoryModes.FirstOrDefault(x => x.MemoryMode == _selectedModel.UserMemoryMode.Value);
             SelectedExecutionOptions = _selectedModel.UserExecutionOptions ?? new ExecutionOptionsModel();
+        }
+
+
+        /// <summary>
+        /// Refreshes the checkpoint sets and the selected set from the selected model.
+        /// </summary>
+        private void RefreshCheckpointSelection()
+        {
+            CheckpointCollection = _selectedModel?.Checkpoints;
+            SelectedCheckpoint = _selectedModel?.Checkpoint;
         }
 
 
@@ -353,7 +392,7 @@ namespace Amuse.App.Controls
             if (_selectedDevice is null || _selectedModel is null)
                 return;
 
-            MemoryModes[0].DetectedMode = Extensions.ResolveMemoryMode(_selectedModel.MemorySize, _selectedDevice.MemoryGB);
+            MemoryModes[0].DetectedMode = Extensions.ResolveMemoryMode(_selectedCheckpoint?.MemorySize ?? _selectedModel.MemorySize, _selectedDevice.MemoryGB);
         }
 
 
@@ -368,6 +407,7 @@ namespace Amuse.App.Controls
 
             SelectedDevice = pipeline.Device;
             SelectedModel = pipeline.LanguageModel;
+            RefreshCheckpointSelection();
             SelectedMemoryMode = MemoryModes.FirstOrDefault(x => x.MemoryMode == pipeline.MemoryMode);
             SelectedExecutionOptions = _selectedModel?.UserExecutionOptions ?? new ExecutionOptionsModel();
             ValidateSelection();
@@ -396,40 +436,9 @@ namespace Amuse.App.Controls
                 ModelCollectionView.Refresh();
                 if (!ModelCollectionView.IsEmpty && _selectedModel == null)
                     ModelCollectionView.MoveCurrentToFirst();
+
+                RefreshCheckpointSelection();
             }
-        }
-
-
-        private async Task<bool> IsDownloadingAsync()
-        {
-            var status = GetPipelineStatus();
-            if (status.Contains(ModelStatusType.Downloading) || status.Contains(ModelStatusType.DownloadQueue) || status.Contains(ModelStatusType.DownloadFailed))
-            {
-                await DialogService.ShowMessageAsync("Model Downloading", "This model is downloading or queued for download", TensorStack.WPF.Dialogs.MessageDialogType.Ok, TensorStack.WPF.Dialogs.MessageBoxIconType.Info, TensorStack.WPF.Dialogs.MessageBoxStyleType.Info);
-                return true;
-            }
-            else if (status.Contains(ModelStatusType.Available) || status.Contains(ModelStatusType.Unknown))
-            {
-                var queueDownload = await DialogService.ShowMessageAsync("Queue Download", "Would you like to queue this model for download?", TensorStack.WPF.Dialogs.MessageDialogType.YesNo, TensorStack.WPF.Dialogs.MessageBoxIconType.Question, TensorStack.WPF.Dialogs.MessageBoxStyleType.Info);
-                if (queueDownload)
-                {
-                    // Base Model
-                    if (_selectedModel.Status != ModelStatusType.Installed)
-                    {
-                        if (!await DownloadService.QueueAsync(_selectedModel))
-                            return true;
-                    }
-                    await NavigationService.NavigateAsync((int)View.Models);
-                }
-                return true;
-            }
-            return false;
-        }
-
-
-        private List<ModelStatusType> GetPipelineStatus()
-        {
-            return [_selectedModel.Status];
         }
 
 

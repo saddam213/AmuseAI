@@ -61,24 +61,6 @@ namespace Amuse.App.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Gated Model - Civitai Authentication Required..
-        /// </summary>
-        public static string ToolTip_Acsess_Civitai {
-            get {
-                return ResourceManager.GetString("ToolTip_Acsess_Civitai", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Gated Model - HuggingFace Authentication Required..
-        /// </summary>
-        public static string ToolTip_Acsess_HuggingFace {
-            get {
-                return ResourceManager.GetString("ToolTip_Acsess_HuggingFace", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to Supported on this device but not installed yet, install it from Manage Environments or the first time you load a model that uses it..
         /// </summary>
         public static string ToolTip_BackendNotInstalled {
@@ -106,6 +88,51 @@ namespace Amuse.App.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Reuses results between sampling steps to speed up generation. EasyCache, DBCache, TaylorSeer and Cache-DiT suit DiT models, UCache suits UNet models and Spectrum suits both.
+        /// </summary>
+        public static string ToolTip_CacheMode {
+            get {
+                return ResourceManager.GetString("ToolTip_CacheMode", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The part of the sampling steps where caching is allowed.
+        /// </summary>
+        public static string ToolTip_CacheRange {
+            get {
+                return ResourceManager.GetString("ToolTip_CacheRange", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to How much change is allowed before a step is computed again, higher is faster but lowers quality, 0 uses the default.
+        /// </summary>
+        public static string ToolTip_CacheThreshold {
+            get {
+                return ResourceManager.GetString("ToolTip_CacheThreshold", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Steps that always run before caching starts, 0 uses the default.
+        /// </summary>
+        public static string ToolTip_CacheWarmupSteps {
+            get {
+                return ResourceManager.GetString("ToolTip_CacheWarmupSteps", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Number of final CLIP text encoder layers to skip, 0 uses the model default.
+        /// </summary>
+        public static string ToolTip_ClipSkip {
+            get {
+                return ResourceManager.GetString("ToolTip_ClipSkip", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Stop asking to install missing environments on startup. Required updates are still shown..
         /// </summary>
         public static string ToolTip_EnvironmentSetupDontAskAgain {
@@ -114,6 +141,15 @@ namespace Amuse.App.Resources {
             }
         }
         
+        /// <summary>
+        ///   Looks up a localized string similar to Models are downloaded to a Models folder in the location you choose, pick a drive with plenty of free space..
+        /// </summary>
+        public static string ToolTip_FirstRunModelFolder {
+            get {
+                return ResourceManager.GetString("ToolTip_FirstRunModelFolder", resourceCulture);
+            }
+        }
+
         /// <summary>
         ///   Looks up a localized string similar to Number of model layers placed on the GPU, -1 for all layers. Lower values move the remaining layers to system memory..
         /// </summary>
@@ -124,11 +160,110 @@ namespace Amuse.App.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Home.
+        ///   Looks up a localized string similar to Image guidance scale for edit and reference images, 0 uses the model default.
         /// </summary>
-        public static string ToolTip_Home {
+        public static string ToolTip_GuidanceImage {
             get {
-                return ResourceManager.GetString("ToolTip_Home", resourceCulture);
+                return ResourceManager.GetString("ToolTip_GuidanceImage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Generate long videos in chunks, each continuing from the last frame of the one before. The length is no longer limited to a single pass, smaller chunks use less memory.
+        /// </summary>
+        public static string ToolTip_FrameChunk {
+            get {
+                return ResourceManager.GetString("ToolTip_FrameChunk", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Enter the length in frames.
+        /// </summary>
+        public static string ToolTip_FrameCount_Frames {
+            get {
+                return ResourceManager.GetString("ToolTip_FrameCount_Frames", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Enter the length in seconds.
+        /// </summary>
+        public static string ToolTip_FrameCount_Seconds {
+            get {
+                return ResourceManager.GetString("ToolTip_FrameCount_Seconds", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to This model generates at a fixed frame rate.
+        /// </summary>
+        public static string ToolTip_FrameRate_Fixed {
+            get {
+                return ResourceManager.GetString("ToolTip_FrameRate_Fixed", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to Point between 0 and 1 where sampling switches from the high noise model to the low noise model, 0 uses the default of 0.875.
+        /// </summary>
+        public static string ToolTip_MoeBoundary {
+            get {
+                return ResourceManager.GetString("ToolTip_MoeBoundary", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Looks for model files again, after you have copied files into the model or search folders yourself..
+        /// </summary>
+        public static string ToolTip_RescanModels {
+            get {
+                return ResourceManager.GetString("ToolTip_RescanModels", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Extra sampler arguments passed to stable-diffusion.cpp as key=value pairs.
+        /// </summary>
+        public static string ToolTip_SamplerArgs {
+            get {
+                return ResourceManager.GetString("ToolTip_SamplerArgs", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Wraps the image around the edge so the result tiles seamlessly in that direction.
+        /// </summary>
+        public static string ToolTip_SeamlessTiling {
+            get {
+                return ResourceManager.GetString("ToolTip_SeamlessTiling", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Shifted timestep used by distilled timestep models, 0 disables it.
+        /// </summary>
+        public static string ToolTip_ShiftedTimestep {
+            get {
+                return ResourceManager.GetString("ToolTip_ShiftedTimestep", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Custom sigma schedule, a comma separated descending list ending in 0, for example 14.61, 7.8, 3.5, 0. Replaces the scheduler and the step count.
+        /// </summary>
+        public static string ToolTip_Sigmas {
+            get {
+                return ResourceManager.GetString("ToolTip_Sigmas", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Skip layer guidance, a comma separated list of layers such as 7, 8, 9, applied between the start and end fraction of the steps. A scale of 0 disables it.
+        /// </summary>
+        public static string ToolTip_SkipLayers {
+            get {
+                return ResourceManager.GetString("ToolTip_SkipLayers", resourceCulture);
             }
         }
         
@@ -183,6 +318,15 @@ namespace Amuse.App.Resources {
         public static string ToolTip_ModelFilterInstalled {
             get {
                 return ResourceManager.GetString("ToolTip_ModelFilterInstalled", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to Use model files that other applications such as ComfyUI already have, without copying or downloading them again..
+        /// </summary>
+        public static string ToolTip_ModelSearchFolders {
+            get {
+                return ResourceManager.GetString("ToolTip_ModelSearchFolders", resourceCulture);
             }
         }
 
@@ -268,14 +412,45 @@ namespace Amuse.App.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Model Update Required.
+        ///   Looks up a localized string similar to Files Missing
+        ///• The download did not finish
+        ///• Files were moved or deleted
+        ///• The model was updated
+        ///Download again to complete it..
         /// </summary>
         public static string ToolTip_ModelStatus_Unknown {
             get {
                 return ResourceManager.GetString("ToolTip_ModelStatus_Unknown", resourceCulture);
             }
         }
-        
+
+        /// <summary>
+        ///   Looks up a localized string similar to Back (Alt+Left).
+        /// </summary>
+        public static string ToolTip_NavigateBack {
+            get {
+                return ResourceManager.GetString("ToolTip_NavigateBack", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to Forward (Alt+Right).
+        /// </summary>
+        public static string ToolTip_NavigateForward {
+            get {
+                return ResourceManager.GetString("ToolTip_NavigateForward", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to Queues every model in the list that is not installed.
+        /// </summary>
+        public static string ToolTip_QueueAll {
+            get {
+                return ResourceManager.GetString("ToolTip_QueueAll", resourceCulture);
+            }
+        }
+
         /// <summary>
         ///   Looks up a localized string similar to Cancel Generation.
         /// </summary>
@@ -511,6 +686,15 @@ namespace Amuse.App.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to The size of the interface, set to fit your screen..
+        /// </summary>
+        public static string ToolTip_UIScale {
+            get {
+                return ResourceManager.GetString("ToolTip_UIScale", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Clear Timeline.
         /// </summary>
         public static string ToolTip_VideoTimeline_Clear {
@@ -529,7 +713,7 @@ namespace Amuse.App.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Remove Selected Frames(s).
+        ///   Looks up a localized string similar to Remove Selected Frame(s).
         /// </summary>
         public static string ToolTip_VideoTimeline_FrameRemove {
             get {
@@ -630,45 +814,9 @@ namespace Amuse.App.Resources {
         /// <summary>
         ///   Looks up a localized string similar to Estimated Memory Modes.
         /// </summary>
-        public static string ToolTop_MemoryEstimate {
+        public static string ToolTip_MemoryEstimate {
             get {
-                return ResourceManager.GetString("ToolTop_MemoryEstimate", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Loads the whole model to the GPU. Fastest, needs the most VRAM.
-        /// </summary>
-        public static string ToolTip_MemoryMode_HuggingFace_High {
-            get {
-                return ResourceManager.GetString("ToolTip_MemoryMode_HuggingFace_High", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Model CPU offload: keeps each sub-model in CPU memory and moves it to the GPU while it runs.
-        /// </summary>
-        public static string ToolTip_MemoryMode_HuggingFace_Medium {
-            get {
-                return ResourceManager.GetString("ToolTip_MemoryMode_HuggingFace_Medium", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Sequential CPU offload: moves individual layers to the GPU only while they run. Lowest VRAM, much slower.
-        /// </summary>
-        public static string ToolTip_MemoryMode_HuggingFace_Low {
-            get {
-                return ResourceManager.GetString("ToolTip_MemoryMode_HuggingFace_Low", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Spreads the model weights across the available GPUs and CPU memory.
-        /// </summary>
-        public static string ToolTip_MemoryMode_HuggingFace_Balanced {
-            get {
-                return ResourceManager.GetString("ToolTip_MemoryMode_HuggingFace_Balanced", resourceCulture);
+                return ResourceManager.GetString("ToolTip_MemoryEstimate", resourceCulture);
             }
         }
         
@@ -840,6 +988,231 @@ namespace Amuse.App.Resources {
         public static string ToolTip_UpscaleWindowSize {
             get {
                 return ResourceManager.GetString("ToolTip_UpscaleWindowSize", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Filter Audio.
+        /// </summary>
+        public static string ToolTip_HistoryFilterAudio {
+            get {
+                return ResourceManager.GetString("ToolTip_HistoryFilterAudio", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Clear Filter.
+        /// </summary>
+        public static string ToolTip_HistoryFilterClear {
+            get {
+                return ResourceManager.GetString("ToolTip_HistoryFilterClear", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Filter Images.
+        /// </summary>
+        public static string ToolTip_HistoryFilterImage {
+            get {
+                return ResourceManager.GetString("ToolTip_HistoryFilterImage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Filter Text.
+        /// </summary>
+        public static string ToolTip_HistoryFilterText {
+            get {
+                return ResourceManager.GetString("ToolTip_HistoryFilterText", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Filter Videos.
+        /// </summary>
+        public static string ToolTip_HistoryFilterVideo {
+            get {
+                return ResourceManager.GetString("ToolTip_HistoryFilterVideo", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Transcribe the microphone live, the text appears while you speak..
+        /// </summary>
+        public static string ToolTip_LiveStart {
+            get {
+                return ResourceManager.GetString("ToolTip_LiveStart", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Stop listening and complete the transcript..
+        /// </summary>
+        public static string ToolTip_LiveStop {
+            get {
+                return ResourceManager.GetString("ToolTip_LiveStop", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Save Audio.
+        /// </summary>
+        public static string ToolTip_AudioTimeline_SaveAudio {
+            get {
+                return ResourceManager.GetString("ToolTip_AudioTimeline_SaveAudio", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Save Reference Video With Audio.
+        /// </summary>
+        public static string ToolTip_AudioTimeline_SaveVideo {
+            get {
+                return ResourceManager.GetString("ToolTip_AudioTimeline_SaveVideo", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Remove Reference Video.
+        /// </summary>
+        public static string ToolTip_AudioTimeline_ReferenceRemove {
+            get {
+                return ResourceManager.GetString("ToolTip_AudioTimeline_ReferenceRemove", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Move Clip To Playhead.
+        /// </summary>
+        public static string ToolTip_AudioTimeline_ClipMove {
+            get {
+                return ResourceManager.GetString("ToolTip_AudioTimeline_ClipMove", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Trim Clip Start To Playhead.
+        /// </summary>
+        public static string ToolTip_AudioTimeline_ClipTrimStart {
+            get {
+                return ResourceManager.GetString("ToolTip_AudioTimeline_ClipTrimStart", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Trim Clip End To Playhead.
+        /// </summary>
+        public static string ToolTip_AudioTimeline_ClipTrimEnd {
+            get {
+                return ResourceManager.GetString("ToolTip_AudioTimeline_ClipTrimEnd", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Split Clip At Playhead.
+        /// </summary>
+        public static string ToolTip_AudioTimeline_ClipSplit {
+            get {
+                return ResourceManager.GetString("ToolTip_AudioTimeline_ClipSplit", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Restore Trimmed Clip.
+        /// </summary>
+        public static string ToolTip_AudioTimeline_ClipRestore {
+            get {
+                return ResourceManager.GetString("ToolTip_AudioTimeline_ClipRestore", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Copy Clip.
+        /// </summary>
+        public static string ToolTip_AudioTimeline_ClipCopy {
+            get {
+                return ResourceManager.GetString("ToolTip_AudioTimeline_ClipCopy", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Remove Clip.
+        /// </summary>
+        public static string ToolTip_AudioTimeline_ClipRemove {
+            get {
+                return ResourceManager.GetString("ToolTip_AudioTimeline_ClipRemove", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to Remove Reference Audio.
+        /// </summary>
+        public static string ToolTip_VideoTimeline_ReferenceRemove {
+            get {
+                return ResourceManager.GetString("ToolTip_VideoTimeline_ReferenceRemove", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Select the range of the source audio to regenerate.
+        /// </summary>
+        public static string ToolTip_SelectAudioRange {
+            get {
+                return ResourceManager.GetString("ToolTip_SelectAudioRange", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The track the task works on, e.g. vocals, guitar, drums, bass or piano.
+        /// </summary>
+        public static string ToolTip_TrackName {
+            get {
+                return ResourceManager.GetString("ToolTip_TrackName", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Start the server once and list its tools..
+        /// </summary>
+        public static string ToolTip_McpTest {
+            get {
+                return ResourceManager.GetString("ToolTip_McpTest", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Add servers from a configuration snippet or the configuration file of another MCP application..
+        /// </summary>
+        public static string ToolTip_McpImport {
+            get {
+                return ResourceManager.GetString("ToolTip_McpImport", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Start this server and offer its tools when you chat..
+        /// </summary>
+        public static string ToolTip_McpEnable {
+            get {
+                return ResourceManager.GetString("ToolTip_McpEnable", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Restart the server and connect again..
+        /// </summary>
+        public static string ToolTip_McpReconnect {
+            get {
+                return ResourceManager.GetString("ToolTip_McpReconnect", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The code of any Font Awesome icon, such as f1e6..
+        /// </summary>
+        public static string ToolTip_McpIconCode {
+            get {
+                return ResourceManager.GetString("ToolTip_McpIconCode", resourceCulture);
             }
         }
     }

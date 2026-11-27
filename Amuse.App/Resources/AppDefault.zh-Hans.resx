@@ -1,0 +1,2572 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <!-- 
+    Microsoft ResX Schema 
+    
+    Version 2.0
+    
+    The primary goals of this format is to allow a simple XML format 
+    that is mostly human readable. The generation and parsing of the 
+    various data types are done through the TypeConverter classes 
+    associated with the data types.
+    
+    Example:
+    
+    ... ado.net/XML headers & schema ...
+    <resheader name="resmimetype">text/microsoft-resx</resheader>
+    <resheader name="version">2.0</resheader>
+    <resheader name="reader">System.Resources.ResXResourceReader, System.Windows.Forms, ...</resheader>
+    <resheader name="writer">System.Resources.ResXResourceWriter, System.Windows.Forms, ...</resheader>
+    <data name="Name1"><value>this is my long string</value><comment>this is a comment</comment></data>
+    <data name="Color1" type="System.Drawing.Color, System.Drawing">Blue</data>
+    <data name="Bitmap1" mimetype="application/x-microsoft.net.object.binary.base64">
+        <value>[base64 mime encoded serialized .NET Framework object]</value>
+    </data>
+    <data name="Icon1" type="System.Drawing.Icon, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
+        <value>[base64 mime encoded string representing a byte array form of the .NET Framework object]</value>
+        <comment>This is a comment</comment>
+    </data>
+                
+    There are any number of "resheader" rows that contain simple 
+    name/value pairs.
+    
+    Each data row contains a name, and value. The row also contains a 
+    type or mimetype. Type corresponds to a .NET class that support 
+    text/value conversion through the TypeConverter architecture. 
+    Classes that don't support this are serialized and stored with the 
+    mimetype set.
+    
+    The mimetype is used for serialized objects, and tells the 
+    ResXResourceReader how to depersist the object. This is currently not 
+    extensible. For a given mimetype the value must be set accordingly:
+    
+    Note - application/x-microsoft.net.object.binary.base64 is the format 
+    that the ResXResourceWriter will generate, however the reader can 
+    read any of the formats listed below.
+    
+    mimetype: application/x-microsoft.net.object.binary.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Binary.BinaryFormatter
+            : and then encoded with base64 encoding.
+    
+    mimetype: application/x-microsoft.net.object.soap.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Soap.SoapFormatter
+            : and then encoded with base64 encoding.
+
+    mimetype: application/x-microsoft.net.object.bytearray.base64
+    value   : The object must be serialized into a byte array 
+            : using a System.ComponentModel.TypeConverter
+            : and then encoded with base64 encoding.
+    -->
+  <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+    <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
+    <xsd:element name="root" msdata:IsDataSet="true">
+      <xsd:complexType>
+        <xsd:choice maxOccurs="unbounded">
+          <xsd:element name="metadata">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" />
+              </xsd:sequence>
+              <xsd:attribute name="name" use="required" type="xsd:string" />
+              <xsd:attribute name="type" type="xsd:string" />
+              <xsd:attribute name="mimetype" type="xsd:string" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="assembly">
+            <xsd:complexType>
+              <xsd:attribute name="alias" type="xsd:string" />
+              <xsd:attribute name="name" type="xsd:string" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="data">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1" />
+              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
+              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="resheader">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" />
+            </xsd:complexType>
+          </xsd:element>
+        </xsd:choice>
+      </xsd:complexType>
+    </xsd:element>
+  </xsd:schema>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="Components" xml:space="preserve">
+    <value>组件</value>
+  </data>
+  <data name="ControlNet" xml:space="preserve">
+    <value>ControlNet</value>
+  </data>
+  <data name="ControlNets" xml:space="preserve">
+    <value>ControlNet</value>
+  </data>
+  <data name="Diffusion" xml:space="preserve">
+    <value>扩散模型</value>
+  </data>
+  <data name="Environment" xml:space="preserve">
+    <value>环境</value>
+  </data>
+  <data name="Environments" xml:space="preserve">
+    <value>环境</value>
+  </data>
+  <data name="Extractor" xml:space="preserve">
+    <value>提取模型</value>
+  </data>
+  <data name="Extractors" xml:space="preserve">
+    <value>提取模型</value>
+  </data>
+  <data name="Gallery" xml:space="preserve">
+    <value>图库</value>
+  </data>
+  <data name="General" xml:space="preserve">
+    <value>常规</value>
+  </data>
+  <data name="LoraAdapter" xml:space="preserve">
+    <value>LoRA 适配器</value>
+  </data>
+  <data name="LoraAdapters" xml:space="preserve">
+    <value>LoRA 适配器</value>
+  </data>
+  <data name="Models" xml:space="preserve">
+    <value>模型</value>
+  </data>
+  <data name="NewVersion" xml:space="preserve">
+    <value>新版本！</value>
+  </data>
+  <data name="Menu_TextToImage" xml:space="preserve">
+    <value>文本 ➔ 图像</value>
+  </data>
+  <data name="Upscaler" xml:space="preserve">
+    <value>放大模型</value>
+  </data>
+  <data name="Upscalers" xml:space="preserve">
+    <value>放大模型</value>
+  </data>
+  <data name="Menu_ImageToImage" xml:space="preserve">
+    <value>图像 ➔ 图像</value>
+  </data>
+  <data name="Menu_ImageEdit" xml:space="preserve">
+    <value>图像编辑</value>
+  </data>
+  <data name="Menu_ImageInpaint" xml:space="preserve">
+    <value>图像局部重绘</value>
+  </data>
+  <data name="Menu_PaintToImage" xml:space="preserve">
+    <value>绘画 ➔ 图像</value>
+  </data>
+  <data name="Menu_ImageExtract" xml:space="preserve">
+    <value>图像提取</value>
+  </data>
+  <data name="Menu_ImageUpscale" xml:space="preserve">
+    <value>图像放大</value>
+  </data>
+  <data name="Menu_ImageCompose" xml:space="preserve">
+    <value>图像合成</value>
+  </data>
+  <data name="Menu_TextToVideo" xml:space="preserve">
+    <value>文本 ➔ 视频</value>
+  </data>
+  <data name="Menu_ImageToVideo" xml:space="preserve">
+    <value>图像 ➔ 视频</value>
+  </data>
+  <data name="Menu_VideoToVideo" xml:space="preserve">
+    <value>视频 ➔ 视频</value>
+  </data>
+  <data name="Menu_MediaToVideo" xml:space="preserve">
+    <value>媒体 ➔ 视频</value>
+  </data>
+  <data name="Menu_FrameToFrame" xml:space="preserve">
+    <value>帧 ➔ 帧</value>
+  </data>
+  <data name="Menu_VideoExtract" xml:space="preserve">
+    <value>视频提取</value>
+  </data>
+  <data name="Menu_VideoUpscale" xml:space="preserve">
+    <value>视频放大</value>
+  </data>
+  <data name="Menu_VideoInterpolate" xml:space="preserve">
+    <value>视频插帧</value>
+  </data>
+  <data name="Menu_VideoCompose" xml:space="preserve">
+    <value>视频合成</value>
+  </data>
+  <data name="Menu_TextToMusic" xml:space="preserve">
+    <value>文本 ➔ 音乐</value>
+  </data>
+  <data name="Menu_TextToAudio" xml:space="preserve">
+    <value>文本 ➔ 音频</value>
+  </data>
+  <data name="Menu_AudioToText" xml:space="preserve">
+    <value>音频 ➔ 文本</value>
+  </data>
+  <data name="Menu_ImageToText" xml:space="preserve">
+    <value>图像 ➔ 文本</value>
+  </data>
+  <data name="Menu_TextInstruct" xml:space="preserve">
+    <value>指令</value>
+  </data>
+  <data name="Menu_TextConverse" xml:space="preserve">
+    <value>对话</value>
+  </data>
+  <data name="Install" xml:space="preserve">
+    <value>安装</value>
+  </data>
+  <data name="Information" xml:space="preserve">
+    <value>信息</value>
+  </data>
+  <data name="Title_EnvironmentSetup" xml:space="preserve">
+    <value>环境配置</value>
+  </data>
+  <data name="Title_AmuseUpdate" xml:space="preserve">
+    <value>Amuse 更新</value>
+  </data>
+  <data name="Title_AmuseSetup" xml:space="preserve">
+    <value>Amuse 初始配置</value>
+  </data>
+  <data name="Title_ComponentModel" xml:space="preserve">
+    <value>组件模型</value>
+  </data>
+  <data name="Title_ControlNetModel" xml:space="preserve">
+    <value>ControlNet 模型</value>
+  </data>
+  <data name="Title_DiffusionModel" xml:space="preserve">
+    <value>扩散模型</value>
+  </data>
+  <data name="Title_AddModel" xml:space="preserve">
+    <value>添加模型</value>
+  </data>
+  <data name="Title_Environment" xml:space="preserve">
+    <value>环境</value>
+  </data>
+  <data name="Title_ExtractModel" xml:space="preserve">
+    <value>提取模型</value>
+  </data>
+  <data name="Title_LanguageModel" xml:space="preserve">
+    <value>语言模型</value>
+  </data>
+  <data name="Title_LoraAdapterModel" xml:space="preserve">
+    <value>LoRA 适配器模型</value>
+  </data>
+  <data name="Title_MediaPreview" xml:space="preserve">
+    <value>媒体预览</value>
+  </data>
+  <data name="Title_UpscaleModel" xml:space="preserve">
+    <value>放大模型</value>
+  </data>
+  <data name="AllBeamsResults" xml:space="preserve">
+    <value>所有束搜索结果</value>
+  </data>
+  <data name="EnableTiling" xml:space="preserve">
+    <value>启用分块</value>
+  </data>
+  <data name="EnableSlicing" xml:space="preserve">
+    <value>启用切片</value>
+  </data>
+  <data name="UseInputSize" xml:space="preserve">
+    <value>使用输入尺寸</value>
+  </data>
+  <data name="OutputHistory" xml:space="preserve">
+    <value>输出历史记录</value>
+  </data>
+  <data name="OutputLocation" xml:space="preserve">
+    <value>输出位置</value>
+  </data>
+  <data name="Lora" xml:space="preserve">
+    <value>LoRA</value>
+  </data>
+  <data name="Extract" xml:space="preserve">
+    <value>提取</value>
+  </data>
+  <data name="Upscale" xml:space="preserve">
+    <value>放大</value>
+  </data>
+  <data name="Control" xml:space="preserve">
+    <value>控制</value>
+  </data>
+  <data name="InvertOutput" xml:space="preserve">
+    <value>反相输出</value>
+  </data>
+  <data name="ThinkingEnabled" xml:space="preserve">
+    <value>启用思考</value>
+  </data>
+  <data name="MinLength" xml:space="preserve">
+    <value>最小长度</value>
+  </data>
+  <data name="MaxLength" xml:space="preserve">
+    <value>最大长度</value>
+  </data>
+  <data name="IsTransparent" xml:space="preserve">
+    <value>透明</value>
+  </data>
+  <data name="SamplingEnabled" xml:space="preserve">
+    <value>启用采样</value>
+  </data>
+  <data name="OutputSeed" xml:space="preserve">
+    <value>输出种子</value>
+  </data>
+  <data name="AudioEnabled" xml:space="preserve">
+    <value>启用音频</value>
+  </data>
+  <data name="EnableAudioProcessing" xml:space="preserve">
+    <value>启用音频处理</value>
+  </data>
+  <data name="DownloadAndInstall" xml:space="preserve">
+    <value>下载并安装</value>
+  </data>
+  <data name="Default_" xml:space="preserve">
+    <value>默认</value>
+  </data>
+  <data name="Move" xml:space="preserve">
+    <value>移动</value>
+  </data>
+  <data name="VaeSlicing" xml:space="preserve">
+    <value>VAE 切片</value>
+  </data>
+  <data name="VaeTiling" xml:space="preserve">
+    <value>VAE 分块</value>
+  </data>
+  <data name="FirstFrameLastFrame" xml:space="preserve">
+    <value>首尾帧</value>
+  </data>
+  <data name="DynamicOutputShape" xml:space="preserve">
+    <value>动态输出形状</value>
+  </data>
+  <data name="Settings" xml:space="preserve">
+    <value>设置</value>
+  </data>
+  <data name="Close" xml:space="preserve">
+    <value>关闭</value>
+  </data>
+  <data name="InputImage" xml:space="preserve">
+    <value>输入图像</value>
+  </data>
+  <data name="MergeOutput" xml:space="preserve">
+    <value>合并输出</value>
+  </data>
+  <data name="Prev" xml:space="preserve">
+    <value>上一个</value>
+  </data>
+  <data name="Next" xml:space="preserve">
+    <value>下一个</value>
+  </data>
+  <data name="AddTextLayer" xml:space="preserve">
+    <value>添加文本图层</value>
+  </data>
+  <data name="AddImageLayer" xml:space="preserve">
+    <value>添加图像图层</value>
+  </data>
+  <data name="ShowInstalled" xml:space="preserve">
+    <value>显示已安装</value>
+  </data>
+  <data name="ShowComponents" xml:space="preserve">
+    <value>显示组件</value>
+  </data>
+  <data name="AddRecentItems" xml:space="preserve">
+    <value>记录最近打开的项目</value>
+  </data>
+  <data name="MaxToolRounds" xml:space="preserve">
+    <value>最大工具调用轮数</value>
+  </data>
+  <data name="MaxItems" xml:space="preserve">
+    <value>最大项目数</value>
+  </data>
+  <data name="SortByLastUsed" xml:space="preserve">
+    <value>按上次使用排序</value>
+  </data>
+  <data name="Orientation" xml:space="preserve">
+    <value>方向</value>
+  </data>
+  <data name="ResetDialogs" xml:space="preserve">
+    <value>重置对话框</value>
+  </data>
+  <data name="EnableExternalLinks" xml:space="preserve">
+    <value>启用外部链接</value>
+  </data>
+  <data name="PipelineDebug" xml:space="preserve">
+    <value>后端进程调试</value>
+  </data>
+  <data name="CheckForUpdates" xml:space="preserve">
+    <value>检查更新</value>
+  </data>
+  <data name="Sampler" xml:space="preserve">
+    <value>采样器</value>
+  </data>
+  <data name="SamplerOptions" xml:space="preserve">
+    <value>采样器选项</value>
+  </data>
+  <data name="LatentUpscale" xml:space="preserve">
+    <value>潜空间放大</value>
+  </data>
+  <data name="AutoEncoder" xml:space="preserve">
+    <value>自编码器</value>
+  </data>
+  <data name="ExtractOptions" xml:space="preserve">
+    <value>提取选项</value>
+  </data>
+  <data name="UpscaleOptions" xml:space="preserve">
+    <value>放大选项</value>
+  </data>
+  <data name="Model" xml:space="preserve">
+    <value>模型</value>
+  </data>
+  <data name="MemoryProfile" xml:space="preserve">
+    <value>内存配置</value>
+  </data>
+  <data name="DefaultOptions" xml:space="preserve">
+    <value>默认选项</value>
+  </data>
+  <data name="Resolutions" xml:space="preserve">
+    <value>分辨率</value>
+  </data>
+  <data name="SupportedFunctions" xml:space="preserve">
+    <value>支持的功能</value>
+  </data>
+  <data name="ViewFilter" xml:space="preserve">
+    <value>视图筛选</value>
+  </data>
+  <data name="ComponentSettings" xml:space="preserve">
+    <value>组件设置</value>
+  </data>
+  <data name="ControlNetSettings" xml:space="preserve">
+    <value>ControlNet 设置</value>
+  </data>
+  <data name="ImageSettings" xml:space="preserve">
+    <value>图像设置</value>
+  </data>
+  <data name="VideoSettings" xml:space="preserve">
+    <value>视频设置</value>
+  </data>
+  <data name="AudioSettings" xml:space="preserve">
+    <value>音频设置</value>
+  </data>
+  <data name="ImageModels" xml:space="preserve">
+    <value>图像模型</value>
+  </data>
+  <data name="VideoModels" xml:space="preserve">
+    <value>视频模型</value>
+  </data>
+  <data name="AudioModels" xml:space="preserve">
+    <value>音频模型</value>
+  </data>
+  <data name="TextModels" xml:space="preserve">
+    <value>文本模型</value>
+  </data>
+  <data name="EnvironmentSettings" xml:space="preserve">
+    <value>环境设置</value>
+  </data>
+  <data name="ExtractSettings" xml:space="preserve">
+    <value>提取设置</value>
+  </data>
+  <data name="LoraSettings" xml:space="preserve">
+    <value>LoRA 设置</value>
+  </data>
+  <data name="UpscaleSettings" xml:space="preserve">
+    <value>放大设置</value>
+  </data>
+  <data name="AccessTokens" xml:space="preserve">
+    <value>访问令牌</value>
+  </data>
+  <data name="ExperimentalSettings" xml:space="preserve">
+    <value>实验性</value>
+  </data>
+  <data name="Options" xml:space="preserve">
+    <value>选项</value>
+  </data>
+  <data name="Seed" xml:space="preserve">
+    <value>种子</value>
+  </data>
+  <data name="Steps" xml:space="preserve">
+    <value>步数</value>
+  </data>
+  <data name="Guidance" xml:space="preserve">
+    <value>引导系数</value>
+  </data>
+  <data name="Strength" xml:space="preserve">
+    <value>强度</value>
+  </data>
+  <data name="Duration" xml:space="preserve">
+    <value>时长</value>
+  </data>
+  <data name="DurationSeconds" xml:space="preserve">
+    <value>时长（秒）</value>
+  </data>
+  <data name="TimeSignature" xml:space="preserve">
+    <value>拍号</value>
+  </data>
+  <data name="Keyscale" xml:space="preserve">
+    <value>调性</value>
+  </data>
+  <data name="VoiceStyle" xml:space="preserve">
+    <value>语音风格</value>
+  </data>
+  <data name="Speed" xml:space="preserve">
+    <value>语速</value>
+  </data>
+  <data name="Task" xml:space="preserve">
+    <value>任务</value>
+  </data>
+  <data name="LengthPenalty" xml:space="preserve">
+    <value>长度惩罚</value>
+  </data>
+  <data name="ChunkSize" xml:space="preserve">
+    <value>块大小</value>
+  </data>
+  <data name="EarlyStopping" xml:space="preserve">
+    <value>提前停止</value>
+  </data>
+  <data name="Advanced" xml:space="preserve">
+    <value>高级</value>
+  </data>
+  <data name="Automation" xml:space="preserve">
+    <value>自动化</value>
+  </data>
+  <data name="AutomationCount" xml:space="preserve">
+    <value>数量</value>
+  </data>
+  <data name="PromptFolder" xml:space="preserve">
+    <value>提示词文件夹</value>
+  </data>
+  <data name="PromptFile" xml:space="preserve">
+    <value>提示词文件</value>
+  </data>
+  <data name="ImageFolder" xml:space="preserve">
+    <value>图像文件夹</value>
+  </data>
+  <data name="VideoFolder" xml:space="preserve">
+    <value>视频文件夹</value>
+  </data>
+  <data name="TextFolder" xml:space="preserve">
+    <value>文本文件夹</value>
+  </data>
+  <data name="AudioFolder" xml:space="preserve">
+    <value>音频文件夹</value>
+  </data>
+  <data name="OutputFolder" xml:space="preserve">
+    <value>输出文件夹</value>
+  </data>
+  <data name="Beams" xml:space="preserve">
+    <value>束数</value>
+  </data>
+  <data name="Temperature" xml:space="preserve">
+    <value>温度</value>
+  </data>
+  <data name="TopK" xml:space="preserve">
+    <value>Top-K</value>
+  </data>
+  <data name="TopP" xml:space="preserve">
+    <value>Top-P</value>
+  </data>
+  <data name="Folder" xml:space="preserve">
+    <value>文件夹</value>
+  </data>
+  <data name="SubFolderOptional" xml:space="preserve">
+    <value>子文件夹（可选）</value>
+  </data>
+  <data name="Component" xml:space="preserve">
+    <value>组件</value>
+  </data>
+  <data name="ModelFile" xml:space="preserve">
+    <value>模型文件</value>
+  </data>
+  <data name="ModelFolder" xml:space="preserve">
+    <value>模型文件夹</value>
+  </data>
+  <data name="DownloadFiles" xml:space="preserve">
+    <value>下载文件</value>
+  </data>
+  <data name="Document" xml:space="preserve">
+    <value>文档</value>
+  </data>
+  <data name="Tokens" xml:space="preserve">
+    <value>Token 数</value>
+  </data>
+  <data name="Length" xml:space="preserve">
+    <value>长度</value>
+  </data>
+  <data name="RefreshRate" xml:space="preserve">
+    <value>刷新率</value>
+  </data>
+  <data name="Presets" xml:space="preserve">
+    <value>预设</value>
+  </data>
+  <data name="NoiseCondition" xml:space="preserve">
+    <value>噪声条件</value>
+  </data>
+  <data name="StepsStage1" xml:space="preserve">
+    <value>步数（阶段 1）</value>
+  </data>
+  <data name="StepsStage2" xml:space="preserve">
+    <value>步数（阶段 2）</value>
+  </data>
+  <data name="StepsHighNoise" xml:space="preserve">
+    <value>步数（高噪声）</value>
+  </data>
+  <data name="StepsLowNoise" xml:space="preserve">
+    <value>步数（低噪声）</value>
+  </data>
+  <data name="GuidanceModel" xml:space="preserve">
+    <value>引导系数（模型）</value>
+  </data>
+  <data name="GuidanceCFG" xml:space="preserve">
+    <value>引导系数（CFG）</value>
+  </data>
+  <data name="GuidanceHighNoise" xml:space="preserve">
+    <value>引导系数（高噪声）</value>
+  </data>
+  <data name="GuidanceLowNoise" xml:space="preserve">
+    <value>引导系数（低噪声）</value>
+  </data>
+  <data name="ControlStrength" xml:space="preserve">
+    <value>控制强度</value>
+  </data>
+  <data name="ControlType" xml:space="preserve">
+    <value>控制类型</value>
+  </data>
+  <data name="Prompt" xml:space="preserve">
+    <value>提示词</value>
+  </data>
+  <data name="NegativePrompt" xml:space="preserve">
+    <value>反向提示词</value>
+  </data>
+  <data name="DenoiseStrength" xml:space="preserve">
+    <value>去噪强度</value>
+  </data>
+  <data name="Ready" xml:space="preserve">
+    <value>就绪</value>
+  </data>
+  <data name="Device" xml:space="preserve">
+    <value>设备</value>
+  </data>
+  <data name="NoDevicesFound" xml:space="preserve">
+    <value>未找到设备。</value>
+  </data>
+  <data name="NoModelsFound" xml:space="preserve">
+    <value>未找到模型。</value>
+  </data>
+  <data name="Memory" xml:space="preserve">
+    <value>内存</value>
+  </data>
+  <data name="BackgroundMode" xml:space="preserve">
+    <value>背景模式</value>
+  </data>
+  <data name="MaxDetections" xml:space="preserve">
+    <value>最大检测数</value>
+  </data>
+  <data name="BodyConfidence" xml:space="preserve">
+    <value>身体置信度</value>
+  </data>
+  <data name="JointConfidence" xml:space="preserve">
+    <value>关节置信度</value>
+  </data>
+  <data name="BoneRadius" xml:space="preserve">
+    <value>骨骼半径</value>
+  </data>
+  <data name="BoneThickness" xml:space="preserve">
+    <value>骨骼粗细</value>
+  </data>
+  <data name="JointRadius" xml:space="preserve">
+    <value>关节半径</value>
+  </data>
+  <data name="FrameMultiplier" xml:space="preserve">
+    <value>帧倍数</value>
+  </data>
+  <data name="OutputPrefix" xml:space="preserve">
+    <value>输出前缀</value>
+  </data>
+  <data name="SystemPrompt" xml:space="preserve">
+    <value>系统提示词</value>
+  </data>
+  <data name="RepetitionPenalty" xml:space="preserve">
+    <value>重复惩罚</value>
+  </data>
+  <data name="NoRepeatNgrams" xml:space="preserve">
+    <value>禁止重复 N-gram</value>
+  </data>
+  <data name="TopH" xml:space="preserve">
+    <value>Top-H</value>
+  </data>
+  <data name="TypicalP" xml:space="preserve">
+    <value>Typical-P</value>
+  </data>
+  <data name="KVCache" xml:space="preserve">
+    <value>KV 缓存</value>
+  </data>
+  <data name="Note" xml:space="preserve">
+    <value>备注</value>
+  </data>
+  <data name="ConversationContext" xml:space="preserve">
+    <value>对话上下文</value>
+  </data>
+  <data name="AdditionalContext" xml:space="preserve">
+    <value>附加上下文</value>
+  </data>
+  <data name="PleaseSelectLora" xml:space="preserve">
+    <value>请选择 LoRA...</value>
+  </data>
+  <data name="TotalUsed" xml:space="preserve">
+    <value>已用总量</value>
+  </data>
+  <data name="CurrentTime" xml:space="preserve">
+    <value>当前时间</value>
+  </data>
+  <data name="TimelineTime" xml:space="preserve">
+    <value>时间线时间</value>
+  </data>
+  <data name="Segments" xml:space="preserve">
+    <value>片段</value>
+  </data>
+  <data name="TimelineFrame" xml:space="preserve">
+    <value>时间线帧</value>
+  </data>
+  <data name="TimelineFrames" xml:space="preserve">
+    <value>时间线帧数</value>
+  </data>
+  <data name="ImportVideo" xml:space="preserve">
+    <value>导入视频</value>
+  </data>
+  <data name="ImportAudio" xml:space="preserve">
+    <value>导入音频</value>
+  </data>
+  <data name="ImportImage" xml:space="preserve">
+    <value>导入图像</value>
+  </data>
+  <data name="ImportOverlay" xml:space="preserve">
+    <value>导入叠加层</value>
+  </data>
+  <data name="FrameWidth" xml:space="preserve">
+    <value>帧宽度</value>
+  </data>
+  <data name="FrameSize" xml:space="preserve">
+    <value>帧尺寸</value>
+  </data>
+  <data name="PreviewQuality" xml:space="preserve">
+    <value>预览质量</value>
+  </data>
+  <data name="FlowShift" xml:space="preserve">
+    <value>Flow 偏移</value>
+  </data>
+  <data name="Eta" xml:space="preserve">
+    <value>Eta</value>
+  </data>
+  <data name="Scheduler" xml:space="preserve">
+    <value>调度器</value>
+  </data>
+  <data name="NewVersionMessage" xml:space="preserve">
+    <value>Amuse 有新版本可用</value>
+  </data>
+  <data name="TimeRemaining" xml:space="preserve">
+    <value>剩余时间</value>
+  </data>
+  <data name="Path" xml:space="preserve">
+    <value>路径</value>
+  </data>
+  <data name="MainFile" xml:space="preserve">
+    <value>主文件</value>
+  </data>
+  <data name="Name" xml:space="preserve">
+    <value>名称</value>
+  </data>
+  <data name="Key" xml:space="preserve">
+    <value>键</value>
+  </data>
+  <data name="Licence" xml:space="preserve">
+    <value>许可证</value>
+  </data>
+  <data name="Link" xml:space="preserve">
+    <value>链接</value>
+  </data>
+  <data name="Pipeline" xml:space="preserve">
+    <value>管线</value>
+  </data>
+  <data name="Backend" xml:space="preserve">
+    <value>后端</value>
+  </data>
+  <data name="Status" xml:space="preserve">
+    <value>状态</value>
+  </data>
+  <data name="ModelLink" xml:space="preserve">
+    <value>模型链接</value>
+  </data>
+  <data name="Tasks" xml:space="preserve">
+    <value>任务</value>
+  </data>
+  <data name="SilenceDuration" xml:space="preserve">
+    <value>静音时长</value>
+  </data>
+  <data name="MaxLength2" xml:space="preserve">
+    <value>最大长度 2</value>
+  </data>
+  <data name="SampleRate" xml:space="preserve">
+    <value>采样率</value>
+  </data>
+  <data name="FrameChunkOverlap" xml:space="preserve">
+    <value>帧块重叠</value>
+  </data>
+  <data name="FrameChunk" xml:space="preserve">
+    <value>帧块</value>
+  </data>
+  <data name="Steps2" xml:space="preserve">
+    <value>步数 2</value>
+  </data>
+  <data name="RepositoryLink" xml:space="preserve">
+    <value>仓库链接</value>
+  </data>
+  <data name="AccessToken" xml:space="preserve">
+    <value>访问令牌</value>
+  </data>
+  <data name="OriginalModelDataType" xml:space="preserve">
+    <value>原始模型数据类型</value>
+  </data>
+  <data name="Source" xml:space="preserve">
+    <value>来源</value>
+  </data>
+  <data name="ModelName" xml:space="preserve">
+    <value>模型名称</value>
+  </data>
+  <data name="Version" xml:space="preserve">
+    <value>版本</value>
+  </data>
+  <data name="Vendor" xml:space="preserve">
+    <value>厂商</value>
+  </data>
+  <data name="Requirements" xml:space="preserve">
+    <value>依赖项</value>
+  </data>
+  <data name="EnvironmentVariables" xml:space="preserve">
+    <value>环境变量</value>
+  </data>
+  <data name="SampleSize" xml:space="preserve">
+    <value>样本尺寸</value>
+  </data>
+  <data name="OutputChannels" xml:space="preserve">
+    <value>输出通道</value>
+  </data>
+  <data name="InputNormalization" xml:space="preserve">
+    <value>输入归一化</value>
+  </data>
+  <data name="OutputNormalization" xml:space="preserve">
+    <value>输出归一化</value>
+  </data>
+  <data name="MemorySize" xml:space="preserve">
+    <value>内存大小</value>
+  </data>
+  <data name="ModelParametersB" xml:space="preserve">
+    <value>模型参数量（B）</value>
+  </data>
+  <data name="ModelSizeGB" xml:space="preserve">
+    <value>模型大小（GB）</value>
+  </data>
+  <data name="TriggerWords" xml:space="preserve">
+    <value>触发词</value>
+  </data>
+  <data name="TagOptional" xml:space="preserve">
+    <value>（可选）</value>
+  </data>
+  <data name="TagDefault" xml:space="preserve">
+    <value>（默认）</value>
+  </data>
+  <data name="Directory" xml:space="preserve">
+    <value>目录</value>
+  </data>
+  <data name="NewLocation" xml:space="preserve">
+    <value>新位置</value>
+  </data>
+  <data name="ScaleFactor" xml:space="preserve">
+    <value>缩放倍数</value>
+  </data>
+  <data name="Actions" xml:space="preserve">
+    <value>操作</value>
+  </data>
+  <data name="DownloadModel" xml:space="preserve">
+    <value>下载模型</value>
+  </data>
+  <data name="RetryDownload" xml:space="preserve">
+    <value>重试下载</value>
+  </data>
+  <data name="UpdateModel" xml:space="preserve">
+    <value>更新模型</value>
+  </data>
+  <data name="CancelDownload" xml:space="preserve">
+    <value>取消下载</value>
+  </data>
+  <data name="OpenFolder" xml:space="preserve">
+    <value>打开文件夹</value>
+  </data>
+  <data name="DeleteFiles" xml:space="preserve">
+    <value>删除文件</value>
+  </data>
+  <data name="Media" xml:space="preserve">
+    <value>媒体</value>
+  </data>
+  <data name="EnvironmentSetDefault" xml:space="preserve">
+    <value>设为默认环境</value>
+  </data>
+  <data name="EnvironmentDefault" xml:space="preserve">
+    <value>默认环境</value>
+  </data>
+  <data name="SaveChanges" xml:space="preserve">
+    <value>保存更改</value>
+  </data>
+  <data name="ModelDirectory" xml:space="preserve">
+    <value>模型目录</value>
+  </data>
+  <data name="UIScale" xml:space="preserve">
+    <value>界面缩放</value>
+  </data>
+  <data name="TempDirectory" xml:space="preserve">
+    <value>临时目录</value>
+  </data>
+  <data name="LogDirectory" xml:space="preserve">
+    <value>日志目录</value>
+  </data>
+  <data name="AudioInput" xml:space="preserve">
+    <value>音频输入</value>
+  </data>
+  <data name="TextResult" xml:space="preserve">
+    <value>文本结果</value>
+  </data>
+  <data name="Search" xml:space="preserve">
+    <value>搜索</value>
+  </data>
+  <data name="MediaType" xml:space="preserve">
+    <value>媒体类型</value>
+  </data>
+  <data name="ProcessType" xml:space="preserve">
+    <value>处理类型</value>
+  </data>
+  <data name="Items" xml:space="preserve">
+    <value>项目</value>
+  </data>
+  <data name="NoItemsFound" xml:space="preserve">
+    <value>未找到项目。</value>
+  </data>
+  <data name="DeleteItem" xml:space="preserve">
+    <value>删除项目</value>
+  </data>
+  <data name="NoInformationFound" xml:space="preserve">
+    <value>未找到信息。</value>
+  </data>
+  <data name="FrameHeight" xml:space="preserve">
+    <value>帧高度</value>
+  </data>
+  <data name="Background" xml:space="preserve">
+    <value>背景</value>
+  </data>
+  <data name="Rotation" xml:space="preserve">
+    <value>旋转</value>
+  </data>
+  <data name="Stretch" xml:space="preserve">
+    <value>拉伸</value>
+  </data>
+  <data name="Font" xml:space="preserve">
+    <value>字体</value>
+  </data>
+  <data name="Size" xml:space="preserve">
+    <value>大小</value>
+  </data>
+  <data name="Style" xml:space="preserve">
+    <value>样式</value>
+  </data>
+  <data name="Weight" xml:space="preserve">
+    <value>粗细</value>
+  </data>
+  <data name="Color" xml:space="preserve">
+    <value>颜色</value>
+  </data>
+  <data name="Layers" xml:space="preserve">
+    <value>图层</value>
+  </data>
+  <data name="ModelType" xml:space="preserve">
+    <value>模型类型</value>
+  </data>
+  <data name="PipelineType" xml:space="preserve">
+    <value>管线类型</value>
+  </data>
+  <data name="BackendType" xml:space="preserve">
+    <value>后端类型</value>
+  </data>
+  <data name="Output" xml:space="preserve">
+    <value>输出</value>
+  </data>
+  <data name="ActiveDownloads" xml:space="preserve">
+    <value>进行中的下载</value>
+  </data>
+  <data name="Retry" xml:space="preserve">
+    <value>重试</value>
+  </data>
+  <data name="CancelAll" xml:space="preserve">
+    <value>全部取消</value>
+  </data>
+  <data name="Queued" xml:space="preserve">
+    <value>排队中</value>
+  </data>
+  <data name="Downloading" xml:space="preserve">
+    <value>下载中</value>
+  </data>
+  <data name="Failed" xml:space="preserve">
+    <value>失败</value>
+  </data>
+  <data name="Scale" xml:space="preserve">
+    <value>缩放</value>
+  </data>
+  <data name="AudioResult" xml:space="preserve">
+    <value>音频结果</value>
+  </data>
+  <data name="InputText" xml:space="preserve">
+    <value>输入文本</value>
+  </data>
+  <data name="ReferenceAudioOptional" xml:space="preserve">
+    <value>参考音频（可选）</value>
+  </data>
+  <data name="Lyrics" xml:space="preserve">
+    <value>歌词</value>
+  </data>
+  <data name="ReferenceAudio" xml:space="preserve">
+    <value>参考音频</value>
+  </data>
+  <data name="LoraModel" xml:space="preserve">
+    <value>LoRA 模型</value>
+  </data>
+  <data name="ControlNetModel" xml:space="preserve">
+    <value>ControlNet 模型</value>
+  </data>
+  <data name="LoraStrength" xml:space="preserve">
+    <value>LoRA 强度</value>
+  </data>
+  <data name="ControlNetStrength" xml:space="preserve">
+    <value>ControlNet 强度</value>
+  </data>
+  <data name="Tiled" xml:space="preserve">
+    <value>分块</value>
+  </data>
+  <data name="Detections" xml:space="preserve">
+    <value>检测数</value>
+  </data>
+  <data name="Created" xml:space="preserve">
+    <value>创建时间</value>
+  </data>
+  <data name="InfoPath" xml:space="preserve">
+    <value>信息路径</value>
+  </data>
+  <data name="OriginalSize" xml:space="preserve">
+    <value>原始尺寸</value>
+  </data>
+  <data name="Interpolated" xml:space="preserve">
+    <value>已插帧</value>
+  </data>
+  <data name="Original" xml:space="preserve">
+    <value>原始</value>
+  </data>
+  <data name="Multiplier" xml:space="preserve">
+    <value>倍数</value>
+  </data>
+  <data name="Composed" xml:space="preserve">
+    <value>已合成</value>
+  </data>
+  <data name="Generated" xml:space="preserve">
+    <value>已生成</value>
+  </data>
+  <data name="Score" xml:space="preserve">
+    <value>评分</value>
+  </data>
+  <data name="DeleteItems" xml:space="preserve">
+    <value>删除项目</value>
+  </data>
+  <data name="Extracted" xml:space="preserve">
+    <value>已提取</value>
+  </data>
+  <data name="Upscaled" xml:space="preserve">
+    <value>已放大</value>
+  </data>
+  <data name="Recent" xml:space="preserve">
+    <value>最近</value>
+  </data>
+  <data name="UpdateAvailable" xml:space="preserve">
+    <value>有可用更新</value>
+  </data>
+  <data name="Interpolate" xml:space="preserve">
+    <value>插帧</value>
+  </data>
+  <data name="ProgressInitialize" xml:space="preserve">
+    <value>正在初始化管线...</value>
+  </data>
+  <data name="ProgressTextEncoder" xml:space="preserve">
+    <value>正在编码提示词...</value>
+  </data>
+  <data name="ProgressTransformer" xml:space="preserve">
+    <value>正在生成...</value>
+  </data>
+  <data name="ProgressStep" xml:space="preserve">
+    <value>步数：{5}/{6}</value>
+  </data>
+  <data name="ProgressAutoEncoder" xml:space="preserve">
+    <value>正在解码结果...</value>
+  </data>
+  <data name="ProgressComplete" xml:space="preserve">
+    <value>正在生成结果...</value>
+  </data>
+  <data name="ProgressEncoder" xml:space="preserve">
+    <value>正在编码输入...</value>
+  </data>
+  <data name="ProgressUpscaling" xml:space="preserve">
+    <value>正在放大...</value>
+  </data>
+  <data name="ActiveDownloadsMessage" xml:space="preserve">
+    <value>仍有下载正在进行，确定要取消并退出吗？</value>
+  </data>
+  <data name="AutomationStarted" xml:space="preserve">
+    <value>自动化已开始</value>
+  </data>
+  <data name="RenderingVideo" xml:space="preserve">
+    <value>正在渲染视频</value>
+  </data>
+  <data name="DeleteGalleryItems" xml:space="preserve">
+    <value>确定要删除全部 {0} 个图库项目吗？</value>
+  </data>
+  <data name="DeleteGalleryItemsFiltered" xml:space="preserve">
+    <value>确定要删除筛选出的 {0} 个图库项目吗？</value>
+  </data>
+  <data name="LoadingPipeline" xml:space="preserve">
+    <value>正在加载管线</value>
+  </data>
+  <data name="EncodingVideoFrames" xml:space="preserve">
+    <value>正在编码视频帧</value>
+  </data>
+  <data name="ProcessingInputFrame" xml:space="preserve">
+    <value>正在处理输入帧</value>
+  </data>
+  <data name="CancellingGeneration" xml:space="preserve">
+    <value>正在取消生成</value>
+  </data>
+  <data name="ExtractingImage" xml:space="preserve">
+    <value>正在提取图像</value>
+  </data>
+  <data name="ExtractingVideo" xml:space="preserve">
+    <value>正在提取视频</value>
+  </data>
+  <data name="UpscalingImage" xml:space="preserve">
+    <value>正在放大图像</value>
+  </data>
+  <data name="UpscalingVideo" xml:space="preserve">
+    <value>正在放大视频</value>
+  </data>
+  <data name="RenderingImage" xml:space="preserve">
+    <value>正在渲染图像</value>
+  </data>
+  <data name="InitializingBackendEnvironment" xml:space="preserve">
+    <value>正在初始化 {0} 环境</value>
+  </data>
+  <data name="Tile" xml:space="preserve">
+    <value>分块</value>
+  </data>
+  <data name="GeneratingBeamResults" xml:space="preserve">
+    <value>正在生成束搜索结果</value>
+  </data>
+  <data name="RemoveComponent" xml:space="preserve">
+    <value>移除组件</value>
+  </data>
+  <data name="RemoveComponentMessage" xml:space="preserve">
+    <value>确定要从 Amuse 中移除此组件吗？已下载的文件不会被删除。</value>
+  </data>
+  <data name="ImportComponent" xml:space="preserve">
+    <value>导入组件</value>
+  </data>
+  <data name="ExportComponent" xml:space="preserve">
+    <value>导出组件</value>
+  </data>
+  <data name="DeleteComponent" xml:space="preserve">
+    <value>删除组件</value>
+  </data>
+  <data name="DeleteComponentMessage" xml:space="preserve">
+    <value>确定要删除此组件已下载的文件吗？</value>
+  </data>
+  <data name="RemoveModel" xml:space="preserve">
+    <value>移除模型</value>
+  </data>
+  <data name="RemoveModelMessage" xml:space="preserve">
+    <value>确定要从 Amuse 中移除此模型吗？已下载的文件不会被删除。</value>
+  </data>
+  <data name="ImportModel" xml:space="preserve">
+    <value>导入模型</value>
+  </data>
+  <data name="ExportModel" xml:space="preserve">
+    <value>导出模型</value>
+  </data>
+  <data name="DeleteModel" xml:space="preserve">
+    <value>删除模型</value>
+  </data>
+  <data name="DeleteModelMessage" xml:space="preserve">
+    <value>确定要删除此模型已下载的文件吗？</value>
+  </data>
+  <data name="RemoveEnvironment" xml:space="preserve">
+    <value>移除环境</value>
+  </data>
+  <data name="RemoveEnvironmentMessage" xml:space="preserve">
+    <value>确定要从 Amuse 中移除此环境吗？其已安装的文件也会被删除。</value>
+  </data>
+  <data name="ImportEnvironment" xml:space="preserve">
+    <value>导入环境</value>
+  </data>
+  <data name="ExportEnvironment" xml:space="preserve">
+    <value>导出环境</value>
+  </data>
+  <data name="DeleteEnvironment" xml:space="preserve">
+    <value>删除环境</value>
+  </data>
+  <data name="DeleteEnvironmentMessage" xml:space="preserve">
+    <value>确定要删除此环境已安装的文件吗？</value>
+  </data>
+  <data name="EnableExternalTools" xml:space="preserve">
+    <value>启用外部工具</value>
+  </data>
+  <data name="EnableExecuteTools" xml:space="preserve">
+    <value>启用执行类工具</value>
+  </data>
+  <data name="EnableDangerousTools" xml:space="preserve">
+    <value>启用危险工具</value>
+  </data>
+  <data name="References" xml:space="preserve">
+    <value>参考</value>
+  </data>
+  <data name="ReferenceAddImage" xml:space="preserve">
+    <value>添加参考图像</value>
+  </data>
+  <data name="ReferenceAddVideo" xml:space="preserve">
+    <value>添加参考视频</value>
+  </data>
+  <data name="ReferenceAddAudio" xml:space="preserve">
+    <value>添加参考音频</value>
+  </data>
+  <data name="ReferenceEmpty" xml:space="preserve">
+    <value>添加参考媒体</value>
+  </data>
+  <data name="ReferenceEmptyMessage" xml:space="preserve">
+    <value>用于引导生成的图像、视频和音频</value>
+  </data>
+  <data name="Prompt2" xml:space="preserve">
+    <value>提示词 2</value>
+  </data>
+  <data name="BPM" xml:space="preserve">
+    <value>BPM</value>
+  </data>
+  <data name="AttachDocumentsMedia" xml:space="preserve">
+    <value>附加文档/媒体</value>
+  </data>
+  <data name="AttachDocumentsMediaMessage" xml:space="preserve">
+    <value>为对话提供额外的上下文</value>
+  </data>
+  <data name="Compute" xml:space="preserve">
+    <value>计算</value>
+  </data>
+  <data name="Tokenizer" xml:space="preserve">
+    <value>分词器</value>
+  </data>
+  <data name="TextEncoder" xml:space="preserve">
+    <value>文本编码器</value>
+  </data>
+  <data name="TextEncoder2" xml:space="preserve">
+    <value>文本编码器 2</value>
+  </data>
+  <data name="TextEncoder3" xml:space="preserve">
+    <value>文本编码器 3</value>
+  </data>
+  <data name="Unet" xml:space="preserve">
+    <value>UNet</value>
+  </data>
+  <data name="Transformer" xml:space="preserve">
+    <value>Transformer</value>
+  </data>
+  <data name="Transformer2" xml:space="preserve">
+    <value>Transformer 2</value>
+  </data>
+  <data name="AudioVae" xml:space="preserve">
+    <value>音频 VAE</value>
+  </data>
+  <data name="Vocoder" xml:space="preserve">
+    <value>声码器</value>
+  </data>
+  <data name="Connectors" xml:space="preserve">
+    <value>连接器</value>
+  </data>
+  <data name="LatentUpsampler" xml:space="preserve">
+    <value>潜空间上采样器</value>
+  </data>
+  <data name="LatentUpsamplerTemporal" xml:space="preserve">
+    <value>潜空间时序上采样器</value>
+  </data>
+  <data name="ConditionEncoder" xml:space="preserve">
+    <value>条件编码器</value>
+  </data>
+  <data name="AudioTokenizer" xml:space="preserve">
+    <value>音频分词器</value>
+  </data>
+  <data name="AudioDetokenizer" xml:space="preserve">
+    <value>音频反分词器</value>
+  </data>
+  <data name="TextModel" xml:space="preserve">
+    <value>文本模型</value>
+  </data>
+  <data name="TextModel2" xml:space="preserve">
+    <value>文本模型 2</value>
+  </data>
+  <data name="InputStrength" xml:space="preserve">
+    <value>输入强度</value>
+  </data>
+  <data name="NoHistoryItemsFound" xml:space="preserve">
+    <value>未找到历史记录</value>
+  </data>
+  <data name="ToolCallsEnabled" xml:space="preserve">
+    <value>启用工具调用</value>
+  </data>
+  <data name="BeamResultsMessage" xml:space="preserve">
+    <value>束搜索全部完成后才会显示结果</value>
+  </data>
+  <data name="Karras" xml:space="preserve">
+    <value>Karras</value>
+  </data>
+  <data name="Beta" xml:space="preserve">
+    <value>Beta</value>
+  </data>
+  <data name="Exponential" xml:space="preserve">
+    <value>指数</value>
+  </data>
+  <data name="BeamLabel" xml:space="preserve">
+    <value>束：</value>
+  </data>
+  <data name="Function_TextToImage" xml:space="preserve">
+    <value>文生图</value>
+  </data>
+  <data name="Function_ImageToImage" xml:space="preserve">
+    <value>图生图</value>
+  </data>
+  <data name="Function_ImageEdit" xml:space="preserve">
+    <value>图像编辑</value>
+  </data>
+  <data name="Function_ImageInpaint" xml:space="preserve">
+    <value>图像局部重绘</value>
+  </data>
+  <data name="Function_ImageControlNet" xml:space="preserve">
+    <value>图像（ControlNet）</value>
+  </data>
+  <data name="Function_ImageToImageControlNet" xml:space="preserve">
+    <value>图生图（ControlNet）</value>
+  </data>
+  <data name="Function_PaintToImage" xml:space="preserve">
+    <value>绘画生图</value>
+  </data>
+  <data name="Function_FrameToFrame" xml:space="preserve">
+    <value>逐帧转换</value>
+  </data>
+  <data name="Function_TextToVideo" xml:space="preserve">
+    <value>文生视频</value>
+  </data>
+  <data name="Function_ImageToVideo" xml:space="preserve">
+    <value>图生视频</value>
+  </data>
+  <data name="Function_VideoToVideo" xml:space="preserve">
+    <value>视频生视频</value>
+  </data>
+  <data name="Function_TextToMusic" xml:space="preserve">
+    <value>文生音乐</value>
+  </data>
+  <data name="Function_TextToAudio" xml:space="preserve">
+    <value>文生音频</value>
+  </data>
+  <data name="Function_AudioToText" xml:space="preserve">
+    <value>音频转文本</value>
+  </data>
+  <data name="Function_TextToText" xml:space="preserve">
+    <value>文生文</value>
+  </data>
+  <data name="Function_ImageToText" xml:space="preserve">
+    <value>图像转文本</value>
+  </data>
+  <data name="Function_TextInstruct" xml:space="preserve">
+    <value>文本指令</value>
+  </data>
+  <data name="Function_TextConverse" xml:space="preserve">
+    <value>文本对话</value>
+  </data>
+  <data name="Title_ExecutionOptions" xml:space="preserve">
+    <value>执行选项</value>
+  </data>
+  <data name="SegmentPrefetch" xml:space="preserve">
+    <value>分段预取</value>
+  </data>
+  <data name="SegmentedCompute" xml:space="preserve">
+    <value>分段计算</value>
+  </data>
+  <data name="MemoryReserveGB" xml:space="preserve">
+    <value>预留显存（GB）</value>
+  </data>
+  <data name="GpuLayers" xml:space="preserve">
+    <value>GPU 层数</value>
+  </data>
+  <data name="Threads" xml:space="preserve">
+    <value>线程数</value>
+  </data>
+  <data name="ContextSize" xml:space="preserve">
+    <value>上下文长度</value>
+  </data>
+  <data name="CacheOffload" xml:space="preserve">
+    <value>GPU 缓存</value>
+  </data>
+  <data name="FlashAttention" xml:space="preserve">
+    <value>Flash Attention</value>
+  </data>
+  <data name="EnableSageAttention" xml:space="preserve">
+    <value>启用 Sage Attention</value>
+  </data>
+  <data name="ConvDirect" xml:space="preserve">
+    <value>Conv-Direct</value>
+  </data>
+  <data name="CPUExecution" xml:space="preserve">
+    <value>CPU 执行</value>
+  </data>
+  <data name="MadeInNewZealand" xml:space="preserve">
+    <value>新西兰制造</value>
+  </data>
+  <data name="CreatedBy" xml:space="preserve">
+    <value>作者： </value>
+  </data>
+  <data name="Image1" xml:space="preserve">
+    <value>图像 1</value>
+  </data>
+  <data name="Image2" xml:space="preserve">
+    <value>图像 2</value>
+  </data>
+  <data name="Image3" xml:space="preserve">
+    <value>图像 3</value>
+  </data>
+  <data name="Image4" xml:space="preserve">
+    <value>图像 4</value>
+  </data>
+  <data name="PosX" xml:space="preserve">
+    <value>X 坐标</value>
+  </data>
+  <data name="PosY" xml:space="preserve">
+    <value>Y 坐标</value>
+  </data>
+  <data name="FirstFrame" xml:space="preserve">
+    <value>首帧</value>
+  </data>
+  <data name="LastFrame" xml:space="preserve">
+    <value>尾帧</value>
+  </data>
+  <data name="SearchComponents" xml:space="preserve">
+    <value>搜索组件</value>
+  </data>
+  <data name="SearchControlNetModels" xml:space="preserve">
+    <value>搜索 ControlNet 模型</value>
+  </data>
+  <data name="SearchDiffusionModels" xml:space="preserve">
+    <value>搜索扩散模型</value>
+  </data>
+  <data name="SearchEnvironments" xml:space="preserve">
+    <value>搜索环境</value>
+  </data>
+  <data name="SearchExtractModels" xml:space="preserve">
+    <value>搜索提取模型</value>
+  </data>
+  <data name="SearchLanguageModels" xml:space="preserve">
+    <value>搜索语言模型</value>
+  </data>
+  <data name="SearchLoraModels" xml:space="preserve">
+    <value>搜索 LoRA 模型</value>
+  </data>
+  <data name="SearchUpscaleModels" xml:space="preserve">
+    <value>搜索放大模型</value>
+  </data>
+  <data name="PipelineDebugMessage" xml:space="preserve">
+    <value>在单独的控制台窗口中显示后端进程输出</value>
+  </data>
+  <data name="AskQuestionPlaceholder" xml:space="preserve">
+    <value>请输入您的问题...</value>
+  </data>
+  <data name="Theme" xml:space="preserve">
+    <value>主题</value>
+  </data>
+  <data name="ThemeChangedTitle" xml:space="preserve">
+    <value>主题已更改</value>
+  </data>
+  <data name="ThemeChangedMessage" xml:space="preserve">
+    <value>重启 Amuse 以应用新主题。</value>
+  </data>
+  <data name="ToolActionReadFile" xml:space="preserve">
+    <value>读取文件：{0}</value>
+  </data>
+  <data name="ToolActionOpenLink" xml:space="preserve">
+    <value>打开链接：{0}</value>
+  </data>
+  <data name="ToolActionRunProgram" xml:space="preserve">
+    <value>运行程序或脚本：{0}</value>
+  </data>
+  <data name="ToolExternalAccessTitle" xml:space="preserve">
+    <value>外部访问</value>
+  </data>
+  <data name="ToolExternalAccessMessage" xml:space="preserve">
+    <value>{0} 将访问外部数据或服务。
+此请求中的数据可能会被发送出去，以检索或处理所请求的信息。
+
+是否继续？</value>
+  </data>
+  <data name="ToolDangerousAccessTitle" xml:space="preserve">
+    <value>危险操作</value>
+  </data>
+  <data name="ToolDangerousAccessMessage" xml:space="preserve">
+    <value>{0} 想要执行一项可能更改您的计算机或泄露您数据的操作：
+
+{1}
+
+仅当您信任此操作且该操作确由您发起时，才继续。
+
+是否继续？</value>
+  </data>
+  <data name="HomeTitle" xml:space="preserve">
+    <value>您想创作什么？</value>
+  </data>
+  <data name="HomeSubtitle" xml:space="preserve">
+    <value>选择一项任务开始，或回到最近使用过的模型或结果。</value>
+  </data>
+  <data name="HomeImageDescription" xml:space="preserve">
+    <value>生成、编辑、局部重绘和放大图像。</value>
+  </data>
+  <data name="HomeVideoDescription" xml:space="preserve">
+    <value>根据文本或图像创建视频，转换风格并放大。</value>
+  </data>
+  <data name="HomeAudioDescription" xml:space="preserve">
+    <value>制作音乐和语音，或将音频转录为文本。</value>
+  </data>
+  <data name="HomeTextDescription" xml:space="preserve">
+    <value>聊天、执行指令和描述图像。</value>
+  </data>
+  <data name="NewModels" xml:space="preserve">
+    <value>新模型</value>
+  </data>
+  <data name="RecommendedModels" xml:space="preserve">
+    <value>推荐模型</value>
+  </data>
+  <data name="RecentModels" xml:space="preserve">
+    <value>最近使用的模型</value>
+  </data>
+  <data name="HomeDevices" xml:space="preserve">
+    <value>设备和后端</value>
+  </data>
+  <data name="ManageEnvironments" xml:space="preserve">
+    <value>管理环境</value>
+  </data>
+  <data name="BackendReady" xml:space="preserve">
+    <value>就绪</value>
+  </data>
+  <data name="BackendNotInstalled" xml:space="preserve">
+    <value>未安装</value>
+  </data>
+  <data name="BackendUnsupported" xml:space="preserve">
+    <value>不支持</value>
+  </data>
+  <data name="ModelDownloadingTitle" xml:space="preserve">
+    <value>模型下载中</value>
+  </data>
+  <data name="WeightType" xml:space="preserve">
+    <value>权重类型</value>
+  </data>
+  <data name="Later" xml:space="preserve">
+    <value>稍后</value>
+  </data>
+  <data name="Installing" xml:space="preserve">
+    <value>安装中</value>
+  </data>
+  <data name="Installed" xml:space="preserve">
+    <value>已安装</value>
+  </data>
+  <data name="EnvironmentUpdateRequired" xml:space="preserve">
+    <value>需要更新</value>
+  </data>
+  <data name="EnvironmentSetupMessage" xml:space="preserve">
+    <value>配置后端环境</value>
+  </data>
+  <data name="EnvironmentSetupSubMessage" xml:space="preserve">
+    <value>部分后端环境缺失或需要更新。请选择现在要配置的环境，未勾选的环境可稍后在主页或设置页面中安装。</value>
+  </data>
+  <data name="EnvironmentSetupWaitMessage" xml:space="preserve">
+    <value>（这可能需要几分钟）</value>
+  </data>
+  <data name="EnvironmentSetupFailedMessage" xml:space="preserve">
+    <value>部分环境安装失败，详情请查看日志。您可以在主页或设置页面中重试。</value>
+  </data>
+  <data name="BackendDescriptionStableDiffusionCpp" xml:space="preserve">
+    <value>图像和视频生成</value>
+  </data>
+  <data name="BackendDescriptionAudioCpp" xml:space="preserve">
+    <value>语音、音乐和音频生成</value>
+  </data>
+  <data name="BackendDescriptionLlamaCpp" xml:space="preserve">
+    <value>聊天和文本助手（语言模型）</value>
+  </data>
+  <data name="Apply" xml:space="preserve">
+    <value>应用</value>
+  </data>
+  <data name="EnvironmentManageSubMessage" xml:space="preserve">
+    <value>为每个后端选择在您的显卡上使用的环境。勾选一行并选择环境：已安装的环境会立即设为默认，其他环境会先进行安装。</value>
+  </data>
+  <data name="Description" xml:space="preserve">
+    <value>描述</value>
+  </data>
+  <data name="DownloadSizeGB" xml:space="preserve">
+    <value>下载大小（GB）</value>
+  </data>
+  <data name="UpscaleTemporalChunkSize" xml:space="preserve">
+    <value>时序块大小</value>
+  </data>
+  <data name="UpscaleWindowSize" xml:space="preserve">
+    <value>窗口大小</value>
+  </data>
+  <data name="ModelFiles" xml:space="preserve">
+    <value>模型文件</value>
+  </data>
+  <data name="ShowAll" xml:space="preserve">
+    <value>显示全部</value>
+  </data>
+  <data name="AllPipelines" xml:space="preserve">
+    <value>所有管线</value>
+  </data>
+  <data name="ImportCompleteTitle" xml:space="preserve">
+    <value>导入完成</value>
+  </data>
+  <data name="ImportCompleteModels" xml:space="preserve">
+    <value>已导入 {0}/{1} 个模型。</value>
+  </data>
+  <data name="ImportCompleteComponents" xml:space="preserve">
+    <value>已导入 {0}/{1} 个组件。</value>
+  </data>
+  <data name="ImportCompleteEnvironments" xml:space="preserve">
+    <value>已导入 {0}/{1} 个环境。</value>
+  </data>
+  <data name="ImportCompleteLoras" xml:space="preserve">
+    <value>已导入 {0}/{1} 个 LoRA 适配器。</value>
+  </data>
+  <data name="MyEnvironment" xml:space="preserve">
+    <value>我的环境</value>
+  </data>
+  <data name="None" xml:space="preserve">
+    <value>无</value>
+  </data>
+  <data name="History" xml:space="preserve">
+    <value>历史记录</value>
+  </data>
+  <data name="Temp" xml:space="preserve">
+    <value>临时</value>
+  </data>
+  <data name="MoveFolderTitle" xml:space="preserve">
+    <value>移动{0}目录</value>
+  </data>
+  <data name="EnvironmentCreateMessage" xml:space="preserve">
+    <value>创建 {0} 环境？</value>
+  </data>
+  <data name="EnvironmentCreateSubMessage" xml:space="preserve">
+    <value>这将在您的计算机上创建运行本地模型所需的 {0} 环境。此设置只需进行一次。</value>
+  </data>
+  <data name="EnvironmentUpdateMessage" xml:space="preserve">
+    <value>更新 {0} 环境？</value>
+  </data>
+  <data name="EnvironmentUpdateSubMessage" xml:space="preserve">
+    <value>这将使用所需的最新软件包更新您的 {0} 环境。此过程只需进行一次。</value>
+  </data>
+  <data name="EnvironmentUpdateWaitMessage" xml:space="preserve">
+    <value>（这可能需要几分钟）</value>
+  </data>
+  <data name="EnvironmentNameVirtual" xml:space="preserve">
+    <value>虚拟环境</value>
+  </data>
+  <data name="AllModels" xml:space="preserve">
+    <value>所有模型</value>
+  </data>
+  <data name="AllMedia" xml:space="preserve">
+    <value>所有媒体</value>
+  </data>
+  <data name="AllProcesses" xml:space="preserve">
+    <value>所有处理类型</value>
+  </data>
+  <data name="AllBackends" xml:space="preserve">
+    <value>所有后端</value>
+  </data>
+  <data name="TokensPerSecond" xml:space="preserve">
+    <value>tokens/s</value>
+  </data>
+  <data name="Unknown" xml:space="preserve">
+    <value>未知</value>
+  </data>
+  <data name="Auto" xml:space="preserve">
+    <value>自动</value>
+  </data>
+  <data name="DurationSecondsFormat" xml:space="preserve">
+    <value>{0} 秒</value>
+  </data>
+  <data name="DurationOneMinute" xml:space="preserve">
+    <value>1 分钟</value>
+  </data>
+  <data name="DurationMinutesFormat" xml:space="preserve">
+    <value>{0} 分钟</value>
+  </data>
+  <data name="TimeSignature24" xml:space="preserve">
+    <value>2/4 拍（进行曲、波尔卡）</value>
+  </data>
+  <data name="TimeSignature34" xml:space="preserve">
+    <value>3/4 拍（华尔兹、抒情曲）</value>
+  </data>
+  <data name="TimeSignature44" xml:space="preserve">
+    <value>4/4 拍（流行、摇滚、嘻哈）</value>
+  </data>
+  <data name="TimeSignature68" xml:space="preserve">
+    <value>6/8 拍（复拍子、民间舞曲）</value>
+  </data>
+  <data name="KeyScaleMajor" xml:space="preserve">
+    <value>大调</value>
+  </data>
+  <data name="KeyScaleMinor" xml:space="preserve">
+    <value>小调</value>
+  </data>
+  <data name="UnknownCPU" xml:space="preserve">
+    <value>未知 CPU</value>
+  </data>
+  <data name="SplashStarting" xml:space="preserve">
+    <value>Amuse {0} 正在启动...</value>
+  </data>
+  <data name="ImportDocument" xml:space="preserve">
+    <value>导入文档</value>
+  </data>
+  <data name="Documents" xml:space="preserve">
+    <value>文档</value>
+  </data>
+  <data name="MaxInputsReached" xml:space="preserve">
+    <value>已达到最多 {0} 个输入的上限</value>
+  </data>
+  <data name="PipelineDownloadingMessage" xml:space="preserve">
+    <value>此模型正在下载或已在下载队列中。</value>
+  </data>
+  <data name="PipelineQueueDownloadMessage" xml:space="preserve">
+    <value>是否将此模型加入下载队列？</value>
+  </data>
+  <data name="ClearLayers" xml:space="preserve">
+    <value>清空图层</value>
+  </data>
+  <data name="ClearLayersMessage" xml:space="preserve">
+    <value>确定要清除所有图层吗？</value>
+  </data>
+  <data name="LayerCopyName" xml:space="preserve">
+    <value>{0} 副本</value>
+  </data>
+  <data name="LayerName" xml:space="preserve">
+    <value>图层 {0}</value>
+  </data>
+  <data name="TextLayerDefault" xml:space="preserve">
+    <value>你好，世界</value>
+  </data>
+  <data name="ClearTimeline" xml:space="preserve">
+    <value>清空时间线</value>
+  </data>
+  <data name="ClearTimelineMessage" xml:space="preserve">
+    <value>确定要清空时间线吗？</value>
+  </data>
+  <data name="VideoFrameProgress" xml:space="preserve">
+    <value>视频帧：{0}/{1}</value>
+  </data>
+  <data name="ToolApplication" xml:space="preserve">
+    <value>应用程序工具</value>
+  </data>
+  <data name="ToolCalculator" xml:space="preserve">
+    <value>计算器工具</value>
+  </data>
+  <data name="ToolDateTime" xml:space="preserve">
+    <value>日期时间工具</value>
+  </data>
+  <data name="ToolFileRead" xml:space="preserve">
+    <value>文件读取工具</value>
+  </data>
+  <data name="ToolFileSearch" xml:space="preserve">
+    <value>文件搜索工具</value>
+  </data>
+  <data name="ToolScreenshot" xml:space="preserve">
+    <value>截图</value>
+  </data>
+  <data name="ToolSystemInfo" xml:space="preserve">
+    <value>系统信息工具</value>
+  </data>
+  <data name="ToolWeather" xml:space="preserve">
+    <value>天气工具</value>
+  </data>
+  <data name="ToolWebPage" xml:space="preserve">
+    <value>网页工具</value>
+  </data>
+  <data name="ToolWebSearch" xml:space="preserve">
+    <value>联网搜索工具</value>
+  </data>
+  <data name="ToolWikipedia" xml:space="preserve">
+    <value>维基百科工具</value>
+  </data>
+  <data name="ToolWorldNews" xml:space="preserve">
+    <value>世界新闻工具</value>
+  </data>
+  <data name="KeyScaleFormat" xml:space="preserve">
+    <value>{0} {1}</value>
+  </data>
+  <data name="LanguageChangedTitle" xml:space="preserve">
+    <value>语言已更改</value>
+  </data>
+  <data name="LanguageChangedMessage" xml:space="preserve">
+    <value>部分文本可能要在重启 Amuse 后才会更新。</value>
+  </data>
+  <data name="Publisher" xml:space="preserve">
+    <value>发布者</value>
+  </data>
+  <data name="Quant" xml:space="preserve">
+    <value>质量</value>
+  </data>
+  <data name="Title_QuantDownload" xml:space="preserve">
+    <value>下载模型</value>
+  </data>
+  <data name="QuantDownloadMessage" xml:space="preserve">
+    <value>选择要下载的 {0} 的质量</value>
+  </data>
+  <data name="QuantDownloadSubMessage" xml:space="preserve">
+    <value>质量较低的版本下载更快，占用内存更少。</value>
+  </data>
+  <data name="QuantQualityBest" xml:space="preserve">
+    <value>最佳质量，内存占用高，下载量大</value>
+  </data>
+  <data name="QuantQualityStandard" xml:space="preserve">
+    <value>标准质量，内存占用中等，下载量中等</value>
+  </data>
+  <data name="QuantQualityReduced" xml:space="preserve">
+    <value>质量降低，内存占用低，下载量小</value>
+  </data>
+  <data name="Quants" xml:space="preserve">
+    <value>质量</value>
+  </data>
+  <data name="GuidanceImage" xml:space="preserve">
+    <value>图像引导系数</value>
+  </data>
+  <data name="ShiftedTimestep" xml:space="preserve">
+    <value>偏移时间步</value>
+  </data>
+  <data name="Sigmas" xml:space="preserve">
+    <value>Sigma 值</value>
+  </data>
+  <data name="SkipLayers" xml:space="preserve">
+    <value>跳过层</value>
+  </data>
+  <data name="SkipLayerScale" xml:space="preserve">
+    <value>跳过层缩放</value>
+  </data>
+  <data name="SkipLayerStart" xml:space="preserve">
+    <value>跳过层起始</value>
+  </data>
+  <data name="SkipLayerEnd" xml:space="preserve">
+    <value>跳过层结束</value>
+  </data>
+  <data name="SamplerArgs" xml:space="preserve">
+    <value>额外参数</value>
+  </data>
+  <data name="ModelOptions" xml:space="preserve">
+    <value>模型选项</value>
+  </data>
+  <data name="ClipSkip" xml:space="preserve">
+    <value>CLIP 跳过层</value>
+  </data>
+  <data name="MoeBoundary" xml:space="preserve">
+    <value>高噪声边界</value>
+  </data>
+  <data name="SeamlessX" xml:space="preserve">
+    <value>水平无缝</value>
+  </data>
+  <data name="SeamlessY" xml:space="preserve">
+    <value>垂直无缝</value>
+  </data>
+  <data name="ProgressListening" xml:space="preserve">
+    <value>正在聆听...</value>
+  </data>
+  <data name="LiveMicrophone" xml:space="preserve">
+    <value>实时麦克风</value>
+  </data>
+  <data name="Menu_AudioCompose" xml:space="preserve">
+    <value>音频合成</value>
+  </data>
+  <data name="ReferenceVideo" xml:space="preserve">
+    <value>参考视频</value>
+  </data>
+  <data name="Clips" xml:space="preserve">
+    <value>片段</value>
+  </data>
+  <data name="Volume" xml:space="preserve">
+    <value>音量</value>
+  </data>
+  <data name="Mute" xml:space="preserve">
+    <value>静音</value>
+  </data>
+  <data name="Position" xml:space="preserve">
+    <value>位置</value>
+  </data>
+  <data name="Start" xml:space="preserve">
+    <value>起点</value>
+  </data>
+  <data name="PreviewVolume" xml:space="preserve">
+    <value>预览音量</value>
+  </data>
+  <data name="ModelLoadedTitle" xml:space="preserve">
+    <value>模型已加载</value>
+  </data>
+  <data name="ModelLoadedMessage" xml:space="preserve">
+    <value>已有模型处于加载状态</value>
+  </data>
+  <data name="ModelLoadedDetail" xml:space="preserve">
+    <value>“{0}”已加载。同时运行两个模型需要足够的设备内存来容纳两者。请先将其卸载、在两者均已加载的情况下继续，或取消。</value>
+  </data>
+  <data name="ModelLoadedUnload" xml:space="preserve">
+    <value>卸载</value>
+  </data>
+  <data name="ModelLoadedContinue" xml:space="preserve">
+    <value>继续</value>
+  </data>
+  <data name="ModelBusyTitle" xml:space="preserve">
+    <value>模型繁忙</value>
+  </data>
+  <data name="ModelBusyMessage" xml:space="preserve">
+    <value>另一个模型仍在加载或生成中。请等待其完成或将其取消，然后再加载此模型。</value>
+  </data>
+  <data name="SelectableFrameRate" xml:space="preserve">
+    <value>可选帧率</value>
+  </data>
+  <data name="AllParts" xml:space="preserve">
+    <value>全部</value>
+  </data>
+  <data name="AllowChunking" xml:space="preserve">
+    <value>允许分块</value>
+  </data>
+  <data name="Appearance" xml:space="preserve">
+    <value>外观</value>
+  </data>
+  <data name="Application" xml:space="preserve">
+    <value>应用程序</value>
+  </data>
+  <data name="AudioRange" xml:space="preserve">
+    <value>范围</value>
+  </data>
+  <data name="AudioRangeFormat" xml:space="preserve">
+    <value>{0:0.00}秒 – {1:0.00}秒</value>
+  </data>
+  <data name="AudioRangeNotSet" xml:space="preserve">
+    <value>未设置</value>
+  </data>
+  <data name="CacheEnd" xml:space="preserve">
+    <value>结束</value>
+  </data>
+  <data name="CacheStart" xml:space="preserve">
+    <value>开始</value>
+  </data>
+  <data name="CacheThreshold" xml:space="preserve">
+    <value>阈值</value>
+  </data>
+  <data name="CacheWarmupSteps" xml:space="preserve">
+    <value>预热步数</value>
+  </data>
+  <data name="ComponentWizardKeyHint" xml:space="preserve">
+    <value>模型通过键引用组件，键必须唯一。</value>
+  </data>
+  <data name="ComponentWizardLocalFileDescription" xml:space="preserve">
+    <value>此电脑上已有的组件文件，通常是 .safetensors 或 .gguf 文件。</value>
+  </data>
+  <data name="ComponentWizardModelDescription" xml:space="preserve">
+    <value>共享文件的类型，决定键前缀和下载所存放的文件夹。</value>
+  </data>
+  <data name="Continue" xml:space="preserve">
+    <value>继续</value>
+  </data>
+  <data name="ControlNetViewFilterDescription" xml:space="preserve">
+    <value>仅在所选视图中显示该 ControlNet，未选择任何视图时在所有视图中显示。</value>
+  </data>
+  <data name="ControlNetWizardLocalFileDescription" xml:space="preserve">
+    <value>此电脑上已有的 ControlNet 文件，通常是 .safetensors 文件。</value>
+  </data>
+  <data name="ControlNetWizardModelDescription" xml:space="preserve">
+    <value>该 ControlNet 所针对的模型，仅适用于此管线的模型。</value>
+  </data>
+  <data name="DestinationFolder" xml:space="preserve">
+    <value>目标文件夹</value>
+  </data>
+  <data name="DiffusionCache" xml:space="preserve">
+    <value>缓存</value>
+  </data>
+  <data name="DisclaimerAccept" xml:space="preserve">
+    <value>我已阅读并同意这些条款和条件</value>
+  </data>
+  <data name="DownloadNowMessage" xml:space="preserve">
+    <value>{0} 需要先下载以下内容才能使用：
+
+{1}
+
+立即下载？</value>
+  </data>
+  <data name="DownloadNowTitle" xml:space="preserve">
+    <value>立即下载？</value>
+  </data>
+  <data name="EditModelDescription" xml:space="preserve">
+    <value>显示在模型列表中的名称以及模型的来源。</value>
+  </data>
+  <data name="Emotion" xml:space="preserve">
+    <value>情感</value>
+  </data>
+  <data name="EmotionAngry" xml:space="preserve">
+    <value>愤怒</value>
+  </data>
+  <data name="EmotionDisgusted" xml:space="preserve">
+    <value>厌恶</value>
+  </data>
+  <data name="EmotionFearful" xml:space="preserve">
+    <value>恐惧</value>
+  </data>
+  <data name="EmotionHappy" xml:space="preserve">
+    <value>开心</value>
+  </data>
+  <data name="EmotionNeutral" xml:space="preserve">
+    <value>中性</value>
+  </data>
+  <data name="EmotionSad" xml:space="preserve">
+    <value>悲伤</value>
+  </data>
+  <data name="EmotionSurprised" xml:space="preserve">
+    <value>惊讶</value>
+  </data>
+  <data name="EnvironmentFolder" xml:space="preserve">
+    <value>文件夹名称</value>
+  </data>
+  <data name="EnvironmentReleaseMessage" xml:space="preserve">
+    <value>“{0}”已加载，可能正在使用此环境运行，必须先卸载才能更改环境。立即卸载？</value>
+  </data>
+  <data name="EnvironmentRequirementsDescription" xml:space="preserve">
+    <value>环境中安装的软件包，每行一个。</value>
+  </data>
+  <data name="EnvironmentRuntime" xml:space="preserve">
+    <value>运行时</value>
+  </data>
+  <data name="EnvironmentRuntimeDescription" xml:space="preserve">
+    <value>环境运行的后端及其所使用的硬件。</value>
+  </data>
+  <data name="EnvironmentSectionDescription" xml:space="preserve">
+    <value>在 Amuse 中显示的名称以及环境的安装文件夹。</value>
+  </data>
+  <data name="EnvironmentVariablesDescription" xml:space="preserve">
+    <value>后端启动时设置的变量。</value>
+  </data>
+  <data name="ExecutionConvDirectDescription" xml:space="preserve">
+    <value>直接卷积，选择“自动”则由后端决定。</value>
+  </data>
+  <data name="ExecutionCpuDescription" xml:space="preserve">
+    <value>在 CPU 上运行这些部分以节省 GPU 内存，但会降低速度。</value>
+  </data>
+  <data name="ExecutionFlashAttentionDescription" xml:space="preserve">
+    <value>更快且占用更少内存的注意力计算，选择“自动”则由后端决定。</value>
+  </data>
+  <data name="ExecutionMemoryDescription" xml:space="preserve">
+    <value>模型加载到内存的方式。</value>
+  </data>
+  <data name="Exit" xml:space="preserve">
+    <value>退出</value>
+  </data>
+  <data name="ExtractModelDescription" xml:space="preserve">
+    <value>提取模型的输出内容、名称及来源。</value>
+  </data>
+  <data name="ExtractWizardLocalFileDescription" xml:space="preserve">
+    <value>此电脑上已有的提取模型文件，即 .onnx 模型。</value>
+  </data>
+  <data name="ExtractWizardModelDescription" xml:space="preserve">
+    <value>选择与您的模型最相似的内置提取模型，新模型将使用其设置。</value>
+  </data>
+  <data name="ExtractWizardWorksLike" xml:space="preserve">
+    <value>类似于</value>
+  </data>
+  <data name="FirstRunSettings" xml:space="preserve">
+    <value>首次设置</value>
+  </data>
+  <data name="FirstRunSettingsMessage" xml:space="preserve">
+    <value>选择模型的存储位置和 Amuse 的外观，之后可在设置页面中更改。</value>
+  </data>
+  <data name="FirstRunSetupMessage" xml:space="preserve">
+    <value>欢迎使用 Amuse</value>
+  </data>
+  <data name="FirstRunSetupSettingsOnlyMessage" xml:space="preserve">
+    <value>选择首次设置即可开始使用，所有后端环境均已安装。</value>
+  </data>
+  <data name="FirstRunSetupSubMessage" xml:space="preserve">
+    <value>选择首次设置以及现在要安装的后端环境，未勾选的环境可稍后在主页或设置页面中安装。</value>
+  </data>
+  <data name="FolderDownloadingMessage" xml:space="preserve">
+    <value>模型正在下载或排队等待下载。请等待下载完成或取消下载，然后再移动模型文件夹。</value>
+  </data>
+  <data name="FolderReleaseMessage" xml:space="preserve">
+    <value>“{0}”已加载，必须先卸载才能移动模型文件夹。立即卸载？</value>
+  </data>
+  <data name="Function_AudioToMusic" xml:space="preserve">
+    <value>音频转音乐</value>
+  </data>
+  <data name="Function_VoiceClone" xml:space="preserve">
+    <value>声音克隆</value>
+  </data>
+  <data name="FunctionsDescription" xml:space="preserve">
+    <value>模型的功能以及显示它的视图。未选择任何视图时，在所有支持的视图中显示。</value>
+  </data>
+  <data name="GeneralAccessTokensDescription" xml:space="preserve">
+    <value>用于受限模型和在线服务的令牌，保存在您的 Amuse 设置中。</value>
+  </data>
+  <data name="GeneralAppearanceDescription" xml:space="preserve">
+    <value>应用的主题、语言和大小。</value>
+  </data>
+  <data name="GeneralApplicationDescription" xml:space="preserve">
+    <value>更新、临时文件、日志，以及您选择不再显示的对话框。</value>
+  </data>
+  <data name="GeneralExperimentalDescription" xml:space="preserve">
+    <value>仍在测试的功能，可能会更改或移除。</value>
+  </data>
+  <data name="GeneralHistoryDescription" xml:space="preserve">
+    <value>结果的保存位置以及历史记录列表的显示方式。</value>
+  </data>
+  <data name="GeneralModelsDescription" xml:space="preserve">
+    <value>模型的存储位置，以及 Amuse 查找模型文件的其他文件夹。</value>
+  </data>
+  <data name="GeneralToolsDescription" xml:space="preserve">
+    <value>聊天时助手工具被允许执行的操作。</value>
+  </data>
+  <data name="HomeWelcome" xml:space="preserve">
+    <value>欢迎使用 Amuse</value>
+  </data>
+  <data name="ImageToTextDefaultPrompt" xml:space="preserve">
+    <value>描述这张图像。</value>
+  </data>
+  <data name="Instruction" xml:space="preserve">
+    <value>指令</value>
+  </data>
+  <data name="InstructionPlaceholder" xml:space="preserve">
+    <value>描述声音或风格，例如：温暖的成年旁白，平静清晰</value>
+  </data>
+  <data name="LlmTools" xml:space="preserve">
+    <value>LLM 工具</value>
+  </data>
+  <data name="LoraFileDescription" xml:space="preserve">
+    <value>LoRA 文件的加载或下载来源。</value>
+  </data>
+  <data name="LoraTriggerWordsDescription" xml:space="preserve">
+    <value>训练该 LoRA 时使用的词语，见其下载页面。</value>
+  </data>
+  <data name="LoraViewFilterDescription" xml:space="preserve">
+    <value>仅在所选视图中显示该 LoRA，未选择任何视图时在所有视图中显示。</value>
+  </data>
+  <data name="LoraWizardDownloadLinkHint" xml:space="preserve">
+    <value>在 Hugging Face 上，复制文件下载按钮的链接，以 .safetensors 结尾。</value>
+  </data>
+  <data name="LoraWizardFilesDescription" xml:space="preserve">
+    <value>选择 LoRA 文件并为其命名。</value>
+  </data>
+  <data name="LoraWizardLocalFile" xml:space="preserve">
+    <value>已下载的文件</value>
+  </data>
+  <data name="LoraWizardLocalFileDescription" xml:space="preserve">
+    <value>此电脑上已有的 LoRA 文件，通常是 .safetensors 文件。</value>
+  </data>
+  <data name="LoraWizardModelDescription" xml:space="preserve">
+    <value>该 LoRA 所针对的模型，仅适用于此管线的模型。</value>
+  </data>
+  <data name="LoraWizardOnlineFile" xml:space="preserve">
+    <value>下载链接</value>
+  </data>
+  <data name="LoraWizardOnlineFileDescription" xml:space="preserve">
+    <value>LoRA 文件的直接链接，Amuse 会为您下载。</value>
+  </data>
+  <data name="LoraWizardSourceDescription" xml:space="preserve">
+    <value>LoRA 文件的来源。</value>
+  </data>
+  <data name="LoraWizardTriggerWordsHint" xml:space="preserve">
+    <value>训练该 LoRA 时使用的词语，以逗号分隔，见其下载页面。</value>
+  </data>
+  <data name="MaxFrames" xml:space="preserve">
+    <value>最大帧数</value>
+  </data>
+  <data name="McpAbout" xml:space="preserve">
+    <value>关于 MCP</value>
+  </data>
+  <data name="McpAboutDescription" xml:space="preserve">
+    <value>MCP（模型上下文协议）服务器可为助手添加工具，例如搜索网页、读取文件或操作其他应用程序。
+
+聊天时，每个已连接的服务器会显示为内置工具旁的插头图标，开启前处于关闭状态。
+
+使用 npx 启动的服务器需要 Node.js，使用 uvx 启动的服务器需要 uv。</value>
+  </data>
+  <data name="McpAddServer" xml:space="preserve">
+    <value>添加服务器</value>
+  </data>
+  <data name="McpArguments" xml:space="preserve">
+    <value>参数</value>
+  </data>
+  <data name="McpCommand" xml:space="preserve">
+    <value>命令</value>
+  </data>
+  <data name="McpCommandDescription" xml:space="preserve">
+    <value>启动服务器的程序（如 npx 或 uvx）及其参数，每行一个。</value>
+  </data>
+  <data name="McpConfiguration" xml:space="preserve">
+    <value>配置</value>
+  </data>
+  <data name="McpConnection" xml:space="preserve">
+    <value>连接</value>
+  </data>
+  <data name="McpHeaders" xml:space="preserve">
+    <value>标头</value>
+  </data>
+  <data name="McpIcon" xml:space="preserve">
+    <value>图标</value>
+  </data>
+  <data name="McpImportJson" xml:space="preserve">
+    <value>导入 JSON</value>
+  </data>
+  <data name="McpImportMessage" xml:space="preserve">
+    <value>粘贴服务器说明中的配置，或打开其他 MCP 应用程序的配置文件。导入的服务器会立即以您的账户启动，请仅导入您信任的服务器。</value>
+  </data>
+  <data name="McpImportOpenFile" xml:space="preserve">
+    <value>打开文件</value>
+  </data>
+  <data name="McpRemoveServer" xml:space="preserve">
+    <value>移除服务器</value>
+  </data>
+  <data name="McpRemoveServerMessage" xml:space="preserve">
+    <value>确定要移除服务器“{0}”吗？</value>
+  </data>
+  <data name="McpServer" xml:space="preserve">
+    <value>服务器</value>
+  </data>
+  <data name="McpServerDescription" xml:space="preserve">
+    <value>服务器的名称以及 Amuse 连接它的方式。</value>
+  </data>
+  <data name="McpServerNew" xml:space="preserve">
+    <value>我的服务器</value>
+  </data>
+  <data name="McpServers" xml:space="preserve">
+    <value>MCP 服务器</value>
+  </data>
+  <data name="McpServersDescription" xml:space="preserve">
+    <value>连接 MCP 服务器，为助手提供更多工具。服务器以您的账户在您的电脑上运行，请仅添加您信任的服务器。</value>
+  </data>
+  <data name="McpServersEmpty" xml:space="preserve">
+    <value>尚未添加服务器。</value>
+  </data>
+  <data name="McpStatusConnected" xml:space="preserve">
+    <value>已连接，工具：{0}</value>
+  </data>
+  <data name="McpStatusConnecting" xml:space="preserve">
+    <value>正在连接...</value>
+  </data>
+  <data name="McpStatusDisabled" xml:space="preserve">
+    <value>已禁用</value>
+  </data>
+  <data name="McpStatusDisconnected" xml:space="preserve">
+    <value>未连接</value>
+  </data>
+  <data name="McpStatusFailed" xml:space="preserve">
+    <value>连接失败</value>
+  </data>
+  <data name="McpTest" xml:space="preserve">
+    <value>测试</value>
+  </data>
+  <data name="McpToolsDescription" xml:space="preserve">
+    <value>测试连接以列出工具，然后取消勾选不希望助手看到的工具。</value>
+  </data>
+  <data name="McpUrl" xml:space="preserve">
+    <value>URL</value>
+  </data>
+  <data name="McpUrlDescription" xml:space="preserve">
+    <value>服务器的地址，支持 Streamable HTTP 和 SSE 服务器。</value>
+  </data>
+  <data name="McpVariablesDescription" xml:space="preserve">
+    <value>服务器所需的值，例如 API 密钥。</value>
+  </data>
+  <data name="Menu_AudioToMusic" xml:space="preserve">
+    <value>音频 ➔ 音乐</value>
+  </data>
+  <data name="Menu_VoiceClone" xml:space="preserve">
+    <value>声音克隆</value>
+  </data>
+  <data name="ModelFileDescription" xml:space="preserve">
+    <value>模型文件的加载或下载来源。</value>
+  </data>
+  <data name="ModelInfoDownload" xml:space="preserve">
+    <value>下载自</value>
+  </data>
+  <data name="ModelInfoLocal" xml:space="preserve">
+    <value>本地文件</value>
+  </data>
+  <data name="ModelInfoSharedComponent" xml:space="preserve">
+    <value>共享组件：{0}</value>
+  </data>
+  <data name="ModelLoadedListDetail" xml:space="preserve">
+    <value>同时运行多个模型需要足够的设备内存。请卸载不需要的模型，在保持其余模型加载的情况下继续，或取消。</value>
+  </data>
+  <data name="ModelLoadedListMessage" xml:space="preserve">
+    <value>已加载其他模型</value>
+  </data>
+  <data name="ModelLoadedUnloadAll" xml:space="preserve">
+    <value>全部卸载</value>
+  </data>
+  <data name="ModelLoadedUnloaded" xml:space="preserve">
+    <value>已卸载</value>
+  </data>
+  <data name="ModelLoadedUnloading" xml:space="preserve">
+    <value>正在卸载</value>
+  </data>
+  <data name="ModelOptionsDescription" xml:space="preserve">
+    <value>首次选择模型时使用的选项。</value>
+  </data>
+  <data name="ModelPipelineReplaceDetail" xml:space="preserve">
+    <value>“{0}”已加载了放大模型或提取模型，加载此模型会将其替换。请先卸载“{0}”，或继续并仅替换其放大模型或提取模型，或取消。</value>
+  </data>
+  <data name="ModelPipelineReplaceNote" xml:space="preserve">
+    <value>加载此模型将替换其放大模型或提取模型</value>
+  </data>
+  <data name="ModelReleaseMessage" xml:space="preserve">
+    <value>“{0}”已加载并使用此模型，必须先卸载才能更改模型文件。立即卸载？</value>
+  </data>
+  <data name="ModelSearchFolderSelect" xml:space="preserve">
+    <value>选择搜索文件夹</value>
+  </data>
+  <data name="ModelSearchFoldersComfyUI" xml:space="preserve">
+    <value>添加 ComfyUI 文件夹</value>
+  </data>
+  <data name="ModelSearchFoldersComfyUINotFound" xml:space="preserve">
+    <value>在所选文件夹中未找到 ComfyUI 模型文件夹。</value>
+  </data>
+  <data name="ModelSearchFoldersComfyUISelect" xml:space="preserve">
+    <value>选择 ComfyUI 文件夹</value>
+  </data>
+  <data name="ModelSearchFoldersMessage" xml:space="preserve">
+    <value>下载模型文件之前，Amuse 也会在这些文件夹中查找。文件将直接从原位置使用，在 Amuse 中删除模型时也会删除这些文件夹中的对应文件。</value>
+  </data>
+  <data name="ModelSettingsDescription" xml:space="preserve">
+    <value>模型的工作方式，必须与模型文件一致。</value>
+  </data>
+  <data name="ModelViewReplaceDetail" xml:space="preserve">
+    <value>“{0}”已由其他视图加载，加载此管线会将其替换。请先卸载它，或继续并替换它，或取消。</value>
+  </data>
+  <data name="ModelViewReplaceNote" xml:space="preserve">
+    <value>加载此管线将替换它</value>
+  </data>
+  <data name="MusicTaskComplete" xml:space="preserve">
+    <value>补全源音频，例如为人声轨道添加伴奏。轨道名称用于指定要添加的乐器。</value>
+  </data>
+  <data name="MusicTaskCover" xml:space="preserve">
+    <value>按提示词的风格和歌词生成源音频的翻唱版本，保留其结构和长度。</value>
+  </data>
+  <data name="MusicTaskCoverNoFsq" xml:space="preserve">
+    <value>更自由的翻唱，更贴近提示词，保留较少的源音频内容。</value>
+  </data>
+  <data name="MusicTaskExtract" xml:space="preserve">
+    <value>从源音频中提取“轨道名称”所指定的轨道（如人声）。</value>
+  </data>
+  <data name="MusicTaskInitAudio" xml:space="preserve">
+    <value>以源音频为起点生成新音乐，强度决定偏离源音频的程度。</value>
+  </data>
+  <data name="MusicTaskInpaintAudio" xml:space="preserve">
+    <value>根据提示词重新生成源音频的所选范围，其余部分保持不变。</value>
+  </data>
+  <data name="MusicTaskLego" xml:space="preserve">
+    <value>生成与源音频相配的新轨道，由“轨道名称”指定（如吉他）。</value>
+  </data>
+  <data name="MusicTaskRepaint" xml:space="preserve">
+    <value>根据提示词重新生成源音频的所选范围，其余部分保持不变。</value>
+  </data>
+  <data name="ProgressChunk" xml:space="preserve">
+    <value>正在生成第 {7}/{8} 块...</value>
+  </data>
+  <data name="QualityDescription" xml:space="preserve">
+    <value>每种质量对应一组模型文件，下方编辑的是所选质量。</value>
+  </data>
+  <data name="QueueAll" xml:space="preserve">
+    <value>全部加入队列</value>
+  </data>
+  <data name="QueueAllMessage" xml:space="preserve">
+    <value>将 {0} 个模型加入下载队列？
+
+它们所需的共享组件也会一并加入队列。</value>
+  </data>
+  <data name="ReferenceTranscript" xml:space="preserve">
+    <value>参考文本</value>
+  </data>
+  <data name="ReferenceTranscriptOptional" xml:space="preserve">
+    <value>声音参考中所说的内容（可选）</value>
+  </data>
+  <data name="ReferenceTranscriptRequired" xml:space="preserve">
+    <value>声音参考中所说的内容（此模型必填）</value>
+  </data>
+  <data name="RescanModels" xml:space="preserve">
+    <value>重新扫描模型</value>
+  </data>
+  <data name="RescanModelsComplete" xml:space="preserve">
+    <value>重新扫描完成，已安装 {0} 个模型。</value>
+  </data>
+  <data name="ResolutionsDescription" xml:space="preserve">
+    <value>各视图中提供的尺寸，默认尺寸会优先选中。</value>
+  </data>
+  <data name="Seconds" xml:space="preserve">
+    <value>秒</value>
+  </data>
+  <data name="SelectModelFolder" xml:space="preserve">
+    <value>选择模型文件夹位置</value>
+  </data>
+  <data name="SourceAudio" xml:space="preserve">
+    <value>源音频</value>
+  </data>
+  <data name="TextSettings" xml:space="preserve">
+    <value>文本设置</value>
+  </data>
+  <data name="Title_AddComponent" xml:space="preserve">
+    <value>添加组件</value>
+  </data>
+  <data name="Title_AddControlNet" xml:space="preserve">
+    <value>添加 ControlNet</value>
+  </data>
+  <data name="Title_AddExtractor" xml:space="preserve">
+    <value>添加提取模型</value>
+  </data>
+  <data name="Title_AddLora" xml:space="preserve">
+    <value>添加 LoRA</value>
+  </data>
+  <data name="Title_AddUpscaler" xml:space="preserve">
+    <value>添加放大模型</value>
+  </data>
+  <data name="Title_Disclaimer" xml:space="preserve">
+    <value>免责声明</value>
+  </data>
+  <data name="Title_McpImport" xml:space="preserve">
+    <value>导入 MCP 服务器</value>
+  </data>
+  <data name="Title_McpServer" xml:space="preserve">
+    <value>MCP 服务器</value>
+  </data>
+  <data name="Title_ModelFiles" xml:space="preserve">
+    <value>模型文件</value>
+  </data>
+  <data name="Title_ModelSearchFolders" xml:space="preserve">
+    <value>模型搜索文件夹</value>
+  </data>
+  <data name="ToolActionMcpTool" xml:space="preserve">
+    <value>运行 MCP 工具：{0}（{1}）</value>
+  </data>
+  <data name="Tools" xml:space="preserve">
+    <value>工具</value>
+  </data>
+  <data name="TrackName" xml:space="preserve">
+    <value>轨道名称</value>
+  </data>
+  <data name="TrackNamePlaceholder" xml:space="preserve">
+    <value>例如：人声、吉他、鼓</value>
+  </data>
+  <data name="UpscaleModelDescription" xml:space="preserve">
+    <value>运行放大模型的后端和管线，以及其来源。</value>
+  </data>
+  <data name="UpscaleWizardLocalFileDescription" xml:space="preserve">
+    <value>此电脑上已有的放大模型文件，如 .pth、.safetensors 或 .onnx。</value>
+  </data>
+  <data name="UpscaleWizardModelDescription" xml:space="preserve">
+    <value>ESRGAN 等图像放大模型使用放大管线，SeedVR2 和 RelayVSR 是视频放大模型。</value>
+  </data>
+  <data name="Value" xml:space="preserve">
+    <value>值</value>
+  </data>
+  <data name="VisionProjector" xml:space="preserve">
+    <value>视觉投影器（mmproj）</value>
+  </data>
+  <data name="VoiceReference" xml:space="preserve">
+    <value>声音参考</value>
+  </data>
+  <data name="WizardCustomCheckpoint" xml:space="preserve">
+    <value>自定义组件</value>
+  </data>
+  <data name="WizardCustomCheckpointDescription" xml:space="preserve">
+    <value>自行选择每个组件，适合高级用户。</value>
+  </data>
+  <data name="WizardDownloadLinkHint" xml:space="preserve">
+    <value>在 Hugging Face 上，复制文件下载按钮的链接。</value>
+  </data>
+  <data name="WizardFileNameDescription" xml:space="preserve">
+    <value>选择模型文件并为其命名。</value>
+  </data>
+  <data name="WizardFileSourceDescription" xml:space="preserve">
+    <value>模型文件的来源。</value>
+  </data>
+  <data name="WizardFilesDescription" xml:space="preserve">
+    <value>选择您已下载的文件。</value>
+  </data>
+  <data name="WizardLanguageFileDescription" xml:space="preserve">
+    <value>单个 GGUF 模型文件，仅支持文本。</value>
+  </data>
+  <data name="WizardLanguageVision" xml:space="preserve">
+    <value>模型 + 视觉</value>
+  </data>
+  <data name="WizardLanguageVisionDescription" xml:space="preserve">
+    <value>GGUF 模型文件及其视觉投影器（mmproj）文件，用于图像输入。</value>
+  </data>
+  <data name="WizardLocalCheckpoint" xml:space="preserve">
+    <value>一体式检查点</value>
+  </data>
+  <data name="WizardLocalCheckpointDescription" xml:space="preserve">
+    <value>内置文本编码器和 VAE 的单个文件，常见于 Civitai 上的 SDXL 检查点。</value>
+  </data>
+  <data name="WizardLocalFileDescription" xml:space="preserve">
+    <value>仅包含扩散模型（UNet 或 Transformer），文本编码器和 VAE 由 Amuse 提供。大多数下载属于此类型。</value>
+  </data>
+  <data name="WizardLocalFileSingleDescription" xml:space="preserve">
+    <value>仅您下载的模型文件。</value>
+  </data>
+  <data name="WizardModelDescription" xml:space="preserve">
+    <value>您所下载文件的模型系列和版本。</value>
+  </data>
+  <data name="WizardOnlineFileDescription" xml:space="preserve">
+    <value>模型文件的直接链接，Amuse 会为您下载。</value>
+  </data>
+  <data name="WizardSourceDescription" xml:space="preserve">
+    <value>所下载文件包含的内容。</value>
+  </data>
+  <data name="WizardSuppliedByAmuse" xml:space="preserve">
+    <value>由 Amuse 提供</value>
+  </data>
+  <data name="WizardSuppliedByAmuseDescription" xml:space="preserve">
+    <value>首次加载模型时，Amuse 会为您下载的共享组件。</value>
+  </data>
+  <data name="WizardWillDownload" xml:space="preserve">
+    <value>将下载</value>
+  </data>
+  <data name="AddSongTemplate" xml:space="preserve">
+    <value>添加歌曲模板</value>
+  </data>
+</root>

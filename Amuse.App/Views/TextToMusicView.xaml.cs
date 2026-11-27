@@ -3,7 +3,6 @@ using Amuse.App.Resources;
 using Amuse.App.Services;
 using Microsoft.Extensions.Logging;
 using System;
-using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using System.Threading;
@@ -21,16 +20,15 @@ namespace Amuse.App.Views
     /// </summary>
     public partial class TextToMusicView : ViewBaseDiffusion
     {
-        private AudioInputStream _sourceAudio;
+        private AudioInputStream _referenceAudio;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="TextToMusicView"/> class.
         /// </summary>
-        public TextToMusicView(Settings settings, NavigationService navigationService, IModelDownloadService downloadService, IGenerateService generateService, IExtractService extractService, IUpscaleService upscaleService, IHistoryService historyService, ILogger<TextToMusicView> logger)
-            : base(settings, navigationService, downloadService, generateService, extractService, upscaleService, historyService, logger)
+        public TextToMusicView(Settings settings, NavigationService navigationService, IModelDownloadService downloadService, IModelAccessService modelAccessService, IAudioService audioService, ILanguageService languageService, IExtractService extractService, IUpscaleService upscaleService, IHistoryService historyService, ILogger<TextToMusicView> logger)
+            : base(settings, navigationService, downloadService, modelAccessService, audioService, languageService, extractService, upscaleService, historyService, logger)
         {
-            AppendLyricCommand = new RelayCommand<string>(AppendLyric, CanAppendLyric);
-            AppendLyricExampleCommand = new RelayCommand<string>(AppendLyricExample, CanAppendLyric);
+            LyricTemplateCommand = new RelayCommand(AddLyricTemplate, CanAddLyricTemplate);
             InitializeComponent();
         }
 
@@ -38,16 +36,15 @@ namespace Amuse.App.Views
         /// Gets the view.
         /// </summary>
         public override View View => View.TextToMusic;
-        public RelayCommand<string> AppendLyricCommand { get; }
-        public RelayCommand<string> AppendLyricExampleCommand { get; }
+        public RelayCommand LyricTemplateCommand { get; }
 
         /// <summary>
-        /// Gets or sets the source audio.
+        /// Gets or sets the reference audio that conditions the timbre and style of the music (ACE-Step), the tasks that start from a source audio are in the AudioToMusic view.
         /// </summary>
-        public AudioInputStream SourceAudio
+        public AudioInputStream ReferenceAudio
         {
-            get { return _sourceAudio; }
-            set { SetProperty(ref _sourceAudio, value); }
+            get { return _referenceAudio; }
+            set { SetProperty(ref _referenceAudio, value); }
         }
 
 
@@ -68,7 +65,7 @@ namespace Amuse.App.Views
         public override async Task CloseAsync()
         {
             await ResultControl.StopAsync();
-            await InputAudioControl.StopAsync();
+            await ReferenceAudioControl.StopAsync();
             await base.CloseAsync();
         }
 
@@ -90,11 +87,7 @@ namespace Amuse.App.Views
 
 
                 // Options
-                var options = Options with { };
-                if (_sourceAudio != null)
-                {
-                    options.InputAudios = [_sourceAudio];
-                }
+                var options = Options with { ReferenceAudio = GetReferenceAudio() };
 
                 // Execute
                 var resultTensor = await ExecuteAudioDiffusionAsync(options);
@@ -152,19 +145,18 @@ namespace Amuse.App.Views
                     //if (!automationJob.InputTexts.IsNullOrEmpty())
                     //    Options.Prompt2 = automationJob.InputTexts[0].Text;
 
+                    // Options
+                    var options = automationJob.GenerateOptions with { ReferenceAudio = GetReferenceAudio() };
+
                     // Diffusion
-                    var resultTensor = await ExecuteAudioDiffusionAsync(automationJob.GenerateOptions);
+                    var resultTensor = await ExecuteAudioDiffusionAsync(options);
 
                     // Result
-                    ResultAudio = resultTensor;
+                    ResultAudio = !AutomationOptions.IsHistoryEnabled
+                        ? resultTensor
+                        : await SaveHistoryAsync(resultTensor, options);
 
-                    // History
-                    if (AutomationOptions.IsHistoryEnabled)
-                    {
-                        await SaveHistoryAsync(resultTensor, automationJob.GenerateOptions);
-                    }
-
-                    //await automationJob.SaveAsync(ResultAudio);
+                    await automationJob.SaveAsync(ResultAudio);
                     AutomationProgress.Update(automationJob.Id, automationJob.Count, $"{AppDefault.Automation}: {automationJob.Id}/{automationJob.Count}");
                 }
 
@@ -194,35 +186,36 @@ namespace Amuse.App.Views
         }
 
 
-        private void AppendLyric(string lyric)
+        /// <summary>
+        /// Gets the reference audio when the model takes one, null otherwise.
+        /// </summary>
+        private AudioInputStream GetReferenceAudio()
         {
-            if (string.IsNullOrWhiteSpace(Options.Prompt2))
-                Options.Prompt2 = $"{lyric}\n";
-            else
-            {
-                Options.Prompt2 += $"\n{lyric}\n";
-            }
+            return InputControl.IsReferenceAudioSupported ? _referenceAudio : default;
         }
 
 
-        private bool CanAppendLyric(string lyric)
+        /// <summary>
+        /// Adds the song template of the model to the lyrics, after any lyrics that are already there.
+        /// </summary>
+        private void AddLyricTemplate()
         {
-            return Options != null;
-        }
-
-        private void AppendLyricExample(string example)
-        {
-            if (!ExamplePrompts.ContainsKey(example))
+            var template = CurrentPipeline?.DiffusionModel?.DefaultOptions?.Lyrics;
+            if (string.IsNullOrEmpty(template))
                 return;
 
-            if (example.StartsWith("Prompt"))
-            {
-                Options.Prompt = ExamplePrompts[example];
-            }
-            else
-            {
-                Options.Prompt2 = ExamplePrompts[example];
-            }
+            Options.Prompt2 = string.IsNullOrWhiteSpace(Options.Prompt2)
+                ? template
+                : string.Concat(Options.Prompt2.TrimEnd(), Environment.NewLine, Environment.NewLine, template);
+        }
+
+
+        /// <summary>
+        /// Determines whether the song template can be added.
+        /// </summary>
+        private bool CanAddLyricTemplate()
+        {
+            return Options != null;
         }
 
 
@@ -243,81 +236,5 @@ namespace Amuse.App.Views
             Logger.LogInformation($"[TextToMusic] [SaveHistory] History saved.");
             return result;
         }
-
-
-        private static readonly Dictionary<string, string> ExamplePrompts = new Dictionary<string, string>
-        {
-
-            {"Prompt1","power pop, catchy melody, male vocals, drums, bass, high energy, bright" },
-            {"Prompt2","80s synthwave, driving synth-pop, cinematic, energetic, electric drums, female vocals, high energy, punchy production" },
-            {"Prompt3","melancholic piano ballad with soft female vocals, gentle string accompaniment, slow tempo, intimate and heartbreaking atmosphere" },
-
-            {"Lyrics1",@"[Intro]
-
-[Verse]
-Woke up early, sun is shining bright,
-Got no worries, feeling just right.
-
-[Chorus]
-We're dancing on the edge of the world,
-With every flag we have unfurled!
-
-[Bridge]
-No one can stop us now.
-
-[Chorus]
-We're dancing on the edge of the world,
-With every flag we have unfurled!
-
-[Outro]" },
-            {"Lyrics2",@"[Intro]
-
-[Verse]
-Neon lights cut through the haze,
-Lost within the digital maze.
-
-[Chorus]
-Driving faster through the night,
-Everything feels so right.
-
-[Bridge]
-The city is asleep, but we are alive.
-
-[Chorus]
-Driving faster through the night,
-Everything feels so right.
-
-[Outro]" },
-            {"Lyrics3",@"[Intro]
-
-[Verse 1]
-Walking through the empty streets
-Thinking of your gentle touch
-Summer nights and softer dreams
-
-[Chorus]
-We rise together
-Into the light
-This is our moment tonight
-
-[Verse 2]
-Stars are falling from the sky
-Your hand fits perfectly in mine
-
-[Bridge]
-If tomorrow never comes
-At least we had this
-
-[Chorus]
-We rise together
-Into the light
-This is our moment tonight
-
-[Outro]" },
-        };
-
-
-
-
     }
 }

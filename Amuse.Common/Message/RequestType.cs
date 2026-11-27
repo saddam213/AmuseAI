@@ -8,6 +8,7 @@
         Load = 11,
         Reload = 12,
         Unload = 13,
-        Run = 20
+        Run = 20,
+        RunStream = 21
     }
 }

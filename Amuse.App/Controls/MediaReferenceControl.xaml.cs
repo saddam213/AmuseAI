@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Amuse.App.Resources;
+using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Diagnostics;
@@ -12,6 +13,7 @@ using TensorStack.Media.Audio;
 using TensorStack.Media.Video;
 using TensorStack.WPF;
 using TensorStack.WPF.Controls;
+using TensorStack.WPF.Dialogs;
 using TensorStack.WPF.Image;
 using TensorStack.WPF.Services;
 
@@ -33,8 +35,12 @@ namespace Amuse.App.Controls
             AddImageCommand = new AsyncRelayCommand(AddImageAsync, () => CanAdd(MediaType.Image));
             AddVideoCommand = new AsyncRelayCommand(AddVideoAsync, () => CanAdd(MediaType.Video));
             AddAudioCommand = new AsyncRelayCommand(AddAudioAsync, () => CanAdd(MediaType.Audio));
+            CaptureImageCommand = new AsyncRelayCommand(CaptureImageAsync, () => CanAdd(MediaType.Image));
+            CaptureVideoCommand = new AsyncRelayCommand(CaptureVideoAsync, () => CanAdd(MediaType.Video));
+            CaptureAudioCommand = new AsyncRelayCommand(CaptureAudioAsync, () => CanAdd(MediaType.Audio));
             ClearCommand = new AsyncRelayCommand(ClearAsync, () => ReferenceCollection.Count > 0);
             RemoveCommand = new AsyncRelayCommand<ReferenceItemModel>(RemoveAsync);
+            CropCommand = new AsyncRelayCommand<ReferenceItemModel>(CropAsync);
             InitializeComponent();
         }
 
@@ -42,12 +48,23 @@ namespace Amuse.App.Controls
         public static readonly DependencyProperty ImageMaxCountProperty = DependencyProperty.Register(nameof(ImageMaxCount), typeof(int), typeof(MediaReferenceControl), new PropertyMetadata<MediaReferenceControl>((c) => c.OnMaxCountChanged()));
         public static readonly DependencyProperty VideoMaxCountProperty = DependencyProperty.Register(nameof(VideoMaxCount), typeof(int), typeof(MediaReferenceControl), new PropertyMetadata<MediaReferenceControl>((c) => c.OnMaxCountChanged()));
         public static readonly DependencyProperty AudioMaxCountProperty = DependencyProperty.Register(nameof(AudioMaxCount), typeof(int), typeof(MediaReferenceControl), new PropertyMetadata<MediaReferenceControl>((c) => c.OnMaxCountChanged()));
+        public static readonly DependencyProperty CaptureWidthProperty = DependencyProperty.Register(nameof(CaptureWidth), typeof(int), typeof(MediaReferenceControl));
+        public static readonly DependencyProperty CaptureHeightProperty = DependencyProperty.Register(nameof(CaptureHeight), typeof(int), typeof(MediaReferenceControl));
+        public static readonly DependencyProperty CaptureFrameRateProperty = DependencyProperty.Register(nameof(CaptureFrameRate), typeof(float), typeof(MediaReferenceControl));
+        public static readonly DependencyProperty CaptureFrameCountProperty = DependencyProperty.Register(nameof(CaptureFrameCount), typeof(int), typeof(MediaReferenceControl));
+        public static readonly DependencyProperty CaptureSampleRateProperty = DependencyProperty.Register(nameof(CaptureSampleRate), typeof(int), typeof(MediaReferenceControl));
+        public static readonly DependencyProperty CaptureChannelsProperty = DependencyProperty.Register(nameof(CaptureChannels), typeof(int), typeof(MediaReferenceControl));
+        public event EventHandler<MediaImportEventArgs> OnMediaImport;
 
         public AsyncRelayCommand AddImageCommand { get; }
         public AsyncRelayCommand AddVideoCommand { get; }
         public AsyncRelayCommand AddAudioCommand { get; }
+        public AsyncRelayCommand CaptureImageCommand { get; }
+        public AsyncRelayCommand CaptureVideoCommand { get; }
+        public AsyncRelayCommand CaptureAudioCommand { get; }
         public AsyncRelayCommand ClearCommand { get; }
         public AsyncRelayCommand<ReferenceItemModel> RemoveCommand { get; }
+        public AsyncRelayCommand<ReferenceItemModel> CropCommand { get; }
         public ObservableCollection<ReferenceItemModel> ReferenceCollection { get; }
 
         public int ImageCount => GetCount(MediaType.Image);
@@ -76,6 +93,60 @@ namespace Amuse.App.Controls
         {
             get { return (int)GetValue(AudioMaxCountProperty); }
             set { SetValue(AudioMaxCountProperty, value); }
+        }
+
+        /// <summary>
+        /// Gets or sets the width a camera image or video is captured at, zero for the size of the camera.
+        /// </summary>
+        public int CaptureWidth
+        {
+            get { return (int)GetValue(CaptureWidthProperty); }
+            set { SetValue(CaptureWidthProperty, value); }
+        }
+
+        /// <summary>
+        /// Gets or sets the height a camera image or video is captured at, zero for the size of the camera.
+        /// </summary>
+        public int CaptureHeight
+        {
+            get { return (int)GetValue(CaptureHeightProperty); }
+            set { SetValue(CaptureHeightProperty, value); }
+        }
+
+        /// <summary>
+        /// Gets or sets the frame rate a camera video is captured at, zero for the frame rate of the camera.
+        /// </summary>
+        public float CaptureFrameRate
+        {
+            get { return (float)GetValue(CaptureFrameRateProperty); }
+            set { SetValue(CaptureFrameRateProperty, value); }
+        }
+
+        /// <summary>
+        /// Gets or sets the exact number of frames of a captured camera video, zero for any length.
+        /// </summary>
+        public int CaptureFrameCount
+        {
+            get { return (int)GetValue(CaptureFrameCountProperty); }
+            set { SetValue(CaptureFrameCountProperty, value); }
+        }
+
+        /// <summary>
+        /// Gets or sets the sample rate audio is captured at, zero for the default.
+        /// </summary>
+        public int CaptureSampleRate
+        {
+            get { return (int)GetValue(CaptureSampleRateProperty); }
+            set { SetValue(CaptureSampleRateProperty, value); }
+        }
+
+        /// <summary>
+        /// Gets or sets the channels audio is captured with, zero for the default.
+        /// </summary>
+        public int CaptureChannels
+        {
+            get { return (int)GetValue(CaptureChannelsProperty); }
+            set { SetValue(CaptureChannelsProperty, value); }
         }
 
         public ReferenceItemModel SelectedReferenceItem
@@ -134,7 +205,7 @@ namespace Amuse.App.Controls
         /// </summary>
         private async Task AddImageAsync()
         {
-            var filename = await DialogService.OpenFileAsync("Import Image", filter: "Image Files|*.bmp;*.jpg;*.jpeg;*.png;*.gif;*.tif;*.tiff|All Files|*.*");
+            var filename = await DialogService.OpenFileAsync(AppDefault.ImportImage, filter: TensorStack.WPF.Common.ImageFileFilter);
             if (!string.IsNullOrEmpty(filename))
             {
                 await AddImageAsync(filename);
@@ -146,17 +217,34 @@ namespace Amuse.App.Controls
         /// Adds an image reference.
         /// </summary>
         /// <param name="filename">The filename.</param>
-        private async Task AddImageAsync(string filename)
+        /// <param name="isImport">if set to <c>true</c> the file is reported as a media import, a capture is not.</param>
+        private async Task AddImageAsync(string filename, bool isImport = true)
         {
             if (!CanAdd(MediaType.Image, filename))
                 return;
 
+            var image = await ImageInput.CreateAsync(filename);
             AddReference(new ReferenceItemModel
             {
                 Filename = filename,
                 MediaType = MediaType.Image,
-                Image = await ImageInput.CreateAsync(filename)
+                Image = image
             });
+            if (isImport)
+                OnMediaImport?.Invoke(this, new MediaImportEventArgs(filename, image));
+        }
+
+
+        /// <summary>
+        /// Captures an image reference from a camera, at the capture size.
+        /// </summary>
+        private async Task CaptureImageAsync()
+        {
+            var filename = await DialogService.CaptureFileAsync(MediaType.Image, GetCaptureOptions());
+            if (!string.IsNullOrEmpty(filename))
+            {
+                await AddImageAsync(filename, false);
+            }
         }
 
 
@@ -165,7 +253,7 @@ namespace Amuse.App.Controls
         /// </summary>
         private async Task AddVideoAsync()
         {
-            var filename = await DialogService.OpenFileAsync("Import Video", filter: "Videos|*.mp4;*.gif;|All Files|*.*;");
+            var filename = await DialogService.OpenFileAsync(AppDefault.ImportVideo, filter: TensorStack.WPF.Common.VideoFileFilter);
             if (!string.IsNullOrEmpty(filename))
             {
                 await AddVideoAsync(filename);
@@ -177,17 +265,34 @@ namespace Amuse.App.Controls
         /// Adds a video reference.
         /// </summary>
         /// <param name="filename">The filename.</param>
-        private async Task AddVideoAsync(string filename)
+        /// <param name="isImport">if set to <c>true</c> the file is reported as a media import, a capture is not.</param>
+        private async Task AddVideoAsync(string filename, bool isImport = true)
         {
             if (!CanAdd(MediaType.Video, filename))
                 return;
 
+            var video = await VideoInputStream.CreateAsync(filename);
             AddReference(new ReferenceItemModel
             {
                 Filename = filename,
                 MediaType = MediaType.Video,
-                Video = await VideoInputStream.CreateAsync(filename)
+                Video = video
             });
+            if (isImport)
+                OnMediaImport?.Invoke(this, new MediaImportEventArgs(filename, video));
+        }
+
+
+        /// <summary>
+        /// Captures a video reference from a camera, at the capture size, frame rate and frame count.
+        /// </summary>
+        private async Task CaptureVideoAsync()
+        {
+            var filename = await DialogService.CaptureFileAsync(MediaType.Video, GetCaptureOptions());
+            if (!string.IsNullOrEmpty(filename))
+            {
+                await AddVideoAsync(filename, false);
+            }
         }
 
 
@@ -196,7 +301,7 @@ namespace Amuse.App.Controls
         /// </summary>
         private async Task AddAudioAsync()
         {
-            var filename = await DialogService.OpenFileAsync("Import Audio", "Audio", filter: "Audio/Video files (*.mp3;*.wav;*.flac;*.m4a;*.aac;*.ogg;*.mp4;*.mov;*.mkv;*.webm)|*.mp3;*.wav;*.flac;*.m4a;*.aac;*.ogg;*.mp4;*.mov;*.mkv;*.webm", defualtExt: "wav");
+            var filename = await DialogService.OpenFileAsync(AppDefault.ImportAudio, "Audio", filter: TensorStack.WPF.Common.AudioFileFilter, defualtExt: "wav");
             if (!string.IsNullOrEmpty(filename))
             {
                 await AddAudioAsync(filename);
@@ -208,17 +313,56 @@ namespace Amuse.App.Controls
         /// Adds an audio reference.
         /// </summary>
         /// <param name="filename">The filename.</param>
-        private async Task AddAudioAsync(string filename)
+        /// <param name="isImport">if set to <c>true</c> the file is reported as a media import, a capture is not.</param>
+        private async Task AddAudioAsync(string filename, bool isImport = true)
         {
             if (!CanAdd(MediaType.Audio, filename))
                 return;
 
+            var audio = await AudioInputStream.CreateAsync(filename);
             AddReference(new ReferenceItemModel
             {
                 Filename = filename,
                 MediaType = MediaType.Audio,
-                Audio = await AudioInputStream.CreateAsync(filename)
+                Audio = audio
             });
+            if (isImport)
+                OnMediaImport?.Invoke(this, new MediaImportEventArgs(filename, audio));
+        }
+
+
+        /// <summary>
+        /// Captures an audio reference from a microphone, at the capture sample rate and channels.
+        /// </summary>
+        private async Task CaptureAudioAsync()
+        {
+            var filename = await DialogService.CaptureFileAsync(MediaType.Audio, GetCaptureOptions());
+            if (!string.IsNullOrEmpty(filename))
+            {
+                await AddAudioAsync(filename, false);
+            }
+        }
+
+
+        /// <summary>
+        /// Gets the capture options, a capture is made in the format the model uses so it needs no conversion.
+        /// The recording is in the temporary directory so it is not reported as a media import.
+        /// </summary>
+        private CaptureOptions GetCaptureOptions()
+        {
+            var captureOptions = new CaptureOptions
+            {
+                CropWidth = CaptureWidth,
+                CropHeight = CaptureHeight,
+                FrameRate = CaptureFrameRate,
+                FrameCount = CaptureFrameCount
+            };
+            if (CaptureSampleRate > 0)
+                captureOptions = captureOptions with { SampleRate = CaptureSampleRate };
+            if (CaptureChannels > 0)
+                captureOptions = captureOptions with { Channels = CaptureChannels };
+
+            return captureOptions;
         }
 
 
@@ -231,6 +375,85 @@ namespace Amuse.App.Controls
             ReferenceCollection.Remove(model);
             UpdateReferenceItems();
             return Task.CompletedTask;
+        }
+
+
+        /// <summary>
+        /// Crops a video or audio reference to a clip in the format the model uses, the section of it is chosen in the crop dialog.
+        /// The clip is in the temporary directory and takes the place of the reference.
+        /// </summary>
+        /// <param name="model">The model.</param>
+        private async Task CropAsync(ReferenceItemModel model)
+        {
+            var reference = default(ReferenceItemModel);
+            if (model?.Video != null)
+                reference = await CropVideoAsync(model);
+            else if (model?.Audio != null)
+                reference = await CropAudioAsync(model);
+
+            var index = ReferenceCollection.IndexOf(model);
+            if (reference == null || index < 0)
+                return;
+
+            // The reference keeps its place
+            ReferenceCollection[index] = reference;
+            UpdateReferenceItems();
+        }
+
+
+        /// <summary>
+        /// Crops a video reference to a clip of the capture size, frame rate and frame count, the section and area of the video are chosen in the crop dialog.
+        /// </summary>
+        /// <param name="model">The model.</param>
+        /// <returns>The reference of the clip, null if the dialog was cancelled.</returns>
+        private async Task<ReferenceItemModel> CropVideoAsync(ReferenceItemModel model)
+        {
+            var cropOptions = new CropVideoOptions
+            {
+                Width = CaptureWidth,
+                Height = CaptureHeight,
+                FrameRate = CaptureFrameRate,
+                FrameCount = CaptureFrameCount
+            };
+            var video = await DialogService.CropVideoAsync(model.Video, cropOptions);
+            if (video == null)
+                return null;
+
+            return new ReferenceItemModel
+            {
+                Id = model.Id,
+                Filename = video.SourceFile,
+                MediaType = MediaType.Video,
+                Video = video
+            };
+        }
+
+
+        /// <summary>
+        /// Crops an audio reference to a clip at the capture sample rate and channels, the section of the audio is chosen in the crop dialog.
+        /// The clip is no longer than the video the model makes.
+        /// </summary>
+        /// <param name="model">The model.</param>
+        /// <returns>The reference of the clip, null if the dialog was cancelled.</returns>
+        private async Task<ReferenceItemModel> CropAudioAsync(ReferenceItemModel model)
+        {
+            var cropOptions = new CropAudioOptions
+            {
+                SampleRate = CaptureSampleRate,
+                Channels = CaptureChannels,
+                MaxDuration = CaptureFrameRate > 0 && CaptureFrameCount > 0 ? TimeSpan.FromSeconds(CaptureFrameCount / CaptureFrameRate) : TimeSpan.Zero
+            };
+            var audio = await DialogService.CropAudioAsync(model.Audio, cropOptions);
+            if (audio == null)
+                return null;
+
+            return new ReferenceItemModel
+            {
+                Id = model.Id,
+                Filename = audio.SourceFile,
+                MediaType = MediaType.Audio,
+                Audio = audio
+            };
         }
 
 
@@ -420,7 +643,7 @@ namespace Amuse.App.Controls
         {
             if (IsIgnored)
             {
-                return $"Models Maximum {MediaType} Inputs Reached";
+                return string.Format(AppDefault.MaxInputsReached, MediaType.GetLocalizedName());
             }
             return Filename;
         }

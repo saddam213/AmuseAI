@@ -1,13 +1,18 @@
 ﻿using Amuse.App.Common;
+using Amuse.Common;
+using Amuse.Common.Config;
+using Amuse.Common.Message;
+using Microsoft.Extensions.Logging;
 using System;
-using System.IO;
+using System.Collections.Generic;
+using System.Runtime.CompilerServices;
 using System.Threading;
 using System.Threading.Tasks;
 using TensorStack.Common;
 using TensorStack.Common.Pipeline;
+using TensorStack.Common.Video;
 using TensorStack.Media.Video;
-using TensorStack.OnnxRuntime;
-using TensorStack.OnnxRuntime.Upscale;
+using PipelineProgress = Amuse.Common.PipelineProgress;
 
 namespace Amuse.App.Services
 {
@@ -15,7 +20,9 @@ namespace Amuse.App.Services
     {
         private readonly Settings _settings;
         private readonly IMediaService _mediaService;
-        private InterpolationPipeline _currentPipeline;
+        private readonly ILogger _logger;
+        private PipelineClient _pipelineClient;
+        private IProgress<RunProgress> _executeProgress;
         private CancellationTokenSource _cancellationTokenSource;
         private bool _isLoaded;
         private bool _isLoading;
@@ -25,10 +32,13 @@ namespace Amuse.App.Services
         /// Initializes a new instance of the <see cref="UpscaleService"/> class.
         /// </summary>
         /// <param name="settings">The settings.</param>
-        public InterpolationService(Settings settings, IMediaService mediaService)
+        /// <param name="mediaService">The media service.</param>
+        /// <param name="logger">The logger.</param>
+        public InterpolationService(Settings settings, IMediaService mediaService, ILogger<InterpolationService> logger)
         {
             _settings = settings;
             _mediaService = mediaService;
+            _logger = logger;
         }
 
         /// <summary>
@@ -77,26 +87,37 @@ namespace Amuse.App.Services
                 using (_cancellationTokenSource = new CancellationTokenSource())
                 {
                     var cancellationToken = _cancellationTokenSource.Token;
-                    if (_currentPipeline != null)
-                        await _currentPipeline.UnloadAsync(cancellationToken);
+                    await UnloadClientAsync();
 
-                    _currentPipeline = InterpolationPipeline.Create(new ModelConfig
+                    _pipelineClient = new PipelineClient(new ClientConfig
                     {
-                        ExecutionProvider = device.GetProvider(),
-                        Path = Path.Combine(App.DirectoryBase, "Interpolation.onnx")
-                    });
-                    await Task.Run(() => _currentPipeline.LoadAsync(cancellationToken), cancellationToken);
+                        ServerPath = App.DirectoryServer,
+                        ServerType = ServerType.OnnxRuntimeInterpolate,
+                        IsDebugMode = _settings.IsServerDebugEnabled
+                    }, new Progress<PipelineProgress>(OnHostProgress), _logger);
+
+                    await _pipelineClient.CreateAsync(new PipelineCreateOptions(), cancellationToken);
+                    await _pipelineClient.LoadAsync(new PipelineLoadOptions
+                    {
+                        Pipeline = PipelineType.InterpolationPipeline,
+                        Device = device.Name,
+                        DeviceId = device.DeviceId,
+                        InterpolateConfig = new InterpolateConfig
+                        {
+                            DeviceType = device.Type
+                        }
+                    }, cancellationToken);
+                    IsLoaded = true;
                 }
             }
-            catch (OperationCanceledException)
+            catch (Exception)
             {
-                _currentPipeline?.Dispose();
-                _currentPipeline = null;
+                _pipelineClient?.Dispose();
+                _pipelineClient = null;
                 throw;
             }
             finally
             {
-                IsLoaded = true;
                 IsLoading = false;
             }
         }
@@ -117,21 +138,26 @@ namespace Amuse.App.Services
                 using (_cancellationTokenSource = new CancellationTokenSource())
                 {
                     var cancellationToken = _cancellationTokenSource.Token;
-                    var processedVideo = _currentPipeline.RunAsync(new InterpolationStreamOptions
+                    var runOptions = new PipelineRunOptions
                     {
-                        Multiplier = options.Multiplier,
-                        FrameCount = options.Frames,
-                        FrameRate = options.FrameRate,
-                        Stream = options.VideoStream.GetAsync()
-                    }, progressCallback, cancellationToken: cancellationToken);
+                        InterpolateVideoOptions = new InterpolateVideoRunOptions
+                        {
+                            Multiplier = options.Multiplier,
+                            FrameCount = options.Frames,
+                            FrameRate = options.FrameRate
+                        }
+                    };
 
-
+                    _executeProgress = progressCallback;
+                    var inputStream = CreateStreamItemsAsync(options.VideoStream.GetAsync(), cancellationToken);
+                    var processedVideo = CreateVideoFramesAsync(_pipelineClient.RunStreamAsync(runOptions, inputStream, cancellationToken), cancellationToken);
                     await processedVideo.SaveAsync(videoFileName, audioSourceFile: options.VideoStream.SourceFile, cancellationToken: cancellationToken);
                     return await VideoInputStream.CreateAsync(videoFileName);
                 }
             }
             finally
             {
+                _executeProgress = null;
                 IsExecuting = false;
             }
         }
@@ -151,17 +177,80 @@ namespace Amuse.App.Services
         /// </summary>
         public async Task UnloadAsync()
         {
-            if (_currentPipeline != null)
+            if (_pipelineClient != null)
             {
                 await _cancellationTokenSource.SafeCancelAsync();
-                await _currentPipeline.UnloadAsync();
-                _currentPipeline.Dispose();
-                _currentPipeline = null;
+                await UnloadClientAsync();
             }
 
             IsLoaded = false;
             IsLoading = false;
             IsExecuting = false;
+        }
+
+
+        /// <summary>
+        /// Unloads the pipeline and stops the host.
+        /// </summary>
+        private async Task UnloadClientAsync()
+        {
+            if (_pipelineClient is null)
+                return;
+
+            try
+            {
+                await _pipelineClient.UnloadAsync();
+            }
+            catch (Exception ex)
+            {
+                _logger.LogWarning("[InterpolationService] [Unload] Host did not unload, Reason: {Reason}", ex.Message);
+            }
+            finally
+            {
+                _pipelineClient.Dispose();
+                _pipelineClient = null;
+            }
+        }
+
+
+        /// <summary>
+        /// Reports the host progress to the running execute.
+        /// </summary>
+        /// <param name="progress">The progress.</param>
+        private void OnHostProgress(PipelineProgress progress)
+        {
+            if (_executeProgress is null || progress.Maximum <= 0)
+                return;
+
+            _executeProgress.Report(new RunProgress(progress.Value, progress.Maximum));
+        }
+
+
+        /// <summary>
+        /// Converts the video frames to stream items as the host takes them.
+        /// </summary>
+        /// <param name="frames">The frames.</param>
+        /// <param name="cancellationToken">The cancellation token.</param>
+        private static async IAsyncEnumerable<PipelineStreamItem> CreateStreamItemsAsync(IAsyncEnumerable<VideoFrame> frames, [EnumeratorCancellation] CancellationToken cancellationToken)
+        {
+            await foreach (var frame in frames.WithCancellation(cancellationToken))
+            {
+                yield return frame.ToStreamItem();
+            }
+        }
+
+
+        /// <summary>
+        /// Converts the stream items to video frames as the host produces them.
+        /// </summary>
+        /// <param name="items">The items.</param>
+        /// <param name="cancellationToken">The cancellation token.</param>
+        private static async IAsyncEnumerable<VideoFrame> CreateVideoFramesAsync(IAsyncEnumerable<PipelineStreamItem> items, [EnumeratorCancellation] CancellationToken cancellationToken)
+        {
+            await foreach (var item in items.WithCancellation(cancellationToken))
+            {
+                yield return item.ToVideoFrame();
+            }
         }
     }
 

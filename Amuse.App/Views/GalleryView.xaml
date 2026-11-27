@@ -7,6 +7,7 @@
     xmlns:CommonControls="clr-namespace:TensorStack.WPF.Controls;assembly=TensorStack.WPF"
     xmlns:Controls="clr-namespace:Amuse.App.Controls"
     xmlns:Common="clr-namespace:Amuse.App.Common"
+    xmlns:Resources="clr-namespace:Amuse.App.Resources"
     xmlns:Views="clr-namespace:Amuse.App.Views">
     <Grid DataContext="{Binding RelativeSource={RelativeSource AncestorType={x:Type local:GalleryView}}}" >
 
@@ -35,15 +36,32 @@
                             </StackPanel>
                             <StackPanel>
                                 <TextBlock Text="{CommonControls:Localize MediaType}" Style="{StaticResource FieldTextBlockStyle}"/>
-                                <CommonControls:NullableComboBox ItemsSource="{Binding Source={StaticResource MediaType}}" SelectedItem="{Binding FilterMediaType}" NullPrefix="All Media" />
+                                <CommonControls:NullableComboBox ItemsSource="{Binding Source={StaticResource MediaType}}" SelectedItem="{Binding FilterMediaType}" NullPrefix="{x:Static Resources:AppDefault.AllMedia}" />
                             </StackPanel>
                             <StackPanel>
                                 <TextBlock Text="{CommonControls:Localize Model}" Style="{StaticResource FieldTextBlockStyle}"/>
-                                <ComboBox ItemsSource="{Binding FilterModelNames}" SelectedItem="{Binding FilterModelName}"  />
+                                <ComboBox ItemsSource="{Binding FilterModelNames}" SelectedItem="{Binding FilterModelName}">
+                                    <ComboBox.ItemTemplate>
+                                        <DataTemplate>
+                                            <TextBlock>
+                                                <TextBlock.Style>
+                                                    <Style TargetType="{x:Type TextBlock}" BasedOn="{StaticResource {x:Type TextBlock}}">
+                                                        <Setter Property="Text" Value="{Binding}" />
+                                                        <Style.Triggers>
+                                                            <DataTrigger Binding="{Binding}" Value="">
+                                                                <Setter Property="Text" Value="{CommonControls:Localize AllModels}" />
+                                                            </DataTrigger>
+                                                        </Style.Triggers>
+                                                    </Style>
+                                                </TextBlock.Style>
+                                            </TextBlock>
+                                        </DataTemplate>
+                                    </ComboBox.ItemTemplate>
+                                </ComboBox>
                             </StackPanel>
                             <StackPanel>
                                 <TextBlock Text="{CommonControls:Localize ProcessType}" Style="{StaticResource FieldTextBlockStyle}"/>
-                                <CommonControls:NullableComboBox ItemsSource="{Binding FilterProcessTypes}" SelectedItem="{Binding FilterProcessType}" NullPrefix="All Processes" />
+                                <CommonControls:NullableComboBox ItemsSource="{Binding FilterProcessTypes}" SelectedItem="{Binding FilterProcessType}" NullPrefix="{x:Static Resources:AppDefault.AllProcesses}" />
                             </StackPanel>
                         </UniformGrid>
                     </DockPanel>
@@ -67,19 +85,19 @@
 
                 <!--Middle-->
                 <Border BorderBrush="{StaticResource DefaultBorderColor}" BorderThickness="1" Margin="0,4">
-                    <ScrollViewer PanningMode="VerticalOnly" HorizontalScrollBarVisibility="Disabled" VerticalScrollBarVisibility="Visible" PreviewMouseWheel="ScrollViewer_PreviewMouseWheel"  >
                         <Grid>
-                            <ListBox x:Name="ListBoxControl" 
+                            <ListBox x:Name="ListBoxControl"
                                 Padding="0"
-                                VerticalAlignment="Top"
                                 BorderThickness="0,0,0,0"
                                 Background="{StaticResource TransparentBrush}"
-                                ScrollViewer.VerticalScrollBarVisibility="Disabled" 
+                                ScrollViewer.CanContentScroll="True"
+                                ScrollViewer.PanningMode="VerticalOnly"
+                                ScrollViewer.VerticalScrollBarVisibility="Visible"
                                 ScrollViewer.HorizontalScrollBarVisibility="Disabled"
                                 IsSynchronizedWithCurrentItem="True"
-                                ItemsSource="{Binding HistoryCollection}" 
+                                ItemsSource="{Binding HistoryCollection}"
                                 VirtualizingPanel.IsVirtualizing="True"
-                                VirtualizingPanel.VirtualizationMode="Recycling"
+                                VirtualizingPanel.VirtualizationMode="Standard"
                                 SelectionChanged="ListBoxControl_SelectionChanged"
                                 SelectedItem="{Binding SelectedItem, Mode=OneWayToSource}">
 
@@ -89,14 +107,14 @@
                                     <DataTemplate DataType="{x:Type Common:DiffusionHistory}">
                                         <DockPanel Margin="3">
                                             <Grid DockPanel.Dock="Top">
-                                                <Grid Width="120" Height="120" Visibility="{Binding MediaType, Converter={StaticResource EnumToVisibilityConverter}, ConverterParameter=Audio}">
-                                                    <CommonControls:FontAwesome Icon="f001" IconStyle="Solid" Size="96" Color="{StaticResource DefaultForeground}" Opacity=".2" />
+                                                <Grid Width="100" Height="100" Visibility="{Binding MediaType, Converter={StaticResource EnumToVisibilityConverter}, ConverterParameter=Audio}">
+                                                    <CommonControls:FontAwesome Icon="f001" IconStyle="Solid" Size="80" Color="{StaticResource DefaultForeground}" Opacity=".2" />
                                                 </Grid>
-                                                <Grid Width="120" Height="120" Visibility="{Binding MediaType, Converter={StaticResource EnumToVisibilityConverter}, ConverterParameter=Text}">
-                                                    <CommonControls:FontAwesome Icon="f894" IconStyle="Solid" Size="96" Color="{StaticResource DefaultForeground}" Opacity=".2" />
+                                                <Grid Width="100" Height="100" Visibility="{Binding MediaType, Converter={StaticResource EnumToVisibilityConverter}, ConverterParameter=Text}">
+                                                    <CommonControls:FontAwesome Icon="f894" IconStyle="Solid" Size="80" Color="{StaticResource DefaultForeground}" Opacity=".2" />
                                                 </Grid>
                                                 <CommonControls:TransparentImageElement 
-                                                    Height="120" 
+                                                    Height="100" 
                                                     Stretch="Uniform" 
                                                     DecodePixelHeight="80"
                                                     UriSource="{Binding ThumbPath, Converter={StaticResource StringToUriConverter}}" />
@@ -133,7 +151,7 @@
                                         <DockPanel Margin="3">
                                             <Grid DockPanel.Dock="Top">
                                                 <CommonControls:TransparentImageElement 
-                                                    Height="120" 
+                                                    Height="100" 
                                                     Stretch="Uniform" 
                                                     DecodePixelHeight="80"
                                                     UriSource="{Binding ThumbPath, Converter={StaticResource StringToUriConverter}}" />
@@ -154,7 +172,7 @@
                                         <DockPanel Margin="3">
                                             <Grid DockPanel.Dock="Top">
                                                 <CommonControls:TransparentImageElement 
-                                                    Height="120" 
+                                                    Height="100" 
                                                     Stretch="Uniform" 
                                                     DecodePixelHeight="80"
                                                     UriSource="{Binding ThumbPath, Converter={StaticResource StringToUriConverter}}" />
@@ -175,7 +193,7 @@
                                         <DockPanel Margin="3">
                                             <Grid DockPanel.Dock="Top">
                                                 <CommonControls:TransparentImageElement 
-                                                    Height="120" 
+                                                    Height="100" 
                                                     Stretch="Uniform" 
                                                     DecodePixelHeight="80"
                                                     UriSource="{Binding ThumbPath, Converter={StaticResource StringToUriConverter}}" />
@@ -195,7 +213,7 @@
                                     <DataTemplate DataType="{x:Type Common:AudioHistory}">
                                         <DockPanel Margin="3" Visibility="{Binding MediaType, Converter={StaticResource EnumToVisibilityConverter}, ConverterParameter=Audio}">
                                             <Grid DockPanel.Dock="Top">
-                                                <CommonControls:FontAwesome Icon="f001" IconStyle="Solid" Size="96" Color="{StaticResource DefaultForeground}" Opacity=".2" Width="120" Height="120" />
+                                                <CommonControls:FontAwesome Icon="f001" IconStyle="Solid" Size="80" Color="{StaticResource DefaultForeground}" Opacity=".2" Width="100" Height="100" />
                                             </Grid>
                                             <StackPanel Margin="0,3,0,0">
                                                 <TextBlock TextAlignment="Center" LineHeight="14" LineStackingStrategy="BlockLineHeight">
@@ -210,7 +228,7 @@
                                     <DataTemplate DataType="{x:Type Common:TextHistory}">
                                         <DockPanel Margin="3" Visibility="{Binding MediaType, Converter={StaticResource EnumToVisibilityConverter}, ConverterParameter=Text}">
                                             <Grid DockPanel.Dock="Top">
-                                                <CommonControls:FontAwesome Icon="f894" IconStyle="Solid" Size="96" Color="{StaticResource DefaultForeground}" Opacity=".2" Width="120" Height="120" />
+                                                <CommonControls:FontAwesome Icon="f894" IconStyle="Solid" Size="80" Color="{StaticResource DefaultForeground}" Opacity=".2" Width="100" Height="100" />
                                             </Grid>
                                             <StackPanel Margin="0,3,0,0">
                                                 <TextBlock TextAlignment="Center" LineHeight="14" LineStackingStrategy="BlockLineHeight">
@@ -226,7 +244,7 @@
                                         <DockPanel Margin="3">
                                             <Grid DockPanel.Dock="Top">
                                                 <CommonControls:TransparentImageElement 
-                                                    Height="120" 
+                                                    Height="100" 
                                                     Stretch="Uniform" 
                                                     DecodePixelHeight="80"
                                                     UriSource="{Binding ThumbPath, Converter={StaticResource StringToUriConverter}}" />
@@ -249,9 +267,9 @@
                                 <ListBox.ItemContainerStyle>
                                     <Style TargetType="{x:Type ListBoxItem}">
                                         <Setter Property="Padding" Value="0"/>
-                                        <Setter Property="Margin" Value="0,1,3,1"/>
+                                        <Setter Property="Margin" Value="2"/>
                                         <Setter Property="BorderThickness" Value="1" />
-                                        <Setter Property="BorderBrush" Value="{StaticResource ContainerBorder}" />
+                                        <Setter Property="BorderBrush" Value="{StaticResource AccentBorderBrush}" />
                                         <Setter Property="Background" Value="{StaticResource TransparentBrush}"/>
                                         <Setter Property="HorizontalContentAlignment" Value="Stretch" />
                                         <Setter Property="Template">
@@ -269,14 +287,7 @@
                                 <!--ItemsPanel-->
                                 <ListBox.ItemsPanel>
                                     <ItemsPanelTemplate>
-                                        <CommonControls:UniformWrapPanel  IsItemsHost="True" SnapsToDevicePixels="True" VerticalAlignment="Top" >
-                                            <CommonControls:UniformWrapPanel.Style>
-                                                <Style TargetType="{x:Type CommonControls:UniformWrapPanel}" >
-                                                    <Setter Property="MinItemWidth" Value="140"/>
-                                                    <Setter Property="MaxItemWidth" Value="200"/>
-                                                </Style>
-                                            </CommonControls:UniformWrapPanel.Style>
-                                        </CommonControls:UniformWrapPanel>
+                                        <Controls:VirtualizingUniformWrapPanel IsItemsHost="True" SnapsToDevicePixels="True" MinItemWidth="124" MaxItemWidth="170" />
                                     </ItemsPanelTemplate>
                                 </ListBox.ItemsPanel>
 
@@ -289,7 +300,6 @@
                             </Grid>
 
                         </Grid>
-                    </ScrollViewer>
                 </Border>
             </DockPanel>
 
@@ -349,11 +359,14 @@
                                 Volume="{Binding Settings.VolumeOutput, Mode=TwoWay}"
                                 IsVolumeMute="{Binding Settings.IsVolumeOutputMute, Mode=TwoWay}"
                                 Visibility="{Binding SelectedItem.MediaType, Converter={StaticResource EnumToVisibilityConverter}, ConverterParameter=Audio}"/>
-                            <CommonControls:TextElement 
-                                IsReadOnly="True"
-                                IsLoadEnabled="False"
-                                IsRemoveEnabled="False"
-                                TextSource="{Binding CurrentText, Mode=OneWay}"
+                            <CommonControls:MarkdownElement
+                                x:Name="TextControl"
+                                IsMarkdownEnabled="True"
+                                IsInputEnabled="True"
+                                IsContextMenuEnabled="True"
+                                IsScrollToBottomEnabled="False"
+                                Settings="{Binding Settings, Mode=OneWay}"
+                                Markdown="{Binding CurrentText.Text, Mode=OneWay}"
                                 Visibility="{Binding SelectedItem.MediaType, Converter={StaticResource EnumToVisibilityConverter}, ConverterParameter=Text}"/>
                         </Grid>
                     </Grid>

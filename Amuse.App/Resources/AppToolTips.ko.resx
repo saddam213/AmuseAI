@@ -1,0 +1,504 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <!-- 
+    Microsoft ResX Schema 
+    
+    Version 2.0
+    
+    The primary goals of this format is to allow a simple XML format 
+    that is mostly human readable. The generation and parsing of the 
+    various data types are done through the TypeConverter classes 
+    associated with the data types.
+    
+    Example:
+    
+    ... ado.net/XML headers & schema ...
+    <resheader name="resmimetype">text/microsoft-resx</resheader>
+    <resheader name="version">2.0</resheader>
+    <resheader name="reader">System.Resources.ResXResourceReader, System.Windows.Forms, ...</resheader>
+    <resheader name="writer">System.Resources.ResXResourceWriter, System.Windows.Forms, ...</resheader>
+    <data name="Name1"><value>this is my long string</value><comment>this is a comment</comment></data>
+    <data name="Color1" type="System.Drawing.Color, System.Drawing">Blue</data>
+    <data name="Bitmap1" mimetype="application/x-microsoft.net.object.binary.base64">
+        <value>[base64 mime encoded serialized .NET Framework object]</value>
+    </data>
+    <data name="Icon1" type="System.Drawing.Icon, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
+        <value>[base64 mime encoded string representing a byte array form of the .NET Framework object]</value>
+        <comment>This is a comment</comment>
+    </data>
+                
+    There are any number of "resheader" rows that contain simple 
+    name/value pairs.
+    
+    Each data row contains a name, and value. The row also contains a 
+    type or mimetype. Type corresponds to a .NET class that support 
+    text/value conversion through the TypeConverter architecture. 
+    Classes that don't support this are serialized and stored with the 
+    mimetype set.
+    
+    The mimetype is used for serialized objects, and tells the 
+    ResXResourceReader how to depersist the object. This is currently not 
+    extensible. For a given mimetype the value must be set accordingly:
+    
+    Note - application/x-microsoft.net.object.binary.base64 is the format 
+    that the ResXResourceWriter will generate, however the reader can 
+    read any of the formats listed below.
+    
+    mimetype: application/x-microsoft.net.object.binary.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Binary.BinaryFormatter
+            : and then encoded with base64 encoding.
+    
+    mimetype: application/x-microsoft.net.object.soap.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Soap.SoapFormatter
+            : and then encoded with base64 encoding.
+
+    mimetype: application/x-microsoft.net.object.bytearray.base64
+    value   : The object must be serialized into a byte array 
+            : using a System.ComponentModel.TypeConverter
+            : and then encoded with base64 encoding.
+    -->
+  <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+    <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
+    <xsd:element name="root" msdata:IsDataSet="true">
+      <xsd:complexType>
+        <xsd:choice maxOccurs="unbounded">
+          <xsd:element name="metadata">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" />
+              </xsd:sequence>
+              <xsd:attribute name="name" use="required" type="xsd:string" />
+              <xsd:attribute name="type" type="xsd:string" />
+              <xsd:attribute name="mimetype" type="xsd:string" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="assembly">
+            <xsd:complexType>
+              <xsd:attribute name="alias" type="xsd:string" />
+              <xsd:attribute name="name" type="xsd:string" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="data">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1" />
+              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
+              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="resheader">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" />
+            </xsd:complexType>
+          </xsd:element>
+        </xsd:choice>
+      </xsd:complexType>
+    </xsd:element>
+  </xsd:schema>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="ToolTip_GenerateStop" xml:space="preserve">
+    <value>백엔드 프로세스를 종료하여 생성을 즉시 중지합니다.</value>
+  </data>
+  <data name="ToolTip_ModelStatus_Available" xml:space="preserve">
+    <value>다운로드 가능</value>
+  </data>
+  <data name="ToolTip_ModelStatus_DownloadFailed" xml:space="preserve">
+    <value>모델 다운로드 실패</value>
+  </data>
+  <data name="ToolTip_ModelStatus_Downloading" xml:space="preserve">
+    <value>모델 다운로드 중</value>
+  </data>
+  <data name="ToolTip_ModelStatus_DownloadQueue" xml:space="preserve">
+    <value>모델 다운로드 대기 중</value>
+  </data>
+  <data name="ToolTip_ModelStatus_Installed" xml:space="preserve">
+    <value>모델 설치됨</value>
+  </data>
+  <data name="ToolTip_ModelStatus_NotInstalled" xml:space="preserve">
+    <value>모델이 설치되지 않음</value>
+  </data>
+  <data name="ToolTip_ModelStatus_Unknown" xml:space="preserve">
+    <value>모델 업데이트 필요</value>
+  </data>
+  <data name="ToolTip_Text_Branch" xml:space="preserve">
+    <value>대화 분기</value>
+  </data>
+  <data name="ToolTip_Text_Rewind" xml:space="preserve">
+    <value>마지막 메시지 되돌리기</value>
+  </data>
+  <data name="ToolTip_Text_SaveResponseFile" xml:space="preserve">
+    <value>응답을 파일로 저장</value>
+  </data>
+  <data name="ToolTip_Text_CopyResponseHtml" xml:space="preserve">
+    <value>응답 HTML 복사</value>
+  </data>
+  <data name="ToolTip_Text_CopyResponseText" xml:space="preserve">
+    <value>응답 텍스트 복사</value>
+  </data>
+  <data name="ToolTip_Text_Clear" xml:space="preserve">
+    <value>텍스트 지우기</value>
+  </data>
+  <data name="ToolTip_Lora_AddTrigger" xml:space="preserve">
+    <value>LoRA 트리거 단어 추가</value>
+  </data>
+  <data name="ToolTip_Paint_Live" xml:space="preserve">
+    <value>실시간 생성</value>
+  </data>
+  <data name="ToolTip_Paint_Cancel" xml:space="preserve">
+    <value>생성 취소</value>
+  </data>
+  <data name="ToolTip_Paint_RoundBrush" xml:space="preserve">
+    <value>둥근 브러시</value>
+  </data>
+  <data name="ToolTip_Paint_SquareBrush" xml:space="preserve">
+    <value>사각 브러시</value>
+  </data>
+  <data name="ToolTip_Paint_Highlighter" xml:space="preserve">
+    <value>형광펜</value>
+  </data>
+  <data name="ToolTip_Paint_Eraser" xml:space="preserve">
+    <value>지우개</value>
+  </data>
+  <data name="ToolTip_Paint_FitCurve" xml:space="preserve">
+    <value>곡선에 맞추기</value>
+  </data>
+  <data name="ToolTip_Paint_Stylus" xml:space="preserve">
+    <value>스타일러스 필압 지원 사용</value>
+  </data>
+  <data name="ToolTip_Paint_FillBG" xml:space="preserve">
+    <value>배경 채우기</value>
+  </data>
+  <data name="ToolTip_Paint_LoadImageBG" xml:space="preserve">
+    <value>배경 이미지 불러오기</value>
+  </data>
+  <data name="ToolTip_Paint_ClearDraw" xml:space="preserve">
+    <value>그림 지우기</value>
+  </data>
+  <data name="ToolTip_Seed_New" xml:space="preserve">
+    <value>새 시드</value>
+  </data>
+  <data name="ToolTip_Seed_Random" xml:space="preserve">
+    <value>무작위 시드</value>
+  </data>
+  <data name="ToolTip_VideoTimeline_Clear" xml:space="preserve">
+    <value>타임라인 지우기</value>
+  </data>
+  <data name="ToolTip_VideoTimeline_Save" xml:space="preserve">
+    <value>비디오 저장</value>
+  </data>
+  <data name="ToolTip_VideoTimeline_Extend" xml:space="preserve">
+    <value>타임라인 확장</value>
+  </data>
+  <data name="ToolTip_VideoTimeline_Trim" xml:space="preserve">
+    <value>타임라인 트리밍</value>
+  </data>
+  <data name="ToolTip_VideoTimeline_ZoomIn" xml:space="preserve">
+    <value>확대</value>
+  </data>
+  <data name="ToolTip_VideoTimeline_ZoomOut" xml:space="preserve">
+    <value>축소</value>
+  </data>
+  <data name="ToolTip_VideoTimeline_FrameRemove" xml:space="preserve">
+    <value>선택한 프레임 제거</value>
+  </data>
+  <data name="ToolTip_VideoTimeline_FrameSave" xml:space="preserve">
+    <value>선택한 프레임을 기록에 저장</value>
+  </data>
+  <data name="ToolTip_VideoTimeline_SegmentSplit" xml:space="preserve">
+    <value>세그먼트 분할</value>
+  </data>
+  <data name="ToolTip_VideoTimeline_SegmentCopy" xml:space="preserve">
+    <value>세그먼트 복사</value>
+  </data>
+  <data name="ToolTip_VideoTimeline_SegmentUp" xml:space="preserve">
+    <value>세그먼트 위로 이동</value>
+  </data>
+  <data name="ToolTip_VideoTimeline_SegmentDown" xml:space="preserve">
+    <value>세그먼트 아래로 이동</value>
+  </data>
+  <data name="ToolTip_VideoTimeline_SegmentRemove" xml:space="preserve">
+    <value>세그먼트 제거</value>
+  </data>
+  <data name="ToolTip_MemoryEstimate" xml:space="preserve">
+    <value>예상 메모리 모드</value>
+  </data>
+  <data name="ToolTip_Text_StreamEnable" xml:space="preserve">
+    <value>스트리밍 토큰 업데이트 사용</value>
+  </data>
+  <data name="ToolTip_Text_StreamDisable" xml:space="preserve">
+    <value>스트리밍 토큰 업데이트 사용 안 함</value>
+  </data>
+  <data name="ToolTip_Text_FormatEnable" xml:space="preserve">
+    <value>결과 서식 사용 (실험적)</value>
+  </data>
+  <data name="ToolTip_Text_FormatDisable" xml:space="preserve">
+    <value>결과 서식 사용 안 함</value>
+  </data>
+  <data name="ToolTip_Text_ThinkingHide" xml:space="preserve">
+    <value>사고 과정 숨기기</value>
+  </data>
+  <data name="ToolTip_Text_ThinkingShow" xml:space="preserve">
+    <value>사고 과정 표시</value>
+  </data>
+  <data name="ToolTip_Theme" xml:space="preserve">
+    <value>테마를 적용하려면 Amuse를 다시 시작하십시오.</value>
+  </data>
+  <data name="ToolTip_UIScale" xml:space="preserve">
+    <value>화면에 맞게 설정된 인터페이스 크기입니다.</value>
+  </data>
+  <data name="ToolTip_ModelFilterAll" xml:space="preserve">
+    <value>모든 모델을 표시하고 있습니다. 클릭하면 설치된 모델만 표시합니다.</value>
+  </data>
+  <data name="ToolTip_ModelFilterInstalled" xml:space="preserve">
+    <value>설치된 모델만 표시하고 있습니다. 클릭하면 모든 모델을 표시합니다.</value>
+  </data>
+  <data name="ToolTip_EnvironmentFilterAll" xml:space="preserve">
+    <value>모든 환경을 표시하고 있습니다. 클릭하면 내 장치용 환경만 표시합니다.</value>
+  </data>
+  <data name="ToolTip_EnvironmentFilterDevices" xml:space="preserve">
+    <value>내 장치용 환경만 표시하고 있습니다. 클릭하면 모든 환경을 표시합니다.</value>
+  </data>
+  <data name="ToolTip_GpuLayers" xml:space="preserve">
+    <value>GPU에 배치할 모델 레이어 수입니다. -1은 모든 레이어를 의미합니다. 값이 낮을수록 나머지 레이어가 시스템 메모리로 이동합니다.</value>
+  </data>
+  <data name="ToolTip_Threads" xml:space="preserve">
+    <value>시스템 메모리에 있는 레이어에 사용할 CPU 스레드 수입니다. 0이면 기본값을 사용합니다.</value>
+  </data>
+  <data name="ToolTip_ContextSize" xml:space="preserve">
+    <value>대화와 응답에 예약되는 토큰 수입니다. 값이 클수록 메모리를 더 많이 사용합니다.</value>
+  </data>
+  <data name="ToolTip_CacheOffload" xml:space="preserve">
+    <value>대화(키/값) 캐시를 GPU 메모리에 유지합니다</value>
+  </data>
+  <data name="ToolTip_BackendReady" xml:space="preserve">
+    <value>백엔드 환경이 설치되어 사용할 준비가 되었습니다.</value>
+  </data>
+  <data name="ToolTip_BackendNotInstalled" xml:space="preserve">
+    <value>이 장치에서 지원되지만 아직 설치되지 않았습니다. 환경 관리에서 설치하거나, 이 백엔드를 사용하는 모델을 처음 로드할 때 설치됩니다.</value>
+  </data>
+  <data name="ToolTip_BackendUnsupported" xml:space="preserve">
+    <value>이 장치에서는 이 백엔드를 사용할 수 없습니다.</value>
+  </data>
+  <data name="ToolTip_MemoryMode_StableDiffusionCpp_High" xml:space="preserve">
+    <value>모든 가중치를 GPU에 유지합니다.</value>
+  </data>
+  <data name="ToolTip_MemoryMode_StableDiffusionCpp_Medium" xml:space="preserve">
+    <value>가중치를 CPU 메모리로 오프로드하고 필요할 때 GPU로 옮깁니다.</value>
+  </data>
+  <data name="ToolTip_MemoryMode_StableDiffusionCpp_Low" xml:space="preserve">
+    <value>디퓨전 가중치는 CPU 메모리로, VAE, 텍스트 인코더 및 기타 부분은 디스크로 오프로드하고 필요할 때 로드합니다.</value>
+  </data>
+  <data name="ToolTip_MemoryMode_StableDiffusionCpp_Balanced" xml:space="preserve">
+    <value>자동 맞춤: 사용 가능한 VRAM에 맞게 가중치를 자동으로 배치합니다.</value>
+  </data>
+  <data name="ToolTip_MemoryMode_AudioCpp_High" xml:space="preserve">
+    <value>전체 모델을 GPU에 로드된 상태로 유지합니다.</value>
+  </data>
+  <data name="ToolTip_MemoryMode_AudioCpp_Medium" xml:space="preserve">
+    <value>메모리 절약 기능을 사용하여 VRAM 사용량을 줄입니다.</value>
+  </data>
+  <data name="ToolTip_MemoryMode_AudioCpp_Low" xml:space="preserve">
+    <value>메모리 절약 기능을 사용하여 VRAM 사용량을 줄입니다.</value>
+  </data>
+  <data name="ToolTip_MemoryMode_AudioCpp_Balanced" xml:space="preserve">
+    <value>메모리 절약 기능을 사용하여 VRAM 사용량을 줄입니다.</value>
+  </data>
+  <data name="ToolTip_MemoryMode_LlamaCpp_High" xml:space="preserve">
+    <value>모든 레이어를 GPU에서 실행하고 KV 캐시를 GPU에 유지합니다.</value>
+  </data>
+  <data name="ToolTip_MemoryMode_LlamaCpp_Medium" xml:space="preserve">
+    <value>모든 레이어를 GPU에서 실행하고 KV 캐시를 CPU 메모리에 유지합니다. 긴 컨텍스트에서 VRAM을 절약합니다.</value>
+  </data>
+  <data name="ToolTip_MemoryMode_LlamaCpp_Low" xml:space="preserve">
+    <value>모든 레이어를 CPU에서 실행하고 KV 캐시를 CPU 메모리에 유지합니다. 가장 느립니다.</value>
+  </data>
+  <data name="ToolTip_MemoryMode_LlamaCpp_Balanced" xml:space="preserve">
+    <value>실행 옵션의 GPU 레이어 및 GPU 캐시 값을 사용합니다.</value>
+  </data>
+  <data name="ToolTip_MemoryMode_OnnxRuntime" xml:space="preserve">
+    <value>ONNX Runtime은 자체적으로 메모리를 관리하므로 이 설정은 적용되지 않습니다.</value>
+  </data>
+  <data name="ToolTip_WeightType" xml:space="preserve">
+    <value>로드할 때 모델 가중치를 이 유형으로 변환합니다. 작은 유형일수록 메모리를 적게 사용하지만 로드 속도가 느려지고 품질이 다소 저하됩니다. 기본값은 모델의 원래 유형을 유지합니다.</value>
+  </data>
+  <data name="ToolTip_ResetExecutionOptions" xml:space="preserve">
+    <value>모든 옵션을 기본값으로 초기화합니다. 적용하려면 저장하십시오.</value>
+  </data>
+  <data name="ToolTip_EnvironmentSetupDontAskAgain" xml:space="preserve">
+    <value>시작 시 누락된 환경 설치를 더 이상 묻지 않습니다. 필수 업데이트는 계속 표시됩니다.</value>
+  </data>
+  <data name="ToolTip_UpscaleSeed" xml:space="preserve">
+    <value>비디오 업스케일러 노이즈의 시드</value>
+  </data>
+  <data name="ToolTip_UpscaleTemporalChunkSize" xml:space="preserve">
+    <value>청크당 처리되는 프레임 수입니다. 값이 낮을수록 메모리를 적게 사용합니다.</value>
+  </data>
+  <data name="ToolTip_UpscaleTileSize" xml:space="preserve">
+    <value>픽셀 단위 타일 크기입니다. 타일이 작을수록 메모리를 적게 사용하며, 0은 기본값을 사용합니다.</value>
+  </data>
+  <data name="ToolTip_UpscaleWindowSize" xml:space="preserve">
+    <value>참조 프레임의 간격입니다. 윈도우가 16이면 0, 15, 30 등의 프레임을 사용하며, 마지막 프레임은 항상 포함됩니다.</value>
+  </data>
+  <data name="ToolTip_HistoryFilterAudio" xml:space="preserve">
+    <value>오디오만 보기</value>
+  </data>
+  <data name="ToolTip_HistoryFilterClear" xml:space="preserve">
+    <value>필터 해제</value>
+  </data>
+  <data name="ToolTip_HistoryFilterImage" xml:space="preserve">
+    <value>이미지만 보기</value>
+  </data>
+  <data name="ToolTip_HistoryFilterText" xml:space="preserve">
+    <value>텍스트만 보기</value>
+  </data>
+  <data name="ToolTip_HistoryFilterVideo" xml:space="preserve">
+    <value>비디오만 보기</value>
+  </data>
+  <data name="ToolTip_AudioTimeline_SaveAudio" xml:space="preserve">
+    <value>오디오 저장</value>
+  </data>
+  <data name="ToolTip_AudioTimeline_SaveVideo" xml:space="preserve">
+    <value>오디오와 함께 참조 비디오 저장</value>
+  </data>
+  <data name="ToolTip_AudioTimeline_ReferenceRemove" xml:space="preserve">
+    <value>참조 비디오 제거</value>
+  </data>
+  <data name="ToolTip_AudioTimeline_ClipMove" xml:space="preserve">
+    <value>클립을 재생 헤드로 이동</value>
+  </data>
+  <data name="ToolTip_AudioTimeline_ClipTrimStart" xml:space="preserve">
+    <value>클립 시작을 재생 헤드까지 자르기</value>
+  </data>
+  <data name="ToolTip_AudioTimeline_ClipTrimEnd" xml:space="preserve">
+    <value>클립 끝을 재생 헤드까지 자르기</value>
+  </data>
+  <data name="ToolTip_AudioTimeline_ClipSplit" xml:space="preserve">
+    <value>재생 헤드에서 클립 분할</value>
+  </data>
+  <data name="ToolTip_AudioTimeline_ClipRestore" xml:space="preserve">
+    <value>자른 클립 복원</value>
+  </data>
+  <data name="ToolTip_AudioTimeline_ClipCopy" xml:space="preserve">
+    <value>클립 복사</value>
+  </data>
+  <data name="ToolTip_AudioTimeline_ClipRemove" xml:space="preserve">
+    <value>클립 제거</value>
+  </data>
+  <data name="ToolTip_VideoTimeline_ReferenceRemove" xml:space="preserve">
+    <value>참조 오디오 제거</value>
+  </data>
+  <data name="ToolTip_GuidanceImage" xml:space="preserve">
+    <value>편집 이미지와 참조 이미지의 이미지 가이던스 스케일입니다. 0은 모델 기본값을 사용합니다.</value>
+  </data>
+  <data name="ToolTip_ShiftedTimestep" xml:space="preserve">
+    <value>증류된 타임스텝 모델에서 사용하는 시프트 타임스텝입니다. 0이면 사용하지 않습니다.</value>
+  </data>
+  <data name="ToolTip_Sigmas" xml:space="preserve">
+    <value>사용자 지정 시그마 스케줄로, 0으로 끝나는 쉼표로 구분된 내림차순 목록입니다(예: 14.61, 7.8, 3.5, 0). 스케줄러와 스텝 수를 대체합니다.</value>
+  </data>
+  <data name="ToolTip_SkipLayers" xml:space="preserve">
+    <value>스킵 레이어 가이던스로, 7, 8, 9와 같은 쉼표로 구분된 레이어 목록이며 스텝의 시작 비율과 종료 비율 사이에 적용됩니다. 스케일이 0이면 사용하지 않습니다.</value>
+  </data>
+  <data name="ToolTip_SamplerArgs" xml:space="preserve">
+    <value>key=value 쌍으로 stable-diffusion.cpp에 전달되는 추가 샘플러 인수입니다.</value>
+  </data>
+  <data name="ToolTip_ClipSkip" xml:space="preserve">
+    <value>건너뛸 CLIP 텍스트 인코더의 마지막 레이어 수입니다. 0은 모델 기본값을 사용합니다.</value>
+  </data>
+  <data name="ToolTip_MoeBoundary" xml:space="preserve">
+    <value>샘플링이 고노이즈 모델에서 저노이즈 모델로 전환되는 0과 1 사이의 지점입니다. 0은 기본값인 0.875를 사용합니다.</value>
+  </data>
+  <data name="ToolTip_SeamlessTiling" xml:space="preserve">
+    <value>이미지를 가장자리에서 반대편으로 이어지게 하여 해당 방향으로 이음매 없이 타일링되는 결과를 만듭니다.</value>
+  </data>
+  <data name="ToolTip_LiveStart" xml:space="preserve">
+    <value>마이크 음성을 실시간으로 받아쓰며, 말하는 동안 텍스트가 표시됩니다.</value>
+  </data>
+  <data name="ToolTip_LiveStop" xml:space="preserve">
+    <value>듣기를 중지하고 받아쓰기를 완료합니다.</value>
+  </data>
+  <data name="ToolTip_FrameRate_Fixed" xml:space="preserve">
+    <value>이 모델은 고정된 프레임 속도로 생성합니다</value>
+  </data>
+  <data name="ToolTip_CacheMode" xml:space="preserve">
+    <value>샘플링 스텝 간에 결과를 재사용하여 생성 속도를 높입니다. EasyCache, DBCache, TaylorSeer, Cache-DiT는 DiT 모델에, UCache는 UNet 모델에, Spectrum은 둘 다에 적합합니다</value>
+  </data>
+  <data name="ToolTip_CacheRange" xml:space="preserve">
+    <value>캐싱을 허용하는 샘플링 스텝 구간</value>
+  </data>
+  <data name="ToolTip_CacheThreshold" xml:space="preserve">
+    <value>스텝을 다시 계산하기 전에 허용되는 변화량입니다. 높을수록 빠르지만 품질이 낮아지며, 0은 기본값을 사용합니다</value>
+  </data>
+  <data name="ToolTip_CacheWarmupSteps" xml:space="preserve">
+    <value>캐싱이 시작되기 전에 항상 실행되는 스텝입니다. 0은 기본값을 사용합니다</value>
+  </data>
+  <data name="ToolTip_FirstRunModelFolder" xml:space="preserve">
+    <value>모델은 선택한 위치의 Models 폴더에 다운로드됩니다. 여유 공간이 충분한 드라이브를 선택하세요.</value>
+  </data>
+  <data name="ToolTip_FrameChunk" xml:space="preserve">
+    <value>긴 비디오를 청크 단위로 생성하며, 각 청크는 이전 청크의 마지막 프레임에서 이어집니다. 길이가 한 번의 처리로 제한되지 않으며, 청크가 작을수록 메모리를 적게 사용합니다</value>
+  </data>
+  <data name="ToolTip_FrameCount_Frames" xml:space="preserve">
+    <value>길이를 프레임 단위로 입력</value>
+  </data>
+  <data name="ToolTip_FrameCount_Seconds" xml:space="preserve">
+    <value>길이를 초 단위로 입력</value>
+  </data>
+  <data name="ToolTip_McpEnable" xml:space="preserve">
+    <value>이 서버를 시작하고 대화할 때 서버의 도구를 제공합니다.</value>
+  </data>
+  <data name="ToolTip_McpIconCode" xml:space="preserve">
+    <value>모든 Font Awesome 아이콘의 코드입니다. 예: f1e6</value>
+  </data>
+  <data name="ToolTip_McpImport" xml:space="preserve">
+    <value>구성 코드 조각 또는 다른 MCP 애플리케이션의 구성 파일에서 서버를 추가합니다.</value>
+  </data>
+  <data name="ToolTip_McpReconnect" xml:space="preserve">
+    <value>서버를 다시 시작하고 다시 연결합니다.</value>
+  </data>
+  <data name="ToolTip_McpTest" xml:space="preserve">
+    <value>서버를 한 번 시작하고 도구를 나열합니다.</value>
+  </data>
+  <data name="ToolTip_ModelSearchFolders" xml:space="preserve">
+    <value>ComfyUI와 같은 다른 애플리케이션에 이미 있는 모델 파일을 복사하거나 다시 다운로드하지 않고 사용합니다.</value>
+  </data>
+  <data name="ToolTip_NavigateBack" xml:space="preserve">
+    <value>뒤로 (Alt+왼쪽 화살표)</value>
+  </data>
+  <data name="ToolTip_NavigateForward" xml:space="preserve">
+    <value>앞으로 (Alt+오른쪽 화살표)</value>
+  </data>
+  <data name="ToolTip_QueueAll" xml:space="preserve">
+    <value>목록에서 설치되지 않은 모든 모델을 대기열에 추가합니다</value>
+  </data>
+  <data name="ToolTip_RescanModels" xml:space="preserve">
+    <value>모델 폴더나 검색 폴더에 직접 파일을 복사한 후 모델 파일을 다시 찾습니다.</value>
+  </data>
+  <data name="ToolTip_SelectAudioRange" xml:space="preserve">
+    <value>다시 생성할 소스 오디오의 범위를 선택</value>
+  </data>
+  <data name="ToolTip_TrackName" xml:space="preserve">
+    <value>작업 대상 트랙입니다. 예: vocals, guitar, drums, bass, piano</value>
+  </data>
+</root>

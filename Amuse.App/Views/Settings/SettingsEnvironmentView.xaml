@@ -6,6 +6,7 @@
     xmlns:local="clr-namespace:Amuse.App.Views"
     xmlns:CommonControls="clr-namespace:TensorStack.WPF.Controls;assembly=TensorStack.WPF"
     xmlns:Controls="clr-namespace:Amuse.App.Controls"
+    xmlns:Resources="clr-namespace:Amuse.App.Resources"
     xmlns:Views="clr-namespace:Amuse.App.Views">
     <GroupBox DataContext="{Binding RelativeSource={RelativeSource AncestorType={x:Type local:SettingsEnvironmentView}}}" Margin="10, 20, 20, 20" Header="{CommonControls:Localize EnvironmentSettings}" Padding="4">
         <Grid >
@@ -60,6 +61,7 @@
                 </StackPanel>
 
                 <StackPanel DockPanel.Dock="Bottom">
+                    <CommonControls:IconButton Text="{CommonControls:Localize ManageEnvironments}" FontSize="13" Icon="f233" IconSize="14" IconColor="{StaticResource AccentColour2}" Command="{Binding ManageEnvironmentsCommand}" Height="40" Margin="0,0,0,2"/>
                     <UniformGrid  Columns="3" Height="50">
                         <CommonControls:IconButton Text="{CommonControls:Localize Add}" FontSize="13" Icon="2b" IconStyle="Light" IconColor="{StaticResource SuccessColour}" Command="{Binding AddEnvironmentCommand}"  />
                         <CommonControls:IconButton Text="{CommonControls:Localize Copy}" FontSize="13" Icon="f24d" IconStyle="Light" IconColor="{StaticResource InfoColour}" Command="{Binding CopyEnvironmentCommand}"  />
@@ -76,7 +78,7 @@
                             <DockPanel Margin="2">
                                 <StackPanel DockPanel.Dock="Left" Margin="3,0,0,0">
                                     <TextBlock Text="{Binding Name}" FontSize="12" FontWeight="Medium" TextTrimming="CharacterEllipsis"/>
-                                    <TextBlock Text="{Binding Pipeline, TargetNullValue=All Pipelines}" Opacity=".7" FontSize="11"/>
+                                    <TextBlock Text="{Binding Pipeline, TargetNullValue={x:Static Resources:AppDefault.AllPipelines}}" Opacity=".7" FontSize="11"/>
                                 </StackPanel>
                                 <StackPanel>
                                     <TextBlock Text="{Binding Type}" TextAlignment="Right" Opacity=".7" FontSize="11"/>
@@ -127,7 +129,6 @@
                             <CommonControls:IconButton Text="{CommonControls:Localize Create}" FontSize="13" Icon="f0ed" IconSize="14" IconStyle="Light" IconOpacity=".8" IconColor="{StaticResource InfoColour}" Command="{Binding EnvironmentServiceCreateCommand}" Height="40" Alignment="Left" IconMargin="11,0,1,0" />
                             <CommonControls:IconButton Text="{CommonControls:Localize Delete}" FontSize="13" Icon="f2ed" IconSize="14" IconStyle="Light" IconOpacity=".8" IconColor="{StaticResource DangerColour}" Command="{Binding EnvironmentServiceDeleteCommand}" Height="40" Alignment="Left" IconMargin="13,0,1,0" />
                             <CommonControls:IconButton Text="{CommonControls:Localize Update}" FontSize="13" Icon="f01e" IconSize="14" IconStyle="Light" IconOpacity=".8" IconColor="{StaticResource WarningColour}" Command="{Binding EnvironmentServiceUpdateCommand}" Height="40" Alignment="Left" IconMargin="10,0,1,0" />
-                            <CommonControls:IconButton Text="{CommonControls:Localize Rebuild}" FontSize="13" Icon="f361" IconSize="14" IconStyle="Light" IconOpacity=".8" IconColor="{StaticResource WarningColour}" Command="{Binding EnvironmentServiceRebuildCommand}" Height="40" Alignment="Left" IconMargin="9,0,1,0" />
                         </UniformGrid>
                     </DockPanel>
 

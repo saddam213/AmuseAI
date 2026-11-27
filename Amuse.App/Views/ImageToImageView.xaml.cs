@@ -26,8 +26,8 @@ namespace Amuse.App.Views
         /// <summary>
         /// Initializes a new instance of the <see cref="ImageToImageView"/> class.
         /// </summary>
-        public ImageToImageView(Settings settings, NavigationService navigationService, IModelDownloadService downloadService, IGenerateService generateService, IExtractService extractService, IUpscaleService upscaleService, IHistoryService historyService, ILogger<ImageToImageView> logger)
-            : base(settings, navigationService, downloadService, generateService, extractService, upscaleService, historyService, logger)
+        public ImageToImageView(Settings settings, NavigationService navigationService, IModelDownloadService downloadService, IModelAccessService modelAccessService, IGenerateService generateService, ILanguageService languageService, IExtractService extractService, IUpscaleService upscaleService, IHistoryService historyService, ILogger<ImageToImageView> logger)
+            : base(settings, navigationService, downloadService, modelAccessService, generateService, languageService, extractService, upscaleService, historyService, logger)
         {
             InitializeComponent();
         }
@@ -144,7 +144,10 @@ namespace Amuse.App.Views
 
                     // Source
                     if (!automationJob.InputImages.IsNullOrEmpty())
-                        SourceImage = automationJob.InputImages[0];
+                    {
+                        _extractImage = await ExecuteImageExtractAsync(automationJob.InputImages[0]);
+                        SourceImage = _extractImage;
+                    }
 
                     // Images
                     if (CurrentPipeline.ProcessType == ProcessType.ImageToImage)
@@ -210,12 +213,15 @@ namespace Amuse.App.Views
 
 
         /// <summary>
-        /// Called when SourceImage changed.
+        /// Called when SourceImage changed, an automation extracts its own images before setting them.
         /// </summary>
         /// <param name="sender">The sender.</param>
         /// <param name="image">The image.</param>
         protected async void OnSourceImageChanged(object sender, ImageInput image)
         {
+            if (IsAutomating)
+                return;
+
             try
             {
                 if (CurrentPipeline?.ExtractModel == null)
@@ -249,8 +255,8 @@ namespace Amuse.App.Views
                 Model = CurrentPipeline.DiffusionModel.Name,
                 LoraModels = CurrentPipeline.LoraAdapterModel?.Select(x => x.Name).ToArray(),
                 ControlNetModel = CurrentPipeline.ControlNetModel?.Name,
-                UpscaleModel = UpscaledModel?.Name,
-                UpscaleOptions = UpscaledModel is not null ? UpscaleOptions : null,
+                UpscaleModel = CurrentPipeline?.UpscaleModel?.Name,
+                UpscaleOptions = CurrentPipeline?.UpscaleModel is not null ? UpscaleOptions : null,
                 ExtractModel = CurrentPipeline.ExtractModel?.Name,
                 ExtractorType = CurrentPipeline.ExtractModel?.Type,
                 ExtractOptions = CurrentPipeline.ExtractModel is not null ? ExtractOptions : null,

@@ -1,6 +1,5 @@
 ﻿using Amuse.App.Common;
 using Amuse.App.Resources;
-using Amuse.App.Services;
 using System;
 using System.Buffers;
 using System.Collections.Generic;
@@ -17,6 +16,7 @@ using TensorStack.Common.Tensor;
 using TensorStack.Media.Audio;
 using TensorStack.Media.Video;
 using TensorStack.WPF.Image;
+using TensorStack.WPF.Resources;
 
 namespace Amuse.App
 {
@@ -37,6 +37,23 @@ namespace Amuse.App
                 MediaType.Video => "mp4",
                 MediaType.Image => "png",
                 _ => throw new NotSupportedException()
+            };
+        }
+
+
+        /// <summary>
+        /// Gets the localized display name of the media type.
+        /// </summary>
+        /// <param name="mediaType">Type of the media.</param>
+        public static string GetLocalizedName(this MediaType mediaType)
+        {
+            return mediaType switch
+            {
+                MediaType.Text => Default.Text,
+                MediaType.Audio => Default.Audio,
+                MediaType.Video => Default.Video,
+                MediaType.Image => Default.Image,
+                _ => mediaType.ToString()
             };
         }
 
@@ -65,10 +82,6 @@ namespace Amuse.App
         {
             return backend switch
             {
-                BackendType.HuggingFace =>
-                [
-                    DataType.BFloat16, DataType.Float16, DataType.Float32, DataType.Float8
-                ],
                 BackendType.StableDiffusionCpp =>
                 [
                     DataType.BFloat16, DataType.Float16, DataType.Float32, DataType.Float8,
@@ -102,10 +115,6 @@ namespace Amuse.App
         {
             return backend switch
             {
-                BackendType.HuggingFace =>
-                [
-                    DataType.Default, DataType.BFloat16, DataType.Float16, DataType.Float32, DataType.Int8, DataType.Int4
-                ],
                 BackendType.StableDiffusionCpp =>
                 [
                     DataType.Default, DataType.BFloat16, DataType.Float16, DataType.Float32,
@@ -137,6 +146,24 @@ namespace Amuse.App
         }
 
 
+        /// <summary>
+        /// Gets the user friendly quality, memory and download size description of the data type, null for Default.
+        /// </summary>
+        /// <param name="dataType">The data type.</param>
+        public static string GetQualityDescription(this DataType dataType)
+        {
+            return dataType switch
+            {
+                DataType.Default => null,
+                DataType.Float64 or DataType.Float32 or DataType.Float16 or DataType.BFloat16 => AppDefault.QuantQualityBest,
+                DataType.Int64 or DataType.Int32 or DataType.Int16 => AppDefault.QuantQualityBest,
+                DataType.Float8 or DataType.Float8E5M2 or DataType.Int8 => AppDefault.QuantQualityStandard,
+                DataType.Q8_0 or DataType.Q8_1 or DataType.Q8_K => AppDefault.QuantQualityStandard,
+                _ => AppDefault.QuantQualityReduced
+            };
+        }
+
+
         public static bool HasChanged(this IReadOnlyList<LoraAdapterModel> existingAdapters, IReadOnlyList<LoraAdapterModel> newAdapters)
         {
             if (ReferenceEquals(existingAdapters, newAdapters))
@@ -158,17 +185,12 @@ namespace Amuse.App
 
 
 
-        public static SchedulerInputOptions[] Copy(this SchedulerInputOptions[] collection)
+        public static SamplerInputOptions[] Copy(this SamplerInputOptions[] collection)
         {
             if (collection.IsNullOrEmpty())
                 return null;
 
-            return collection.Select(x => x with
-            {
-                ScaleFactors = x.ScaleFactors?.ToList(),
-                StageRange = x.StageRange?.ToList(),
-                DisableCorrector = x.DisableCorrector?.ToList(),
-            }).ToArray();
+            return collection.Select(x => x with { }).ToArray();
         }
 
 
@@ -203,6 +225,18 @@ namespace Amuse.App
                 return false;
 
             return true;
+        }
+
+
+        /// <summary>
+        /// Determines whether the status is a download that is queued, running or has failed.
+        /// </summary>
+        /// <param name="status">The model status.</param>
+        public static bool IsDownloadActive(this ModelStatusType status)
+        {
+            return status == ModelStatusType.DownloadQueue
+                || status == ModelStatusType.Downloading
+                || status == ModelStatusType.DownloadFailed;
         }
 
 
@@ -280,14 +314,56 @@ namespace Amuse.App
         public const int FixedIdRange = 1000;
 
         /// <summary>
-        /// Estimates the memory size in GB of a model from its parameter count, assuming an 8-bit quant.
+        /// Estimates the memory size in GB of a model from its parameter count and the data type of its weights.
         /// </summary>
         /// <param name="parameterCount">The parameter count in billions.</param>
-        public static float GetMemorySize(double parameterCount)
+        /// <param name="dataType">The data type of the weights.</param>
+        public static float GetMemorySize(double parameterCount, DataType dataType)
         {
-            const double size8Bit = 1.0;
-            const double overhead8Bit = 1.1;
-            return Estimate(parameterCount, size8Bit, overhead8Bit);
+            const double overhead = 1.1;
+            var bytesPerParam = dataType switch
+            {
+                DataType.Float64 => 8.0,
+                DataType.Float32 => 4.0,
+                DataType.Float16 or DataType.BFloat16 => 2.0,
+                DataType.Q6_K => 0.8,
+                DataType.Q5_K or DataType.Q5_1 or DataType.Q5_0 => 0.7,
+                DataType.Q4_K or DataType.Q4_1 or DataType.Q4_0 or DataType.IQ4_NL or DataType.IQ4_XS or DataType.MXFP4 or DataType.NVFP4 or DataType.Int4 => 0.6,
+                DataType.Q3_K or DataType.IQ3_S or DataType.IQ3_XXS => 0.5,
+                DataType.Q2_K or DataType.Q2_0 or DataType.IQ2_S or DataType.IQ2_XS or DataType.IQ2_XXS or DataType.TQ2_0 => 0.4,
+                DataType.Q1_0 or DataType.IQ1_S or DataType.IQ1_M or DataType.TQ1_0 => 0.3,
+                _ => 1.0
+            };
+            return Estimate(parameterCount, bytesPerParam, overhead);
+        }
+
+
+        /// <summary>
+        /// Guesses the data type of a model file from its name, null when the name does not say.
+        /// </summary>
+        /// <param name="fileName">The model file name.</param>
+        public static DataType? GetDataType(string fileName)
+        {
+            if (string.IsNullOrEmpty(fileName))
+                return null;
+
+            var name = Path.GetFileName(fileName);
+            var match = Regex.Match(name, "iq\\d_[a-z]+|q\\d_[k01]", RegexOptions.IgnoreCase);
+            if (match.Success && Enum.TryParse<DataType>(match.Value, true, out var quantType))
+                return quantType;
+
+            if (name.Contains("mxfp4", StringComparison.OrdinalIgnoreCase))
+                return DataType.MXFP4;
+            if (name.Contains("int8", StringComparison.OrdinalIgnoreCase))
+                return DataType.Int8;
+            if (name.Contains("bf16", StringComparison.OrdinalIgnoreCase))
+                return DataType.BFloat16;
+            if (name.Contains("fp16", StringComparison.OrdinalIgnoreCase) || name.Contains("f16", StringComparison.OrdinalIgnoreCase))
+                return DataType.Float16;
+            if (name.EndsWith(".safetensors", StringComparison.OrdinalIgnoreCase))
+                return DataType.BFloat16;
+
+            return null;
         }
 
 
@@ -435,16 +511,15 @@ namespace Amuse.App
             if (progress.Elapsed <= 0 || progress.BatchMaximum <= 0 || remainingKB <= 0)
                 return null;
 
-            var remaining = AppDefault.Remaining.ToLower();
             var timeSpan = TimeSpan.FromSeconds(remainingKB / progress.Elapsed);
             if (timeSpan.TotalDays >= 1)
-                return $"{timeSpan.Days}d {timeSpan.Hours}h {remaining}";
+                return string.Format(Default.TimeRemainingFormat, $"{timeSpan.Days}d {timeSpan.Hours}h");
             if (timeSpan.TotalHours >= 1)
-                return $"{timeSpan.Hours}h {timeSpan.Minutes}m {remaining}";
+                return string.Format(Default.TimeRemainingFormat, $"{timeSpan.Hours}h {timeSpan.Minutes}m");
             if (timeSpan.TotalMinutes >= 1)
-                return $"{timeSpan.Minutes}m {timeSpan.Seconds}s {remaining}";
+                return string.Format(Default.TimeRemainingFormat, $"{timeSpan.Minutes}m {timeSpan.Seconds}s");
 
-            return $"{timeSpan.Seconds}s {remaining}";
+            return string.Format(Default.TimeRemainingFormat, $"{timeSpan.Seconds}s");
         }
 
 

@@ -3,16 +3,19 @@ using Amuse.App.Resources;
 using Amuse.App.Services;
 using Amuse.Common;
 using Amuse.Common.Config;
+using Amuse.Common.Message;
 using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.IO;
 using System.Linq;
+using System.Runtime.CompilerServices;
 using System.Threading;
 using System.Threading.Tasks;
 using TensorStack.Common;
 using TensorStack.Common.Tensor;
+using TensorStack.Common.Video;
 using TensorStack.Media;
 using TensorStack.Media.Audio;
 using TensorStack.Media.Video;
@@ -22,6 +25,8 @@ namespace Amuse.App.Runtime
 {
     public abstract class BackendClient : ServiceBase
     {
+        private PipelineClient _loadingClient;
+
         /// <summary>
         /// Initializes a new instance of the <see cref="BackendClient"/> class.
         /// </summary>
@@ -56,15 +61,16 @@ namespace Amuse.App.Runtime
 
 
         /// <summary>
-        /// Load the pipeline
+        /// Load the pipeline, a load that fails after it was cancelled or its host was stopped is reported as cancelled.
         /// </summary>
         /// <param name="pipeline">The pipeline.</param>
         /// <param name="progressCallback">The progress callback.</param>
         public async Task LoadAsync(PipelineModel pipeline, IProgress<PipelineProgress> progressCallback)
         {
+            var cancellationTokenSource = new CancellationTokenSource();
             try
             {
-                using (CancellationTokenSource = new CancellationTokenSource())
+                using (CancellationTokenSource = cancellationTokenSource)
                 {
                     await UnloadPipelineClientAsync();
 
@@ -81,13 +87,16 @@ namespace Amuse.App.Runtime
                     Settings.ScanModels();
                 }
             }
-            catch (OperationCanceledException)
+            catch (Exception ex) when (ex is OperationCanceledException || cancellationTokenSource.IsCancellationRequested)
             {
                 PipelineClient?.Dispose();
                 PipelineClient = null;
                 DefaultOptions = null;
                 Pipeline = null;
-                throw;
+                if (ex is OperationCanceledException)
+                    throw;
+
+                throw new OperationCanceledException(ex.Message, ex);
             }
             finally
             {
@@ -165,19 +174,22 @@ namespace Amuse.App.Runtime
 
 
         /// <summary>
-        /// Stop/Kill server
+        /// Stop/Kill server, the host of a load that is still running is killed too.
         /// </summary>
         public async Task StopAsync()
         {
+            var pipelineClient = PipelineClient ?? _loadingClient;
             try
             {
-                await PipelineClient.KillServerAsync();
+                await CancellationTokenSource.SafeCancelAsync();
+                if (pipelineClient is not null)
+                    await pipelineClient.KillServerAsync();
             }
             catch (Exception) { }
             finally
             {
                 // Release the channels and progress loop, not just the reference
-                PipelineClient?.Dispose();
+                pipelineClient?.Dispose();
                 PipelineClient = null;
             }
         }
@@ -284,6 +296,12 @@ namespace Amuse.App.Runtime
                     generateOptions.InputAudios.Add(await inputAudios.GetAsync(DefaultOptions.SampleRate, DefaultOptions.Channels));
                 }
 
+                if (options.ReferenceAudio != null)
+                {
+                    generateOptions.InputAudios.Add(await options.ReferenceAudio.GetAsync(DefaultOptions.SampleRate, DefaultOptions.Channels));
+                    generateOptions.HasReferenceAudio = true;
+                }
+
                 var audioTensors = await PipelineClient.GenerateAudioAsync(generateOptions);
                 if (audioTensors.IsNullOrEmpty())
                 {
@@ -324,22 +342,76 @@ namespace Amuse.App.Runtime
                     generateOptions.InputAudios.Add(await inputAudios.GetAsync(DefaultOptions.SampleRate, DefaultOptions.Channels));
                 }
 
+                var selectedTools = Array.Empty<string>();
                 if (DefaultOptions.IsToolCallsSupported && options.IsToolCallsEnabled)
                 {
+                    selectedTools = options.SelectedTools.ToArray();
                     generateOptions.Tools = ToolService.GetTools(options);
                 }
 
-                var pipelineResult = await GenerateTextLoopAsync(generateOptions);
-                foreach (var beamResult in pipelineResult)
+                using (CancellationTokenSource = new CancellationTokenSource())
                 {
-                    textResult.Results.Add(beamResult);
+                    var pipelineResult = await GenerateTextLoopAsync(generateOptions, selectedTools, CancellationTokenSource.Token);
+                    foreach (var beamResult in pipelineResult)
+                    {
+                        textResult.Results.Add(beamResult);
+                    }
+                    return textResult;
                 }
-                return textResult;
             }
             catch (IOException ex)
             {
                 HandlePipelineClientError(ex);
                 throw new Exception(AppErrors.PipelineClosedUnexpectedly);
+            }
+            finally
+            {
+                CancellationTokenSource = null;
+            }
+        }
+
+
+        /// <summary>
+        /// Generate text from live audio, the audio chunks are sent to the host as it takes them and the text is returned as it is recognised.
+        /// </summary>
+        /// <param name="options">The options.</param>
+        /// <param name="inputAudio">The audio chunks.</param>
+        /// <param name="cancellationToken">The cancellation token.</param>
+        /// <returns>The text recognised since the last result.</returns>
+        /// <exception cref="Exception">Pipeline Closed Unexpectedly</exception>
+        public async IAsyncEnumerable<string> GenerateTextStreamAsync(GenerateInputOptions options, IAsyncEnumerable<AudioTensor> inputAudio, [EnumeratorCancellation] CancellationToken cancellationToken = default)
+        {
+            options.Seed = options.Seed > 0 ? options.Seed : Random.Shared.Next();
+            var generateOptions = GenerateTextOptions(options, default);
+            var runOptions = new PipelineRunOptions { TextOptions = generateOptions };
+            using (CancellationTokenSource = CancellationTokenSource.CreateLinkedTokenSource(cancellationToken))
+            {
+                var streamToken = CancellationTokenSource.Token;
+                var inputItems = CreateStreamItemsAsync(inputAudio, streamToken);
+                var resultItems = PipelineClient.RunStreamAsync(runOptions, inputItems, streamToken).GetAsyncEnumerator(streamToken);
+                try
+                {
+                    while (true)
+                    {
+                        try
+                        {
+                            if (!await resultItems.MoveNextAsync())
+                                break;
+                        }
+                        catch (IOException ex)
+                        {
+                            HandlePipelineClientError(ex);
+                            throw new Exception(AppErrors.PipelineClosedUnexpectedly);
+                        }
+
+                        if (!string.IsNullOrEmpty(resultItems.Current.Text))
+                            yield return resultItems.Current.Text;
+                    }
+                }
+                finally
+                {
+                    await resultItems.DisposeAsync();
+                }
             }
         }
 
@@ -348,23 +420,34 @@ namespace Amuse.App.Runtime
         /// Generate text with tool loop
         /// </summary>
         /// <param name="options">The options.</param>
-        private async Task<IReadOnlyList<TextInput>> GenerateTextLoopAsync(Amuse.Common.GenerateTextOptions options)
+        /// <param name="selectedTools">The tools the user enabled.</param>
+        /// <param name="cancellationToken">The cancellation token.</param>
+        private async Task<IReadOnlyList<TextInput>> GenerateTextLoopAsync(Amuse.Common.GenerateTextOptions options, IReadOnlyCollection<string> selectedTools, CancellationToken cancellationToken)
         {
             var textResult = await PipelineClient.GenerateTextAsync(options);
-            if (DefaultOptions.IsToolCallsSupported && ToolService.IsToolResponse(textResult))
+            var maxToolRounds = Math.Max(1, Settings.MaxToolRounds);
+            for (int round = 0; round < maxToolRounds; round++)
             {
-                var toolResponse = ToolService.ParseResponse(textResult);
+                if (selectedTools.Count == 0 || !ToolService.IsToolResponse(textResult))
+                    return textResult;
+
+                var toolResponse = ToolService.ParseResponse(textResult, selectedTools);
                 if (toolResponse == null || toolResponse.IsEmpty)
                     return textResult;
 
                 options.Conversation.Add(new ConversationMessage(ConversationRole.Assistant, "", default, default, toolResponse.ToolCalls));
                 foreach (var tool in toolResponse.Tools)
                 {
-                    var content = await tool.ExecuteAsync(Settings);
+                    cancellationToken.ThrowIfCancellationRequested();
+                    var content = await tool.ExecuteAsync(Settings, cancellationToken);
                     options.Conversation.Add(new ConversationMessage(ConversationRole.Tool, content, default, default, default));
                 }
-                textResult = await GenerateTextLoopAsync(options);
+
+                cancellationToken.ThrowIfCancellationRequested();
+                textResult = await PipelineClient.GenerateTextAsync(options);
             }
+
+            Logger.LogWarning("[BackendClient] [GenerateText] Tool call limit reached, Rounds: {Rounds}", maxToolRounds);
             return textResult;
         }
 
@@ -398,6 +481,81 @@ namespace Amuse.App.Runtime
             {
                 HandlePipelineClientError(ex);
                 throw new Exception(AppErrors.PipelineClosedUnexpectedly);
+            }
+        }
+
+
+        /// <summary>
+        /// Upscale a video frame stream with an image upscaler, the frames are sent to the host as it takes them and returned as they are upscaled.
+        /// </summary>
+        /// <param name="inputFrames">The input frames.</param>
+        /// <param name="options">The upscale options.</param>
+        /// <param name="cancellationToken">The cancellation token.</param>
+        /// <exception cref="Exception">Pipeline Closed Unexpectedly</exception>
+        public IAsyncEnumerable<VideoFrame> UpscaleVideoStreamAsync(IAsyncEnumerable<VideoFrame> inputFrames, UpscaleInputOptions options, CancellationToken cancellationToken = default)
+        {
+            var runOptions = new PipelineRunOptions
+            {
+                UpscaleImageOptions = new UpscaleImageRunOptions
+                {
+                    IsTileEnabled = options?.IsTileEnabled ?? false,
+                    TileSize = options?.TileSize ?? 0,
+                    TileOverlap = options?.TileOverlap ?? 0
+                }
+            };
+            return RunVideoStreamAsync(runOptions, inputFrames, cancellationToken);
+        }
+
+
+        /// <summary>
+        /// Extract a video frame stream, the frames are sent to the host as it takes them and returned as they are extracted.
+        /// </summary>
+        /// <param name="inputFrames">The input frames.</param>
+        /// <param name="options">The extract options.</param>
+        /// <param name="isTransparentSupported">Whether a transparent result is supported, background extractors.</param>
+        /// <param name="cancellationToken">The cancellation token.</param>
+        /// <exception cref="Exception">Pipeline Closed Unexpectedly</exception>
+        public IAsyncEnumerable<VideoFrame> ExtractVideoStreamAsync(IAsyncEnumerable<VideoFrame> inputFrames, ExtractInputOptions options, bool isTransparentSupported = true, CancellationToken cancellationToken = default)
+        {
+            var runOptions = new PipelineRunOptions
+            {
+                ExtractImageOptions = CreateExtractOptions(options, isTransparentSupported)
+            };
+            return RunVideoStreamAsync(runOptions, inputFrames, cancellationToken);
+        }
+
+
+        /// <summary>
+        /// Runs a video frame stream on the host.
+        /// </summary>
+        /// <param name="runOptions">The run options.</param>
+        /// <param name="inputFrames">The input frames.</param>
+        /// <param name="cancellationToken">The cancellation token.</param>
+        /// <exception cref="Exception">Pipeline Closed Unexpectedly</exception>
+        private async IAsyncEnumerable<VideoFrame> RunVideoStreamAsync(PipelineRunOptions runOptions, IAsyncEnumerable<VideoFrame> inputFrames, [EnumeratorCancellation] CancellationToken cancellationToken)
+        {
+            var inputItems = CreateStreamItemsAsync(inputFrames, cancellationToken);
+            var resultItems = PipelineClient.RunStreamAsync(runOptions, inputItems, cancellationToken).GetAsyncEnumerator(cancellationToken);
+            try
+            {
+                while (true)
+                {
+                    try
+                    {
+                        if (!await resultItems.MoveNextAsync())
+                            break;
+                    }
+                    catch (IOException ex)
+                    {
+                        HandlePipelineClientError(ex);
+                        throw new Exception(AppErrors.PipelineClosedUnexpectedly);
+                    }
+                    yield return resultItems.Current.ToVideoFrame();
+                }
+            }
+            finally
+            {
+                await resultItems.DisposeAsync();
             }
         }
 
@@ -447,25 +605,8 @@ namespace Amuse.App.Runtime
         {
             try
             {
-                var extractOptions = new ExtractImageRunOptions
-                {
-                    IsTileEnabled = options?.IsTileEnabled ?? false,
-                    TileSize = options?.TileSize ?? 0,
-                    TileOverlap = options?.TileOverlap ?? 0,
-                    IsInverted = options?.IsInverted ?? false,
-                    MergeInput = options?.MergeInput ?? false,
-                    Mode = options?.Mode ?? default,
-                    IsTransparentSupported = isTransparentSupported,
-                    Detections = options?.Detections ?? 0,
-                    BodyConfidence = options?.BodyConfidence ?? 0,
-                    JointConfidence = options?.JointConfidence ?? 0,
-                    ColorAlpha = options?.ColorAlpha ?? 0,
-                    JointRadius = options?.JointRadius ?? 0,
-                    BoneRadius = options?.BoneRadius ?? 0,
-                    BoneThickness = options?.BoneThickness ?? 0,
-                    IsTransparent = options?.IsTransparent ?? false,
-                    InputImages = [inputImage]
-                };
+                var extractOptions = CreateExtractOptions(options, isTransparentSupported);
+                extractOptions.InputImages = [inputImage];
 
                 var imageTensors = await PipelineClient.ExtractImageAsync(extractOptions);
                 if (imageTensors.IsNullOrEmpty())
@@ -486,12 +627,76 @@ namespace Amuse.App.Runtime
         /// </summary>
         public void Dispose()
         {
+            _loadingClient?.Dispose();
+            _loadingClient = null;
             PipelineClient?.Dispose();
             PipelineClient = null;
             CancellationTokenSource = null;
             Pipeline = null;
             DefaultOptions = null;
             ProgressCallback = null;
+        }
+
+
+        /// <summary>
+        /// Creates the extract run options.
+        /// </summary>
+        /// <param name="options">The extract options.</param>
+        /// <param name="isTransparentSupported">Whether a transparent result is supported, background extractors.</param>
+        private static ExtractImageRunOptions CreateExtractOptions(ExtractInputOptions options, bool isTransparentSupported)
+        {
+            return new ExtractImageRunOptions
+            {
+                IsTileEnabled = options?.IsTileEnabled ?? false,
+                TileSize = options?.TileSize ?? 0,
+                TileOverlap = options?.TileOverlap ?? 0,
+                IsInverted = options?.IsInverted ?? false,
+                MergeInput = options?.MergeInput ?? false,
+                Mode = options?.Mode ?? default,
+                IsTransparentSupported = isTransparentSupported,
+                Detections = options?.Detections ?? 0,
+                BodyConfidence = options?.BodyConfidence ?? 0,
+                JointConfidence = options?.JointConfidence ?? 0,
+                ColorAlpha = options?.ColorAlpha ?? 0,
+                JointRadius = options?.JointRadius ?? 0,
+                BoneRadius = options?.BoneRadius ?? 0,
+                BoneThickness = options?.BoneThickness ?? 0,
+                IsTransparent = options?.IsTransparent ?? false
+            };
+        }
+
+
+        /// <summary>
+        /// Converts the video frames to stream items as the host takes them.
+        /// </summary>
+        /// <param name="frames">The frames.</param>
+        /// <param name="cancellationToken">The cancellation token.</param>
+        private static async IAsyncEnumerable<PipelineStreamItem> CreateStreamItemsAsync(IAsyncEnumerable<VideoFrame> frames, [EnumeratorCancellation] CancellationToken cancellationToken)
+        {
+            await foreach (var frame in frames.WithCancellation(cancellationToken))
+            {
+                yield return frame.ToStreamItem();
+            }
+        }
+
+
+        /// <summary>
+        /// Converts the audio chunks to stream items as the host takes them.
+        /// </summary>
+        /// <param name="audioChunks">The audio chunks.</param>
+        /// <param name="cancellationToken">The cancellation token.</param>
+        private static async IAsyncEnumerable<PipelineStreamItem> CreateStreamItemsAsync(IAsyncEnumerable<AudioTensor> audioChunks, [EnumeratorCancellation] CancellationToken cancellationToken)
+        {
+            var index = 0;
+            await foreach (var audio in audioChunks.WithCancellation(cancellationToken))
+            {
+                yield return new PipelineStreamItem
+                {
+                    Index = index++,
+                    Rate = audio.SampleRate,
+                    Tensors = [audio]
+                };
+            }
         }
 
 
@@ -504,7 +709,7 @@ namespace Amuse.App.Runtime
         {
             var progressCallback = new Progress<PipelineProgress>(progress => ProgressCallback?.Report(progress));
             var pipelineClient = new PipelineClient(config, progressCallback, Logger);
-
+            _loadingClient = pipelineClient;
             try
             {
                 var loadOptions = GetPipelineLoadOptions();
@@ -516,6 +721,10 @@ namespace Amuse.App.Runtime
             {
                 pipelineClient?.Dispose();
                 throw;
+            }
+            finally
+            {
+                _loadingClient = null;
             }
         }
 
@@ -577,6 +786,7 @@ namespace Amuse.App.Runtime
                 Height = options.Height,
                 Strength = options.Strength,
                 ControlNetScale = options.ControlNetStrength,
+                ControlType = options.ControlType,
                 TempFileName = tempFileName,
                 EnableVaeSlicing = options.IsVaeSlicingEnabled,
                 EnableVaeTiling = options.IsVaeTilingEnabled,
@@ -589,7 +799,11 @@ namespace Amuse.App.Runtime
                 LatentUpscaleSteps = options.LatentUpscaleSteps,
                 LatentUpscaleStrength = options.LatentUpscaleStrength,
                 LatentUpscaleTileSize = options.LatentUpscaleTileSize,
-                SchedulerOptions = options.SchedulerOptions?.ToClientOptions(),
+                ClipSkip = options.ClipSkip,
+                EnableCircularX = options.IsCircularXEnabled,
+                EnableCircularY = options.IsCircularYEnabled,
+                SamplerOptions = options.SamplerOptions?.ToClientOptions(),
+                CacheOptions = CacheOptions(options),
                 LoraOptions = LoraOptions(options),
                 InputImages = options.InputImages,
                 InputControlImages = options.InputControlImages
@@ -616,7 +830,7 @@ namespace Amuse.App.Runtime
                 Strength = options.Strength,
                 ControlNetScale = options.ControlNetStrength,
                 TempFileName = tempFileName,
-                FrameChunk = options.FrameChunk,
+                FrameChunk = options.IsFrameChunkEnabled ? options.FrameChunk : 0,
                 FrameChunkOverlap = options.FrameChunkOverlap,
                 NoiseCondition = options.NoiseCondition,
                 EnableVaeSlicing = options.IsVaeSlicingEnabled,
@@ -632,7 +846,12 @@ namespace Amuse.App.Runtime
                 LatentUpscaleSteps = options.LatentUpscaleSteps,
                 LatentUpscaleStrength = options.LatentUpscaleStrength,
                 LatentUpscaleTileSize = options.LatentUpscaleTileSize,
-                SchedulerOptions = options.SchedulerOptions?.ToClientOptions(),
+                ClipSkip = options.ClipSkip,
+                MoeBoundary = options.MoeBoundary,
+                EnableCircularX = options.IsCircularXEnabled,
+                EnableCircularY = options.IsCircularYEnabled,
+                SamplerOptions = options.SamplerOptions?.ToClientOptions(),
+                CacheOptions = CacheOptions(options),
                 LoraOptions = LoraOptions(options),
                 InputImages = options.InputImages,
                 InputControlImages = options.InputControlImages,
@@ -670,7 +889,10 @@ namespace Amuse.App.Runtime
                 Speed = options.Speed,
                 SilenceDuration = options.SilenceDuration,
                 SampleRate = DefaultOptions.SampleRate,
-                SchedulerOptions = options.SchedulerOptions?.ToClientOptions(),
+                RangeStart = options.RangeStart,
+                RangeEnd = options.RangeEnd,
+                ReferenceText = options.ReferenceText,
+                Emotion = options.Emotion,
                 LoraOptions = LoraOptions(options),
                 InputVideos = options.InputVideos,
             };
@@ -828,7 +1050,6 @@ namespace Amuse.App.Runtime
             var device = Pipeline.Device;
             return new PipelineLoadOptions
             {
-                Variant = model.Variant,
                 LoraAdapterPath = Path.GetFullPath(Settings.DirectoryLoraAdapter),
                 Template = model.Template,
                 Pipeline = model.Pipeline,
@@ -839,10 +1060,10 @@ namespace Amuse.App.Runtime
                 DeviceBusId = device.PCIBusId,
                 DeviceVendor = device.Vendor,
                 DeviceVendorIndex = device.VendorIndex,
-                MemoryMode = GetMemoryMode(model.MemorySize),
+                MemoryMode = GetMemoryMode(model.GetMemorySize(Pipeline.CheckpointType)),
                 ControlNet = ControlNetConfig(),
                 LoraAdapters = GetLoraAdapters(),
-                CheckpointConfig = GetCheckpoint(model.Checkpoint, Settings.DirectoryDiffusion),
+                CheckpointConfig = GetCheckpoint(model.GetCheckpoint(Pipeline.CheckpointType), Settings.DirectoryDiffusion),
                 ExecutionOptions = GetExecutionOptions()
             };
         }
@@ -853,7 +1074,6 @@ namespace Amuse.App.Runtime
             var device = Pipeline.Device;
             return new PipelineLoadOptions
             {
-                Variant = model.Variant,
                 LoraAdapterPath = Path.GetFullPath(Settings.DirectoryLoraAdapter),
                 Template = model.Template,
                 Pipeline = model.Pipeline,
@@ -864,9 +1084,9 @@ namespace Amuse.App.Runtime
                 DeviceBusId = device.PCIBusId,
                 DeviceVendor = device.Vendor,
                 DeviceVendorIndex = device.VendorIndex,
-                MemoryMode = GetMemoryMode(model.MemorySize),
+                MemoryMode = GetMemoryMode(model.GetMemorySize(Pipeline.CheckpointType)),
                 LoraAdapters = GetLoraAdapters(),
-                CheckpointConfig = GetCheckpoint(model.Checkpoint, Settings.DirectoryLangaugeModel),
+                CheckpointConfig = GetCheckpoint(model.GetCheckpoint(Pipeline.CheckpointType), Settings.DirectoryLangaugeModel),
                 ExecutionOptions = GetExecutionOptions()
             };
         }
@@ -1015,6 +1235,26 @@ namespace Amuse.App.Runtime
                 return default;
 
             return [.. conversation.Select(x => new ConversationMessage(x.Role, x.Content, x.ImageIndex.GetIndexValues(), x.AudioIndex.GetIndexValues(), default))];
+        }
+
+
+        /// <summary>
+        /// Gets the diffusion cache options, null when caching is disabled.
+        /// </summary>
+        /// <param name="options">The options.</param>
+        private static DiffusionCacheOptions CacheOptions(GenerateInputOptions options)
+        {
+            if (options.CacheMode == DiffusionCacheType.Disabled)
+                return default;
+
+            return new DiffusionCacheOptions
+            {
+                Mode = options.CacheMode,
+                Threshold = options.CacheThreshold,
+                StartPercent = options.CacheStartPercent,
+                EndPercent = options.CacheEndPercent,
+                WarmupSteps = options.CacheWarmupSteps
+            };
         }
 
 

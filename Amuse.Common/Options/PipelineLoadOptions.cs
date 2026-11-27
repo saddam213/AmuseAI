@@ -8,7 +8,6 @@ namespace Amuse.Common
     {
         public string Template { get; set; }
         public string ModelType { get; set; }
-        public string Variant { get; set; }
         public PipelineType Pipeline { get; set; }
         public ProcessType ProcessType { get; set; }
         public string Device { get; set; }
@@ -24,5 +23,6 @@ namespace Amuse.Common
         public ExecutionOptions ExecutionOptions { get; set; }
         public UpscaleConfig UpscaleConfig { get; set; }
         public ExtractConfig ExtractConfig { get; set; }
+        public InterpolateConfig InterpolateConfig { get; set; }
     }
 }

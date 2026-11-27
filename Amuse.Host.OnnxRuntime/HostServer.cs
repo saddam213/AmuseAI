@@ -4,18 +4,19 @@ using Amuse.Common.Message;
 using Microsoft.Extensions.Logging;
 using Microsoft.ML.OnnxRuntime;
 using System;
+using System.Collections.Generic;
 using System.Diagnostics;
+using System.IO;
 using System.Linq;
+using System.Runtime.CompilerServices;
 using System.Threading;
 using System.Threading.Tasks;
 using TensorStack.Common;
 using TensorStack.Common.Pipeline;
 using TensorStack.Common.Tensor;
+using TensorStack.Common.Video;
 using TensorStack.OnnxRuntime;
 using TensorStack.OnnxRuntime.Extract;
-using TensorStack.OnnxRuntime.LLM.Common;
-using TensorStack.OnnxRuntime.LLM.Pipelines.Supertonic;
-using TensorStack.OnnxRuntime.LLM.Pipelines.Whisper;
 using TensorStack.OnnxRuntime.Upscale;
 using PipelineProgress = Amuse.Common.PipelineProgress;
 
@@ -25,18 +26,15 @@ namespace Amuse.Host.OnnxRuntime
     public sealed class HostServer : PipelineServer
     {
         private readonly IProgress<RunProgress> _progressRelayRunCallback;
-        private readonly IProgress<GenerateProgress> _progressRelayGenerateCallback;
 
         private IPipeline _pipeline;
         private PipelineLoadOptions _pipelineOptions;
         private ExecutionProvider _executionProvider;
-        private ExecutionProvider _executionProviderCPU;
 
         public HostServer(ServerConfig channelConfig, ILogger logger)
             : base(channelConfig, logger)
         {
             _progressRelayRunCallback = new SyncProgress<RunProgress>(UpdateProgress);
-            _progressRelayGenerateCallback = new SyncProgress<GenerateProgress>(UpdateProgress);
         }
 
 
@@ -101,20 +99,15 @@ namespace Amuse.Host.OnnxRuntime
                     return;
                 }
 
-                _executionProvider = Provider.GetProvider(DeviceType.GPU, _pipelineOptions.DeviceId, GraphOptimizationLevel.ORT_ENABLE_ALL);
-                _executionProviderCPU = Provider.GetProvider(DeviceType.CPU, GraphOptimizationLevel.ORT_ENABLE_ALL); // TODO: DirectML not working with decoder
-
-                var onnxModelPath = _pipelineOptions.CheckpointConfig.Compute;
-
-                _pipeline = _pipelineOptions.Pipeline switch
+                if (_pipelineOptions.Pipeline == PipelineType.InterpolationPipeline)
                 {
-                    PipelineType.SupertonicPipeline => SupertonicPipeline.Create(onnxModelPath, _executionProvider),
-                    PipelineType.WhisperPipeline => WhisperPipeline.Create(_executionProvider, _executionProviderCPU, onnxModelPath, Enum.Parse<WhisperType>(_pipelineOptions.ModelType, true)),
-                    _ => throw new NotImplementedException()
-                };
-                await _pipeline.LoadAsync(cancellationToken);
-                await SendResponse(cancellationToken);
+                    _pipeline = CreateInterpolationPipeline(_pipelineOptions.InterpolateConfig);
+                    await _pipeline.LoadAsync(cancellationToken);
+                    await SendResponse(cancellationToken);
+                    return;
+                }
 
+                throw new NotSupportedException($"The {_pipelineOptions.Pipeline} is not supported by OnnxRuntime.");
             }
             catch (Exception ex)
             {
@@ -185,15 +178,9 @@ namespace Amuse.Host.OnnxRuntime
                         await SendTensorResponse(cancellationToken, resultTensor);
                     }
                 }
-                else if (_pipelineOptions.ProcessType == Common.ProcessType.AudioToText)
+                else
                 {
-                    var resultTensor = await GenerateTextAsync(request.RunOptions.TextOptions, cancellationToken);
-                    await SendTensorResponse(cancellationToken, resultTensor);
-                }
-                else if (_pipelineOptions.ProcessType == Common.ProcessType.TextToAudio)
-                {
-                    var resultTensor = await GenerateAudioAsync(request.RunOptions.AudioOptions, cancellationToken);
-                    await SendTensorResponse(cancellationToken, resultTensor);
+                    throw new NotSupportedException("The run request is not supported by OnnxRuntime.");
                 }
             }
             catch (OperationCanceledException ex)
@@ -205,6 +192,163 @@ namespace Amuse.Host.OnnxRuntime
             {
                 Logger.LogError(ex, "[PipelineServer] [RunPipeline] An exception occurred running pipeline.");
                 await SendException(ex, cancellationToken);
+            }
+        }
+
+
+        /// <summary>
+        /// Runs the pipeline as a stream, items are processed as they arrive from the client.
+        /// </summary>
+        /// <param name="request">The request.</param>
+        /// <param name="input">The items streamed from the client.</param>
+        /// <param name="cancellationToken">The cancellation token.</param>
+        protected override IAsyncEnumerable<PipelineStreamItem> RunPipelineStreamAsync(PipelineRequest request, IAsyncEnumerable<PipelineStreamItem> input, CancellationToken cancellationToken)
+        {
+            if (request.RunOptions.InterpolateVideoOptions != null)
+                return InterpolateVideoAsync(request.RunOptions.InterpolateVideoOptions, input, cancellationToken);
+            if (request.RunOptions.UpscaleImageOptions != null)
+                return UpscaleStreamAsync(request.RunOptions.UpscaleImageOptions, input, cancellationToken);
+            if (request.RunOptions.ExtractImageOptions != null)
+                return ExtractStreamAsync(request.RunOptions.ExtractImageOptions, input, cancellationToken);
+
+            throw new NotSupportedException("The stream request is not supported by OnnxRuntime.");
+        }
+
+
+        /// <summary>
+        /// Creates the interpolation pipeline.
+        /// </summary>
+        /// <param name="interpolateConfig">The interpolate configuration.</param>
+        /// <returns>InterpolationPipeline.</returns>
+        private InterpolationPipeline CreateInterpolationPipeline(InterpolateConfig interpolateConfig)
+        {
+            if (interpolateConfig == null)
+                throw new Exception("Interpolation pipeline requires an interpolate configuration.");
+
+            _executionProvider = interpolateConfig.DeviceType == DeviceType.CPU
+                ? Provider.GetProvider(DeviceType.CPU, GraphOptimizationLevel.ORT_ENABLE_ALL)
+                : Provider.GetProvider(DeviceType.GPU, _pipelineOptions.DeviceId, GraphOptimizationLevel.ORT_ENABLE_ALL);
+
+            return InterpolationPipeline.Create(new ModelConfig
+            {
+                ExecutionProvider = _executionProvider,
+                Path = Path.Combine(AppContext.BaseDirectory, "Interpolation.onnx")
+            });
+        }
+
+
+        /// <summary>
+        /// Interpolates the video frames streamed from the client, returning the frames as they are produced.
+        /// </summary>
+        /// <param name="options">The options.</param>
+        /// <param name="input">The frames streamed from the client.</param>
+        /// <param name="cancellationToken">The cancellation token.</param>
+        private async IAsyncEnumerable<PipelineStreamItem> InterpolateVideoAsync(InterpolateVideoRunOptions options, IAsyncEnumerable<PipelineStreamItem> input, [EnumeratorCancellation] CancellationToken cancellationToken)
+        {
+            if (_pipeline is not InterpolationPipeline interpolationPipeline)
+                throw new Exception("Interpolation requires an interpolation pipeline to be loaded.");
+
+            var interpolationOptions = new InterpolationStreamOptions
+            {
+                Multiplier = options.Multiplier,
+                FrameCount = options.FrameCount,
+                FrameRate = options.FrameRate,
+                Stream = ReadVideoFramesAsync(input, cancellationToken)
+            };
+
+            await foreach (var frame in interpolationPipeline.RunAsync(interpolationOptions, _progressRelayRunCallback, cancellationToken))
+            {
+                yield return frame.ToStreamItem();
+            }
+        }
+
+
+        /// <summary>
+        /// Extracts the video frames streamed from the client, returning each frame as it is extracted.
+        /// </summary>
+        /// <param name="options">The options.</param>
+        /// <param name="input">The frames streamed from the client.</param>
+        /// <param name="cancellationToken">The cancellation token.</param>
+        private IAsyncEnumerable<PipelineStreamItem> ExtractStreamAsync(ExtractImageRunOptions options, IAsyncEnumerable<PipelineStreamItem> input, CancellationToken cancellationToken)
+        {
+            var inputFrames = ReadVideoFramesAsync(input, cancellationToken);
+            var resultFrames = _pipeline switch
+            {
+                ExtractorPipeline extractorPipeline => extractorPipeline.RunAsync(new ExtractorStreamOptions
+                {
+                    Stream = inputFrames,
+                    IsInverted = options.IsInverted,
+                    IsTileEnabled = options.IsTileEnabled,
+                    MaxTileSize = options.TileSize,
+                    TileOverlap = options.TileOverlap,
+                    MergeInput = options.MergeInput
+                }, _progressRelayRunCallback, cancellationToken),
+                PosePipeline posePipeline => posePipeline.RunAsync(new PoseStreamOptions
+                {
+                    Stream = inputFrames,
+                    Detections = options.Detections,
+                    BodyConfidence = options.BodyConfidence,
+                    JointConfidence = options.JointConfidence,
+                    ColorAlpha = options.ColorAlpha,
+                    JointRadius = options.JointRadius,
+                    BoneRadius = options.BoneRadius,
+                    BoneThickness = options.BoneThickness,
+                    IsTransparent = options.IsTransparent
+                }, _progressRelayRunCallback, cancellationToken),
+                BackgroundPipeline backgroundPipeline => ExtractBackgroundStreamAsync(backgroundPipeline, options, inputFrames, cancellationToken),
+                _ => throw new Exception("Extract requires an extract pipeline to be loaded.")
+            };
+            return CreateStreamItemsAsync(resultFrames, cancellationToken);
+        }
+
+
+        /// <summary>
+        /// Extracts the background of each video frame, the background pipeline has no stream run so the frames are processed one at a time.
+        /// </summary>
+        /// <param name="backgroundPipeline">The background pipeline.</param>
+        /// <param name="options">The options.</param>
+        /// <param name="inputFrames">The input frames.</param>
+        /// <param name="cancellationToken">The cancellation token.</param>
+        private async IAsyncEnumerable<VideoFrame> ExtractBackgroundStreamAsync(BackgroundPipeline backgroundPipeline, ExtractImageRunOptions options, IAsyncEnumerable<VideoFrame> inputFrames, [EnumeratorCancellation] CancellationToken cancellationToken)
+        {
+            await foreach (var frame in inputFrames.WithCancellation(cancellationToken))
+            {
+                var backgroundOptions = new BackgroundImageOptions
+                {
+                    Image = frame.Frame,
+                    Mode = (TensorStack.OnnxRuntime.Extract.BackgroundMode)options.Mode,
+                    IsTransparentSupported = options.IsTransparentSupported
+                };
+                var resultImage = await Task.Run(() => backgroundPipeline.RunAsync(backgroundOptions, _progressRelayRunCallback, cancellationToken), cancellationToken);
+                yield return new VideoFrame(frame.Index, resultImage, frame.SourceFrameRate);
+            }
+        }
+
+
+        /// <summary>
+        /// Converts the video frames to stream items.
+        /// </summary>
+        /// <param name="frames">The frames.</param>
+        /// <param name="cancellationToken">The cancellation token.</param>
+        private static async IAsyncEnumerable<PipelineStreamItem> CreateStreamItemsAsync(IAsyncEnumerable<VideoFrame> frames, [EnumeratorCancellation] CancellationToken cancellationToken)
+        {
+            await foreach (var frame in frames.WithCancellation(cancellationToken))
+            {
+                yield return frame.ToStreamItem();
+            }
+        }
+
+
+        /// <summary>
+        /// Reads the stream items as video frames.
+        /// </summary>
+        /// <param name="input">The items streamed from the client.</param>
+        /// <param name="cancellationToken">The cancellation token.</param>
+        private static async IAsyncEnumerable<VideoFrame> ReadVideoFramesAsync(IAsyncEnumerable<PipelineStreamItem> input, [EnumeratorCancellation] CancellationToken cancellationToken)
+        {
+            await foreach (var item in input.WithCancellation(cancellationToken))
+            {
+                yield return item.ToVideoFrame();
             }
         }
 
@@ -257,6 +401,32 @@ namespace Amuse.Host.OnnxRuntime
                 TileOverlap = options.TileOverlap
             };
             return await Task.Run(() => upscalePipeline.RunAsync(upscaleOptions, _progressRelayRunCallback, cancellationToken), cancellationToken);
+        }
+
+
+        /// <summary>
+        /// Upscales the video frames streamed from the client, returning each frame as it is upscaled.
+        /// </summary>
+        /// <param name="options">The options.</param>
+        /// <param name="input">The frames streamed from the client.</param>
+        /// <param name="cancellationToken">The cancellation token.</param>
+        private async IAsyncEnumerable<PipelineStreamItem> UpscaleStreamAsync(UpscaleImageRunOptions options, IAsyncEnumerable<PipelineStreamItem> input, [EnumeratorCancellation] CancellationToken cancellationToken)
+        {
+            if (_pipeline is not UpscalePipeline upscalePipeline)
+                throw new Exception("Upscale requires an upscale pipeline to be loaded.");
+
+            var upscaleOptions = new UpscaleStreamOptions
+            {
+                IsTileEnabled = options.IsTileEnabled,
+                MaxTileSize = options.TileSize,
+                TileOverlap = options.TileOverlap,
+                Stream = ReadVideoFramesAsync(input, cancellationToken)
+            };
+
+            await foreach (var frame in upscalePipeline.RunAsync(upscaleOptions, _progressRelayRunCallback, cancellationToken))
+            {
+                yield return frame.ToStreamItem();
+            }
         }
 
 
@@ -336,85 +506,6 @@ namespace Amuse.Host.OnnxRuntime
             };
         }
 
-
-        private async Task<AudioTensor> GenerateAudioAsync(Common.GenerateAudioOptions options, CancellationToken cancellationToken)
-        {
-            var supertonicPipeline = _pipeline as IPipeline<AudioTensor, SupertonicOptions, RunProgress>;
-            var pipelineOptions = new SupertonicOptions
-            {
-                TextInput = options.Prompt,
-                VoiceStyle = options.Task,
-                Steps = options.Steps,
-                Speed = options.Speed,
-                SilenceDuration = options.SilenceDuration,
-                Seed = options.Seed,
-                Language = options.Language.GetShortName(),
-            };
-            return await supertonicPipeline.RunAsync(pipelineOptions, _progressRelayRunCallback, cancellationToken);
-        }
-
-
-        public async Task<TextInput[]> GenerateTextAsync(Common.GenerateTextOptions options, CancellationToken cancellationToken)
-        {
-            var pipelineOptions = new WhisperOptions
-            {
-                Seed = options.Seed,
-                Beams = options.Beams,
-                TopK = options.TopK,
-                TopP = options.TopP,
-                Temperature = options.Temperature,
-                MaxLength = options.MaxLength,
-                MinLength = options.MinLength,
-                NoRepeatNgramSize = options.NoRepeatNgramSize,
-                LengthPenalty = options.LengthPenalty,
-                EarlyStopping = Enum.Parse<EarlyStopping>(options.EarlyStopping, true),
-                Language = options.GetLanguageType(),
-                Task = Enum.Parse<TaskType>(options.Task),
-                ChunkSize = options.ChunkSize,
-                AudioInput = options.InputAudios[0]
-            };
-
-            var pipelineResult = await Task.Run(async () =>
-            {
-                if (options.Beams == 0)
-                {
-                    // Greedy Search
-                    var greedyPipeline = _pipeline as IPipeline<GenerateResult, WhisperOptions, GenerateProgress>;
-                    return [await greedyPipeline.RunAsync(pipelineOptions, _progressRelayGenerateCallback, cancellationToken)];
-                }
-
-                // Beam Search
-                var beamSearchPipeline = _pipeline as IPipeline<GenerateResult[], WhisperSearchOptions, GenerateProgress>;
-                return await beamSearchPipeline.RunAsync(new WhisperSearchOptions(pipelineOptions), _progressRelayGenerateCallback, cancellationToken);
-            });
-
-            var results = new TextInput[pipelineResult.Length];
-            for (int i = 0; i < pipelineResult.Length; i++)
-            {
-                var beamResult = pipelineResult[i];
-                results[i] = new TextInput
-                {
-                    Beam = beamResult.Beam,
-                    PenaltyScore = beamResult.PenaltyScore,
-                    Score = beamResult.Score,
-                    Text = beamResult.Result
-                };
-            }
-            return results;
-        }
-
-
-        private void UpdateProgress(GenerateProgress progress)
-        {
-            EnqueueProgress(new PipelineProgress
-            {
-                Key = "Generate",
-                Subkey = $"{progress.IsReset}",
-                Value = progress.Value,
-                Maximum = progress.Maximum,
-                Message = progress.Result
-            });
-        }
 
         private void UpdateProgress(RunProgress progress)
         {

@@ -26,9 +26,10 @@
                         <!--ModelControl-->
                         <Grid DockPanel.Dock="Top" IsEnabled="{Binding ExtractService.IsLoading, Converter={StaticResource InverseBoolConverter}}">
                             <Grid IsEnabled="{Binding ExtractService.IsExecuting, Mode=OneWay, Converter={StaticResource InverseBoolConverter}}">
-                                <Grid IsEnabled="{Binding IsAutomating, Mode=OneWay, Converter={StaticResource InverseBoolConverter}}">
+                                <Grid IsEnabled="{Binding IsPipelineBusy, Mode=OneWay, Converter={StaticResource InverseBoolConverter}}">
                                     <Controls:ModelControl
                                         x:Name="ModelControl"
+                                        ViewType="ImageExtract"
                                         IsExtractorEnabled="True"
                                         Settings="{Binding Settings, Mode=OneWay}" 
                                         IsPipelineLoaded="{Binding IsPipelineLoaded, Mode=OneWay}"

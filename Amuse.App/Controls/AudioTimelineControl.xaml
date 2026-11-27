@@ -1,0 +1,307 @@
+﻿<local:TimelineControlBase x:Class="Amuse.App.Controls.AudioTimelineControl"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:local="clr-namespace:Amuse.App.Controls"
+             xmlns:CommonControls="clr-namespace:TensorStack.WPF.Controls;assembly=TensorStack.WPF"
+             Foreground="{StaticResource DefaultForeground}">
+    <DockPanel DataContext="{Binding RelativeSource={RelativeSource AncestorType={x:Type local:AudioTimelineControl}}}">
+
+        <!--Details-->
+        <UniformGrid DockPanel.Dock="Bottom" Columns="3" Height="170" Margin="0,8,0,4">
+
+            <!--Reference Frame-->
+            <DockPanel HorizontalAlignment="Left" >
+                <Border DockPanel.Dock="Left" Width="300" BorderBrush="{StaticResource ContainerBorder}" BorderThickness="1">
+                    <Image Stretch="Uniform" Source="{Binding PreviewFrame, TargetNullValue={StaticResource PlaceholderVideo}, FallbackValue={StaticResource PlaceholderVideo}}"/>
+                </Border>
+
+                <!--Timeline Details-->
+                <DockPanel Margin="4,0,0,0" >
+                    <UniformGrid DockPanel.Dock="Top" Columns="2">
+                        <TextBlock Text="{CommonControls:Localize CurrentTime, Append=:}" Opacity=".7" VerticalAlignment="Center" FontStyle="Italic"/>
+                        <TextBlock Text="{Binding Position, FallbackValue=00:00:00, StringFormat={}hh\\:mm\\:ss\\.ff}" FontSize="16" Opacity=".9"/>
+                        <TextBlock Text="{CommonControls:Localize TimelineTime, Append=:}" Opacity=".7" VerticalAlignment="Center" FontStyle="Italic"/>
+                        <TextBlock Text="{Binding Duration, FallbackValue=00:00:00, StringFormat={}hh\\:mm\\:ss\\.ff}" FontSize="16" Opacity=".9"/>
+                    </UniformGrid>
+                    <UniformGrid Columns="2" VerticalAlignment="Bottom" MinWidth="200">
+                        <TextBlock Text="{CommonControls:Localize Clips, Append=:}" Opacity=".7" FontStyle="Italic"/>
+                        <TextBlock Text="{Binding Clips.Count, Mode=OneWay}" Opacity=".9"/>
+                        <TextBlock Text="{CommonControls:Localize ReferenceVideo, Append=:}" Opacity=".7" FontStyle="Italic"/>
+                        <TextBlock Text="{Binding ReferenceVideo.Duration, FallbackValue=00:00:00, StringFormat={}hh\\:mm\\:ss\\.ff}" Opacity=".9"/>
+                        <TextBlock Text="{CommonControls:Localize Width, Append=:}" Opacity=".7" FontStyle="Italic"/>
+                        <TextBlock Text="{Binding ReferenceVideo.Width, FallbackValue=0, StringFormat={}{0} px}" Opacity=".9"/>
+                        <TextBlock Text="{CommonControls:Localize Height, Append=:}" Opacity=".7" FontStyle="Italic"/>
+                        <TextBlock Text="{Binding ReferenceVideo.Height, FallbackValue=0, StringFormat={}{0} px}" Opacity=".9"/>
+                        <TextBlock Text="{CommonControls:Localize FrameRate, Append=:}" Opacity=".7" FontStyle="Italic"/>
+                        <TextBlock Text="{Binding ReferenceVideo.FrameRate, FallbackValue=0, StringFormat={}{0:N0} fps}" Opacity=".9"/>
+                    </UniformGrid>
+                </DockPanel>
+            </DockPanel>
+
+
+            <DockPanel>
+
+                <!--Selected Clip-->
+                <StackPanel DockPanel.Dock="Top" Margin="40,0,40,0" IsEnabled="{Binding SelectedClip, Converter={StaticResource InverseNullBooleanConverter}}">
+                    <TextBlock Text="{Binding SelectedClip.Name, FallbackValue=-}" TextTrimming="CharacterEllipsis" HorizontalAlignment="Center" Opacity=".9"/>
+                    <UniformGrid Columns="3" Margin="0,4,0,0">
+                        <StackPanel Orientation="Horizontal" >
+                            <TextBlock Text="{CommonControls:Localize Position, Append=:}" FontStyle="Italic" Opacity=".7" Margin="0,0,3,0"/>
+                            <TextBlock Text="{Binding SelectedClip.Position, FallbackValue=00:00.00, StringFormat={}mm\\:ss\\.ff}"/>
+                        </StackPanel>
+                        <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
+                            <TextBlock Text="{CommonControls:Localize Start, Append=:}" FontStyle="Italic" Opacity=".7" Margin="0,0,3,0"/>
+                            <TextBlock Text="{Binding SelectedClip.Start, FallbackValue=00:00.00, StringFormat={}mm\\:ss\\.ff}"/>
+                        </StackPanel>
+                        <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
+                            <TextBlock Text="{CommonControls:Localize Duration, Append=:}" FontStyle="Italic" Opacity=".7" Margin="0,0,3,0"/>
+                            <TextBlock Text="{Binding SelectedClip.Duration, FallbackValue=00:00.00, StringFormat={}mm\\:ss\\.ff}"/>
+                        </StackPanel>
+                    </UniformGrid>
+                    <DockPanel Margin="0,4,0,0">
+                        <CheckBox DockPanel.Dock="Right" Content="{CommonControls:Localize Mute}" IsChecked="{Binding SelectedClip.IsMuted}" VerticalAlignment="Bottom" Margin="10,0,0,4"/>
+                        <CommonControls:SliderControl Text="{CommonControls:Localize Volume}" Minimum="0" Maximum="2" TickFrequency="0.05" ValueFormat="N2" Value="{Binding SelectedClip.Volume, FallbackValue=1}"/>
+                    </DockPanel>
+                </StackPanel>
+
+                <!--Import Buttons-->
+                <Grid VerticalAlignment="Bottom">
+                    <UniformGrid Columns="2" Margin="40,0,40,0" VerticalAlignment="Top">
+                        <Border Style="{StaticResource AudioDropZoneStyle}" IsEnabled="{Binding IsControlBusy, Converter={StaticResource InverseBoolConverter}}">
+                            <CommonControls:IconButton Text="{CommonControls:Localize ImportAudio}" Icon="f001" Command="{Binding LoadAudioCommand}" Drop="OnAudioDrop" Style="{StaticResource TimelineDropButton}"/>
+                        </Border>
+                        <Border Style="{StaticResource VideoDropZoneStyle}" IsEnabled="{Binding IsControlBusy, Converter={StaticResource InverseBoolConverter}}">
+                            <CommonControls:IconButton Text="{CommonControls:Localize ReferenceVideo}" Icon="f008" Command="{Binding LoadReferenceCommand}" Drop="OnReferenceDrop" Style="{StaticResource TimelineDropButton}"/>
+                        </Border>
+                    </UniformGrid>
+                </Grid>
+
+            </DockPanel>
+
+            <!--Preview Controls - Save/Cancel-->
+            <DockPanel Width="400" HorizontalAlignment="Right" >
+                <UniformGrid DockPanel.Dock="Bottom" Columns="3" Height="30">
+                    <Button Content="{CommonControls:Localize Cancel}" Command="{Binding CancelCommand}"/>
+                    <Button Content="{CommonControls:Localize SaveAudio}" Command="{Binding SaveAudioCommand}"/>
+                    <Button Content="{CommonControls:Localize SaveVideo}" Command="{Binding SaveVideoCommand}"/>
+                </UniformGrid>
+                <StackPanel>
+                    <CommonControls:SliderControl Text="{CommonControls:Localize PreviewVolume}" Minimum="0" Maximum="1" TickFrequency="0.01" ValueFormat="N2" Value="{Binding PreviewVolume}"/>
+                </StackPanel>
+            </DockPanel>
+
+        </UniformGrid>
+
+        <!--Timeline-->
+        <Border BorderBrush="{StaticResource ContainerBorder}" BorderThickness="1" IsHitTestVisible="{Binding IsControlBusy, Converter={StaticResource InverseBoolConverter}}">
+            <DockPanel>
+                <Border DockPanel.Dock="Bottom" Background="{StaticResource ContainerBackground}" BorderBrush="{StaticResource ContainerBorder}" BorderThickness="0,1,0,0" Padding="4,4,4,4">
+                    <DockPanel Height="22">
+                        <!--Timeline Controls-->
+                        <UniformGrid DockPanel.Dock="Left" Rows="1">
+                            <Button Command="{Binding ClearCommand}" Width="50" Style="{StaticResource TimelineOptionButton}" ToolTip="{CommonControls:Localize ToolTip_VideoTimeline_Clear}" >
+                                <CommonControls:FontAwesome Icon="e2ab" Size="12" Color="{StaticResource DangerColour}" Opacity=".8"/>
+                            </Button>
+                            <Button Command="{Binding SaveAudioCommand}" Style="{StaticResource TimelineOptionButton}" ToolTip="{CommonControls:Localize ToolTip_AudioTimeline_SaveAudio}">
+                                <CommonControls:FontAwesome Icon="f0c7" Size="12"/>
+                            </Button>
+                            <Button Command="{Binding SaveVideoCommand}" Style="{StaticResource TimelineOptionButton}" ToolTip="{CommonControls:Localize ToolTip_AudioTimeline_SaveVideo}">
+                                <CommonControls:FontAwesome Icon="f008" Size="12"/>
+                            </Button>
+                            <Button Command="{Binding RemoveReferenceCommand}" Style="{StaticResource TimelineOptionButton}" ToolTip="{CommonControls:Localize ToolTip_AudioTimeline_ReferenceRemove}">
+                                <CommonControls:FontAwesome Icon="f4e2" Size="12"/>
+                            </Button>
+                            <Button Command="{Binding ZoomInCommand}" Style="{StaticResource TimelineOptionButton}" ToolTip="{CommonControls:Localize ToolTip_VideoTimeline_ZoomIn}">
+                                <CommonControls:FontAwesome Icon="f00e" Size="12"/>
+                            </Button>
+                            <Button Command="{Binding ZoomOutCommand}" Style="{StaticResource TimelineOptionButton}" ToolTip="{CommonControls:Localize ToolTip_VideoTimeline_ZoomOut}">
+                                <CommonControls:FontAwesome Icon="f010" Size="12"/>
+                            </Button>
+                        </UniformGrid>
+
+                        <!--Clip Controls-->
+                        <UniformGrid DockPanel.Dock="Right" Rows="1">
+                            <Button Command="{Binding ClipMoveCommand}" Width="50" Style="{StaticResource TimelineOptionButton}" ToolTip="{CommonControls:Localize ToolTip_AudioTimeline_ClipMove}">
+                                <CommonControls:FontAwesome Icon="f05b" Size="12"/>
+                            </Button>
+                            <Button Command="{Binding ClipTrimStartCommand}" Style="{StaticResource TimelineOptionButton}" ToolTip="{CommonControls:Localize ToolTip_AudioTimeline_ClipTrimStart}">
+                                <CommonControls:FontAwesome Icon="f048" Size="12"/>
+                            </Button>
+                            <Button Command="{Binding ClipTrimEndCommand}" Style="{StaticResource TimelineOptionButton}" ToolTip="{CommonControls:Localize ToolTip_AudioTimeline_ClipTrimEnd}">
+                                <CommonControls:FontAwesome Icon="f051" Size="12"/>
+                            </Button>
+                            <Button Command="{Binding ClipSplitCommand}" Style="{StaticResource TimelineOptionButton}" ToolTip="{CommonControls:Localize ToolTip_AudioTimeline_ClipSplit}">
+                                <CommonControls:FontAwesome Icon="e254" Size="12"/>
+                            </Button>
+                            <Button Command="{Binding ClipRestoreCommand}" Style="{StaticResource TimelineOptionButton}" ToolTip="{CommonControls:Localize ToolTip_AudioTimeline_ClipRestore}">
+                                <CommonControls:FontAwesome Icon="f2ea" Size="12"/>
+                            </Button>
+                            <Button Command="{Binding ClipCopyCommand}" Style="{StaticResource TimelineOptionButton}" ToolTip="{CommonControls:Localize ToolTip_AudioTimeline_ClipCopy}">
+                                <CommonControls:FontAwesome Icon="f0c5" Size="12"/>
+                            </Button>
+                            <Button Command="{Binding ClipRemoveCommand}" Style="{StaticResource TimelineOptionButton}" ToolTip="{CommonControls:Localize ToolTip_AudioTimeline_ClipRemove}" >
+                                <CommonControls:FontAwesome Icon="f2ed" Size="12" Color="{StaticResource DangerColour}" Opacity=".8"/>
+                            </Button>
+                        </UniformGrid>
+
+                        <!--Media Controls-->
+                        <UniformGrid Rows="1" Columns="5" HorizontalAlignment="Center">
+                            <Button Command="{Binding StartCommand}" Width="50">
+                                <CommonControls:FontAwesome Icon="f100" Size="12"/>
+                            </Button>
+                            <Button Command="{Binding PauseCommand}">
+                                <CommonControls:FontAwesome Icon="f04c" Size="12"/>
+                            </Button>
+                            <Button Command="{Binding PlayCommand}">
+                                <CommonControls:FontAwesome Icon="f04b" Size="12"/>
+                            </Button>
+                            <Button Command="{Binding StopCommand}">
+                                <CommonControls:FontAwesome Icon="f04d" Size="12"/>
+                            </Button>
+                            <Button Command="{Binding EndCommand}">
+                                <CommonControls:FontAwesome Icon="f101" Size="12"/>
+                            </Button>
+                        </UniformGrid>
+                    </DockPanel>
+                </Border>
+
+                <CommonControls:ProgressElement DockPanel.Dock="Bottom" Progress="{Binding Progress}" Height="6"/>
+                <Grid>
+                    <Border x:Name="DragDropContainer" Style="{StaticResource AudioDropZoneStyle}">
+                        <ScrollViewer x:Name="TimelineViewer"
+                            Margin="0,1,0,1"
+                            Focusable="True"
+                            VerticalScrollBarVisibility="Auto"
+                            HorizontalScrollBarVisibility="Auto"
+                            Drop="OnAudioDrop"
+                            SizeChanged="OnTimelineSizeChanged"
+                            PreviewKeyUp="OnTimelineKeyUp"
+                            PreviewMouseWheel="OnTimelineMouseWheel">
+                            <Grid x:Name="TimelineContent"
+                                Width="{Binding TimelineWidth}"
+                                HorizontalAlignment="Left"
+                                Background="{StaticResource TransparentBrush}"
+                                MouseLeftButtonDown="OnTimelineMouseDown"
+                                MouseMove="OnTimelineMouseMove"
+                                MouseLeftButtonUp="OnTimelineMouseUp"
+                                LostMouseCapture="OnTimelineLostMouseCapture">
+                                <DockPanel>
+
+                                    <!--Time Markers-->
+                                    <ItemsControl DockPanel.Dock="Top" Height="18" ItemsSource="{Binding Markers}" IsHitTestVisible="False" Opacity=".8">
+                                        <ItemsControl.ItemTemplate>
+                                            <DataTemplate>
+                                                <Border BorderBrush="{StaticResource ContainerBorder}" BorderThickness="1,0,0,0" Height="18">
+                                                    <TextBlock Text="{Binding Time, StringFormat={}mm\\:ss\\.ff}" FontSize="9" Margin="3,0,0,0"/>
+                                                </Border>
+                                            </DataTemplate>
+                                        </ItemsControl.ItemTemplate>
+                                        <ItemsControl.ItemsPanel>
+                                            <ItemsPanelTemplate>
+                                                <Canvas IsItemsHost="True"/>
+                                            </ItemsPanelTemplate>
+                                        </ItemsControl.ItemsPanel>
+                                        <ItemsControl.ItemContainerStyle>
+                                            <Style TargetType="{x:Type ContentPresenter}">
+                                                <Setter Property="Canvas.Left" Value="{Binding Left}"/>
+                                            </Style>
+                                        </ItemsControl.ItemContainerStyle>
+                                    </ItemsControl>
+
+                                    <!--Reference Video-->
+                                    <Border DockPanel.Dock="Top"
+                                        Height="48"
+                                        Margin="0,2,0,0"
+                                        Width="{Binding ReferenceWidth}"
+                                        HorizontalAlignment="Left"
+                                        BorderBrush="LightBlue"
+                                        BorderThickness="0,0,0,2"
+                                        IsHitTestVisible="False"
+                                        Visibility="{Binding HasReference, Converter={StaticResource BooleanToVisibilityConverter}}">
+                                        <ItemsControl ItemsSource="{Binding ReferenceThumbs}">
+                                            <ItemsControl.ItemTemplate>
+                                                <DataTemplate>
+                                                    <Image Source="{Binding}" Stretch="UniformToFill" RenderOptions.BitmapScalingMode="LowQuality"/>
+                                                </DataTemplate>
+                                            </ItemsControl.ItemTemplate>
+                                            <ItemsControl.ItemsPanel>
+                                                <ItemsPanelTemplate>
+                                                    <UniformGrid IsItemsHost="True" Rows="1"/>
+                                                </ItemsPanelTemplate>
+                                            </ItemsControl.ItemsPanel>
+                                        </ItemsControl>
+                                    </Border>
+
+                                    <!--Clips-->
+                                    <ItemsControl ItemsSource="{Binding Clips}" VerticalAlignment="Top" Margin="0,4,0,0">
+                                        <ItemsControl.ItemTemplate>
+                                            <DataTemplate>
+                                                <Canvas Height="50" Margin="0,0,0,2">
+                                                    <Border Canvas.Left="{Binding Left}"
+                                                        Width="{Binding Width}"
+                                                        Height="50"
+                                                        BorderThickness="1"
+                                                        ClipToBounds="True"
+                                                        Cursor="SizeWE"
+                                                        Background="{StaticResource ContainerBackground}"
+                                                        MouseLeftButtonDown="OnClipMouseDown"
+                                                        MouseMove="OnClipMouseMove"
+                                                        MouseLeftButtonUp="OnClipMouseUp"
+                                                        LostMouseCapture="OnClipLostMouseCapture">
+                                                        <Grid>
+                                                            <Canvas IsHitTestVisible="False">
+                                                                <Path Data="{Binding Waveform}" Fill="{StaticResource AccentColour2}" Opacity=".7">
+                                                                    <Path.RenderTransform>
+                                                                        <ScaleTransform ScaleX="{Binding WaveformScale}" ScaleY="48"/>
+                                                                    </Path.RenderTransform>
+                                                                </Path>
+                                                            </Canvas>
+                                                            <TextBlock Text="{Binding Name}" FontSize="10" Margin="4,2,4,0" VerticalAlignment="Top" HorizontalAlignment="Left" IsHitTestVisible="False"/>
+                                                        </Grid>
+                                                        <Border.Style>
+                                                            <Style TargetType="{x:Type Border}">
+                                                                <Setter Property="BorderBrush" Value="{StaticResource ContainerBorder}"/>
+                                                                <Style.Triggers>
+                                                                    <DataTrigger Binding="{Binding IsMuted}" Value="True">
+                                                                        <Setter Property="Opacity" Value=".4"/>
+                                                                    </DataTrigger>
+                                                                    <DataTrigger Binding="{Binding IsSelected}" Value="True">
+                                                                        <Setter Property="BorderBrush" Value="{StaticResource AccentColour1}"/>
+                                                                    </DataTrigger>
+                                                                </Style.Triggers>
+                                                            </Style>
+                                                        </Border.Style>
+                                                    </Border>
+                                                </Canvas>
+                                            </DataTemplate>
+                                        </ItemsControl.ItemTemplate>
+                                    </ItemsControl>
+                                </DockPanel>
+
+                                <!--Playhead-->
+                                <Border Width="1" HorizontalAlignment="Left" Background="{StaticResource DangerColour}" IsHitTestVisible="False">
+                                    <Border.RenderTransform>
+                                        <TranslateTransform X="{Binding PlayheadLeft}"/>
+                                    </Border.RenderTransform>
+                                </Border>
+                            </Grid>
+                        </ScrollViewer>
+                    </Border>
+
+                    <!--Placeholder-->
+                    <Grid IsHitTestVisible="False" Visibility="{Binding Clips.Count, Converter={StaticResource LessOrEqualThanToVisibilityConverter}, ConverterParameter=0}">
+                        <CommonControls:FontAwesome Icon="f001" Size="200" Opacity=".06" Color="{StaticResource DefaultForeground}"/>
+                    </Grid>
+
+                    <!--DragDrop Notification-->
+                    <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center" Visibility="{Binding AllowDrop, ElementName=DragDropContainer, Converter={StaticResource BooleanToVisibilityConverter}}" IsHitTestVisible="False">
+                        <CommonControls:FontAwesome Icon="e74c" Size="30" IconStyle="SharpLight" Color="{StaticResource AccentColour2}"/>
+                        <TextBlock Text="{CommonControls:Localize DragDropAudio}" Foreground="{StaticResource AccentColour2}" FontSize="13" FontWeight="DemiBold" Margin="0,6,0,0"/>
+                    </StackPanel>
+                </Grid>
+            </DockPanel>
+        </Border>
+    </DockPanel>
+</local:TimelineControlBase>

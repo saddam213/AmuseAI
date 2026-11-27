@@ -22,8 +22,8 @@ namespace Amuse.App.Views
         private ImageInput _sourceImage;
         private ImageInput _sourceImageMask;
 
-        public ImageInpaintView(Settings settings, NavigationService navigationService, IModelDownloadService downloadService, IGenerateService generateService, IExtractService extractService, IUpscaleService upscaleService, IHistoryService historyService, ILogger<ImageInpaintView> logger)
-            : base(settings, navigationService, downloadService, generateService, extractService, upscaleService, historyService, logger)
+        public ImageInpaintView(Settings settings, NavigationService navigationService, IModelDownloadService downloadService, IModelAccessService modelAccessService, IGenerateService generateService, ILanguageService languageService, IExtractService extractService, IUpscaleService upscaleService, IHistoryService historyService, ILogger<ImageInpaintView> logger)
+            : base(settings, navigationService, downloadService, modelAccessService, generateService, languageService, extractService, upscaleService, historyService, logger)
         {
             InitializeComponent();
         }
@@ -149,11 +149,14 @@ namespace Amuse.App.Views
                     var inputImage = ImageEditControl.GetImage();
                     var inputImageMask = ImageEditControl.GetImageMask();
 
-                    // Diffusion
-                    var resultTensor = await ExecuteImageDiffusionAsync(automationJob.GenerateOptions with
+                    // Options
+                    var options = automationJob.GenerateOptions with
                     {
                         InputImages = [inputImage, inputImageMask]
-                    });
+                    };
+
+                    // Diffusion
+                    var resultTensor = await ExecuteImageDiffusionAsync(options);
 
                     // Upscale
                     resultTensor = await ExecuteImageUpscaleAsync(resultTensor);
@@ -165,7 +168,7 @@ namespace Amuse.App.Views
                     // History
                     if (AutomationOptions.IsHistoryEnabled)
                     {
-                        await SaveHistoryAsync(automationJob.GenerateOptions);
+                        await SaveHistoryAsync(options);
                     }
 
                     await automationJob.SaveAsync(ResultImage);
@@ -222,8 +225,8 @@ namespace Amuse.App.Views
                 Options = options,
                 Model = CurrentPipeline.DiffusionModel.Name,
                 LoraModels = CurrentPipeline.LoraAdapterModel?.Select(x => x.Name).ToArray(),
-                UpscaleModel = UpscaledModel?.Name,
-                UpscaleOptions = UpscaledModel is not null ? UpscaleOptions : null,
+                UpscaleModel = CurrentPipeline?.UpscaleModel?.Name,
+                UpscaleOptions = CurrentPipeline?.UpscaleModel is not null ? UpscaleOptions : null,
                 ExtractModel = CurrentPipeline.ExtractModel?.Name,
                 ExtractorType = CurrentPipeline.ExtractModel?.Type,
                 ExtractOptions = CurrentPipeline.ExtractModel is not null ? ExtractOptions : null,

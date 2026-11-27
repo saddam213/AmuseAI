@@ -1,0 +1,234 @@
+<Views:ViewBaseDiffusion x:Class="Amuse.App.Views.AudioToMusicView"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:local="clr-namespace:Amuse.App.Views"
+    xmlns:CommonControls="clr-namespace:TensorStack.WPF.Controls;assembly=TensorStack.WPF"
+    xmlns:Controls="clr-namespace:Amuse.App.Controls"
+    xmlns:Views="clr-namespace:Amuse.App.Views">
+    <Grid DataContext="{Binding RelativeSource={RelativeSource AncestorType={x:Type local:AudioToMusicView}}}" >
+        <Grid.RowDefinitions>
+            <RowDefinition Height="1*" />
+        </Grid.RowDefinitions>
+        <Grid Grid.Row="0" >
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition MinWidth="380"/>
+                <ColumnDefinition Width="5" />
+                <ColumnDefinition Width="4*" />
+                <ColumnDefinition Width="5" />
+                <ColumnDefinition Width="Auto" MaxWidth="330" />
+            </Grid.ColumnDefinitions>
+
+            <!--***Left Panel***-->
+            <Grid Grid.Column="0">
+                <Border Margin="4">
+                    <DockPanel x:Name="LeftPanelContainer" Margin="4" IsEnabled="{Binding IsViewBusy, Converter={StaticResource InverseBoolConverter}}">
+
+                        <!--ModelControl-->
+                        <Grid DockPanel.Dock="Top" IsEnabled="{Binding GenerateService.IsLoading, Converter={StaticResource InverseBoolConverter}}">
+                            <Grid IsEnabled="{Binding GenerateService.IsExecuting, Converter={StaticResource InverseBoolConverter}}">
+                                <Grid IsEnabled="{Binding IsPipelineBusy, Converter={StaticResource InverseBoolConverter}}">
+                                    <Controls:DiffusionModelControl
+                                        x:Name="ModelControl"
+                                        ViewType="AudioToMusic"
+                                        ProcessType="TextToAudio"
+                                        IsLoraSupported="False"
+                                        IsUpscalerSupported="False"
+                                        IsExtractorSupported="False"
+                                        IsControlNetSupported="False"
+                                        Settings="{Binding Settings, Mode=OneWay}"
+                                        IsPipelineLoaded="{Binding IsPipelineLoaded, Mode=OneWay}"
+                                        DownloadService="{Binding DownloadService, Mode=OneTime}"
+                                        NavigationService="{Binding NavigationService, Mode=OneTime}"
+                                        SelectionChanged="SelectedPipelineChanged"/>
+                                </Grid>
+                            </Grid>
+                        </Grid>
+
+                        <DockPanel DockPanel.Dock="Bottom">
+
+                            <!--Execute/Cancel-->
+                            <UniformGrid DockPanel.Dock="Bottom" Columns="2" Height="30" >
+                                <DockPanel>
+                                    <Button DockPanel.Dock="Left" Width="30" Command="{Binding StopCommand}" Visibility="{Binding GenerateService.IsCanceling, Converter={StaticResource BooleanToVisibilityConverter}}" ToolTip="{CommonControls:Localize ToolTip_GenerateStop}" ToolTipService.InitialShowDelay="200">
+                                        <CommonControls:FontAwesome Icon="f00d" Color="{StaticResource DangerColour}" />
+                                    </Button>
+                                    <Grid IsEnabled="{Binding GenerateService.IsCanceling, Converter={StaticResource InverseBoolConverter}}">
+                                        <Button Command="{Binding CancelCommand}" >
+                                            <Button.Style>
+                                                <Style TargetType="{x:Type Button}" BasedOn="{StaticResource {x:Type Button}}">
+                                                    <Setter Property="Content" Value="{CommonControls:Localize Cancel}" />
+                                                    <Style.Triggers>
+                                                        <DataTrigger Binding="{Binding GenerateService.IsCanceling}" Value="True">
+                                                            <Setter Property="Content" Value="{CommonControls:Localize Canceling}" />
+                                                        </DataTrigger>
+                                                    </Style.Triggers>
+                                                </Style>
+                                            </Button.Style>
+                                        </Button>
+                                    </Grid>
+                                </DockPanel>
+                                <Grid IsEnabled="{Binding IsSelectionValid, ElementName=ModelControl}">
+                                    <Button Content="{CommonControls:Localize Generate}" Command="{Binding ExecuteCommand}" Visibility="{Binding SelectedOption, ElementName=InputControl, Converter={StaticResource InverseEnumToVisibilityConverter}, ConverterParameter=Automation}"/>
+                                    <Button Content="{CommonControls:Localize Automate}" Command="{Binding ExecuteAutomationCommand}" Visibility="{Binding SelectedOption, ElementName=InputControl, Converter={StaticResource EnumToVisibilityConverter}, ConverterParameter=Automation}"/>
+                                </Grid>
+                            </UniformGrid>
+
+                            <!--InputControl-->
+                            <StackPanel >
+
+                                <!--Source Audio-->
+                                <StackPanel IsEnabled="{Binding IsAutomating, Converter={StaticResource InverseBoolConverter}}">
+                                    <TextBlock Text="{CommonControls:Localize SourceAudio}" Style="{StaticResource FieldTextBlockStyle}" />
+                                    <Border Style="{StaticResource AudioDropZoneStyle}" IsEnabled="{Binding GenerateService.IsExecuting, Converter={StaticResource InverseBoolConverter}}">
+                                        <CommonControls:AudioStreamElement
+                                            x:Name="SourceAudioControl"
+                                            Height="160"
+                                            Source="{Binding SourceAudio, Mode=TwoWay}"
+                                            Configuration="{Binding Settings}"
+                                            Volume="{Binding Settings.VolumeInput, Mode=TwoWay}"
+                                            IsVolumeMute="{Binding Settings.IsVolumeInputMute, Mode=TwoWay}"
+                                            IsReplayEnabled="False"
+                                            IsAutoPlayEnabled="False"
+                                            IsLoadEnabled="True"
+                                            IsSaveEnabled="False"
+                                            IsCropEnabled="True"
+                                            CaptureSampleRate="{Binding CurrentPipeline.DiffusionModel.DefaultOptions.SampleRate, Mode=OneWay, FallbackValue=0}"
+                                            CaptureChannels="{Binding CurrentPipeline.DiffusionModel.DefaultOptions.Channels, Mode=OneWay, FallbackValue=0}"
+                                            IsInputEnabled="{Binding IsPipelineLoaded}"
+                                            OnMediaImport="OnMediaImport"/>
+                                    </Border>
+                                </StackPanel>
+
+                                <Controls:AudioDiffusionInputControl
+                                    x:Name="InputControl"
+                                    ViewType="AudioToMusic"
+                                    ProcessType="TextToAudio"
+                                    Options="{Binding Options, Mode=OneWayToSource}"
+                                    AutomationOptions="{Binding AutomationOptions, Mode=OneWayToSource}"
+                                    AutomationProgress="{Binding AutomationProgress, Mode=OneWay}"
+                                    Pipeline="{Binding CurrentPipeline, Mode=OneWay}"
+                                    SourceAudio="{Binding SourceAudio, Mode=OneWay}"
+                                    IsExecuting="{Binding GenerateService.IsExecuting, Mode=OneWay}"
+                                    IsAutomating="{Binding IsAutomating, Mode=OneWay}"
+                                    IsEnabled="{Binding IsPipelineLoaded}"/>
+
+                                <!--Reference Audio-->
+                                <Grid Margin="0,-6,0,0" Visibility="{Binding IsReferenceAudioSupported, ElementName=InputControl, Converter={StaticResource BooleanToVisibilityConverter}}">
+                                    <DockPanel Visibility="{Binding SelectedOption, ElementName=InputControl, Converter={StaticResource EnumToVisibilityConverter}, ConverterParameter=Options}">
+                                        <TextBlock DockPanel.Dock="Top" Text="{CommonControls:Localize ReferenceAudioOptional}" Style="{StaticResource FieldTextBlockStyle}" Margin="0,0,0,2"/>
+                                        <Border Style="{StaticResource AudioDropZoneStyle}" IsEnabled="{Binding GenerateService.IsExecuting, Converter={StaticResource InverseBoolConverter}}">
+                                            <CommonControls:AudioStreamElement
+                                                x:Name="ReferenceAudioControl"
+                                                Height="120"
+                                                Source="{Binding ReferenceAudio, Mode=TwoWay}"
+                                                Configuration="{Binding Settings}"
+                                                Volume="{Binding Settings.VolumeInput, Mode=TwoWay}"
+                                                IsVolumeMute="{Binding Settings.IsVolumeInputMute, Mode=TwoWay}"
+                                                IsInputEnabled="{Binding IsPipelineLoaded}"
+                                                IsReplayEnabled="False"
+                                                IsAutoPlayEnabled="False"
+                                                IsLoadEnabled="True"
+                                                IsSaveEnabled="False"
+                                                IsCropEnabled="True"
+                                                CaptureSampleRate="{Binding CurrentPipeline.DiffusionModel.DefaultOptions.SampleRate, Mode=OneWay, FallbackValue=0}"
+                                                CaptureChannels="{Binding CurrentPipeline.DiffusionModel.DefaultOptions.Channels, Mode=OneWay, FallbackValue=0}"
+                                                OnMediaImport="OnMediaImport"/>
+                                        </Border>
+                                    </DockPanel>
+                                </Grid>
+                            </StackPanel>
+
+                        </DockPanel>
+                    </DockPanel>
+                </Border>
+            </Grid>
+
+
+            <!--GridSplitter-->
+            <GridSplitter Grid.Column="1" HorizontalAlignment="Stretch" Width="5" Opacity=".4" Margin="0,20" />
+
+
+            <!--***Right Panel***-->
+            <Grid Grid.Column="2" Grid.Row="0" >
+
+                <!--Content-->
+                <DockPanel>
+
+                    <!--Statistics-->
+                    <Controls:StatisticsControl
+                        DockPanel.Dock="Bottom"
+                        Margin="14,0,14,8"
+                        Statistics="{Binding Statistics}"
+                        Progress="{Binding Progress}" />
+
+                    <Border Margin="4" IsEnabled="{Binding IsViewBusy, Converter={StaticResource InverseBoolConverter}}">
+                        <DockPanel>
+
+                            <!--Output-->
+                            <DockPanel DockPanel.Dock="Bottom" Margin="10,10,10,4">
+                                <DockPanel Height="150">
+                                    <TextBlock DockPanel.Dock="Top" Text="{CommonControls:Localize AudioResult}" Style="{StaticResource FieldTextBlockStyle}"/>
+                                    <CommonControls:AudioStreamElement
+                                        x:Name="ResultControl"
+                                        Source="{Binding ResultAudio, Mode=TwoWay}"
+                                        IsReplayEnabled="False"
+                                        IsAutoPlayEnabled="True"
+                                        IsLoadEnabled="False"
+                                        IsInputEnabled="{Binding IsPipelineLoaded}" />
+                                </DockPanel>
+                            </DockPanel>
+
+                            <!--Prompt-->
+                            <Grid Margin="10,0,10,0" IsEnabled="{Binding IsPipelineLoaded}">
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="1*" MinHeight="60"/>
+                                    <RowDefinition Height="5"/>
+                                    <RowDefinition Height="5*" MinHeight="60"/>
+                                </Grid.RowDefinitions>
+                                <DockPanel Grid.Row="0" Margin="0,0,0,5">
+                                    <DockPanel>
+                                        <TextBlock DockPanel.Dock="Top" Text="{CommonControls:Localize Style}" Style="{StaticResource FieldTextBlockStyle}"/>
+                                        <Border Style="{StaticResource TextDropZoneStyle}">
+                                            <CommonControls:PlaceholderTextBox Text="{Binding Options.Prompt, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" AcceptsReturn="True" TextWrapping="Wrap"/>
+                                        </Border>
+                                    </DockPanel>
+                                </DockPanel>
+
+                                <GridSplitter Grid.Row="1" HorizontalAlignment="Stretch" Height="5" Opacity=".4" Style="{StaticResource GridSplitterHorizontal}"/>
+
+                                <DockPanel Grid.Row="2" Margin="0,-2,0,0">
+                                    <DockPanel >
+                                        <DockPanel DockPanel.Dock="Top">
+                                            <Button DockPanel.Dock="Right" Style="{StaticResource TransparentButton}" Command="{Binding LyricTemplateCommand}" VerticalAlignment="Bottom" Margin="0,0,2,2" Cursor="Hand" Visibility="{Binding CurrentPipeline.DiffusionModel.DefaultOptions.Lyrics, Converter={StaticResource NullOrEmptyVisibilityConverter}, FallbackValue=Collapsed}">
+                                                <TextBlock Text="{CommonControls:Localize AddSongTemplate}" FontSize="11" TextDecorations="Underline" Foreground="{StaticResource InfoColour}" />
+                                            </Button>
+                                            <TextBlock Text="{CommonControls:Localize Lyrics}" Style="{StaticResource FieldTextBlockStyle}"/>
+                                        </DockPanel>
+                                        <Border Style="{StaticResource TextDropZoneStyle}">
+                                            <CommonControls:PlaceholderTextBox Text="{Binding Options.Prompt2, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" AcceptsReturn="True" TextWrapping="Wrap" VerticalScrollBarVisibility="Auto" />
+                                        </Border>
+                                    </DockPanel>
+                                </DockPanel>
+                            </Grid>
+
+                        </DockPanel>
+                    </Border>
+                </DockPanel>
+
+            </Grid>
+
+
+            <!--GridSplitter-->
+            <GridSplitter Grid.Column="3" HorizontalAlignment="Stretch" Width="5" Opacity=".4" Margin="0,20" />
+
+
+            <!--Help/Information-->
+            <Grid Grid.Column="4" Grid.Row="0" >
+
+            </Grid>
+
+        </Grid>
+    </Grid>
+</Views:ViewBaseDiffusion>

@@ -1,0 +1,504 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <!-- 
+    Microsoft ResX Schema 
+    
+    Version 2.0
+    
+    The primary goals of this format is to allow a simple XML format 
+    that is mostly human readable. The generation and parsing of the 
+    various data types are done through the TypeConverter classes 
+    associated with the data types.
+    
+    Example:
+    
+    ... ado.net/XML headers & schema ...
+    <resheader name="resmimetype">text/microsoft-resx</resheader>
+    <resheader name="version">2.0</resheader>
+    <resheader name="reader">System.Resources.ResXResourceReader, System.Windows.Forms, ...</resheader>
+    <resheader name="writer">System.Resources.ResXResourceWriter, System.Windows.Forms, ...</resheader>
+    <data name="Name1"><value>this is my long string</value><comment>this is a comment</comment></data>
+    <data name="Color1" type="System.Drawing.Color, System.Drawing">Blue</data>
+    <data name="Bitmap1" mimetype="application/x-microsoft.net.object.binary.base64">
+        <value>[base64 mime encoded serialized .NET Framework object]</value>
+    </data>
+    <data name="Icon1" type="System.Drawing.Icon, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
+        <value>[base64 mime encoded string representing a byte array form of the .NET Framework object]</value>
+        <comment>This is a comment</comment>
+    </data>
+                
+    There are any number of "resheader" rows that contain simple 
+    name/value pairs.
+    
+    Each data row contains a name, and value. The row also contains a 
+    type or mimetype. Type corresponds to a .NET class that support 
+    text/value conversion through the TypeConverter architecture. 
+    Classes that don't support this are serialized and stored with the 
+    mimetype set.
+    
+    The mimetype is used for serialized objects, and tells the 
+    ResXResourceReader how to depersist the object. This is currently not 
+    extensible. For a given mimetype the value must be set accordingly:
+    
+    Note - application/x-microsoft.net.object.binary.base64 is the format 
+    that the ResXResourceWriter will generate, however the reader can 
+    read any of the formats listed below.
+    
+    mimetype: application/x-microsoft.net.object.binary.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Binary.BinaryFormatter
+            : and then encoded with base64 encoding.
+    
+    mimetype: application/x-microsoft.net.object.soap.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Soap.SoapFormatter
+            : and then encoded with base64 encoding.
+
+    mimetype: application/x-microsoft.net.object.bytearray.base64
+    value   : The object must be serialized into a byte array 
+            : using a System.ComponentModel.TypeConverter
+            : and then encoded with base64 encoding.
+    -->
+  <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+    <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
+    <xsd:element name="root" msdata:IsDataSet="true">
+      <xsd:complexType>
+        <xsd:choice maxOccurs="unbounded">
+          <xsd:element name="metadata">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" />
+              </xsd:sequence>
+              <xsd:attribute name="name" use="required" type="xsd:string" />
+              <xsd:attribute name="type" type="xsd:string" />
+              <xsd:attribute name="mimetype" type="xsd:string" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="assembly">
+            <xsd:complexType>
+              <xsd:attribute name="alias" type="xsd:string" />
+              <xsd:attribute name="name" type="xsd:string" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="data">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1" />
+              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
+              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="resheader">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" />
+            </xsd:complexType>
+          </xsd:element>
+        </xsd:choice>
+      </xsd:complexType>
+    </xsd:element>
+  </xsd:schema>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="ToolTip_GenerateStop" xml:space="preserve">
+    <value>关闭后端进程以立即停止生成。</value>
+  </data>
+  <data name="ToolTip_ModelStatus_Available" xml:space="preserve">
+    <value>可供下载</value>
+  </data>
+  <data name="ToolTip_ModelStatus_DownloadFailed" xml:space="preserve">
+    <value>模型下载失败</value>
+  </data>
+  <data name="ToolTip_ModelStatus_Downloading" xml:space="preserve">
+    <value>模型下载中</value>
+  </data>
+  <data name="ToolTip_ModelStatus_DownloadQueue" xml:space="preserve">
+    <value>模型下载排队中</value>
+  </data>
+  <data name="ToolTip_ModelStatus_Installed" xml:space="preserve">
+    <value>模型已安装</value>
+  </data>
+  <data name="ToolTip_ModelStatus_NotInstalled" xml:space="preserve">
+    <value>模型未安装</value>
+  </data>
+  <data name="ToolTip_ModelStatus_Unknown" xml:space="preserve">
+    <value>模型需要更新</value>
+  </data>
+  <data name="ToolTip_Text_Branch" xml:space="preserve">
+    <value>创建对话分支</value>
+  </data>
+  <data name="ToolTip_Text_Rewind" xml:space="preserve">
+    <value>撤回上一条消息</value>
+  </data>
+  <data name="ToolTip_Text_SaveResponseFile" xml:space="preserve">
+    <value>将回复保存到文件</value>
+  </data>
+  <data name="ToolTip_Text_CopyResponseHtml" xml:space="preserve">
+    <value>复制回复 HTML</value>
+  </data>
+  <data name="ToolTip_Text_CopyResponseText" xml:space="preserve">
+    <value>复制回复文本</value>
+  </data>
+  <data name="ToolTip_Text_Clear" xml:space="preserve">
+    <value>清除文本</value>
+  </data>
+  <data name="ToolTip_Lora_AddTrigger" xml:space="preserve">
+    <value>添加 LoRA 触发词</value>
+  </data>
+  <data name="ToolTip_Paint_Live" xml:space="preserve">
+    <value>实时生成</value>
+  </data>
+  <data name="ToolTip_Paint_Cancel" xml:space="preserve">
+    <value>取消生成</value>
+  </data>
+  <data name="ToolTip_Paint_RoundBrush" xml:space="preserve">
+    <value>圆形画笔</value>
+  </data>
+  <data name="ToolTip_Paint_SquareBrush" xml:space="preserve">
+    <value>方形画笔</value>
+  </data>
+  <data name="ToolTip_Paint_Highlighter" xml:space="preserve">
+    <value>荧光笔</value>
+  </data>
+  <data name="ToolTip_Paint_Eraser" xml:space="preserve">
+    <value>橡皮擦</value>
+  </data>
+  <data name="ToolTip_Paint_FitCurve" xml:space="preserve">
+    <value>拟合曲线</value>
+  </data>
+  <data name="ToolTip_Paint_Stylus" xml:space="preserve">
+    <value>启用手写笔压感支持</value>
+  </data>
+  <data name="ToolTip_Paint_FillBG" xml:space="preserve">
+    <value>填充背景</value>
+  </data>
+  <data name="ToolTip_Paint_LoadImageBG" xml:space="preserve">
+    <value>加载背景图像</value>
+  </data>
+  <data name="ToolTip_Paint_ClearDraw" xml:space="preserve">
+    <value>清除绘图</value>
+  </data>
+  <data name="ToolTip_Seed_New" xml:space="preserve">
+    <value>新种子</value>
+  </data>
+  <data name="ToolTip_Seed_Random" xml:space="preserve">
+    <value>随机种子</value>
+  </data>
+  <data name="ToolTip_VideoTimeline_Clear" xml:space="preserve">
+    <value>清空时间线</value>
+  </data>
+  <data name="ToolTip_VideoTimeline_Save" xml:space="preserve">
+    <value>保存视频</value>
+  </data>
+  <data name="ToolTip_VideoTimeline_Extend" xml:space="preserve">
+    <value>延长时间线</value>
+  </data>
+  <data name="ToolTip_VideoTimeline_Trim" xml:space="preserve">
+    <value>修剪时间线</value>
+  </data>
+  <data name="ToolTip_VideoTimeline_ZoomIn" xml:space="preserve">
+    <value>放大</value>
+  </data>
+  <data name="ToolTip_VideoTimeline_ZoomOut" xml:space="preserve">
+    <value>缩小</value>
+  </data>
+  <data name="ToolTip_VideoTimeline_FrameRemove" xml:space="preserve">
+    <value>移除所选帧</value>
+  </data>
+  <data name="ToolTip_VideoTimeline_FrameSave" xml:space="preserve">
+    <value>将所选帧保存到历史记录</value>
+  </data>
+  <data name="ToolTip_VideoTimeline_SegmentSplit" xml:space="preserve">
+    <value>拆分片段</value>
+  </data>
+  <data name="ToolTip_VideoTimeline_SegmentCopy" xml:space="preserve">
+    <value>复制片段</value>
+  </data>
+  <data name="ToolTip_VideoTimeline_SegmentUp" xml:space="preserve">
+    <value>上移片段</value>
+  </data>
+  <data name="ToolTip_VideoTimeline_SegmentDown" xml:space="preserve">
+    <value>下移片段</value>
+  </data>
+  <data name="ToolTip_VideoTimeline_SegmentRemove" xml:space="preserve">
+    <value>移除片段</value>
+  </data>
+  <data name="ToolTip_MemoryEstimate" xml:space="preserve">
+    <value>预估内存模式</value>
+  </data>
+  <data name="ToolTip_Text_StreamEnable" xml:space="preserve">
+    <value>启用流式 Token 更新</value>
+  </data>
+  <data name="ToolTip_Text_StreamDisable" xml:space="preserve">
+    <value>禁用流式 Token 更新</value>
+  </data>
+  <data name="ToolTip_Text_FormatEnable" xml:space="preserve">
+    <value>启用结果格式化（实验性）</value>
+  </data>
+  <data name="ToolTip_Text_FormatDisable" xml:space="preserve">
+    <value>禁用结果格式化</value>
+  </data>
+  <data name="ToolTip_Text_ThinkingHide" xml:space="preserve">
+    <value>隐藏思考内容</value>
+  </data>
+  <data name="ToolTip_Text_ThinkingShow" xml:space="preserve">
+    <value>显示思考内容</value>
+  </data>
+  <data name="ToolTip_Theme" xml:space="preserve">
+    <value>重启 Amuse 以应用主题。</value>
+  </data>
+  <data name="ToolTip_UIScale" xml:space="preserve">
+    <value>界面大小，已根据您的屏幕调整。</value>
+  </data>
+  <data name="ToolTip_ModelFilterAll" xml:space="preserve">
+    <value>正在显示所有模型，点击可仅显示已安装的模型</value>
+  </data>
+  <data name="ToolTip_ModelFilterInstalled" xml:space="preserve">
+    <value>当前仅显示已安装的模型，点击可显示所有模型</value>
+  </data>
+  <data name="ToolTip_EnvironmentFilterAll" xml:space="preserve">
+    <value>正在显示所有环境，点击可仅显示适用于您设备的环境</value>
+  </data>
+  <data name="ToolTip_EnvironmentFilterDevices" xml:space="preserve">
+    <value>当前仅显示适用于您设备的环境，点击可显示所有环境</value>
+  </data>
+  <data name="ToolTip_GpuLayers" xml:space="preserve">
+    <value>放置在 GPU 上的模型层数，-1 表示全部层。数值较小时，其余层将移至系统内存。</value>
+  </data>
+  <data name="ToolTip_Threads" xml:space="preserve">
+    <value>用于处理系统内存中各层的 CPU 线程数，0 表示使用默认值。</value>
+  </data>
+  <data name="ToolTip_ContextSize" xml:space="preserve">
+    <value>为对话和回复预留的 Token 数，数值越大占用内存越多。</value>
+  </data>
+  <data name="ToolTip_CacheOffload" xml:space="preserve">
+    <value>将对话（键/值）缓存保留在显存中</value>
+  </data>
+  <data name="ToolTip_BackendReady" xml:space="preserve">
+    <value>后端环境已安装，可以使用。</value>
+  </data>
+  <data name="ToolTip_BackendNotInstalled" xml:space="preserve">
+    <value>此设备支持该后端，但尚未安装。可在“管理环境”中安装，或在首次加载使用该后端的模型时安装。</value>
+  </data>
+  <data name="ToolTip_BackendUnsupported" xml:space="preserve">
+    <value>此后端不适用于此设备。</value>
+  </data>
+  <data name="ToolTip_MemoryMode_StableDiffusionCpp_High" xml:space="preserve">
+    <value>将所有权重保留在 GPU 上。</value>
+  </data>
+  <data name="ToolTip_MemoryMode_StableDiffusionCpp_Medium" xml:space="preserve">
+    <value>将权重卸载到 CPU 内存，需要时再移至 GPU。</value>
+  </data>
+  <data name="ToolTip_MemoryMode_StableDiffusionCpp_Low" xml:space="preserve">
+    <value>将扩散权重卸载到 CPU 内存，将 VAE、文本编码器及其他部分卸载到磁盘，需要时再加载。</value>
+  </data>
+  <data name="ToolTip_MemoryMode_StableDiffusionCpp_Balanced" xml:space="preserve">
+    <value>自动适配：自动放置权重以适应可用显存。</value>
+  </data>
+  <data name="ToolTip_MemoryMode_AudioCpp_High" xml:space="preserve">
+    <value>将整个模型保持加载在 GPU 上。</value>
+  </data>
+  <data name="ToolTip_MemoryMode_AudioCpp_Medium" xml:space="preserve">
+    <value>启用内存节省功能以减少显存占用。</value>
+  </data>
+  <data name="ToolTip_MemoryMode_AudioCpp_Low" xml:space="preserve">
+    <value>启用内存节省功能以减少显存占用。</value>
+  </data>
+  <data name="ToolTip_MemoryMode_AudioCpp_Balanced" xml:space="preserve">
+    <value>启用内存节省功能以减少显存占用。</value>
+  </data>
+  <data name="ToolTip_MemoryMode_LlamaCpp_High" xml:space="preserve">
+    <value>在 GPU 上运行所有层，并将 KV 缓存保留在 GPU 上。</value>
+  </data>
+  <data name="ToolTip_MemoryMode_LlamaCpp_Medium" xml:space="preserve">
+    <value>在 GPU 上运行所有层，并将 KV 缓存保留在 CPU 内存中。在长上下文时可节省显存。</value>
+  </data>
+  <data name="ToolTip_MemoryMode_LlamaCpp_Low" xml:space="preserve">
+    <value>在 CPU 上运行所有层，并将 KV 缓存保留在 CPU 内存中。速度最慢。</value>
+  </data>
+  <data name="ToolTip_MemoryMode_LlamaCpp_Balanced" xml:space="preserve">
+    <value>使用执行选项中的“GPU 层数”和“GPU 缓存”设置值。</value>
+  </data>
+  <data name="ToolTip_MemoryMode_OnnxRuntime" xml:space="preserve">
+    <value>ONNX Runtime 自行管理内存，此设置无效。</value>
+  </data>
+  <data name="ToolTip_WeightType" xml:space="preserve">
+    <value>加载时将模型权重转换为此类型。较小的类型占用内存更少，但加载更慢，且会损失一定质量。“默认”保留模型自身的类型。</value>
+  </data>
+  <data name="ToolTip_ResetExecutionOptions" xml:space="preserve">
+    <value>将所有选项重置为默认值。保存后生效。</value>
+  </data>
+  <data name="ToolTip_EnvironmentSetupDontAskAgain" xml:space="preserve">
+    <value>启动时不再询问是否安装缺失的环境。必需的更新仍会显示。</value>
+  </data>
+  <data name="ToolTip_UpscaleSeed" xml:space="preserve">
+    <value>视频放大模型的噪声种子</value>
+  </data>
+  <data name="ToolTip_UpscaleTemporalChunkSize" xml:space="preserve">
+    <value>每个块处理的帧数，数值越小占用内存越少</value>
+  </data>
+  <data name="ToolTip_UpscaleTileSize" xml:space="preserve">
+    <value>分块大小（像素），分块越小占用内存越少，0 表示使用默认值</value>
+  </data>
+  <data name="ToolTip_UpscaleWindowSize" xml:space="preserve">
+    <value>参考帧的间隔，窗口为 16 时使用第 0、15、30 帧，依此类推，最后一帧始终包含在内</value>
+  </data>
+  <data name="ToolTip_HistoryFilterAudio" xml:space="preserve">
+    <value>筛选音频</value>
+  </data>
+  <data name="ToolTip_HistoryFilterClear" xml:space="preserve">
+    <value>清除筛选</value>
+  </data>
+  <data name="ToolTip_HistoryFilterImage" xml:space="preserve">
+    <value>筛选图像</value>
+  </data>
+  <data name="ToolTip_HistoryFilterText" xml:space="preserve">
+    <value>筛选文本</value>
+  </data>
+  <data name="ToolTip_HistoryFilterVideo" xml:space="preserve">
+    <value>筛选视频</value>
+  </data>
+  <data name="ToolTip_AudioTimeline_SaveAudio" xml:space="preserve">
+    <value>保存音频</value>
+  </data>
+  <data name="ToolTip_AudioTimeline_SaveVideo" xml:space="preserve">
+    <value>保存带音频的参考视频</value>
+  </data>
+  <data name="ToolTip_AudioTimeline_ReferenceRemove" xml:space="preserve">
+    <value>移除参考视频</value>
+  </data>
+  <data name="ToolTip_AudioTimeline_ClipMove" xml:space="preserve">
+    <value>将片段移到播放头</value>
+  </data>
+  <data name="ToolTip_AudioTimeline_ClipTrimStart" xml:space="preserve">
+    <value>将片段开头裁剪到播放头</value>
+  </data>
+  <data name="ToolTip_AudioTimeline_ClipTrimEnd" xml:space="preserve">
+    <value>将片段结尾裁剪到播放头</value>
+  </data>
+  <data name="ToolTip_AudioTimeline_ClipSplit" xml:space="preserve">
+    <value>在播放头处分割片段</value>
+  </data>
+  <data name="ToolTip_AudioTimeline_ClipRestore" xml:space="preserve">
+    <value>恢复已裁剪的片段</value>
+  </data>
+  <data name="ToolTip_AudioTimeline_ClipCopy" xml:space="preserve">
+    <value>复制片段</value>
+  </data>
+  <data name="ToolTip_AudioTimeline_ClipRemove" xml:space="preserve">
+    <value>移除片段</value>
+  </data>
+  <data name="ToolTip_VideoTimeline_ReferenceRemove" xml:space="preserve">
+    <value>移除参考音频</value>
+  </data>
+  <data name="ToolTip_GuidanceImage" xml:space="preserve">
+    <value>编辑图像和参考图像的图像引导系数，0 表示使用模型默认值</value>
+  </data>
+  <data name="ToolTip_ShiftedTimestep" xml:space="preserve">
+    <value>蒸馏时间步模型使用的偏移时间步，0 表示禁用</value>
+  </data>
+  <data name="ToolTip_Sigmas" xml:space="preserve">
+    <value>自定义 sigma 调度，以逗号分隔、以 0 结尾的降序列表，例如 14.61, 7.8, 3.5, 0。将替代调度器和步数</value>
+  </data>
+  <data name="ToolTip_SkipLayers" xml:space="preserve">
+    <value>跳过层引导，以逗号分隔的层列表（如 7, 8, 9），在步数的起始与结束比例之间应用。缩放为 0 时禁用</value>
+  </data>
+  <data name="ToolTip_SamplerArgs" xml:space="preserve">
+    <value>以 key=value 形式传递给 stable-diffusion.cpp 的额外采样器参数</value>
+  </data>
+  <data name="ToolTip_ClipSkip" xml:space="preserve">
+    <value>要跳过的 CLIP 文本编码器末尾层数，0 表示使用模型默认值</value>
+  </data>
+  <data name="ToolTip_MoeBoundary" xml:space="preserve">
+    <value>采样从高噪声模型切换到低噪声模型的位置（0 到 1 之间），0 表示使用默认值 0.875</value>
+  </data>
+  <data name="ToolTip_SeamlessTiling" xml:space="preserve">
+    <value>让图像在边缘处环绕，使结果在该方向上可无缝平铺</value>
+  </data>
+  <data name="ToolTip_LiveStart" xml:space="preserve">
+    <value>实时转录麦克风语音，说话时即显示文本。</value>
+  </data>
+  <data name="ToolTip_LiveStop" xml:space="preserve">
+    <value>停止聆听并完成转录。</value>
+  </data>
+  <data name="ToolTip_FrameRate_Fixed" xml:space="preserve">
+    <value>此模型以固定帧率生成</value>
+  </data>
+  <data name="ToolTip_CacheMode" xml:space="preserve">
+    <value>在采样步骤之间复用结果以加快生成。EasyCache、DBCache、TaylorSeer 和 Cache-DiT 适用于 DiT 模型，UCache 适用于 UNet 模型，Spectrum 两者皆适用</value>
+  </data>
+  <data name="ToolTip_CacheRange" xml:space="preserve">
+    <value>允许使用缓存的采样步骤范围</value>
+  </data>
+  <data name="ToolTip_CacheThreshold" xml:space="preserve">
+    <value>允许变化多少之后才重新计算某一步，值越高越快但质量越低，0 表示使用默认值</value>
+  </data>
+  <data name="ToolTip_CacheWarmupSteps" xml:space="preserve">
+    <value>缓存开始前始终执行的步数，0 表示使用默认值</value>
+  </data>
+  <data name="ToolTip_FirstRunModelFolder" xml:space="preserve">
+    <value>模型会下载到您所选位置下的 Models 文件夹中，请选择可用空间充足的驱动器。</value>
+  </data>
+  <data name="ToolTip_FrameChunk" xml:space="preserve">
+    <value>分块生成长视频，每块从上一块的最后一帧继续。长度不再受限于单次生成，块越小占用内存越少</value>
+  </data>
+  <data name="ToolTip_FrameCount_Frames" xml:space="preserve">
+    <value>输入帧数长度</value>
+  </data>
+  <data name="ToolTip_FrameCount_Seconds" xml:space="preserve">
+    <value>输入秒数长度</value>
+  </data>
+  <data name="ToolTip_McpEnable" xml:space="preserve">
+    <value>启动此服务器，并在聊天时提供其工具。</value>
+  </data>
+  <data name="ToolTip_McpIconCode" xml:space="preserve">
+    <value>任意 Font Awesome 图标的代码，例如 f1e6。</value>
+  </data>
+  <data name="ToolTip_McpImport" xml:space="preserve">
+    <value>从配置片段或其他 MCP 应用程序的配置文件中添加服务器。</value>
+  </data>
+  <data name="ToolTip_McpReconnect" xml:space="preserve">
+    <value>重启服务器并重新连接。</value>
+  </data>
+  <data name="ToolTip_McpTest" xml:space="preserve">
+    <value>启动一次服务器并列出其工具。</value>
+  </data>
+  <data name="ToolTip_ModelSearchFolders" xml:space="preserve">
+    <value>使用 ComfyUI 等其他应用程序已有的模型文件，无需复制或重新下载。</value>
+  </data>
+  <data name="ToolTip_NavigateBack" xml:space="preserve">
+    <value>后退（Alt+左箭头）</value>
+  </data>
+  <data name="ToolTip_NavigateForward" xml:space="preserve">
+    <value>前进（Alt+右箭头）</value>
+  </data>
+  <data name="ToolTip_QueueAll" xml:space="preserve">
+    <value>将列表中所有未安装的模型加入队列</value>
+  </data>
+  <data name="ToolTip_RescanModels" xml:space="preserve">
+    <value>在您自行将文件复制到模型文件夹或搜索文件夹后，重新查找模型文件。</value>
+  </data>
+  <data name="ToolTip_SelectAudioRange" xml:space="preserve">
+    <value>选择要重新生成的源音频范围</value>
+  </data>
+  <data name="ToolTip_TrackName" xml:space="preserve">
+    <value>任务所处理的轨道，例如人声、吉他、鼓、贝斯或钢琴</value>
+  </data>
+</root>

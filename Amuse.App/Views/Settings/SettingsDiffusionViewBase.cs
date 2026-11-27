@@ -23,9 +23,9 @@ namespace Amuse.App.Views
         private readonly MediaType _mediaType;
         private DiffusionModel _selectedModel;
         private string _filterText;
-        private string _filterBackend;
-        private string _filterPipeline;
-        private string _filterStatus;
+        private FilterOption _filterBackend;
+        private FilterOption _filterPipeline;
+        private FilterOption _filterStatus;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="SettingsDiffusionViewBase"/> class.
@@ -36,13 +36,13 @@ namespace Amuse.App.Views
         /// <param name="downloadService">The download service.</param>
         /// <param name="historyService">The history service.</param>
         /// <param name="logger">The logger.</param>
-        protected SettingsDiffusionViewBase(MediaType mediaType, Settings settings, NavigationService navigationService, IModelDownloadService downloadService, IHistoryService historyService, ILogger logger)
-            : base(settings, navigationService, downloadService, historyService, logger)
+        protected SettingsDiffusionViewBase(MediaType mediaType, Settings settings, NavigationService navigationService, IModelDownloadService downloadService, IModelAccessService modelAccessService, IHistoryService historyService, ILogger logger)
+            : base(settings, navigationService, downloadService, modelAccessService, historyService, logger)
         {
             _mediaType = mediaType;
-            FilterBackends = ["Show All", .. Enum.GetNames<BackendType>()];
-            FilterStatuses = ["Show All", "Installed", "Unknown"];
-            FilterPipelines = ["Show All", .. settings.DiffusionModels.Where(x => x.MediaType == mediaType).Select(x => x.Pipeline.ToString()).Distinct().Order()];
+            FilterBackends = [FilterOption.ShowAll(), .. Enum.GetValues<BackendType>().Where(x => x != BackendType.HuggingFace).Select(x => FilterOption.FromEnum(x))];
+            FilterStatuses = FilterOption.ModelStatuses();
+            FilterPipelines = [FilterOption.ShowAll(), .. settings.DiffusionModels.Where(x => x.MediaType == mediaType).Select(x => x.Pipeline.ToString()).Distinct().Order().Select(FilterOption.FromValue)];
             FilterBackend = FilterBackends[0];
             FilterStatus = FilterStatuses[0];
             FilterPipeline = FilterPipelines[0];
@@ -139,17 +139,17 @@ namespace Amuse.App.Views
         /// <summary>
         /// Gets the filter backends.
         /// </summary>
-        public string[] FilterBackends { get; }
+        public FilterOption[] FilterBackends { get; }
 
         /// <summary>
         /// Gets the filter pipelines.
         /// </summary>
-        public string[] FilterPipelines { get; }
+        public FilterOption[] FilterPipelines { get; }
 
         /// <summary>
         /// Gets the filter statuses.
         /// </summary>
-        public string[] FilterStatuses { get; }
+        public FilterOption[] FilterStatuses { get; }
 
         /// <summary>
         /// Gets or sets the selected model.
@@ -172,7 +172,7 @@ namespace Amuse.App.Views
         /// <summary>
         /// Gets or sets the filter backend.
         /// </summary>
-        public string FilterBackend
+        public FilterOption FilterBackend
         {
             get { return _filterBackend; }
             set { SetProperty(ref _filterBackend, value); ModelCollection?.Refresh(); }
@@ -181,7 +181,7 @@ namespace Amuse.App.Views
         /// <summary>
         /// Gets or sets the filter pipeline.
         /// </summary>
-        public string FilterPipeline
+        public FilterOption FilterPipeline
         {
             get { return _filterPipeline; }
             set { SetProperty(ref _filterPipeline, value); ModelCollection?.Refresh(); }
@@ -190,7 +190,7 @@ namespace Amuse.App.Views
         /// <summary>
         /// Gets or sets the filter status.
         /// </summary>
-        public string FilterStatus
+        public FilterOption FilterStatus
         {
             get { return _filterStatus; }
             set { SetProperty(ref _filterStatus, value); ModelCollection?.Refresh(); }
@@ -221,27 +221,27 @@ namespace Amuse.App.Views
                 if (model.MediaType != _mediaType)
                     return false;
 
-                if (model.Status != ModelStatusType.Installed && model.Status != ModelStatusType.Unknown)
+                if (model.Id <= Utils.FixedIdRange && model.Status != ModelStatusType.Installed && model.Status != ModelStatusType.Unknown)
                     return false;
 
                 var isvalid = true;
-                if (!string.IsNullOrEmpty(_filterBackend))
+                if (!string.IsNullOrEmpty(_filterBackend?.Value))
                 {
-                    if (Enum.TryParse<BackendType>(_filterBackend, out var backendType))
+                    if (Enum.TryParse<BackendType>(_filterBackend.Value, out var backendType))
                     {
                         isvalid = isvalid && model.Backend == backendType;
                     }
                 }
-                if (!string.IsNullOrEmpty(_filterStatus))
+                if (!string.IsNullOrEmpty(_filterStatus?.Value))
                 {
-                    if (Enum.TryParse<ModelStatusType>(_filterStatus, out var statusType))
+                    if (Enum.TryParse<ModelStatusType>(_filterStatus.Value, out var statusType))
                     {
                         isvalid = isvalid && model.Status == statusType;
                     }
                 }
-                if (!string.IsNullOrEmpty(_filterPipeline))
+                if (!string.IsNullOrEmpty(_filterPipeline?.Value))
                 {
-                    isvalid = isvalid && (_filterPipeline == FilterPipelines[0] || model.Pipeline.ToString() == _filterPipeline);
+                    isvalid = isvalid && model.Pipeline.ToString() == _filterPipeline.Value;
                 }
                 if (!string.IsNullOrEmpty(_filterText))
                 {
@@ -285,7 +285,7 @@ namespace Amuse.App.Views
         private async Task AddModelWizardAsync()
         {
             var dialog = DialogService.GetDialog<DiffusionModelWizardDialog>();
-            if (await dialog.ShowDialogAsync())
+            if (await dialog.AddAsync(_mediaType))
             {
                 await SaveAsync();
                 SelectedModel = dialog.SelectedTemplate;
@@ -347,7 +347,7 @@ namespace Amuse.App.Views
                 var modelImports = await Json.LoadArrayAsync<DiffusionModel>(importPath);
                 if (modelImports.IsNullOrEmpty())
                 {
-                    await DialogService.ShowMessageAsync(AppErrors.ImportErrorTitle, AppErrors.ImportModel);
+                    await DialogService.ShowErrorAsync(AppErrors.ImportErrorTitle, AppErrors.ImportModelFailed);
                     return;
                 }
 
@@ -390,6 +390,10 @@ namespace Amuse.App.Views
         {
             if (await DialogService.ShowMessageAsync(AppDefault.DeleteModel, AppDefault.DeleteModelMessage, TensorStack.WPF.Dialogs.MessageDialogType.YesNo, TensorStack.WPF.Dialogs.MessageBoxIconType.Warning, TensorStack.WPF.Dialogs.MessageBoxStyleType.Danger))
             {
+                if (!await ModelAccessService.RequestModelReleaseAsync(_selectedModel))
+                    return;
+
+                await DownloadService.CancelAsync(_selectedModel);
                 await Task.Run(() => _selectedModel.Delete(Settings));
                 _selectedModel.Status = ModelStatusType.Available;
                 await SaveAsync();
@@ -402,7 +406,7 @@ namespace Amuse.App.Views
         /// </summary>
         private async Task DownloadModelAsync()
         {
-            await DownloadService.QueueAsync(_selectedModel);
+            await DownloadService.DownloadAsync(_selectedModel);
         }
 
 

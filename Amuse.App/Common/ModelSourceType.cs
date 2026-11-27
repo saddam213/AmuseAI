@@ -15,6 +15,9 @@ namespace Amuse.App.Common
         LocalCheckpoint = 2,
 
         [Display(Name = "ModelSourceType3", Description = "ModelSourceType3_Description", ResourceType = typeof(AppEnums))]
-        Checkpoint = 3
+        Checkpoint = 3,
+
+        [Display(Name = "ModelSourceType4", Description = "ModelSourceType4_Description", ResourceType = typeof(AppEnums))]
+        LocalFileVision = 4
     }
 }

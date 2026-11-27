@@ -1,7 +1,5 @@
-﻿using Amuse.App.Common;
-using Serilog;
+﻿using Serilog;
 using System;
-using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Reflection;
@@ -54,7 +52,8 @@ namespace Amuse.App
                 if (File.Exists(appSettingsFile))
                     BackupFile(appSettingsFile);
 
-                File.Copy(appDefaultsFile, appSettingsFile, true);
+                var defaultsFile = File.Exists(appDefaultsFile) ? appDefaultsFile : appDefaultsBakupFile;
+                File.Copy(defaultsFile, appSettingsFile, true);
                 return LoadSettingsFile(appSettingsFile);
             }
             finally
@@ -143,9 +142,6 @@ namespace Amuse.App
                                 if (environment.Id == 2000)
                                     continue;
 
-                                if (environment.Backend == TensorStack.Common.BackendType.PyTorch)
-                                    environment.Backend = TensorStack.Common.BackendType.HuggingFace;
-
                                 // Add back any Environments the user has created
                                 if (!defaultSettings.Environments.Any(x => x.Id == environment.Id))
                                     defaultSettings.Environments.Add(environment);
@@ -156,11 +152,13 @@ namespace Amuse.App
                                 if (defaultEnvironment == null)
                                     continue;
 
-                                if (defaultEnvironment.Version > environment.Version)
+                                if (defaultEnvironment.Version != environment.Version)
                                 {
-                                    defaultEnvironment.Status = int.IsEvenInteger(defaultEnvironment.Version)
-                                        ? BackendStatus.Update
-                                        : BackendStatus.Rebuild;
+                                    defaultEnvironment.Status = BackendStatus.Update;
+                                }
+                                else if (environment.Status == BackendStatus.Update)
+                                {
+                                    defaultEnvironment.Status = environment.Status;
                                 }
 
                                 // Merge any user settings
@@ -192,24 +190,18 @@ namespace Amuse.App
                     {
                         foreach (var upscaleModel in currentSettings.UpscaleModels.Where(x => x.Id > 1000))
                         {
-                            if (upscaleModel.Backend == TensorStack.Common.BackendType.PyTorch)
-                                upscaleModel.Backend = TensorStack.Common.BackendType.HuggingFace;
-
                             // Add back any upscale Model the user has created
                             defaultSettings.UpscaleModels.Add(upscaleModel);
                         }
                     }
                     if (property.Name == nameof(defaultSettings.DiffusionModels))
                     {
-                        var migrateDiffusionModels = new List<DiffusionModel>();
                         foreach (var diffusionModel in currentSettings.DiffusionModels)
                         {
                             if (diffusionModel.Id > 1000)
                             {
                                 if (diffusionModel.Backend == TensorStack.Common.BackendType.OnnxRuntime)
                                     continue;
-                                if (diffusionModel.Backend == TensorStack.Common.BackendType.PyTorch)
-                                    diffusionModel.Backend = TensorStack.Common.BackendType.HuggingFace;
 
                                 if (!defaultSettings.DiffusionModels.Any(x => x.Id == diffusionModel.Id))
                                     defaultSettings.DiffusionModels.Add(diffusionModel);
@@ -218,40 +210,22 @@ namespace Amuse.App
                             {
                                 var defaultDiffusionModel = defaultSettings.DiffusionModels.FirstOrDefault(x => x.Id == diffusionModel.Id);
                                 if (defaultDiffusionModel == null)
-                                {
-                                    // Installed built-in HuggingFace models become user models
-                                    if (IsMigrateHuggingFace(diffusionModel.Backend, diffusionModel.Status))
-                                        migrateDiffusionModels.Add(diffusionModel);
-
                                     continue;
-                                }
 
                                 // Merge any user settings
                                 defaultDiffusionModel.Status = diffusionModel.Status;
                                 defaultDiffusionModel.UserMemoryMode = diffusionModel.UserMemoryMode;
                                 defaultDiffusionModel.UserExecutionOptions = diffusionModel.UserExecutionOptions;
+                                defaultDiffusionModel.CurrentCheckpointType = diffusionModel.CurrentCheckpointType;
                             }
-                        }
-
-                        // Migrate HuggingFace
-                        foreach (var diffusionModel in migrateDiffusionModels)
-                        {
-                            diffusionModel.Id = defaultSettings.DiffusionModels.NextId();
-                            diffusionModel.Name = GetLegacyName(diffusionModel.Name);
-                            diffusionModel.Backend = TensorStack.Common.BackendType.HuggingFace;
-                            defaultSettings.DiffusionModels.Add(diffusionModel);
                         }
                     }
                     if (property.Name == nameof(defaultSettings.LanguageModels))
                     {
-                        var migrateLanguageModels = new List<LanguageModel>();
                         foreach (var languageModel in currentSettings.LanguageModels)
                         {
                             if (languageModel.Id > 1000)
                             {
-                                if (languageModel.Backend == TensorStack.Common.BackendType.PyTorch)
-                                    languageModel.Backend = TensorStack.Common.BackendType.HuggingFace;
-
                                 if (!defaultSettings.LanguageModels.Any(x => x.Id == languageModel.Id))
                                     defaultSettings.LanguageModels.Add(languageModel);
                             }
@@ -259,28 +233,14 @@ namespace Amuse.App
                             {
                                 var defaultLanguageModel = defaultSettings.LanguageModels.FirstOrDefault(x => x.Id == languageModel.Id);
                                 if (defaultLanguageModel == null)
-                                {
-                                    // Installed built-in HuggingFace models become user models
-                                    if (IsMigrateHuggingFace(languageModel.Backend, languageModel.Status))
-                                        migrateLanguageModels.Add(languageModel);
-
                                     continue;
-                                }
 
                                 // Merge any user settings
                                 defaultLanguageModel.Status = languageModel.Status;
                                 defaultLanguageModel.UserMemoryMode = languageModel.UserMemoryMode;
                                 defaultLanguageModel.UserExecutionOptions = languageModel.UserExecutionOptions;
+                                defaultLanguageModel.CurrentCheckpointType = languageModel.CurrentCheckpointType;
                             }
-                        }
-
-                        // Migrate HuggingFace
-                        foreach (var languageModel in migrateLanguageModels)
-                        {
-                            languageModel.Id = defaultSettings.LanguageModels.NextId();
-                            languageModel.Name = GetLegacyName(languageModel.Name);
-                            languageModel.Backend = TensorStack.Common.BackendType.HuggingFace;
-                            defaultSettings.LanguageModels.Add(languageModel);
                         }
                     }
                     if (property.Name == nameof(defaultSettings.LoraAdapterModels))
@@ -304,9 +264,6 @@ namespace Amuse.App
                     {
                         foreach (var extractModel in currentSettings.ExtractModels.Where(x => x.Id > 1000))
                         {
-                            if (extractModel.Backend == TensorStack.Common.BackendType.PyTorch)
-                                extractModel.Backend = TensorStack.Common.BackendType.HuggingFace;
-
                             // Add back any extract Model the user has created
                             defaultSettings.ExtractModels.Add(extractModel);
                         }
@@ -325,40 +282,13 @@ namespace Amuse.App
         }
 
 
-        /// <summary>
-        /// Determines whether a built-in model removed from the defaults should be migrated to a user model.
-        /// </summary>
-        /// <param name="backend">The model backend.</param>
-        /// <param name="status">The model status.</param>
-        private static bool IsMigrateHuggingFace(BackendType backend, ModelStatusType status)
-        {
-            if (backend != BackendType.HuggingFace && backend != BackendType.PyTorch)
-                return false;
-
-            return status == ModelStatusType.Installed;
-        }
-
-
-        /// <summary>
-        /// Gets the name of a migrated model, marked as legacy.
-        /// </summary>
-        /// <param name="name">The model name.</param>
-        private static string GetLegacyName(string name)
-        {
-            const string legacySuffix = " (Legacy)";
-            if (name.EndsWith(legacySuffix, StringComparison.OrdinalIgnoreCase))
-                return name;
-
-            return name + legacySuffix;
-        }
-
-
         private static Settings LoadSettingsFile(string filePath)
         {
             FileLock.Wait();
             try
             {
-                return Json.Load<Settings>(filePath);
+                return Json.Load<Settings>(filePath)
+                    ?? throw new InvalidDataException($"Settings file could not be read, File: {filePath}");
             }
             finally
             {

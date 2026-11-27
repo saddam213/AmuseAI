@@ -1,6 +1,8 @@
 ﻿// Copyright (c) Adam Clark. All rights reserved.
 // Licensed under the Apache 2.0 License.
 using Amuse.App.Common;
+using Amuse.App.Resources;
+using Amuse.App.Services;
 using Amuse.Common;
 using System;
 using System.Collections.Generic;
@@ -19,27 +21,37 @@ namespace Amuse.App.Dialogs
     /// </summary>
     public partial class LanguageModelWizardDialog : DialogControl
     {
-        private BackendType _selectedBackend;
+        private readonly IModelDownloadService _downloadService;
+        private readonly BackendType _backend;
         private WizardItemModel _selectedPipelineOption;
         private WizardOptionModel _selectedTemplateOption;
         private LanguageModel _selectedTemplate;
         private ModelSourceType _selectedSource;
-        private ModelSourceType[] _modelSources;
+        private bool _hasVisionProjector;
         private string _selectedFile;
-        private string _selectedPath;
+        private string _selectedProjectorFile;
         private string _selectedName;
-        private string _selectedVariant;
         private string _fileFilter;
+        private DataType[] _checkpointTypes;
+        private DataType? _selectedCheckpointType;
 
-        public LanguageModelWizardDialog(Settings settings)
+        /// <summary>
+        /// Initializes a new instance of the <see cref="LanguageModelWizardDialog"/> class.
+        /// </summary>
+        /// <param name="settings">The settings.</param>
+        /// <param name="downloadService">The model download service.</param>
+        public LanguageModelWizardDialog(Settings settings, IModelDownloadService downloadService)
         {
             Settings = settings;
+            _downloadService = downloadService;
+            _backend = BackendType.LlamaCpp;
             PipelineOptions = new ObservableCollection<WizardItemModel>();
-            SelectedBackend = BackendType.HuggingFace;
-            Backends = [BackendType.HuggingFace, BackendType.LlamaCpp];
             Errors = new ObservableCollection<string>();
             CancelCommand = new AsyncRelayCommand(CancelAsync);
             SaveCommand = new AsyncRelayCommand(SaveAsync, CanExecuteSave);
+            CheckpointTypes = [DataType.Default, .. _backend.GetDataTypes()];
+            FileFilter = $"{AppDefault.ModelFiles}|*.gguf;";
+            FilterPipelineOptions();
             InitializeComponent();
         }
 
@@ -48,19 +60,6 @@ namespace Amuse.App.Dialogs
         public AsyncRelayCommand CancelCommand { get; }
         public ObservableCollection<string> Errors { get; }
         public ObservableCollection<WizardItemModel> PipelineOptions { get; }
-        public BackendType[] Backends { get; }
-
-        public BackendType SelectedBackend
-        {
-            get { return _selectedBackend; }
-            set { SetProperty(ref _selectedBackend, value); SetModelSources(); FilterPipelineOptions(); SetFileFilter(); }
-        }
-
-        public ModelSourceType[] ModelSources
-        {
-            get { return _modelSources; }
-            set { SetProperty(ref _modelSources, value); }
-        }
 
         public WizardItemModel SelectedPipelineOption
         {
@@ -77,7 +76,6 @@ namespace Amuse.App.Dialogs
             get { return _selectedTemplateOption; }
             set
             {
-                Reset();
                 SetProperty(ref _selectedTemplateOption, value);
                 SelectedTemplate = GetTemplate(_selectedTemplateOption?.Template);
             }
@@ -86,25 +84,66 @@ namespace Amuse.App.Dialogs
         public LanguageModel SelectedTemplate
         {
             get { return _selectedTemplate; }
-            set { SetProperty(ref _selectedTemplate, value); }
+            set
+            {
+                SetProperty(ref _selectedTemplate, value);
+                HasVisionProjector = _selectedTemplate?.Checkpoint?.TextModel2 != null;
+                SelectedSource = ModelSourceType.LocalFile;
+            }
         }
 
         public ModelSourceType SelectedSource
         {
             get { return _selectedSource; }
-            set { SetProperty(ref _selectedSource, value); }
+            set
+            {
+                SetProperty(ref _selectedSource, value);
+                NotifyPropertyChanged(nameof(IsLocalFile));
+                NotifyPropertyChanged(nameof(IsLocalFileVision));
+                NotifyPropertyChanged(nameof(IsCustomCheckpoint));
+                NotifyPropertyChanged(nameof(IsModelFileVisible));
+            }
+        }
+
+        public bool IsLocalFile
+        {
+            get { return _selectedSource == ModelSourceType.LocalFile; }
+            set { if (value) SelectedSource = ModelSourceType.LocalFile; }
+        }
+
+        public bool IsLocalFileVision
+        {
+            get { return _selectedSource == ModelSourceType.LocalFileVision; }
+            set { if (value) SelectedSource = ModelSourceType.LocalFileVision; }
+        }
+
+        public bool IsCustomCheckpoint
+        {
+            get { return _selectedSource == ModelSourceType.Checkpoint; }
+            set { if (value) SelectedSource = ModelSourceType.Checkpoint; }
+        }
+
+        public bool IsModelFileVisible
+        {
+            get { return _selectedSource == ModelSourceType.LocalFile || _selectedSource == ModelSourceType.LocalFileVision; }
+        }
+
+        public bool HasVisionProjector
+        {
+            get { return _hasVisionProjector; }
+            set { SetProperty(ref _hasVisionProjector, value); }
         }
 
         public string SelectedFile
         {
             get { return _selectedFile; }
-            set { SetProperty(ref _selectedFile, value); SetModelName(); }
+            set { SetProperty(ref _selectedFile, value); SetModelName(); SetCheckpointType(value); }
         }
 
-        public string SelectedPath
+        public string SelectedProjectorFile
         {
-            get { return _selectedPath; }
-            set { SetProperty(ref _selectedPath, value); SetModelName(); }
+            get { return _selectedProjectorFile; }
+            set { SetProperty(ref _selectedProjectorFile, value); }
         }
 
         public string SelectedName
@@ -113,10 +152,19 @@ namespace Amuse.App.Dialogs
             set { SetProperty(ref _selectedName, value); }
         }
 
-        public string SelectedVariant
+        /// <summary>
+        /// Gets or sets the data types the backend can load.
+        /// </summary>
+        public DataType[] CheckpointTypes
         {
-            get { return _selectedVariant; }
-            set { SetProperty(ref _selectedVariant, value); }
+            get { return _checkpointTypes; }
+            set { SetProperty(ref _checkpointTypes, value); }
+        }
+
+        public DataType? SelectedCheckpointType
+        {
+            get { return _selectedCheckpointType; }
+            set { SetProperty(ref _selectedCheckpointType, value); }
         }
 
         public string FileFilter
@@ -126,47 +174,56 @@ namespace Amuse.App.Dialogs
         }
 
 
-        protected override Task SaveAsync()
+        /// <summary>
+        /// Adds the model from the selected template and files.
+        /// </summary>
+        protected override async Task SaveAsync()
         {
             _selectedTemplate.Name = _selectedName;
-            _selectedTemplate.Variant = _selectedVariant;
             _selectedTemplate.Status = ModelStatusType.Unknown;
 
-            if (_selectedSource == ModelSourceType.LocalFolder)
+            if (_selectedSource == ModelSourceType.LocalFile)
             {
-                if (_selectedTemplate.Checkpoint.TextModel != null)
-                {
-                    _selectedTemplate.Checkpoint.TextModel = new CheckpointComponent
-                    {
-                        Name = "TextModel",
-                        Path = _selectedPath,
-                        Type = CheckpointType.LocalFolder,
-                    };
-                }
-            }
-            else if (_selectedSource == ModelSourceType.LocalFile)
-            {
-                // A single model file, text only so the optional second file (multimodal projector) is not used
                 _selectedTemplate.ModelType = "Base";
                 _selectedTemplate.ProcessTypes = [ProcessType.TextToText];
                 _selectedTemplate.Checkpoint.TextModel2 = null;
                 _selectedTemplate.Checkpoint.TextModel = new CheckpointComponent
                 {
                     Name = "TextModel",
-                    Path = _selectedPath,
+                    Path = _selectedFile,
+                    Type = CheckpointType.LocalFile,
+                };
+            }
+            else if (_selectedSource == ModelSourceType.LocalFileVision)
+            {
+                _selectedTemplate.Checkpoint.TextModel = new CheckpointComponent
+                {
+                    Name = "TextModel",
+                    Path = _selectedFile,
+                    Type = CheckpointType.LocalFile,
+                };
+                _selectedTemplate.Checkpoint.TextModel2 = new CheckpointComponent
+                {
+                    Name = "TextModel2",
+                    Path = _selectedProjectorFile,
                     Type = CheckpointType.LocalFile,
                 };
             }
 
             _selectedTemplate.ModelParams = _selectedTemplateOption.ModelParams;
             _selectedTemplate.DefaultOptions.MaxLength = _selectedTemplateOption.ModelMaxLength;
-            _selectedTemplate.MemorySize = Utils.GetMemorySize(_selectedTemplate.ModelParams);
+            _selectedTemplate.Checkpoint.Type = _selectedCheckpointType.Value;
+            _selectedTemplate.Checkpoint.MemorySize = Utils.GetMemorySize(_selectedTemplate.ModelParams, _selectedCheckpointType.Value);
             _selectedTemplate.Initialize(Settings);
             Settings.LanguageModels.Add(_selectedTemplate);
-            return base.SaveAsync();
+            await _downloadService.PromptDownloadAsync(_selectedTemplate);
+            await base.SaveAsync();
         }
 
 
+        /// <summary>
+        /// Determines whether the model can be saved, listing the validation errors.
+        /// </summary>
         protected override bool CanExecuteSave()
         {
             Errors.Clear();
@@ -177,37 +234,28 @@ namespace Amuse.App.Dialogs
         }
 
 
+        /// <summary>
+        /// Cancels the dialog.
+        /// </summary>
         protected override Task CancelAsync()
         {
             return base.CancelAsync();
         }
 
 
+        /// <summary>
+        /// Closes the dialog.
+        /// </summary>
         protected override async Task CloseAsync()
         {
             await base.CloseAsync();
         }
 
 
-        private void Reset()
-        {
-            SelectedSource = _modelSources.First();
-        }
-
-
         /// <summary>
-        /// Sets the model sources of the backend, llama.cpp models are GGUF files while HuggingFace models are folders.
+        /// Gets a copy of the template with a new model id.
         /// </summary>
-        private void SetModelSources()
-        {
-            ModelSources = _selectedBackend == BackendType.LlamaCpp
-                ? [ModelSourceType.LocalFile, ModelSourceType.Checkpoint]
-                : [ModelSourceType.LocalFolder, ModelSourceType.Checkpoint];
-            SelectedPath = null;
-            SelectedSource = _modelSources.First();
-        }
-
-
+        /// <param name="name">The template name.</param>
         private LanguageModel GetTemplate(string name)
         {
             if (string.IsNullOrEmpty(name))
@@ -222,37 +270,37 @@ namespace Amuse.App.Dialogs
         }
 
 
+        /// <summary>
+        /// Fills the model name from the model file when no name is set.
+        /// </summary>
         private void SetModelName()
         {
-            if (string.IsNullOrEmpty(_selectedPath))
+            if (!string.IsNullOrEmpty(_selectedName) || string.IsNullOrEmpty(_selectedFile))
                 return;
 
-            if (_selectedSource == ModelSourceType.LocalFolder)
-            {
-                SelectedName = Path.GetFileName(_selectedPath);
-            }
-            else if (_selectedSource == ModelSourceType.LocalFile)
-            {
-                SelectedName = Path.GetFileNameWithoutExtension(_selectedPath);
-            }
+            SelectedName = Path.GetFileNameWithoutExtension(_selectedFile);
         }
 
 
-        private void SetFileFilter()
+        /// <summary>
+        /// Selects the data type the model file name suggests, keeping the selection when it does not suggest one the backend can load.
+        /// </summary>
+        /// <param name="fileName">The model file name.</param>
+        private void SetCheckpointType(string fileName)
         {
-            FileFilter = _selectedBackend switch
-            {
-                BackendType.OnnxRuntime => "Model Files|*.onnx;",
-                BackendType.LlamaCpp => "Model Files|*.gguf;",
-                _ => "Model Files|*.safetensors;*.gguf;"
-            };
+            var checkpointType = Utils.GetDataType(fileName);
+            if (checkpointType.HasValue && _checkpointTypes.Contains(checkpointType.Value))
+                SelectedCheckpointType = checkpointType;
         }
 
 
+        /// <summary>
+        /// Fills the pipelines of the backend.
+        /// </summary>
         private void FilterPipelineOptions()
         {
             PipelineOptions.Clear();
-            foreach (var pipelineOption in Settings.Templates.LanguageTemplateMap.Where(x => x.Backend == _selectedBackend))
+            foreach (var pipelineOption in Settings.Templates.LanguageTemplateMap.Where(x => x.Backend == _backend))
             {
                 PipelineOptions.Add(pipelineOption);
             }
@@ -260,44 +308,63 @@ namespace Amuse.App.Dialogs
         }
 
 
+        /// <summary>
+        /// Gets the validation errors of the current input.
+        /// </summary>
         private IEnumerable<string> GetValidationErrors()
         {
             if (_selectedPipelineOption == null)
-                yield return "Pipeline cannot be empty";
+                yield return AppErrors.ValidationPipelineEmpty;
 
             if (_selectedTemplateOption == null)
-                yield return "Type cannot be empty";
+                yield return AppErrors.ValidationTypeEmpty;
 
-            // Name
+            if (_selectedCheckpointType is null)
+                yield return AppErrors.ValidationQuantTypeEmpty;
+
             if (string.IsNullOrWhiteSpace(_selectedName))
-                yield return "Model name cannot be empty";
+                yield return AppErrors.ValidationModelNameEmpty;
             if (Settings.LanguageModels.Any(x => x.Name.Equals(_selectedName, StringComparison.OrdinalIgnoreCase)))
-                yield return $"Model with name '{_selectedName}' already exists";
+                yield return string.Format(AppErrors.ValidationModelNameExists, _selectedName);
 
-            if (_selectedSource == ModelSourceType.LocalFolder)
+            if (_selectedSource == ModelSourceType.LocalFile || _selectedSource == ModelSourceType.LocalFileVision)
             {
-                if (string.IsNullOrEmpty(_selectedPath))
-                    yield return "Model folder name cannot be empty";
+                if (string.IsNullOrEmpty(_selectedFile))
+                    yield return AppErrors.ValidationModelFileNameEmpty;
+                else if (!File.Exists(_selectedFile))
+                    yield return AppErrors.ValidationModelFileNotFound;
             }
-            else if (_selectedSource == ModelSourceType.LocalFile)
+
+            if (_selectedSource == ModelSourceType.LocalFileVision)
             {
-                if (string.IsNullOrEmpty(_selectedPath))
-                    yield return "Model file name cannot be empty";
-                else if (!File.Exists(_selectedPath))
-                    yield return "Model file not found";
+                if (string.IsNullOrEmpty(_selectedProjectorFile))
+                    yield return $"{AppDefault.VisionProjector}: {AppErrors.ValidationModelFileNameEmpty}";
+                else if (!File.Exists(_selectedProjectorFile))
+                    yield return $"{AppDefault.VisionProjector}: {AppErrors.ValidationModelFileNotFound}";
             }
             else if (_selectedSource == ModelSourceType.Checkpoint)
             {
-                // Checkpoint
                 if (_selectedTemplate?.Checkpoint != null)
                 {
                     foreach (var checkpoint in _selectedTemplate.Checkpoint.GetComponents())
                     {
                         if (!checkpoint.IsValid(out var checkpointValidation))
                             yield return $"{checkpoint.Name} {checkpointValidation}";
+                        else if (_selectedTemplate.Backend == BackendType.LlamaCpp && IsMainFileMissing(checkpoint))
+                            yield return $"{checkpoint.Name} {AppErrors.ValidationMainFileEmpty}";
                     }
                 }
             }
+        }
+
+        /// <summary>
+        /// Determines whether a folder checkpoint has no main file, the file a backend that loads files is given.
+        /// </summary>
+        /// <param name="checkpoint">The checkpoint.</param>
+        private static bool IsMainFileMissing(CheckpointComponent checkpoint)
+        {
+            var isFolder = checkpoint.Type == CheckpointType.OnlineFolder || checkpoint.Type == CheckpointType.LocalFolder;
+            return isFolder && string.IsNullOrEmpty(checkpoint.MainFile);
         }
     }
 }

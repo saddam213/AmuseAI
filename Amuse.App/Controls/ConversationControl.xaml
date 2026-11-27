@@ -12,7 +12,7 @@
     <Controls:TextControlBase.InputBindings>
         <KeyBinding Modifiers="Ctrl" Key="X"  Command="{Binding ClearCommand, Mode=OneTime, RelativeSource={RelativeSource AncestorType={x:Type Controls:ConversationControl}}}" />
     </Controls:TextControlBase.InputBindings>
-    <Border DataContext="{Binding RelativeSource={RelativeSource AncestorType={x:Type Controls:ConversationControl}}, Mode=OneTime}" BorderBrush="{StaticResource ButtonBorderBrush}" Background="{StaticResource ContainerBackground}" BorderThickness="1" >
+    <Border DataContext="{Binding RelativeSource={RelativeSource AncestorType={x:Type Controls:ConversationControl}}, Mode=OneTime}" BorderBrush="{StaticResource ButtonBorderBrush}" Background="{StaticResource ContainerGlassBackground}" BorderThickness="1" >
         <DockPanel>
 
             <!--Controls-->

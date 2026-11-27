@@ -51,6 +51,36 @@
         </Style>
 
 
+        <Style x:Key="HistoryFilterPanel" TargetType="{x:Type UniformGrid}">
+            <Setter Property="DockPanel.Dock" Value="Left"/>
+            <Setter Property="Columns" Value="1"/>
+            <Setter Property="Width" Value="24"/>
+            <Setter Property="Height" Value="NaN"/>
+            <Setter Property="Margin" Value="0,2,4,0"/>
+            <Style.Triggers>
+                <DataTrigger Binding="{Binding Orientation, RelativeSource={RelativeSource AncestorType={x:Type local:HistoryControl}}}" Value="Vertical">
+                    <Setter Property="DockPanel.Dock" Value="Top"/>
+                    <Setter Property="Columns" Value="0"/>
+                    <Setter Property="Rows" Value="1"/>
+                    <Setter Property="Width" Value="NaN"/>
+                    <Setter Property="Height" Value="24"/>
+                    <Setter Property="Margin" Value="0,0,3,4"/>
+                </DataTrigger>
+            </Style.Triggers>
+        </Style>
+
+        <Style x:Key="HistoryFilterToggleButton" TargetType="{x:Type CommonControls:ToggleButton}">
+            <Setter Property="Margin" Value="0,0,0,0"/>
+            <Setter Property="SizeTrue" Value="12"/>
+            <Setter Property="SizeFalse" Value="12"/>
+            <Setter Property="IconStyleTrue" Value="Solid"/>
+            <Setter Property="IconStyleFalse" Value="Solid"/>
+            <Setter Property="ColorTrue" Value="{DynamicResource AccentColour2}"/>
+            <Setter Property="ColorFalse" Value="{StaticResource DefaultForeground}"/>
+            <Setter Property="ToolTipInitialDelay" Value="200"/>
+        </Style>
+
+
         <!--DiffusionHistory-->
         <DataTemplate  DataType="{x:Type Common:DiffusionHistory}">
             <Grid x:Name="Root" Background="Transparent" >
@@ -812,25 +842,47 @@
             VerticalAlignment="Center"
             Visibility="{Binding CollectionView, Converter={StaticResource EmptyToVisibilityConverter}}" />-->
 
-        <ScrollViewer 
-            PanningMode="HorizontalOnly"
-            PreviewMouseWheel="ScrollViewer_PreviewMouseWheel"
-            HorizontalScrollBarVisibility="{Binding HorizontalScrollBarVisibility}" 
-            VerticalScrollBarVisibility="{Binding VerticalScrollBarVisibility}" >
-            <ListBox x:Name="ListBoxControl" 
-                ItemsSource="{Binding CollectionView}" 
+        <DockPanel>
+
+            <!--Filter-->
+            <UniformGrid Style="{StaticResource HistoryFilterPanel}">
+                <CommonControls:ToggleButton Style="{StaticResource HistoryFilterToggleButton}" IconTrue="f03e" IconFalse="f03e" IsChecked="{Binding IsImageFilter, Mode=TwoWay}" ToolTipTrue="{CommonControls:Localize ToolTip_HistoryFilterImage}" ToolTipFalse="{CommonControls:Localize ToolTip_HistoryFilterImage}" />
+                <CommonControls:ToggleButton Style="{StaticResource HistoryFilterToggleButton}" IconTrue="f03d" IconFalse="f03d" IsChecked="{Binding IsVideoFilter, Mode=TwoWay}" ToolTipTrue="{CommonControls:Localize ToolTip_HistoryFilterVideo}" ToolTipFalse="{CommonControls:Localize ToolTip_HistoryFilterVideo}" />
+                <CommonControls:ToggleButton Style="{StaticResource HistoryFilterToggleButton}" IconTrue="f001" IconFalse="f001" IsChecked="{Binding IsAudioFilter, Mode=TwoWay}" ToolTipTrue="{CommonControls:Localize ToolTip_HistoryFilterAudio}" ToolTipFalse="{CommonControls:Localize ToolTip_HistoryFilterAudio}" />
+                <CommonControls:ToggleButton Style="{StaticResource HistoryFilterToggleButton}" IconTrue="f894" IconFalse="f894" IsChecked="{Binding IsTextFilter, Mode=TwoWay}" ToolTipTrue="{CommonControls:Localize ToolTip_HistoryFilterText}" ToolTipFalse="{CommonControls:Localize ToolTip_HistoryFilterText}" />
+                <CommonControls:IconButton Icon="f00d" IconSize="12" IconStyle="Solid" IconColor="{StaticResource DefaultForeground}" Command="{Binding ClearFilterCommand}" ToolTip="{CommonControls:Localize ToolTip_HistoryFilterClear}" ToolTipService.InitialShowDelay="200" />
+            </UniformGrid>
+
+            <!--Items-->
+            <ListBox x:Name="ListBoxControl"
+                ItemsSource="{Binding CollectionView}"
                 VerticalAlignment="Top"
                 SelectedItem="{Binding SelectedItem, Mode=TwoWay}"
                 ItemTemplate="{Binding ItemTemplate}"
                 ItemsPanel="{Binding ItemsPanelTemplate}"
                 IsSynchronizedWithCurrentItem="True"
-                ScrollViewer.VerticalScrollBarVisibility="Disabled" 
-                ScrollViewer.HorizontalScrollBarVisibility="Disabled"
-                RequestBringIntoView="ListBox_RequestBringIntoView" 
+                VirtualizingPanel.IsVirtualizing="True"
+                VirtualizingPanel.VirtualizationMode="Recycling"
+                VirtualizingPanel.ScrollUnit="Pixel"
+                VirtualizingPanel.CacheLengthUnit="Page"
+                VirtualizingPanel.CacheLength="1"
                 Background="{StaticResource TransparentBrush}"
                 BorderThickness="0,0,0,0"
                 Padding="0"
                 PreviewMouseMove="ListBoxPreviewMouseMove">
+                <ListBox.Template>
+                    <ControlTemplate TargetType="{x:Type ListBox}">
+                        <ScrollViewer
+                            Focusable="False"
+                            CanContentScroll="True"
+                            PanningMode="HorizontalOnly"
+                            PreviewMouseWheel="ScrollViewer_PreviewMouseWheel"
+                            HorizontalScrollBarVisibility="{Binding HorizontalScrollBarVisibility}"
+                            VerticalScrollBarVisibility="{Binding VerticalScrollBarVisibility}" >
+                            <ItemsPresenter RequestBringIntoView="ListBox_RequestBringIntoView" />
+                        </ScrollViewer>
+                    </ControlTemplate>
+                </ListBox.Template>
                 <ListBox.ItemContainerStyle>
                     <Style TargetType="{x:Type ListBoxItem}">
                         <Setter Property="Padding" Value="0"/>
@@ -851,6 +903,6 @@
                     </Style>
                 </ListBox.ItemContainerStyle>
             </ListBox>
-        </ScrollViewer>
+        </DockPanel>
     </Grid>
 </CommonControls:BaseControl>

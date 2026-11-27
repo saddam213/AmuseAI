@@ -28,8 +28,8 @@ namespace Amuse.App.Views
         /// <summary>
         /// Initializes a new instance of the <see cref="VideoInterpolateView"/> class.
         /// </summary>
-        public VideoInterpolateView(Settings settings, NavigationService navigationService, IModelDownloadService downloadService, IHistoryService historyService, IInterpolationService interpolationService, ILogger<VideoInterpolateView> logger)
-            : base(settings, navigationService, downloadService, historyService, logger)
+        public VideoInterpolateView(Settings settings, NavigationService navigationService, IModelDownloadService downloadService, IModelAccessService modelAccessService, IHistoryService historyService, IInterpolationService interpolationService, ILogger<VideoInterpolateView> logger)
+            : base(settings, navigationService, downloadService, modelAccessService, historyService, logger)
         {
             InterpolationService = interpolationService;
             InitializeComponent();
@@ -115,6 +115,9 @@ namespace Amuse.App.Views
             try
             {
                 Progress.Indeterminate($"{AppDefault.LoadingPipeline}...");
+
+                if (!await ModelAccessService.RequestInterpolationAccessAsync(CurrentPipeline))
+                    throw new OperationCanceledException();
 
                 await InterpolationService.LoadAsync(CurrentPipeline.Device);
 

@@ -18,8 +18,8 @@ namespace Amuse.App.Views
         /// <param name="downloadService">The download service.</param>
         /// <param name="historyService">The history service.</param>
         /// <param name="logger">The logger.</param>
-        public SettingsImageView(Settings settings, NavigationService navigationService, IModelDownloadService downloadService, IHistoryService historyService, ILogger<SettingsImageView> logger)
-            : base(MediaType.Image, settings, navigationService, downloadService, historyService, logger)
+        public SettingsImageView(Settings settings, NavigationService navigationService, IModelDownloadService downloadService, IModelAccessService modelAccessService, IHistoryService historyService, ILogger<SettingsImageView> logger)
+            : base(MediaType.Image, settings, navigationService, downloadService, modelAccessService, historyService, logger)
         {
             InitializeComponent();
         }

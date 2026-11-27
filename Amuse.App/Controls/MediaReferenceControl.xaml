@@ -8,9 +8,18 @@
              xmlns:CommonControls="clr-namespace:TensorStack.WPF.Controls;assembly=TensorStack.WPF">
     <DockPanel DataContext="{Binding RelativeSource={RelativeSource AncestorType={x:Type local:MediaReferenceControl}}}">
 
-        <!--Add/Clear-->
-        <UniformGrid Rows="1" Height="35" DockPanel.Dock="Bottom">
-            <Button Command="{Binding AddImageCommand}" ToolTip="{CommonControls:Localize ReferenceAddImage}" ToolTipService.ShowOnDisabled="True">
+        <!--Add/Capture/Clear, each add button is followed by its capture button-->
+        <Grid Height="35" DockPanel.Dock="Bottom">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="32" />
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="32" />
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="32" />
+                <ColumnDefinition Width="32" />
+            </Grid.ColumnDefinitions>
+            <Button Grid.Column="0" Command="{Binding AddImageCommand}" ToolTip="{CommonControls:Localize ReferenceAddImage}" ToolTipService.ShowOnDisabled="True">
                 <StackPanel Orientation="Horizontal">
                     <CommonControls:FontAwesome Icon="f03e"/>
                     <TextBlock FontSize="11" Opacity=".8" Margin="4,0,0,0" VerticalAlignment="Center">
@@ -18,7 +27,10 @@
                     </TextBlock>
                 </StackPanel>
             </Button>
-            <Button Command="{Binding AddVideoCommand}" ToolTip="{CommonControls:Localize ReferenceAddVideo}" ToolTipService.ShowOnDisabled="True">
+            <Button Grid.Column="1" Command="{Binding CaptureImageCommand}" ToolTip="{CommonControls:Localize Tooltip_CaptureImage}" ToolTipService.InitialShowDelay="200" ToolTipService.ShowOnDisabled="True">
+                <CommonControls:FontAwesome Icon="f030"/>
+            </Button>
+            <Button Grid.Column="2" Command="{Binding AddVideoCommand}" ToolTip="{CommonControls:Localize ReferenceAddVideo}" ToolTipService.ShowOnDisabled="True">
                 <StackPanel Orientation="Horizontal">
                     <CommonControls:FontAwesome Icon="f008"/>
                     <TextBlock FontSize="11" Opacity=".8" Margin="4,0,0,0" VerticalAlignment="Center">
@@ -26,7 +38,10 @@
                     </TextBlock>
                 </StackPanel>
             </Button>
-            <Button Command="{Binding AddAudioCommand}" ToolTip="{CommonControls:Localize ReferenceAddAudio}" ToolTipService.ShowOnDisabled="True">
+            <Button Grid.Column="3" Command="{Binding CaptureVideoCommand}" ToolTip="{CommonControls:Localize Tooltip_CaptureVideo}" ToolTipService.InitialShowDelay="200" ToolTipService.ShowOnDisabled="True">
+                <CommonControls:FontAwesome Icon="f03d"/>
+            </Button>
+            <Button Grid.Column="4" Command="{Binding AddAudioCommand}" ToolTip="{CommonControls:Localize ReferenceAddAudio}" ToolTipService.ShowOnDisabled="True">
                 <StackPanel Orientation="Horizontal">
                     <CommonControls:FontAwesome Icon="f001"/>
                     <TextBlock FontSize="11" Opacity=".8" Margin="4,0,0,0" VerticalAlignment="Center">
@@ -34,10 +49,13 @@
                     </TextBlock>
                 </StackPanel>
             </Button>
-            <Button Command="{Binding ClearCommand}" >
+            <Button Grid.Column="5" Command="{Binding CaptureAudioCommand}" ToolTip="{CommonControls:Localize Tooltip_CaptureAudio}" ToolTipService.InitialShowDelay="200" ToolTipService.ShowOnDisabled="True">
+                <CommonControls:FontAwesome Icon="f130"/>
+            </Button>
+            <Button Grid.Column="6" Command="{Binding ClearCommand}" >
                 <CommonControls:FontAwesome Icon="f00d" Color="{StaticResource DangerColour}"/>
             </Button>
-        </UniformGrid>
+        </Grid>
 
         <Grid Margin="0,0,0,6">
             <Grid.Resources>
@@ -81,6 +99,18 @@
                             <Grid DockPanel.Dock="Right" VerticalAlignment="Center" Margin="0,0,4,0" >
                                 <Button Command="{Binding RemoveCommand, RelativeSource={RelativeSource AncestorType={x:Type local:MediaReferenceControl}}}" CommandParameter="{Binding}">
                                     <CommonControls:FontAwesome Icon="f00d" Size="13" Color="{StaticResource DangerColour}" Opacity="1" Margin="2"/>
+                                </Button>
+                            </Grid>
+
+                            <!--Crop, a video or audio is cut to the clip the model uses-->
+                            <Grid DockPanel.Dock="Right" VerticalAlignment="Center" Margin="0,0,4,0" Visibility="{Binding MediaType, Converter={StaticResource EnumToVisibilityConverter}, ConverterParameter=Video}">
+                                <Button Command="{Binding CropCommand, RelativeSource={RelativeSource AncestorType={x:Type local:MediaReferenceControl}}}" CommandParameter="{Binding}" ToolTip="{CommonControls:Localize Tooltip_CropVideo}" ToolTipService.InitialShowDelay="200">
+                                    <CommonControls:FontAwesome Icon="f125" Size="13" Margin="2"/>
+                                </Button>
+                            </Grid>
+                            <Grid DockPanel.Dock="Right" VerticalAlignment="Center" Margin="0,0,4,0" Visibility="{Binding MediaType, Converter={StaticResource EnumToVisibilityConverter}, ConverterParameter=Audio}">
+                                <Button Command="{Binding CropCommand, RelativeSource={RelativeSource AncestorType={x:Type local:MediaReferenceControl}}}" CommandParameter="{Binding}" ToolTip="{CommonControls:Localize Tooltip_CropAudio}" ToolTipService.InitialShowDelay="200">
+                                    <CommonControls:FontAwesome Icon="f125" Size="13" Margin="2"/>
                                 </Button>
                             </Grid>
 

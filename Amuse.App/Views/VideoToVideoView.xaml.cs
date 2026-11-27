@@ -3,7 +3,6 @@ using Amuse.App.Resources;
 using Amuse.App.Services;
 using Microsoft.Extensions.Logging;
 using System;
-using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using System.Threading;
@@ -22,12 +21,13 @@ namespace Amuse.App.Views
     public partial class VideoToVideoView : ViewBaseDiffusion
     {
         private VideoInputStream _sourceVideo;
+        private VideoInputStream _extractVideo;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="VideoToVideoView"/> class.
         /// </summary>
-        public VideoToVideoView(Settings settings, NavigationService navigationService, IModelDownloadService downloadService, IGenerateService generateService, IExtractService extractService, IUpscaleService upscaleService, IHistoryService historyService, ILogger<VideoToVideoView> logger)
-            : base(settings, navigationService, downloadService, generateService, extractService, upscaleService, historyService, logger)
+        public VideoToVideoView(Settings settings, NavigationService navigationService, IModelDownloadService downloadService, IModelAccessService modelAccessService, IGenerateService generateService, ILanguageService languageService, IExtractService extractService, IUpscaleService upscaleService, IHistoryService historyService, ILogger<VideoToVideoView> logger)
+            : base(settings, navigationService, downloadService, modelAccessService, generateService, languageService, extractService, upscaleService, historyService, logger)
         {
             InitializeComponent();
         }
@@ -136,12 +136,12 @@ namespace Amuse.App.Views
 
             try
             {
-                var previousImage = ResultImage;
+                await ResultControl.ClearAsync();
                 Progress.Clear();
                 AutomationProgress.Clear();
                 Statistics.Clear();
-                ResultImage = default;
-                CompareImage = default;
+                ResultVideo = default;
+                CompareVideo = default;
                 Statistics.Start();
                 CancellationTokenSource = new CancellationTokenSource();
 
@@ -169,6 +169,7 @@ namespace Amuse.App.Views
                     ResultVideo = !AutomationOptions.IsHistoryEnabled
                         ? resultTensor
                         : await SaveHistoryAsync(automationJob.GenerateOptions, resultTensor);
+                    CompareVideo = _sourceVideo;
 
                     // Output
                     await automationJob.SaveAsync(ResultVideo);
@@ -202,6 +203,52 @@ namespace Amuse.App.Views
 
 
         /// <summary>
+        /// Unloads the pipeline
+        /// </summary>
+        protected override Task<bool> UnloadPipelineAsync()
+        {
+            _extractVideo = null;
+            return base.UnloadPipelineAsync();
+        }
+
+
+        /// <summary>
+        /// Called when SourceVideo changed, replaces the source with the extracted video when an extractor is loaded.
+        /// </summary>
+        /// <param name="sender">The sender.</param>
+        /// <param name="video">The video.</param>
+        protected async void OnSourceVideoChanged(object sender, VideoInputStream video)
+        {
+            try
+            {
+                if (CurrentPipeline?.ExtractModel == null)
+                    return;
+
+                IsViewBusy = true;
+                if (_sourceVideo == null || _extractVideo == _sourceVideo)
+                    return;
+
+                _extractVideo = await ExecuteVideoExtractAsync(_sourceVideo);
+                SourceVideo = _extractVideo;
+            }
+            catch (OperationCanceledException)
+            {
+                Logger.LogInformation("[VideoToVideo] [SourceVideoChanged] Extracting the source video cancelled");
+            }
+            catch (Exception ex)
+            {
+                Logger.LogError(ex, "[VideoToVideo] [SourceVideoChanged] An exception occurred extracting the source video");
+                await DialogService.ShowErrorAsync(AppErrors.ExecutePipelineTitle, ex.Message);
+            }
+            finally
+            {
+                Progress.Clear();
+                IsViewBusy = false;
+            }
+        }
+
+
+        /// <summary>
         /// Save history
         /// </summary>
         /// <param name="options">The options.</param>
@@ -214,8 +261,8 @@ namespace Amuse.App.Views
                 Options = options,
                 Model = CurrentPipeline.DiffusionModel.Name,
                 LoraModels = CurrentPipeline.LoraAdapterModel?.Select(x => x.Name).ToArray(),
-                UpscaleModel = UpscaledModel?.Name,
-                UpscaleOptions = UpscaledModel is not null ? UpscaleOptions : null,
+                UpscaleModel = CurrentPipeline?.UpscaleModel?.Name,
+                UpscaleOptions = CurrentPipeline?.UpscaleModel is not null ? UpscaleOptions : null,
                 ExtractModel = CurrentPipeline.ExtractModel?.Name,
                 ExtractorType = CurrentPipeline.ExtractModel?.Type,
                 ExtractOptions = CurrentPipeline.ExtractModel is not null ? ExtractOptions : null,

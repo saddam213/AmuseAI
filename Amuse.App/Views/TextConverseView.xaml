@@ -8,6 +8,7 @@
     xmlns:CommonControls="clr-namespace:TensorStack.WPF.Controls;assembly=TensorStack.WPF"
     xmlns:Controls="clr-namespace:Amuse.App.Controls"
     xmlns:Behaviors="clr-namespace:TensorStack.WPF.Behaviors;assembly=TensorStack.WPF"
+    xmlns:Resources="clr-namespace:Amuse.App.Resources"
     xmlns:Views="clr-namespace:Amuse.App.Views">
     <Grid DataContext="{Binding RelativeSource={RelativeSource AncestorType={x:Type local:TextConverseView}}, Mode=OneTime}" >
         <Grid.ColumnDefinitions>
@@ -22,9 +23,9 @@
                 <DockPanel x:Name="LeftPanelContainer" Margin="4" IsEnabled="{Binding IsViewBusy, Converter={StaticResource InverseBoolConverter}, Mode=OneWay}">
 
                     <!--ModelControl-->
-                    <Grid DockPanel.Dock="Top" IsEnabled="{Binding GenerateService.IsLoading, Converter={StaticResource InverseBoolConverter}, Mode=OneWay}">
-                        <Grid IsEnabled="{Binding GenerateService.IsExecuting, Converter={StaticResource InverseBoolConverter}}">
-                            <Grid IsEnabled="{Binding IsAutomating, Converter={StaticResource InverseBoolConverter}, Mode=OneWay}">
+                    <Grid DockPanel.Dock="Top" IsEnabled="{Binding LanguageService.IsLoading, Converter={StaticResource InverseBoolConverter}, Mode=OneWay}">
+                        <Grid IsEnabled="{Binding LanguageService.IsExecuting, Converter={StaticResource InverseBoolConverter}}">
+                            <Grid IsEnabled="{Binding IsPipelineBusy, Converter={StaticResource InverseBoolConverter}, Mode=OneWay}">
                                 <Controls:LanguageModelControl
                                     x:Name="ModelControl"
                                     ViewType="TextConverse"
@@ -41,7 +42,7 @@
                     <DockPanel DockPanel.Dock="Bottom">
 
                         <!--InputControl-->
-                        <Grid IsEnabled="{Binding GenerateService.IsLoaded, Mode=OneWay}" >
+                        <Grid IsEnabled="{Binding LanguageService.IsLoaded, Mode=OneWay}" >
                             <Controls:LanguageInputControl
                                 x:Name="InputControl"
                                 ViewType="TextConverse"
@@ -50,7 +51,7 @@
                                 AutomationOptions="{Binding AutomationOptions, Mode=OneWayToSource}"
                                 AutomationProgress="{Binding AutomationProgress, Mode=OneWay}"
                                 Pipeline="{Binding CurrentPipeline, Mode=OneWay}" 
-                                IsExecuting="{Binding GenerateService.IsExecuting, Mode=OneWay}"
+                                IsExecuting="{Binding LanguageService.IsExecuting, Mode=OneWay}"
                                 IsAutomating="{Binding IsAutomating, Mode=OneWay}"
                                 IsEnabled="{Binding CurrentPipeline, Converter={StaticResource InverseNullBooleanConverter}, Mode=OneWay}"
                                 IsInputEnabled="{Binding IsPipelineLoaded}"
@@ -123,16 +124,16 @@
                         <!--Execute/Cancel-->
                         <UniformGrid DockPanel.Dock="Right" Columns="2" Width="260" Margin="0,4,0,0">
                             <DockPanel >
-                                <Button DockPanel.Dock="Left" Width="30" Command="{Binding StopCommand, Mode=OneWay}" Visibility="{Binding GenerateService.IsCanceling, Converter={StaticResource BooleanToVisibilityConverter}, Mode=OneWay}" ToolTip="{CommonControls:Localize ToolTip_GenerateStop}" ToolTipService.InitialShowDelay="200">
+                                <Button DockPanel.Dock="Left" Width="30" Command="{Binding StopCommand, Mode=OneWay}" Visibility="{Binding LanguageService.IsCanceling, Converter={StaticResource BooleanToVisibilityConverter}, Mode=OneWay}" ToolTip="{CommonControls:Localize ToolTip_GenerateStop}" ToolTipService.InitialShowDelay="200">
                                     <CommonControls:FontAwesome Icon="f00d" Color="{StaticResource DangerColour}" />
                                 </Button>
-                                <Grid IsEnabled="{Binding GenerateService.IsCanceling, Converter={StaticResource InverseBoolConverter}, Mode=OneWay}">
+                                <Grid IsEnabled="{Binding LanguageService.IsCanceling, Converter={StaticResource InverseBoolConverter}, Mode=OneWay}">
                                     <Button Command="{Binding CancelCommand, Mode=OneWay}" >
                                         <Button.Style>
                                             <Style TargetType="{x:Type Button}" BasedOn="{StaticResource {x:Type Button}}">
-                                                <Setter Property="Content" Value="Cancel" />
+                                                <Setter Property="Content" Value="{CommonControls:Localize Cancel}" />
                                                 <Style.Triggers>
-                                                    <DataTrigger Binding="{Binding GenerateService.IsCanceling, Mode=OneWay}" Value="True">
+                                                    <DataTrigger Binding="{Binding LanguageService.IsCanceling, Mode=OneWay}" Value="True">
                                                         <Setter Property="Content" Value="{CommonControls:Localize Canceling}" />
                                                     </DataTrigger>
                                                 </Style.Triggers>
@@ -142,8 +143,7 @@
                                 </Grid>
                             </DockPanel>
                             <Grid IsEnabled="{Binding IsSelectionValid, ElementName=ModelControl, Mode=OneWay}">
-                                <Button Content="{CommonControls:Localize Generate}" Command="{Binding ExecuteCommand, Mode=OneWay}" Visibility="{Binding SelectedOption, ElementName=InputControl, Converter={StaticResource InverseEnumToVisibilityConverter}, ConverterParameter=Automation, Mode=OneWay}"/>
-                                <Button Content="{CommonControls:Localize Automate}" Command="{Binding ExecuteAutomationCommand, Mode=OneWay}" Visibility="{Binding SelectedOption, ElementName=InputControl, Converter={StaticResource EnumToVisibilityConverter}, ConverterParameter=Automation, Mode=OneWay}"/>
+                                <Button Content="{CommonControls:Localize Generate}" Command="{Binding ExecuteCommand, Mode=OneWay}"/>
                             </Grid>
                         </UniformGrid>
 
@@ -162,7 +162,7 @@
                             <!--Statistics-->
                             <Controls:StatisticsControl 
                                 Margin="10,0,10,1"
-                                PrefixPerSecond="tokens/s"
+                                PrefixPerSecond="{x:Static Resources:AppDefault.TokensPerSecond}"
                                 PrefixSecondsPer=""
                                 Statistics="{Binding Statistics, Mode=OneWay}"
                                 Progress="{Binding Progress, Mode=OneWay}"/>
@@ -180,15 +180,7 @@
                                 TextWrapping="Wrap" 
                                 PreviewKeyDown="OnSourceTextKeyDown"
                                 Placeholder="{CommonControls:Localize AskQuestionPlaceholder}" 
-                                VerticalScrollBarVisibility="Auto"
-                                Visibility="{Binding IsAutomating, Converter={StaticResource InverseBooleanToVisibilityConverter}}"/>
-                            <TextBox 
-                                Text="{Binding AutomationPrompt, Mode=OneWay}" 
-                                Padding="2,2,2,10" 
-                                IsReadOnly="True" 
-                                TextWrapping="Wrap" 
-                                VerticalScrollBarVisibility="Auto"
-                                Visibility="{Binding IsAutomating, Converter={StaticResource BooleanToVisibilityConverter}}"/>
+                                VerticalScrollBarVisibility="Auto"/>
                         </Grid>
 
                     </Border>

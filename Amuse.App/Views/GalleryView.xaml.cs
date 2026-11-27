@@ -11,7 +11,6 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Controls;
 using System.Windows.Data;
-using System.Windows.Input;
 using TensorStack.Common;
 using TensorStack.Media.Audio;
 using TensorStack.Media.Video;
@@ -27,7 +26,7 @@ namespace Amuse.App.Views
     /// </summary>
     public partial class GalleryView : ViewBase
     {
-        private const string String_AllModels = "All Models";
+        private const string FilterAllModels = "";
         private IHistoryItem _selectedItem;
         private ImageInput _currentImage;
         private AudioInputStream _currentAudioStream;
@@ -38,8 +37,8 @@ namespace Amuse.App.Views
         private View? _filterProcessType;
         private TextInput _currentText;
 
-        public GalleryView(Settings settings, NavigationService navigationService, IModelDownloadService downloadService, IHistoryService historyService, ILogger<GalleryView> logger)
-            : base(settings, navigationService, downloadService, historyService, logger)
+        public GalleryView(Settings settings, NavigationService navigationService, IModelDownloadService downloadService, IModelAccessService modelAccessService, IHistoryService historyService, ILogger<GalleryView> logger)
+            : base(settings, navigationService, downloadService, modelAccessService, historyService, logger)
         {
             RemoveFiltersCommand = new AsyncRelayCommand(RemoveFilters, CanRemoveFilters);
             DeleteItemCommand = new AsyncRelayCommand<IHistoryItem>(RemoveItemAsync, (x) => SelectedItem is not null);
@@ -118,9 +117,12 @@ namespace Amuse.App.Views
         }
 
 
-        public override Task OpenAsync(OpenViewArgs args = null)
+        public override async Task OpenAsync(OpenViewArgs args = null)
         {
-            return base.OpenAsync(args);
+            if (CurrentText != null && TextControl.Length == 0)
+                await TextControl.SetTextAsync(CurrentText.Text);
+
+            await base.OpenAsync(args);
         }
 
 
@@ -128,6 +130,7 @@ namespace Amuse.App.Views
         {
             await AudioControl.StopAsync();
             await VideoControl.StopAsync();
+            await TextControl.CloseAsync();
             await base.CloseAsync();
         }
 
@@ -175,19 +178,16 @@ namespace Amuse.App.Views
                 if (_filterMediaType.HasValue)
                     isValid = historyItem.MediaType == _filterMediaType.Value;
                 if (_filterProcessType.HasValue)
-                    isValid = historyItem.Source == _filterProcessType.Value;
-                if (_filterModelName?.Equals(String_AllModels) == false)
+                    isValid = isValid && historyItem.Source == _filterProcessType.Value;
+                if (_filterModelName?.Equals(FilterAllModels) == false)
                     isValid = isValid && historyItem.Model == _filterModelName;
 
                 if (!string.IsNullOrEmpty(_filterText))
                 {
-                    if (historyItem is DiffusionHistory diffusionHistory)
-                    {
-                        if (!string.IsNullOrEmpty(diffusionHistory.Options?.Prompt))
-                            isValid = isValid && diffusionHistory.Options.Prompt.Contains(_filterText, StringComparison.OrdinalIgnoreCase);
-                        if (!string.IsNullOrEmpty(diffusionHistory.Options?.NegativePrompt))
-                            isValid = isValid && diffusionHistory.Options.NegativePrompt.Contains(_filterText, StringComparison.OrdinalIgnoreCase);
-                    }
+                    var diffusionOptions = (historyItem as DiffusionHistory)?.Options;
+                    var isPromptMatch = diffusionOptions?.Prompt?.Contains(_filterText, StringComparison.OrdinalIgnoreCase) == true;
+                    var isNegativePromptMatch = diffusionOptions?.NegativePrompt?.Contains(_filterText, StringComparison.OrdinalIgnoreCase) == true;
+                    isValid = isValid && (isPromptMatch || isNegativePromptMatch);
                 }
 
                 return isValid;
@@ -198,8 +198,8 @@ namespace Amuse.App.Views
         private void Populate()
         {
             FilterModelNames.Clear();
-            FilterModelNames.Add(String_AllModels);
-            foreach (var modelName in HistoryService.HistoryCollection.Select(x => x.Model).Distinct().OrderBy(x => x))
+            FilterModelNames.Add(FilterAllModels);
+            foreach (var modelName in HistoryService.HistoryCollection.Select(x => x.Model).Where(x => !string.IsNullOrEmpty(x)).Distinct().OrderBy(x => x))
             {
                 FilterModelNames.Add(modelName);
             }
@@ -221,7 +221,7 @@ namespace Amuse.App.Views
             var message = HistoryCollection.Count < HistoryService.HistoryCollection.Count
                 ? string.Format(AppDefault.DeleteGalleryItemsFiltered, HistoryCollection.Count)
                 : string.Format(AppDefault.DeleteGalleryItems, HistoryCollection.Count);
-            if (await DialogService.ShowMessageAsync(AppDefault.DeleteItems, message, TensorStack.WPF.Dialogs.MessageDialogType.YesNo, TensorStack.WPF.Dialogs.MessageBoxIconType.Question, TensorStack.WPF.Dialogs.MessageBoxStyleType.Warning))
+            if (await DialogService.ShowMessageAsync(AppDefault.DeleteItems, message, TensorStack.WPF.Dialogs.MessageDialogType.YesNo, TensorStack.WPF.Dialogs.MessageBoxIconType.Warning, TensorStack.WPF.Dialogs.MessageBoxStyleType.Danger))
             {
                 var toRemove = new List<IHistoryItem>();
                 foreach (var item in HistoryCollection)
@@ -245,7 +245,7 @@ namespace Amuse.App.Views
             _filterText = null;
             _filterMediaType = null;
             _filterProcessType = null;
-            _filterModelName = String_AllModels;
+            _filterModelName = FilterAllModels;
 
             HistoryCollection.Refresh();
             NotifyPropertyChanged(nameof(FilterText));
@@ -259,23 +259,15 @@ namespace Amuse.App.Views
         private bool CanRemoveFilters()
         {
             return !string.IsNullOrWhiteSpace(_filterText)
-                || _filterModelName?.Equals(String_AllModels) == false
+                || _filterModelName?.Equals(FilterAllModels) == false
                 || _filterMediaType.HasValue
                 || _filterProcessType.HasValue;
         }
 
 
-        private void ScrollViewer_PreviewMouseWheel(object sender, MouseWheelEventArgs e)
-        {
-            var scrollViewer = (ScrollViewer)sender;
-            scrollViewer.ScrollToVerticalOffset(scrollViewer.VerticalOffset - e.Delta);
-            e.Handled = true;
-        }
-
-
         private static View[] GetProcessTypes()
         {
-            return Enum.GetValues<View>().Except([View.Home, View.SettingsImage, View.SettingsVideo, View.SettingsAudio, View.SettingsControlNet, View.SettingsLoraAdapter, View.SettingsExtract, View.SettingsUpscale, View.SettingsGeneral, View.SettingsEnvironment, View.Gallery, View.Recent]).ToArray();
+            return Enum.GetValues<View>().Except([View.Home, View.SettingsImage, View.SettingsVideo, View.SettingsAudio, View.SettingsControlNet, View.SettingsLoraAdapter, View.SettingsExtract, View.SettingsUpscale, View.SettingsGeneral, View.SettingsEnvironment, View.SettingsTool, View.Gallery, View.Recent]).ToArray();
         }
 
 

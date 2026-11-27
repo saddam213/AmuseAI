@@ -1,0 +1,504 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <!-- 
+    Microsoft ResX Schema 
+    
+    Version 2.0
+    
+    The primary goals of this format is to allow a simple XML format 
+    that is mostly human readable. The generation and parsing of the 
+    various data types are done through the TypeConverter classes 
+    associated with the data types.
+    
+    Example:
+    
+    ... ado.net/XML headers & schema ...
+    <resheader name="resmimetype">text/microsoft-resx</resheader>
+    <resheader name="version">2.0</resheader>
+    <resheader name="reader">System.Resources.ResXResourceReader, System.Windows.Forms, ...</resheader>
+    <resheader name="writer">System.Resources.ResXResourceWriter, System.Windows.Forms, ...</resheader>
+    <data name="Name1"><value>this is my long string</value><comment>this is a comment</comment></data>
+    <data name="Color1" type="System.Drawing.Color, System.Drawing">Blue</data>
+    <data name="Bitmap1" mimetype="application/x-microsoft.net.object.binary.base64">
+        <value>[base64 mime encoded serialized .NET Framework object]</value>
+    </data>
+    <data name="Icon1" type="System.Drawing.Icon, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
+        <value>[base64 mime encoded string representing a byte array form of the .NET Framework object]</value>
+        <comment>This is a comment</comment>
+    </data>
+                
+    There are any number of "resheader" rows that contain simple 
+    name/value pairs.
+    
+    Each data row contains a name, and value. The row also contains a 
+    type or mimetype. Type corresponds to a .NET class that support 
+    text/value conversion through the TypeConverter architecture. 
+    Classes that don't support this are serialized and stored with the 
+    mimetype set.
+    
+    The mimetype is used for serialized objects, and tells the 
+    ResXResourceReader how to depersist the object. This is currently not 
+    extensible. For a given mimetype the value must be set accordingly:
+    
+    Note - application/x-microsoft.net.object.binary.base64 is the format 
+    that the ResXResourceWriter will generate, however the reader can 
+    read any of the formats listed below.
+    
+    mimetype: application/x-microsoft.net.object.binary.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Binary.BinaryFormatter
+            : and then encoded with base64 encoding.
+    
+    mimetype: application/x-microsoft.net.object.soap.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Soap.SoapFormatter
+            : and then encoded with base64 encoding.
+
+    mimetype: application/x-microsoft.net.object.bytearray.base64
+    value   : The object must be serialized into a byte array 
+            : using a System.ComponentModel.TypeConverter
+            : and then encoded with base64 encoding.
+    -->
+  <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+    <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
+    <xsd:element name="root" msdata:IsDataSet="true">
+      <xsd:complexType>
+        <xsd:choice maxOccurs="unbounded">
+          <xsd:element name="metadata">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" />
+              </xsd:sequence>
+              <xsd:attribute name="name" use="required" type="xsd:string" />
+              <xsd:attribute name="type" type="xsd:string" />
+              <xsd:attribute name="mimetype" type="xsd:string" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="assembly">
+            <xsd:complexType>
+              <xsd:attribute name="alias" type="xsd:string" />
+              <xsd:attribute name="name" type="xsd:string" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="data">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1" />
+              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
+              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="resheader">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" />
+            </xsd:complexType>
+          </xsd:element>
+        </xsd:choice>
+      </xsd:complexType>
+    </xsd:element>
+  </xsd:schema>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="ToolTip_GenerateStop" xml:space="preserve">
+    <value>Немедленно останавливает генерацию, завершая процесс бэкенда.</value>
+  </data>
+  <data name="ToolTip_ModelStatus_Available" xml:space="preserve">
+    <value>Доступна для скачивания</value>
+  </data>
+  <data name="ToolTip_ModelStatus_DownloadFailed" xml:space="preserve">
+    <value>Ошибка скачивания модели</value>
+  </data>
+  <data name="ToolTip_ModelStatus_Downloading" xml:space="preserve">
+    <value>Модель скачивается</value>
+  </data>
+  <data name="ToolTip_ModelStatus_DownloadQueue" xml:space="preserve">
+    <value>Модель в очереди на скачивание</value>
+  </data>
+  <data name="ToolTip_ModelStatus_Installed" xml:space="preserve">
+    <value>Модель установлена</value>
+  </data>
+  <data name="ToolTip_ModelStatus_NotInstalled" xml:space="preserve">
+    <value>Модель не установлена</value>
+  </data>
+  <data name="ToolTip_ModelStatus_Unknown" xml:space="preserve">
+    <value>Требуется обновление модели</value>
+  </data>
+  <data name="ToolTip_Text_Branch" xml:space="preserve">
+    <value>Создать ветку беседы</value>
+  </data>
+  <data name="ToolTip_Text_Rewind" xml:space="preserve">
+    <value>Откатить последнее сообщение</value>
+  </data>
+  <data name="ToolTip_Text_SaveResponseFile" xml:space="preserve">
+    <value>Сохранить ответ в файл</value>
+  </data>
+  <data name="ToolTip_Text_CopyResponseHtml" xml:space="preserve">
+    <value>Копировать ответ (HTML)</value>
+  </data>
+  <data name="ToolTip_Text_CopyResponseText" xml:space="preserve">
+    <value>Копировать текст ответа</value>
+  </data>
+  <data name="ToolTip_Text_Clear" xml:space="preserve">
+    <value>Очистить текст</value>
+  </data>
+  <data name="ToolTip_Lora_AddTrigger" xml:space="preserve">
+    <value>Добавить триггерное слово LoRA</value>
+  </data>
+  <data name="ToolTip_Paint_Live" xml:space="preserve">
+    <value>Генерация в реальном времени</value>
+  </data>
+  <data name="ToolTip_Paint_Cancel" xml:space="preserve">
+    <value>Отменить генерацию</value>
+  </data>
+  <data name="ToolTip_Paint_RoundBrush" xml:space="preserve">
+    <value>Круглая кисть</value>
+  </data>
+  <data name="ToolTip_Paint_SquareBrush" xml:space="preserve">
+    <value>Квадратная кисть</value>
+  </data>
+  <data name="ToolTip_Paint_Highlighter" xml:space="preserve">
+    <value>Маркер</value>
+  </data>
+  <data name="ToolTip_Paint_Eraser" xml:space="preserve">
+    <value>Ластик</value>
+  </data>
+  <data name="ToolTip_Paint_FitCurve" xml:space="preserve">
+    <value>Сглаживать по кривой</value>
+  </data>
+  <data name="ToolTip_Paint_Stylus" xml:space="preserve">
+    <value>Включить поддержку нажима стилуса</value>
+  </data>
+  <data name="ToolTip_Paint_FillBG" xml:space="preserve">
+    <value>Залить фон</value>
+  </data>
+  <data name="ToolTip_Paint_LoadImageBG" xml:space="preserve">
+    <value>Загрузить фоновое изображение</value>
+  </data>
+  <data name="ToolTip_Paint_ClearDraw" xml:space="preserve">
+    <value>Очистить рисунок</value>
+  </data>
+  <data name="ToolTip_Seed_New" xml:space="preserve">
+    <value>Новый сид</value>
+  </data>
+  <data name="ToolTip_Seed_Random" xml:space="preserve">
+    <value>Случайные сиды</value>
+  </data>
+  <data name="ToolTip_VideoTimeline_Clear" xml:space="preserve">
+    <value>Очистить таймлайн</value>
+  </data>
+  <data name="ToolTip_VideoTimeline_Save" xml:space="preserve">
+    <value>Сохранить видео</value>
+  </data>
+  <data name="ToolTip_VideoTimeline_Extend" xml:space="preserve">
+    <value>Удлинить таймлайн</value>
+  </data>
+  <data name="ToolTip_VideoTimeline_Trim" xml:space="preserve">
+    <value>Обрезать таймлайн</value>
+  </data>
+  <data name="ToolTip_VideoTimeline_ZoomIn" xml:space="preserve">
+    <value>Увеличить масштаб</value>
+  </data>
+  <data name="ToolTip_VideoTimeline_ZoomOut" xml:space="preserve">
+    <value>Уменьшить масштаб</value>
+  </data>
+  <data name="ToolTip_VideoTimeline_FrameRemove" xml:space="preserve">
+    <value>Удалить выбранные кадры</value>
+  </data>
+  <data name="ToolTip_VideoTimeline_FrameSave" xml:space="preserve">
+    <value>Сохранить выбранный кадр в историю</value>
+  </data>
+  <data name="ToolTip_VideoTimeline_SegmentSplit" xml:space="preserve">
+    <value>Разделить сегмент</value>
+  </data>
+  <data name="ToolTip_VideoTimeline_SegmentCopy" xml:space="preserve">
+    <value>Копировать сегмент</value>
+  </data>
+  <data name="ToolTip_VideoTimeline_SegmentUp" xml:space="preserve">
+    <value>Переместить сегмент вверх</value>
+  </data>
+  <data name="ToolTip_VideoTimeline_SegmentDown" xml:space="preserve">
+    <value>Переместить сегмент вниз</value>
+  </data>
+  <data name="ToolTip_VideoTimeline_SegmentRemove" xml:space="preserve">
+    <value>Удалить сегмент</value>
+  </data>
+  <data name="ToolTip_MemoryEstimate" xml:space="preserve">
+    <value>Оценка режимов памяти</value>
+  </data>
+  <data name="ToolTip_Text_StreamEnable" xml:space="preserve">
+    <value>Включить потоковый вывод токенов</value>
+  </data>
+  <data name="ToolTip_Text_StreamDisable" xml:space="preserve">
+    <value>Отключить потоковый вывод токенов</value>
+  </data>
+  <data name="ToolTip_Text_FormatEnable" xml:space="preserve">
+    <value>Включить форматирование результата (экспериментально)</value>
+  </data>
+  <data name="ToolTip_Text_FormatDisable" xml:space="preserve">
+    <value>Отключить форматирование результата</value>
+  </data>
+  <data name="ToolTip_Text_ThinkingHide" xml:space="preserve">
+    <value>Скрыть размышления</value>
+  </data>
+  <data name="ToolTip_Text_ThinkingShow" xml:space="preserve">
+    <value>Показать размышления</value>
+  </data>
+  <data name="ToolTip_Theme" xml:space="preserve">
+    <value>Перезапустите Amuse, чтобы применить тему.</value>
+  </data>
+  <data name="ToolTip_UIScale" xml:space="preserve">
+    <value>Размер интерфейса, подобранный под ваш экран.</value>
+  </data>
+  <data name="ToolTip_ModelFilterAll" xml:space="preserve">
+    <value>Показаны все модели. Нажмите, чтобы показать только установленные</value>
+  </data>
+  <data name="ToolTip_ModelFilterInstalled" xml:space="preserve">
+    <value>Показаны только установленные модели. Нажмите, чтобы показать все</value>
+  </data>
+  <data name="ToolTip_EnvironmentFilterAll" xml:space="preserve">
+    <value>Показаны все среды. Нажмите, чтобы показать только среды для ваших устройств</value>
+  </data>
+  <data name="ToolTip_EnvironmentFilterDevices" xml:space="preserve">
+    <value>Показаны только среды для ваших устройств. Нажмите, чтобы показать все</value>
+  </data>
+  <data name="ToolTip_GpuLayers" xml:space="preserve">
+    <value>Число слоёв модели, размещаемых на GPU (-1 — все слои). При меньших значениях остальные слои переносятся в системную память.</value>
+  </data>
+  <data name="ToolTip_Threads" xml:space="preserve">
+    <value>Потоки CPU для слоёв в системной памяти (0 — по умолчанию).</value>
+  </data>
+  <data name="ToolTip_ContextSize" xml:space="preserve">
+    <value>Число токенов, резервируемых для беседы и ответа. Большие значения требуют больше памяти.</value>
+  </data>
+  <data name="ToolTip_CacheOffload" xml:space="preserve">
+    <value>Хранить кэш беседы (ключ/значение) в памяти GPU</value>
+  </data>
+  <data name="ToolTip_BackendReady" xml:space="preserve">
+    <value>Среда бэкенда установлена и готова к работе.</value>
+  </data>
+  <data name="ToolTip_BackendNotInstalled" xml:space="preserve">
+    <value>Поддерживается на этом устройстве, но ещё не установлен. Установите его в разделе «Управление средами» или при первой загрузке модели, которая его использует.</value>
+  </data>
+  <data name="ToolTip_BackendUnsupported" xml:space="preserve">
+    <value>Этот бэкенд недоступен на данном устройстве.</value>
+  </data>
+  <data name="ToolTip_MemoryMode_StableDiffusionCpp_High" xml:space="preserve">
+    <value>Хранит все веса на GPU.</value>
+  </data>
+  <data name="ToolTip_MemoryMode_StableDiffusionCpp_Medium" xml:space="preserve">
+    <value>Выгружает веса в память CPU и перемещает их на GPU по мере необходимости.</value>
+  </data>
+  <data name="ToolTip_MemoryMode_StableDiffusionCpp_Low" xml:space="preserve">
+    <value>Выгружает веса диффузии в память CPU, а VAE, текстовые энкодеры и другие части — на диск, загружая их по мере необходимости.</value>
+  </data>
+  <data name="ToolTip_MemoryMode_StableDiffusionCpp_Balanced" xml:space="preserve">
+    <value>Автоподбор: веса размещаются автоматически с учётом доступной VRAM.</value>
+  </data>
+  <data name="ToolTip_MemoryMode_AudioCpp_High" xml:space="preserve">
+    <value>Держит всю модель загруженной на GPU.</value>
+  </data>
+  <data name="ToolTip_MemoryMode_AudioCpp_Medium" xml:space="preserve">
+    <value>Включает экономию памяти для снижения расхода VRAM.</value>
+  </data>
+  <data name="ToolTip_MemoryMode_AudioCpp_Low" xml:space="preserve">
+    <value>Включает экономию памяти для снижения расхода VRAM.</value>
+  </data>
+  <data name="ToolTip_MemoryMode_AudioCpp_Balanced" xml:space="preserve">
+    <value>Включает экономию памяти для снижения расхода VRAM.</value>
+  </data>
+  <data name="ToolTip_MemoryMode_LlamaCpp_High" xml:space="preserve">
+    <value>Выполняет все слои на GPU и хранит KV-кэш на GPU.</value>
+  </data>
+  <data name="ToolTip_MemoryMode_LlamaCpp_Medium" xml:space="preserve">
+    <value>Выполняет все слои на GPU, а KV-кэш хранит в памяти CPU. Экономит VRAM при длинном контексте.</value>
+  </data>
+  <data name="ToolTip_MemoryMode_LlamaCpp_Low" xml:space="preserve">
+    <value>Выполняет все слои на CPU и хранит KV-кэш в памяти CPU. Самый медленный режим.</value>
+  </data>
+  <data name="ToolTip_MemoryMode_LlamaCpp_Balanced" xml:space="preserve">
+    <value>Использует значения «Слои на GPU» и «Кэш на GPU» из параметров выполнения.</value>
+  </data>
+  <data name="ToolTip_MemoryMode_OnnxRuntime" xml:space="preserve">
+    <value>OnnxRuntime управляет памятью самостоятельно, этот параметр ни на что не влияет.</value>
+  </data>
+  <data name="ToolTip_WeightType" xml:space="preserve">
+    <value>Преобразует веса модели в этот тип при загрузке. Меньшие типы занимают меньше памяти, но загружаются дольше и немного теряют в качестве. «По умолчанию» сохраняет исходный тип модели.</value>
+  </data>
+  <data name="ToolTip_ResetExecutionOptions" xml:space="preserve">
+    <value>Сбрасывает все параметры к значениям по умолчанию. Нажмите «Сохранить», чтобы применить.</value>
+  </data>
+  <data name="ToolTip_EnvironmentSetupDontAskAgain" xml:space="preserve">
+    <value>Не предлагать установку недостающих сред при запуске. Обязательные обновления по-прежнему будут показываться.</value>
+  </data>
+  <data name="ToolTip_UpscaleSeed" xml:space="preserve">
+    <value>Сид шума для апскейлера видео</value>
+  </data>
+  <data name="ToolTip_UpscaleTemporalChunkSize" xml:space="preserve">
+    <value>Количество кадров, обрабатываемых за один блок; меньшие значения требуют меньше памяти</value>
+  </data>
+  <data name="ToolTip_UpscaleTileSize" xml:space="preserve">
+    <value>Размер тайла в пикселях; меньшие тайлы требуют меньше памяти, 0 — значение по умолчанию</value>
+  </data>
+  <data name="ToolTip_UpscaleWindowSize" xml:space="preserve">
+    <value>Интервал опорных кадров: при окне 16 используются кадры 0, 15, 30 и т. д.; последний кадр включается всегда</value>
+  </data>
+  <data name="ToolTip_HistoryFilterAudio" xml:space="preserve">
+    <value>Фильтр: аудио</value>
+  </data>
+  <data name="ToolTip_HistoryFilterClear" xml:space="preserve">
+    <value>Сбросить фильтр</value>
+  </data>
+  <data name="ToolTip_HistoryFilterImage" xml:space="preserve">
+    <value>Фильтр: изображения</value>
+  </data>
+  <data name="ToolTip_HistoryFilterText" xml:space="preserve">
+    <value>Фильтр: текст</value>
+  </data>
+  <data name="ToolTip_HistoryFilterVideo" xml:space="preserve">
+    <value>Фильтр: видео</value>
+  </data>
+  <data name="ToolTip_AudioTimeline_SaveAudio" xml:space="preserve">
+    <value>Сохранить аудио</value>
+  </data>
+  <data name="ToolTip_AudioTimeline_SaveVideo" xml:space="preserve">
+    <value>Сохранить опорное видео со звуком</value>
+  </data>
+  <data name="ToolTip_AudioTimeline_ReferenceRemove" xml:space="preserve">
+    <value>Удалить опорное видео</value>
+  </data>
+  <data name="ToolTip_AudioTimeline_ClipMove" xml:space="preserve">
+    <value>Переместить клип к указателю</value>
+  </data>
+  <data name="ToolTip_AudioTimeline_ClipTrimStart" xml:space="preserve">
+    <value>Обрезать начало клипа до указателя</value>
+  </data>
+  <data name="ToolTip_AudioTimeline_ClipTrimEnd" xml:space="preserve">
+    <value>Обрезать конец клипа до указателя</value>
+  </data>
+  <data name="ToolTip_AudioTimeline_ClipSplit" xml:space="preserve">
+    <value>Разделить клип по указателю</value>
+  </data>
+  <data name="ToolTip_AudioTimeline_ClipRestore" xml:space="preserve">
+    <value>Восстановить обрезанный клип</value>
+  </data>
+  <data name="ToolTip_AudioTimeline_ClipCopy" xml:space="preserve">
+    <value>Копировать клип</value>
+  </data>
+  <data name="ToolTip_AudioTimeline_ClipRemove" xml:space="preserve">
+    <value>Удалить клип</value>
+  </data>
+  <data name="ToolTip_VideoTimeline_ReferenceRemove" xml:space="preserve">
+    <value>Удалить референсное аудио</value>
+  </data>
+  <data name="ToolTip_GuidanceImage" xml:space="preserve">
+    <value>Масштаб guidance изображения для редактируемых и референсных изображений; 0 — значение модели по умолчанию</value>
+  </data>
+  <data name="ToolTip_ShiftedTimestep" xml:space="preserve">
+    <value>Сдвинутый timestep для моделей с дистиллированным timestep; 0 — отключено</value>
+  </data>
+  <data name="ToolTip_Sigmas" xml:space="preserve">
+    <value>Пользовательское расписание сигм — список по убыванию через запятую, заканчивающийся на 0, например 14.61, 7.8, 3.5, 0. Заменяет планировщик и число шагов</value>
+  </data>
+  <data name="ToolTip_SkipLayers" xml:space="preserve">
+    <value>Skip layer guidance — список слоёв через запятую, например 7, 8, 9, применяемый между начальной и конечной долей шагов. Масштаб 0 отключает его</value>
+  </data>
+  <data name="ToolTip_SamplerArgs" xml:space="preserve">
+    <value>Дополнительные аргументы сэмплера, передаваемые в stable-diffusion.cpp в виде пар key=value</value>
+  </data>
+  <data name="ToolTip_ClipSkip" xml:space="preserve">
+    <value>Число последних слоёв текстового энкодера CLIP, которые пропускаются; 0 — значение модели по умолчанию</value>
+  </data>
+  <data name="ToolTip_MoeBoundary" xml:space="preserve">
+    <value>Точка от 0 до 1, в которой сэмплирование переключается с модели высокого шума на модель низкого шума; 0 — значение по умолчанию 0.875</value>
+  </data>
+  <data name="ToolTip_SeamlessTiling" xml:space="preserve">
+    <value>Замыкает изображение по краям, чтобы результат бесшовно повторялся в этом направлении</value>
+  </data>
+  <data name="ToolTip_LiveStart" xml:space="preserve">
+    <value>Расшифровка речи с микрофона в реальном времени: текст появляется, пока вы говорите.</value>
+  </data>
+  <data name="ToolTip_LiveStop" xml:space="preserve">
+    <value>Остановить прослушивание и завершить расшифровку.</value>
+  </data>
+  <data name="ToolTip_FrameRate_Fixed" xml:space="preserve">
+    <value>Эта модель генерирует с фиксированной частотой кадров</value>
+  </data>
+  <data name="ToolTip_CacheMode" xml:space="preserve">
+    <value>Повторно использует результаты между шагами сэмплирования для ускорения генерации. EasyCache, DBCache, TaylorSeer и Cache-DiT подходят для моделей DiT, UCache — для моделей UNet, Spectrum — для обоих типов</value>
+  </data>
+  <data name="ToolTip_CacheRange" xml:space="preserve">
+    <value>Часть шагов сэмплирования, на которой разрешено кэширование</value>
+  </data>
+  <data name="ToolTip_CacheThreshold" xml:space="preserve">
+    <value>Насколько сильное изменение допустимо, прежде чем шаг будет вычислен заново; чем выше, тем быстрее, но хуже качество, 0 — значение по умолчанию</value>
+  </data>
+  <data name="ToolTip_CacheWarmupSteps" xml:space="preserve">
+    <value>Шаги, которые всегда выполняются до начала кэширования, 0 — значение по умолчанию</value>
+  </data>
+  <data name="ToolTip_FirstRunModelFolder" xml:space="preserve">
+    <value>Модели скачиваются в папку Models в выбранном расположении, выберите диск с большим объёмом свободного места.</value>
+  </data>
+  <data name="ToolTip_FrameChunk" xml:space="preserve">
+    <value>Генерация длинных видео блоками, каждый из которых продолжает последний кадр предыдущего. Длина больше не ограничена одним проходом, а меньшие блоки требуют меньше памяти</value>
+  </data>
+  <data name="ToolTip_FrameCount_Frames" xml:space="preserve">
+    <value>Введите длину в кадрах</value>
+  </data>
+  <data name="ToolTip_FrameCount_Seconds" xml:space="preserve">
+    <value>Введите длину в секундах</value>
+  </data>
+  <data name="ToolTip_McpEnable" xml:space="preserve">
+    <value>Запустить этот сервер и предлагать его инструменты в беседе.</value>
+  </data>
+  <data name="ToolTip_McpIconCode" xml:space="preserve">
+    <value>Код любого значка Font Awesome, например f1e6.</value>
+  </data>
+  <data name="ToolTip_McpImport" xml:space="preserve">
+    <value>Добавить серверы из фрагмента конфигурации или файла конфигурации другого приложения MCP.</value>
+  </data>
+  <data name="ToolTip_McpReconnect" xml:space="preserve">
+    <value>Перезапустить сервер и подключиться снова.</value>
+  </data>
+  <data name="ToolTip_McpTest" xml:space="preserve">
+    <value>Запустить сервер один раз и получить список его инструментов.</value>
+  </data>
+  <data name="ToolTip_ModelSearchFolders" xml:space="preserve">
+    <value>Использовать файлы моделей, которые уже есть у других приложений, например ComfyUI, без копирования и повторного скачивания.</value>
+  </data>
+  <data name="ToolTip_NavigateBack" xml:space="preserve">
+    <value>Назад (Alt+Left)</value>
+  </data>
+  <data name="ToolTip_NavigateForward" xml:space="preserve">
+    <value>Вперёд (Alt+Right)</value>
+  </data>
+  <data name="ToolTip_QueueAll" xml:space="preserve">
+    <value>Ставит в очередь все модели из списка, которые не установлены</value>
+  </data>
+  <data name="ToolTip_RescanModels" xml:space="preserve">
+    <value>Снова ищет файлы моделей после того, как вы сами скопировали файлы в папки моделей или поиска.</value>
+  </data>
+  <data name="ToolTip_SelectAudioRange" xml:space="preserve">
+    <value>Выберите диапазон исходного аудио для повторной генерации</value>
+  </data>
+  <data name="ToolTip_TrackName" xml:space="preserve">
+    <value>Дорожка, с которой работает задача, например vocals, guitar, drums, bass или piano</value>
+  </data>
+</root>

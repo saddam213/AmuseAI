@@ -130,9 +130,9 @@
                                 <Controls:SeedControl Seed="{Binding Options.Seed}"/>
                             </StackPanel>
 
-                            <!--Scheduler-->
+                            <!--Sampler-->
                             <StackPanel Margin="2,0,0,0">
-                                <Controls:SchedulerControl Options="{Binding Schedulers}" SelectedOptions="{Binding Options.SchedulerOptions, Mode=TwoWay}" IsSelectorOnly="True"/>
+                                <Controls:SamplerControl Options="{Binding Samplers}" SelectedOptions="{Binding Options.SamplerOptions, Mode=TwoWay}" IsSelectorOnly="True"/>
                             </StackPanel>
 
                         </UniformGrid>
@@ -147,10 +147,10 @@
                                 SourceCount="4"
                                 IsMultiSelect="True" 
                                 TextHorizontalAlignment="Center"
-                                SourceText1="Image 1"
-                                SourceText2="Image 2"
-                                SourceText3="Image 3"
-                                SourceText4="Image 4"
+                                SourceText1="{CommonControls:Localize Image1}"
+                                SourceText2="{CommonControls:Localize Image2}"
+                                SourceText3="{CommonControls:Localize Image3}"
+                                SourceText4="{CommonControls:Localize Image4}"
                                 IsSource1Selected="{Binding Options.IsSource1Enabled, Mode=TwoWay}"
                                 IsSource2Selected="{Binding Options.IsSource2Enabled, Mode=TwoWay}"
                                 IsSource3Selected="{Binding Options.IsSource3Enabled, Mode=TwoWay}"
@@ -167,10 +167,10 @@
                                 SourceCount="4"
                                 IsMultiSelect="True" 
                                 TextHorizontalAlignment="Center"
-                                SourceText1="Frame"
-                                SourceText2="Image 1"
-                                SourceText3="Image 2"
-                                SourceText4="Image 3"
+                                SourceText1="{CommonControls:Localize Frame}"
+                                SourceText2="{CommonControls:Localize Image1}"
+                                SourceText3="{CommonControls:Localize Image2}"
+                                SourceText4="{CommonControls:Localize Image3}"
                                 IsSource1Selected="{Binding Options.IsSource1Enabled, Mode=TwoWay}"
                                 IsSource2Selected="{Binding Options.IsSource2Enabled, Mode=TwoWay}"
                                 IsSource3Selected="{Binding Options.IsSource3Enabled, Mode=TwoWay}"
@@ -179,45 +179,16 @@
 
 
                         <!--Frames / FrameRate-->
-                        <StackPanel Visibility="{Binding Pipeline.DiffusionModel.DefaultOptions.FrameOptions, Converter={StaticResource NullVisibilityConverter}, FallbackValue=Collapsed}">
-                            <UniformGrid Columns="3">
-                                <StackPanel Margin="0,0,2,0">
-                                    <TextBlock Text="{CommonControls:Localize Frames}" Style="{StaticResource FieldTextBlockStyle}" />
-                                    <ComboBox ItemsSource="{Binding Pipeline.DiffusionModel.DefaultOptions.FrameOptions}" SelectedItem="{Binding Options.Frames}" />
-                                </StackPanel>
-                                <StackPanel Margin="2,0,2,0">
-                                    <TextBlock Text="{CommonControls:Localize FrameRate}" Style="{StaticResource FieldTextBlockStyle}" />
-                                    <ComboBox ItemsSource="{Binding FrameRates}" SelectedItem="{Binding Options.FrameRate}" >
-                                        <ComboBox.ItemTemplate>
-                                            <DataTemplate>
-                                                <TextBlock Text="{Binding ., StringFormat={}{0} fps}"/>
-                                            </DataTemplate>
-                                        </ComboBox.ItemTemplate>
-                                    </ComboBox>
-                                </StackPanel>
-
-                                <DockPanel Margin="2,0,0,0">
-                                    <TextBlock DockPanel.Dock="Top" Text="{CommonControls:Localize Duration}" Style="{StaticResource FieldTextBlockStyle}" />
-                                    <TextBox IsReadOnly="True" IsHitTestVisible="False" Opacity=".8">
-                                        <TextBox.Text>
-                                            <MultiBinding Converter="{StaticResource FramesToTimeSpanConverter}" StringFormat="{}{0:mm\:ss\.ff}">
-                                                <Binding Path="Options.Frames" />
-                                                <Binding Path="Options.FrameRate" />
-                                            </MultiBinding>
-                                        </TextBox.Text>
-                                    </TextBox>
-                                </DockPanel>
-                            </UniformGrid>
-
-                            <!--Frame Chunk-->
-                            <StackPanel Visibility="{Binding Pipeline.DiffusionModel.DefaultOptions.FrameChunk, Converter={StaticResource GreaterThanToVisibilityConverter}, ConverterParameter=0, FallbackValue=Collapsed}">
-                                <UniformGrid Columns="3" Margin="0,4,0,0">
-                                    <CommonControls:SliderControl Text="{CommonControls:Localize ChunkSize}" Value="{Binding Options.FrameChunk}" Minimum="1" Maximum="{Binding Pipeline.DiffusionModel.DefaultOptions.Frames}" TickFrequency="1" ValueFormat="N0" Margin="0,0,2,0"/>
-                                    <CommonControls:SliderControl Text="{CommonControls:Localize Overlap}" Value="{Binding Options.FrameChunkOverlap}" Minimum="1" Maximum="{Binding Pipeline.DiffusionModel.DefaultOptions.Frames}" TickFrequency="1" ValueFormat="N0" Margin="2,0,2,0"/>
-                                    <CommonControls:SliderControl Text="{CommonControls:Localize NoiseCondition}" Value="{Binding Options.NoiseCondition}" Minimum="1" Maximum="100" TickFrequency="1" ValueFormat="N0" Margin="2,0,0,0"/>
-                                </UniformGrid>
-                            </StackPanel>
-
+                        <StackPanel Visibility="{Binding Pipeline.DiffusionModel.DefaultOptions.MaxFrames, Converter={StaticResource GreaterThanToVisibilityConverter}, ConverterParameter=0, FallbackValue=Collapsed}">
+                            <Controls:FrameCountControl
+                                Frames="{Binding Options.Frames}"
+                                ChunkFrames="{Binding Options.FrameChunk}"
+                                IsChunkAllowed="{Binding Options.IsFrameChunkEnabled}"
+                                FrameRate="{Binding Options.FrameRate}"
+                                IsFrameRateEnabled="{Binding Pipeline.DiffusionModel.DefaultOptions.IsFrameRateEnabled}"
+                                MaxFrames="{Binding Pipeline.DiffusionModel.DefaultOptions.MaxFrames}"
+                                Pipeline="{Binding Pipeline.DiffusionModel.Pipeline}"
+                                IsChunkEnabled="{Binding Pipeline.DiffusionModel.DefaultOptions.FrameChunk, Converter={StaticResource GreaterThanToBooleanConverter}, ConverterParameter=0}" />
                         </StackPanel>
 
 
@@ -232,8 +203,8 @@
                                     IsMultiSelect="True" 
                                     IsSourceRequired="True" 
                                     TextHorizontalAlignment="Center"
-                                    SourceText1="First Frame"
-                                    SourceText2="Last Frame"
+                                    SourceText1="{CommonControls:Localize FirstFrame}"
+                                    SourceText2="{CommonControls:Localize LastFrame}"
                                     IsSource1Selected="{Binding Options.IsSource1Enabled, Mode=TwoWay}"
                                     IsSource2Selected="{Binding Options.IsSource2Enabled, Mode=TwoWay}"/>
                             </StackPanel>
@@ -263,10 +234,9 @@
                                 <CommonControls:SliderControl Text="{CommonControls:Localize GuidanceModel}" Value="{Binding Options.GuidanceScale2}" Minimum="1" Maximum="20" TickFrequency="0.1" ValueFormat="F2" Margin="0,0,3,0"/>
                                 <CommonControls:SliderControl Text="{CommonControls:Localize GuidanceCFG}" Value="{Binding Options.GuidanceScale}" Minimum="1" Maximum="20" TickFrequency="0.1" ValueFormat="F2" Margin="3,0,0,0"/>
                             </UniformGrid>
-                            <UniformGrid Columns="2" Visibility="{Binding Pipeline.DiffusionModel.Pipeline, Converter={StaticResource EnumToVisibilityConverter}, ConverterParameter=WanPipeline}">
-                                <CommonControls:SliderControl Text="{CommonControls:Localize GuidanceHighNoise}" Value="{Binding Options.GuidanceScale}" Minimum="1" Maximum="20" TickFrequency="0.1" ValueFormat="F2" Margin="3,0,0,0"/>
-                                <CommonControls:SliderControl Text="{CommonControls:Localize GuidanceLowNoise}" Value="{Binding Options.GuidanceScale2}" Minimum="1" Maximum="20" TickFrequency="0.1" ValueFormat="F2" Margin="0,0,3,0"/>
-                            </UniformGrid>
+                            <StackPanel Visibility="{Binding Pipeline.DiffusionModel.Pipeline, Converter={StaticResource EnumToVisibilityConverter}, ConverterParameter=WanPipeline}">
+                                <CommonControls:SliderControl Text="{CommonControls:Localize Guidance}" Value="{Binding Options.GuidanceScale2}" Minimum="1" Maximum="20" TickFrequency="0.1" ValueFormat="F2"/>
+                            </StackPanel>
                         </StackPanel>
 
 
@@ -281,6 +251,10 @@
                             <!--ControlNet-->
                             <StackPanel Visibility="{Binding Pipeline.ControlNetModel, Converter={StaticResource NullVisibilityConverter}, FallbackValue=Collapsed}">
                                 <CommonControls:SliderControl Text="{CommonControls:Localize ControlStrength}" Value="{Binding Options.ControlNetStrength}" IsPercent="True" Minimum="0.01" Maximum="1" TickFrequency="0.01"/>
+                                <StackPanel Margin="0,0,0,2">
+                                    <TextBlock Text="{CommonControls:Localize ControlType}" Style="{StaticResource FieldTextBlockStyle}" />
+                                    <ComboBox ItemsSource="{Binding Source={StaticResource ControlNetType}}" SelectedItem="{Binding Options.ControlType, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}" Style="{StaticResource EnumComboBox}" />
+                                </StackPanel>
                                 <!--<DockPanel Visibility="{Binding IsImageToImageControlNetSupported, Converter={StaticResource BooleanToVisibilityConverter}}">
                                     <CheckBox DockPanel.Dock="Left" Content="{CommonControls:Localize InputImage}" Margin="0,10,20,0"/>
                                     <CommonControls:SliderControl Text="{CommonControls:Localize InputStrength}" Value="{Binding Options.Strength}"  IsPercent="True"  Minimum="0.01" Maximum="1" TickFrequency="0.01" />
@@ -401,9 +375,9 @@
                 </TabItem.Header>
                 <StackPanel VerticalAlignment="Top" Margin="0,4,0,0">
 
-                    <!--SchedulerOptions-->
-                    <GroupBox Header="{CommonControls:Localize SchedulerOptions}" Margin="0,0,0,10" Padding="0,4">
-                        <Controls:SchedulerControl Options="{Binding Schedulers}" SelectedOptions="{Binding Options.SchedulerOptions, Mode=TwoWay}" BackendType="{Binding Pipeline.GenerateModel.Backend}" IsSelectorOnly="False"/>
+                    <!--SamplerOptions-->
+                    <GroupBox Header="{CommonControls:Localize SamplerOptions}" Margin="0,0,0,10" Padding="0,4">
+                        <Controls:SamplerControl Options="{Binding Samplers}" SelectedOptions="{Binding Options.SamplerOptions, Mode=TwoWay}" IsSelectorOnly="False"/>
                     </GroupBox>
 
                     <!--LatentUpscale-->
@@ -420,6 +394,50 @@
                             <CommonControls:SliderControl Text="{CommonControls:Localize Steps}" Minimum="1" Maximum="{Binding Options.Steps}" TickFrequency="1" Value="{Binding Options.LatentUpscaleSteps, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}" IsEnabled="{Binding Options.LatentUpscale, Converter={StaticResource InverseEnumToBooleanConverter}, ConverterParameter=None}"/>
                             <CommonControls:SliderControl Text="{CommonControls:Localize DenoiseStrength}"  IsPercent="True" Minimum="0.01" Maximum="1" TickFrequency="0.01" Value="{Binding Options.LatentUpscaleStrength, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}" IsEnabled="{Binding Options.LatentUpscale, Converter={StaticResource InverseEnumToBooleanConverter}, ConverterParameter=None}"/>
                         </UniformGrid>
+                    </GroupBox>
+
+                    <!--Cache-->
+                    <GroupBox Header="{CommonControls:Localize DiffusionCache}" Margin="0,0,0,10" Padding="0,4" Visibility="{Binding Pipeline.DiffusionModel.Backend, Converter={StaticResource EnumToVisibilityConverter}, ConverterParameter=StableDiffusionCpp}">
+                        <StackPanel>
+                            <UniformGrid Columns="2">
+                                <StackPanel Margin="0,0,2,2" ToolTip="{CommonControls:Localize ToolTip_CacheMode}" ToolTipService.InitialShowDelay="200">
+                                    <TextBlock Text="{CommonControls:Localize Mode}" Style="{StaticResource FieldTextBlockStyle}" />
+                                    <ComboBox ItemsSource="{Binding Source={StaticResource DiffusionCacheType}}" SelectedItem="{Binding Options.CacheMode, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}" Style="{StaticResource EnumComboBox}" />
+                                </StackPanel>
+                                <StackPanel Margin="2,0,0,2" ToolTip="{CommonControls:Localize ToolTip_CacheThreshold}" ToolTipService.InitialShowDelay="200" Visibility="{Binding Options.CacheMode, Converter={StaticResource EnumToVisibilityConverter}, ConverterParameter=EasyCache|UCache|DBCache|TaylorSeer|CacheDit}">
+                                    <TextBlock Text="{CommonControls:Localize CacheThreshold}" Style="{StaticResource FieldTextBlockStyle}" />
+                                    <CommonControls:FloatBox FloatValue="{Binding Options.CacheThreshold, UpdateSourceTrigger=PropertyChanged}" />
+                                </StackPanel>
+                                <StackPanel Margin="2,0,0,2" ToolTip="{CommonControls:Localize ToolTip_CacheWarmupSteps}" ToolTipService.InitialShowDelay="200" Visibility="{Binding Options.CacheMode, Converter={StaticResource EnumToVisibilityConverter}, ConverterParameter=DBCache|TaylorSeer|CacheDit|Spectrum}">
+                                    <TextBlock Text="{CommonControls:Localize CacheWarmupSteps}" Style="{StaticResource FieldTextBlockStyle}" />
+                                    <TextBox Text="{Binding Options.CacheWarmupSteps, UpdateSourceTrigger=PropertyChanged}" />
+                                </StackPanel>
+                            </UniformGrid>
+                            <UniformGrid Columns="2" ToolTip="{CommonControls:Localize ToolTip_CacheRange}" ToolTipService.InitialShowDelay="200" Visibility="{Binding Options.CacheMode, Converter={StaticResource EnumToVisibilityConverter}, ConverterParameter=EasyCache|UCache}">
+                                <CommonControls:SliderControl Text="{CommonControls:Localize CacheStart}" IsPercent="True" Minimum="0.01" Maximum="1" TickFrequency="0.01" Value="{Binding Options.CacheStartPercent, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"/>
+                                <CommonControls:SliderControl Text="{CommonControls:Localize CacheEnd}" IsPercent="True" Minimum="0.01" Maximum="1" TickFrequency="0.01" Value="{Binding Options.CacheEndPercent, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"/>
+                            </UniformGrid>
+                        </StackPanel>
+                    </GroupBox>
+
+                    <!--ModelOptions-->
+                    <GroupBox Header="{CommonControls:Localize ModelOptions}" Margin="0,0,0,10" Padding="0,4" Visibility="{Binding Pipeline.DiffusionModel.Backend, Converter={StaticResource EnumToVisibilityConverter}, ConverterParameter=StableDiffusionCpp}">
+                        <StackPanel>
+                            <UniformGrid Columns="2">
+                                <StackPanel Margin="0,0,2,0" ToolTip="{CommonControls:Localize ToolTip_ClipSkip}" ToolTipService.InitialShowDelay="200">
+                                    <TextBlock Text="{CommonControls:Localize ClipSkip}" Style="{StaticResource FieldTextBlockStyle}" />
+                                    <TextBox Text="{Binding Options.ClipSkip, UpdateSourceTrigger=PropertyChanged}" />
+                                </StackPanel>
+                                <StackPanel Margin="2,0,0,0" ToolTip="{CommonControls:Localize ToolTip_MoeBoundary}" ToolTipService.InitialShowDelay="200" Visibility="{Binding Pipeline.DiffusionModel.Pipeline, Converter={StaticResource EnumToVisibilityConverter}, ConverterParameter=WanPipeline}">
+                                    <TextBlock Text="{CommonControls:Localize MoeBoundary}" Style="{StaticResource FieldTextBlockStyle}" />
+                                    <CommonControls:FloatBox FloatValue="{Binding Options.MoeBoundary, UpdateSourceTrigger=PropertyChanged}" />
+                                </StackPanel>
+                            </UniformGrid>
+                            <UniformGrid Columns="2" Margin="0,8,0,4" ToolTip="{CommonControls:Localize ToolTip_SeamlessTiling}" ToolTipService.InitialShowDelay="200">
+                                <CheckBox Content="{CommonControls:Localize SeamlessX}" IsChecked="{Binding Options.IsCircularXEnabled}" />
+                                <CheckBox Content="{CommonControls:Localize SeamlessY}" IsChecked="{Binding Options.IsCircularYEnabled}" />
+                            </UniformGrid>
+                        </StackPanel>
                     </GroupBox>
 
                     <!--AutoEncoder-->
@@ -469,7 +487,7 @@
                         <Grid Visibility="{Binding AutomationOptions.Type, Converter={StaticResource EnumToVisibilityConverter}, ConverterParameter=Seed}">
                             <UniformGrid Margin="0,0,0,0">
                                 <StackPanel>
-                                    <TextBlock Text="{CommonControls:Localize ImageCount}" Style="{StaticResource FieldTextBlockStyle}"/>
+                                    <TextBlock Text="{CommonControls:Localize AutomationCount}" Style="{StaticResource FieldTextBlockStyle}"/>
                                     <TextBox Text="{Binding AutomationOptions.Count, UpdateSourceTrigger=PropertyChanged}" />
                                 </StackPanel>
                             </UniformGrid>
@@ -490,7 +508,7 @@
                             <UniformGrid Margin="0,0,0,0" >
                                 <StackPanel>
                                     <TextBlock Text="{CommonControls:Localize PromptFile}" Style="{StaticResource FieldTextBlockStyle}"/>
-                                    <CommonControls:FilePickerTextBox FileName="{Binding AutomationOptions.InputFile, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" IsRequired="True" Filter="Text Files|*.txt;" DefaultExt="txt"/>
+                                    <CommonControls:FilePickerTextBox FileName="{Binding AutomationOptions.InputFile, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" IsRequired="True" Filter="{CommonControls:Localize TextFiles, Append='|*.txt;'}" DefaultExt="txt"/>
                                 </StackPanel>
                             </UniformGrid>
                         </Grid>

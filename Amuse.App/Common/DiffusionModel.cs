@@ -1,37 +1,28 @@
 ﻿using Amuse.App.Views;
 using Amuse.Common;
-using System.Collections.Generic;
 using System.Linq;
 using System.Text.Json.Serialization;
 using TensorStack.Common;
-using TensorStack.Common.Common;
-using TensorStack.WPF;
 
 namespace Amuse.App.Common
 {
-    public sealed class DiffusionModel : BaseModel, IGenerateModel
+    public sealed class DiffusionModel : GenerateModelBase<DiffusionCheckpointModel>, IGenerateModel
     {
         private BackendType _backend;
         private string _name;
         private string _template;
         private PipelineType _pipeline;
         private string _modelType = "Base";
-        private string _variant;
         private VendorType[] _vendor;
-        private DataType _baseType;
         private MediaType _mediaType;
         private ProcessType[] _processTypes;
         private View[] _viewFilter;
-        private DiffusionCheckpointModel _checkpoint;
-        private float _memorySize;
         private GenerateDefaultOptions _defaultOptions;
         private SizeOption[] _resolutions = [];
-        private string _accessToken;
         private bool _isDefault;
         private bool _isNew;
         private bool _isRecommended;
         private string _link;
-        private ModelStatusType _status;
         private MemoryMode? _userMemoryMode;
         private ExecutionOptionsModel _userExecutionOptions;
 
@@ -69,23 +60,10 @@ namespace Amuse.App.Common
         }
 
         [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
-        public string Variant
-        {
-            get { return _variant; }
-            set { SetProperty(ref _variant, value); }
-        }
-
-        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
         public VendorType[] Vendor
         {
             get { return _vendor; }
             set { SetProperty(ref _vendor, value); }
-        }
-
-        public DataType BaseType
-        {
-            get { return _baseType; }
-            set { SetProperty(ref _baseType, value); }
         }
 
         public MediaType MediaType
@@ -107,18 +85,6 @@ namespace Amuse.App.Common
             set { SetProperty(ref _viewFilter, value); }
         }
 
-        public DiffusionCheckpointModel Checkpoint
-        {
-            get { return _checkpoint; }
-            set { SetProperty(ref _checkpoint, value); }
-        }
-
-        public float MemorySize
-        {
-            get { return _memorySize; }
-            set { SetProperty(ref _memorySize, value); }
-        }
-
         public GenerateDefaultOptions DefaultOptions
         {
             get { return _defaultOptions; }
@@ -129,19 +95,6 @@ namespace Amuse.App.Common
         {
             get { return _resolutions; }
             set { SetProperty(ref _resolutions, value); }
-        }
-
-        public ModelStatusType Status
-        {
-            get { return _status; }
-            set { SetProperty(ref _status, value); }
-        }
-
-        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingDefault)]
-        public string AccessToken
-        {
-            get { return _accessToken; }
-            set { SetProperty(ref _accessToken, value); }
         }
 
         [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingDefault)]
@@ -192,49 +145,13 @@ namespace Amuse.App.Common
             set { SetProperty(ref _userExecutionOptions, value); }
         }
 
-
-        public void Initialize(Settings settings)
+        /// <summary>
+        /// Gets the directory the checkpoint sets are installed in.
+        /// </summary>
+        /// <param name="settings">The settings.</param>
+        public override string GetDirectory(Settings settings)
         {
-            Status = GetModelStatus(settings);
-        }
-
-
-        public void Delete(Settings settings)
-        {
-            foreach (var component in Checkpoint.GetComponents())
-            {
-                if (component.Type == CheckpointType.Component)
-                    continue;
-
-                var resolvedPath = component.Resolve(settings, settings.DirectoryDiffusion);
-                if (component.Type == CheckpointType.LocalFile || component.Type == CheckpointType.OnlineFile)
-                    FileHelper.DeleteFile(resolvedPath);
-                else if (component.Type == CheckpointType.LocalFolder || component.Type == CheckpointType.LocalFolder)
-                    FileHelper.DeleteDirectory(resolvedPath);
-            }
-        }
-
-
-        public string GetDirectory(Settings settings)
-        {
-            return System.IO.Path.Combine(settings.DirectoryDiffusion);
-        }
-
-
-        private ModelStatusType GetModelStatus(Settings settings)
-        {
-            if (Checkpoint == null)
-                return ModelStatusType.Available;
-
-            var isValid = Checkpoint.IsInstalled(settings.DirectoryDiffusion, settings.Components);
-            if ((Status == ModelStatusType.Available || Status == ModelStatusType.Unknown) && isValid)
-                return ModelStatusType.Installed;
-            else if (Status == ModelStatusType.Installed && !isValid)
-                return ModelStatusType.Unknown;
-            else if (Status == ModelStatusType.Downloading || Status == ModelStatusType.DownloadQueue || Status == ModelStatusType.DownloadFailed)
-                return ModelStatusType.Available;
-
-            return Status;
+            return settings.DirectoryDiffusion;
         }
 
 
@@ -248,25 +165,17 @@ namespace Amuse.App.Common
                 Template = Template,
                 Pipeline = Pipeline,
                 ModelType = ModelType,
-                Variant = Variant,
-                BaseType = BaseType,
                 MediaType = MediaType,
-                AccessToken = AccessToken,
                 Link = Link,
+                Metadata = Metadata?.DeepClone(),
                 Vendor = Vendor?.ToArray(),
                 Resolutions = Resolutions.Copy(),
                 ViewFilter = ViewFilter?.ToArray(),
-                Checkpoint = Checkpoint.DeepClone(),
-                MemorySize = MemorySize,
+                Checkpoints = [.. Checkpoints.Select(x => x.DeepClone())],
+                CurrentCheckpointType = CurrentCheckpointType,
                 ProcessTypes = ProcessTypes.ToArray(),
                 DefaultOptions = DefaultOptions.DeepClone()
             };
-        }
-
-
-        public IEnumerable<CheckpointComponent> GetComponents()
-        {
-            return _checkpoint.GetComponents();
         }
     }
 }

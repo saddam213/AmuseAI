@@ -1,6 +1,7 @@
 ﻿// Copyright (c) Adam Clark. All rights reserved.
 // Licensed under the Apache 2.0 License.
 using Amuse.App.Common;
+using Amuse.App.Resources;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -24,7 +25,6 @@ namespace Amuse.App.Dialogs
         private VariableModel _selectedVariable;
         private string _requirements;
         private bool _isFixedEnvironment;
-        private readonly string[] _pythonVersions = ["3.12", "3.13", "3.14"];
         private readonly string[] _stableDiffusionCppVersions = ["Vulkan", "CUDA", "ROCM"];
         private readonly string[] _audioCppVersions = ["Vulkan", "CUDA", "CPU"];
         private readonly string[] _llamaCppVersions = ["Vulkan", "CUDA", "ROCM"];
@@ -91,10 +91,9 @@ namespace Amuse.App.Dialogs
             get { return _backendType; }
             set
             {
+                var hostVersion = EnvironmentModel?.HostVersion;
                 SetProperty(ref _backendType, value);
-                if (_backendType == BackendType.HuggingFace)
-                    HostVersions = [.. _pythonVersions];
-                else if (_backendType == BackendType.StableDiffusionCpp)
+                if (_backendType == BackendType.StableDiffusionCpp)
                     HostVersions = [.. _stableDiffusionCppVersions];
                 else if (_backendType == BackendType.AudioCpp)
                     HostVersions = [.. _audioCppVersions];
@@ -102,6 +101,8 @@ namespace Amuse.App.Dialogs
                     HostVersions = [.. _llamaCppVersions];
                 else
                     HostVersions = [];
+
+                SetHostVersion(hostVersion);
             }
         }
 
@@ -132,11 +133,11 @@ namespace Amuse.App.Dialogs
             EnvironmentModel = new EnvironmentModel
             {
                 Id = environmentId,
-                Name = "My Environment",
+                Name = AppDefault.MyEnvironment,
                 Environment = "environment-new",
                 Vendor = Settings.Vendors.FirstOrDefault(),
                 Type = EnvironmentType.Vendor,
-                Backend = BackendType.HuggingFace
+                Backend = BackendType.StableDiffusionCpp
             };
             Populate();
             return base.ShowDialogAsync();
@@ -181,7 +182,7 @@ namespace Amuse.App.Dialogs
                 var imported = 0;
                 foreach (var environmentImport in environmentImports)
                 {
-                    if (Settings.Environments.Any(x => x.Name == environmentImport.Name && x.Vendor == environmentImport.Vendor))
+                    if (!IsValidImport(environmentImport))
                         continue;
 
                     imported++;
@@ -189,7 +190,7 @@ namespace Amuse.App.Dialogs
                     Settings.Environments.Add(environmentImport);
                 }
 
-                await DialogService.ShowMessageAsync("Import Complete", $"{imported}/{environmentImports.Length} Environments Imported.");
+                await DialogService.ShowMessageAsync(AppDefault.ImportCompleteTitle, string.Format(AppDefault.ImportCompleteEnvironments, imported, environmentImports.Length));
                 return true;
             }
         }
@@ -204,7 +205,7 @@ namespace Amuse.App.Dialogs
             Variables.Add(new VariableModel
             {
                 Name = _currentVariable.Name,
-                Value = _currentVariable.Value,
+                Value = _currentVariable.Value ?? string.Empty,
             });
 
             CurrentVariable.Clear();
@@ -212,11 +213,16 @@ namespace Amuse.App.Dialogs
         }
 
 
+        /// <summary>
+        /// Determines whether the entered variable can be added, its name has no spaces or equals signs and the value may be empty.
+        /// </summary>
         private bool CanAddVariable()
         {
-            return !string.IsNullOrEmpty(_currentVariable.Name)
-                && !string.IsNullOrEmpty(_currentVariable.Value)
-                && !Variables.Any(x => x.Name == _currentVariable.Name && x.Value == _currentVariable.Value);
+            var name = _currentVariable.Name;
+            if (string.IsNullOrWhiteSpace(name) || name.Any(c => char.IsWhiteSpace(c) || c == '='))
+                return false;
+
+            return !Variables.Any(x => x.Name == name && x.Value == (_currentVariable.Value ?? string.Empty));
         }
 
 
@@ -253,7 +259,7 @@ namespace Amuse.App.Dialogs
 
             EnvironmentModel.Backend = _backendType;
             EnvironmentModel.Variables = Variables.Count > 0 ? Variables.ToDictionary(k => k.Name, k => k.Value) : null;
-            EnvironmentModel.Requirements = Requirements.Split(Environment.NewLine, StringSplitOptions.TrimEntries | StringSplitOptions.RemoveEmptyEntries);
+            EnvironmentModel.Requirements = Requirements.Split(['\r', '\n'], StringSplitOptions.TrimEntries | StringSplitOptions.RemoveEmptyEntries);
 
             // Defaults
             UpdateDefaults(EnvironmentModel);
@@ -303,7 +309,21 @@ namespace Amuse.App.Dialogs
             }
 
             BackendType = EnvironmentModel.Backend;
-            EnvironmentModel.HostVersion = EnvironmentModel.HostVersion;
+        }
+
+
+        /// <summary>
+        /// Selects the host version again after the host versions change, the first one when the backend does not have it.
+        /// </summary>
+        /// <param name="hostVersion">The host version selected before the change.</param>
+        private void SetHostVersion(string hostVersion)
+        {
+            if (EnvironmentModel is null || HostVersions.Count == 0)
+                return;
+
+            var selectedVersion = HostVersions.Contains(hostVersion) ? hostVersion : HostVersions[0];
+            EnvironmentModel.HostVersion = null;
+            EnvironmentModel.HostVersion = selectedVersion;
         }
 
 
@@ -327,31 +347,49 @@ namespace Amuse.App.Dialogs
         }
 
 
+        /// <summary>
+        /// Determines whether an imported environment can be added as is, its folder name is set, valid and not used by another environment of the same backend and vendor.
+        /// </summary>
+        /// <param name="environment">The imported environment.</param>
+        private bool IsValidImport(EnvironmentModel environment)
+        {
+            if (string.IsNullOrWhiteSpace(environment.Name) || string.IsNullOrWhiteSpace(environment.Environment))
+                return false;
+
+            if (!environment.Environment.All(c => char.IsLetterOrDigit(c) || c == '_' || c == '-' || c == '.'))
+                return false;
+
+            return !Settings.Environments.Any(x => x.Backend == environment.Backend && x.Vendor == environment.Vendor && x.Environment.Equals(environment.Environment, StringComparison.OrdinalIgnoreCase));
+        }
+
+
         private IEnumerable<string> GetValidationErrors()
         {
             if (string.IsNullOrWhiteSpace(Requirements))
-                yield return "Requirements cannot be empty";
+                yield return AppErrors.ValidationRequirementsEmpty;
+            if (EnvironmentModel.DownloadSize < 0)
+                yield return string.Format(AppErrors.ValidationZeroOrGreater, AppDefault.DownloadSizeGB);
             if (string.IsNullOrWhiteSpace(EnvironmentModel.Name))
-                yield return "Name cannot be empty";
+                yield return AppErrors.ValidationNameEmpty;
             if (string.IsNullOrWhiteSpace(EnvironmentModel.Environment))
-                yield return "Environment cannot be empty";
+                yield return AppErrors.ValidationEnvironmentEmpty;
             if (!string.IsNullOrWhiteSpace(EnvironmentModel.Environment))
             {
                 if (!EnvironmentModel.Environment.All(c => char.IsLetterOrDigit(c) || c == '_' || c == '-' || c == '.'))
-                    yield return "Environment can only contain letters, numbers, '.', '_' & '-'";
-                if (!IsUpdateMode && Settings.Environments.Any(x => x.Environment.Equals(EnvironmentModel.Environment, StringComparison.OrdinalIgnoreCase)))
-                    yield return $"Environment with name '{EnvironmentModel.Environment}' already exists";
+                    yield return AppErrors.ValidationEnvironmentInvalidCharacters;
+                if (Settings.Environments.Any(x => x != _originalEnvironmentModel && x.Backend == _backendType && x.Vendor == EnvironmentModel.Vendor && x.Environment.Equals(EnvironmentModel.Environment, StringComparison.OrdinalIgnoreCase)))
+                    yield return string.Format(AppErrors.ValidationEnvironmentExists, EnvironmentModel.Environment);
             }
 
             if (EnvironmentModel.Type == EnvironmentType.Device)
             {
                 if (EnvironmentModel.Device == 0)
-                    yield return "Device cannot be empty";
+                    yield return AppErrors.ValidationDeviceEmpty;
             }
             else if (EnvironmentModel.Type == EnvironmentType.Pipeline)
             {
                 if (EnvironmentModel.Pipeline == null)
-                    yield return "Pipeline cannot be empty";
+                    yield return AppErrors.ValidationPipelineEmpty;
             }
         }
 

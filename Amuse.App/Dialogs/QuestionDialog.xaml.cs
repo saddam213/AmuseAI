@@ -3,6 +3,7 @@
 using System.Threading.Tasks;
 using TensorStack.WPF;
 using TensorStack.WPF.Controls;
+using TensorStack.WPF.Resources;
 
 namespace Amuse.App.Dialogs
 {
@@ -51,13 +52,13 @@ namespace Amuse.App.Dialogs
         }
 
 
-        public Task<bool> ShowDialogAsync(string title, string messageTitle, string messageBody, string buttonTextSave = "Save", string buttonTextCancel = "Cancel") //TODO: Localize
+        public Task<bool> ShowDialogAsync(string title, string messageTitle, string messageBody, string buttonTextSave = null, string buttonTextCancel = null)
         {
             Title = title;
             MessageTitle = messageTitle;
             MessageBody = messageBody;
-            ButtonTextSave = buttonTextSave;
-            ButtonTextCancel = buttonTextCancel;
+            ButtonTextSave = buttonTextSave ?? Default.Save;
+            ButtonTextCancel = buttonTextCancel ?? Default.Cancel;
             return base.ShowDialogAsync();
         }
     }

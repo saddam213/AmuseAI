@@ -28,7 +28,7 @@
                         <!--ModelControl-->
                         <Grid DockPanel.Dock="Top" IsEnabled="{Binding GenerateService.IsLoading, Converter={StaticResource InverseBoolConverter}}">
                             <Grid IsEnabled="{Binding GenerateService.IsExecuting, Converter={StaticResource InverseBoolConverter}}">
-                                <Grid IsEnabled="{Binding IsAutomating, Converter={StaticResource InverseBoolConverter}}">
+                                <Grid IsEnabled="{Binding IsPipelineBusy, Converter={StaticResource InverseBoolConverter}}">
                                     <Controls:DiffusionModelControl
                                         x:Name="ModelControl"
                                         ViewType="AudioToText"
@@ -58,7 +58,7 @@
                                         <Button Command="{Binding CancelCommand}" >
                                             <Button.Style>
                                                 <Style TargetType="{x:Type Button}" BasedOn="{StaticResource {x:Type Button}}">
-                                                    <Setter Property="Content" Value="Cancel" />
+                                                    <Setter Property="Content" Value="{CommonControls:Localize Cancel}" />
                                                     <Style.Triggers>
                                                         <DataTrigger Binding="{Binding GenerateService.IsCanceling}" Value="True">
                                                             <Setter Property="Content" Value="{CommonControls:Localize Canceling}" />
@@ -90,9 +90,23 @@
                                             IsReplayEnabled="False"
                                             IsAutoPlayEnabled="False"
                                             IsSaveEnabled="False"
+                                            IsCropEnabled="True"
+                                            CaptureSampleRate="{Binding CurrentPipeline.DiffusionModel.DefaultOptions.SampleRate, Mode=OneWay, FallbackValue=0}"
+                                            CaptureChannels="{Binding CurrentPipeline.DiffusionModel.DefaultOptions.Channels, Mode=OneWay, FallbackValue=0}"
                                             IsInputEnabled="{Binding IsPipelineLoaded}"
                                             OnMediaImport="OnMediaImport"/>
                                     </Border>
+                                </StackPanel>
+
+                                <!--Live Microphone-->
+                                <StackPanel Margin="0,4,0,4" IsEnabled="{Binding IsAutomating, Converter={StaticResource InverseBoolConverter}}" Visibility="{Binding CurrentPipeline.DiffusionModel.DefaultOptions.IsLiveSupported, Converter={StaticResource BooleanToVisibilityConverter}, FallbackValue=Collapsed}">
+                                    <TextBlock Text="{CommonControls:Localize LiveMicrophone}" Style="{StaticResource FieldTextBlockStyle}" />
+                                    <CommonControls:AudioInputLiveControl
+                                        x:Name="LiveInputControl"
+                                        LiveCommand="{Binding LiveCommand, Mode=OneTime}"
+                                        StartToolTip="{CommonControls:Localize ToolTip_LiveStart}"
+                                        StopToolTip="{CommonControls:Localize ToolTip_LiveStop}"
+                                        IsEnabled="{Binding IsPipelineLoaded}"/>
                                 </StackPanel>
 
                                 <Controls:AudioDiffusionInputControl
@@ -105,8 +119,7 @@
                                     Pipeline="{Binding CurrentPipeline, Mode=OneWay}" 
                                     IsExecuting="{Binding GenerateService.IsExecuting, Mode=OneWay}"
                                     IsAutomating="{Binding IsAutomating, Mode=OneWay}"
-                                    IsEnabled="{Binding IsPipelineLoaded}"
-                                    IsMultipleResult="{Binding IsMultipleResult, Mode=TwoWay}"/>
+                                    IsEnabled="{Binding IsPipelineLoaded}"/>
 
                             </StackPanel>
 
@@ -140,29 +153,7 @@
 
                             <Grid >
                                 <Grid Visibility="{Binding GenerateService.IsExecuting, Converter={StaticResource InverseBooleanToHiddenConverter}}">
-                                    <TabControl ItemsSource="{Binding ResultText.Results}" SelectedIndex="{Binding SelectedBeam}" Visibility="{Binding IsMultipleResult, Converter={StaticResource BooleanToHiddenConverter}}" Padding="0" BorderThickness="0">
-                                        <TabControl.ItemTemplate>
-                                            <DataTemplate>
-                                                <StackPanel>
-                                                    <TextBlock MinWidth="100">
-                                                        <Run Text="{CommonControls:Localize BeamLabel}"/>
-                                                        <Run Text="{Binding Beam}"/>
-                                                    </TextBlock>
-                                                    <TextBlock FontSize="8" FontStyle="Italic" Opacity=".6" >
-                                                        <Run Text="{CommonControls:Localize Score, Append=:}"/>
-                                                        <Run Text="{Binding Score, StringFormat={}{0:F4}}"/>
-                                                    </TextBlock>
-                                                </StackPanel>
-                                            </DataTemplate>
-                                        </TabControl.ItemTemplate>
-                                        <TabControl.ContentTemplate>
-                                            <DataTemplate>
-                                                <CommonControls:TextElement TextSource="{Binding ., Mode=TwoWay}" TextWrapping="Wrap" IsReadOnly="True" BorderThickness="0" IsLoadEnabled="False"/>
-                                            </DataTemplate>
-                                        </TabControl.ContentTemplate>
-                                    </TabControl>
-
-                                    <DockPanel Visibility="{Binding IsMultipleResult, Converter={StaticResource InverseBooleanToHiddenConverter}, FallbackValue=Visible}">
+                                    <DockPanel>
                                         <CommonControls:TextElement TextSource="{Binding ResultText.Result, Mode=OneWay}" TextWrapping="Wrap" IsReadOnly="True" IsLoadEnabled="False"/>
                                     </DockPanel>
                                 </Grid>

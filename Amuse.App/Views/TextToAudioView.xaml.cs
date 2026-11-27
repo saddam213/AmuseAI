@@ -24,8 +24,8 @@ namespace Amuse.App.Views
         /// <summary>
         /// Initializes a new instance of the <see cref="TextToAudioView"/> class.
         /// </summary>
-        public TextToAudioView(Settings settings, NavigationService navigationService, IModelDownloadService downloadService, IGenerateService generateService, IExtractService extractService, IUpscaleService upscaleService, IHistoryService historyService, ILogger<TextToAudioView> logger)
-            : base(settings, navigationService, downloadService, generateService, extractService, upscaleService, historyService, logger)
+        public TextToAudioView(Settings settings, NavigationService navigationService, IModelDownloadService downloadService, IModelAccessService modelAccessService, IAudioService audioService, ILanguageService languageService, IExtractService extractService, IUpscaleService upscaleService, IHistoryService historyService, ILogger<TextToAudioView> logger)
+            : base(settings, navigationService, downloadService, modelAccessService, audioService, languageService, extractService, upscaleService, historyService, logger)
         {
             _sourceText = new TextInput(string.Empty);
             InitializeComponent();
@@ -144,13 +144,9 @@ namespace Amuse.App.Views
                     var resultTensor = await ExecuteAudioDiffusionAsync(options);
 
                     // Result
-                    ResultAudio = resultTensor;
-
-                    // History
-                    if (AutomationOptions.IsHistoryEnabled)
-                    {
-                        await SaveHistoryAsync(ResultAudio, automationJob.GenerateOptions);
-                    }
+                    ResultAudio = !AutomationOptions.IsHistoryEnabled
+                        ? resultTensor
+                        : await SaveHistoryAsync(resultTensor, options);
 
                     await automationJob.SaveAsync(ResultAudio);
                     AutomationProgress.Update(automationJob.Id, automationJob.Count, $"{AppDefault.Automation}: {automationJob.Id}/{automationJob.Count}");

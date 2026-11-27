@@ -6,6 +6,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.IO.Pipes;
+using System.Runtime.CompilerServices;
 using System.Threading;
 using System.Threading.Tasks;
 using TensorStack.Common;
@@ -21,13 +22,20 @@ namespace Amuse.Common
         private readonly NamedPipeClientStream _commandChannel;
         private readonly NamedPipeClientStream _pipelineChannel;
         private readonly NamedPipeClientStream _progressChannel;
+        private readonly NamedPipeClientStream _streamChannel;
         private readonly PipelineTensorChannel _pipelineTensorChannel;
+        private readonly PipelineStreamChannel _pipelineStreamChannel;
         private readonly ProcessHandler _processHandler;
         private readonly IProgress<PipelineProgress> _progressCallback;
+        private readonly SemaphoreSlim _pipelineLock = new SemaphoreSlim(1, 1);
+        private readonly SemaphoreSlim _commandLock = new SemaphoreSlim(1, 1);
+        private readonly TimeSpan _connectTimeout = TimeSpan.FromSeconds(60);
+        private readonly TimeSpan _stopTimeout = TimeSpan.FromSeconds(15);
 
         private CancellationTokenSource _progressCancellation;
         private Process _serverProcess;
         private bool _isCanceled;
+        private int _streamId;
 
         protected PipelineClient(ClientConfig config, ServerConfig serverConfig, IProgress<PipelineProgress> progressCallback, ILogger logger = default)
         {
@@ -40,8 +48,10 @@ namespace Amuse.Common
             _commandChannel = new NamedPipeClientStream(".", _serverConfig.ChannelCommand, PipeDirection.InOut, PipeOptions.Asynchronous);
             _pipelineChannel = new NamedPipeClientStream(".", _serverConfig.ChannelPipeName, PipeDirection.InOut, PipeOptions.Asynchronous);
             _progressChannel = new NamedPipeClientStream(".", _serverConfig.ChannelProgress, PipeDirection.In, PipeOptions.Asynchronous);
+            _streamChannel = new NamedPipeClientStream(".", _serverConfig.ChannelStream, PipeDirection.InOut, PipeOptions.Asynchronous);
             _pipelineTensorChannel = new PipelineTensorChannel(_serverConfig);
-            _ = ProcessProgressQueueAsync(_progressCallback);
+            _pipelineStreamChannel = new PipelineStreamChannel(_streamChannel, _serverConfig, false);
+            _ = Task.Run(() => ProcessProgressQueueAsync(_progressCallback));
         }
 
         public PipelineClient(ClientConfig config, IProgress<PipelineProgress> progressCallback, ILogger logger = default)
@@ -62,12 +72,8 @@ namespace Amuse.Common
             try
             {
                 // Connect Pipes
-                await Task.WhenAll
-                (
-                    _commandChannel.ConnectAsync(cancellationToken),
-                    _progressChannel.ConnectAsync(cancellationToken),
-                    _pipelineChannel.ConnectAsync(cancellationToken)
-                );
+                await ConnectAsync(cancellationToken);
+                _ = Task.Run(() => _pipelineStreamChannel.StartAsync(_progressCancellation.Token));
 
                 // Start Environment
                 await SendPipelineRequestAsync(new PipelineRequest(RequestType.Start), cancellationToken);
@@ -81,13 +87,65 @@ namespace Amuse.Common
 
 
         /// <summary>
+        /// Connect the pipes, fails if the host exits or does not create its pipes in time.
+        /// </summary>
+        /// <param name="cancellationToken">The cancellation token.</param>
+        /// <exception cref="System.Exception">Host process exited before connecting.</exception>
+        /// <exception cref="System.TimeoutException">Timed out connecting to the host process.</exception>
+        private async Task ConnectAsync(CancellationToken cancellationToken)
+        {
+            using (var connectCancellation = CancellationTokenSource.CreateLinkedTokenSource(cancellationToken))
+            {
+                connectCancellation.CancelAfter(_connectTimeout);
+                var connectTask = Task.WhenAll
+                (
+                    _commandChannel.ConnectAsync(connectCancellation.Token),
+                    _progressChannel.ConnectAsync(connectCancellation.Token),
+                    _streamChannel.ConnectAsync(connectCancellation.Token),
+                    _pipelineChannel.ConnectAsync(connectCancellation.Token)
+                );
+
+                try
+                {
+                    var exitTask = _serverProcess.WaitForExitAsync(connectCancellation.Token);
+                    if (await Task.WhenAny(connectTask, exitTask) == exitTask && _serverProcess.HasExited)
+                    {
+                        var exitCode = _serverProcess.ExitCode;
+                        throw new Exception($"Host process exited before connecting, ExitCode: {exitCode}");
+                    }
+                    await connectTask;
+                }
+                catch (OperationCanceledException) when (!cancellationToken.IsCancellationRequested)
+                {
+                    throw new TimeoutException("Timed out connecting to the host process.");
+                }
+                finally
+                {
+                    connectCancellation.Cancel();
+                }
+            }
+        }
+
+
+        /// <summary>
         /// Stop client
         /// </summary>
         public async Task StopAsync()
         {
             _isCanceled = true;
-            await SendPipelineRequestAsync(new PipelineRequest(RequestType.Stop));
-            await StopServerAsync(_serverProcess);
+            try
+            {
+                using (var stopCancellation = new CancellationTokenSource(_stopTimeout))
+                {
+                    await SendPipelineRequestAsync(new PipelineRequest(RequestType.Stop), stopCancellation.Token);
+                }
+                await StopServerAsync(_serverProcess);
+            }
+            catch (Exception ex)
+            {
+                _logger?.LogWarning("[PipelineClient] [Stop] Host did not stop, killing process, Reason: {Reason}", ex.Message);
+                await KillServerAsync();
+            }
         }
 
 
@@ -96,10 +154,20 @@ namespace Amuse.Common
         /// </summary>
         public virtual async Task KillServerAsync()
         {
-            if (_serverProcess is not null)
+            if (_serverProcess is null)
+                return;
+
+            try
             {
-                _serverProcess.Kill(true);
-                await _serverProcess.WaitForExitAsync();
+                if (!_serverProcess.HasExited)
+                {
+                    _serverProcess.Kill(true);
+                    await _serverProcess.WaitForExitAsync();
+                }
+            }
+            catch (InvalidOperationException)
+            {
+                // Process already exited or disposed
             }
         }
 
@@ -154,8 +222,7 @@ namespace Amuse.Common
         /// <param name="cancellationToken">The cancellation token.</param>
         protected virtual async Task<CommandResponse> SendCommandRequestAsync(CommandRequest request, CancellationToken cancellationToken = default)
         {
-            await _commandChannel.SendMessage(request, cancellationToken);
-            var response = await _commandChannel.ReceiveMessage<CommandResponse>(cancellationToken);
+            var response = await SendCommandRequest(request, cancellationToken);
             if (response.IsError)
             {
                 if (response.IsCanceled)
@@ -184,7 +251,7 @@ namespace Amuse.Common
             if (!_config.ServerVariables.IsNullOrEmpty())
             {
                 foreach (var variable in _config.ServerVariables)
-                    processInfo.Environment.Add(variable);
+                    processInfo.Environment[variable.Key] = variable.Value;
             }
 
             _serverProcess = Process.Start(processInfo);
@@ -254,7 +321,19 @@ namespace Amuse.Common
             _progressChannel?.Dispose();
             _commandChannel?.Dispose();
             _pipelineChannel?.Dispose();
+            _pipelineStreamChannel?.Dispose();
+            _streamChannel?.Dispose();
+            try
+            {
+                if (_serverProcess is not null && !_serverProcess.HasExited)
+                    _serverProcess.Kill(true);
+            }
+            catch (InvalidOperationException)
+            {
+                // Process already exited or disposed
+            }
             _serverProcess?.Dispose();
+            _processHandler?.Dispose();
         }
 
 
@@ -331,7 +410,19 @@ namespace Amuse.Common
         public async Task UnloadAsync()
         {
             _isCanceled = true;
-            await SendPipelineRequestAsync(new PipelineRequest(RequestType.Unload));
+            try
+            {
+                using (var stopCancellation = new CancellationTokenSource(_stopTimeout))
+                {
+                    await SendPipelineRequestAsync(new PipelineRequest(RequestType.Unload), stopCancellation.Token);
+                }
+            }
+            catch (Exception ex)
+            {
+                _logger?.LogWarning("[PipelineClient] [Unload] Host did not unload, killing process, Reason: {Reason}", ex.Message);
+                await KillServerAsync();
+                return;
+            }
             await StopAsync();
         }
 
@@ -452,6 +543,137 @@ namespace Amuse.Common
 
 
         /// <summary>
+        /// Runs a pipeline stream, the input items are sent to the host as it takes them and its results are returned as they are produced.
+        /// </summary>
+        /// <param name="options">The options.</param>
+        /// <param name="input">The items to stream to the host, null if the pipeline takes no stream input.</param>
+        /// <param name="cancellationToken">The cancellation token.</param>
+        public async IAsyncEnumerable<PipelineStreamItem> RunStreamAsync(PipelineRunOptions options, IAsyncEnumerable<PipelineStreamItem> input, [EnumeratorCancellation] CancellationToken cancellationToken = default)
+        {
+            _isCanceled = false;
+            await _pipelineLock.WaitAsync(cancellationToken);
+
+            var isCompleted = false;
+            var streamResult = new StreamResult();
+            var inputCancellation = new CancellationTokenSource();
+            try
+            {
+                var streamId = ++_streamId;
+                _pipelineStreamChannel.Open(streamId);
+                await _pipelineChannel.SendMessage(new PipelineRequest(options, streamId), CancellationToken.None);
+                streamResult.ResponseTask = _pipelineChannel.ReceiveMessage<PipelineResponse>(CancellationToken.None);
+
+                var readyTask = _pipelineStreamChannel.WaitReadyAsync();
+                if (await Task.WhenAny(readyTask, streamResult.ResponseTask) == readyTask)
+                {
+                    await readyTask;
+                    streamResult.IsStarted = true;
+                    streamResult.InputTask = SendStreamInputAsync(input, inputCancellation.Token);
+                    await foreach (var item in _pipelineStreamChannel.ReadAllAsync(cancellationToken))
+                    {
+                        yield return item;
+                    }
+                }
+                isCompleted = true;
+            }
+            finally
+            {
+                await CompleteStreamAsync(streamResult, inputCancellation, isCompleted);
+                _pipelineLock.Release();
+            }
+
+            if (streamResult.InputException is not null)
+                throw streamResult.InputException;
+            if (streamResult.Response is null)
+                throw new Exception("The host closed the stream without a response.");
+            if (streamResult.Response.IsError)
+            {
+                if (streamResult.Response.IsCanceled)
+                    throw new OperationCanceledException(streamResult.Response.Error);
+
+                throw new Exception(streamResult.Response.Error);
+            }
+        }
+
+
+        /// <summary>
+        /// Sends the input items to the host, completing the stream with the exception if the input fails.
+        /// </summary>
+        /// <param name="input">The input.</param>
+        /// <param name="cancellationToken">The cancellation token.</param>
+        private async Task SendStreamInputAsync(IAsyncEnumerable<PipelineStreamItem> input, CancellationToken cancellationToken)
+        {
+            try
+            {
+                if (input is not null)
+                {
+                    await foreach (var item in input.WithCancellation(cancellationToken))
+                    {
+                        await _pipelineStreamChannel.WriteAsync(item, cancellationToken);
+                    }
+                }
+                await _pipelineStreamChannel.CompleteAsync();
+            }
+            catch (OperationCanceledException)
+            {
+                // The host stopped reading or the stream was cancelled
+            }
+            catch (Exception ex)
+            {
+                await _pipelineStreamChannel.CompleteAsync(ex);
+                throw;
+            }
+        }
+
+
+        /// <summary>
+        /// Completes a stream run, an unfinished stream is cancelled on the host and the final response is always read so the pipeline channel stays in sync.
+        /// </summary>
+        /// <param name="streamResult">The stream result.</param>
+        /// <param name="inputCancellation">The input cancellation.</param>
+        /// <param name="isCompleted">if set to <c>true</c> the host completed the stream.</param>
+        private async Task CompleteStreamAsync(StreamResult streamResult, CancellationTokenSource inputCancellation, bool isCompleted)
+        {
+            try
+            {
+                if (!isCompleted && streamResult.IsStarted)
+                {
+                    _isCanceled = true;
+                    await SendCommandRequest(new CommandRequest());
+                }
+            }
+            catch (Exception)
+            {
+                // The host is gone, the response read below fails
+            }
+
+            try
+            {
+                if (streamResult.ResponseTask is not null)
+                    streamResult.Response = await streamResult.ResponseTask;
+            }
+            catch (Exception)
+            {
+                // The host is gone, there is no response
+            }
+
+            inputCancellation.Cancel();
+            try
+            {
+                if (streamResult.InputTask is not null)
+                    await streamResult.InputTask;
+            }
+            catch (Exception ex)
+            {
+                streamResult.InputException = ex;
+            }
+
+            _pipelineStreamChannel.Close();
+            inputCancellation.Dispose();
+        }
+
+
+        /// <summary>
         /// Sends the pipeline request, waits and returns the response
         /// </summary>
         /// <param name="request">The request.</param>
@@ -459,8 +681,37 @@ namespace Amuse.Common
         /// <returns>PipelineResponse.</returns>
         private async Task<PipelineResponse> SendPipelineRequest(PipelineRequest request, CancellationToken cancellationToken = default)
         {
-            await _pipelineChannel.SendMessage(request, cancellationToken);
-            return await _pipelineChannel.ReceiveMessage<PipelineResponse>(cancellationToken);
+            await _pipelineLock.WaitAsync(cancellationToken);
+            try
+            {
+                await _pipelineChannel.SendMessage(request, cancellationToken);
+                return await _pipelineChannel.ReceiveMessage<PipelineResponse>(cancellationToken);
+            }
+            finally
+            {
+                _pipelineLock.Release();
+            }
+        }
+
+
+        /// <summary>
+        /// Sends the command request, waits and returns the response
+        /// </summary>
+        /// <param name="request">The request.</param>
+        /// <param name="cancellationToken">The cancellation token.</param>
+        /// <returns>CommandResponse.</returns>
+        private async Task<CommandResponse> SendCommandRequest(CommandRequest request, CancellationToken cancellationToken = default)
+        {
+            await _commandLock.WaitAsync(cancellationToken);
+            try
+            {
+                await _commandChannel.SendMessage(request, cancellationToken);
+                return await _commandChannel.ReceiveMessage<CommandResponse>(cancellationToken);
+            }
+            finally
+            {
+                _commandLock.Release();
+            }
         }
 
 
@@ -471,8 +722,20 @@ namespace Amuse.Common
         private async Task SendTensorResponseComplete(CancellationToken cancellationToken = default)
         {
             var message = new CommandRequest(CommandRequestType.Complete);
-            await _commandChannel.SendMessage(message, cancellationToken);
-            await _commandChannel.ReceiveMessage<CommandResponse>(cancellationToken);
+            await SendCommandRequest(message, cancellationToken);
+        }
+
+
+        /// <summary>
+        /// The state of a stream run.
+        /// </summary>
+        private sealed record StreamResult
+        {
+            public bool IsStarted { get; set; }
+            public Task InputTask { get; set; }
+            public Task<PipelineResponse> ResponseTask { get; set; }
+            public PipelineResponse Response { get; set; }
+            public Exception InputException { get; set; }
         }
     }
 }

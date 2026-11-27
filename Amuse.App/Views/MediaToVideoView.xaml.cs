@@ -24,8 +24,8 @@ namespace Amuse.App.Views
         /// <summary>
         /// Initializes a new instance of the <see cref="MediaToVideoView"/> class.
         /// </summary>
-        public MediaToVideoView(Settings settings, NavigationService navigationService, IModelDownloadService downloadService, IGenerateService generateService, IExtractService extractService, IUpscaleService upscaleService, IHistoryService historyService, ILogger<MediaToVideoView> logger)
-            : base(settings, navigationService, downloadService, generateService, extractService, upscaleService, historyService, logger)
+        public MediaToVideoView(Settings settings, NavigationService navigationService, IModelDownloadService downloadService, IModelAccessService modelAccessService, IGenerateService generateService, ILanguageService languageService, IExtractService extractService, IUpscaleService upscaleService, IHistoryService historyService, ILogger<MediaToVideoView> logger)
+            : base(settings, navigationService, downloadService, modelAccessService, generateService, languageService, extractService, upscaleService, historyService, logger)
         {
             InitializeComponent();
         }
@@ -121,11 +121,13 @@ namespace Amuse.App.Views
 
             try
             {
+                var previousVideo = ResultVideo;
+                await ResultControl.ClearAsync();
                 Progress.Clear();
                 AutomationProgress.Clear();
                 Statistics.Clear();
-                ResultImage = default;
-                CompareImage = default;
+                ResultVideo = default;
+                CompareVideo = default;
                 Statistics.Start();
                 CancellationTokenSource = new CancellationTokenSource();
 
@@ -153,9 +155,11 @@ namespace Amuse.App.Views
                     resultTensor = await ExecuteVideoUpscaleAsync(resultTensor);
 
                     // Result
+                    var compareVideo = ResultVideo ?? previousVideo;
                     ResultVideo = !AutomationOptions.IsHistoryEnabled
                         ? resultTensor
-                        : await SaveHistoryAsync(automationJob.GenerateOptions, resultTensor);
+                        : await SaveHistoryAsync(options, resultTensor);
+                    CompareVideo = compareVideo;
 
                     await automationJob.SaveAsync(ResultVideo);
                     AutomationProgress.Update(automationJob.Id, automationJob.Count, $"{AppDefault.Automation}: {automationJob.Id}/{automationJob.Count}");
@@ -200,8 +204,8 @@ namespace Amuse.App.Views
                 Options = options,
                 Model = CurrentPipeline.DiffusionModel.Name,
                 LoraModels = CurrentPipeline.LoraAdapterModel?.Select(x => x.Name).ToArray(),
-                UpscaleModel = UpscaledModel?.Name,
-                UpscaleOptions = UpscaledModel is not null ? UpscaleOptions : null,
+                UpscaleModel = CurrentPipeline?.UpscaleModel?.Name,
+                UpscaleOptions = CurrentPipeline?.UpscaleModel is not null ? UpscaleOptions : null,
                 Source = View.MediaToVideo,
             });
             Logger.LogInformation("[MediaToVideo] [SaveHistory] History saved.");

@@ -2,12 +2,15 @@
 using Amuse.App.Tools;
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
+using System.Net.Http;
 using System.Reflection;
 using System.Text.Json;
+using System.Threading;
+using System.Threading.Tasks;
 using System.Xml.Linq;
 using TensorStack.Common;
-using TensorStack.WPF.Services;
 
 namespace Amuse.App.Services
 {
@@ -16,21 +19,39 @@ namespace Amuse.App.Services
         public const string TagOpen = "<tool_call>";
         public const string TagClose = "</tool_call>";
         private readonly Dictionary<string, ToolCallBase> _toolDefinitions;
-        private readonly IHttpService _httpService;
+        private readonly HttpClient _httpClient;
+        private readonly IMcpService _mcpService;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="ToolService"/> class.
         /// </summary>
-        public ToolService(IHttpService httpService)
+        /// <param name="settings">The settings.</param>
+        /// <param name="mcpService">The MCP service.</param>
+        public ToolService(Settings settings, IMcpService mcpService)
         {
-            _httpService = httpService;
+            _mcpService = mcpService;
+            _httpClient = ToolHelper.CreateHttpClient(settings.UserAgent);
             _toolDefinitions = RegisterTools();
+        }
+
+        /// <summary>
+        /// Occurs when the tools of the MCP servers change.
+        /// </summary>
+        public event EventHandler ToolsChanged
+        {
+            add { _mcpService.ToolsChanged += value; }
+            remove { _mcpService.ToolsChanged -= value; }
         }
 
         /// <summary>
         /// Gets the tool names.
         /// </summary>
         public IReadOnlyCollection<ToolCallBase> ToolDefinitions => _toolDefinitions.Values;
+
+        /// <summary>
+        /// Gets the MCP servers, the tools of a connected server are enabled together.
+        /// </summary>
+        public ObservableCollection<McpServerModel> McpServers => _mcpService.Servers;
 
 
         /// <summary>
@@ -39,10 +60,21 @@ namespace Amuse.App.Services
         /// <param name="options">The options.</param>
         public string[] GetTools(GenerateInputOptions options)
         {
-            return _toolDefinitions
-                  .Where(x => options.SelectedTools.Contains(x.Key))
-                  .Select(x => x.Value.Schema)
+            return _toolDefinitions.Values
+                  .Concat(GetMcpTools())
+                  .Where(x => options.SelectedTools.Contains(x.Name))
+                  .Select(x => x.Schema)
                   .ToArray();
+        }
+
+
+        /// <summary>
+        /// Connects the MCP servers that are enabled and not connected yet.
+        /// </summary>
+        /// <param name="cancellationToken">The cancellation token.</param>
+        public Task ConnectAsync(CancellationToken cancellationToken = default)
+        {
+            return _mcpService.ConnectAsync(cancellationToken);
         }
 
 
@@ -64,7 +96,8 @@ namespace Amuse.App.Services
         /// Parses the response.
         /// </summary>
         /// <param name="response">The response.</param>
-        public ToolResult ParseResponse(IReadOnlyList<TextInput> response)
+        /// <param name="selectedTools">The tools the user enabled, calls to any other tool are rejected.</param>
+        public ToolResult ParseResponse(IReadOnlyList<TextInput> response, IReadOnlyCollection<string> selectedTools)
         {
             if (response.Count == 0)
                 return null;
@@ -80,7 +113,7 @@ namespace Amuse.App.Services
             {
                 var parsedToolCall = parsedToolCalls[i];
                 toolCalls[i] = parsedToolCall;
-                tools[i] = DeserializeToolCall(parsedToolCall);
+                tools[i] = DeserializeToolCall(parsedToolCall, selectedTools);
             }
             return new ToolResult(toolCalls, tools);
         }
@@ -90,17 +123,57 @@ namespace Amuse.App.Services
         /// Deserializes the tool call.
         /// </summary>
         /// <param name="toolCall">The tool call.</param>
+        /// <param name="selectedTools">The tools the user enabled.</param>
         /// <returns>ToolCallBase.</returns>
-        /// <exception cref="System.Exception"></exception>
-        private ToolCallBase DeserializeToolCall(string toolCall)
+        /// <exception cref="System.Exception">Tool is unknown or not enabled.</exception>
+        private ToolCallBase DeserializeToolCall(string toolCall, IReadOnlyCollection<string> selectedTools)
         {
             var toolDefinition = JsonSerializer.Deserialize<ToolDefinition>(toolCall, Json.DefaultOptions);
-            if (toolDefinition == null || !_toolDefinitions.TryGetValue(toolDefinition.Name, out var toolRegistration))
-                throw new Exception();
+            var toolRegistration = GetToolRegistration(toolDefinition?.Name, selectedTools);
+            if (toolRegistration == null)
+                throw new Exception($"Tool '{toolDefinition?.Name}' is not a known tool.");
 
-            var toolCallImplementation = (ToolCallBase)JsonSerializer.Deserialize(toolCall, toolRegistration.GetType(), Json.DefaultOptions);
-            toolCallImplementation.HttpClient = _httpService.Client;
+            if (selectedTools == null || !selectedTools.Contains(toolRegistration.Name))
+                throw new Exception($"Tool '{toolRegistration.Name}' is not enabled.");
+
+            var toolCallImplementation = toolRegistration.CreateCall(toolCall);
+            toolCallImplementation.HttpClient = _httpClient;
             return toolCallImplementation;
+        }
+
+
+        /// <summary>
+        /// Gets the registered tool with the name, a built-in tool or a tool of a connected MCP server.
+        /// A small model can call an MCP tool by the name it has on its server, without the server prefix, that name is accepted when only one enabled tool has it.
+        /// </summary>
+        /// <param name="name">The tool name.</param>
+        /// <param name="selectedTools">The tools the user enabled.</param>
+        private ToolCallBase GetToolRegistration(string name, IReadOnlyCollection<string> selectedTools)
+        {
+            if (string.IsNullOrEmpty(name))
+                return null;
+
+            if (_toolDefinitions.TryGetValue(name, out var toolRegistration))
+                return toolRegistration;
+
+            var mcpTools = GetMcpTools().ToArray();
+            var mcpTool = mcpTools.FirstOrDefault(x => x.Name == name);
+            if (mcpTool != null || selectedTools == null)
+                return mcpTool;
+
+            var serverTools = mcpTools
+                .Where(x => string.Equals(x.ToolName, name, StringComparison.OrdinalIgnoreCase) && selectedTools.Contains(x.Name))
+                .ToArray();
+            return serverTools.Length == 1 ? serverTools[0] : null;
+        }
+
+
+        /// <summary>
+        /// Gets the tools of the connected MCP servers, a tool with the name of a built-in tool is left out.
+        /// </summary>
+        private IEnumerable<McpToolCall> GetMcpTools()
+        {
+            return _mcpService.GetTools().Where(x => !_toolDefinitions.ContainsKey(x.Name));
         }
 
 
@@ -144,6 +217,7 @@ namespace Amuse.App.Services
             return Assembly.GetExecutingAssembly()
                 .GetTypes()
                 .Where(t => t.IsClass && !t.IsAbstract && typeof(ToolCallBase).IsAssignableFrom(t))
+                .Where(t => t.GetConstructor(Type.EmptyTypes) != null)
                 .Select(t => (ToolCallBase)Activator.CreateInstance(t))
                 .ToDictionary(k => k.Name, v => v);
         }
@@ -217,9 +291,12 @@ namespace Amuse.App.Services
 
     public interface IToolService
     {
+        event EventHandler ToolsChanged;
         IReadOnlyCollection<ToolCallBase> ToolDefinitions { get; }
+        ObservableCollection<McpServerModel> McpServers { get; }
         string[] GetTools(GenerateInputOptions options);
+        Task ConnectAsync(CancellationToken cancellationToken = default);
         bool IsToolResponse(IReadOnlyList<TextInput> response);
-        ToolResult ParseResponse(IReadOnlyList<TextInput> response);
+        ToolResult ParseResponse(IReadOnlyList<TextInput> response, IReadOnlyCollection<string> selectedTools);
     }
 }

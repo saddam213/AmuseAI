@@ -12,6 +12,7 @@ using System.Windows;
 using System.Windows.Input;
 using TensorStack.Common;
 using TensorStack.WPF;
+using TensorStack.WPF.Services;
 
 namespace Amuse.App.Controls
 {
@@ -307,27 +308,27 @@ namespace Amuse.App.Controls
                 {
                     foreach (var imageIndex in message.ImageIndex)
                     {
-                        if (imageIndex.Key < 0 || !File.Exists(imageIndex.Value))
-                            continue;
-                        userMessage.Append($"![Image{imageIndex.Key}](https://resource.amuse/{Uri.EscapeDataString(imageIndex.Value)})");
+                        var imageUrl = GetMediaUrl(imageIndex.Key, imageIndex.Value);
+                        if (imageUrl != null)
+                            userMessage.Append($"![Image{imageIndex.Key}]({imageUrl})");
                     }
                 }
                 if (!message.AudioIndex.IsNullOrEmpty())
                 {
                     foreach (var audioIndex in message.AudioIndex)
                     {
-                        if (audioIndex.Key < 0 || !File.Exists(audioIndex.Value))
-                            continue;
-                        userMessage.Append($"![Image{audioIndex.Key}](https://resource.amuse/{Uri.EscapeDataString(audioIndex.Value)})");
+                        var audioUrl = GetMediaUrl(audioIndex.Key, audioIndex.Value);
+                        if (audioUrl != null)
+                            userMessage.Append($"![Image{audioIndex.Key}]({audioUrl})");
                     }
                 }
                 if (!message.VideoIndex.IsNullOrEmpty())
                 {
                     foreach (var videoIndex in message.VideoIndex)
                     {
-                        if (videoIndex.Key < 0 || !File.Exists(videoIndex.Value))
-                            continue;
-                        userMessage.Append($"![Video{videoIndex.Key}](https://resource.amuse/{Uri.EscapeDataString(videoIndex.Value)})");
+                        var videoUrl = GetMediaUrl(videoIndex.Key, videoIndex.Value);
+                        if (videoUrl != null)
+                            userMessage.Append($"![Video{videoIndex.Key}]({videoUrl})");
                     }
                 }
                 userMessage.Append(message.Content);
@@ -342,6 +343,26 @@ namespace Amuse.App.Controls
                 _ => throw new NotImplementedException()
             };
             return result.ReplaceLineEndings("\n");
+        }
+
+
+        /// <summary>
+        /// Gets the URL the markdown view loads a media file from.
+        /// </summary>
+        /// <param name="index">The media index.</param>
+        /// <param name="filename">The filename.</param>
+        /// <returns>The URL, or <c>null</c> if the file is not an existing local media file.</returns>
+        private static string GetMediaUrl(int index, string filename)
+        {
+            if (index < 0)
+                return null;
+
+            // Validated before the file is touched, the path may come from a loaded conversation
+            var mediaUrl = MarkdownConverter.GetResourceUrl(filename);
+            if (mediaUrl == null || !File.Exists(filename))
+                return null;
+
+            return mediaUrl;
         }
 
 

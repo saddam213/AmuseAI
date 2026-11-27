@@ -1,0 +1,504 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <!-- 
+    Microsoft ResX Schema 
+    
+    Version 2.0
+    
+    The primary goals of this format is to allow a simple XML format 
+    that is mostly human readable. The generation and parsing of the 
+    various data types are done through the TypeConverter classes 
+    associated with the data types.
+    
+    Example:
+    
+    ... ado.net/XML headers & schema ...
+    <resheader name="resmimetype">text/microsoft-resx</resheader>
+    <resheader name="version">2.0</resheader>
+    <resheader name="reader">System.Resources.ResXResourceReader, System.Windows.Forms, ...</resheader>
+    <resheader name="writer">System.Resources.ResXResourceWriter, System.Windows.Forms, ...</resheader>
+    <data name="Name1"><value>this is my long string</value><comment>this is a comment</comment></data>
+    <data name="Color1" type="System.Drawing.Color, System.Drawing">Blue</data>
+    <data name="Bitmap1" mimetype="application/x-microsoft.net.object.binary.base64">
+        <value>[base64 mime encoded serialized .NET Framework object]</value>
+    </data>
+    <data name="Icon1" type="System.Drawing.Icon, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
+        <value>[base64 mime encoded string representing a byte array form of the .NET Framework object]</value>
+        <comment>This is a comment</comment>
+    </data>
+                
+    There are any number of "resheader" rows that contain simple 
+    name/value pairs.
+    
+    Each data row contains a name, and value. The row also contains a 
+    type or mimetype. Type corresponds to a .NET class that support 
+    text/value conversion through the TypeConverter architecture. 
+    Classes that don't support this are serialized and stored with the 
+    mimetype set.
+    
+    The mimetype is used for serialized objects, and tells the 
+    ResXResourceReader how to depersist the object. This is currently not 
+    extensible. For a given mimetype the value must be set accordingly:
+    
+    Note - application/x-microsoft.net.object.binary.base64 is the format 
+    that the ResXResourceWriter will generate, however the reader can 
+    read any of the formats listed below.
+    
+    mimetype: application/x-microsoft.net.object.binary.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Binary.BinaryFormatter
+            : and then encoded with base64 encoding.
+    
+    mimetype: application/x-microsoft.net.object.soap.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Soap.SoapFormatter
+            : and then encoded with base64 encoding.
+
+    mimetype: application/x-microsoft.net.object.bytearray.base64
+    value   : The object must be serialized into a byte array 
+            : using a System.ComponentModel.TypeConverter
+            : and then encoded with base64 encoding.
+    -->
+  <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+    <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
+    <xsd:element name="root" msdata:IsDataSet="true">
+      <xsd:complexType>
+        <xsd:choice maxOccurs="unbounded">
+          <xsd:element name="metadata">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" />
+              </xsd:sequence>
+              <xsd:attribute name="name" use="required" type="xsd:string" />
+              <xsd:attribute name="type" type="xsd:string" />
+              <xsd:attribute name="mimetype" type="xsd:string" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="assembly">
+            <xsd:complexType>
+              <xsd:attribute name="alias" type="xsd:string" />
+              <xsd:attribute name="name" type="xsd:string" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="data">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1" />
+              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
+              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="resheader">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" />
+            </xsd:complexType>
+          </xsd:element>
+        </xsd:choice>
+      </xsd:complexType>
+    </xsd:element>
+  </xsd:schema>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="ToolTip_GenerateStop" xml:space="preserve">
+    <value>Stoppt die Generierung sofort, indem der Backend-Prozess beendet wird.</value>
+  </data>
+  <data name="ToolTip_ModelStatus_Available" xml:space="preserve">
+    <value>Zum Download verfügbar</value>
+  </data>
+  <data name="ToolTip_ModelStatus_DownloadFailed" xml:space="preserve">
+    <value>Modell-Download fehlgeschlagen</value>
+  </data>
+  <data name="ToolTip_ModelStatus_Downloading" xml:space="preserve">
+    <value>Modell wird heruntergeladen</value>
+  </data>
+  <data name="ToolTip_ModelStatus_DownloadQueue" xml:space="preserve">
+    <value>Modell-Download in Warteschlange</value>
+  </data>
+  <data name="ToolTip_ModelStatus_Installed" xml:space="preserve">
+    <value>Modell installiert</value>
+  </data>
+  <data name="ToolTip_ModelStatus_NotInstalled" xml:space="preserve">
+    <value>Modell nicht installiert</value>
+  </data>
+  <data name="ToolTip_ModelStatus_Unknown" xml:space="preserve">
+    <value>Modell-Update erforderlich</value>
+  </data>
+  <data name="ToolTip_Text_Branch" xml:space="preserve">
+    <value>Unterhaltung verzweigen</value>
+  </data>
+  <data name="ToolTip_Text_Rewind" xml:space="preserve">
+    <value>Letzte Nachricht zurücknehmen</value>
+  </data>
+  <data name="ToolTip_Text_SaveResponseFile" xml:space="preserve">
+    <value>Antwort in Datei speichern</value>
+  </data>
+  <data name="ToolTip_Text_CopyResponseHtml" xml:space="preserve">
+    <value>Antwort als HTML kopieren</value>
+  </data>
+  <data name="ToolTip_Text_CopyResponseText" xml:space="preserve">
+    <value>Antworttext kopieren</value>
+  </data>
+  <data name="ToolTip_Text_Clear" xml:space="preserve">
+    <value>Text löschen</value>
+  </data>
+  <data name="ToolTip_Lora_AddTrigger" xml:space="preserve">
+    <value>LoRA-Triggerwort hinzufügen</value>
+  </data>
+  <data name="ToolTip_Paint_Live" xml:space="preserve">
+    <value>Live-Generierung</value>
+  </data>
+  <data name="ToolTip_Paint_Cancel" xml:space="preserve">
+    <value>Generierung abbrechen</value>
+  </data>
+  <data name="ToolTip_Paint_RoundBrush" xml:space="preserve">
+    <value>Runder Pinsel</value>
+  </data>
+  <data name="ToolTip_Paint_SquareBrush" xml:space="preserve">
+    <value>Eckiger Pinsel</value>
+  </data>
+  <data name="ToolTip_Paint_Highlighter" xml:space="preserve">
+    <value>Textmarker</value>
+  </data>
+  <data name="ToolTip_Paint_Eraser" xml:space="preserve">
+    <value>Radierer</value>
+  </data>
+  <data name="ToolTip_Paint_FitCurve" xml:space="preserve">
+    <value>An Kurve anpassen</value>
+  </data>
+  <data name="ToolTip_Paint_Stylus" xml:space="preserve">
+    <value>Stiftdruck-Unterstützung aktivieren</value>
+  </data>
+  <data name="ToolTip_Paint_FillBG" xml:space="preserve">
+    <value>Hintergrund füllen</value>
+  </data>
+  <data name="ToolTip_Paint_LoadImageBG" xml:space="preserve">
+    <value>Hintergrundbild laden</value>
+  </data>
+  <data name="ToolTip_Paint_ClearDraw" xml:space="preserve">
+    <value>Zeichnung löschen</value>
+  </data>
+  <data name="ToolTip_Seed_New" xml:space="preserve">
+    <value>Neuer Seed</value>
+  </data>
+  <data name="ToolTip_Seed_Random" xml:space="preserve">
+    <value>Zufällige Seeds</value>
+  </data>
+  <data name="ToolTip_VideoTimeline_Clear" xml:space="preserve">
+    <value>Zeitleiste leeren</value>
+  </data>
+  <data name="ToolTip_VideoTimeline_Save" xml:space="preserve">
+    <value>Video speichern</value>
+  </data>
+  <data name="ToolTip_VideoTimeline_Extend" xml:space="preserve">
+    <value>Zeitleiste verlängern</value>
+  </data>
+  <data name="ToolTip_VideoTimeline_Trim" xml:space="preserve">
+    <value>Zeitleiste kürzen</value>
+  </data>
+  <data name="ToolTip_VideoTimeline_ZoomIn" xml:space="preserve">
+    <value>Vergrößern</value>
+  </data>
+  <data name="ToolTip_VideoTimeline_ZoomOut" xml:space="preserve">
+    <value>Verkleinern</value>
+  </data>
+  <data name="ToolTip_VideoTimeline_FrameRemove" xml:space="preserve">
+    <value>Ausgewählte(n) Frame(s) entfernen</value>
+  </data>
+  <data name="ToolTip_VideoTimeline_FrameSave" xml:space="preserve">
+    <value>Ausgewählten Frame im Verlauf speichern</value>
+  </data>
+  <data name="ToolTip_VideoTimeline_SegmentSplit" xml:space="preserve">
+    <value>Segment teilen</value>
+  </data>
+  <data name="ToolTip_VideoTimeline_SegmentCopy" xml:space="preserve">
+    <value>Segment kopieren</value>
+  </data>
+  <data name="ToolTip_VideoTimeline_SegmentUp" xml:space="preserve">
+    <value>Segment nach oben verschieben</value>
+  </data>
+  <data name="ToolTip_VideoTimeline_SegmentDown" xml:space="preserve">
+    <value>Segment nach unten verschieben</value>
+  </data>
+  <data name="ToolTip_VideoTimeline_SegmentRemove" xml:space="preserve">
+    <value>Segment entfernen</value>
+  </data>
+  <data name="ToolTip_MemoryEstimate" xml:space="preserve">
+    <value>Geschätzte Speichermodi</value>
+  </data>
+  <data name="ToolTip_Text_StreamEnable" xml:space="preserve">
+    <value>Token-Streaming aktivieren</value>
+  </data>
+  <data name="ToolTip_Text_StreamDisable" xml:space="preserve">
+    <value>Token-Streaming deaktivieren</value>
+  </data>
+  <data name="ToolTip_Text_FormatEnable" xml:space="preserve">
+    <value>Ergebnisformatierung aktivieren (experimentell)</value>
+  </data>
+  <data name="ToolTip_Text_FormatDisable" xml:space="preserve">
+    <value>Ergebnisformatierung deaktivieren</value>
+  </data>
+  <data name="ToolTip_Text_ThinkingHide" xml:space="preserve">
+    <value>Denkprozess ausblenden</value>
+  </data>
+  <data name="ToolTip_Text_ThinkingShow" xml:space="preserve">
+    <value>Denkprozess einblenden</value>
+  </data>
+  <data name="ToolTip_Theme" xml:space="preserve">
+    <value>Starten Sie Amuse neu, um das Design anzuwenden.</value>
+  </data>
+  <data name="ToolTip_UIScale" xml:space="preserve">
+    <value>Die Größe der Oberfläche, passend zu Ihrem Bildschirm eingestellt.</value>
+  </data>
+  <data name="ToolTip_ModelFilterAll" xml:space="preserve">
+    <value>Alle Modelle werden angezeigt. Klicken, um nur installierte Modelle anzuzeigen</value>
+  </data>
+  <data name="ToolTip_ModelFilterInstalled" xml:space="preserve">
+    <value>Nur installierte Modelle werden angezeigt. Klicken, um alle Modelle anzuzeigen</value>
+  </data>
+  <data name="ToolTip_EnvironmentFilterAll" xml:space="preserve">
+    <value>Alle Umgebungen werden angezeigt. Klicken, um nur Umgebungen für Ihre Geräte anzuzeigen</value>
+  </data>
+  <data name="ToolTip_EnvironmentFilterDevices" xml:space="preserve">
+    <value>Nur Umgebungen für Ihre Geräte werden angezeigt. Klicken, um alle Umgebungen anzuzeigen</value>
+  </data>
+  <data name="ToolTip_GpuLayers" xml:space="preserve">
+    <value>Anzahl der Modellschichten auf der GPU, -1 für alle Schichten. Bei niedrigeren Werten werden die übrigen Schichten in den Systemspeicher verlagert.</value>
+  </data>
+  <data name="ToolTip_Threads" xml:space="preserve">
+    <value>CPU-Threads für Schichten im Systemspeicher, 0 für den Standardwert.</value>
+  </data>
+  <data name="ToolTip_ContextSize" xml:space="preserve">
+    <value>Für die Unterhaltung und die Antwort reservierte Tokens. Größere Werte benötigen mehr Speicher.</value>
+  </data>
+  <data name="ToolTip_CacheOffload" xml:space="preserve">
+    <value>Cache der Unterhaltung (Key/Value) im GPU-Speicher halten</value>
+  </data>
+  <data name="ToolTip_BackendReady" xml:space="preserve">
+    <value>Die Backend-Umgebung ist installiert und einsatzbereit.</value>
+  </data>
+  <data name="ToolTip_BackendNotInstalled" xml:space="preserve">
+    <value>Auf diesem Gerät unterstützt, aber noch nicht installiert. Installieren Sie die Umgebung über „Umgebungen verwalten“ oder beim ersten Laden eines Modells, das sie verwendet.</value>
+  </data>
+  <data name="ToolTip_BackendUnsupported" xml:space="preserve">
+    <value>Dieses Backend ist für dieses Gerät nicht verfügbar.</value>
+  </data>
+  <data name="ToolTip_MemoryMode_StableDiffusionCpp_High" xml:space="preserve">
+    <value>Hält alle Gewichte auf der GPU.</value>
+  </data>
+  <data name="ToolTip_MemoryMode_StableDiffusionCpp_Medium" xml:space="preserve">
+    <value>Lagert die Gewichte in den CPU-Speicher aus und verschiebt sie bei Bedarf auf die GPU.</value>
+  </data>
+  <data name="ToolTip_MemoryMode_StableDiffusionCpp_Low" xml:space="preserve">
+    <value>Lagert die Diffusionsgewichte in den CPU-Speicher sowie VAE, Text-Encoder und weitere Teile auf die Festplatte aus und lädt sie bei Bedarf.</value>
+  </data>
+  <data name="ToolTip_MemoryMode_StableDiffusionCpp_Balanced" xml:space="preserve">
+    <value>Auto-Fit: Platziert die Gewichte automatisch passend zum verfügbaren VRAM.</value>
+  </data>
+  <data name="ToolTip_MemoryMode_AudioCpp_High" xml:space="preserve">
+    <value>Hält das gesamte Modell auf der GPU geladen.</value>
+  </data>
+  <data name="ToolTip_MemoryMode_AudioCpp_Medium" xml:space="preserve">
+    <value>Aktiviert den Speichersparmodus, um den VRAM-Bedarf zu senken.</value>
+  </data>
+  <data name="ToolTip_MemoryMode_AudioCpp_Low" xml:space="preserve">
+    <value>Aktiviert den Speichersparmodus, um den VRAM-Bedarf zu senken.</value>
+  </data>
+  <data name="ToolTip_MemoryMode_AudioCpp_Balanced" xml:space="preserve">
+    <value>Aktiviert den Speichersparmodus, um den VRAM-Bedarf zu senken.</value>
+  </data>
+  <data name="ToolTip_MemoryMode_LlamaCpp_High" xml:space="preserve">
+    <value>Führt alle Schichten auf der GPU aus und hält den KV-Cache auf der GPU.</value>
+  </data>
+  <data name="ToolTip_MemoryMode_LlamaCpp_Medium" xml:space="preserve">
+    <value>Führt alle Schichten auf der GPU aus und hält den KV-Cache im CPU-Speicher. Spart VRAM bei langen Kontexten.</value>
+  </data>
+  <data name="ToolTip_MemoryMode_LlamaCpp_Low" xml:space="preserve">
+    <value>Führt alle Schichten auf der CPU aus und hält den KV-Cache im CPU-Speicher. Am langsamsten.</value>
+  </data>
+  <data name="ToolTip_MemoryMode_LlamaCpp_Balanced" xml:space="preserve">
+    <value>Verwendet die Werte für GPU-Schichten und GPU-Cache aus den Ausführungsoptionen.</value>
+  </data>
+  <data name="ToolTip_MemoryMode_OnnxRuntime" xml:space="preserve">
+    <value>OnnxRuntime verwaltet seinen Speicher selbst, diese Einstellung hat keine Auswirkung.</value>
+  </data>
+  <data name="ToolTip_WeightType" xml:space="preserve">
+    <value>Konvertiert die Modellgewichte beim Laden in diesen Typ. Kleinere Typen benötigen weniger Speicher, laden aber langsamer und verlieren etwas Qualität. „Standard“ behält den ursprünglichen Typ des Modells bei.</value>
+  </data>
+  <data name="ToolTip_ResetExecutionOptions" xml:space="preserve">
+    <value>Setzt alle Optionen auf ihre Standardwerte zurück. Zum Übernehmen speichern.</value>
+  </data>
+  <data name="ToolTip_EnvironmentSetupDontAskAgain" xml:space="preserve">
+    <value>Beim Start nicht mehr nach der Installation fehlender Umgebungen fragen. Erforderliche Updates werden weiterhin angezeigt.</value>
+  </data>
+  <data name="ToolTip_UpscaleSeed" xml:space="preserve">
+    <value>Seed für das Rauschen des Video-Upscalers</value>
+  </data>
+  <data name="ToolTip_UpscaleTemporalChunkSize" xml:space="preserve">
+    <value>Anzahl der pro Chunk verarbeiteten Frames. Niedrigere Werte benötigen weniger Speicher</value>
+  </data>
+  <data name="ToolTip_UpscaleTileSize" xml:space="preserve">
+    <value>Kachelgröße in Pixeln. Kleinere Kacheln benötigen weniger Speicher, 0 verwendet den Standardwert</value>
+  </data>
+  <data name="ToolTip_UpscaleWindowSize" xml:space="preserve">
+    <value>Abstand der Referenz-Frames: Ein Fenster von 16 verwendet die Frames 0, 15, 30 usw., der letzte Frame wird immer einbezogen</value>
+  </data>
+  <data name="ToolTip_HistoryFilterAudio" xml:space="preserve">
+    <value>Audio filtern</value>
+  </data>
+  <data name="ToolTip_HistoryFilterClear" xml:space="preserve">
+    <value>Filter zurücksetzen</value>
+  </data>
+  <data name="ToolTip_HistoryFilterImage" xml:space="preserve">
+    <value>Bilder filtern</value>
+  </data>
+  <data name="ToolTip_HistoryFilterText" xml:space="preserve">
+    <value>Text filtern</value>
+  </data>
+  <data name="ToolTip_HistoryFilterVideo" xml:space="preserve">
+    <value>Videos filtern</value>
+  </data>
+  <data name="ToolTip_AudioTimeline_SaveAudio" xml:space="preserve">
+    <value>Audio speichern</value>
+  </data>
+  <data name="ToolTip_AudioTimeline_SaveVideo" xml:space="preserve">
+    <value>Referenzvideo mit Audio speichern</value>
+  </data>
+  <data name="ToolTip_AudioTimeline_ReferenceRemove" xml:space="preserve">
+    <value>Referenzvideo entfernen</value>
+  </data>
+  <data name="ToolTip_AudioTimeline_ClipMove" xml:space="preserve">
+    <value>Clip zum Abspielkopf verschieben</value>
+  </data>
+  <data name="ToolTip_AudioTimeline_ClipTrimStart" xml:space="preserve">
+    <value>Clipanfang bis zum Abspielkopf kürzen</value>
+  </data>
+  <data name="ToolTip_AudioTimeline_ClipTrimEnd" xml:space="preserve">
+    <value>Clipende bis zum Abspielkopf kürzen</value>
+  </data>
+  <data name="ToolTip_AudioTimeline_ClipSplit" xml:space="preserve">
+    <value>Clip am Abspielkopf teilen</value>
+  </data>
+  <data name="ToolTip_AudioTimeline_ClipRestore" xml:space="preserve">
+    <value>Gekürzten Clip wiederherstellen</value>
+  </data>
+  <data name="ToolTip_AudioTimeline_ClipCopy" xml:space="preserve">
+    <value>Clip kopieren</value>
+  </data>
+  <data name="ToolTip_AudioTimeline_ClipRemove" xml:space="preserve">
+    <value>Clip entfernen</value>
+  </data>
+  <data name="ToolTip_VideoTimeline_ReferenceRemove" xml:space="preserve">
+    <value>Referenz-Audio entfernen</value>
+  </data>
+  <data name="ToolTip_GuidanceImage" xml:space="preserve">
+    <value>Bild-Guidance-Skala für Bearbeitungs- und Referenzbilder, 0 verwendet den Standardwert des Modells</value>
+  </data>
+  <data name="ToolTip_ShiftedTimestep" xml:space="preserve">
+    <value>Verschobener Timestep für destillierte Timestep-Modelle, 0 deaktiviert ihn</value>
+  </data>
+  <data name="ToolTip_Sigmas" xml:space="preserve">
+    <value>Eigener Sigma-Zeitplan als kommagetrennte, absteigende Liste, die mit 0 endet, zum Beispiel 14.61, 7.8, 3.5, 0. Ersetzt den Scheduler und die Schrittanzahl</value>
+  </data>
+  <data name="ToolTip_SkipLayers" xml:space="preserve">
+    <value>Skip-Layer-Guidance als kommagetrennte Liste von Schichten wie 7, 8, 9, angewendet zwischen dem Start- und Endanteil der Schritte. Eine Skalierung von 0 deaktiviert sie</value>
+  </data>
+  <data name="ToolTip_SamplerArgs" xml:space="preserve">
+    <value>Zusätzliche Sampler-Argumente, die als key=value-Paare an stable-diffusion.cpp übergeben werden</value>
+  </data>
+  <data name="ToolTip_ClipSkip" xml:space="preserve">
+    <value>Anzahl der letzten Schichten des CLIP-Text-Encoders, die übersprungen werden, 0 verwendet den Standardwert des Modells</value>
+  </data>
+  <data name="ToolTip_MoeBoundary" xml:space="preserve">
+    <value>Punkt zwischen 0 und 1, an dem das Sampling vom Modell für hohes Rauschen zum Modell für niedriges Rauschen wechselt, 0 verwendet den Standardwert 0.875</value>
+  </data>
+  <data name="ToolTip_SeamlessTiling" xml:space="preserve">
+    <value>Lässt das Bild über den Rand hinweg umlaufen, sodass sich das Ergebnis in dieser Richtung nahtlos kacheln lässt</value>
+  </data>
+  <data name="ToolTip_LiveStart" xml:space="preserve">
+    <value>Mikrofon live transkribieren, der Text erscheint, während Sie sprechen.</value>
+  </data>
+  <data name="ToolTip_LiveStop" xml:space="preserve">
+    <value>Zuhören beenden und das Transkript abschließen.</value>
+  </data>
+  <data name="ToolTip_FrameRate_Fixed" xml:space="preserve">
+    <value>Dieses Modell generiert mit fester Framerate</value>
+  </data>
+  <data name="ToolTip_CacheMode" xml:space="preserve">
+    <value>Verwendet Ergebnisse zwischen Sampling-Schritten wieder, um die Generierung zu beschleunigen. EasyCache, DBCache, TaylorSeer und Cache-DiT eignen sich für DiT-Modelle, UCache für UNet-Modelle und Spectrum für beide</value>
+  </data>
+  <data name="ToolTip_CacheRange" xml:space="preserve">
+    <value>Der Teil der Sampling-Schritte, in dem Caching erlaubt ist</value>
+  </data>
+  <data name="ToolTip_CacheThreshold" xml:space="preserve">
+    <value>Wie viel Änderung erlaubt ist, bevor ein Schritt neu berechnet wird, höher ist schneller, verringert aber die Qualität, 0 verwendet den Standardwert</value>
+  </data>
+  <data name="ToolTip_CacheWarmupSteps" xml:space="preserve">
+    <value>Schritte, die immer vor dem Start des Cachings ausgeführt werden, 0 verwendet den Standardwert</value>
+  </data>
+  <data name="ToolTip_FirstRunModelFolder" xml:space="preserve">
+    <value>Modelle werden in einen Ordner „Models“ am gewählten Speicherort heruntergeladen, wählen Sie ein Laufwerk mit viel freiem Speicherplatz.</value>
+  </data>
+  <data name="ToolTip_FrameChunk" xml:space="preserve">
+    <value>Lange Videos in Chunks generieren, die jeweils beim letzten Frame des vorherigen fortfahren. Die Länge ist nicht mehr auf einen einzelnen Durchlauf begrenzt, kleinere Chunks benötigen weniger Speicher</value>
+  </data>
+  <data name="ToolTip_FrameCount_Frames" xml:space="preserve">
+    <value>Länge in Frames eingeben</value>
+  </data>
+  <data name="ToolTip_FrameCount_Seconds" xml:space="preserve">
+    <value>Länge in Sekunden eingeben</value>
+  </data>
+  <data name="ToolTip_McpEnable" xml:space="preserve">
+    <value>Diesen Server starten und seine Tools im Chat anbieten.</value>
+  </data>
+  <data name="ToolTip_McpIconCode" xml:space="preserve">
+    <value>Der Code eines beliebigen Font-Awesome-Symbols, z. B. f1e6.</value>
+  </data>
+  <data name="ToolTip_McpImport" xml:space="preserve">
+    <value>Server aus einem Konfigurationsausschnitt oder der Konfigurationsdatei einer anderen MCP-Anwendung hinzufügen.</value>
+  </data>
+  <data name="ToolTip_McpReconnect" xml:space="preserve">
+    <value>Den Server neu starten und erneut verbinden.</value>
+  </data>
+  <data name="ToolTip_McpTest" xml:space="preserve">
+    <value>Den Server einmal starten und seine Tools auflisten.</value>
+  </data>
+  <data name="ToolTip_ModelSearchFolders" xml:space="preserve">
+    <value>Modelldateien verwenden, die andere Anwendungen wie ComfyUI bereits haben, ohne sie zu kopieren oder erneut herunterzuladen.</value>
+  </data>
+  <data name="ToolTip_NavigateBack" xml:space="preserve">
+    <value>Zurück (Alt+Links)</value>
+  </data>
+  <data name="ToolTip_NavigateForward" xml:space="preserve">
+    <value>Vorwärts (Alt+Rechts)</value>
+  </data>
+  <data name="ToolTip_QueueAll" xml:space="preserve">
+    <value>Reiht jedes Modell der Liste ein, das nicht installiert ist</value>
+  </data>
+  <data name="ToolTip_RescanModels" xml:space="preserve">
+    <value>Sucht erneut nach Modelldateien, nachdem Sie Dateien selbst in die Modell- oder Suchordner kopiert haben.</value>
+  </data>
+  <data name="ToolTip_SelectAudioRange" xml:space="preserve">
+    <value>Den Bereich des Quell-Audios auswählen, der neu generiert werden soll</value>
+  </data>
+  <data name="ToolTip_TrackName" xml:space="preserve">
+    <value>Die Spur, an der die Aufgabe arbeitet, z. B. Gesang, Gitarre, Schlagzeug, Bass oder Klavier</value>
+  </data>
+</root>

@@ -104,23 +104,14 @@ namespace Amuse.App.Controls
 
         private void OnBackendChanged()
         {
-            if (Backend == BackendType.HuggingFace)
-            {
-                TextEncodedCheckpointTypes = IsOnlineCheckpointsEnabled
-                    ? [CheckpointType.LocalFolder, CheckpointType.OnlineFolder, CheckpointType.Component]
-                    : [CheckpointType.LocalFolder, CheckpointType.Component];
-                CheckpointTypes = IsOnlineCheckpointsEnabled
-                   ? [CheckpointType.LocalFile, CheckpointType.LocalFolder, CheckpointType.Component, CheckpointType.OnlineFile, CheckpointType.OnlineFolder]
-                   : [CheckpointType.LocalFile, CheckpointType.LocalFolder, CheckpointType.Component];
-            }
             if (Backend == BackendType.StableDiffusionCpp)
             {
                 TextEncodedCheckpointTypes = IsOnlineCheckpointsEnabled
-                    ? [CheckpointType.LocalFile, CheckpointType.OnlineFile, CheckpointType.OnlineFolder, CheckpointType.Component]
-                    : [CheckpointType.LocalFile, CheckpointType.Component];
+                    ? [CheckpointType.LocalFile, CheckpointType.LocalFolder, CheckpointType.OnlineFile, CheckpointType.OnlineFolder, CheckpointType.Component]
+                    : [CheckpointType.LocalFile, CheckpointType.LocalFolder, CheckpointType.Component];
                 CheckpointTypes = IsOnlineCheckpointsEnabled
-                   ? [CheckpointType.LocalFile, CheckpointType.Component, CheckpointType.OnlineFile, CheckpointType.OnlineFolder]
-                   : [CheckpointType.LocalFile, CheckpointType.Component];
+                   ? [CheckpointType.LocalFile, CheckpointType.LocalFolder, CheckpointType.Component, CheckpointType.OnlineFile, CheckpointType.OnlineFolder]
+                   : [CheckpointType.LocalFile, CheckpointType.LocalFolder, CheckpointType.Component];
             }
             if (Backend == BackendType.AudioCpp)
             {

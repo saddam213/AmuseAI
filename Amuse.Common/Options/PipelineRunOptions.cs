@@ -9,5 +9,6 @@
         public UpscaleImageRunOptions UpscaleImageOptions { get; set; }
         public UpscaleVideoRunOptions UpscaleVideoOptions { get; set; }
         public ExtractImageRunOptions ExtractImageOptions { get; set; }
+        public InterpolateVideoRunOptions InterpolateVideoOptions { get; set; }
     }
 }

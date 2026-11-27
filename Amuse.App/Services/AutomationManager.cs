@@ -8,7 +8,6 @@ using TensorStack.Common;
 using TensorStack.Media.Audio;
 using TensorStack.Media.Video;
 using TensorStack.WPF.Image;
-using TensorStack.WPF.Resources;
 
 namespace Amuse.App.Services
 {
@@ -34,25 +33,25 @@ namespace Amuse.App.Services
                         Id = index + 1,
                         Count = seeds.Length,
                         GenerateOptions = options,
-                        OutputFile = GetOutputFile(automationOptions, outputMediaType, Default.Image, seed)
+                        OutputFile = GetOutputFile(automationOptions, outputMediaType, outputMediaType.GetLocalizedName(), seed)
                     };
                 }
             }
             else if (automationOptions.Type == AutomationType.PromptLines)
             {
-                var promptLines = await File.ReadAllLinesAsync(automationOptions.InputFile);
+                var promptLines = (await File.ReadAllLinesAsync(automationOptions.InputFile))
+                    .Select((prompt, index) => new PromptLine(index + 1, prompt))
+                    .Where(x => !string.IsNullOrWhiteSpace(x.Prompt))
+                    .ToArray();
                 var seeds = GetSeeds(generateOptions.Seed, promptLines.Length);
-                foreach (var (index, prompt) in promptLines.Index())
+                foreach (var (index, promptLine) in promptLines.Index())
                 {
-                    if (string.IsNullOrWhiteSpace(prompt))
-                        continue;
-
                     var seed = seeds[index];
-                    var name = $"Line{index + 1}";
+                    var name = $"Line{promptLine.LineNumber}";
                     var options = generateOptions with
                     {
                         Seed = seed,
-                        Prompt = $"{prompt} {generateOptions.Prompt}"
+                        Prompt = $"{promptLine.Prompt} {generateOptions.Prompt}"
                     };
                     yield return new AutomationJob
                     {
@@ -65,20 +64,23 @@ namespace Amuse.App.Services
             }
             else if (automationOptions.Type == AutomationType.PromptFiles)
             {
-                var promptFiles = Directory.EnumerateFiles(automationOptions.InputDirectory, "*.txt").ToArray();
-                var seeds = GetSeeds(generateOptions.Seed, promptFiles.Length);
+                var promptFiles = new List<PromptFile>();
+                foreach (var filename in GetFiles(automationOptions.InputDirectory, TensorStack.WPF.Common.TextFileExtensions))
+                {
+                    var prompt = await File.ReadAllTextAsync(filename);
+                    if (!string.IsNullOrWhiteSpace(prompt))
+                        promptFiles.Add(new PromptFile(filename, prompt));
+                }
+
+                var seeds = GetSeeds(generateOptions.Seed, promptFiles.Count);
                 foreach (var (index, promptFile) in promptFiles.Index())
                 {
                     var seed = seeds[index];
-                    var name = Path.GetFileNameWithoutExtension(promptFile);
-                    var prompt = await File.ReadAllTextAsync(promptFile);
-                    if (string.IsNullOrWhiteSpace(prompt))
-                        continue;
-
+                    var name = Path.GetFileNameWithoutExtension(promptFile.Filename);
                     var options = generateOptions with
                     {
                         Seed = seed,
-                        Prompt = $"{prompt} {generateOptions.Prompt}"
+                        Prompt = $"{promptFile.Prompt} {generateOptions.Prompt}"
                     };
                     yield return new AutomationJob
                     {
@@ -93,9 +95,7 @@ namespace Amuse.App.Services
             {
                 if (inputMediaType == MediaType.Image)
                 {
-                    var imageFiles = Directory.EnumerateFiles(automationOptions.InputDirectory, "*.*")
-                       .Where(x => TensorStack.WPF.Common.ImageFileExtensions.Contains(Path.GetExtension(x)))
-                       .ToArray();
+                    var imageFiles = GetFiles(automationOptions.InputDirectory, TensorStack.WPF.Common.ImageFileExtensions);
                     var seeds = GetSeeds(generateOptions.Seed, imageFiles.Length);
                     foreach (var (index, filename) in imageFiles.Index())
                     {
@@ -121,9 +121,7 @@ namespace Amuse.App.Services
                 }
                 else if (inputMediaType == MediaType.Video)
                 {
-                    var videoFiles = Directory.EnumerateFiles(automationOptions.InputDirectory, "*.*")
-                       .Where(x => TensorStack.WPF.Common.VideoFileExtensions.Contains(Path.GetExtension(x)))
-                       .ToArray();
+                    var videoFiles = GetFiles(automationOptions.InputDirectory, TensorStack.WPF.Common.VideoFileExtensions);
                     var seeds = GetSeeds(generateOptions.Seed, videoFiles.Length);
                     foreach (var (index, filename) in videoFiles.Index())
                     {
@@ -142,9 +140,7 @@ namespace Amuse.App.Services
                 }
                 else if (inputMediaType == MediaType.Audio)
                 {
-                    var audioFiles = Directory.EnumerateFiles(automationOptions.InputDirectory, "*.*")
-                        .Where(x => TensorStack.WPF.Common.AudioFileExtensions.Contains(Path.GetExtension(x)))
-                        .ToArray();
+                    var audioFiles = GetFiles(automationOptions.InputDirectory, TensorStack.WPF.Common.AudioFileExtensions);
                     var seeds = GetSeeds(generateOptions.Seed, audioFiles.Length);
                     foreach (var (index, filename) in audioFiles.Index())
                     {
@@ -163,9 +159,7 @@ namespace Amuse.App.Services
                 }
                 else if (inputMediaType == MediaType.Text)
                 {
-                    var textFiles = Directory.EnumerateFiles(automationOptions.InputDirectory, "*.*")
-                        .Where(x => TensorStack.WPF.Common.TextFileExtensions.Contains(Path.GetExtension(x)))
-                        .ToArray();
+                    var textFiles = GetFiles(automationOptions.InputDirectory, TensorStack.WPF.Common.TextFileExtensions);
                     var seeds = GetSeeds(generateOptions.Seed, textFiles.Length);
                     foreach (var (index, filename) in textFiles.Index())
                     {
@@ -199,7 +193,7 @@ namespace Amuse.App.Services
             {
                 if (inputMediaType == MediaType.Image)
                 {
-                    var imageFiles = Directory.EnumerateFiles(automationOptions.InputDirectory, "*.png").ToArray();
+                    var imageFiles = GetFiles(automationOptions.InputDirectory, TensorStack.WPF.Common.ImageFileExtensions);
                     foreach (var (index, filename) in imageFiles.Index())
                     {
                         var name = Path.GetFileNameWithoutExtension(filename);
@@ -216,7 +210,7 @@ namespace Amuse.App.Services
                 }
                 else if (inputMediaType == MediaType.Video)
                 {
-                    var videoFiles = Directory.EnumerateFiles(automationOptions.InputDirectory, "*.mp4").ToArray();
+                    var videoFiles = GetFiles(automationOptions.InputDirectory, TensorStack.WPF.Common.VideoFileExtensions);
                     foreach (var (index, filename) in videoFiles.Index())
                     {
                         var name = Path.GetFileNameWithoutExtension(filename);
@@ -248,7 +242,7 @@ namespace Amuse.App.Services
             {
                 if (inputMediaType == MediaType.Image)
                 {
-                    var imageFiles = Directory.EnumerateFiles(automationOptions.InputDirectory, "*.png").ToArray();
+                    var imageFiles = GetFiles(automationOptions.InputDirectory, TensorStack.WPF.Common.ImageFileExtensions);
                     foreach (var (index, filename) in imageFiles.Index())
                     {
                         var name = Path.GetFileNameWithoutExtension(filename);
@@ -265,7 +259,7 @@ namespace Amuse.App.Services
                 }
                 else if (inputMediaType == MediaType.Video)
                 {
-                    var videoFiles = Directory.EnumerateFiles(automationOptions.InputDirectory, "*.mp4").ToArray();
+                    var videoFiles = GetFiles(automationOptions.InputDirectory, TensorStack.WPF.Common.VideoFileExtensions);
                     foreach (var (index, filename) in videoFiles.Index())
                     {
                         var name = Path.GetFileNameWithoutExtension(filename);
@@ -291,14 +285,13 @@ namespace Amuse.App.Services
         /// <param name="interpolateOptions">The interpolate options.</param>
         /// <param name="outputMediaType">Type of the output media.</param>
         /// <param name="inputMediaType">Type of the input media.</param>
-        /// <returns>A Task&lt;IReadOnlyList`1&gt; representing the asynchronous operation.</returns>
         public static async IAsyncEnumerable<AutomationJob> CreateJobsAsync(AutomationOptions automationOptions, InterpolateInputOptions interpolateOptions, MediaType outputMediaType, MediaType inputMediaType)
         {
             if (automationOptions.Type == AutomationType.InputFiles)
             {
                 if (inputMediaType == MediaType.Video)
                 {
-                    var videoFiles = Directory.EnumerateFiles(automationOptions.InputDirectory, "*.mp4").ToArray();
+                    var videoFiles = GetFiles(automationOptions.InputDirectory, TensorStack.WPF.Common.VideoFileExtensions);
                     foreach (var (index, filename) in videoFiles.Index())
                     {
                         var name = Path.GetFileNameWithoutExtension(filename);
@@ -318,11 +311,26 @@ namespace Amuse.App.Services
 
 
         /// <summary>
+        /// Gets the files in the directory with one of the extensions, in name order.
+        /// </summary>
+        /// <param name="directory">The directory.</param>
+        /// <param name="extensions">The file extensions, including the dot.</param>
+        private static string[] GetFiles(string directory, string[] extensions)
+        {
+            return Directory.EnumerateFiles(directory, "*.*")
+                .Where(x => extensions.Contains(Path.GetExtension(x), StringComparer.OrdinalIgnoreCase))
+                .Order(StringComparer.OrdinalIgnoreCase)
+                .ToArray();
+        }
+
+
+        /// <summary>
         /// Gets the output filename.
         /// </summary>
         /// <param name="options">The options.</param>
         /// <param name="mediaType">Type of the media.</param>
         /// <param name="fileId">The file identifier.</param>
+        /// <param name="seed">The seed, appended to the filename when enabled.</param>
         private static string GetOutputFile(AutomationOptions options, MediaType mediaType, string fileId, int seed = 0)
         {
             if (!options.UseOutputDirectory)
@@ -346,11 +354,14 @@ namespace Amuse.App.Services
         /// <summary>
         /// Gets the seeds.
         /// </summary>
-        /// <param name="initialSeed">The initial seed.</param>
+        /// <param name="initialSeed">The initial seed, repeated for every job when set, otherwise random seeds are used.</param>
         /// <param name="count">The count.</param>
-        /// <param name="baseSeed">The base seed.</param>
+        /// <param name="baseSeed">The base seed of the random seeds, 0 for a random base.</param>
         private static int[] GetSeeds(int initialSeed, int count, int baseSeed = 0)
         {
+            if (count <= 0)
+                return [];
+
             if (initialSeed == 0)
             {
                 baseSeed = baseSeed == 0 ? Random.Shared.Next() : baseSeed;
@@ -360,5 +371,16 @@ namespace Amuse.App.Services
             return Enumerable.Repeat(initialSeed, count).ToArray();
         }
 
+
+        /// <summary>
+        /// A line of a prompt file and its line number.
+        /// </summary>
+        private sealed record PromptLine(int LineNumber, string Prompt);
+
+
+        /// <summary>
+        /// A prompt file and its prompt.
+        /// </summary>
+        private sealed record PromptFile(string Filename, string Prompt);
     }
 }

@@ -8,8 +8,8 @@
         xmlns:Common="clr-namespace:Amuse.App.Common"
         xmlns:Controls="clr-namespace:Amuse.App.Controls"
         Title="{CommonControls:Localize Title_AddModel}"
-        MinWidth="800"
-        MaxWidth="800"
+        MinWidth="900"
+        MaxWidth="900"
         Icon="/Images/Icon.ico"
         Style="{StaticResource {x:Type CommonControls:DialogControl}}">
     <DockPanel DataContext="{Binding RelativeSource={RelativeSource AncestorType={x:Type local:DiffusionModelWizardDialog}}}" Margin="15, 15, 15, 10">
@@ -30,56 +30,146 @@
         </DockPanel>
 
         <!--Main Content-->
-        <StackPanel >
+        <StackPanel>
 
-            <UniformGrid Columns="4" >
-                <StackPanel Margin="0,0,2,0">
-                    <TextBlock Text="{CommonControls:Localize Backend}" Style="{StaticResource FieldTextBlockStyle}"/>
-                    <ComboBox ItemsSource="{Binding Backends}" SelectedItem="{Binding SelectedBackend}" Style="{StaticResource EnumComboBox}"/>
-                </StackPanel>
-                <StackPanel Margin="2,0,2,0">
-                    <TextBlock Text="{CommonControls:Localize Pipeline}" Style="{StaticResource FieldTextBlockStyle}"/>
-                    <ComboBox ItemsSource="{Binding PipelineOptions}" SelectedItem="{Binding SelectedPipelineOption}" DisplayMemberPath="Name" />
-                </StackPanel>
-                <StackPanel Margin="2,0,2,0">
-                    <TextBlock Text="{CommonControls:Localize Type}" Style="{StaticResource FieldTextBlockStyle}"/>
-                    <ComboBox ItemsSource="{Binding SelectedPipelineOption.Options}" SelectedItem="{Binding SelectedTemplateOption}" DisplayMemberPath="Name" />
-                </StackPanel>
-                <StackPanel Margin="2,0,0,0">
-                    <TextBlock Text="{CommonControls:Localize Source}" Style="{StaticResource FieldTextBlockStyle}"/>
-                    <ComboBox x:Name="ComboBoxSource" ItemsSource="{Binding ModelSources}" SelectedItem="{Binding SelectedSource}" Style="{StaticResource EnumComboBox}"/>
-                </StackPanel>
-            </UniformGrid>
+            <!--Model-->
+            <Border Style="{StaticResource WizardSection}">
+                <DockPanel>
+                    <StackPanel Style="{StaticResource WizardSectionHeader}">
+                        <TextBlock Text="{CommonControls:Localize Model}" FontWeight="SemiBold" FontSize="13"/>
+                        <TextBlock Text="{CommonControls:Localize WizardModelDescription}" FontSize="11" Opacity=".7" TextWrapping="Wrap"/>
+                    </StackPanel>
+                    <UniformGrid Columns="2" VerticalAlignment="Top">
+                        <StackPanel Margin="0,0,2,0">
+                            <TextBlock Text="{CommonControls:Localize Pipeline}" Style="{StaticResource FieldTextBlockStyle}"/>
+                            <ComboBox ItemsSource="{Binding PipelineOptions}" SelectedItem="{Binding SelectedPipelineOption}" DisplayMemberPath="Name" />
+                        </StackPanel>
+                        <StackPanel Margin="2,0,0,0">
+                            <TextBlock Text="{CommonControls:Localize Type}" Style="{StaticResource FieldTextBlockStyle}"/>
+                            <ComboBox ItemsSource="{Binding SelectedPipelineOption.Options}" SelectedItem="{Binding SelectedTemplateOption}" DisplayMemberPath="Name" />
+                        </StackPanel>
+                    </UniformGrid>
+                </DockPanel>
+            </Border>
 
-            <Grid>
-                <!--File-->
-                <StackPanel Visibility="{Binding SelectedSource, Converter={StaticResource EnumToVisibilityConverter}, ConverterParameter=LocalFile|LocalCheckpoint}">
-                    <TextBlock Text="{CommonControls:Localize ModelFile}" Style="{StaticResource FieldTextBlockStyle}"/>
-                    <CommonControls:FilePickerTextBox FileName="{Binding SelectedFile, Mode=TwoWay}" IsFolderPicker="False" IsRequired="True" Filter="{Binding FileFilter}"/>
-                </StackPanel>
+            <!--Source-->
+            <Border Style="{StaticResource WizardSection}">
+                <DockPanel>
+                    <StackPanel Style="{StaticResource WizardSectionHeader}">
+                        <TextBlock Text="{CommonControls:Localize Source}" FontWeight="SemiBold" FontSize="13"/>
+                        <TextBlock Text="{CommonControls:Localize WizardSourceDescription}" FontSize="11" Opacity=".7" TextWrapping="Wrap"/>
+                    </StackPanel>
+                    <UniformGrid Rows="1" VerticalAlignment="Top">
+                        <RadioButton IsChecked="{Binding IsLocalFile}" VerticalAlignment="Top" VerticalContentAlignment="Top" Margin="0,2,10,2">
+                            <StackPanel Margin="2,0,0,0">
+                                <TextBlock Text="{CommonControls:Localize ModelFile}" FontWeight="SemiBold"/>
+                                <TextBlock Margin="0,1,0,0" FontSize="10" Opacity=".7" TextWrapping="Wrap">
+                                    <TextBlock.Style>
+                                        <Style TargetType="{x:Type TextBlock}" BasedOn="{StaticResource {x:Type TextBlock}}">
+                                            <Setter Property="Text" Value="{CommonControls:Localize WizardLocalFileDescription}"/>
+                                            <Style.Triggers>
+                                                <DataTrigger Binding="{Binding HasSharedComponents}" Value="False">
+                                                    <Setter Property="Text" Value="{CommonControls:Localize WizardLocalFileSingleDescription}"/>
+                                                </DataTrigger>
+                                            </Style.Triggers>
+                                        </Style>
+                                    </TextBlock.Style>
+                                </TextBlock>
+                            </StackPanel>
+                        </RadioButton>
+                        <RadioButton IsChecked="{Binding IsLocalCheckpoint}" VerticalAlignment="Top" VerticalContentAlignment="Top" Margin="0,2,10,2" Visibility="{Binding HasSharedComponents, Converter={StaticResource BooleanToVisibilityConverter}}">
+                            <StackPanel Margin="2,0,0,0">
+                                <TextBlock Text="{CommonControls:Localize WizardLocalCheckpoint}" FontWeight="SemiBold"/>
+                                <TextBlock Text="{CommonControls:Localize WizardLocalCheckpointDescription}" Margin="0,1,0,0" FontSize="10" Opacity=".7" TextWrapping="Wrap"/>
+                            </StackPanel>
+                        </RadioButton>
+                        <RadioButton IsChecked="{Binding IsCustomCheckpoint}" VerticalAlignment="Top" VerticalContentAlignment="Top" Margin="0,2,0,2">
+                            <StackPanel Margin="2,0,0,0">
+                                <TextBlock Text="{CommonControls:Localize WizardCustomCheckpoint}" FontWeight="SemiBold"/>
+                                <TextBlock Text="{CommonControls:Localize WizardCustomCheckpointDescription}" Margin="0,1,0,0" FontSize="10" Opacity=".7" TextWrapping="Wrap"/>
+                            </StackPanel>
+                        </RadioButton>
+                    </UniformGrid>
+                </DockPanel>
+            </Border>
 
-                <!--Folder-->
-                <StackPanel Visibility="{Binding SelectedSource, Converter={StaticResource EnumToVisibilityConverter}, ConverterParameter=LocalFolder}">
-                    <TextBlock Text="{CommonControls:Localize ModelFolder}" Style="{StaticResource FieldTextBlockStyle}"/>
-                    <CommonControls:FilePickerTextBox FileName="{Binding SelectedPath, Mode=TwoWay}" IsFolderPicker="True" IsRequired="True"/>
-                </StackPanel>
+            <!--Files-->
+            <Border Style="{StaticResource WizardSection}">
+                <DockPanel>
+                    <StackPanel Style="{StaticResource WizardSectionHeader}">
+                        <TextBlock Text="{CommonControls:Localize ModelFiles}" FontWeight="SemiBold" FontSize="13"/>
+                        <TextBlock Text="{CommonControls:Localize WizardFilesDescription}" FontSize="11" Opacity=".7" TextWrapping="Wrap"/>
+                    </StackPanel>
+                    <StackPanel>
 
-                <!--Checkpoint Settings-->
-                <Grid Visibility="{Binding SelectedSource, Converter={StaticResource EnumToVisibilityConverter}, ConverterParameter=Checkpoint}" Margin="0,10,0,0">
-                    <Controls:DiffusionCheckpointControl Settings="{Binding Settings}" Checkpoint="{Binding SelectedTemplate.Checkpoint}" Backend="{Binding SelectedTemplate.Backend}" />
-                </Grid>
-            </Grid>
+                        <!--Local File-->
+                        <StackPanel Visibility="{Binding IsLocalFile, Converter={StaticResource BooleanToVisibilityConverter}}">
+                            <ItemsControl ItemsSource="{Binding RequiredFiles}">
+                                <ItemsControl.ItemTemplate>
+                                    <DataTemplate DataType="{x:Type Common:WizardFileModel}">
+                                        <StackPanel Margin="0,0,0,2">
+                                            <TextBlock Text="{Binding Label}" Style="{StaticResource FieldTextBlockStyle}"/>
+                                            <CommonControls:FilePickerTextBox FileName="{Binding Component.Path, Mode=TwoWay}" IsFolderPicker="{Binding IsFolder}" IsRequired="True" Filter="{Binding FileFilter, RelativeSource={RelativeSource AncestorType={x:Type local:DiffusionModelWizardDialog}}}"/>
+                                        </StackPanel>
+                                    </DataTemplate>
+                                </ItemsControl.ItemTemplate>
+                            </ItemsControl>
 
-            <DockPanel  Margin="0,4,0,0">
-                <StackPanel DockPanel.Dock="Right" Margin="4,0,0,0">
-                    <TextBlock Text="{CommonControls:Localize VariantOptional}" Style="{StaticResource FieldTextBlockStyle}"/>
-                    <TextBox Text="{Binding SelectedVariant, UpdateSourceTrigger=PropertyChanged}" />
-                </StackPanel>
-                <StackPanel>
-                    <TextBlock Text="{CommonControls:Localize ModelName}" Style="{StaticResource FieldTextBlockStyle}"/>
-                    <TextBox Text="{Binding SelectedName, UpdateSourceTrigger=PropertyChanged}" />
-                </StackPanel>
-            </DockPanel>
+                            <!--Supplied By Amuse-->
+                            <StackPanel Margin="0,6,0,0" Visibility="{Binding SharedComponents.Count, Converter={StaticResource GreaterThanToVisibilityConverter}, ConverterParameter=0}">
+                                <TextBlock Text="{CommonControls:Localize WizardSuppliedByAmuse}" Style="{StaticResource FieldTextBlockStyle}"/>
+                                <TextBlock Text="{CommonControls:Localize WizardSuppliedByAmuseDescription}" FontSize="10" Opacity=".7" TextWrapping="Wrap" Margin="0,0,0,2"/>
+                                <ItemsControl ItemsSource="{Binding SharedComponents}">
+                                    <ItemsControl.ItemTemplate>
+                                        <DataTemplate DataType="{x:Type Common:WizardFileModel}">
+                                            <DockPanel Margin="0,1">
+                                                <Grid DockPanel.Dock="Right" Width="130">
+                                                    <StackPanel Orientation="Horizontal" Visibility="{Binding IsInstalled, Converter={StaticResource BooleanToVisibilityConverter}}">
+                                                        <CommonControls:FontAwesome Icon="f00c" Size="11" Color="{StaticResource SuccessColour}" Margin="0,0,5,0"/>
+                                                        <TextBlock Text="{CommonControls:Localize Installed}" FontSize="11"/>
+                                                    </StackPanel>
+                                                    <StackPanel Orientation="Horizontal" Visibility="{Binding IsInstalled, Converter={StaticResource InverseBooleanToVisibilityConverter}}">
+                                                        <CommonControls:FontAwesome Icon="f019" Size="11" Color="{StaticResource InfoColour}" Margin="0,0,5,0"/>
+                                                        <TextBlock Text="{CommonControls:Localize WizardWillDownload}" FontSize="11"/>
+                                                    </StackPanel>
+                                                </Grid>
+                                                <TextBlock FontSize="11">
+                                                    <Run Text="{Binding Label, Mode=OneWay}" FontWeight="SemiBold"/>
+                                                    <Run Text="{Binding SharedComponent.Name, Mode=OneWay}"/>
+                                                </TextBlock>
+                                            </DockPanel>
+                                        </DataTemplate>
+                                    </ItemsControl.ItemTemplate>
+                                </ItemsControl>
+                            </StackPanel>
+                        </StackPanel>
+
+                        <!--Local Checkpoint-->
+                        <StackPanel Visibility="{Binding IsLocalCheckpoint, Converter={StaticResource BooleanToVisibilityConverter}}">
+                            <TextBlock Text="{CommonControls:Localize ModelFile}" Style="{StaticResource FieldTextBlockStyle}"/>
+                            <CommonControls:FilePickerTextBox FileName="{Binding SelectedFile, Mode=TwoWay}" IsFolderPicker="False" IsRequired="True" Filter="{Binding FileFilter}"/>
+                        </StackPanel>
+
+                        <!--Custom Checkpoint-->
+                        <Grid Visibility="{Binding IsCustomCheckpoint, Converter={StaticResource BooleanToVisibilityConverter}}">
+                            <Controls:DiffusionCheckpointControl Settings="{Binding Settings}" Checkpoint="{Binding SelectedTemplate.Checkpoint}" Backend="{Binding SelectedTemplate.Backend}" IsOnlineCheckpointsEnabled="True" />
+                        </Grid>
+
+                        <!--Name/Quant-->
+                        <DockPanel Margin="0,6,0,0">
+                            <StackPanel DockPanel.Dock="Right" Margin="4,0,0,0" Width="120">
+                                <TextBlock Text="{CommonControls:Localize Quant}" Style="{StaticResource FieldTextBlockStyle}"/>
+                                <ComboBox ItemsSource="{Binding CheckpointTypes}" SelectedItem="{Binding SelectedCheckpointType}" Style="{StaticResource EnumComboBox}"/>
+                            </StackPanel>
+                            <StackPanel>
+                                <TextBlock Text="{CommonControls:Localize ModelName}" Style="{StaticResource FieldTextBlockStyle}"/>
+                                <TextBox Text="{Binding SelectedName, UpdateSourceTrigger=PropertyChanged}" />
+                            </StackPanel>
+                        </DockPanel>
+
+                    </StackPanel>
+                </DockPanel>
+            </Border>
 
         </StackPanel>
 

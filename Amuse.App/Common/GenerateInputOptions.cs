@@ -23,13 +23,15 @@ namespace Amuse.App.Common
         private int _steps2;
         private float _strength = 0;
         private float _controlNetStrength = 0;
-        private SchedulerInputOptions _schedulerOptions;
+        private ControlNetType _controlType;
+        private SamplerInputOptions _samplerOptions;
         private List<LoraOptionModel> _loraOptions;
         private int _frames;
         private float _frameRate;
         private int _noiseCondition;
         private int _frameChunkOverlap;
         private int _frameChunk;
+        private bool _isFrameChunkEnabled;
         private bool _isVaeTilingEnabled;
         private bool _isVaeSlicingEnabled;
         private bool _isSource1Enabled = true;
@@ -43,6 +45,10 @@ namespace Amuse.App.Common
         private string _task;
         private string _timeSignature;
         private string _trackName;
+        private float _rangeStart;
+        private float _rangeEnd;
+        private string _referenceText;
+        private string _emotion;
         private float _duration;
         private LanguageType _language;
         private float _speed;
@@ -68,6 +74,15 @@ namespace Amuse.App.Common
         private int _latentUpscaleSteps = 4;
         private float _latentUpscaleStrength = 0.7f;
         private int _latentUpscaleTileSize = 128;
+        private DiffusionCacheType _cacheMode;
+        private float _cacheThreshold;
+        private float _cacheStartPercent = 0.15f;
+        private float _cacheEndPercent = 0.95f;
+        private int _cacheWarmupSteps;
+        private int _clipSkip;
+        private float _moeBoundary;
+        private bool _isCircularXEnabled;
+        private bool _isCircularYEnabled;
         private bool _isToolCallsEnabled = true;
         private List<string> _selectedTools = new List<string>();
 
@@ -155,6 +170,13 @@ namespace Amuse.App.Common
         }
 
         [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingDefault)]
+        public ControlNetType ControlType
+        {
+            get { return _controlType; }
+            set { SetProperty(ref _controlType, value); }
+        }
+
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingDefault)]
         public int Frames
         {
             get { return _frames; }
@@ -173,6 +195,13 @@ namespace Amuse.App.Common
         {
             get { return _frameChunk; }
             set { SetProperty(ref _frameChunk, value); }
+        }
+
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingDefault)]
+        public bool IsFrameChunkEnabled
+        {
+            get { return _isFrameChunkEnabled; }
+            set { SetProperty(ref _isFrameChunkEnabled, value); }
         }
 
         [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingDefault)]
@@ -204,10 +233,10 @@ namespace Amuse.App.Common
         }
 
         [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
-        public SchedulerInputOptions SchedulerOptions
+        public SamplerInputOptions SamplerOptions
         {
-            get { return _schedulerOptions; }
-            set { SetProperty(ref _schedulerOptions, value); }
+            get { return _samplerOptions; }
+            set { SetProperty(ref _samplerOptions, value); }
         }
 
         [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
@@ -285,6 +314,37 @@ namespace Amuse.App.Common
         {
             get { return _trackName; }
             set { SetProperty(ref _trackName, value); }
+        }
+
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingDefault)]
+        public float RangeStart
+        {
+            get { return _rangeStart; }
+            set { SetProperty(ref _rangeStart, value); NotifyPropertyChanged(nameof(HasRange)); }
+        }
+
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingDefault)]
+        public float RangeEnd
+        {
+            get { return _rangeEnd; }
+            set { SetProperty(ref _rangeEnd, value); NotifyPropertyChanged(nameof(HasRange)); }
+        }
+
+        [JsonIgnore]
+        public bool HasRange => _rangeStart >= 0 && _rangeEnd > _rangeStart;
+
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingDefault)]
+        public string ReferenceText
+        {
+            get { return _referenceText; }
+            set { SetProperty(ref _referenceText, value); }
+        }
+
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingDefault)]
+        public string Emotion
+        {
+            get { return _emotion; }
+            set { SetProperty(ref _emotion, value); }
         }
 
         [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingDefault)]
@@ -441,6 +501,69 @@ namespace Amuse.App.Common
             set { SetProperty(ref _latentUpscaleTileSize, value); }
         }
 
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingDefault)]
+        public DiffusionCacheType CacheMode
+        {
+            get { return _cacheMode; }
+            set { SetProperty(ref _cacheMode, value); }
+        }
+
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingDefault)]
+        public float CacheThreshold
+        {
+            get { return _cacheThreshold; }
+            set { SetProperty(ref _cacheThreshold, value); }
+        }
+
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingDefault)]
+        public float CacheStartPercent
+        {
+            get { return _cacheStartPercent; }
+            set { SetProperty(ref _cacheStartPercent, value); }
+        }
+
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingDefault)]
+        public float CacheEndPercent
+        {
+            get { return _cacheEndPercent; }
+            set { SetProperty(ref _cacheEndPercent, value); }
+        }
+
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingDefault)]
+        public int CacheWarmupSteps
+        {
+            get { return _cacheWarmupSteps; }
+            set { SetProperty(ref _cacheWarmupSteps, value); }
+        }
+
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingDefault)]
+        public int ClipSkip
+        {
+            get { return _clipSkip; }
+            set { SetProperty(ref _clipSkip, value); }
+        }
+
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingDefault)]
+        public float MoeBoundary
+        {
+            get { return _moeBoundary; }
+            set { SetProperty(ref _moeBoundary, value); }
+        }
+
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingDefault)]
+        public bool IsCircularXEnabled
+        {
+            get { return _isCircularXEnabled; }
+            set { SetProperty(ref _isCircularXEnabled, value); }
+        }
+
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingDefault)]
+        public bool IsCircularYEnabled
+        {
+            get { return _isCircularYEnabled; }
+            set { SetProperty(ref _isCircularYEnabled, value); }
+        }
+
         [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
         public ObservableCollection<ConversationModel> Conversation
         {
@@ -485,6 +608,9 @@ namespace Amuse.App.Common
 
         [JsonIgnore]
         public List<AudioInputStream> InputAudios { get; set; } = [];
+
+        [JsonIgnore]
+        public AudioInputStream ReferenceAudio { get; set; }
 
         [JsonIgnore]
         public List<VideoSequence> InputVideos { get; set; } = [];

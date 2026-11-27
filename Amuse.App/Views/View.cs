@@ -18,6 +18,7 @@ namespace Amuse.App.Views
         SettingsLanguage = 59,
         SettingsVideo = 60,
         SettingsAudio = 61,
+        SettingsTool = 62,
 
         TextToImage = 100,
         ImageToImage = 101,
@@ -42,6 +43,9 @@ namespace Amuse.App.Views
         TextToAudio = 300,
         AudioToText = 301,
         TextToMusic = 302,
+        AudioToMusic = 303,
+        VoiceClone = 304,
+        AudioCompose = 350,
 
         TextInstruct = 400,
         TextConverse = 401,
@@ -71,8 +75,8 @@ namespace Amuse.App.Views
             {ViewCategory.Settings, View.SettingsGeneral },
             {ViewCategory.Image, View.TextToImage },
             {ViewCategory.Video, View.TextToVideo },
-            {ViewCategory.Audio, View.TextToMusic },
-            {ViewCategory.Text, View.TextInstruct }
+            {ViewCategory.Audio, View.TextToAudio },
+            {ViewCategory.Text, View.TextConverse }
         };
 
 
@@ -95,6 +99,7 @@ namespace Amuse.App.Views
             { View.SettingsUpscale , ViewCategory.Settings  },
             { View.SettingsComponent , ViewCategory.Settings  },
             { View.SettingsLanguage , ViewCategory.Settings  },
+            { View.SettingsTool , ViewCategory.Settings  },
 
             // Image
             { View.TextToImage, ViewCategory.Image  },
@@ -119,8 +124,11 @@ namespace Amuse.App.Views
 
              // Audio
             { View.TextToMusic, ViewCategory.Audio  },
+            { View.AudioToMusic, ViewCategory.Audio  },
             { View.TextToAudio, ViewCategory.Audio  },
+            { View.VoiceClone, ViewCategory.Audio  },
             { View.AudioToText, ViewCategory.Audio  },
+            { View.AudioCompose, ViewCategory.Audio  },
 
             // Text
             { View.TextInstruct, ViewCategory.Text  },

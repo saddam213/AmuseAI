@@ -1,4 +1,6 @@
-﻿using System;
+﻿using Amuse.App.Resources;
+using Microsoft.Extensions.Logging;
+using System;
 using System.IO;
 using System.Threading;
 using System.Threading.Tasks;
@@ -17,6 +19,7 @@ namespace Amuse.App.Dialogs
         private readonly Settings _settings;
         private readonly DownloadService _downloadService;
         private readonly IProgress<FileDownloadProgress> _updateProgress;
+        private readonly ILogger<AppUpdateDialog> _logger;
         private AppUpdate _appUpdate;
         private AppAsset _appAsset;
         private CancellationTokenSource _cancellationTokenSource;
@@ -26,11 +29,18 @@ namespace Amuse.App.Dialogs
         private double _downloadSpeed;
         private double _downloadSize;
         private double _downloadAmount;
-        private string _downloadRemaining = "0 sec";
+        private string _downloadRemaining;
         private DateTime _lastUpdate;
 
-        public AppUpdateDialog(Settings settings, DownloadService downloadService)
+        /// <summary>
+        /// Initializes a new instance of the <see cref="AppUpdateDialog"/> class.
+        /// </summary>
+        /// <param name="settings">The settings.</param>
+        /// <param name="downloadService">The download service.</param>
+        /// <param name="logger">The logger.</param>
+        public AppUpdateDialog(Settings settings, DownloadService downloadService, ILogger<AppUpdateDialog> logger)
         {
+            _logger = logger;
             _settings = settings;
             _downloadService = downloadService;
             _updateProgress = new Progress<FileDownloadProgress>(UpdateProgress);
@@ -96,7 +106,10 @@ namespace Amuse.App.Dialogs
             AppAsset = isAppInstalled
                 ? appUpdate.AssetInstaller
                 : appUpdate.AssetStandalone;
-            DownloadSize = _appAsset.Size / 1_000_000.0;
+            DownloadSize = (_appAsset?.Size ?? 0) / 1_000_000.0;
+            if (_appAsset is null)
+                ErrorMessage = AppErrors.UpdateDownloadFailed;
+
             return await base.ShowDialogAsync();
         }
 
@@ -115,33 +128,66 @@ namespace Amuse.App.Dialogs
         }
 
 
+        /// <summary>
+        /// Downloads the update, a cancelled or failed download deletes the partial file.
+        /// </summary>
         private async Task Download()
         {
+            if (_appAsset is null)
+                return;
+
+            var cancellationTokenSource = new CancellationTokenSource();
+            _cancellationTokenSource = cancellationTokenSource;
             try
             {
                 ErrorMessage = string.Empty;
-                using (_cancellationTokenSource = new CancellationTokenSource())
-                {
-                    _assetLocation = Path.Combine(_settings.DirectoryTemp, Path.GetFileName(_appAsset.Name));
-                    await _downloadService.DownloadAsync(_appAsset.DownloadLink, _assetLocation, _updateProgress, _cancellationTokenSource.Token);
-                    await SaveAsync();
-                }
+                _assetLocation = Path.Combine(_settings.DirectoryTemp, Path.GetFileName(_appAsset.Name));
+                await _downloadService.DownloadAsync(_appAsset.DownloadLink, _assetLocation, _updateProgress, cancellationTokenSource.Token);
+                await SaveAsync();
             }
             catch (OperationCanceledException)
             {
-                // download Canceled
+                _logger.LogInformation("[AppUpdateDialog] [Download] Downloading update cancelled");
+                DeletePartialFile();
             }
-            catch (Exception)
+            catch (Exception ex)
             {
-                ErrorMessage = "Failed to download update files\nIf problems persist please try again later";
+                _logger.LogError(ex, "[AppUpdateDialog] [Download] Downloading update failed, Link: {Link}", _appAsset.DownloadLink);
+                DeletePartialFile();
+                ErrorMessage = AppErrors.UpdateDownloadFailed;
+            }
+            finally
+            {
+                _cancellationTokenSource = null;
+                cancellationTokenSource.Dispose();
             }
         }
 
 
+        /// <summary>
+        /// Cancels the download when one is running.
+        /// </summary>
         private Task CancelDownload()
         {
             _cancellationTokenSource?.Cancel();
             return Task.CompletedTask;
+        }
+
+
+        /// <summary>
+        /// Deletes the partly downloaded update file.
+        /// </summary>
+        private void DeletePartialFile()
+        {
+            try
+            {
+                if (File.Exists(_assetLocation))
+                    File.Delete(_assetLocation);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogWarning(ex, "[AppUpdateDialog] [Download] Deleting partial update failed, File: {File}", _assetLocation);
+            }
         }
 
 

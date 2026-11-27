@@ -2,9 +2,8 @@
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
-using System.Diagnostics;
 using System.Linq;
-using System.Threading.Tasks;
+using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Threading;
 using TensorStack.Common;
@@ -26,13 +25,12 @@ namespace Amuse.App.Controls
         /// </summary>
         public SystemInfoControl()
         {
+            DeviceCollection = new List<DeviceInfo>();
             if (!DesignerProperties.GetIsInDesignMode(this))
             {
                 _hardwareService = App.GetService<IHardwareService>();
-                DeviceCollection = new List<DeviceInfo>();
 
                 var cpuDevice = Provider.GetDevice(DeviceType.CPU);
-                var gpuDevices = _hardwareService.GetGPUDevices();
                 DeviceCollection.Add(new DeviceInfo
                 {
                     Id = cpuDevice.Id,
@@ -41,11 +39,11 @@ namespace Amuse.App.Controls
                     HardwareLUID = 0,
                     HardwareID = cpuDevice.HardwareID,
                     HardwareVendorId = cpuDevice.HardwareVendorId,
-                    Memory = cpuDevice.Memory,
+                    Memory = _hardwareService.CPUDevice?.MemoryTotal ?? cpuDevice.Memory,
                     Type = cpuDevice.Type
                 });
 
-                DeviceCollection.AddRange(gpuDevices.Select(x => new DeviceInfo
+                DeviceCollection.AddRange(_hardwareService.GetGPUDevices().Select(x => new DeviceInfo
                 {
                     Id = x.Id,
                     DeviceId = x.Id,
@@ -57,9 +55,13 @@ namespace Amuse.App.Controls
                     Type = x.Type
                 }));
 
-                _updateTimer = new DispatcherTimer(TimeSpan.FromMilliseconds(300), DispatcherPriority.Normal, UpdateDevices, Dispatcher);
-                _updateTimer.Start();
-                _ = Task.Run(UpdateDevices);
+                _updateTimer = new DispatcherTimer(DispatcherPriority.Background, Dispatcher)
+                {
+                    Interval = TimeSpan.FromMilliseconds(500)
+                };
+                _updateTimer.Tick += UpdateTimer_Tick;
+                Loaded += SystemInfoControl_Loaded;
+                Unloaded += SystemInfoControl_Unloaded;
             }
 
             InitializeComponent();
@@ -69,63 +71,113 @@ namespace Amuse.App.Controls
         public List<DeviceInfo> DeviceCollection { get; }
 
 
-        private void UpdateDevices(object sender, EventArgs e)
+        /// <summary>
+        /// Starts the updates when the control is loaded.
+        /// </summary>
+        /// <param name="sender">The sender.</param>
+        /// <param name="e">The <see cref="RoutedEventArgs"/> instance containing the event data.</param>
+        private void SystemInfoControl_Loaded(object sender, RoutedEventArgs e)
         {
-            foreach (var device in DeviceCollection)
+            UpdateDevices();
+            _updateTimer.Start();
+        }
+
+
+        /// <summary>
+        /// Stops the updates when the control is unloaded.
+        /// </summary>
+        /// <param name="sender">The sender.</param>
+        /// <param name="e">The <see cref="RoutedEventArgs"/> instance containing the event data.</param>
+        private void SystemInfoControl_Unloaded(object sender, RoutedEventArgs e)
+        {
+            _updateTimer.Stop();
+        }
+
+
+        /// <summary>
+        /// Handles the update timer tick.
+        /// </summary>
+        /// <param name="sender">The sender.</param>
+        /// <param name="e">The <see cref="EventArgs"/> instance containing the event data.</param>
+        private void UpdateTimer_Tick(object sender, EventArgs e)
+        {
+            UpdateDevices();
+        }
+
+
+        /// <summary>
+        /// Updates the devices from the latest hardware status.
+        /// </summary>
+        private void UpdateDevices()
+        {
+            try
             {
-                device.NotifyPropertyChanged(nameof(DeviceInfo.Usage));
-                device.NotifyPropertyChanged(nameof(DeviceInfo.MemoryUsage));
-                device.NotifyPropertyChanged(nameof(DeviceInfo.MemoryRemaining));
-                device.NotifyPropertyChanged(nameof(DeviceInfo.ProcessMemoryUsage));
-                device.NotifyPropertyChanged(nameof(DeviceInfo.ProgressValue));
-                device.NotifyPropertyChanged(nameof(DeviceInfo.ProgressSubValue));
+                foreach (var device in DeviceCollection)
+                {
+                    if (device.Type == DeviceType.CPU)
+                        UpdateDeviceCPU(device, _hardwareService.CPUStatus);
+                    else if (device.Type == DeviceType.NPU)
+                        UpdateDeviceNPU(device, _hardwareService.NPUStatus);
+                }
+
+                foreach (var gpuStatus in _hardwareService.GPUStatus)
+                {
+                    var gpuDevice = DeviceCollection.FirstOrDefault(x => x.DeviceId == gpuStatus.Id && x.Type == DeviceType.GPU);
+                    if (gpuDevice != null)
+                        UpdateDeviceGPU(gpuDevice, gpuStatus);
+                }
+            }
+            catch (Exception)
+            {
+                // Hardware status unavailable, retry next tick
             }
         }
 
 
-        private async Task UpdateDevices()
+        /// <summary>
+        /// Updates the CPU device.
+        /// </summary>
+        /// <param name="device">The device.</param>
+        /// <param name="status">The status.</param>
+        private static void UpdateDeviceCPU(DeviceInfo device, CPUStatus status)
         {
-            var process = Process.GetCurrentProcess();
-            while (!process.HasExited)
-            {
-                try
-                {
-                    process.Refresh(); // Update stats
-                    var cpuStatus = _hardwareService.CPUStatus;
-                    var cpuUpdate = DeviceCollection.FirstOrDefault(x => x.Type == DeviceType.CPU);
-                    if (cpuUpdate != null)
-                    {
-                        var memoryUsage = (cpuStatus.MemoryTotal - cpuStatus.MemoryAvailable);
-                        var processMemoryUsage = process.WorkingSet64 / 1024f / 1024f;
-                        cpuUpdate.Memory = _hardwareService.CPUDevice.MemoryTotal;
-                        cpuUpdate.Usage = cpuStatus.Usage;
-                        cpuUpdate.MemoryUsage = memoryUsage / 1024f;
-                        cpuUpdate.ProcessMemoryUsage = processMemoryUsage / 1024f;
-                    }
+            if (status.MemoryTotal <= 0)
+                return;
 
-                    var npuStatus = _hardwareService.NPUStatus;
-                    var npuUpdate = DeviceCollection.FirstOrDefault(x => x.Type == DeviceType.NPU);
-                    if (npuUpdate != null)
-                    {
-                        npuUpdate.Memory = _hardwareService.NPUDevice.MemoryTotal;
-                        npuUpdate.Usage = npuStatus.Usage;
-                        npuUpdate.MemoryUsage = npuStatus.MemoryUsage / 1024f;
-                    }
+            device.Memory = status.MemoryTotal;
+            device.Usage = status.Usage;
+            device.MemoryUsage = (status.MemoryTotal - status.MemoryAvailable) / 1024f;
+            device.ProcessMemoryUsage = status.ProcessMemoryUsage / 1024f;
+        }
 
-                    foreach (var gpuStatus in _hardwareService.GPUStatus)
-                    {
-                        var gpuUpdate = DeviceCollection.FirstOrDefault(x => x.DeviceId == gpuStatus.Id && x.Type == DeviceType.GPU);
-                        if (gpuUpdate == null)
-                            continue;
 
-                        gpuUpdate.Usage = GetGPUUsage(gpuStatus);
-                        gpuUpdate.MemoryUsage = gpuStatus.MemoryUsage / 1024f;
-                        gpuUpdate.ProcessMemoryUsage = gpuStatus.ProcessMemoryTotal / 1024f;
-                    }
-                }
-                catch (Exception) { }
-                await Task.Delay(250); // Non-blocking delay
-            }
+        /// <summary>
+        /// Updates the NPU device.
+        /// </summary>
+        /// <param name="device">The device.</param>
+        /// <param name="status">The status.</param>
+        private static void UpdateDeviceNPU(DeviceInfo device, NPUStatus status)
+        {
+            if (status.MemoryTotal <= 0)
+                return;
+
+            device.Memory = status.MemoryTotal;
+            device.Usage = status.Usage;
+            device.MemoryUsage = status.MemoryUsage / 1024f;
+            device.ProcessMemoryUsage = status.ProcessSharedMemoryUsage / 1024f;
+        }
+
+
+        /// <summary>
+        /// Updates the GPU device.
+        /// </summary>
+        /// <param name="device">The device.</param>
+        /// <param name="status">The status.</param>
+        private static void UpdateDeviceGPU(DeviceInfo device, GPUStatus status)
+        {
+            device.Usage = GetGPUUsage(status);
+            device.MemoryUsage = status.MemoryUsage / 1024f;
+            device.ProcessMemoryUsage = status.ProcessMemoryUsage / 1024f;
         }
 
 
@@ -133,20 +185,23 @@ namespace Amuse.App.Controls
         /// Gets the GPU usage.
         /// </summary>
         /// <param name="status">The status.</param>
-        /// <returns>System.Double.</returns>
-        private int GetGPUUsage(GPUStatus status)
+        private static int GetGPUUsage(GPUStatus status)
         {
             var compute = Math.Max(status.UsageCompute, status.UsageCompute1);
             var graphics = Math.Max(status.UsageGraphics, status.UsageGraphics1);
             var usage = Math.Max(status.UsageCuda, Math.Max(compute, graphics));
             return Math.Min(usage, 100);
         }
-
     }
+
 
     public class DeviceInfo : BaseModel
     {
         private double _memory;
+        private int _memoryGB;
+        private int _usage;
+        private double _memoryUsage;
+        private double _processMemoryUsage;
 
         public int Id { get; init; }
         public int DeviceId { get; init; }
@@ -155,23 +210,66 @@ namespace Amuse.App.Controls
         public int HardwareID { get; init; }
         public long HardwareLUID { get; init; }
         public int HardwareVendorId { get; init; }
-        public int Usage { get; set; }
-        public double MemoryUsage { get; set; }
-        public double ProcessMemoryUsage { get; set; }
-        public double MemoryRemaining => MemoryGB - MemoryUsage;
-        public double ProgressValue => MemoryUsage;
-        public double ProgressSubValue => MemoryUsage - ProcessMemoryUsage;
+
+        public int Usage
+        {
+            get { return _usage; }
+            set { SetProperty(ref _usage, value); }
+        }
+
+        public double MemoryUsage
+        {
+            get { return _memoryUsage; }
+            set
+            {
+                if (SetProperty(ref _memoryUsage, value))
+                    NotifyMemoryChanged();
+            }
+        }
+
+        public double ProcessMemoryUsage
+        {
+            get { return _processMemoryUsage; }
+            set
+            {
+                if (SetProperty(ref _processMemoryUsage, value))
+                    NotifyMemoryChanged();
+            }
+        }
 
         public double Memory
         {
             get { return _memory; }
             set
             {
-                _memory = value;
-                MemoryGB = (int)Math.Round(_memory / 1024.0, 0, MidpointRounding.ToEven);
+                if (SetProperty(ref _memory, value))
+                    MemoryGB = (int)Math.Round(_memory / 1024.0, 0, MidpointRounding.ToEven);
             }
         }
-        public int MemoryGB { get; set; }
-    }
 
+        public int MemoryGB
+        {
+            get { return _memoryGB; }
+            private set
+            {
+                if (SetProperty(ref _memoryGB, value))
+                    NotifyMemoryChanged();
+            }
+        }
+
+        public double MemoryRemaining => Math.Max(0, MemoryGB - MemoryUsage);
+        public double ProgressValue => MemoryUsage;
+        public double ProgressSubValue => Math.Max(0, MemoryUsage - ProcessMemoryUsage);
+
+
+        /// <summary>
+        /// Notifies the computed memory properties.
+        /// </summary>
+        private void NotifyMemoryChanged()
+        {
+            NotifyPropertyChanged(nameof(MemoryRemaining));
+            NotifyPropertyChanged(nameof(ProgressValue));
+            NotifyPropertyChanged(nameof(ProgressSubValue));
+        }
+    }
 }

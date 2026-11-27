@@ -26,7 +26,7 @@
                         <!--ModelControl-->
                         <Grid DockPanel.Dock="Top" IsEnabled="{Binding InterpolationService.IsLoading, Converter={StaticResource InverseBoolConverter}}">
                             <Grid IsEnabled="{Binding InterpolationService.IsExecuting, Mode=OneWay, Converter={StaticResource InverseBoolConverter}}">
-                                <Grid IsEnabled="{Binding IsAutomating, Mode=OneWay, Converter={StaticResource InverseBoolConverter}}">
+                                <Grid IsEnabled="{Binding IsPipelineBusy, Mode=OneWay, Converter={StaticResource InverseBoolConverter}}">
                                     <Controls:ModelControl
                                             x:Name="ModelControl"
                                             Settings="{Binding Settings, Mode=OneWay}" 

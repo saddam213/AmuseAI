@@ -16,8 +16,6 @@
                 <ColumnDefinition MinWidth="380"/>
                 <ColumnDefinition Width="5" />
                 <ColumnDefinition Width="4*" />
-                <ColumnDefinition Width="5" />
-                <ColumnDefinition Width="Auto" MaxWidth="330" />
             </Grid.ColumnDefinitions>
 
             <!--***Left Panel***-->
@@ -28,7 +26,7 @@
                         <!--ModelControl-->
                         <Grid DockPanel.Dock="Top" IsEnabled="{Binding GenerateService.IsLoading, Converter={StaticResource InverseBoolConverter}}">
                             <Grid IsEnabled="{Binding GenerateService.IsExecuting, Converter={StaticResource InverseBoolConverter}}">
-                                <Grid IsEnabled="{Binding IsAutomating, Converter={StaticResource InverseBoolConverter}}">
+                                <Grid IsEnabled="{Binding IsPipelineBusy, Converter={StaticResource InverseBoolConverter}}">
                                     <Controls:DiffusionModelControl
                                         x:Name="ModelControl"
                                         ViewType="TextToMusic"
@@ -58,7 +56,7 @@
                                         <Button Command="{Binding CancelCommand}" >
                                             <Button.Style>
                                                 <Style TargetType="{x:Type Button}" BasedOn="{StaticResource {x:Type Button}}">
-                                                    <Setter Property="Content" Value="Cancel" />
+                                                    <Setter Property="Content" Value="{CommonControls:Localize Cancel}" />
                                                     <Style.Triggers>
                                                         <DataTrigger Binding="{Binding GenerateService.IsCanceling}" Value="True">
                                                             <Setter Property="Content" Value="{CommonControls:Localize Canceling}" />
@@ -89,19 +87,24 @@
                                     IsExecuting="{Binding GenerateService.IsExecuting, Mode=OneWay}"
                                     IsAutomating="{Binding IsAutomating, Mode=OneWay}"
                                     IsEnabled="{Binding IsPipelineLoaded}"/>
-                                <DockPanel Margin="0,-6,0,0" Visibility="{Binding SelectedOption, ElementName=InputControl, Converter={StaticResource EnumToVisibilityConverter}, ConverterParameter=Options}">
-                                    <TextBlock DockPanel.Dock="Top" Text="{CommonControls:Localize ReferenceAudioOptional}" Style="{StaticResource FieldTextBlockStyle}" Margin="0,0,0,2"/>
-                                    <CommonControls:AudioStreamElement 
-                                        x:Name="InputAudioControl"
-                                        Height="160"
-                                        Source="{Binding SourceAudio, Mode=TwoWay}" 
-                                        IsInputEnabled="{Binding IsPipelineLoaded}"
-                                        IsReplayEnabled="False"
-                                        IsAutoPlayEnabled="False"
-                                        IsLoadEnabled="True" 
-                                        IsSaveEnabled="False"
-                                        OnMediaImport="OnMediaImport"/>
-                                </DockPanel>
+                                <Grid Visibility="{Binding IsReferenceAudioSupported, ElementName=InputControl, Converter={StaticResource BooleanToVisibilityConverter}}">
+                                    <DockPanel Margin="0,-6,0,0" Visibility="{Binding SelectedOption, ElementName=InputControl, Converter={StaticResource EnumToVisibilityConverter}, ConverterParameter=Options}">
+                                        <TextBlock DockPanel.Dock="Top" Text="{CommonControls:Localize ReferenceAudioOptional}" Style="{StaticResource FieldTextBlockStyle}" Margin="0,0,0,2"/>
+                                        <CommonControls:AudioStreamElement
+                                            x:Name="ReferenceAudioControl"
+                                            Height="160"
+                                            Source="{Binding ReferenceAudio, Mode=TwoWay}"
+                                            IsInputEnabled="{Binding IsPipelineLoaded}"
+                                            IsReplayEnabled="False"
+                                            IsAutoPlayEnabled="False"
+                                            IsLoadEnabled="True"
+                                            IsSaveEnabled="False"
+                                            IsCropEnabled="True"
+                                            CaptureSampleRate="{Binding CurrentPipeline.DiffusionModel.DefaultOptions.SampleRate, Mode=OneWay, FallbackValue=0}"
+                                            CaptureChannels="{Binding CurrentPipeline.DiffusionModel.DefaultOptions.Channels, Mode=OneWay, FallbackValue=0}"
+                                            OnMediaImport="OnMediaImport"/>
+                                    </DockPanel>
+                                </Grid>
                             </StackPanel>
 
                         </DockPanel>
@@ -164,7 +167,12 @@
 
                                 <DockPanel Grid.Row="2" Margin="0,-2,0,0">
                                     <DockPanel >
-                                        <TextBlock DockPanel.Dock="Top" Text="{CommonControls:Localize Lyrics}" Style="{StaticResource FieldTextBlockStyle}"/>
+                                        <DockPanel DockPanel.Dock="Top">
+                                            <Button DockPanel.Dock="Right" Style="{StaticResource TransparentButton}" Command="{Binding LyricTemplateCommand}" VerticalAlignment="Bottom" Margin="0,0,2,2" Cursor="Hand" Visibility="{Binding CurrentPipeline.DiffusionModel.DefaultOptions.Lyrics, Converter={StaticResource NullOrEmptyVisibilityConverter}, FallbackValue=Collapsed}">
+                                                <TextBlock Text="{CommonControls:Localize AddSongTemplate}" FontSize="11" TextDecorations="Underline" Foreground="{StaticResource InfoColour}" />
+                                            </Button>
+                                            <TextBlock Text="{CommonControls:Localize Lyrics}" Style="{StaticResource FieldTextBlockStyle}"/>
+                                        </DockPanel>
                                         <Border Style="{StaticResource TextDropZoneStyle}">
                                             <CommonControls:PlaceholderTextBox Text="{Binding Options.Prompt2, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" AcceptsReturn="True" TextWrapping="Wrap" VerticalScrollBarVisibility="Auto" />
                                         </Border>
@@ -175,102 +183,6 @@
                         </DockPanel>
                     </Border>
                 </DockPanel>
-
-            </Grid>
-
-
-            <!--GridSplitter-->
-            <GridSplitter Grid.Column="3" HorizontalAlignment="Stretch" Width="5" Opacity=".4" Margin="0,20" />
-
-
-            <!--Help/Information-->
-            <Grid Grid.Column="4" Grid.Row="0" >
-
-                <StackPanel Margin="8,4,4,8" Width="318" IsEnabled="{Binding IsPipelineLoaded}">
-
-                    <!--Style-->
-                    <DockPanel DockPanel.Dock="Top" >
-                        <StackPanel DockPanel.Dock="Top" TextBlock.FontSize="11">
-                            <TextBlock Text="{CommonControls:Localize Style}" Style="{StaticResource FieldTextBlockStyle}"/>
-                            <TextBlock Text="{CommonControls:Localize MusicStyleTip}" TextWrapping="Wrap" Opacity=".9"/>
-                            <StackPanel Margin="0,6,0,0" Opacity=".9">
-                                <TextBlock Text="{CommonControls:Localize MusicStyleTipGenre}"/>
-                                <TextBlock Text="{CommonControls:Localize MusicStyleTipInstruments}"/>
-                                <TextBlock Text="{CommonControls:Localize MusicStyleTipMood}"/>
-                                <TextBlock Text="{CommonControls:Localize MusicStyleTipProduction}"/>
-                            </StackPanel>
-                        </StackPanel>
-                        <DockPanel>
-                            <UniformGrid DockPanel.Dock="Top" Columns="3" Margin="0,12,0,0" VerticalAlignment="Bottom" Opacity=".8" Height="22">
-                                <Button Content="{CommonControls:Localize StyleSample}" Command="{Binding AppendLyricExampleCommand}" CommandParameter="Prompt1" FontSize="11" />
-                                <Button Content="{CommonControls:Localize StyleSample}" Command="{Binding AppendLyricExampleCommand}" CommandParameter="Prompt2" FontSize="11" />
-                                <Button Content="{CommonControls:Localize StyleSample}" Command="{Binding AppendLyricExampleCommand}" CommandParameter="Prompt3" FontSize="11" />
-                            </UniformGrid>
-                        </DockPanel>
-                    </DockPanel>
-
-                    <!--Lyric-->
-                    <DockPanel Margin="0,20,0,0">
-                        <StackPanel DockPanel.Dock="Top" TextBlock.FontSize="11">
-                            <TextBlock Text="{CommonControls:Localize Lyrics}" Style="{StaticResource FieldTextBlockStyle}"/>
-                            <StackPanel Opacity=".9">
-                                <TextBlock Text="{CommonControls:Localize MusicLyricsTipSyllables}"/>
-                                <TextBlock Text="{CommonControls:Localize MusicLyricsTipUppercase}"/>
-                                <TextBlock Text="{CommonControls:Localize MusicLyricsTipBrackets}"/>
-                                <TextBlock Text="{CommonControls:Localize MusicLyricsTipDescriptors}"/>
-                            </StackPanel>
-                            <TextBlock Text="{CommonControls:Localize LyricTags}" Margin="0,8,0,0" Style="{StaticResource FieldTextBlockStyle}"/>
-                        </StackPanel>
-
-                        <Grid DockPanel.Dock="Top" Opacity=".9">
-                            <Grid.ColumnDefinitions>
-                                <ColumnDefinition Width="100"/>
-                                <ColumnDefinition Width="*" />
-                            </Grid.ColumnDefinitions>
-                            <Grid.RowDefinitions>
-                                <RowDefinition Height="*" />
-                                <RowDefinition Height="*" />
-                                <RowDefinition Height="*" />
-                                <RowDefinition Height="*" />
-                                <RowDefinition Height="*" />
-                                <RowDefinition Height="*" />
-                                <RowDefinition Height="*" />
-                            </Grid.RowDefinitions>
-                            <Button Grid.Column="0" Grid.Row="0" Content="[Intro]"  FontSize="11" HorizontalContentAlignment="Left" Padding="0" Style="{StaticResource TransparentButton}" Command="{Binding AppendLyricCommand}" CommandParameter="[Intro]"/>
-                            <Button Grid.Column="0" Grid.Row="1" Content="[Verse]" FontSize="11" HorizontalContentAlignment="Left" Padding="0" Style="{StaticResource TransparentButton}" Command="{Binding AppendLyricCommand}" CommandParameter="[Verse]" />
-                            <Button Grid.Column="0" Grid.Row="2" Content="[Pre-Chorus]" FontSize="11" HorizontalContentAlignment="Left" Padding="0" Style="{StaticResource TransparentButton}" Command="{Binding AppendLyricCommand}" CommandParameter="[Pre-Chorus]" />
-                            <Button Grid.Column="0" Grid.Row="3" Content="[Chorus]" FontSize="11" HorizontalContentAlignment="Left" Padding="0" Style="{StaticResource TransparentButton}" Command="{Binding AppendLyricCommand}" CommandParameter="[Chorus]" />
-                            <Button Grid.Column="0" Grid.Row="4" Content="[Bridge]" FontSize="11" HorizontalContentAlignment="Left" Padding="0" Style="{StaticResource TransparentButton}" Command="{Binding AppendLyricCommand}" CommandParameter="[Bridge]" />
-                            <Button Grid.Column="0" Grid.Row="5" Content="[Instrumental]" FontSize="11" HorizontalContentAlignment="Left" Padding="0" Style="{StaticResource TransparentButton}" Command="{Binding AppendLyricCommand}" CommandParameter="[Instrumental]"/>
-                            <Button Grid.Column="0" Grid.Row="6" Content="[Outro]" FontSize="11" HorizontalContentAlignment="Left" Padding="0" Style="{StaticResource TransparentButton}" Command="{Binding AppendLyricCommand}" CommandParameter="[Outro]"/>
-                            <TextBlock Grid.Column="1" Grid.Row="0" FontSize="11" Text="{CommonControls:Localize LyricTagIntroMessage}" Margin="0,1"/>
-                            <TextBlock Grid.Column="1" Grid.Row="1" FontSize="11" Text="{CommonControls:Localize LyricTagVerseMessage}" Margin="0,1"/>
-                            <TextBlock Grid.Column="1" Grid.Row="2" FontSize="11" Text="{CommonControls:Localize LyricTagPreChorusMessage}" Margin="0,1"/>
-                            <TextBlock Grid.Column="1" Grid.Row="3" FontSize="11" Text="{CommonControls:Localize LyricTagChorusMessage}" Margin="0,1"/>
-                            <TextBlock Grid.Column="1" Grid.Row="4" FontSize="11" Text="{CommonControls:Localize LyricTagBridgeMessage}" Margin="0,1"/>
-                            <TextBlock Grid.Column="1" Grid.Row="5" FontSize="11" Text="{CommonControls:Localize LyricTagInstrumentalMessage}" Margin="0,1"/>
-                            <TextBlock Grid.Column="1" Grid.Row="6" FontSize="11" Text="{CommonControls:Localize LyricTagOutroMessage}" Margin="0,1"/>
-                        </Grid>
-                        <UniformGrid DockPanel.Dock="Top" Columns="3" Margin="0,12,0,0" Opacity=".8" Height="22">
-                            <Button Content="{CommonControls:Localize LyricsSample}" Command="{Binding AppendLyricExampleCommand}" CommandParameter="Lyrics1" FontSize="11"/>
-                            <Button Content="{CommonControls:Localize LyricsSample}" Command="{Binding AppendLyricExampleCommand}" CommandParameter="Lyrics2" FontSize="11"/>
-                            <Button Content="{CommonControls:Localize LyricsSample}" Command="{Binding AppendLyricExampleCommand}" CommandParameter="Lyrics3" FontSize="11"/>
-                        </UniformGrid>
-                        <TextBlock />
-                    </DockPanel>
-
-                    <!--Reference Audio-->
-                    <StackPanel TextBlock.FontSize="11">
-                        <TextBlock Text="{CommonControls:Localize ReferenceAudio}" Style="{StaticResource FieldTextBlockStyle}"/>
-                        <StackPanel Opacity=".9">
-                            <TextBlock Text="{CommonControls:Localize MusicReferenceTip}"/>
-                            <TextBlock Text="{CommonControls:Localize MusicReferenceTipTonal}"/>
-                            <TextBlock Text="{CommonControls:Localize MusicReferenceTipTexture}"/>
-                            <TextBlock Text="{CommonControls:Localize MusicReferenceTipVibe}"/>
-                        </StackPanel>
-                    </StackPanel>
-
-                </StackPanel>
 
             </Grid>
 

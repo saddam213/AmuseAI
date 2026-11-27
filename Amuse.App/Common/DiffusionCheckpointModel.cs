@@ -1,11 +1,41 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using System.Text.Json.Serialization;
+using TensorStack.Common;
 using TensorStack.WPF;
 
 namespace Amuse.App.Common
 {
-    public sealed class DiffusionCheckpointModel : BaseModel
+    public sealed class DiffusionCheckpointModel : BaseModel, ICheckpointModel
     {
+        private DataType _type;
+        private float _memorySize;
+        private bool _isInstalled;
+
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingDefault)]
+        public DataType Type
+        {
+            get { return _type; }
+            set { SetProperty(ref _type, value); NotifyPropertyChanged(nameof(QualityDescription)); }
+        }
+
+        [JsonIgnore]
+        public string QualityDescription => _type.GetQualityDescription();
+
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingDefault)]
+        public float MemorySize
+        {
+            get { return _memorySize; }
+            set { SetProperty(ref _memorySize, value); }
+        }
+
+        [JsonIgnore]
+        public bool IsInstalled
+        {
+            get { return _isInstalled; }
+            private set { SetProperty(ref _isInstalled, value); }
+        }
+
         [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
         public CheckpointComponent Compute { get; set; }
         [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
@@ -68,14 +98,15 @@ namespace Amuse.App.Common
         }
 
 
-        public bool IsInstalled(string modelDirectory, IReadOnlyCollection<ComponentModel> components)
+        /// <summary>
+        /// Checks the files of every component are installed and updates <see cref="IsInstalled"/>.
+        /// </summary>
+        /// <param name="settings">The settings.</param>
+        /// <param name="modelDirectory">The model directory.</param>
+        public bool CheckInstall(Settings settings, string modelDirectory)
         {
-            foreach (var checkpointComponent in GetComponents())
-            {
-                if (!checkpointComponent.IsInstalled(modelDirectory, components))
-                    return false;
-            }
-            return true;
+            IsInstalled = GetComponents().All(x => x.IsInstalled(settings, modelDirectory));
+            return _isInstalled;
         }
 
 
@@ -105,6 +136,8 @@ namespace Amuse.App.Common
         {
             return new DiffusionCheckpointModel
             {
+                Type = Type,
+                MemorySize = MemorySize,
                 Compute = Compute?.DeepClone(),
                 Tokenizer = Tokenizer?.DeepClone(),
                 TextEncoder = TextEncoder?.DeepClone(),

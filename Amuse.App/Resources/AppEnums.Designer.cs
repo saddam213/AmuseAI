@@ -619,7 +619,7 @@ namespace Amuse.App.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to RoundBrush.
+        ///   Looks up a localized string similar to Round Brush.
         /// </summary>
         public static string PaintDrawingTool0 {
             get {
@@ -628,7 +628,7 @@ namespace Amuse.App.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to SquareBrush.
+        ///   Looks up a localized string similar to Square Brush.
         /// </summary>
         public static string PaintDrawingTool1 {
             get {
@@ -673,15 +673,6 @@ namespace Amuse.App.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Audio.
-        /// </summary>
-        public static string TimelineSegmentType2 {
-            get {
-                return ResourceManager.GetString("TimelineSegmentType2", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to Overlay.
         /// </summary>
         public static string TimelineSegmentType3 {
@@ -691,56 +682,56 @@ namespace Amuse.App.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Other.
+        ///   Looks up a localized string similar to Local File + Vision.
         /// </summary>
-        public static string ViewCategory0 {
+        public static string ModelSourceType4 {
             get {
-                return ResourceManager.GetString("ViewCategory0", resourceCulture);
+                return ResourceManager.GetString("ModelSourceType4", resourceCulture);
             }
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Settings.
+        ///   Looks up a localized string similar to Model file and vision projector (mmproj) file.
         /// </summary>
-        public static string ViewCategory1 {
+        public static string ModelSourceType4_Description {
             get {
-                return ResourceManager.GetString("ViewCategory1", resourceCulture);
+                return ResourceManager.GetString("ModelSourceType4_Description", resourceCulture);
             }
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Image.
+        ///   Looks up a localized string similar to Local Command.
         /// </summary>
-        public static string ViewCategory2 {
+        public static string McpTransportType0 {
             get {
-                return ResourceManager.GetString("ViewCategory2", resourceCulture);
+                return ResourceManager.GetString("McpTransportType0", resourceCulture);
             }
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Video.
+        ///   Looks up a localized string similar to A program started on this computer.
         /// </summary>
-        public static string ViewCategory3 {
+        public static string McpTransportType0_Description {
             get {
-                return ResourceManager.GetString("ViewCategory3", resourceCulture);
+                return ResourceManager.GetString("McpTransportType0_Description", resourceCulture);
             }
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Audio.
+        ///   Looks up a localized string similar to Remote URL.
         /// </summary>
-        public static string ViewCategory4 {
+        public static string McpTransportType1 {
             get {
-                return ResourceManager.GetString("ViewCategory4", resourceCulture);
+                return ResourceManager.GetString("McpTransportType1", resourceCulture);
             }
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Text.
+        ///   Looks up a localized string similar to A server reached over the network.
         /// </summary>
-        public static string ViewCategory5 {
+        public static string McpTransportType1_Description {
             get {
-                return ResourceManager.GetString("ViewCategory5", resourceCulture);
+                return ResourceManager.GetString("McpTransportType1_Description", resourceCulture);
             }
         }
     }

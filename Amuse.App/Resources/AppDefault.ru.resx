@@ -1,0 +1,2572 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <!-- 
+    Microsoft ResX Schema 
+    
+    Version 2.0
+    
+    The primary goals of this format is to allow a simple XML format 
+    that is mostly human readable. The generation and parsing of the 
+    various data types are done through the TypeConverter classes 
+    associated with the data types.
+    
+    Example:
+    
+    ... ado.net/XML headers & schema ...
+    <resheader name="resmimetype">text/microsoft-resx</resheader>
+    <resheader name="version">2.0</resheader>
+    <resheader name="reader">System.Resources.ResXResourceReader, System.Windows.Forms, ...</resheader>
+    <resheader name="writer">System.Resources.ResXResourceWriter, System.Windows.Forms, ...</resheader>
+    <data name="Name1"><value>this is my long string</value><comment>this is a comment</comment></data>
+    <data name="Color1" type="System.Drawing.Color, System.Drawing">Blue</data>
+    <data name="Bitmap1" mimetype="application/x-microsoft.net.object.binary.base64">
+        <value>[base64 mime encoded serialized .NET Framework object]</value>
+    </data>
+    <data name="Icon1" type="System.Drawing.Icon, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
+        <value>[base64 mime encoded string representing a byte array form of the .NET Framework object]</value>
+        <comment>This is a comment</comment>
+    </data>
+                
+    There are any number of "resheader" rows that contain simple 
+    name/value pairs.
+    
+    Each data row contains a name, and value. The row also contains a 
+    type or mimetype. Type corresponds to a .NET class that support 
+    text/value conversion through the TypeConverter architecture. 
+    Classes that don't support this are serialized and stored with the 
+    mimetype set.
+    
+    The mimetype is used for serialized objects, and tells the 
+    ResXResourceReader how to depersist the object. This is currently not 
+    extensible. For a given mimetype the value must be set accordingly:
+    
+    Note - application/x-microsoft.net.object.binary.base64 is the format 
+    that the ResXResourceWriter will generate, however the reader can 
+    read any of the formats listed below.
+    
+    mimetype: application/x-microsoft.net.object.binary.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Binary.BinaryFormatter
+            : and then encoded with base64 encoding.
+    
+    mimetype: application/x-microsoft.net.object.soap.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Soap.SoapFormatter
+            : and then encoded with base64 encoding.
+
+    mimetype: application/x-microsoft.net.object.bytearray.base64
+    value   : The object must be serialized into a byte array 
+            : using a System.ComponentModel.TypeConverter
+            : and then encoded with base64 encoding.
+    -->
+  <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+    <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
+    <xsd:element name="root" msdata:IsDataSet="true">
+      <xsd:complexType>
+        <xsd:choice maxOccurs="unbounded">
+          <xsd:element name="metadata">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" />
+              </xsd:sequence>
+              <xsd:attribute name="name" use="required" type="xsd:string" />
+              <xsd:attribute name="type" type="xsd:string" />
+              <xsd:attribute name="mimetype" type="xsd:string" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="assembly">
+            <xsd:complexType>
+              <xsd:attribute name="alias" type="xsd:string" />
+              <xsd:attribute name="name" type="xsd:string" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="data">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1" />
+              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
+              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="resheader">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" />
+            </xsd:complexType>
+          </xsd:element>
+        </xsd:choice>
+      </xsd:complexType>
+    </xsd:element>
+  </xsd:schema>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="Components" xml:space="preserve">
+    <value>Компоненты</value>
+  </data>
+  <data name="ControlNet" xml:space="preserve">
+    <value>ControlNet</value>
+  </data>
+  <data name="ControlNets" xml:space="preserve">
+    <value>ControlNet</value>
+  </data>
+  <data name="Diffusion" xml:space="preserve">
+    <value>Диффузия</value>
+  </data>
+  <data name="Environment" xml:space="preserve">
+    <value>Среда</value>
+  </data>
+  <data name="Environments" xml:space="preserve">
+    <value>Среды</value>
+  </data>
+  <data name="Extractor" xml:space="preserve">
+    <value>Экстрактор</value>
+  </data>
+  <data name="Extractors" xml:space="preserve">
+    <value>Экстракторы</value>
+  </data>
+  <data name="Gallery" xml:space="preserve">
+    <value>Галерея</value>
+  </data>
+  <data name="General" xml:space="preserve">
+    <value>Общие</value>
+  </data>
+  <data name="LoraAdapter" xml:space="preserve">
+    <value>LoRA-адаптер</value>
+  </data>
+  <data name="LoraAdapters" xml:space="preserve">
+    <value>LoRA-адаптеры</value>
+  </data>
+  <data name="Models" xml:space="preserve">
+    <value>Модели</value>
+  </data>
+  <data name="NewVersion" xml:space="preserve">
+    <value>Новая версия!</value>
+  </data>
+  <data name="Menu_TextToImage" xml:space="preserve">
+    <value>Текст ➔ Изображение</value>
+  </data>
+  <data name="Upscaler" xml:space="preserve">
+    <value>Апскейлер</value>
+  </data>
+  <data name="Upscalers" xml:space="preserve">
+    <value>Апскейлеры</value>
+  </data>
+  <data name="Menu_ImageToImage" xml:space="preserve">
+    <value>Изображение ➔ Изображение</value>
+  </data>
+  <data name="Menu_ImageEdit" xml:space="preserve">
+    <value>Правка изображения</value>
+  </data>
+  <data name="Menu_ImageInpaint" xml:space="preserve">
+    <value>Инпейнтинг</value>
+  </data>
+  <data name="Menu_PaintToImage" xml:space="preserve">
+    <value>Рисунок ➔ Изображение</value>
+  </data>
+  <data name="Menu_ImageExtract" xml:space="preserve">
+    <value>Извлечение из изображения</value>
+  </data>
+  <data name="Menu_ImageUpscale" xml:space="preserve">
+    <value>Апскейл изображения</value>
+  </data>
+  <data name="Menu_ImageCompose" xml:space="preserve">
+    <value>Компоновка изображения</value>
+  </data>
+  <data name="Menu_TextToVideo" xml:space="preserve">
+    <value>Текст ➔ Видео</value>
+  </data>
+  <data name="Menu_ImageToVideo" xml:space="preserve">
+    <value>Изображение ➔ Видео</value>
+  </data>
+  <data name="Menu_VideoToVideo" xml:space="preserve">
+    <value>Видео ➔ Видео</value>
+  </data>
+  <data name="Menu_MediaToVideo" xml:space="preserve">
+    <value>Медиа ➔ Видео</value>
+  </data>
+  <data name="Menu_FrameToFrame" xml:space="preserve">
+    <value>Кадр ➔ Кадр</value>
+  </data>
+  <data name="Menu_VideoExtract" xml:space="preserve">
+    <value>Извлечение из видео</value>
+  </data>
+  <data name="Menu_VideoUpscale" xml:space="preserve">
+    <value>Апскейл видео</value>
+  </data>
+  <data name="Menu_VideoInterpolate" xml:space="preserve">
+    <value>Интерполяция видео</value>
+  </data>
+  <data name="Menu_VideoCompose" xml:space="preserve">
+    <value>Компоновка видео</value>
+  </data>
+  <data name="Menu_TextToMusic" xml:space="preserve">
+    <value>Текст ➔ Музыка</value>
+  </data>
+  <data name="Menu_TextToAudio" xml:space="preserve">
+    <value>Текст ➔ Аудио</value>
+  </data>
+  <data name="Menu_AudioToText" xml:space="preserve">
+    <value>Аудио ➔ Текст</value>
+  </data>
+  <data name="Menu_ImageToText" xml:space="preserve">
+    <value>Изображение ➔ Текст</value>
+  </data>
+  <data name="Menu_TextInstruct" xml:space="preserve">
+    <value>Задание</value>
+  </data>
+  <data name="Menu_TextConverse" xml:space="preserve">
+    <value>Беседа</value>
+  </data>
+  <data name="Install" xml:space="preserve">
+    <value>Установить</value>
+  </data>
+  <data name="Information" xml:space="preserve">
+    <value>Сведения</value>
+  </data>
+  <data name="Title_EnvironmentSetup" xml:space="preserve">
+    <value>Настройка сред</value>
+  </data>
+  <data name="Title_AmuseUpdate" xml:space="preserve">
+    <value>Обновление Amuse</value>
+  </data>
+  <data name="Title_AmuseSetup" xml:space="preserve">
+    <value>Установка Amuse</value>
+  </data>
+  <data name="Title_ComponentModel" xml:space="preserve">
+    <value>Компонент модели</value>
+  </data>
+  <data name="Title_ControlNetModel" xml:space="preserve">
+    <value>Модель ControlNet</value>
+  </data>
+  <data name="Title_DiffusionModel" xml:space="preserve">
+    <value>Диффузионная модель</value>
+  </data>
+  <data name="Title_AddModel" xml:space="preserve">
+    <value>Добавить модель</value>
+  </data>
+  <data name="Title_Environment" xml:space="preserve">
+    <value>Среда</value>
+  </data>
+  <data name="Title_ExtractModel" xml:space="preserve">
+    <value>Модель извлечения</value>
+  </data>
+  <data name="Title_LanguageModel" xml:space="preserve">
+    <value>Языковая модель</value>
+  </data>
+  <data name="Title_LoraAdapterModel" xml:space="preserve">
+    <value>LoRA-адаптер</value>
+  </data>
+  <data name="Title_MediaPreview" xml:space="preserve">
+    <value>Предпросмотр медиа</value>
+  </data>
+  <data name="Title_UpscaleModel" xml:space="preserve">
+    <value>Модель апскейла</value>
+  </data>
+  <data name="AllBeamsResults" xml:space="preserve">
+    <value>Результаты всех лучей</value>
+  </data>
+  <data name="EnableTiling" xml:space="preserve">
+    <value>Включить тайлинг</value>
+  </data>
+  <data name="EnableSlicing" xml:space="preserve">
+    <value>Включить слайсинг</value>
+  </data>
+  <data name="UseInputSize" xml:space="preserve">
+    <value>Использовать размер входа</value>
+  </data>
+  <data name="OutputHistory" xml:space="preserve">
+    <value>История результатов</value>
+  </data>
+  <data name="OutputLocation" xml:space="preserve">
+    <value>Папка результатов</value>
+  </data>
+  <data name="Lora" xml:space="preserve">
+    <value>LoRA</value>
+  </data>
+  <data name="Extract" xml:space="preserve">
+    <value>Извлечь</value>
+  </data>
+  <data name="Upscale" xml:space="preserve">
+    <value>Апскейл</value>
+  </data>
+  <data name="Control" xml:space="preserve">
+    <value>ControlNet</value>
+  </data>
+  <data name="InvertOutput" xml:space="preserve">
+    <value>Инвертировать результат</value>
+  </data>
+  <data name="ThinkingEnabled" xml:space="preserve">
+    <value>Режим размышлений</value>
+  </data>
+  <data name="MinLength" xml:space="preserve">
+    <value>Мин. длина</value>
+  </data>
+  <data name="MaxLength" xml:space="preserve">
+    <value>Макс. длина</value>
+  </data>
+  <data name="IsTransparent" xml:space="preserve">
+    <value>Прозрачность</value>
+  </data>
+  <data name="SamplingEnabled" xml:space="preserve">
+    <value>Сэмплирование</value>
+  </data>
+  <data name="OutputSeed" xml:space="preserve">
+    <value>Сид результата</value>
+  </data>
+  <data name="AudioEnabled" xml:space="preserve">
+    <value>Со звуком</value>
+  </data>
+  <data name="EnableAudioProcessing" xml:space="preserve">
+    <value>Обработка звука</value>
+  </data>
+  <data name="DownloadAndInstall" xml:space="preserve">
+    <value>Скачать и установить</value>
+  </data>
+  <data name="Default_" xml:space="preserve">
+    <value>По умолчанию</value>
+  </data>
+  <data name="Move" xml:space="preserve">
+    <value>Переместить</value>
+  </data>
+  <data name="VaeSlicing" xml:space="preserve">
+    <value>Слайсинг VAE</value>
+  </data>
+  <data name="VaeTiling" xml:space="preserve">
+    <value>Тайлинг VAE</value>
+  </data>
+  <data name="FirstFrameLastFrame" xml:space="preserve">
+    <value>Первый и последний кадр</value>
+  </data>
+  <data name="DynamicOutputShape" xml:space="preserve">
+    <value>Динамический размер выхода</value>
+  </data>
+  <data name="Settings" xml:space="preserve">
+    <value>Настройки</value>
+  </data>
+  <data name="Close" xml:space="preserve">
+    <value>Закрыть</value>
+  </data>
+  <data name="InputImage" xml:space="preserve">
+    <value>Входное изображение</value>
+  </data>
+  <data name="MergeOutput" xml:space="preserve">
+    <value>Объединить результаты</value>
+  </data>
+  <data name="Prev" xml:space="preserve">
+    <value>Назад</value>
+  </data>
+  <data name="Next" xml:space="preserve">
+    <value>Далее</value>
+  </data>
+  <data name="AddTextLayer" xml:space="preserve">
+    <value>Добавить текстовый слой</value>
+  </data>
+  <data name="AddImageLayer" xml:space="preserve">
+    <value>Добавить слой изображения</value>
+  </data>
+  <data name="ShowInstalled" xml:space="preserve">
+    <value>Только установленные</value>
+  </data>
+  <data name="ShowComponents" xml:space="preserve">
+    <value>Показывать компоненты</value>
+  </data>
+  <data name="AddRecentItems" xml:space="preserve">
+    <value>Добавлять недавние</value>
+  </data>
+  <data name="MaxToolRounds" xml:space="preserve">
+    <value>Макс. циклов инструментов</value>
+  </data>
+  <data name="MaxItems" xml:space="preserve">
+    <value>Макс. элементов</value>
+  </data>
+  <data name="SortByLastUsed" xml:space="preserve">
+    <value>Сначала недавние</value>
+  </data>
+  <data name="Orientation" xml:space="preserve">
+    <value>Ориентация</value>
+  </data>
+  <data name="ResetDialogs" xml:space="preserve">
+    <value>Сбросить диалоги</value>
+  </data>
+  <data name="EnableExternalLinks" xml:space="preserve">
+    <value>Разрешить внешние ссылки</value>
+  </data>
+  <data name="PipelineDebug" xml:space="preserve">
+    <value>Отладка серверного процесса</value>
+  </data>
+  <data name="CheckForUpdates" xml:space="preserve">
+    <value>Проверить обновления</value>
+  </data>
+  <data name="Sampler" xml:space="preserve">
+    <value>Сэмплер</value>
+  </data>
+  <data name="SamplerOptions" xml:space="preserve">
+    <value>Параметры сэмплера</value>
+  </data>
+  <data name="LatentUpscale" xml:space="preserve">
+    <value>Латентный апскейл</value>
+  </data>
+  <data name="AutoEncoder" xml:space="preserve">
+    <value>Автоэнкодер</value>
+  </data>
+  <data name="ExtractOptions" xml:space="preserve">
+    <value>Параметры извлечения</value>
+  </data>
+  <data name="UpscaleOptions" xml:space="preserve">
+    <value>Параметры апскейла</value>
+  </data>
+  <data name="Model" xml:space="preserve">
+    <value>Модель</value>
+  </data>
+  <data name="MemoryProfile" xml:space="preserve">
+    <value>Профиль памяти</value>
+  </data>
+  <data name="DefaultOptions" xml:space="preserve">
+    <value>Параметры по умолчанию</value>
+  </data>
+  <data name="Resolutions" xml:space="preserve">
+    <value>Разрешения</value>
+  </data>
+  <data name="SupportedFunctions" xml:space="preserve">
+    <value>Поддерживаемые функции</value>
+  </data>
+  <data name="ViewFilter" xml:space="preserve">
+    <value>Фильтр разделов</value>
+  </data>
+  <data name="ComponentSettings" xml:space="preserve">
+    <value>Настройки компонентов</value>
+  </data>
+  <data name="ControlNetSettings" xml:space="preserve">
+    <value>Настройки ControlNet</value>
+  </data>
+  <data name="ImageSettings" xml:space="preserve">
+    <value>Настройки изображений</value>
+  </data>
+  <data name="VideoSettings" xml:space="preserve">
+    <value>Настройки видео</value>
+  </data>
+  <data name="AudioSettings" xml:space="preserve">
+    <value>Настройки аудио</value>
+  </data>
+  <data name="ImageModels" xml:space="preserve">
+    <value>Модели изображений</value>
+  </data>
+  <data name="VideoModels" xml:space="preserve">
+    <value>Модели видео</value>
+  </data>
+  <data name="AudioModels" xml:space="preserve">
+    <value>Модели аудио</value>
+  </data>
+  <data name="TextModels" xml:space="preserve">
+    <value>Текстовые модели</value>
+  </data>
+  <data name="EnvironmentSettings" xml:space="preserve">
+    <value>Настройки сред</value>
+  </data>
+  <data name="ExtractSettings" xml:space="preserve">
+    <value>Настройки извлечения</value>
+  </data>
+  <data name="LoraSettings" xml:space="preserve">
+    <value>Настройки LoRA</value>
+  </data>
+  <data name="UpscaleSettings" xml:space="preserve">
+    <value>Настройки апскейла</value>
+  </data>
+  <data name="AccessTokens" xml:space="preserve">
+    <value>Токены доступа</value>
+  </data>
+  <data name="ExperimentalSettings" xml:space="preserve">
+    <value>Экспериментальные</value>
+  </data>
+  <data name="Options" xml:space="preserve">
+    <value>Параметры</value>
+  </data>
+  <data name="Seed" xml:space="preserve">
+    <value>Сид</value>
+  </data>
+  <data name="Steps" xml:space="preserve">
+    <value>Шаги</value>
+  </data>
+  <data name="Guidance" xml:space="preserve">
+    <value>Guidance</value>
+  </data>
+  <data name="Strength" xml:space="preserve">
+    <value>Сила</value>
+  </data>
+  <data name="Duration" xml:space="preserve">
+    <value>Длительность</value>
+  </data>
+  <data name="DurationSeconds" xml:space="preserve">
+    <value>Длительность (с)</value>
+  </data>
+  <data name="TimeSignature" xml:space="preserve">
+    <value>Музыкальный размер</value>
+  </data>
+  <data name="Keyscale" xml:space="preserve">
+    <value>Тональность</value>
+  </data>
+  <data name="VoiceStyle" xml:space="preserve">
+    <value>Стиль голоса</value>
+  </data>
+  <data name="Speed" xml:space="preserve">
+    <value>Скорость</value>
+  </data>
+  <data name="Task" xml:space="preserve">
+    <value>Задача</value>
+  </data>
+  <data name="LengthPenalty" xml:space="preserve">
+    <value>Штраф за длину</value>
+  </data>
+  <data name="ChunkSize" xml:space="preserve">
+    <value>Размер блока</value>
+  </data>
+  <data name="EarlyStopping" xml:space="preserve">
+    <value>Ранняя остановка</value>
+  </data>
+  <data name="Advanced" xml:space="preserve">
+    <value>Дополнительно</value>
+  </data>
+  <data name="Automation" xml:space="preserve">
+    <value>Автоматизация</value>
+  </data>
+  <data name="AutomationCount" xml:space="preserve">
+    <value>Количество</value>
+  </data>
+  <data name="PromptFolder" xml:space="preserve">
+    <value>Папка промптов</value>
+  </data>
+  <data name="PromptFile" xml:space="preserve">
+    <value>Файл промптов</value>
+  </data>
+  <data name="ImageFolder" xml:space="preserve">
+    <value>Папка изображений</value>
+  </data>
+  <data name="VideoFolder" xml:space="preserve">
+    <value>Папка видео</value>
+  </data>
+  <data name="TextFolder" xml:space="preserve">
+    <value>Папка текстов</value>
+  </data>
+  <data name="AudioFolder" xml:space="preserve">
+    <value>Папка аудио</value>
+  </data>
+  <data name="OutputFolder" xml:space="preserve">
+    <value>Папка результатов</value>
+  </data>
+  <data name="Beams" xml:space="preserve">
+    <value>Лучи</value>
+  </data>
+  <data name="Temperature" xml:space="preserve">
+    <value>Температура</value>
+  </data>
+  <data name="TopK" xml:space="preserve">
+    <value>TopK</value>
+  </data>
+  <data name="TopP" xml:space="preserve">
+    <value>TopP</value>
+  </data>
+  <data name="Folder" xml:space="preserve">
+    <value>Папка</value>
+  </data>
+  <data name="SubFolderOptional" xml:space="preserve">
+    <value>Подпапка (необязательно)</value>
+  </data>
+  <data name="Component" xml:space="preserve">
+    <value>Компонент</value>
+  </data>
+  <data name="ModelFile" xml:space="preserve">
+    <value>Файл модели</value>
+  </data>
+  <data name="ModelFolder" xml:space="preserve">
+    <value>Папка модели</value>
+  </data>
+  <data name="DownloadFiles" xml:space="preserve">
+    <value>Файлы для скачивания</value>
+  </data>
+  <data name="Document" xml:space="preserve">
+    <value>Документ</value>
+  </data>
+  <data name="Tokens" xml:space="preserve">
+    <value>Токены</value>
+  </data>
+  <data name="Length" xml:space="preserve">
+    <value>Длина</value>
+  </data>
+  <data name="RefreshRate" xml:space="preserve">
+    <value>Частота обновления</value>
+  </data>
+  <data name="Presets" xml:space="preserve">
+    <value>Пресеты</value>
+  </data>
+  <data name="NoiseCondition" xml:space="preserve">
+    <value>Шумовое условие</value>
+  </data>
+  <data name="StepsStage1" xml:space="preserve">
+    <value>Шаги (этап 1)</value>
+  </data>
+  <data name="StepsStage2" xml:space="preserve">
+    <value>Шаги (этап 2)</value>
+  </data>
+  <data name="StepsHighNoise" xml:space="preserve">
+    <value>Шаги (выс. шум)</value>
+  </data>
+  <data name="StepsLowNoise" xml:space="preserve">
+    <value>Шаги (низк. шум)</value>
+  </data>
+  <data name="GuidanceModel" xml:space="preserve">
+    <value>Guidance (модель)</value>
+  </data>
+  <data name="GuidanceCFG" xml:space="preserve">
+    <value>Guidance (CFG)</value>
+  </data>
+  <data name="GuidanceHighNoise" xml:space="preserve">
+    <value>Guidance (выс. шум)</value>
+  </data>
+  <data name="GuidanceLowNoise" xml:space="preserve">
+    <value>Guidance (низк. шум)</value>
+  </data>
+  <data name="ControlStrength" xml:space="preserve">
+    <value>Сила ControlNet</value>
+  </data>
+  <data name="ControlType" xml:space="preserve">
+    <value>Тип ControlNet</value>
+  </data>
+  <data name="Prompt" xml:space="preserve">
+    <value>Промпт</value>
+  </data>
+  <data name="NegativePrompt" xml:space="preserve">
+    <value>Негативный промпт</value>
+  </data>
+  <data name="DenoiseStrength" xml:space="preserve">
+    <value>Сила шумоподавления</value>
+  </data>
+  <data name="Ready" xml:space="preserve">
+    <value>Готово</value>
+  </data>
+  <data name="Device" xml:space="preserve">
+    <value>Устройство</value>
+  </data>
+  <data name="NoDevicesFound" xml:space="preserve">
+    <value>Устройства не найдены.</value>
+  </data>
+  <data name="NoModelsFound" xml:space="preserve">
+    <value>Модели не найдены.</value>
+  </data>
+  <data name="Memory" xml:space="preserve">
+    <value>Память</value>
+  </data>
+  <data name="BackgroundMode" xml:space="preserve">
+    <value>Режим фона</value>
+  </data>
+  <data name="MaxDetections" xml:space="preserve">
+    <value>Макс. обнаружений</value>
+  </data>
+  <data name="BodyConfidence" xml:space="preserve">
+    <value>Уверенность (тело)</value>
+  </data>
+  <data name="JointConfidence" xml:space="preserve">
+    <value>Уверенность (суставы)</value>
+  </data>
+  <data name="BoneRadius" xml:space="preserve">
+    <value>Радиус костей</value>
+  </data>
+  <data name="BoneThickness" xml:space="preserve">
+    <value>Толщина костей</value>
+  </data>
+  <data name="JointRadius" xml:space="preserve">
+    <value>Радиус суставов</value>
+  </data>
+  <data name="FrameMultiplier" xml:space="preserve">
+    <value>Множитель кадров</value>
+  </data>
+  <data name="OutputPrefix" xml:space="preserve">
+    <value>Префикс результата</value>
+  </data>
+  <data name="SystemPrompt" xml:space="preserve">
+    <value>Системный промпт</value>
+  </data>
+  <data name="RepetitionPenalty" xml:space="preserve">
+    <value>Штраф за повторы</value>
+  </data>
+  <data name="NoRepeatNgrams" xml:space="preserve">
+    <value>Запрет повтора N-грамм</value>
+  </data>
+  <data name="TopH" xml:space="preserve">
+    <value>TopH</value>
+  </data>
+  <data name="TypicalP" xml:space="preserve">
+    <value>TypicalP</value>
+  </data>
+  <data name="KVCache" xml:space="preserve">
+    <value>KV-кэш</value>
+  </data>
+  <data name="Note" xml:space="preserve">
+    <value>Примечание</value>
+  </data>
+  <data name="ConversationContext" xml:space="preserve">
+    <value>Контекст беседы</value>
+  </data>
+  <data name="AdditionalContext" xml:space="preserve">
+    <value>Дополнительный контекст</value>
+  </data>
+  <data name="PleaseSelectLora" xml:space="preserve">
+    <value>Выберите LoRA...</value>
+  </data>
+  <data name="TotalUsed" xml:space="preserve">
+    <value>Всего использовано</value>
+  </data>
+  <data name="CurrentTime" xml:space="preserve">
+    <value>Текущее время</value>
+  </data>
+  <data name="TimelineTime" xml:space="preserve">
+    <value>Время на таймлайне</value>
+  </data>
+  <data name="Segments" xml:space="preserve">
+    <value>Сегменты</value>
+  </data>
+  <data name="TimelineFrame" xml:space="preserve">
+    <value>Кадр таймлайна</value>
+  </data>
+  <data name="TimelineFrames" xml:space="preserve">
+    <value>Кадры таймлайна</value>
+  </data>
+  <data name="ImportVideo" xml:space="preserve">
+    <value>Импорт видео</value>
+  </data>
+  <data name="ImportAudio" xml:space="preserve">
+    <value>Импорт аудио</value>
+  </data>
+  <data name="ImportImage" xml:space="preserve">
+    <value>Импорт изображения</value>
+  </data>
+  <data name="ImportOverlay" xml:space="preserve">
+    <value>Импорт наложения</value>
+  </data>
+  <data name="FrameWidth" xml:space="preserve">
+    <value>Ширина кадра</value>
+  </data>
+  <data name="FrameSize" xml:space="preserve">
+    <value>Размер кадра</value>
+  </data>
+  <data name="PreviewQuality" xml:space="preserve">
+    <value>Качество предпросмотра</value>
+  </data>
+  <data name="FlowShift" xml:space="preserve">
+    <value>Сдвиг flow</value>
+  </data>
+  <data name="Eta" xml:space="preserve">
+    <value>Eta</value>
+  </data>
+  <data name="Scheduler" xml:space="preserve">
+    <value>Планировщик</value>
+  </data>
+  <data name="NewVersionMessage" xml:space="preserve">
+    <value>Доступна новая версия Amuse</value>
+  </data>
+  <data name="TimeRemaining" xml:space="preserve">
+    <value>Осталось времени</value>
+  </data>
+  <data name="Path" xml:space="preserve">
+    <value>Путь</value>
+  </data>
+  <data name="MainFile" xml:space="preserve">
+    <value>Основной файл</value>
+  </data>
+  <data name="Name" xml:space="preserve">
+    <value>Имя</value>
+  </data>
+  <data name="Key" xml:space="preserve">
+    <value>Ключ</value>
+  </data>
+  <data name="Licence" xml:space="preserve">
+    <value>Лицензия</value>
+  </data>
+  <data name="Link" xml:space="preserve">
+    <value>Ссылка</value>
+  </data>
+  <data name="Pipeline" xml:space="preserve">
+    <value>Пайплайн</value>
+  </data>
+  <data name="Backend" xml:space="preserve">
+    <value>Бэкенд</value>
+  </data>
+  <data name="Status" xml:space="preserve">
+    <value>Статус</value>
+  </data>
+  <data name="ModelLink" xml:space="preserve">
+    <value>Ссылка на модель</value>
+  </data>
+  <data name="Tasks" xml:space="preserve">
+    <value>Задачи</value>
+  </data>
+  <data name="SilenceDuration" xml:space="preserve">
+    <value>Длительность тишины</value>
+  </data>
+  <data name="MaxLength2" xml:space="preserve">
+    <value>Макс. длина 2</value>
+  </data>
+  <data name="SampleRate" xml:space="preserve">
+    <value>Частота дискретизации</value>
+  </data>
+  <data name="FrameChunkOverlap" xml:space="preserve">
+    <value>Перекрытие блоков кадров</value>
+  </data>
+  <data name="FrameChunk" xml:space="preserve">
+    <value>Блок кадров</value>
+  </data>
+  <data name="Steps2" xml:space="preserve">
+    <value>Шаги 2</value>
+  </data>
+  <data name="RepositoryLink" xml:space="preserve">
+    <value>Ссылка на репозиторий</value>
+  </data>
+  <data name="AccessToken" xml:space="preserve">
+    <value>Токен доступа</value>
+  </data>
+  <data name="OriginalModelDataType" xml:space="preserve">
+    <value>Исходный тип данных модели</value>
+  </data>
+  <data name="Source" xml:space="preserve">
+    <value>Источник</value>
+  </data>
+  <data name="ModelName" xml:space="preserve">
+    <value>Имя модели</value>
+  </data>
+  <data name="Version" xml:space="preserve">
+    <value>Версия</value>
+  </data>
+  <data name="Vendor" xml:space="preserve">
+    <value>Производитель</value>
+  </data>
+  <data name="Requirements" xml:space="preserve">
+    <value>Зависимости</value>
+  </data>
+  <data name="EnvironmentVariables" xml:space="preserve">
+    <value>Переменные среды</value>
+  </data>
+  <data name="SampleSize" xml:space="preserve">
+    <value>Размер сэмпла</value>
+  </data>
+  <data name="OutputChannels" xml:space="preserve">
+    <value>Выходные каналы</value>
+  </data>
+  <data name="InputNormalization" xml:space="preserve">
+    <value>Нормализация входа</value>
+  </data>
+  <data name="OutputNormalization" xml:space="preserve">
+    <value>Нормализация выхода</value>
+  </data>
+  <data name="MemorySize" xml:space="preserve">
+    <value>Объём памяти</value>
+  </data>
+  <data name="ModelParametersB" xml:space="preserve">
+    <value>Параметры модели (млрд)</value>
+  </data>
+  <data name="ModelSizeGB" xml:space="preserve">
+    <value>Размер модели (ГБ)</value>
+  </data>
+  <data name="TriggerWords" xml:space="preserve">
+    <value>Триггерные слова</value>
+  </data>
+  <data name="TagOptional" xml:space="preserve">
+    <value>(необязательно)</value>
+  </data>
+  <data name="TagDefault" xml:space="preserve">
+    <value>(по умолчанию)</value>
+  </data>
+  <data name="Directory" xml:space="preserve">
+    <value>Папка</value>
+  </data>
+  <data name="NewLocation" xml:space="preserve">
+    <value>Новое расположение</value>
+  </data>
+  <data name="ScaleFactor" xml:space="preserve">
+    <value>Коэф. масштабирования</value>
+  </data>
+  <data name="Actions" xml:space="preserve">
+    <value>Действия</value>
+  </data>
+  <data name="DownloadModel" xml:space="preserve">
+    <value>Скачать модель</value>
+  </data>
+  <data name="RetryDownload" xml:space="preserve">
+    <value>Повторить скачивание</value>
+  </data>
+  <data name="UpdateModel" xml:space="preserve">
+    <value>Обновить модель</value>
+  </data>
+  <data name="CancelDownload" xml:space="preserve">
+    <value>Отменить скачивание</value>
+  </data>
+  <data name="OpenFolder" xml:space="preserve">
+    <value>Открыть папку</value>
+  </data>
+  <data name="DeleteFiles" xml:space="preserve">
+    <value>Удалить файлы</value>
+  </data>
+  <data name="Media" xml:space="preserve">
+    <value>Медиа</value>
+  </data>
+  <data name="EnvironmentSetDefault" xml:space="preserve">
+    <value>Сделать средой по умолчанию</value>
+  </data>
+  <data name="EnvironmentDefault" xml:space="preserve">
+    <value>Среда по умолчанию</value>
+  </data>
+  <data name="SaveChanges" xml:space="preserve">
+    <value>Сохранить изменения</value>
+  </data>
+  <data name="ModelDirectory" xml:space="preserve">
+    <value>Папка моделей</value>
+  </data>
+  <data name="UIScale" xml:space="preserve">
+    <value>Масштаб интерфейса</value>
+  </data>
+  <data name="TempDirectory" xml:space="preserve">
+    <value>Временная папка</value>
+  </data>
+  <data name="LogDirectory" xml:space="preserve">
+    <value>Папка журналов</value>
+  </data>
+  <data name="AudioInput" xml:space="preserve">
+    <value>Входное аудио</value>
+  </data>
+  <data name="TextResult" xml:space="preserve">
+    <value>Текстовый результат</value>
+  </data>
+  <data name="Search" xml:space="preserve">
+    <value>Поиск</value>
+  </data>
+  <data name="MediaType" xml:space="preserve">
+    <value>Тип медиа</value>
+  </data>
+  <data name="ProcessType" xml:space="preserve">
+    <value>Тип процесса</value>
+  </data>
+  <data name="Items" xml:space="preserve">
+    <value>Элементы</value>
+  </data>
+  <data name="NoItemsFound" xml:space="preserve">
+    <value>Элементы не найдены.</value>
+  </data>
+  <data name="DeleteItem" xml:space="preserve">
+    <value>Удалить элемент</value>
+  </data>
+  <data name="NoInformationFound" xml:space="preserve">
+    <value>Сведения не найдены.</value>
+  </data>
+  <data name="FrameHeight" xml:space="preserve">
+    <value>Высота кадра</value>
+  </data>
+  <data name="Background" xml:space="preserve">
+    <value>Фон</value>
+  </data>
+  <data name="Rotation" xml:space="preserve">
+    <value>Поворот</value>
+  </data>
+  <data name="Stretch" xml:space="preserve">
+    <value>Растяжение</value>
+  </data>
+  <data name="Font" xml:space="preserve">
+    <value>Шрифт</value>
+  </data>
+  <data name="Size" xml:space="preserve">
+    <value>Размер</value>
+  </data>
+  <data name="Style" xml:space="preserve">
+    <value>Стиль</value>
+  </data>
+  <data name="Weight" xml:space="preserve">
+    <value>Насыщенность</value>
+  </data>
+  <data name="Color" xml:space="preserve">
+    <value>Цвет</value>
+  </data>
+  <data name="Layers" xml:space="preserve">
+    <value>Слои</value>
+  </data>
+  <data name="ModelType" xml:space="preserve">
+    <value>Тип модели</value>
+  </data>
+  <data name="PipelineType" xml:space="preserve">
+    <value>Тип пайплайна</value>
+  </data>
+  <data name="BackendType" xml:space="preserve">
+    <value>Тип бэкенда</value>
+  </data>
+  <data name="Output" xml:space="preserve">
+    <value>Результат</value>
+  </data>
+  <data name="ActiveDownloads" xml:space="preserve">
+    <value>Активные скачивания</value>
+  </data>
+  <data name="Retry" xml:space="preserve">
+    <value>Повторить</value>
+  </data>
+  <data name="CancelAll" xml:space="preserve">
+    <value>Отменить все</value>
+  </data>
+  <data name="Queued" xml:space="preserve">
+    <value>В очереди</value>
+  </data>
+  <data name="Downloading" xml:space="preserve">
+    <value>Скачивание</value>
+  </data>
+  <data name="Failed" xml:space="preserve">
+    <value>Ошибка</value>
+  </data>
+  <data name="Scale" xml:space="preserve">
+    <value>Масштаб</value>
+  </data>
+  <data name="AudioResult" xml:space="preserve">
+    <value>Аудиорезультат</value>
+  </data>
+  <data name="InputText" xml:space="preserve">
+    <value>Входной текст</value>
+  </data>
+  <data name="ReferenceAudioOptional" xml:space="preserve">
+    <value>Референсное аудио (необязательно)</value>
+  </data>
+  <data name="Lyrics" xml:space="preserve">
+    <value>Текст песни</value>
+  </data>
+  <data name="ReferenceAudio" xml:space="preserve">
+    <value>Референсное аудио</value>
+  </data>
+  <data name="LoraModel" xml:space="preserve">
+    <value>Модель LoRA</value>
+  </data>
+  <data name="ControlNetModel" xml:space="preserve">
+    <value>Модель ControlNet</value>
+  </data>
+  <data name="LoraStrength" xml:space="preserve">
+    <value>Сила LoRA</value>
+  </data>
+  <data name="ControlNetStrength" xml:space="preserve">
+    <value>Сила ControlNet</value>
+  </data>
+  <data name="Tiled" xml:space="preserve">
+    <value>По тайлам</value>
+  </data>
+  <data name="Detections" xml:space="preserve">
+    <value>Обнаружения</value>
+  </data>
+  <data name="Created" xml:space="preserve">
+    <value>Создано</value>
+  </data>
+  <data name="InfoPath" xml:space="preserve">
+    <value>Путь к сведениям</value>
+  </data>
+  <data name="OriginalSize" xml:space="preserve">
+    <value>Исходный размер</value>
+  </data>
+  <data name="Interpolated" xml:space="preserve">
+    <value>Интерполировано</value>
+  </data>
+  <data name="Original" xml:space="preserve">
+    <value>Оригинал</value>
+  </data>
+  <data name="Multiplier" xml:space="preserve">
+    <value>Множитель</value>
+  </data>
+  <data name="Composed" xml:space="preserve">
+    <value>Скомпоновано</value>
+  </data>
+  <data name="Generated" xml:space="preserve">
+    <value>Сгенерировано</value>
+  </data>
+  <data name="Score" xml:space="preserve">
+    <value>Оценка</value>
+  </data>
+  <data name="DeleteItems" xml:space="preserve">
+    <value>Удалить элементы</value>
+  </data>
+  <data name="Extracted" xml:space="preserve">
+    <value>Извлечено</value>
+  </data>
+  <data name="Upscaled" xml:space="preserve">
+    <value>Увеличено</value>
+  </data>
+  <data name="Recent" xml:space="preserve">
+    <value>Недавние</value>
+  </data>
+  <data name="UpdateAvailable" xml:space="preserve">
+    <value>Доступно обновление</value>
+  </data>
+  <data name="Interpolate" xml:space="preserve">
+    <value>Интерполяция</value>
+  </data>
+  <data name="ProgressInitialize" xml:space="preserve">
+    <value>Инициализация пайплайна...</value>
+  </data>
+  <data name="ProgressTextEncoder" xml:space="preserve">
+    <value>Кодирование промпта...</value>
+  </data>
+  <data name="ProgressTransformer" xml:space="preserve">
+    <value>Генерация...</value>
+  </data>
+  <data name="ProgressStep" xml:space="preserve">
+    <value>Шаг: {5}/{6}</value>
+  </data>
+  <data name="ProgressAutoEncoder" xml:space="preserve">
+    <value>Декодирование результата...</value>
+  </data>
+  <data name="ProgressComplete" xml:space="preserve">
+    <value>Формирование результата...</value>
+  </data>
+  <data name="ProgressEncoder" xml:space="preserve">
+    <value>Кодирование входных данных...</value>
+  </data>
+  <data name="ProgressUpscaling" xml:space="preserve">
+    <value>Апскейл...</value>
+  </data>
+  <data name="ActiveDownloadsMessage" xml:space="preserve">
+    <value>Скачивание ещё не завершено. Вы действительно хотите отменить его и выйти?</value>
+  </data>
+  <data name="AutomationStarted" xml:space="preserve">
+    <value>Автоматизация запущена</value>
+  </data>
+  <data name="RenderingVideo" xml:space="preserve">
+    <value>Рендеринг видео</value>
+  </data>
+  <data name="DeleteGalleryItems" xml:space="preserve">
+    <value>Вы действительно хотите удалить все элементы галереи ({0})?</value>
+  </data>
+  <data name="DeleteGalleryItemsFiltered" xml:space="preserve">
+    <value>Вы действительно хотите удалить отфильтрованные элементы галереи ({0})?</value>
+  </data>
+  <data name="LoadingPipeline" xml:space="preserve">
+    <value>Загрузка пайплайна</value>
+  </data>
+  <data name="EncodingVideoFrames" xml:space="preserve">
+    <value>Кодирование кадров видео</value>
+  </data>
+  <data name="ProcessingInputFrame" xml:space="preserve">
+    <value>Обработка входного кадра</value>
+  </data>
+  <data name="CancellingGeneration" xml:space="preserve">
+    <value>Отмена генерации</value>
+  </data>
+  <data name="ExtractingImage" xml:space="preserve">
+    <value>Извлечение из изображения</value>
+  </data>
+  <data name="ExtractingVideo" xml:space="preserve">
+    <value>Извлечение из видео</value>
+  </data>
+  <data name="UpscalingImage" xml:space="preserve">
+    <value>Апскейл изображения</value>
+  </data>
+  <data name="UpscalingVideo" xml:space="preserve">
+    <value>Апскейл видео</value>
+  </data>
+  <data name="RenderingImage" xml:space="preserve">
+    <value>Рендеринг изображения</value>
+  </data>
+  <data name="InitializingBackendEnvironment" xml:space="preserve">
+    <value>Инициализация среды {0}</value>
+  </data>
+  <data name="Tile" xml:space="preserve">
+    <value>Тайл</value>
+  </data>
+  <data name="GeneratingBeamResults" xml:space="preserve">
+    <value>Генерация результатов лучей</value>
+  </data>
+  <data name="RemoveComponent" xml:space="preserve">
+    <value>Убрать компонент</value>
+  </data>
+  <data name="RemoveComponentMessage" xml:space="preserve">
+    <value>Вы действительно хотите убрать этот компонент из Amuse? Скачанные файлы не удаляются.</value>
+  </data>
+  <data name="ImportComponent" xml:space="preserve">
+    <value>Импорт компонента</value>
+  </data>
+  <data name="ExportComponent" xml:space="preserve">
+    <value>Экспорт компонента</value>
+  </data>
+  <data name="DeleteComponent" xml:space="preserve">
+    <value>Удалить компонент</value>
+  </data>
+  <data name="DeleteComponentMessage" xml:space="preserve">
+    <value>Вы действительно хотите удалить скачанные файлы этого компонента?</value>
+  </data>
+  <data name="RemoveModel" xml:space="preserve">
+    <value>Убрать модель</value>
+  </data>
+  <data name="RemoveModelMessage" xml:space="preserve">
+    <value>Вы действительно хотите убрать эту модель из Amuse? Скачанные файлы не удаляются.</value>
+  </data>
+  <data name="ImportModel" xml:space="preserve">
+    <value>Импорт модели</value>
+  </data>
+  <data name="ExportModel" xml:space="preserve">
+    <value>Экспорт модели</value>
+  </data>
+  <data name="DeleteModel" xml:space="preserve">
+    <value>Удалить модель</value>
+  </data>
+  <data name="DeleteModelMessage" xml:space="preserve">
+    <value>Вы действительно хотите удалить скачанные файлы этой модели?</value>
+  </data>
+  <data name="RemoveEnvironment" xml:space="preserve">
+    <value>Убрать среду</value>
+  </data>
+  <data name="RemoveEnvironmentMessage" xml:space="preserve">
+    <value>Вы действительно хотите убрать эту среду из Amuse? Установленные файлы тоже будут удалены.</value>
+  </data>
+  <data name="ImportEnvironment" xml:space="preserve">
+    <value>Импорт среды</value>
+  </data>
+  <data name="ExportEnvironment" xml:space="preserve">
+    <value>Экспорт среды</value>
+  </data>
+  <data name="DeleteEnvironment" xml:space="preserve">
+    <value>Удалить среду</value>
+  </data>
+  <data name="DeleteEnvironmentMessage" xml:space="preserve">
+    <value>Вы действительно хотите удалить установленные файлы этой среды?</value>
+  </data>
+  <data name="EnableExternalTools" xml:space="preserve">
+    <value>Разрешить внешние инструменты</value>
+  </data>
+  <data name="EnableExecuteTools" xml:space="preserve">
+    <value>Разрешить запуск программ</value>
+  </data>
+  <data name="EnableDangerousTools" xml:space="preserve">
+    <value>Разрешить опасные инструменты</value>
+  </data>
+  <data name="References" xml:space="preserve">
+    <value>Референсы</value>
+  </data>
+  <data name="ReferenceAddImage" xml:space="preserve">
+    <value>Добавить референсное изображение</value>
+  </data>
+  <data name="ReferenceAddVideo" xml:space="preserve">
+    <value>Добавить референсное видео</value>
+  </data>
+  <data name="ReferenceAddAudio" xml:space="preserve">
+    <value>Добавить референсное аудио</value>
+  </data>
+  <data name="ReferenceEmpty" xml:space="preserve">
+    <value>Добавьте референсы</value>
+  </data>
+  <data name="ReferenceEmptyMessage" xml:space="preserve">
+    <value>Изображения, видео и аудио, задающие направление генерации</value>
+  </data>
+  <data name="Prompt2" xml:space="preserve">
+    <value>Промпт 2</value>
+  </data>
+  <data name="BPM" xml:space="preserve">
+    <value>BPM</value>
+  </data>
+  <data name="AttachDocumentsMedia" xml:space="preserve">
+    <value>Прикрепить документы / медиа</value>
+  </data>
+  <data name="AttachDocumentsMediaMessage" xml:space="preserve">
+    <value>Дополнительный контекст для вашей беседы</value>
+  </data>
+  <data name="Compute" xml:space="preserve">
+    <value>Вычисления</value>
+  </data>
+  <data name="Tokenizer" xml:space="preserve">
+    <value>Токенизатор</value>
+  </data>
+  <data name="TextEncoder" xml:space="preserve">
+    <value>Текстовый энкодер</value>
+  </data>
+  <data name="TextEncoder2" xml:space="preserve">
+    <value>Текстовый энкодер 2</value>
+  </data>
+  <data name="TextEncoder3" xml:space="preserve">
+    <value>Текстовый энкодер 3</value>
+  </data>
+  <data name="Unet" xml:space="preserve">
+    <value>UNet</value>
+  </data>
+  <data name="Transformer" xml:space="preserve">
+    <value>Transformer</value>
+  </data>
+  <data name="Transformer2" xml:space="preserve">
+    <value>Transformer 2</value>
+  </data>
+  <data name="AudioVae" xml:space="preserve">
+    <value>Аудио-VAE</value>
+  </data>
+  <data name="Vocoder" xml:space="preserve">
+    <value>Вокодер</value>
+  </data>
+  <data name="Connectors" xml:space="preserve">
+    <value>Коннекторы</value>
+  </data>
+  <data name="LatentUpsampler" xml:space="preserve">
+    <value>Латентный апсэмплер</value>
+  </data>
+  <data name="LatentUpsamplerTemporal" xml:space="preserve">
+    <value>Латентный апсэмплер (временной)</value>
+  </data>
+  <data name="ConditionEncoder" xml:space="preserve">
+    <value>Энкодер условий</value>
+  </data>
+  <data name="AudioTokenizer" xml:space="preserve">
+    <value>Аудиотокенизатор</value>
+  </data>
+  <data name="AudioDetokenizer" xml:space="preserve">
+    <value>Аудиодетокенизатор</value>
+  </data>
+  <data name="TextModel" xml:space="preserve">
+    <value>Текстовая модель</value>
+  </data>
+  <data name="TextModel2" xml:space="preserve">
+    <value>Текстовая модель 2</value>
+  </data>
+  <data name="InputStrength" xml:space="preserve">
+    <value>Сила входа</value>
+  </data>
+  <data name="NoHistoryItemsFound" xml:space="preserve">
+    <value>Элементы истории не найдены</value>
+  </data>
+  <data name="ToolCallsEnabled" xml:space="preserve">
+    <value>Вызов инструментов</value>
+  </data>
+  <data name="BeamResultsMessage" xml:space="preserve">
+    <value>Результаты лучей появятся только после завершения всех лучей</value>
+  </data>
+  <data name="Karras" xml:space="preserve">
+    <value>Karras</value>
+  </data>
+  <data name="Beta" xml:space="preserve">
+    <value>Beta</value>
+  </data>
+  <data name="Exponential" xml:space="preserve">
+    <value>Экспоненциальное</value>
+  </data>
+  <data name="BeamLabel" xml:space="preserve">
+    <value>Луч:</value>
+  </data>
+  <data name="Function_TextToImage" xml:space="preserve">
+    <value>Текст в изображение</value>
+  </data>
+  <data name="Function_ImageToImage" xml:space="preserve">
+    <value>Изображение в изображение</value>
+  </data>
+  <data name="Function_ImageEdit" xml:space="preserve">
+    <value>Правка изображения</value>
+  </data>
+  <data name="Function_ImageInpaint" xml:space="preserve">
+    <value>Инпейнтинг</value>
+  </data>
+  <data name="Function_ImageControlNet" xml:space="preserve">
+    <value>Изображение (ControlNet)</value>
+  </data>
+  <data name="Function_ImageToImageControlNet" xml:space="preserve">
+    <value>Изображение в изображение (ControlNet)</value>
+  </data>
+  <data name="Function_PaintToImage" xml:space="preserve">
+    <value>Рисунок в изображение</value>
+  </data>
+  <data name="Function_FrameToFrame" xml:space="preserve">
+    <value>Кадр в кадр</value>
+  </data>
+  <data name="Function_TextToVideo" xml:space="preserve">
+    <value>Текст в видео</value>
+  </data>
+  <data name="Function_ImageToVideo" xml:space="preserve">
+    <value>Изображение в видео</value>
+  </data>
+  <data name="Function_VideoToVideo" xml:space="preserve">
+    <value>Видео в видео</value>
+  </data>
+  <data name="Function_TextToMusic" xml:space="preserve">
+    <value>Текст в музыку</value>
+  </data>
+  <data name="Function_TextToAudio" xml:space="preserve">
+    <value>Текст в аудио</value>
+  </data>
+  <data name="Function_AudioToText" xml:space="preserve">
+    <value>Аудио в текст</value>
+  </data>
+  <data name="Function_TextToText" xml:space="preserve">
+    <value>Текст в текст</value>
+  </data>
+  <data name="Function_ImageToText" xml:space="preserve">
+    <value>Изображение в текст</value>
+  </data>
+  <data name="Function_TextInstruct" xml:space="preserve">
+    <value>Задание</value>
+  </data>
+  <data name="Function_TextConverse" xml:space="preserve">
+    <value>Беседа</value>
+  </data>
+  <data name="Title_ExecutionOptions" xml:space="preserve">
+    <value>Параметры выполнения</value>
+  </data>
+  <data name="SegmentPrefetch" xml:space="preserve">
+    <value>Предзагрузка сегментов</value>
+  </data>
+  <data name="SegmentedCompute" xml:space="preserve">
+    <value>Посегментные вычисления</value>
+  </data>
+  <data name="MemoryReserveGB" xml:space="preserve">
+    <value>Резерв памяти (ГБ)</value>
+  </data>
+  <data name="GpuLayers" xml:space="preserve">
+    <value>Слои на GPU</value>
+  </data>
+  <data name="Threads" xml:space="preserve">
+    <value>Потоки</value>
+  </data>
+  <data name="ContextSize" xml:space="preserve">
+    <value>Размер контекста</value>
+  </data>
+  <data name="CacheOffload" xml:space="preserve">
+    <value>Кэш на GPU</value>
+  </data>
+  <data name="FlashAttention" xml:space="preserve">
+    <value>Flash Attention</value>
+  </data>
+  <data name="EnableSageAttention" xml:space="preserve">
+    <value>Включить Sage Attention</value>
+  </data>
+  <data name="ConvDirect" xml:space="preserve">
+    <value>Conv-Direct</value>
+  </data>
+  <data name="CPUExecution" xml:space="preserve">
+    <value>Выполнение на CPU</value>
+  </data>
+  <data name="MadeInNewZealand" xml:space="preserve">
+    <value>Сделано в Новой Зеландии</value>
+  </data>
+  <data name="CreatedBy" xml:space="preserve">
+    <value>Автор: </value>
+  </data>
+  <data name="Image1" xml:space="preserve">
+    <value>Изображение 1</value>
+  </data>
+  <data name="Image2" xml:space="preserve">
+    <value>Изображение 2</value>
+  </data>
+  <data name="Image3" xml:space="preserve">
+    <value>Изображение 3</value>
+  </data>
+  <data name="Image4" xml:space="preserve">
+    <value>Изображение 4</value>
+  </data>
+  <data name="PosX" xml:space="preserve">
+    <value>Поз. X</value>
+  </data>
+  <data name="PosY" xml:space="preserve">
+    <value>Поз. Y</value>
+  </data>
+  <data name="FirstFrame" xml:space="preserve">
+    <value>Первый кадр</value>
+  </data>
+  <data name="LastFrame" xml:space="preserve">
+    <value>Последний кадр</value>
+  </data>
+  <data name="SearchComponents" xml:space="preserve">
+    <value>Поиск компонентов</value>
+  </data>
+  <data name="SearchControlNetModels" xml:space="preserve">
+    <value>Поиск моделей ControlNet</value>
+  </data>
+  <data name="SearchDiffusionModels" xml:space="preserve">
+    <value>Поиск диффузионных моделей</value>
+  </data>
+  <data name="SearchEnvironments" xml:space="preserve">
+    <value>Поиск сред</value>
+  </data>
+  <data name="SearchExtractModels" xml:space="preserve">
+    <value>Поиск моделей извлечения</value>
+  </data>
+  <data name="SearchLanguageModels" xml:space="preserve">
+    <value>Поиск языковых моделей</value>
+  </data>
+  <data name="SearchLoraModels" xml:space="preserve">
+    <value>Поиск моделей LoRA</value>
+  </data>
+  <data name="SearchUpscaleModels" xml:space="preserve">
+    <value>Поиск моделей апскейла</value>
+  </data>
+  <data name="PipelineDebugMessage" xml:space="preserve">
+    <value>Показывать вывод серверного процесса в отдельном окне консоли</value>
+  </data>
+  <data name="AskQuestionPlaceholder" xml:space="preserve">
+    <value>Задайте вопрос...</value>
+  </data>
+  <data name="Theme" xml:space="preserve">
+    <value>Тема</value>
+  </data>
+  <data name="ThemeChangedTitle" xml:space="preserve">
+    <value>Тема изменена</value>
+  </data>
+  <data name="ThemeChangedMessage" xml:space="preserve">
+    <value>Перезапустите Amuse, чтобы применить новую тему.</value>
+  </data>
+  <data name="ToolActionReadFile" xml:space="preserve">
+    <value>Чтение файла: {0}</value>
+  </data>
+  <data name="ToolActionOpenLink" xml:space="preserve">
+    <value>Открытие ссылки: {0}</value>
+  </data>
+  <data name="ToolActionRunProgram" xml:space="preserve">
+    <value>Запуск программы или скрипта: {0}</value>
+  </data>
+  <data name="ToolExternalAccessTitle" xml:space="preserve">
+    <value>Внешний доступ</value>
+  </data>
+  <data name="ToolExternalAccessMessage" xml:space="preserve">
+    <value>{0}: будет выполнено обращение к внешним данным или сервисам.
+Данные из этого запроса могут быть отправлены для получения или обработки запрошенной информации.
+
+Продолжить?</value>
+  </data>
+  <data name="ToolDangerousAccessTitle" xml:space="preserve">
+    <value>Опасное действие</value>
+  </data>
+  <data name="ToolDangerousAccessMessage" xml:space="preserve">
+    <value>{0}: запрошено действие, которое может изменить ваш компьютер или раскрыть ваши данные:
+
+{1}
+
+Продолжайте, только если вы доверяете этому действию и сами его запросили.
+
+Продолжить?</value>
+  </data>
+  <data name="HomeTitle" xml:space="preserve">
+    <value>Что вы хотите создать?</value>
+  </data>
+  <data name="HomeSubtitle" xml:space="preserve">
+    <value>Выберите задачу, чтобы начать, или вернитесь к недавно использованной модели или результату.</value>
+  </data>
+  <data name="HomeImageDescription" xml:space="preserve">
+    <value>Генерация, редактирование, инпейнтинг и апскейл изображений.</value>
+  </data>
+  <data name="HomeVideoDescription" xml:space="preserve">
+    <value>Создание видео из текста или изображений, стилизация и апскейл.</value>
+  </data>
+  <data name="HomeAudioDescription" xml:space="preserve">
+    <value>Создание музыки и речи, расшифровка аудио в текст.</value>
+  </data>
+  <data name="HomeTextDescription" xml:space="preserve">
+    <value>Беседа, выполнение инструкций и описание изображений.</value>
+  </data>
+  <data name="NewModels" xml:space="preserve">
+    <value>Новые модели</value>
+  </data>
+  <data name="RecommendedModels" xml:space="preserve">
+    <value>Рекомендуемые модели</value>
+  </data>
+  <data name="RecentModels" xml:space="preserve">
+    <value>Недавно использованные модели</value>
+  </data>
+  <data name="HomeDevices" xml:space="preserve">
+    <value>Устройства и бэкенды</value>
+  </data>
+  <data name="ManageEnvironments" xml:space="preserve">
+    <value>Управление средами</value>
+  </data>
+  <data name="BackendReady" xml:space="preserve">
+    <value>Готов</value>
+  </data>
+  <data name="BackendNotInstalled" xml:space="preserve">
+    <value>Не установлен</value>
+  </data>
+  <data name="BackendUnsupported" xml:space="preserve">
+    <value>Не поддерживается</value>
+  </data>
+  <data name="ModelDownloadingTitle" xml:space="preserve">
+    <value>Модель скачивается</value>
+  </data>
+  <data name="WeightType" xml:space="preserve">
+    <value>Тип весов</value>
+  </data>
+  <data name="Later" xml:space="preserve">
+    <value>Позже</value>
+  </data>
+  <data name="Installing" xml:space="preserve">
+    <value>Установка</value>
+  </data>
+  <data name="Installed" xml:space="preserve">
+    <value>Установлено</value>
+  </data>
+  <data name="EnvironmentUpdateRequired" xml:space="preserve">
+    <value>Требуется обновление</value>
+  </data>
+  <data name="EnvironmentSetupMessage" xml:space="preserve">
+    <value>Настройка сред бэкендов</value>
+  </data>
+  <data name="EnvironmentSetupSubMessage" xml:space="preserve">
+    <value>Некоторые среды бэкендов отсутствуют или требуют обновления. Выберите, какие настроить сейчас; неотмеченные можно установить позже на главной странице или в настройках.</value>
+  </data>
+  <data name="EnvironmentSetupWaitMessage" xml:space="preserve">
+    <value>(Это может занять несколько минут)</value>
+  </data>
+  <data name="EnvironmentSetupFailedMessage" xml:space="preserve">
+    <value>Не удалось установить некоторые среды, подробности см. в журнале. Повторить попытку можно на главной странице или в настройках.</value>
+  </data>
+  <data name="BackendDescriptionStableDiffusionCpp" xml:space="preserve">
+    <value>Генерация изображений и видео</value>
+  </data>
+  <data name="BackendDescriptionAudioCpp" xml:space="preserve">
+    <value>Генерация речи, музыки и звука</value>
+  </data>
+  <data name="BackendDescriptionLlamaCpp" xml:space="preserve">
+    <value>Чат и текстовый ассистент (языковые модели)</value>
+  </data>
+  <data name="Apply" xml:space="preserve">
+    <value>Применить</value>
+  </data>
+  <data name="EnvironmentManageSubMessage" xml:space="preserve">
+    <value>Выберите среду, которую каждый бэкенд использует на ваших видеокартах. Отметьте строку и выберите среду: установленная среда сразу становится средой по умолчанию, остальные сначала устанавливаются.</value>
+  </data>
+  <data name="Description" xml:space="preserve">
+    <value>Описание</value>
+  </data>
+  <data name="DownloadSizeGB" xml:space="preserve">
+    <value>Объём скачивания (ГБ)</value>
+  </data>
+  <data name="UpscaleTemporalChunkSize" xml:space="preserve">
+    <value>Размер блока по времени</value>
+  </data>
+  <data name="UpscaleWindowSize" xml:space="preserve">
+    <value>Размер окна</value>
+  </data>
+  <data name="ModelFiles" xml:space="preserve">
+    <value>Файлы модели</value>
+  </data>
+  <data name="ShowAll" xml:space="preserve">
+    <value>Показать все</value>
+  </data>
+  <data name="AllPipelines" xml:space="preserve">
+    <value>Все пайплайны</value>
+  </data>
+  <data name="ImportCompleteTitle" xml:space="preserve">
+    <value>Импорт завершён</value>
+  </data>
+  <data name="ImportCompleteModels" xml:space="preserve">
+    <value>Импортировано моделей: {0}/{1}.</value>
+  </data>
+  <data name="ImportCompleteComponents" xml:space="preserve">
+    <value>Импортировано компонентов: {0}/{1}.</value>
+  </data>
+  <data name="ImportCompleteEnvironments" xml:space="preserve">
+    <value>Импортировано сред: {0}/{1}.</value>
+  </data>
+  <data name="ImportCompleteLoras" xml:space="preserve">
+    <value>Импортировано LoRA-адаптеров: {0}/{1}.</value>
+  </data>
+  <data name="MyEnvironment" xml:space="preserve">
+    <value>Моя среда</value>
+  </data>
+  <data name="None" xml:space="preserve">
+    <value>Нет</value>
+  </data>
+  <data name="History" xml:space="preserve">
+    <value>История</value>
+  </data>
+  <data name="Temp" xml:space="preserve">
+    <value>Временные</value>
+  </data>
+  <data name="MoveFolderTitle" xml:space="preserve">
+    <value>Перемещение: {0}</value>
+  </data>
+  <data name="EnvironmentCreateMessage" xml:space="preserve">
+    <value>Создать среду {0}?</value>
+  </data>
+  <data name="EnvironmentCreateSubMessage" xml:space="preserve">
+    <value>На вашем компьютере будет создана среда {0}, необходимая для запуска локальных моделей. Это однократная настройка.</value>
+  </data>
+  <data name="EnvironmentUpdateMessage" xml:space="preserve">
+    <value>Обновить среду {0}?</value>
+  </data>
+  <data name="EnvironmentUpdateSubMessage" xml:space="preserve">
+    <value>В среду {0} будут установлены последние версии необходимых пакетов. Это однократная операция.</value>
+  </data>
+  <data name="EnvironmentUpdateWaitMessage" xml:space="preserve">
+    <value>(Это может занять несколько минут)</value>
+  </data>
+  <data name="EnvironmentNameVirtual" xml:space="preserve">
+    <value>Виртуальная</value>
+  </data>
+  <data name="AllModels" xml:space="preserve">
+    <value>Все модели</value>
+  </data>
+  <data name="AllMedia" xml:space="preserve">
+    <value>Все медиа</value>
+  </data>
+  <data name="AllProcesses" xml:space="preserve">
+    <value>Все процессы</value>
+  </data>
+  <data name="AllBackends" xml:space="preserve">
+    <value>Все бэкенды</value>
+  </data>
+  <data name="TokensPerSecond" xml:space="preserve">
+    <value>токенов/с</value>
+  </data>
+  <data name="Unknown" xml:space="preserve">
+    <value>Неизвестно</value>
+  </data>
+  <data name="Auto" xml:space="preserve">
+    <value>Авто</value>
+  </data>
+  <data name="DurationSecondsFormat" xml:space="preserve">
+    <value>{0} с</value>
+  </data>
+  <data name="DurationOneMinute" xml:space="preserve">
+    <value>1 мин.</value>
+  </data>
+  <data name="DurationMinutesFormat" xml:space="preserve">
+    <value>{0} мин.</value>
+  </data>
+  <data name="TimeSignature24" xml:space="preserve">
+    <value>2/4 (марши, полька)</value>
+  </data>
+  <data name="TimeSignature34" xml:space="preserve">
+    <value>3/4 (вальсы, баллады)</value>
+  </data>
+  <data name="TimeSignature44" xml:space="preserve">
+    <value>4/4 (поп, рок, хип-хоп)</value>
+  </data>
+  <data name="TimeSignature68" xml:space="preserve">
+    <value>6/8 (сложный размер, народные танцы)</value>
+  </data>
+  <data name="KeyScaleMajor" xml:space="preserve">
+    <value>мажор</value>
+  </data>
+  <data name="KeyScaleMinor" xml:space="preserve">
+    <value>минор</value>
+  </data>
+  <data name="UnknownCPU" xml:space="preserve">
+    <value>Неизвестный CPU</value>
+  </data>
+  <data name="SplashStarting" xml:space="preserve">
+    <value>Запуск Amuse {0}...</value>
+  </data>
+  <data name="ImportDocument" xml:space="preserve">
+    <value>Импорт документа</value>
+  </data>
+  <data name="Documents" xml:space="preserve">
+    <value>Документы</value>
+  </data>
+  <data name="MaxInputsReached" xml:space="preserve">
+    <value>Достигнуто максимальное число входов: {0}</value>
+  </data>
+  <data name="PipelineDownloadingMessage" xml:space="preserve">
+    <value>Эта модель скачивается или стоит в очереди на скачивание.</value>
+  </data>
+  <data name="PipelineQueueDownloadMessage" xml:space="preserve">
+    <value>Поставить эту модель в очередь на скачивание?</value>
+  </data>
+  <data name="ClearLayers" xml:space="preserve">
+    <value>Удалить все слои</value>
+  </data>
+  <data name="ClearLayersMessage" xml:space="preserve">
+    <value>Вы действительно хотите очистить все слои?</value>
+  </data>
+  <data name="LayerCopyName" xml:space="preserve">
+    <value>{0} (копия)</value>
+  </data>
+  <data name="LayerName" xml:space="preserve">
+    <value>Слой {0}</value>
+  </data>
+  <data name="TextLayerDefault" xml:space="preserve">
+    <value>Привет, мир</value>
+  </data>
+  <data name="ClearTimeline" xml:space="preserve">
+    <value>Очистить таймлайн</value>
+  </data>
+  <data name="ClearTimelineMessage" xml:space="preserve">
+    <value>Вы действительно хотите очистить таймлайн?</value>
+  </data>
+  <data name="VideoFrameProgress" xml:space="preserve">
+    <value>Кадр видео: {0}/{1}</value>
+  </data>
+  <data name="ToolApplication" xml:space="preserve">
+    <value>Запуск приложений</value>
+  </data>
+  <data name="ToolCalculator" xml:space="preserve">
+    <value>Калькулятор</value>
+  </data>
+  <data name="ToolDateTime" xml:space="preserve">
+    <value>Дата и время</value>
+  </data>
+  <data name="ToolFileRead" xml:space="preserve">
+    <value>Чтение файлов</value>
+  </data>
+  <data name="ToolFileSearch" xml:space="preserve">
+    <value>Поиск файлов</value>
+  </data>
+  <data name="ToolScreenshot" xml:space="preserve">
+    <value>Снимок экрана</value>
+  </data>
+  <data name="ToolSystemInfo" xml:space="preserve">
+    <value>Сведения о системе</value>
+  </data>
+  <data name="ToolWeather" xml:space="preserve">
+    <value>Погода</value>
+  </data>
+  <data name="ToolWebPage" xml:space="preserve">
+    <value>Веб-страница</value>
+  </data>
+  <data name="ToolWebSearch" xml:space="preserve">
+    <value>Веб-поиск</value>
+  </data>
+  <data name="ToolWikipedia" xml:space="preserve">
+    <value>Википедия</value>
+  </data>
+  <data name="ToolWorldNews" xml:space="preserve">
+    <value>Мировые новости</value>
+  </data>
+  <data name="KeyScaleFormat" xml:space="preserve">
+    <value>{0} {1}</value>
+  </data>
+  <data name="LanguageChangedTitle" xml:space="preserve">
+    <value>Язык изменён</value>
+  </data>
+  <data name="LanguageChangedMessage" xml:space="preserve">
+    <value>Часть текста может обновиться только после перезапуска Amuse.</value>
+  </data>
+  <data name="Publisher" xml:space="preserve">
+    <value>Издатель</value>
+  </data>
+  <data name="Quant" xml:space="preserve">
+    <value>Качество</value>
+  </data>
+  <data name="Title_QuantDownload" xml:space="preserve">
+    <value>Скачать модель</value>
+  </data>
+  <data name="QuantDownloadMessage" xml:space="preserve">
+    <value>Выберите качество {0} для скачивания</value>
+  </data>
+  <data name="QuantDownloadSubMessage" xml:space="preserve">
+    <value>Версии с более низким качеством скачиваются быстрее и занимают меньше памяти.</value>
+  </data>
+  <data name="QuantQualityBest" xml:space="preserve">
+    <value>Лучшее качество, много памяти, большой объём загрузки</value>
+  </data>
+  <data name="QuantQualityStandard" xml:space="preserve">
+    <value>Стандартное качество, средний объём памяти, средний объём загрузки</value>
+  </data>
+  <data name="QuantQualityReduced" xml:space="preserve">
+    <value>Пониженное качество, мало памяти, малый объём загрузки</value>
+  </data>
+  <data name="Quants" xml:space="preserve">
+    <value>Качество</value>
+  </data>
+  <data name="GuidanceImage" xml:space="preserve">
+    <value>Guidance изображения</value>
+  </data>
+  <data name="ShiftedTimestep" xml:space="preserve">
+    <value>Сдвинутый timestep</value>
+  </data>
+  <data name="Sigmas" xml:space="preserve">
+    <value>Сигмы</value>
+  </data>
+  <data name="SkipLayers" xml:space="preserve">
+    <value>Пропуск слоёв</value>
+  </data>
+  <data name="SkipLayerScale" xml:space="preserve">
+    <value>Масштаб пропуска слоёв</value>
+  </data>
+  <data name="SkipLayerStart" xml:space="preserve">
+    <value>Начало пропуска слоёв</value>
+  </data>
+  <data name="SkipLayerEnd" xml:space="preserve">
+    <value>Конец пропуска слоёв</value>
+  </data>
+  <data name="SamplerArgs" xml:space="preserve">
+    <value>Дополнительные аргументы</value>
+  </data>
+  <data name="ModelOptions" xml:space="preserve">
+    <value>Параметры модели</value>
+  </data>
+  <data name="ClipSkip" xml:space="preserve">
+    <value>Пропуск CLIP</value>
+  </data>
+  <data name="MoeBoundary" xml:space="preserve">
+    <value>Граница высокого шума</value>
+  </data>
+  <data name="SeamlessX" xml:space="preserve">
+    <value>Бесшовно по горизонтали</value>
+  </data>
+  <data name="SeamlessY" xml:space="preserve">
+    <value>Бесшовно по вертикали</value>
+  </data>
+  <data name="ProgressListening" xml:space="preserve">
+    <value>Прослушивание...</value>
+  </data>
+  <data name="LiveMicrophone" xml:space="preserve">
+    <value>Микрофон в реальном времени</value>
+  </data>
+  <data name="Menu_AudioCompose" xml:space="preserve">
+    <value>Компоновка аудио</value>
+  </data>
+  <data name="ReferenceVideo" xml:space="preserve">
+    <value>Опорное видео</value>
+  </data>
+  <data name="Clips" xml:space="preserve">
+    <value>Клипы</value>
+  </data>
+  <data name="Volume" xml:space="preserve">
+    <value>Громкость</value>
+  </data>
+  <data name="Mute" xml:space="preserve">
+    <value>Без звука</value>
+  </data>
+  <data name="Position" xml:space="preserve">
+    <value>Позиция</value>
+  </data>
+  <data name="Start" xml:space="preserve">
+    <value>Начало</value>
+  </data>
+  <data name="PreviewVolume" xml:space="preserve">
+    <value>Громкость предпросмотра</value>
+  </data>
+  <data name="ModelLoadedTitle" xml:space="preserve">
+    <value>Модель загружена</value>
+  </data>
+  <data name="ModelLoadedMessage" xml:space="preserve">
+    <value>Модель уже загружена</value>
+  </data>
+  <data name="ModelLoadedDetail" xml:space="preserve">
+    <value>Модель «{0}» уже загружена. Для одновременной работы обеих моделей нужно достаточно памяти устройства для обеих. Сначала выгрузите её, продолжите с обеими загруженными моделями или отмените.</value>
+  </data>
+  <data name="ModelLoadedUnload" xml:space="preserve">
+    <value>Выгрузить</value>
+  </data>
+  <data name="ModelLoadedContinue" xml:space="preserve">
+    <value>Продолжить</value>
+  </data>
+  <data name="ModelBusyTitle" xml:space="preserve">
+    <value>Модель занята</value>
+  </data>
+  <data name="ModelBusyMessage" xml:space="preserve">
+    <value>Другая модель ещё загружается или выполняет генерацию. Дождитесь завершения или отмените её, прежде чем загружать эту модель.</value>
+  </data>
+  <data name="SelectableFrameRate" xml:space="preserve">
+    <value>Выбор частоты кадров</value>
+  </data>
+  <data name="AllParts" xml:space="preserve">
+    <value>Все</value>
+  </data>
+  <data name="AllowChunking" xml:space="preserve">
+    <value>Разрешить блоки</value>
+  </data>
+  <data name="Appearance" xml:space="preserve">
+    <value>Оформление</value>
+  </data>
+  <data name="Application" xml:space="preserve">
+    <value>Приложение</value>
+  </data>
+  <data name="AudioRange" xml:space="preserve">
+    <value>Диапазон</value>
+  </data>
+  <data name="AudioRangeFormat" xml:space="preserve">
+    <value>{0:0.00} с – {1:0.00} с</value>
+  </data>
+  <data name="AudioRangeNotSet" xml:space="preserve">
+    <value>Не задан</value>
+  </data>
+  <data name="CacheEnd" xml:space="preserve">
+    <value>Конец</value>
+  </data>
+  <data name="CacheStart" xml:space="preserve">
+    <value>Начало</value>
+  </data>
+  <data name="CacheThreshold" xml:space="preserve">
+    <value>Порог</value>
+  </data>
+  <data name="CacheWarmupSteps" xml:space="preserve">
+    <value>Шаги прогрева</value>
+  </data>
+  <data name="ComponentWizardKeyHint" xml:space="preserve">
+    <value>Модели ссылаются на компонент по ключу, он должен быть уникальным.</value>
+  </data>
+  <data name="ComponentWizardLocalFileDescription" xml:space="preserve">
+    <value>Файл компонента, уже находящийся на этом ПК, обычно .safetensors или .gguf.</value>
+  </data>
+  <data name="ComponentWizardModelDescription" xml:space="preserve">
+    <value>Тип общего файла: определяет префикс ключа и папку для скачивания.</value>
+  </data>
+  <data name="Continue" xml:space="preserve">
+    <value>Продолжить</value>
+  </data>
+  <data name="ControlNetViewFilterDescription" xml:space="preserve">
+    <value>Показывать ControlNet только в выбранных разделах; если ничего не выбрано, он показывается во всех.</value>
+  </data>
+  <data name="ControlNetWizardLocalFileDescription" xml:space="preserve">
+    <value>Файл ControlNet, уже находящийся на этом ПК, обычно .safetensors.</value>
+  </data>
+  <data name="ControlNetWizardModelDescription" xml:space="preserve">
+    <value>Модель, для которой создан ControlNet; он работает только с моделями этого конвейера.</value>
+  </data>
+  <data name="DestinationFolder" xml:space="preserve">
+    <value>Папка назначения</value>
+  </data>
+  <data name="DiffusionCache" xml:space="preserve">
+    <value>Кэш</value>
+  </data>
+  <data name="DisclaimerAccept" xml:space="preserve">
+    <value>Я прочитал(а) и принимаю эти условия</value>
+  </data>
+  <data name="DownloadNowMessage" xml:space="preserve">
+    <value>Для использования {0} нужно скачать:
+
+{1}
+
+Скачать сейчас?</value>
+  </data>
+  <data name="DownloadNowTitle" xml:space="preserve">
+    <value>Скачать сейчас?</value>
+  </data>
+  <data name="EditModelDescription" xml:space="preserve">
+    <value>Название в списках моделей и источник модели.</value>
+  </data>
+  <data name="Emotion" xml:space="preserve">
+    <value>Эмоция</value>
+  </data>
+  <data name="EmotionAngry" xml:space="preserve">
+    <value>Злость</value>
+  </data>
+  <data name="EmotionDisgusted" xml:space="preserve">
+    <value>Отвращение</value>
+  </data>
+  <data name="EmotionFearful" xml:space="preserve">
+    <value>Страх</value>
+  </data>
+  <data name="EmotionHappy" xml:space="preserve">
+    <value>Радость</value>
+  </data>
+  <data name="EmotionNeutral" xml:space="preserve">
+    <value>Нейтрально</value>
+  </data>
+  <data name="EmotionSad" xml:space="preserve">
+    <value>Грусть</value>
+  </data>
+  <data name="EmotionSurprised" xml:space="preserve">
+    <value>Удивление</value>
+  </data>
+  <data name="EnvironmentFolder" xml:space="preserve">
+    <value>Имя папки</value>
+  </data>
+  <data name="EnvironmentReleaseMessage" xml:space="preserve">
+    <value>'{0}' загружена и может работать из этой среды; перед изменением среды её нужно выгрузить. Выгрузить сейчас?</value>
+  </data>
+  <data name="EnvironmentRequirementsDescription" xml:space="preserve">
+    <value>Пакеты, установленные в среде, по одному в строке.</value>
+  </data>
+  <data name="EnvironmentRuntime" xml:space="preserve">
+    <value>Среда выполнения</value>
+  </data>
+  <data name="EnvironmentRuntimeDescription" xml:space="preserve">
+    <value>Бэкенд, который запускает среда, и оборудование для него.</value>
+  </data>
+  <data name="EnvironmentSectionDescription" xml:space="preserve">
+    <value>Название в Amuse и папка, в которую установлена среда.</value>
+  </data>
+  <data name="EnvironmentVariablesDescription" xml:space="preserve">
+    <value>Переменные, задаваемые бэкенду при запуске.</value>
+  </data>
+  <data name="ExecutionConvDirectDescription" xml:space="preserve">
+    <value>Прямая свёртка; Авто — выбор за бэкендом.</value>
+  </data>
+  <data name="ExecutionCpuDescription" xml:space="preserve">
+    <value>Выполняет эти части на CPU, экономя память GPU ценой скорости.</value>
+  </data>
+  <data name="ExecutionFlashAttentionDescription" xml:space="preserve">
+    <value>Более быстрое внимание с меньшим расходом памяти; Авто — выбор за бэкендом.</value>
+  </data>
+  <data name="ExecutionMemoryDescription" xml:space="preserve">
+    <value>Как модель загружается в память.</value>
+  </data>
+  <data name="Exit" xml:space="preserve">
+    <value>Выход</value>
+  </data>
+  <data name="ExtractModelDescription" xml:space="preserve">
+    <value>Что создаёт экстрактор: его название и источник.</value>
+  </data>
+  <data name="ExtractWizardLocalFileDescription" xml:space="preserve">
+    <value>Файл экстрактора, уже находящийся на этом ПК, — модель .onnx.</value>
+  </data>
+  <data name="ExtractWizardModelDescription" xml:space="preserve">
+    <value>Выберите встроенный экстрактор, наиболее похожий на ваш; его настройки будут использованы для нового.</value>
+  </data>
+  <data name="ExtractWizardWorksLike" xml:space="preserve">
+    <value>Работает как</value>
+  </data>
+  <data name="FirstRunSettings" xml:space="preserve">
+    <value>Первоначальные настройки</value>
+  </data>
+  <data name="FirstRunSettingsMessage" xml:space="preserve">
+    <value>Выберите, где хранить модели и как будет выглядеть Amuse; это можно изменить позже на странице настроек.</value>
+  </data>
+  <data name="FirstRunSetupMessage" xml:space="preserve">
+    <value>Добро пожаловать в Amuse</value>
+  </data>
+  <data name="FirstRunSetupSettingsOnlyMessage" xml:space="preserve">
+    <value>Выберите первоначальные настройки, чтобы начать; все среды бэкендов уже установлены.</value>
+  </data>
+  <data name="FirstRunSetupSubMessage" xml:space="preserve">
+    <value>Выберите первоначальные настройки и среды бэкендов для установки сейчас; всё, что осталось неотмеченным, можно установить позже на странице «Главная» или «Настройки».</value>
+  </data>
+  <data name="FolderDownloadingMessage" xml:space="preserve">
+    <value>Модели скачиваются или стоят в очереди на скачивание. Дождитесь завершения или отмените их перед перемещением папки моделей.</value>
+  </data>
+  <data name="FolderReleaseMessage" xml:space="preserve">
+    <value>'{0}' загружена; перед перемещением папки моделей её нужно выгрузить. Выгрузить сейчас?</value>
+  </data>
+  <data name="Function_AudioToMusic" xml:space="preserve">
+    <value>Аудио в музыку</value>
+  </data>
+  <data name="Function_VoiceClone" xml:space="preserve">
+    <value>Клонирование голоса</value>
+  </data>
+  <data name="FunctionsDescription" xml:space="preserve">
+    <value>Что умеет модель и в каких разделах она показывается. Если разделы не выбраны, она показывается во всех, которые её поддерживают.</value>
+  </data>
+  <data name="GeneralAccessTokensDescription" xml:space="preserve">
+    <value>Токены для закрытых моделей и онлайн-сервисов, хранятся в настройках Amuse.</value>
+  </data>
+  <data name="GeneralAppearanceDescription" xml:space="preserve">
+    <value>Тема, язык и размер приложения.</value>
+  </data>
+  <data name="GeneralApplicationDescription" xml:space="preserve">
+    <value>Обновления, временные файлы, журналы и диалоги, которые вы решили больше не показывать.</value>
+  </data>
+  <data name="GeneralExperimentalDescription" xml:space="preserve">
+    <value>Функции на стадии тестирования; они могут измениться или быть удалены.</value>
+  </data>
+  <data name="GeneralHistoryDescription" xml:space="preserve">
+    <value>Где хранятся ваши результаты и как их показывает список истории.</value>
+  </data>
+  <data name="GeneralModelsDescription" xml:space="preserve">
+    <value>Где хранятся модели и другие папки, в которых Amuse ищет файлы моделей.</value>
+  </data>
+  <data name="GeneralToolsDescription" xml:space="preserve">
+    <value>Что разрешено инструментам ассистента во время беседы.</value>
+  </data>
+  <data name="HomeWelcome" xml:space="preserve">
+    <value>Добро пожаловать в Amuse</value>
+  </data>
+  <data name="ImageToTextDefaultPrompt" xml:space="preserve">
+    <value>Опишите изображение.</value>
+  </data>
+  <data name="Instruction" xml:space="preserve">
+    <value>Инструкция</value>
+  </data>
+  <data name="InstructionPlaceholder" xml:space="preserve">
+    <value>Опишите голос или стиль, например: тёплый взрослый рассказчик, спокойный и чёткий</value>
+  </data>
+  <data name="LlmTools" xml:space="preserve">
+    <value>Инструменты LLM</value>
+  </data>
+  <data name="LoraFileDescription" xml:space="preserve">
+    <value>Откуда загружается или скачивается файл LoRA.</value>
+  </data>
+  <data name="LoraTriggerWordsDescription" xml:space="preserve">
+    <value>Слова, на которых обучалась LoRA, как указано на странице загрузки.</value>
+  </data>
+  <data name="LoraViewFilterDescription" xml:space="preserve">
+    <value>Показывать LoRA только в выбранных разделах; если ничего не выбрано, она показывается во всех.</value>
+  </data>
+  <data name="LoraWizardDownloadLinkHint" xml:space="preserve">
+    <value>На Hugging Face скопируйте ссылку кнопки скачивания файла, она заканчивается на .safetensors.</value>
+  </data>
+  <data name="LoraWizardFilesDescription" xml:space="preserve">
+    <value>Выберите файл LoRA и задайте ему имя.</value>
+  </data>
+  <data name="LoraWizardLocalFile" xml:space="preserve">
+    <value>Скачанный файл</value>
+  </data>
+  <data name="LoraWizardLocalFileDescription" xml:space="preserve">
+    <value>Файл LoRA, уже находящийся на этом ПК, обычно .safetensors.</value>
+  </data>
+  <data name="LoraWizardModelDescription" xml:space="preserve">
+    <value>Модель, для которой создана LoRA; она работает только с моделями этого конвейера.</value>
+  </data>
+  <data name="LoraWizardOnlineFile" xml:space="preserve">
+    <value>Ссылка для скачивания</value>
+  </data>
+  <data name="LoraWizardOnlineFileDescription" xml:space="preserve">
+    <value>Прямая ссылка на файл LoRA, Amuse скачает его за вас.</value>
+  </data>
+  <data name="LoraWizardSourceDescription" xml:space="preserve">
+    <value>Откуда берётся файл LoRA.</value>
+  </data>
+  <data name="LoraWizardTriggerWordsHint" xml:space="preserve">
+    <value>Слова, на которых обучалась LoRA, через запятую, как указано на странице загрузки.</value>
+  </data>
+  <data name="MaxFrames" xml:space="preserve">
+    <value>Макс. кадров</value>
+  </data>
+  <data name="McpAbout" xml:space="preserve">
+    <value>О MCP</value>
+  </data>
+  <data name="McpAboutDescription" xml:space="preserve">
+    <value>Серверы MCP (Model Context Protocol) добавляют ассистенту инструменты, например поиск в интернете, чтение файлов или работу с другими приложениями.
+
+Каждый подключённый сервер отображается в беседе значком вилки рядом со встроенными инструментами и остаётся выключенным, пока вы его не включите.
+
+Серверам, запускаемым через npx, нужен Node.js, а запускаемым через uvx — uv.</value>
+  </data>
+  <data name="McpAddServer" xml:space="preserve">
+    <value>Добавить сервер</value>
+  </data>
+  <data name="McpArguments" xml:space="preserve">
+    <value>Аргументы</value>
+  </data>
+  <data name="McpCommand" xml:space="preserve">
+    <value>Команда</value>
+  </data>
+  <data name="McpCommandDescription" xml:space="preserve">
+    <value>Программа, запускающая сервер, например npx или uvx, и её аргументы, по одному в строке.</value>
+  </data>
+  <data name="McpConfiguration" xml:space="preserve">
+    <value>Конфигурация</value>
+  </data>
+  <data name="McpConnection" xml:space="preserve">
+    <value>Подключение</value>
+  </data>
+  <data name="McpHeaders" xml:space="preserve">
+    <value>Заголовки</value>
+  </data>
+  <data name="McpIcon" xml:space="preserve">
+    <value>Значок</value>
+  </data>
+  <data name="McpImportJson" xml:space="preserve">
+    <value>Импорт JSON</value>
+  </data>
+  <data name="McpImportMessage" xml:space="preserve">
+    <value>Вставьте конфигурацию из инструкции сервера или откройте файл конфигурации другого приложения MCP. Импортированные серверы сразу запускаются от вашей учётной записи, импортируйте только серверы, которым доверяете.</value>
+  </data>
+  <data name="McpImportOpenFile" xml:space="preserve">
+    <value>Открыть файл</value>
+  </data>
+  <data name="McpRemoveServer" xml:space="preserve">
+    <value>Удалить сервер</value>
+  </data>
+  <data name="McpRemoveServerMessage" xml:space="preserve">
+    <value>Вы действительно хотите удалить сервер '{0}'?</value>
+  </data>
+  <data name="McpServer" xml:space="preserve">
+    <value>Сервер</value>
+  </data>
+  <data name="McpServerDescription" xml:space="preserve">
+    <value>Название сервера и способ подключения Amuse к нему.</value>
+  </data>
+  <data name="McpServerNew" xml:space="preserve">
+    <value>Мой сервер</value>
+  </data>
+  <data name="McpServers" xml:space="preserve">
+    <value>Серверы MCP</value>
+  </data>
+  <data name="McpServersDescription" xml:space="preserve">
+    <value>Подключайте серверы MCP, чтобы дать ассистенту больше инструментов. Сервер работает на вашем компьютере от вашей учётной записи, добавляйте только серверы, которым доверяете.</value>
+  </data>
+  <data name="McpServersEmpty" xml:space="preserve">
+    <value>Серверы не добавлены.</value>
+  </data>
+  <data name="McpStatusConnected" xml:space="preserve">
+    <value>Подключено, инструментов: {0}</value>
+  </data>
+  <data name="McpStatusConnecting" xml:space="preserve">
+    <value>Подключение...</value>
+  </data>
+  <data name="McpStatusDisabled" xml:space="preserve">
+    <value>Отключён</value>
+  </data>
+  <data name="McpStatusDisconnected" xml:space="preserve">
+    <value>Нет подключения</value>
+  </data>
+  <data name="McpStatusFailed" xml:space="preserve">
+    <value>Не удалось подключиться</value>
+  </data>
+  <data name="McpTest" xml:space="preserve">
+    <value>Проверить</value>
+  </data>
+  <data name="McpToolsDescription" xml:space="preserve">
+    <value>Проверьте подключение, чтобы получить список инструментов, затем снимите отметки с тех, которые ассистент видеть не должен.</value>
+  </data>
+  <data name="McpUrl" xml:space="preserve">
+    <value>URL</value>
+  </data>
+  <data name="McpUrlDescription" xml:space="preserve">
+    <value>Адрес сервера; поддерживаются серверы Streamable HTTP и SSE.</value>
+  </data>
+  <data name="McpVariablesDescription" xml:space="preserve">
+    <value>Значения, необходимые серверу, например ключ API.</value>
+  </data>
+  <data name="Menu_AudioToMusic" xml:space="preserve">
+    <value>Аудио ➔ Музыка</value>
+  </data>
+  <data name="Menu_VoiceClone" xml:space="preserve">
+    <value>Клонирование голоса</value>
+  </data>
+  <data name="ModelFileDescription" xml:space="preserve">
+    <value>Откуда загружается или скачивается файл модели.</value>
+  </data>
+  <data name="ModelInfoDownload" xml:space="preserve">
+    <value>Скачано с</value>
+  </data>
+  <data name="ModelInfoLocal" xml:space="preserve">
+    <value>Локальный файл</value>
+  </data>
+  <data name="ModelInfoSharedComponent" xml:space="preserve">
+    <value>Общий компонент: {0}</value>
+  </data>
+  <data name="ModelLoadedListDetail" xml:space="preserve">
+    <value>Для одновременной работы нескольких моделей нужно достаточно памяти устройства для всех. Выгрузите ненужные модели, продолжите с загруженными или отмените.</value>
+  </data>
+  <data name="ModelLoadedListMessage" xml:space="preserve">
+    <value>Другие модели уже загружены</value>
+  </data>
+  <data name="ModelLoadedUnloadAll" xml:space="preserve">
+    <value>Выгрузить все</value>
+  </data>
+  <data name="ModelLoadedUnloaded" xml:space="preserve">
+    <value>Выгружено</value>
+  </data>
+  <data name="ModelLoadedUnloading" xml:space="preserve">
+    <value>Выгрузка</value>
+  </data>
+  <data name="ModelOptionsDescription" xml:space="preserve">
+    <value>Параметры, применяемые при первом выборе модели.</value>
+  </data>
+  <data name="ModelPipelineReplaceDetail" xml:space="preserve">
+    <value>'{0}' загружена вместе с апскейлером или экстрактором, которые заменит загрузка этой модели. Сначала выгрузите '{0}', продолжите, заменив только её апскейлер или экстрактор, или отмените.</value>
+  </data>
+  <data name="ModelPipelineReplaceNote" xml:space="preserve">
+    <value>Загрузка этой модели заменит её апскейлер или экстрактор</value>
+  </data>
+  <data name="ModelReleaseMessage" xml:space="preserve">
+    <value>'{0}' загружена и использует эту модель; перед изменением файлов модели её нужно выгрузить. Выгрузить сейчас?</value>
+  </data>
+  <data name="ModelSearchFolderSelect" xml:space="preserve">
+    <value>Выберите папку поиска</value>
+  </data>
+  <data name="ModelSearchFoldersComfyUI" xml:space="preserve">
+    <value>Добавить папки ComfyUI</value>
+  </data>
+  <data name="ModelSearchFoldersComfyUINotFound" xml:space="preserve">
+    <value>В выбранной папке не найдено папок моделей ComfyUI.</value>
+  </data>
+  <data name="ModelSearchFoldersComfyUISelect" xml:space="preserve">
+    <value>Выберите папку ComfyUI</value>
+  </data>
+  <data name="ModelSearchFoldersMessage" xml:space="preserve">
+    <value>Перед скачиванием Amuse также ищет файлы модели в этих папках. Файлы используются на месте: при удалении модели в Amuse её файлы из этих папок тоже удаляются.</value>
+  </data>
+  <data name="ModelSettingsDescription" xml:space="preserve">
+    <value>Как работает модель; значения должны соответствовать файлу модели.</value>
+  </data>
+  <data name="ModelViewReplaceDetail" xml:space="preserve">
+    <value>'{0}' загружена другим разделом, и загрузка этого конвейера её заменит. Сначала выгрузите её, продолжите с заменой или отмените.</value>
+  </data>
+  <data name="ModelViewReplaceNote" xml:space="preserve">
+    <value>Загрузка этого конвейера заменит её</value>
+  </data>
+  <data name="MusicTaskComplete" xml:space="preserve">
+    <value>Дополняет исходник, например добавляет аккомпанемент к вокальной дорожке. Инструмент для добавления задаётся в поле «Название дорожки».</value>
+  </data>
+  <data name="MusicTaskCover" xml:space="preserve">
+    <value>Создаёт кавер исходника в стиле и с текстом из промпта, сохраняя его структуру и длину.</value>
+  </data>
+  <data name="MusicTaskCoverNoFsq" xml:space="preserve">
+    <value>Более свободный кавер, который точнее следует промпту и сохраняет меньше от исходника.</value>
+  </data>
+  <data name="MusicTaskExtract" xml:space="preserve">
+    <value>Извлекает из исходника дорожку, указанную в поле «Название дорожки» (например, вокал).</value>
+  </data>
+  <data name="MusicTaskInitAudio" xml:space="preserve">
+    <value>Создаёт новую музыку, отталкиваясь от исходника; Сила задаёт, насколько далеко она от него уйдёт.</value>
+  </data>
+  <data name="MusicTaskInpaintAudio" xml:space="preserve">
+    <value>Заново генерирует выбранный диапазон исходника по промпту, остальное сохраняется.</value>
+  </data>
+  <data name="MusicTaskLego" xml:space="preserve">
+    <value>Создаёт новую дорожку, подходящую к исходнику, с названием из поля «Название дорожки» (например, гитара).</value>
+  </data>
+  <data name="MusicTaskRepaint" xml:space="preserve">
+    <value>Заново генерирует выбранный диапазон исходника по промпту, остальное сохраняется.</value>
+  </data>
+  <data name="ProgressChunk" xml:space="preserve">
+    <value>Генерация блока {7} из {8}...</value>
+  </data>
+  <data name="QualityDescription" xml:space="preserve">
+    <value>Каждое качество — это набор файлов модели; выбранное редактируется ниже.</value>
+  </data>
+  <data name="QueueAll" xml:space="preserve">
+    <value>В очередь все</value>
+  </data>
+  <data name="QueueAllMessage" xml:space="preserve">
+    <value>Поставить в очередь на скачивание моделей: {0}?
+
+Нужные им общие компоненты тоже будут поставлены в очередь.</value>
+  </data>
+  <data name="ReferenceTranscript" xml:space="preserve">
+    <value>Транскрипция референса</value>
+  </data>
+  <data name="ReferenceTranscriptOptional" xml:space="preserve">
+    <value>Что произносится в голосовом референсе (необязательно)</value>
+  </data>
+  <data name="ReferenceTranscriptRequired" xml:space="preserve">
+    <value>Что произносится в голосовом референсе (обязательно для этой модели)</value>
+  </data>
+  <data name="RescanModels" xml:space="preserve">
+    <value>Пересканировать модели</value>
+  </data>
+  <data name="RescanModelsComplete" xml:space="preserve">
+    <value>Пересканирование завершено, установлено моделей: {0}.</value>
+  </data>
+  <data name="ResolutionsDescription" xml:space="preserve">
+    <value>Размеры, доступные в разделах; по умолчанию выбран первый.</value>
+  </data>
+  <data name="Seconds" xml:space="preserve">
+    <value>Секунды</value>
+  </data>
+  <data name="SelectModelFolder" xml:space="preserve">
+    <value>Выберите расположение папки моделей</value>
+  </data>
+  <data name="SourceAudio" xml:space="preserve">
+    <value>Исходное аудио</value>
+  </data>
+  <data name="TextSettings" xml:space="preserve">
+    <value>Настройки текста</value>
+  </data>
+  <data name="Title_AddComponent" xml:space="preserve">
+    <value>Добавить компонент</value>
+  </data>
+  <data name="Title_AddControlNet" xml:space="preserve">
+    <value>Добавить ControlNet</value>
+  </data>
+  <data name="Title_AddExtractor" xml:space="preserve">
+    <value>Добавить экстрактор</value>
+  </data>
+  <data name="Title_AddLora" xml:space="preserve">
+    <value>Добавить LoRA</value>
+  </data>
+  <data name="Title_AddUpscaler" xml:space="preserve">
+    <value>Добавить апскейлер</value>
+  </data>
+  <data name="Title_Disclaimer" xml:space="preserve">
+    <value>Отказ от ответственности</value>
+  </data>
+  <data name="Title_McpImport" xml:space="preserve">
+    <value>Импорт серверов MCP</value>
+  </data>
+  <data name="Title_McpServer" xml:space="preserve">
+    <value>Сервер MCP</value>
+  </data>
+  <data name="Title_ModelFiles" xml:space="preserve">
+    <value>Файлы модели</value>
+  </data>
+  <data name="Title_ModelSearchFolders" xml:space="preserve">
+    <value>Папки поиска моделей</value>
+  </data>
+  <data name="ToolActionMcpTool" xml:space="preserve">
+    <value>Запустить инструмент MCP: {0} ({1})</value>
+  </data>
+  <data name="Tools" xml:space="preserve">
+    <value>Инструменты</value>
+  </data>
+  <data name="TrackName" xml:space="preserve">
+    <value>Название дорожки</value>
+  </data>
+  <data name="TrackNamePlaceholder" xml:space="preserve">
+    <value>например: vocals, guitar, drums</value>
+  </data>
+  <data name="UpscaleModelDescription" xml:space="preserve">
+    <value>Бэкенд и конвейер, запускающие апскейлер, и его источник.</value>
+  </data>
+  <data name="UpscaleWizardLocalFileDescription" xml:space="preserve">
+    <value>Файл апскейлера, уже находящийся на этом ПК, например .pth, .safetensors или .onnx.</value>
+  </data>
+  <data name="UpscaleWizardModelDescription" xml:space="preserve">
+    <value>Апскейлеры изображений, такие как ESRGAN, используют конвейер апскейла; SeedVR2 и RelayVSR — апскейлеры видео.</value>
+  </data>
+  <data name="Value" xml:space="preserve">
+    <value>Значение</value>
+  </data>
+  <data name="VisionProjector" xml:space="preserve">
+    <value>Визуальный проектор (mmproj)</value>
+  </data>
+  <data name="VoiceReference" xml:space="preserve">
+    <value>Голосовой референс</value>
+  </data>
+  <data name="WizardCustomCheckpoint" xml:space="preserve">
+    <value>Свои компоненты</value>
+  </data>
+  <data name="WizardCustomCheckpointDescription" xml:space="preserve">
+    <value>Выберите каждый компонент самостоятельно, для опытных пользователей.</value>
+  </data>
+  <data name="WizardDownloadLinkHint" xml:space="preserve">
+    <value>На Hugging Face скопируйте ссылку кнопки скачивания файла.</value>
+  </data>
+  <data name="WizardFileNameDescription" xml:space="preserve">
+    <value>Выберите файл модели и задайте ему имя.</value>
+  </data>
+  <data name="WizardFileSourceDescription" xml:space="preserve">
+    <value>Откуда берётся файл модели.</value>
+  </data>
+  <data name="WizardFilesDescription" xml:space="preserve">
+    <value>Выберите скачанные файлы.</value>
+  </data>
+  <data name="WizardLanguageFileDescription" xml:space="preserve">
+    <value>Один файл модели GGUF, только текст.</value>
+  </data>
+  <data name="WizardLanguageVision" xml:space="preserve">
+    <value>Модель + Vision</value>
+  </data>
+  <data name="WizardLanguageVisionDescription" xml:space="preserve">
+    <value>Файл модели GGUF и файл её визуального проектора (mmproj) для ввода изображений.</value>
+  </data>
+  <data name="WizardLocalCheckpoint" xml:space="preserve">
+    <value>Чекпоинт «всё в одном»</value>
+  </data>
+  <data name="WizardLocalCheckpointDescription" xml:space="preserve">
+    <value>Один файл со встроенными текстовыми энкодерами и VAE, обычен для чекпоинтов SDXL на Civitai.</value>
+  </data>
+  <data name="WizardLocalFileDescription" xml:space="preserve">
+    <value>Только диффузионная модель (UNet или Transformer); текстовые энкодеры и VAE предоставляет Amuse. Большинство загрузок относится к этому типу.</value>
+  </data>
+  <data name="WizardLocalFileSingleDescription" xml:space="preserve">
+    <value>Только скачанный файл модели.</value>
+  </data>
+  <data name="WizardModelDescription" xml:space="preserve">
+    <value>Семейство и версия модели скачанного файла.</value>
+  </data>
+  <data name="WizardOnlineFileDescription" xml:space="preserve">
+    <value>Прямая ссылка на файл модели, Amuse скачает его за вас.</value>
+  </data>
+  <data name="WizardSourceDescription" xml:space="preserve">
+    <value>Что содержит скачанный файл.</value>
+  </data>
+  <data name="WizardSuppliedByAmuse" xml:space="preserve">
+    <value>Предоставляет Amuse</value>
+  </data>
+  <data name="WizardSuppliedByAmuseDescription" xml:space="preserve">
+    <value>Общие компоненты, которые Amuse скачивает за вас при первой загрузке модели.</value>
+  </data>
+  <data name="WizardWillDownload" xml:space="preserve">
+    <value>Будет скачано</value>
+  </data>
+  <data name="AddSongTemplate" xml:space="preserve">
+    <value>Добавить шаблон песни</value>
+  </data>
+</root>

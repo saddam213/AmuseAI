@@ -4,7 +4,9 @@ using Amuse.App.Runtime;
 using Amuse.Common;
 using Microsoft.Extensions.Logging;
 using System;
+using System.Collections.Generic;
 using System.Diagnostics;
+using System.Runtime.CompilerServices;
 using System.Threading;
 using System.Threading.Tasks;
 using TensorStack.Common;
@@ -24,6 +26,8 @@ namespace Amuse.App.Services
         private readonly IMediaService _mediaService;
         private readonly IEnvironmentService _environmentService;
         private readonly IGenerateService _generateService;
+        private readonly ILanguageService _languageService;
+        private readonly IAudioService _audioService;
         private readonly SemaphoreSlim _operationLock = new SemaphoreSlim(1, 1);
         private PipelineModel _currentPipeline;
         private BackendClient _backendClient;
@@ -45,8 +49,10 @@ namespace Amuse.App.Services
         /// <param name="toolService">The tool service.</param>
         /// <param name="mediaService">The media service.</param>
         /// <param name="generateService">The generate service, its loaded model shares the device memory.</param>
+        /// <param name="languageService">The language service, its loaded model shares the device memory.</param>
+        /// <param name="audioService">The audio service, its loaded model shares the device memory.</param>
         /// <param name="logger">The logger.</param>
-        public UpscaleService(Settings settings, IEnvironmentService environmentService, IToolService toolService, IMediaService mediaService, IGenerateService generateService, ILogger<UpscaleService> logger)
+        public UpscaleService(Settings settings, IEnvironmentService environmentService, IToolService toolService, IMediaService mediaService, IGenerateService generateService, ILanguageService languageService, IAudioService audioService, ILogger<UpscaleService> logger)
         {
             _logger = logger;
             _settings = settings;
@@ -54,6 +60,8 @@ namespace Amuse.App.Services
             _mediaService = mediaService;
             _environmentService = environmentService;
             _generateService = generateService;
+            _languageService = languageService;
+            _audioService = audioService;
         }
 
         /// <summary>
@@ -216,16 +224,16 @@ namespace Amuse.App.Services
                     // Tile size
                     await EnsureTileSizeAsync(request.Options, request.VideoStream.Width, request.VideoStream.Height, cancellationToken);
 
-                    // Image upscaler, frame by frame
-                    var frameCount = request.VideoStream.FrameCount;
-                    async Task<VideoFrame> FrameProcessor(VideoFrame frame)
+                    // Image upscaler, the frames are streamed through the host
+                    var inputFrames = request.VideoStream.GetAsync(cancellationToken: cancellationToken);
+                    var upscaledFrames = _backendClient.UpscaleVideoStreamAsync(inputFrames, request.Options, cancellationToken);
+                    var resultFrames = ReportProgressAsync(upscaledFrames, request.VideoStream.FrameCount, progressCallback, cancellationToken);
+                    var audioSourceFile = request.VideoStream.HasAudio ? request.VideoStream.SourceFile : null;
+                    return await RunOnBackendAsync(async () =>
                     {
-                        var processedFrame = await RunOnBackendAsync(() => _backendClient.UpscaleImageAsync(frame.Frame, request.Options));
-                        progressCallback?.Report(new RunProgress(frame.Index, frameCount));
-                        return new VideoFrame(frame.Index, processedFrame, frame.SourceFrameRate, frame.AuxFrame);
-                    }
-
-                    return await request.VideoStream.ProcessAsync(videoFileName, FrameProcessor, true, _settings.ReadBuffer, _settings.WriteBuffer, cancellationToken);
+                        await resultFrames.SaveAsync(videoFileName, audioSourceFile: audioSourceFile, cancellationToken: cancellationToken);
+                        return await VideoInputStream.CreateAsync(videoFileName);
+                    });
                 }
             }
             catch (OperationCanceledException)
@@ -277,7 +285,7 @@ namespace Amuse.App.Services
 
 
         /// <summary>
-        /// Loads the upscale model into a new backend host.
+        /// Loads the upscale model into a new backend host, the pipeline is set before the host loads so its owner and model are known while it is loading.
         /// </summary>
         /// <param name="pipeline">The pipeline.</param>
         /// <param name="tileSize">The tile size, StableDiffusionCpp sets it when the model loads.</param>
@@ -288,6 +296,7 @@ namespace Amuse.App.Services
             // Unload
             await UnloadBackendAsync();
             cancellationToken.ThrowIfCancellationRequested();
+            _currentPipeline = pipeline;
 
             // Tile size is a load option for StableDiffusionCpp image upscalers
             var model = pipeline.UpscaleModel;
@@ -322,7 +331,6 @@ namespace Amuse.App.Services
             }
 
             // Result
-            _currentPipeline = pipeline;
             _defaultOptions = model.DefaultOptions;
             _loadedTileSize = tileSize;
             _isLoadedUntiled = isUntiled;
@@ -416,6 +424,23 @@ namespace Amuse.App.Services
 
 
         /// <summary>
+        /// Reports the progress of a frame stream as each frame is returned.
+        /// </summary>
+        /// <param name="frames">The frames.</param>
+        /// <param name="frameCount">The frame count.</param>
+        /// <param name="progressCallback">The progress callback.</param>
+        /// <param name="cancellationToken">The cancellation token.</param>
+        private static async IAsyncEnumerable<VideoFrame> ReportProgressAsync(IAsyncEnumerable<VideoFrame> frames, int frameCount, IProgress<RunProgress> progressCallback, [EnumeratorCancellation] CancellationToken cancellationToken)
+        {
+            await foreach (var frame in frames.WithCancellation(cancellationToken))
+            {
+                progressCallback?.Report(new RunProgress(frame.Index, frameCount));
+                yield return frame;
+            }
+        }
+
+
+        /// <summary>
         /// Gets the loaded upscale model.
         /// </summary>
         /// <exception cref="InvalidOperationException">No upscale model is loaded</exception>
@@ -429,18 +454,29 @@ namespace Amuse.App.Services
 
 
         /// <summary>
-        /// Gets the memory mode for the upscaler, from the device memory left by the generate model loaded on the same device.
+        /// Gets the memory mode for the upscaler, from the device memory left by the generate, language and audio models loaded on the same device.
         /// </summary>
         /// <param name="pipeline">The pipeline.</param>
         private MemoryMode GetMemoryMode(PipelineModel pipeline)
         {
             var device = pipeline.Device;
-            var generatePipeline = _generateService.Pipeline;
-            var reservedMemory = generatePipeline?.Device == device
-                ? generatePipeline.GenerateModel?.MemorySize ?? 0
-                : 0;
+            var reservedMemory = GetReservedMemory(_generateService.Pipeline, device) + GetReservedMemory(_languageService.Pipeline, device) + GetReservedMemory(_audioService.Pipeline, device);
             var availableMemory = Math.Max(0, device.MemoryGB - (int)Math.Ceiling(reservedMemory));
             return Extensions.ResolveMemoryMode(pipeline.UpscaleModel.MemorySize, availableMemory);
+        }
+
+
+        /// <summary>
+        /// Gets the device memory used by the model loaded in a pipeline, zero when it is loaded on another device.
+        /// </summary>
+        /// <param name="loadedPipeline">The loaded pipeline.</param>
+        /// <param name="device">The device.</param>
+        private static float GetReservedMemory(PipelineModel loadedPipeline, DeviceModel device)
+        {
+            if (loadedPipeline?.Device != device)
+                return 0;
+
+            return loadedPipeline.GenerateModel?.GetMemorySize(loadedPipeline.CheckpointType) ?? 0;
         }
 
 

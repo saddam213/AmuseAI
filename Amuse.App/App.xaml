@@ -6,8 +6,6 @@
              xmlns:CoreCommon="clr-namespace:TensorStack.Common;assembly=TensorStack.Common"
              xmlns:CommonControls="clr-namespace:TensorStack.WPF.Controls;assembly=TensorStack.WPF"
              xmlns:AmuseCommon="clr-namespace:Amuse.Common;assembly=Amuse.Common"
-             xmlns:Whisper="clr-namespace:TensorStack.OnnxRuntime.LLM.Pipelines.Whisper;assembly=TensorStack.OnnxRuntime.LLM"
-             xmlns:TextGeneration="clr-namespace:TensorStack.OnnxRuntime.LLM.Common;assembly=TensorStack.OnnxRuntime.LLM"
              xmlns:Common="clr-namespace:Amuse.App.Common"
              xmlns:Controls="clr-namespace:Amuse.App.Controls"
              ShutdownMode="OnMainWindowClose">
@@ -101,6 +99,18 @@
                 </ObjectDataProvider.MethodParameters>
             </ObjectDataProvider>
 
+            <ObjectDataProvider x:Key="ModelFolderType" MethodName="GetValues" ObjectType="{x:Type System:Enum}">
+                <ObjectDataProvider.MethodParameters>
+                    <x:Type TypeName="Common:ModelFolderType"/>
+                </ObjectDataProvider.MethodParameters>
+            </ObjectDataProvider>
+
+            <ObjectDataProvider x:Key="McpTransportType" MethodName="GetValues" ObjectType="{x:Type System:Enum}">
+                <ObjectDataProvider.MethodParameters>
+                    <x:Type TypeName="Common:McpTransportType"/>
+                </ObjectDataProvider.MethodParameters>
+            </ObjectDataProvider>
+
             <ObjectDataProvider x:Key="PipelineType" MethodName="GetValues" ObjectType="{x:Type System:Enum}">
                 <ObjectDataProvider.MethodParameters>
                     <x:Type TypeName="AmuseCommon:PipelineType"/>
@@ -113,81 +123,15 @@
                 </ObjectDataProvider.MethodParameters>
             </ObjectDataProvider>
 
+            <ObjectDataProvider x:Key="SamplerType" MethodName="GetValues" ObjectType="{x:Type System:Enum}">
+                <ObjectDataProvider.MethodParameters>
+                    <x:Type TypeName="AmuseCommon:SamplerType"/>
+                </ObjectDataProvider.MethodParameters>
+            </ObjectDataProvider>
+
             <ObjectDataProvider x:Key="SchedulerType" MethodName="GetValues" ObjectType="{x:Type System:Enum}">
                 <ObjectDataProvider.MethodParameters>
                     <x:Type TypeName="AmuseCommon:SchedulerType"/>
-                </ObjectDataProvider.MethodParameters>
-            </ObjectDataProvider>
-
-            <ObjectDataProvider x:Key="TimestepSpacingType" MethodName="GetValues" ObjectType="{x:Type System:Enum}">
-                <ObjectDataProvider.MethodParameters>
-                    <x:Type TypeName="AmuseCommon:TimestepSpacingType"/>
-                </ObjectDataProvider.MethodParameters>
-            </ObjectDataProvider>
-
-            <ObjectDataProvider x:Key="AlgorithmType" MethodName="GetValues" ObjectType="{x:Type System:Enum}">
-                <ObjectDataProvider.MethodParameters>
-                    <x:Type TypeName="AmuseCommon:AlgorithmType"/>
-                </ObjectDataProvider.MethodParameters>
-            </ObjectDataProvider>
-
-            <ObjectDataProvider x:Key="SolverType" MethodName="GetValues" ObjectType="{x:Type System:Enum}">
-                <ObjectDataProvider.MethodParameters>
-                    <x:Type TypeName="AmuseCommon:SolverType"/>
-                </ObjectDataProvider.MethodParameters>
-            </ObjectDataProvider>
-
-            <ObjectDataProvider x:Key="BetaScheduleType" MethodName="GetValues" ObjectType="{x:Type System:Enum}">
-                <ObjectDataProvider.MethodParameters>
-                    <x:Type TypeName="AmuseCommon:BetaScheduleType"/>
-                </ObjectDataProvider.MethodParameters>
-            </ObjectDataProvider>
-
-            <ObjectDataProvider x:Key="PredictionType" MethodName="GetValues" ObjectType="{x:Type System:Enum}">
-                <ObjectDataProvider.MethodParameters>
-                    <x:Type TypeName="AmuseCommon:PredictionType"/>
-                </ObjectDataProvider.MethodParameters>
-            </ObjectDataProvider>
-
-            <ObjectDataProvider x:Key="VarianceType" MethodName="GetValues" ObjectType="{x:Type System:Enum}">
-                <ObjectDataProvider.MethodParameters>
-                    <x:Type TypeName="AmuseCommon:VarianceType"/>
-                </ObjectDataProvider.MethodParameters>
-            </ObjectDataProvider>
-
-            <ObjectDataProvider x:Key="FinalSigmasType" MethodName="GetValues" ObjectType="{x:Type System:Enum}">
-                <ObjectDataProvider.MethodParameters>
-                    <x:Type TypeName="AmuseCommon:FinalSigmasType"/>
-                </ObjectDataProvider.MethodParameters>
-            </ObjectDataProvider>
-
-            <ObjectDataProvider x:Key="TimestepType" MethodName="GetValues" ObjectType="{x:Type System:Enum}">
-                <ObjectDataProvider.MethodParameters>
-                    <x:Type TypeName="AmuseCommon:TimestepType"/>
-                </ObjectDataProvider.MethodParameters>
-            </ObjectDataProvider>
-
-            <ObjectDataProvider x:Key="InterpolationType" MethodName="GetValues" ObjectType="{x:Type System:Enum}">
-                <ObjectDataProvider.MethodParameters>
-                    <x:Type TypeName="AmuseCommon:InterpolationType"/>
-                </ObjectDataProvider.MethodParameters>
-            </ObjectDataProvider>
-
-            <ObjectDataProvider x:Key="TimeShiftType" MethodName="GetValues" ObjectType="{x:Type System:Enum}">
-                <ObjectDataProvider.MethodParameters>
-                    <x:Type TypeName="AmuseCommon:TimeShiftType"/>
-                </ObjectDataProvider.MethodParameters>
-            </ObjectDataProvider>
-
-            <ObjectDataProvider x:Key="SigmaScheduleType" MethodName="GetValues" ObjectType="{x:Type System:Enum}">
-                <ObjectDataProvider.MethodParameters>
-                    <x:Type TypeName="AmuseCommon:SigmaScheduleType"/>
-                </ObjectDataProvider.MethodParameters>
-            </ObjectDataProvider>
-
-            <ObjectDataProvider x:Key="UpscaleModeType" MethodName="GetValues" ObjectType="{x:Type System:Enum}">
-                <ObjectDataProvider.MethodParameters>
-                    <x:Type TypeName="AmuseCommon:UpscaleModeType"/>
                 </ObjectDataProvider.MethodParameters>
             </ObjectDataProvider>
 
@@ -209,6 +153,18 @@
                 </ObjectDataProvider.MethodParameters>
             </ObjectDataProvider>
 
+            <ObjectDataProvider x:Key="DiffusionCacheType" MethodName="GetValues" ObjectType="{x:Type System:Enum}">
+                <ObjectDataProvider.MethodParameters>
+                    <x:Type TypeName="AmuseCommon:DiffusionCacheType"/>
+                </ObjectDataProvider.MethodParameters>
+            </ObjectDataProvider>
+
+            <ObjectDataProvider x:Key="ControlNetType" MethodName="GetValues" ObjectType="{x:Type System:Enum}">
+                <ObjectDataProvider.MethodParameters>
+                    <x:Type TypeName="AmuseCommon:ControlNetType"/>
+                </ObjectDataProvider.MethodParameters>
+            </ObjectDataProvider>
+
             <ObjectDataProvider x:Key="AutoOption" MethodName="GetValues" ObjectType="{x:Type System:Enum}">
                 <ObjectDataProvider.MethodParameters>
                     <x:Type TypeName="AmuseCommon:AutoOption"/>
@@ -221,17 +177,218 @@
                 </ObjectDataProvider.MethodParameters>
             </ObjectDataProvider>
 
-            <ObjectDataProvider x:Key="TaskType" MethodName="GetValues" ObjectType="{x:Type System:Enum}">
-                <ObjectDataProvider.MethodParameters>
-                    <x:Type TypeName="Whisper:TaskType"/>
-                </ObjectDataProvider.MethodParameters>
-            </ObjectDataProvider>
 
-            <ObjectDataProvider x:Key="EarlyStopping" MethodName="GetValues" ObjectType="{x:Type System:Enum}">
-                <ObjectDataProvider.MethodParameters>
-                    <x:Type TypeName="TextGeneration:EarlyStopping"/>
-                </ObjectDataProvider.MethodParameters>
-            </ObjectDataProvider>
+            <!--Media Colours-->
+            <Color x:Key="MediaImageColor">#FF0D72BA</Color>
+            <Color x:Key="MediaVideoColor">#FF0D72BA</Color>
+            <Color x:Key="MediaAudioColor">#FF74B768</Color>
+            <Color x:Key="MediaTextColor">#FF74B768</Color>
+            <SolidColorBrush x:Key="MediaImageBrush" Color="{StaticResource MediaImageColor}"/>
+            <SolidColorBrush x:Key="MediaVideoBrush" Color="{StaticResource MediaVideoColor}"/>
+            <SolidColorBrush x:Key="MediaAudioBrush" Color="{StaticResource MediaAudioColor}"/>
+            <SolidColorBrush x:Key="MediaTextBrush" Color="{StaticResource MediaTextColor}"/>
+
+            <!--Media Glow-->
+            <RadialGradientBrush x:Key="MediaImageGlowBrush" Center="0,0" GradientOrigin="0,0" RadiusX="1.1" RadiusY="1.3">
+                <GradientStop Color="#200D72BA" Offset="0"/>
+                <GradientStop Color="#000D72BA" Offset="1"/>
+            </RadialGradientBrush>
+            <RadialGradientBrush x:Key="MediaVideoGlowBrush" Center="0,0" GradientOrigin="0,0" RadiusX="1.1" RadiusY="1.3">
+                <GradientStop Color="#200D72BA" Offset="0"/>
+                <GradientStop Color="#000D72BA" Offset="1"/>
+            </RadialGradientBrush>
+            <RadialGradientBrush x:Key="MediaAudioGlowBrush" Center="0,0" GradientOrigin="0,0" RadiusX="1.1" RadiusY="1.3">
+                <GradientStop Color="#2074B768" Offset="0"/>
+                <GradientStop Color="#0074B768" Offset="1"/>
+            </RadialGradientBrush>
+            <RadialGradientBrush x:Key="MediaTextGlowBrush" Center="0,0" GradientOrigin="0,0" RadiusX="1.1" RadiusY="1.3">
+                <GradientStop Color="#2074B768" Offset="0"/>
+                <GradientStop Color="#0074B768" Offset="1"/>
+            </RadialGradientBrush>
+
+            <!--Accent Border-->
+            <LinearGradientBrush x:Key="AccentBorderBrush" StartPoint="0,0" EndPoint="1,1">
+                <GradientStop Color="#4D0D72BA" Offset="0"/>
+                <GradientStop Color="#4D0D72BA" Offset="0.5"/>
+                <GradientStop Color="#4D74B768" Offset="0.5"/>
+                <GradientStop Color="#4D74B768" Offset="1"/>
+            </LinearGradientBrush>
+
+            <LinearGradientBrush x:Key="AccentBorderLightBrush" StartPoint="0,0" EndPoint="1,1">
+                <GradientStop Color="#2E0D72BA" Offset="0"/>
+                <GradientStop Color="#2E0D72BA" Offset="0.5"/>
+                <GradientStop Color="#2E74B768" Offset="0.5"/>
+                <GradientStop Color="#2E74B768" Offset="1"/>
+            </LinearGradientBrush>
+
+            <!--List Item Glow-->
+            <LinearGradientBrush x:Key="ListItemGlowBrush" StartPoint="0,0" EndPoint="1,0">
+                <GradientStop Color="#180D72BA" Offset="0"/>
+                <GradientStop Color="#000D72BA" Offset="1"/>
+            </LinearGradientBrush>
+
+            <!--Status Tints-->
+            <SolidColorBrush x:Key="SuccessTintBrush" Color="#204CAF50"/>
+            <SolidColorBrush x:Key="SuccessTintBorderBrush" Color="#404CAF50"/>
+            <SolidColorBrush x:Key="WarningTintBrush" Color="#20FFC107"/>
+            <SolidColorBrush x:Key="WarningTintBorderBrush" Color="#50FFC107"/>
+            <SolidColorBrush x:Key="InfoTintBrush" Color="#202E90D7"/>
+            <SolidColorBrush x:Key="InfoTintBorderBrush" Color="#402E90D7"/>
+            <SolidColorBrush x:Key="DangerTintBrush" Color="#20FE2929"/>
+            <SolidColorBrush x:Key="DangerTintBorderBrush" Color="#40FE2929"/>
+
+            <!--Card-->
+            <Style x:Key="CardBorder" TargetType="{x:Type Border}">
+                <Setter Property="Background" Value="{StaticResource ContainerBackground}"/>
+                <Setter Property="BorderBrush" Value="{StaticResource ContainerBorder}"/>
+                <Setter Property="BorderThickness" Value="1"/>
+            </Style>
+
+            <!--Icon Tile-->
+            <Style x:Key="IconTileBorder" TargetType="{x:Type Border}">
+                <Setter Property="Width" Value="38"/>
+                <Setter Property="Height" Value="38"/>
+                <Setter Property="Opacity" Value=".15"/>
+            </Style>
+
+            <!--Chip-->
+            <Style x:Key="ChipBorder" TargetType="{x:Type Border}">
+                <Setter Property="Background" Value="{StaticResource ControlBrightDefaultBackground}"/>
+                <Setter Property="BorderBrush" Value="{StaticResource ContainerBorder}"/>
+                <Setter Property="BorderThickness" Value="1"/>
+                <Setter Property="Padding" Value="10,3"/>
+                <Setter Property="Margin" Value="0,0,8,0"/>
+            </Style>
+
+            <!--Tag-->
+            <Style x:Key="TagBorder" TargetType="{x:Type Border}">
+                <Setter Property="Background" Value="{StaticResource ControlBrightDefaultBackground}"/>
+                <Setter Property="BorderBrush" Value="{StaticResource ContainerBorder}"/>
+                <Setter Property="BorderThickness" Value="1"/>
+                <Setter Property="VerticalAlignment" Value="Center"/>
+            </Style>
+
+            <Style x:Key="TagTextBlock" TargetType="{x:Type TextBlock}" BasedOn="{StaticResource {x:Type TextBlock}}">
+                <Setter Property="FontSize" Value="10"/>
+                <Setter Property="Margin" Value="6,0,6,1"/>
+                <Setter Property="Opacity" Value=".75"/>
+            </Style>
+
+            <!--Status Tag-->
+            <Style x:Key="StatusTagBorder" TargetType="{x:Type Border}">
+                <Setter Property="Padding" Value="9,3,10,3"/>
+                <Setter Property="HorizontalAlignment" Value="Left"/>
+                <Setter Property="VerticalAlignment" Value="Center"/>
+                <Setter Property="BorderThickness" Value="1"/>
+                <Setter Property="BorderBrush" Value="{StaticResource ContainerBorder}"/>
+                <Setter Property="Background" Value="Transparent"/>
+            </Style>
+
+            <Style x:Key="StatusTagSuccessBorder" TargetType="{x:Type Border}" BasedOn="{StaticResource StatusTagBorder}">
+                <Setter Property="Background" Value="{StaticResource SuccessTintBrush}"/>
+                <Setter Property="BorderBrush" Value="{StaticResource SuccessTintBorderBrush}"/>
+            </Style>
+
+            <Style x:Key="StatusTagWarningBorder" TargetType="{x:Type Border}" BasedOn="{StaticResource StatusTagBorder}">
+                <Setter Property="Background" Value="{StaticResource WarningTintBrush}"/>
+                <Setter Property="BorderBrush" Value="{StaticResource WarningTintBorderBrush}"/>
+            </Style>
+
+            <Style x:Key="StatusTagInfoBorder" TargetType="{x:Type Border}" BasedOn="{StaticResource StatusTagBorder}">
+                <Setter Property="Background" Value="{StaticResource InfoTintBrush}"/>
+                <Setter Property="BorderBrush" Value="{StaticResource InfoTintBorderBrush}"/>
+            </Style>
+
+            <Style x:Key="StatusTagDangerBorder" TargetType="{x:Type Border}" BasedOn="{StaticResource StatusTagBorder}">
+                <Setter Property="Background" Value="{StaticResource DangerTintBrush}"/>
+                <Setter Property="BorderBrush" Value="{StaticResource DangerTintBorderBrush}"/>
+            </Style>
+
+            <!--Section Header-->
+            <Style x:Key="SectionHeaderTextBlock" TargetType="{x:Type TextBlock}" BasedOn="{StaticResource {x:Type TextBlock}}">
+                <Setter Property="FontSize" Value="16"/>
+                <Setter Property="FontWeight" Value="SemiBold"/>
+                <Setter Property="Opacity" Value=".9"/>
+                <Setter Property="Margin" Value="8,0,0,0"/>
+                <Setter Property="VerticalAlignment" Value="Center"/>
+            </Style>
+
+            <Style x:Key="SectionHeaderFontAwesome" TargetType="{x:Type CommonControls:FontAwesome}" BasedOn="{StaticResource {x:Type CommonControls:FontAwesome}}">
+                <Setter Property="Size" Value="15"/>
+                <Setter Property="IconStyle" Value="Regular"/>
+                <Setter Property="Color" Value="{StaticResource AccentColour2}"/>
+                <Setter Property="VerticalAlignment" Value="Center"/>
+            </Style>
+
+            <!--Tile Button-->
+            <Style x:Key="TileButton" TargetType="{x:Type Button}">
+                <Setter Property="Background" Value="{StaticResource ContainerBackground}"/>
+                <Setter Property="BorderBrush" Value="{StaticResource ContainerBorder}"/>
+                <Setter Property="Foreground" Value="{StaticResource ButtonForeground}"/>
+                <Setter Property="BorderThickness" Value="1"/>
+                <Setter Property="Cursor" Value="Hand"/>
+                <Setter Property="Template">
+                    <Setter.Value>
+                        <ControlTemplate TargetType="{x:Type Button}">
+                            <Border x:Name="border" Background="{TemplateBinding Background}" BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="{TemplateBinding BorderThickness}" SnapsToDevicePixels="True">
+                                <ContentPresenter Focusable="False" Margin="{TemplateBinding Padding}" HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}" VerticalAlignment="{TemplateBinding VerticalContentAlignment}"/>
+                            </Border>
+                            <ControlTemplate.Triggers>
+                                <Trigger Property="IsMouseOver" Value="True">
+                                    <Setter Property="Background" TargetName="border" Value="{StaticResource ControlMouseOverBackground}"/>
+                                    <Setter Property="BorderBrush" TargetName="border" Value="{StaticResource ButtonBorderMouseOver}"/>
+                                </Trigger>
+                                <Trigger Property="IsPressed" Value="True">
+                                    <Setter Property="BorderBrush" TargetName="border" Value="{StaticResource ButtonBorderPressed}"/>
+                                </Trigger>
+                            </ControlTemplate.Triggers>
+                        </ControlTemplate>
+                    </Setter.Value>
+                </Setter>
+            </Style>
+
+            <!--Media Type-->
+            <Style x:Key="MediaTypeFontAwesome" TargetType="{x:Type CommonControls:FontAwesome}" BasedOn="{StaticResource {x:Type CommonControls:FontAwesome}}">
+                <Setter Property="Icon" Value="f1b2"/>
+                <Setter Property="IconStyle" Value="Regular"/>
+                <Setter Property="Color" Value="{StaticResource DefaultForeground}"/>
+                <Style.Triggers>
+                    <DataTrigger Binding="{Binding MediaType}" Value="Image">
+                        <Setter Property="Icon" Value="f03e"/>
+                        <Setter Property="Color" Value="{StaticResource MediaImageBrush}"/>
+                    </DataTrigger>
+                    <DataTrigger Binding="{Binding MediaType}" Value="Video">
+                        <Setter Property="Icon" Value="f008"/>
+                        <Setter Property="Color" Value="{StaticResource MediaVideoBrush}"/>
+                    </DataTrigger>
+                    <DataTrigger Binding="{Binding MediaType}" Value="Audio">
+                        <Setter Property="Icon" Value="f001"/>
+                        <Setter Property="Color" Value="{StaticResource MediaAudioBrush}"/>
+                    </DataTrigger>
+                    <DataTrigger Binding="{Binding MediaType}" Value="Text">
+                        <Setter Property="Icon" Value="f893"/>
+                        <Setter Property="Color" Value="{StaticResource MediaTextBrush}"/>
+                    </DataTrigger>
+                </Style.Triggers>
+            </Style>
+
+            <Style x:Key="MediaTypeBorder" TargetType="{x:Type Border}" BasedOn="{StaticResource IconTileBorder}">
+                <Setter Property="Background" Value="{StaticResource DefaultForeground}"/>
+                <Style.Triggers>
+                    <DataTrigger Binding="{Binding MediaType}" Value="Image">
+                        <Setter Property="Background" Value="{StaticResource MediaImageBrush}"/>
+                    </DataTrigger>
+                    <DataTrigger Binding="{Binding MediaType}" Value="Video">
+                        <Setter Property="Background" Value="{StaticResource MediaVideoBrush}"/>
+                    </DataTrigger>
+                    <DataTrigger Binding="{Binding MediaType}" Value="Audio">
+                        <Setter Property="Background" Value="{StaticResource MediaAudioBrush}"/>
+                    </DataTrigger>
+                    <DataTrigger Binding="{Binding MediaType}" Value="Text">
+                        <Setter Property="Background" Value="{StaticResource MediaTextBrush}"/>
+                    </DataTrigger>
+                </Style.Triggers>
+            </Style>
 
 
             <Style x:Key="ImageDropZoneStyle" TargetType="{x:Type Border}">
@@ -291,6 +448,29 @@
                         </MultiDataTrigger.Setters>
                     </MultiDataTrigger>
                 </Style.Triggers>
+            </Style>
+
+
+            <Style x:Key="TimelineDropButton" TargetType="{x:Type CommonControls:IconButton}">
+                <Setter Property="IconSize" Value="18"/>
+                <Setter Property="IconOpacity" Value=".8"/>
+                <Setter Property="IconMargin" Value="0,6,0,0"/>
+                <Setter Property="TextMargin" Value="0,-3,0,4"/>
+                <Setter Property="Orientation" Value="Vertical"/>
+                <Setter Property="IconColor" Value="{StaticResource DefaultForeground}"/>
+                <Setter Property="Foreground" Value="{StaticResource DefaultForeground}"/>
+                <Style.Triggers>
+                    <Trigger Property="AllowDrop" Value="True">
+                        <Setter Property="IconColor" Value="{StaticResource AccentColour2}"/>
+                        <Setter Property="Foreground" Value="{StaticResource AccentColour2}"/>
+                    </Trigger>
+                </Style.Triggers>
+            </Style>
+
+            <Style x:Key="TimelineOptionButton" TargetType="{x:Type Button}" BasedOn="{StaticResource {x:Type Button}}">
+                <Setter Property="ToolTipService.Placement" Value="Top"/>
+                <Setter Property="ToolTipService.InitialShowDelay" Value="200"/>
+                <Setter Property="ToolTipService.ShowOnDisabled" Value="True"/>
             </Style>
 
 
@@ -495,6 +675,19 @@
                 </Style.Triggers>
             </Style>
 
+            <Style x:Key="CheckpointStatusFontAwesome" TargetType="{x:Type CommonControls:FontAwesome}" BasedOn="{StaticResource {x:Type CommonControls:FontAwesome}}">
+                <Setter Property="Icon" Value="f00c"/>
+                <Setter Property="Opacity" Value=".6"/>
+                <Setter Property="Color" Value="{StaticResource IconMutedColour}"/>
+                <Setter Property="ToolTip" Value="{CommonControls:Localize ToolTip_ModelStatus_NotInstalled}"/>
+                <Style.Triggers>
+                    <DataTrigger Binding="{Binding IsInstalled}" Value="True">
+                        <Setter Property="Color" Value="{StaticResource SuccessColour}"/>
+                        <Setter Property="ToolTip" Value="{CommonControls:Localize ToolTip_ModelStatus_Installed}"/>
+                    </DataTrigger>
+                </Style.Triggers>
+            </Style>
+
             <Style x:Key="ModelStatusTextBlock" TargetType="{x:Type TextBlock}" BasedOn="{StaticResource {x:Type TextBlock}}">
                 <Setter Property="Foreground" Value="{StaticResource DefaultForeground}"/>
                 <Setter Property="ToolTip" Value="{CommonControls:Localize ToolTip_ModelStatus_NotInstalled}"/>
@@ -553,6 +746,20 @@
                         <Setter Property="ToolTip" Value="{CommonControls:Localize ToolTip_ModelStatus_DownloadFailed}"/>
                     </DataTrigger>
                 </Style.Triggers>
+            </Style>
+
+            <!--Dialog Section-->
+            <Style x:Key="WizardSection" TargetType="{x:Type Border}">
+                <Setter Property="Background" Value="{StaticResource ContainerGlassBackground}"/>
+                <Setter Property="Margin" Value="0,2"/>
+                <Setter Property="Padding" Value="8,6"/>
+            </Style>
+
+            <!--Dialog Section Header-->
+            <Style x:Key="WizardSectionHeader" TargetType="{x:Type StackPanel}">
+                <Setter Property="DockPanel.Dock" Value="Left"/>
+                <Setter Property="Width" Value="180"/>
+                <Setter Property="Margin" Value="0,2,10,0"/>
             </Style>
 
             <Style x:Key="TransparentListBoxItem" TargetType="ListBoxItem">
@@ -615,31 +822,8 @@
             <DataTemplate x:Key="ComboBoxDataDiffusionTemplateModel">
                 <StackPanel>
                     <DockPanel>
-                        <UniformGrid DockPanel.Dock="Right"  Columns="2">
-
-                            <!--AccessToken-->
-                            <CommonControls:FontAwesome Icon="f084" Size="10" IconStyle="Solid" Opacity=".6"  Width="15" ToolTipService.InitialShowDelay="200">
-                                <CommonControls:FontAwesome.Style>
-                                    <Style TargetType="{x:Type CommonControls:FontAwesome}" BasedOn="{StaticResource {x:Type CommonControls:FontAwesome}}">
-                                        <Setter Property="ToolTip" Value="{x:Null}"/>
-                                        <Setter Property="Color" Value="{StaticResource IconMutedColour}"/>
-                                        <Style.Triggers>
-                                            <DataTrigger Binding="{Binding AccessToken}" Value="HuggingFace">
-                                                <Setter Property="Color" Value="{StaticResource WarningColour}"/>
-                                                <Setter Property="ToolTip" Value="{CommonControls:Localize ToolTip_Acsess_HuggingFace}"/>
-                                            </DataTrigger>
-                                            <DataTrigger Binding="{Binding AccessToken}" Value="Civitai">
-                                                <Setter Property="Color" Value="{StaticResource WarningColour}"/>
-                                                <Setter Property="ToolTip" Value="{CommonControls:Localize ToolTip_Acsess_Civitai}"/>
-                                            </DataTrigger>
-                                        </Style.Triggers>
-                                    </Style>
-                                </CommonControls:FontAwesome.Style>
-                            </CommonControls:FontAwesome>
-
-                            <!--Installed | Downloading-->
-                            <CommonControls:FontAwesome Size="10" IconStyle="Solid" Opacity=".6"  ToolTipService.InitialShowDelay="200" Style="{StaticResource ModelStatusFontAwesome}" Tag="{Binding Status}" />
-                        </UniformGrid>
+                        <!--Installed | Downloading-->
+                        <CommonControls:FontAwesome DockPanel.Dock="Right" Size="10" Width="15" IconStyle="Solid" Opacity=".6"  ToolTipService.InitialShowDelay="200" Style="{StaticResource ModelStatusFontAwesome}" Tag="{Binding Status}" />
 
                         <TextBlock Text="{Binding Name}" />
                     </DockPanel>
@@ -654,31 +838,8 @@
 
             <DataTemplate x:Key="ComboBoxDataTemplateModel">
                 <DockPanel>
-                    <UniformGrid DockPanel.Dock="Right"  Columns="2">
-
-                        <!--AccessToken-->
-                        <CommonControls:FontAwesome Icon="f084" Size="10" IconStyle="Solid" Opacity=".6"  Width="15" ToolTipService.InitialShowDelay="200">
-                            <CommonControls:FontAwesome.Style>
-                                <Style TargetType="{x:Type CommonControls:FontAwesome}" BasedOn="{StaticResource {x:Type CommonControls:FontAwesome}}">
-                                    <Setter Property="ToolTip" Value="{x:Null}"/>
-                                    <Setter Property="Color" Value="{StaticResource IconMutedColour}"/>
-                                    <Style.Triggers>
-                                        <DataTrigger Binding="{Binding AccessToken}" Value="HuggingFace">
-                                            <Setter Property="Color" Value="{StaticResource WarningColour}"/>
-                                            <Setter Property="ToolTip" Value="{CommonControls:Localize ToolTip_Acsess_HuggingFace}"/>
-                                        </DataTrigger>
-                                        <DataTrigger Binding="{Binding AccessToken}" Value="Civitai">
-                                            <Setter Property="Color" Value="{StaticResource WarningColour}"/>
-                                            <Setter Property="ToolTip" Value="{CommonControls:Localize ToolTip_Acsess_Civitai}"/>
-                                        </DataTrigger>
-                                    </Style.Triggers>
-                                </Style>
-                            </CommonControls:FontAwesome.Style>
-                        </CommonControls:FontAwesome>
-
-                        <!--Installed | Downloading-->
-                        <CommonControls:FontAwesome Size="10" IconStyle="Solid" Opacity=".6"  ToolTipService.InitialShowDelay="200" Style="{StaticResource ModelStatusFontAwesome}" Tag="{Binding Status}" />
-                    </UniformGrid>
+                    <!--Installed | Downloading-->
+                    <CommonControls:FontAwesome DockPanel.Dock="Right" Size="10" Width="15" IconStyle="Solid" Opacity=".6"  ToolTipService.InitialShowDelay="200" Style="{StaticResource ModelStatusFontAwesome}" Tag="{Binding Status}" />
 
                     <TextBlock Text="{Binding Name}" />
                 </DockPanel>
@@ -730,10 +891,7 @@
                         <!--Details-->
                         <UniformGrid Columns="3" Margin="0,4,0,0" Visibility="{Binding MediaType, Converter={StaticResource EnumToVisibilityConverter}, ConverterParameter=Image|Video}">
                             <StackPanel>
-                                <TextBlock Style="{StaticResource FieldTextBlockStyle}">
-                                    <Run Text="{Binding MediaType}"/>
-                                    <Run Text="{CommonControls:Localize Size}"/>
-                                </TextBlock>
+                                <TextBlock Text="{CommonControls:Localize Size}" Style="{StaticResource FieldTextBlockStyle}" />
                                 <TextBlock>
                                    <Run Text="{Binding Width}" />
                                    <Run Text="x" />
@@ -794,15 +952,15 @@
                         </StackPanel>
 
 
-                        <!--Scheduler Settings-->
+                        <!--Sampler Settings-->
                         <UniformGrid Columns="3" Margin="0,4,0,0" Visibility="{Binding MediaType, Converter={StaticResource InverseEnumToVisibilityConverter}, ConverterParameter=Text}">
                             <StackPanel>
                                 <TextBlock Text="{CommonControls:Localize Seed}" Style="{StaticResource FieldTextBlockStyle}" />
                                 <TextBox Text="{Binding Options.Seed}" Style="{StaticResource TextBlockStyle}" />
                             </StackPanel>
                             <StackPanel>
-                                <TextBlock Text="{CommonControls:Localize Scheduler}" Style="{StaticResource FieldTextBlockStyle}" />
-                                <TextBlock Text="{Binding Options.SchedulerOptions.Scheduler, Converter={StaticResource EnumDisplayNameConverter}}" />
+                                <TextBlock Text="{CommonControls:Localize Sampler}" Style="{StaticResource FieldTextBlockStyle}" />
+                                <TextBlock Text="{Binding Options.SamplerOptions.Sampler, Converter={StaticResource EnumDisplayNameConverter}}" />
                             </StackPanel>
                             <StackPanel Margin="0,3,0,0">
                                 <TextBlock Text="{CommonControls:Localize Steps}" Style="{StaticResource FieldTextBlockStyle}" />
@@ -973,10 +1131,7 @@
 
                         <UniformGrid Columns="3" Margin="0,6,0,0">
                             <StackPanel>
-                                <TextBlock Style="{StaticResource FieldTextBlockStyle}">
-                                    <Run Text="{Binding MediaType}"/>
-                                    <Run Text="{CommonControls:Localize Size}"/>
-                                </TextBlock>
+                                <TextBlock Text="{CommonControls:Localize Size}" Style="{StaticResource FieldTextBlockStyle}" />
                                 <TextBlock>
                                     <Run Text="{Binding Width}" />
                                     <Run Text="x" />
@@ -1084,10 +1239,7 @@
 
                         <UniformGrid Columns="3" Margin="0,6,0,0">
                             <StackPanel>
-                                <TextBlock Style="{StaticResource FieldTextBlockStyle}">
-                                    <Run Text="{Binding MediaType}"/>
-                                    <Run Text="{CommonControls:Localize Size}"/>
-                                </TextBlock>
+                                <TextBlock Text="{CommonControls:Localize Size}" Style="{StaticResource FieldTextBlockStyle}" />
                                 <TextBlock>
                                     <Run Text="{Binding Width}" />
                                     <Run Text="x" />
@@ -1190,10 +1342,7 @@
                         <Separator Opacity=".7"/>
                         <UniformGrid Columns="3" Margin="0,6,0,0">
                             <StackPanel>
-                                <TextBlock Style="{StaticResource FieldTextBlockStyle}">
-                                    <Run Text="{Binding MediaType}"/>
-                                    <Run Text="{CommonControls:Localize Size}"/>
-                                </TextBlock>
+                                <TextBlock Text="{CommonControls:Localize Size}" Style="{StaticResource FieldTextBlockStyle}" />
                                 <TextBlock>
                                     <Run Text="{Binding Width}" />
                                     <Run Text="x" />
@@ -1356,10 +1505,7 @@
 
                         <UniformGrid Columns="3" Margin="0,6,0,0">
                             <StackPanel>
-                                <TextBlock Style="{StaticResource FieldTextBlockStyle}">
-                                    <Run Text="{Binding MediaType}"/>
-                                    <Run Text="{CommonControls:Localize Size}"/>
-                                </TextBlock>
+                                <TextBlock Text="{CommonControls:Localize Size}" Style="{StaticResource FieldTextBlockStyle}" />
                                 <TextBlock>
                                     <Run Text="{Binding Width}" />
                                     <Run Text="x" />
@@ -1401,10 +1547,7 @@
                         <Separator Opacity=".7"/>
                         <UniformGrid Columns="3" Margin="0,3,0,0">
                             <StackPanel Visibility="{Binding MediaType, Converter={StaticResource EnumToVisibilityConverter}, ConverterParameter=Image|Video}">
-                                <TextBlock Style="{StaticResource FieldTextBlockStyle}">
-                                    <Run Text="{Binding MediaType}"/>
-                                    <Run Text="{CommonControls:Localize Size}"/>
-                                </TextBlock>
+                                <TextBlock Text="{CommonControls:Localize Size}" Style="{StaticResource FieldTextBlockStyle}" />
                                 <TextBlock>
                                    <Run Text="{Binding Width}" />
                                    <Run Text="x" />
@@ -1455,7 +1598,8 @@
                 <Setter Property="Padding" Value="0" />
                 <Setter Property="Margin" Value="0"/>
                 <Setter Property="BorderThickness" Value="1" />
-                <Setter Property="BorderBrush" Value="{StaticResource ControlBrightDefaultBorderBrush }" />
+                <Setter Property="BorderBrush" Value="{StaticResource AccentBorderLightBrush}" />
+                <Setter Property="Background" Value="{StaticResource ListItemGlowBrush}" />
                 <Setter Property="HorizontalContentAlignment" Value="Stretch"></Setter>
                 <Setter Property="Template">
                     <Setter.Value>
@@ -1479,7 +1623,8 @@
                 <Setter Property="Padding" Value="0" />
                 <Setter Property="Margin" Value="2"/>
                 <Setter Property="BorderThickness" Value="1" />
-                <Setter Property="BorderBrush" Value="{StaticResource ControlBrightDefaultBorderBrush}" />
+                <Setter Property="BorderBrush" Value="{StaticResource AccentBorderLightBrush}" />
+                <Setter Property="Background" Value="{StaticResource ListItemGlowBrush}" />
                 <Setter Property="HorizontalContentAlignment" Value="Stretch"></Setter>
                 <Setter Property="Template">
                     <Setter.Value>

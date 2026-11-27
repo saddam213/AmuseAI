@@ -6,185 +6,193 @@
         xmlns:local="clr-namespace:Amuse.App.Dialogs"
         xmlns:Controls="clr-namespace:Amuse.App.Controls"
         xmlns:CommonControls="clr-namespace:TensorStack.WPF.Controls;assembly=TensorStack.WPF"
-        MinWidth="500"
-        MaxWidth="500"
+        MinWidth="760"
+        MaxWidth="760"
         Title="{CommonControls:Localize Title_ExecutionOptions}"
         Icon="/Images/Icon.ico"
         Style="{StaticResource {x:Type CommonControls:DialogControl}}">
     <DockPanel DataContext="{Binding RelativeSource={RelativeSource AncestorType={x:Type local:ExecutionOptionsDialog}}}" Margin="15, 15, 15, 10">
 
-        <!--Save/Cancel-->
-        <DockPanel DockPanel.Dock="Bottom" Height="30" Margin="0,15,0,0">
-            <UniformGrid DockPanel.Dock="Right" Columns="2" >
+        <!--Reset/Save/Cancel/Errors-->
+        <DockPanel DockPanel.Dock="Bottom" MinHeight="30" Margin="0,15,0,0">
+            <UniformGrid DockPanel.Dock="Right" Columns="2" Height="30" VerticalAlignment="Bottom">
                 <Button Content="{CommonControls:Localize Save}" Command="{Binding SaveCommand}" Width="100" IsDefault="True"/>
                 <Button Content="{CommonControls:Localize Cancel}" Command="{Binding CancelCommand}"/>
             </UniformGrid>
-            <Button DockPanel.Dock="Left" Content="{CommonControls:Localize Reset}" Command="{Binding ResetCommand}" Width="100" HorizontalAlignment="Left" ToolTip="{CommonControls:Localize ToolTip_ResetExecutionOptions}" ToolTipService.InitialShowDelay="200"/>
+            <Button DockPanel.Dock="Left" Content="{CommonControls:Localize Reset}" Command="{Binding ResetCommand}" Width="100" Height="30" VerticalAlignment="Bottom" ToolTip="{CommonControls:Localize ToolTip_ResetExecutionOptions}" ToolTipService.InitialShowDelay="200"/>
+            <ItemsControl ItemsSource="{Binding Errors}" Margin="10,0">
+                <ItemsControl.ItemTemplate>
+                    <DataTemplate>
+                        <TextBlock Text="{Binding}" Foreground="IndianRed" TextWrapping="Wrap" FontSize="11"/>
+                    </DataTemplate>
+                </ItemsControl.ItemTemplate>
+            </ItemsControl>
         </DockPanel>
 
+        <!--Main Content-->
+        <StackPanel>
 
-        <!--HuggingFace-->
-        <StackPanel DockPanel.Dock="Top" Visibility="{Binding Backend, Converter={StaticResource EnumToVisibilityConverter}, ConverterParameter=HuggingFace}">
-
-            <!--Memory-->
-            <GroupBox Header="{CommonControls:Localize Memory}" Margin="0, 0, 0, 0" Padding="5,2,5,5">
-                <StackPanel>
-                    <UniformGrid Columns="2">
-                        <StackPanel>
-                            <TextBlock Text="{CommonControls:Localize WeightType}" Style="{StaticResource FieldTextBlockStyle}"/>
-                            <ComboBox ItemsSource="{Binding WeightTypes}" SelectedItem="{Binding ExecutionOptions.WeightType}" Style="{StaticResource EnumComboBox}" ToolTip="{CommonControls:Localize ToolTip_WeightType}" ToolTipService.InitialShowDelay="200" ToolTipService.Placement="Bottom"/>
+                <!--LlamaCpp-->
+                <StackPanel Visibility="{Binding Backend, Converter={StaticResource EnumToVisibilityConverter}, ConverterParameter=LlamaCpp}">
+                <Border Style="{StaticResource WizardSection}">
+                    <DockPanel>
+                        <StackPanel Style="{StaticResource WizardSectionHeader}">
+                            <TextBlock Text="{CommonControls:Localize Memory}" FontWeight="SemiBold" FontSize="13"/>
+                            <TextBlock Text="{CommonControls:Localize ExecutionMemoryDescription}" FontSize="11" Opacity=".7" TextWrapping="Wrap"/>
                         </StackPanel>
-                    </UniformGrid>
-                    <StackPanel Margin="0,12,0,0">
-                        <CheckBox Content="{CommonControls:Localize OptimizeDevice}" IsChecked="{Binding ExecutionOptions.IsOptimizeDeviceEnabled}"/>
-                        <TextBlock Text="{CommonControls:Localize OptimizeDeviceMessage}" FontSize="11" FontStyle="Italic" Opacity=".6" Margin="22,0,0,0"/>
-                    </StackPanel>
-                    <StackPanel Margin="0,4,0,0">
-                        <CheckBox Content="{CommonControls:Localize OptimizeChannels}" IsChecked="{Binding ExecutionOptions.IsOptimizeChannelsEnabled}"/>
-                        <TextBlock Text="{CommonControls:Localize OptimizeChannelsMessage}" FontSize="11" FontStyle="Italic" Opacity=".6" Margin="22,0,0,0"/>
-                    </StackPanel>
-                    <StackPanel Margin="0,4,0,0">
-                        <CheckBox Content="{CommonControls:Localize DeviceQuantization}" IsChecked="{Binding ExecutionOptions.IsDeviceQuantizationEnabled}"/>
-                        <TextBlock Text="{CommonControls:Localize DeviceQuantizationMessage}" FontSize="11" FontStyle="Italic" Opacity=".6" Margin="22,0,0,0"/>
-                    </StackPanel>
-                </StackPanel>
-            </GroupBox>
-        </StackPanel>
-
-
-        <!--LlamaCpp-->
-        <DockPanel DockPanel.Dock="Top" Visibility="{Binding Backend, Converter={StaticResource EnumToVisibilityConverter}, ConverterParameter=LlamaCpp}" >
-
-            <!--Memory-->
-            <GroupBox DockPanel.Dock="Top" Header="{CommonControls:Localize Memory}" Margin="0, 0, 0, 0" Padding="5,2,5,5">
-                <StackPanel>
-                    <UniformGrid Columns="3">
-                        <StackPanel>
-                            <TextBlock Text="{CommonControls:Localize Threads}" Style="{StaticResource FieldTextBlockStyle}"/>
-                            <TextBox Text="{Binding ExecutionOptions.Threads}" ToolTip="{CommonControls:Localize ToolTip_Threads}" ToolTipService.InitialShowDelay="200" ToolTipService.Placement="Bottom"/>
+                        <StackPanel VerticalAlignment="Top">
+                            <UniformGrid Columns="3">
+                                <StackPanel Margin="0,0,4,0">
+                                    <TextBlock Text="{CommonControls:Localize Threads}" Style="{StaticResource FieldTextBlockStyle}"/>
+                                    <TextBox Text="{Binding ExecutionOptions.Threads, UpdateSourceTrigger=PropertyChanged}" ToolTip="{CommonControls:Localize ToolTip_Threads}" ToolTipService.InitialShowDelay="200" ToolTipService.Placement="Bottom"/>
+                                </StackPanel>
+                                <StackPanel Margin="0,0,4,0">
+                                    <TextBlock Text="{CommonControls:Localize GpuLayers}" Style="{StaticResource FieldTextBlockStyle}"/>
+                                    <TextBox Text="{Binding ExecutionOptions.GpuLayers, UpdateSourceTrigger=PropertyChanged}" ToolTip="{CommonControls:Localize ToolTip_GpuLayers}" ToolTipService.InitialShowDelay="200" ToolTipService.Placement="Bottom"/>
+                                </StackPanel>
+                                <StackPanel>
+                                    <TextBlock Text="{CommonControls:Localize ContextSize}" Style="{StaticResource FieldTextBlockStyle}"/>
+                                    <TextBox Text="{Binding ExecutionOptions.ContextSize, UpdateSourceTrigger=PropertyChanged}" ToolTip="{CommonControls:Localize ToolTip_ContextSize}" ToolTipService.InitialShowDelay="200" ToolTipService.Placement="Bottom"/>
+                                </StackPanel>
+                            </UniformGrid>
+                            <CheckBox Content="{CommonControls:Localize CacheOffload}" IsChecked="{Binding ExecutionOptions.IsCacheOffloadEnabled}" ToolTip="{CommonControls:Localize ToolTip_CacheOffload}" ToolTipService.InitialShowDelay="200" ToolTipService.Placement="Bottom" Margin="0,6,0,0"/>
                         </StackPanel>
-                        <StackPanel >
-                            <TextBlock Text="{CommonControls:Localize GpuLayers}" Style="{StaticResource FieldTextBlockStyle}"/>
-                            <TextBox Text="{Binding ExecutionOptions.GpuLayers}" ToolTip="{CommonControls:Localize ToolTip_GpuLayers}" ToolTipService.InitialShowDelay="200" ToolTipService.Placement="Bottom"/>
+                    </DockPanel>
+                </Border>
+                <Border Style="{StaticResource WizardSection}">
+                    <DockPanel>
+                        <StackPanel Style="{StaticResource WizardSectionHeader}">
+                            <TextBlock Text="{CommonControls:Localize FlashAttention}" FontWeight="SemiBold" FontSize="13"/>
+                            <TextBlock Text="{CommonControls:Localize ExecutionFlashAttentionDescription}" FontSize="11" Opacity=".7" TextWrapping="Wrap"/>
                         </StackPanel>
-                        <StackPanel>
-                            <TextBlock Text="{CommonControls:Localize ContextSize}" Style="{StaticResource FieldTextBlockStyle}"/>
-                            <TextBox Text="{Binding ExecutionOptions.ContextSize}" ToolTip="{CommonControls:Localize ToolTip_ContextSize}" ToolTipService.InitialShowDelay="200" ToolTipService.Placement="Bottom"/>
-                        </StackPanel>
-                    </UniformGrid>
-                    <StackPanel Margin="0,6,0,0">
-                        <CheckBox Content="{CommonControls:Localize CacheOffload}" IsChecked="{Binding ExecutionOptions.IsCacheOffloadEnabled}" ToolTip="{CommonControls:Localize ToolTip_CacheOffload}" ToolTipService.InitialShowDelay="200" ToolTipService.Placement="Bottom"/>
-                    </StackPanel>
-                </StackPanel>
-            </GroupBox>
-
-            <!--Flash Attention-->
-            <GroupBox Header="{CommonControls:Localize FlashAttention}" Margin="0, 10, 0, 0" Padding="5">
-                <UniformGrid Columns="3">
-                    <ComboBox ItemsSource="{Binding Source={StaticResource AutoOption}}" SelectedItem="{Binding ExecutionOptions.TextEncoderFlashAttention}" Style="{StaticResource EnumComboBox}"/>
-                </UniformGrid>
-            </GroupBox>
-        </DockPanel>
-
-
-        <!--StableDiffusionCpp-->
-        <StackPanel DockPanel.Dock="Top" Visibility="{Binding Backend, Converter={StaticResource EnumToVisibilityConverter}, ConverterParameter=StableDiffusionCpp}">
-
-            <!--Memory-->
-            <GroupBox Header="{CommonControls:Localize Memory}" Margin="0, 0, 0, 0" Padding="5,2,5,5">
-                <UniformGrid Columns="2">
-                    <StackPanel>
-                        <StackPanel>
-                            <TextBlock Text="{CommonControls:Localize WeightType}" Style="{StaticResource FieldTextBlockStyle}"/>
-                            <ComboBox ItemsSource="{Binding WeightTypes}" SelectedItem="{Binding ExecutionOptions.WeightType}" Style="{StaticResource EnumComboBox}" ToolTip="{CommonControls:Localize ToolTip_WeightType}" ToolTipService.InitialShowDelay="200" ToolTipService.Placement="Bottom"/>
-                        </StackPanel>
-                        <StackPanel>
-                            <TextBlock Text="{CommonControls:Localize MemoryReserveGB}" Style="{StaticResource FieldTextBlockStyle}"/>
-                            <TextBox Text="{Binding ExecutionOptions.MemoryReserve}"/>
-                        </StackPanel>
-                    </StackPanel>
-                    <StackPanel Margin="16, 18, 0, 0">
-                        <CheckBox Content="{CommonControls:Localize SegmentPrefetch}" IsChecked="{Binding ExecutionOptions.IsPrefetchEnabled}"/>
-                        <CheckBox Content="{CommonControls:Localize SegmentedCompute}" IsChecked="{Binding ExecutionOptions.IsSegmentedComputeEnabled}"/>
-                    </StackPanel>
-                </UniformGrid>
-            </GroupBox>
-
-            <!--Flash Attention-->
-            <GroupBox Header="{CommonControls:Localize FlashAttention}" Margin="0, 10, 0, 0" Padding="5">
-                <StackPanel>
-                    <UniformGrid Columns="5">
-                        <StackPanel>
-                            <TextBlock Text="" Style="{StaticResource FieldTextBlockStyle}"/>
-                            <ComboBox ItemsSource="{Binding Source={StaticResource AutoOption}}" SelectedItem="{Binding SelectedFlashAttention}" Style="{StaticResource EnumComboBox}"/>
-                        </StackPanel>
-                        <StackPanel Margin="4,0,0,0">
-                            <TextBlock Text="{CommonControls:Localize Diffusion}" Style="{StaticResource FieldTextBlockStyle}"/>
-                            <ComboBox ItemsSource="{Binding Source={StaticResource AutoOption}}" SelectedItem="{Binding ExecutionOptions.DiffusionFlashAttention}" Style="{StaticResource EnumComboBox}"/>
-                        </StackPanel>
-                        <StackPanel Margin="4,0,0,0">
-                            <TextBlock Text="{CommonControls:Localize AutoEncoder}" Style="{StaticResource FieldTextBlockStyle}"/>
-                            <ComboBox ItemsSource="{Binding Source={StaticResource AutoOption}}" SelectedItem="{Binding ExecutionOptions.AutoEncoderFlashAttention}" Style="{StaticResource EnumComboBox}"/>
-                        </StackPanel>
-                        <StackPanel Margin="4,0,0,0">
-                            <TextBlock Text="{CommonControls:Localize TextEncoder}" Style="{StaticResource FieldTextBlockStyle}"/>
+                        <UniformGrid Columns="3" VerticalAlignment="Top">
                             <ComboBox ItemsSource="{Binding Source={StaticResource AutoOption}}" SelectedItem="{Binding ExecutionOptions.TextEncoderFlashAttention}" Style="{StaticResource EnumComboBox}"/>
-                        </StackPanel>
-                        <StackPanel Margin="4,0,0,0">
-                            <TextBlock Text="{CommonControls:Localize ControlNet}" Style="{StaticResource FieldTextBlockStyle}"/>
-                            <ComboBox ItemsSource="{Binding Source={StaticResource AutoOption}}" SelectedItem="{Binding ExecutionOptions.ControlNetFlashAttention}" Style="{StaticResource EnumComboBox}"/>
-                        </StackPanel>
-                    </UniformGrid>
-                    <CheckBox Content="{CommonControls:Localize EnableSageAttention}" IsChecked="{Binding ExecutionOptions.IsSageAttentionEnabled}"  Margin="0,6,0,0"/>
+                        </UniformGrid>
+                    </DockPanel>
+                </Border>
                 </StackPanel>
-            </GroupBox>
 
-            <!--Conv-Direct-->
-            <GroupBox Header="{CommonControls:Localize ConvDirect}" Margin="0, 10, 0, 0" Padding="5">
-                <UniformGrid Columns="5">
-                    <StackPanel>
-                        <TextBlock Text="" Style="{StaticResource FieldTextBlockStyle}"/>
-                        <ComboBox ItemsSource="{Binding Source={StaticResource AutoOption}}" SelectedItem="{Binding SelectedConvDirect}" Style="{StaticResource EnumComboBox}"/>
-                    </StackPanel>
-                    <StackPanel Margin="4,0,0,0">
-                        <TextBlock Text="{CommonControls:Localize Diffusion}" Style="{StaticResource FieldTextBlockStyle}"/>
-                        <ComboBox ItemsSource="{Binding Source={StaticResource AutoOption}}" SelectedItem="{Binding ExecutionOptions.DiffusionConvDirect}" Style="{StaticResource EnumComboBox}"/>
-                    </StackPanel>
-                    <StackPanel Margin="4,0,0,0">
-                        <TextBlock Text="{CommonControls:Localize AutoEncoder}" Style="{StaticResource FieldTextBlockStyle}"/>
-                        <ComboBox ItemsSource="{Binding Source={StaticResource AutoOption}}" SelectedItem="{Binding ExecutionOptions.AutoEncoderConvDirect}" Style="{StaticResource EnumComboBox}"/>
-                    </StackPanel>
-                    <StackPanel Margin="4,0,0,0">
-                        <TextBlock Text="{CommonControls:Localize TextEncoder}" Style="{StaticResource FieldTextBlockStyle}"/>
-                        <ComboBox ItemsSource="{Binding Source={StaticResource AutoOption}}" SelectedItem="{Binding ExecutionOptions.TextEncoderConvDirect}" Style="{StaticResource EnumComboBox}"/>
-                    </StackPanel>
-                    <StackPanel Margin="4,0,0,0">
-                        <TextBlock Text="{CommonControls:Localize ControlNet}" Style="{StaticResource FieldTextBlockStyle}"/>
-                        <ComboBox ItemsSource="{Binding Source={StaticResource AutoOption}}" SelectedItem="{Binding ExecutionOptions.ControlNetConvDirect}" Style="{StaticResource EnumComboBox}"/>
-                    </StackPanel>
-                </UniformGrid>
-            </GroupBox>
-
-            <!--CPU Execution-->
-            <GroupBox Header="{CommonControls:Localize CPUExecution}" Margin="0, 10, 0, 0" Padding="5">
-                <UniformGrid Columns="3">
-                    <CheckBox Content="{CommonControls:Localize AutoEncoder}" IsChecked="{Binding ExecutionOptions.IsAutoEncoderCpuEnabled}"/>
-                    <CheckBox Content="{CommonControls:Localize TextEncoder}" IsChecked="{Binding ExecutionOptions.IsTextEncoderCpuEnabled}" HorizontalAlignment="Center"/>
-                    <CheckBox Content="{CommonControls:Localize ControlNet}" IsChecked="{Binding ExecutionOptions.IsControlNetCpuEnabled}" HorizontalAlignment="Right"/>
-                </UniformGrid>
-            </GroupBox>
-        </StackPanel>
-
-
-        <!--AudioCpp-->
-        <StackPanel DockPanel.Dock="Top" Visibility="{Binding Backend, Converter={StaticResource EnumToVisibilityConverter}, ConverterParameter=AudioCpp}">
-            <UniformGrid Columns="2">
-                <StackPanel>
-                    <TextBlock Text="{CommonControls:Localize WeightType}" Style="{StaticResource FieldTextBlockStyle}"/>
-                    <ComboBox ItemsSource="{Binding WeightTypes}" SelectedItem="{Binding ExecutionOptions.WeightType}" Style="{StaticResource EnumComboBox}" ToolTip="{CommonControls:Localize ToolTip_WeightType}" ToolTipService.InitialShowDelay="200" ToolTipService.Placement="Bottom"/>
+                <!--StableDiffusionCpp-->
+                <StackPanel Visibility="{Binding Backend, Converter={StaticResource EnumToVisibilityConverter}, ConverterParameter=StableDiffusionCpp}">
+                <Border Style="{StaticResource WizardSection}">
+                    <DockPanel>
+                        <StackPanel Style="{StaticResource WizardSectionHeader}">
+                            <TextBlock Text="{CommonControls:Localize Memory}" FontWeight="SemiBold" FontSize="13"/>
+                            <TextBlock Text="{CommonControls:Localize ExecutionMemoryDescription}" FontSize="11" Opacity=".7" TextWrapping="Wrap"/>
+                        </StackPanel>
+                        <StackPanel VerticalAlignment="Top">
+                            <UniformGrid Columns="2">
+                                <StackPanel>
+                                <TextBlock Text="{CommonControls:Localize WeightType}" Style="{StaticResource FieldTextBlockStyle}"/>
+                                <ComboBox ItemsSource="{Binding WeightTypes}" SelectedItem="{Binding ExecutionOptions.WeightType}" Style="{StaticResource EnumComboBox}" ToolTip="{CommonControls:Localize ToolTip_WeightType}" ToolTipService.InitialShowDelay="200" ToolTipService.Placement="Bottom"/>
+                            </StackPanel>
+                                <StackPanel Margin="4,0,0,0">
+                                    <TextBlock Text="{CommonControls:Localize MemoryReserveGB}" Style="{StaticResource FieldTextBlockStyle}"/>
+                                    <TextBox Text="{Binding ExecutionOptions.MemoryReserve, UpdateSourceTrigger=PropertyChanged}"/>
+                                </StackPanel>
+                            </UniformGrid>
+                            <StackPanel Orientation="Horizontal" Margin="0,6,0,0">
+                                <CheckBox Content="{CommonControls:Localize SegmentPrefetch}" IsChecked="{Binding ExecutionOptions.IsPrefetchEnabled}" Margin="0,0,20,0"/>
+                                <CheckBox Content="{CommonControls:Localize SegmentedCompute}" IsChecked="{Binding ExecutionOptions.IsSegmentedComputeEnabled}"/>
+                            </StackPanel>
+                        </StackPanel>
+                    </DockPanel>
+                </Border>
+                <Border Style="{StaticResource WizardSection}">
+                    <DockPanel>
+                        <StackPanel Style="{StaticResource WizardSectionHeader}">
+                            <TextBlock Text="{CommonControls:Localize FlashAttention}" FontWeight="SemiBold" FontSize="13"/>
+                            <TextBlock Text="{CommonControls:Localize ExecutionFlashAttentionDescription}" FontSize="11" Opacity=".7" TextWrapping="Wrap"/>
+                        </StackPanel>
+                        <StackPanel VerticalAlignment="Top">
+                            <UniformGrid Columns="5">
+                            <StackPanel Margin="0,0,4,0">
+                                <TextBlock Text="{CommonControls:Localize AllParts}" Style="{StaticResource FieldTextBlockStyle}" FontWeight="SemiBold"/>
+                                <ComboBox ItemsSource="{Binding Source={StaticResource AutoOption}}" SelectedItem="{Binding SelectedFlashAttention}" Style="{StaticResource EnumComboBox}"/>
+                            </StackPanel>
+                            <StackPanel Margin="0,0,4,0">
+                                <TextBlock Text="{CommonControls:Localize Diffusion}" Style="{StaticResource FieldTextBlockStyle}"/>
+                                <ComboBox ItemsSource="{Binding Source={StaticResource AutoOption}}" SelectedItem="{Binding ExecutionOptions.DiffusionFlashAttention}" Style="{StaticResource EnumComboBox}"/>
+                            </StackPanel>
+                            <StackPanel Margin="0,0,4,0">
+                                <TextBlock Text="{CommonControls:Localize AutoEncoder}" Style="{StaticResource FieldTextBlockStyle}"/>
+                                <ComboBox ItemsSource="{Binding Source={StaticResource AutoOption}}" SelectedItem="{Binding ExecutionOptions.AutoEncoderFlashAttention}" Style="{StaticResource EnumComboBox}"/>
+                            </StackPanel>
+                            <StackPanel Margin="0,0,4,0">
+                                <TextBlock Text="{CommonControls:Localize TextEncoder}" Style="{StaticResource FieldTextBlockStyle}"/>
+                                <ComboBox ItemsSource="{Binding Source={StaticResource AutoOption}}" SelectedItem="{Binding ExecutionOptions.TextEncoderFlashAttention}" Style="{StaticResource EnumComboBox}"/>
+                            </StackPanel>
+                            <StackPanel Margin="0,0,4,0">
+                                <TextBlock Text="{CommonControls:Localize ControlNet}" Style="{StaticResource FieldTextBlockStyle}"/>
+                                <ComboBox ItemsSource="{Binding Source={StaticResource AutoOption}}" SelectedItem="{Binding ExecutionOptions.ControlNetFlashAttention}" Style="{StaticResource EnumComboBox}"/>
+                            </StackPanel>
+                            </UniformGrid>
+                            <CheckBox Content="{CommonControls:Localize EnableSageAttention}" IsChecked="{Binding ExecutionOptions.IsSageAttentionEnabled}" Margin="0,6,0,0"/>
+                        </StackPanel>
+                    </DockPanel>
+                </Border>
+                <Border Style="{StaticResource WizardSection}">
+                    <DockPanel>
+                        <StackPanel Style="{StaticResource WizardSectionHeader}">
+                            <TextBlock Text="{CommonControls:Localize ConvDirect}" FontWeight="SemiBold" FontSize="13"/>
+                            <TextBlock Text="{CommonControls:Localize ExecutionConvDirectDescription}" FontSize="11" Opacity=".7" TextWrapping="Wrap"/>
+                        </StackPanel>
+                        <UniformGrid Columns="5" VerticalAlignment="Top">
+                            <StackPanel Margin="0,0,4,0">
+                                <TextBlock Text="{CommonControls:Localize AllParts}" Style="{StaticResource FieldTextBlockStyle}" FontWeight="SemiBold"/>
+                                <ComboBox ItemsSource="{Binding Source={StaticResource AutoOption}}" SelectedItem="{Binding SelectedConvDirect}" Style="{StaticResource EnumComboBox}"/>
+                            </StackPanel>
+                            <StackPanel Margin="0,0,4,0">
+                                <TextBlock Text="{CommonControls:Localize Diffusion}" Style="{StaticResource FieldTextBlockStyle}"/>
+                                <ComboBox ItemsSource="{Binding Source={StaticResource AutoOption}}" SelectedItem="{Binding ExecutionOptions.DiffusionConvDirect}" Style="{StaticResource EnumComboBox}"/>
+                            </StackPanel>
+                            <StackPanel Margin="0,0,4,0">
+                                <TextBlock Text="{CommonControls:Localize AutoEncoder}" Style="{StaticResource FieldTextBlockStyle}"/>
+                                <ComboBox ItemsSource="{Binding Source={StaticResource AutoOption}}" SelectedItem="{Binding ExecutionOptions.AutoEncoderConvDirect}" Style="{StaticResource EnumComboBox}"/>
+                            </StackPanel>
+                            <StackPanel Margin="0,0,4,0">
+                                <TextBlock Text="{CommonControls:Localize TextEncoder}" Style="{StaticResource FieldTextBlockStyle}"/>
+                                <ComboBox ItemsSource="{Binding Source={StaticResource AutoOption}}" SelectedItem="{Binding ExecutionOptions.TextEncoderConvDirect}" Style="{StaticResource EnumComboBox}"/>
+                            </StackPanel>
+                            <StackPanel Margin="0,0,4,0">
+                                <TextBlock Text="{CommonControls:Localize ControlNet}" Style="{StaticResource FieldTextBlockStyle}"/>
+                                <ComboBox ItemsSource="{Binding Source={StaticResource AutoOption}}" SelectedItem="{Binding ExecutionOptions.ControlNetConvDirect}" Style="{StaticResource EnumComboBox}"/>
+                            </StackPanel>
+                        </UniformGrid>
+                    </DockPanel>
+                </Border>
+                <Border Style="{StaticResource WizardSection}">
+                    <DockPanel>
+                        <StackPanel Style="{StaticResource WizardSectionHeader}">
+                            <TextBlock Text="{CommonControls:Localize CPUExecution}" FontWeight="SemiBold" FontSize="13"/>
+                            <TextBlock Text="{CommonControls:Localize ExecutionCpuDescription}" FontSize="11" Opacity=".7" TextWrapping="Wrap"/>
+                        </StackPanel>
+                        <UniformGrid Columns="3" VerticalAlignment="Top">
+                            <CheckBox Content="{CommonControls:Localize AutoEncoder}" IsChecked="{Binding ExecutionOptions.IsAutoEncoderCpuEnabled}"/>
+                            <CheckBox Content="{CommonControls:Localize TextEncoder}" IsChecked="{Binding ExecutionOptions.IsTextEncoderCpuEnabled}"/>
+                            <CheckBox Content="{CommonControls:Localize ControlNet}" IsChecked="{Binding ExecutionOptions.IsControlNetCpuEnabled}"/>
+                        </UniformGrid>
+                    </DockPanel>
+                </Border>
                 </StackPanel>
-            </UniformGrid>
-        </StackPanel>
 
+                <!--AudioCpp-->
+                <StackPanel Visibility="{Binding Backend, Converter={StaticResource EnumToVisibilityConverter}, ConverterParameter=AudioCpp}">
+                <Border Style="{StaticResource WizardSection}">
+                    <DockPanel>
+                        <StackPanel Style="{StaticResource WizardSectionHeader}">
+                            <TextBlock Text="{CommonControls:Localize Memory}" FontWeight="SemiBold" FontSize="13"/>
+                            <TextBlock Text="{CommonControls:Localize ExecutionMemoryDescription}" FontSize="11" Opacity=".7" TextWrapping="Wrap"/>
+                        </StackPanel>
+                        <UniformGrid Columns="2" VerticalAlignment="Top">
+                            <StackPanel>
+                                <TextBlock Text="{CommonControls:Localize WeightType}" Style="{StaticResource FieldTextBlockStyle}"/>
+                                <ComboBox ItemsSource="{Binding WeightTypes}" SelectedItem="{Binding ExecutionOptions.WeightType}" Style="{StaticResource EnumComboBox}" ToolTip="{CommonControls:Localize ToolTip_WeightType}" ToolTipService.InitialShowDelay="200" ToolTipService.Placement="Bottom"/>
+                            </StackPanel>
+                        </UniformGrid>
+                    </DockPanel>
+                </Border>
+                </StackPanel>
+        </StackPanel>
     </DockPanel>
 </CommonControls:DialogControl>

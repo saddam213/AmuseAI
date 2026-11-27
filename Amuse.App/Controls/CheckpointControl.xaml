@@ -127,6 +127,12 @@
 
             </DockPanel>
 
+            <!--MainFile-->
+            <StackPanel DockPanel.Dock="Bottom" Margin="0,2,0,0" Visibility="{Binding Checkpoint.Type, Converter={StaticResource EnumToVisibilityConverter}, ConverterParameter=OnlineFolder|LocalFolder}">
+                <TextBlock Text="{CommonControls:Localize MainFile}" Style="{StaticResource FieldTextBlockStyle}"/>
+                <ComboBox ItemsSource="{Binding MainFiles}" SelectedItem="{Binding Checkpoint.MainFile}" Height="25"/>
+            </StackPanel>
+
             <DockPanel Visibility="{Binding Checkpoint.Type, Converter={StaticResource EnumToVisibilityConverter}, ConverterParameter=OnlineFolder|OnlineFile}">
                 <TextBlock DockPanel.Dock="Top" Text="{CommonControls:Localize DownloadFiles}" Style="{StaticResource FieldTextBlockStyle}"/>
                 <TextBox Text="{Binding Checkpoint.DownloadFiles, Converter={StaticResource StringArrayConverter}}" AcceptsReturn="True" VerticalScrollBarVisibility="Visible" />

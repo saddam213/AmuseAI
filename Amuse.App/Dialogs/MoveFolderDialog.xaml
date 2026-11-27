@@ -8,13 +8,13 @@
         mc:Ignorable="d"
         MinWidth="600"
         MaxWidth="600"
-        Icon="{DynamicResource ImageIcon}"
+        Icon="/Images/Icon.ico"
         Style="{StaticResource {x:Type CommonControls:DialogControl}}">
     <DockPanel DataContext="{Binding RelativeSource={RelativeSource AncestorType={x:Type local:MoveFolderDialog}}}"  Margin="15, 15, 15, 10">
 
         <StackPanel DockPanel.Dock="Top" VerticalAlignment="Bottom" Margin="0,0,0,4">
             <StackPanel IsEnabled="{Binding IsMoving, Converter={StaticResource InverseBoolConverter}}">
-                <TextBlock Text="{CommonControls:Localize Directory}" Style="{StaticResource FieldTextBlockStyle}"/>
+                <TextBlock Text="{CommonControls:Localize DestinationFolder}" Style="{StaticResource FieldTextBlockStyle}"/>
                 <CommonControls:FilePickerTextBox FileName="{Binding UserDirectory, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" IsFolderPicker="True" IsRequired="True" />
             </StackPanel>
 
@@ -22,6 +22,8 @@
                 <TextBlock DockPanel.Dock="Left" Text="{CommonControls:Localize NewLocation}" Opacity=".78" Margin="0,0,3,0" />
                 <TextBlock Text="{Binding DestinationDirectory}" FontSize="13" FontWeight="DemiBold" Opacity=".9"/>
             </DockPanel>
+
+            <TextBlock Text="{Binding DestinationError}" Foreground="IndianRed" TextWrapping="Wrap" FontSize="11" Margin="0,0,0,8" Visibility="{Binding DestinationError, Converter={StaticResource NullVisibilityConverter}}"/>
 
             <CommonControls:ProgressElement Progress="{Binding Progress}" Height="22" />
 

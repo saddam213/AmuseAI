@@ -7,6 +7,7 @@ using Microsoft.Extensions.Logging;
 using Serilog;
 using System;
 using System.Diagnostics;
+using System.Globalization;
 using System.IO;
 using System.Net.Http.Json;
 using System.Reflection;
@@ -46,6 +47,9 @@ namespace Amuse.App
         private static string _directoryLogs;
         private static IHttpService _httpService;
         private readonly Settings _settings;
+        private string _startupLanguage;
+        private CultureInfo _startupCulture;
+        private bool _isLanguageNoticeSuppressed;
 
         public App()
         {
@@ -75,6 +79,7 @@ namespace Amuse.App
 
             // Add TensorStack.WPF
             _settings = LoadSettingsFile();
+            ApplyLanguage();
             _settings.PropertyChanged += async (s, e) => await OnSettingsChanged(e.PropertyName);
             builder.Services.AddWPFCommon<MainWindow, Settings>(_settings);
 
@@ -85,12 +90,16 @@ namespace Amuse.App
             builder.Services.AddSingleton<IUpscaleService, UpscaleService>();
             builder.Services.AddSingleton<IExtractService, ExtractService>();
             builder.Services.AddSingleton<IGenerateService, GenerateService>();
+            builder.Services.AddSingleton<ILanguageService, LanguageService>();
+            builder.Services.AddSingleton<IAudioService, AudioService>();
             builder.Services.AddSingleton<IEnvironmentService, EnvironmentService>();
             builder.Services.AddSingleton<IInterpolationService, InterpolationService>();
             builder.Services.AddSingleton<IModelDownloadService, ModelDownloadService>();
+            builder.Services.AddSingleton<IModelAccessService, ModelAccessService>();
             builder.Services.AddSingleton<IMigrationService, MigrationService>();
             builder.Services.AddSingleton<IHttpService, HttpService>();
             builder.Services.AddSingleton<IPreviewService, PreviewService>();
+            builder.Services.AddSingleton<IMcpService, McpService>();
             builder.Services.AddSingleton<IToolService, ToolService>();
 
             // Build
@@ -147,9 +156,90 @@ namespace Amuse.App
         /// </summary>
         private static Settings LoadSettingsFile()
         {
+            CopyStaticData();
             var configuration = SettingsManager.Load();
             configuration.Initialize(_directoryData).Wait();
             return configuration;
+        }
+
+
+        /// <summary>
+        /// Copies the static data shipped in the install directory (default settings and templates) to the data directory.
+        /// The installer runs as an administrator and only seeds that account's data directory, so every other user gets their copy here.
+        /// Settings.default.json is moved to Settings.backup.json once merged, so either file being current means this version was already applied.
+        /// </summary>
+        private static void CopyStaticData()
+        {
+            if (!IsApplicationInstalled())
+                return;
+
+            CopyStaticFile("Settings.default.json", "Settings.backup.json");
+            CopyStaticFile("Templates.json");
+        }
+
+
+        /// <summary>
+        /// Copies a static file from the install directory to the data directory when it is missing or older than the installed file.
+        /// </summary>
+        /// <param name="relativePath">The file path, relative to both the install and data directories.</param>
+        /// <param name="appliedFileName">The name of a data directory file that also marks the installed file as applied.</param>
+        private static void CopyStaticFile(string relativePath, string appliedFileName = null)
+        {
+            var sourceFile = Path.Combine(_directoryBase, relativePath);
+            var destinationFile = Path.Combine(_directoryData, relativePath);
+            try
+            {
+                if (!File.Exists(sourceFile))
+                    return;
+
+                var sourceTime = File.GetLastWriteTimeUtc(sourceFile);
+                if (IsFileCurrent(destinationFile, sourceTime))
+                    return;
+
+                if (appliedFileName != null && IsFileCurrent(Path.Combine(_directoryData, appliedFileName), sourceTime))
+                    return;
+
+                Directory.CreateDirectory(Path.GetDirectoryName(destinationFile));
+                File.Copy(sourceFile, destinationFile, true);
+                Log.Logger.Information("[CopyStaticData] Copied static file, File: {File}", relativePath);
+            }
+            catch (Exception ex)
+            {
+                Log.Logger.Error(ex, "[CopyStaticData] Failed to copy static file, Source: {Source}, Destination: {Destination}", sourceFile, destinationFile);
+            }
+        }
+
+
+        /// <summary>
+        /// Determines whether a file exists and was written at or after the specified time.
+        /// </summary>
+        /// <param name="filePath">The file path.</param>
+        /// <param name="sourceTime">The last write time of the installed file, in UTC.</param>
+        private static bool IsFileCurrent(string filePath, DateTime sourceTime)
+        {
+            return File.Exists(filePath) && File.GetLastWriteTimeUtc(filePath) >= sourceTime;
+        }
+
+
+        /// <summary>
+        /// Applies the saved UI language before any view is created, an unset or unknown language keeps the system language.
+        /// </summary>
+        private void ApplyLanguage()
+        {
+            _startupCulture = CultureInfo.CurrentUICulture;
+            if (string.IsNullOrEmpty(_settings.UILanguage))
+                return;
+
+            try
+            {
+                LocalizationService.Instance.SetLanguage(_settings.UILanguage);
+                _startupLanguage = _settings.UILanguage;
+                _splashscreen.UpdateTitle();
+            }
+            catch (CultureNotFoundException ex)
+            {
+                Log.Logger.Warning(ex, "[ApplyLanguage] Unknown UI language, Language: {Language}", _settings.UILanguage);
+            }
         }
 
 
@@ -177,13 +267,13 @@ namespace Amuse.App
                 Log.Logger.Information($"[AppStartup] Device found, Vendor: {device.Vendor}, Name: {device.Name}, DeviceId: {device.DeviceId}, PCIBusId: {device.PCIBusId}, DeviceType: {device.DeviceType}, HardwareLUID: {device.HardwareLUID}, Memory: {device.Memory}MB");
             }
 
+            // Run Migrations, before the main window so the app setup sees the environments already deleted
+            await migrationService.RunAutoMigrationsAsync();
+
             // Open Main Window
             MainWindow = _appHost.Services.GetMainWindow();
             MainWindow.Show();
             _splashscreen.Close();
-
-            // Run Migrations
-            await migrationService.RunAutoMigrationsAsync();
             Log.Logger.Information($"[AppStartup] Application started.");
         }
 
@@ -209,6 +299,7 @@ namespace Amuse.App
                 // Run each step even if an earlier one fails, so settings are always saved
                 await RunShutdownStepAsync("Cancel", () => _cancellationTokenSource.CancelAsync());
                 await RunShutdownStepAsync("SaveSettings", () => _settings.SaveAsync());
+                await RunShutdownStepAsync("StopMcpServers", () => _appHost.Services.GetService<IMcpService>().DisconnectAsync());
                 await RunShutdownStepAsync("StopHost", () => _appHost.StopAsync());
                 DeregisterExceptionHandlers();
                 _appMutex.WaitOne();
@@ -476,6 +567,39 @@ namespace Amuse.App
             {
                 await OnThemeChangedAsync();
             }
+            else if (propertyName.Equals(nameof(Settings.UILanguage)))
+            {
+                await OnLanguageChangedAsync();
+            }
+        }
+
+
+        /// <summary>
+        /// Called when the UI language setting changes, saves settings and tells the user some text only updates after a restart.
+        /// When no language was saved the app runs in the system language, choosing that language is not treated as a change.
+        /// </summary>
+        private async Task OnLanguageChangedAsync()
+        {
+            try
+            {
+                if (string.IsNullOrEmpty(_settings.UILanguage))
+                    return;
+
+                await _settings.SaveAsync();
+                Log.Logger.Information("[OnLanguageChanged] Language changed, Language: {Language}, Active: {Active}", _settings.UILanguage, _startupLanguage ?? _startupCulture?.Name);
+                if (IsStartupLanguage(_settings.UILanguage))
+                    return;
+
+                // First Run, the setup changes the language without asking for a restart
+                if (_isLanguageNoticeSuppressed)
+                    return;
+
+                await DialogService.ShowMessageAsync(AppDefault.LanguageChangedTitle, AppDefault.LanguageChangedMessage, MessageDialogType.Ok, MessageBoxIconType.Info, MessageBoxStyleType.Info);
+            }
+            catch (Exception ex)
+            {
+                Log.Logger.Error(ex, "[OnLanguageChanged] An exception occurred handling the language change.");
+            }
         }
 
 
@@ -500,6 +624,46 @@ namespace Amuse.App
             catch (Exception ex)
             {
                 Log.Logger.Error(ex, "[OnThemeChanged] An exception occurred handling the theme change.");
+            }
+        }
+
+
+        /// <summary>
+        /// Sets whether the language restart notice is suppressed, the first run setup changes the language without asking for a restart.
+        /// </summary>
+        /// <param name="isSuppressed">if set to <c>true</c> the notice is not shown.</param>
+        public void SuppressLanguageNotice(bool isSuppressed)
+        {
+            _isLanguageNoticeSuppressed = isSuppressed;
+        }
+
+
+        /// <summary>
+        /// Determines whether a language is the one the app started in: the saved language, or with none saved the system language.
+        /// The system language is matched the way the language list picks it, its culture and parents first, then the same language.
+        /// </summary>
+        /// <param name="language">The language.</param>
+        private bool IsStartupLanguage(string language)
+        {
+            if (!string.IsNullOrEmpty(_startupLanguage))
+                return string.Equals(language, _startupLanguage, StringComparison.OrdinalIgnoreCase);
+
+            if (_startupCulture == null)
+                return false;
+
+            for (var culture = _startupCulture; !string.IsNullOrEmpty(culture.Name); culture = culture.Parent)
+            {
+                if (string.Equals(culture.Name, language, StringComparison.OrdinalIgnoreCase))
+                    return true;
+            }
+
+            try
+            {
+                return string.Equals(CultureInfo.GetCultureInfo(language).TwoLetterISOLanguageName, _startupCulture.TwoLetterISOLanguageName, StringComparison.OrdinalIgnoreCase);
+            }
+            catch (CultureNotFoundException)
+            {
+                return false;
             }
         }
 

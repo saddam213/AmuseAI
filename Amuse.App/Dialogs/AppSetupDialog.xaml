@@ -24,6 +24,9 @@
         <Style x:Key="SetupLaterButton" TargetType="{x:Type Button}" BasedOn="{StaticResource {x:Type Button}}">
             <Setter Property="Content" Value="{CommonControls:Localize Later}"/>
             <Style.Triggers>
+                <DataTrigger Binding="{Binding IsManage}" Value="True">
+                    <Setter Property="Content" Value="{CommonControls:Localize Close}"/>
+                </DataTrigger>
                 <DataTrigger Binding="{Binding IsExecuting}" Value="True">
                     <Setter Property="Content" Value="{CommonControls:Localize Cancel}"/>
                 </DataTrigger>
@@ -40,9 +43,40 @@
         <DockPanel DockPanel.Dock="Top" Margin="0,0,0,10">
             <CommonControls:FontAwesome DockPanel.Dock="Left" Size="50" Margin="0,5,0,0" Icon="f0ed" IconStyle="Light" Color="{StaticResource InfoColour}" VerticalAlignment="Top" />
             <StackPanel Margin="20,2,0,0">
-                <TextBlock Text="{CommonControls:Localize EnvironmentSetupMessage}" FontSize="16" />
-                <TextBlock Text="{CommonControls:Localize EnvironmentSetupSubMessage}" Margin="0,3,0,0" TextWrapping="Wrap" FontStyle="Italic" FontSize="11" Opacity=".8" Visibility="{Binding IsManage, Converter={StaticResource InverseBooleanToVisibilityConverter}}" />
-                <TextBlock Text="{CommonControls:Localize EnvironmentManageSubMessage}" Margin="0,3,0,0" TextWrapping="Wrap" FontStyle="Italic" FontSize="11" Opacity=".8" Visibility="{Binding IsManage, Converter={StaticResource BooleanToVisibilityConverter}}" />
+                <TextBlock FontSize="16">
+                    <TextBlock.Style>
+                        <Style TargetType="{x:Type TextBlock}" BasedOn="{StaticResource {x:Type TextBlock}}">
+                            <Setter Property="Text" Value="{CommonControls:Localize EnvironmentSetupMessage}"/>
+                            <Style.Triggers>
+                                <DataTrigger Binding="{Binding IsFirstRun}" Value="True">
+                                    <Setter Property="Text" Value="{CommonControls:Localize FirstRunSetupMessage}"/>
+                                </DataTrigger>
+                            </Style.Triggers>
+                        </Style>
+                    </TextBlock.Style>
+                </TextBlock>
+                <TextBlock Margin="0,3,0,0" TextWrapping="Wrap" FontStyle="Italic" FontSize="11" Opacity=".8">
+                    <TextBlock.Style>
+                        <Style TargetType="{x:Type TextBlock}" BasedOn="{StaticResource {x:Type TextBlock}}">
+                            <Setter Property="Text" Value="{CommonControls:Localize EnvironmentSetupSubMessage}"/>
+                            <Style.Triggers>
+                                <DataTrigger Binding="{Binding IsFirstRun}" Value="True">
+                                    <Setter Property="Text" Value="{CommonControls:Localize FirstRunSetupSubMessage}"/>
+                                </DataTrigger>
+                                <MultiDataTrigger>
+                                    <MultiDataTrigger.Conditions>
+                                        <Condition Binding="{Binding IsFirstRun}" Value="True"/>
+                                        <Condition Binding="{Binding Groups.Count}" Value="0"/>
+                                    </MultiDataTrigger.Conditions>
+                                    <Setter Property="Text" Value="{CommonControls:Localize FirstRunSetupSettingsOnlyMessage}"/>
+                                </MultiDataTrigger>
+                                <DataTrigger Binding="{Binding IsManage}" Value="True">
+                                    <Setter Property="Text" Value="{CommonControls:Localize EnvironmentManageSubMessage}"/>
+                                </DataTrigger>
+                            </Style.Triggers>
+                        </Style>
+                    </TextBlock.Style>
+                </TextBlock>
             </StackPanel>
         </DockPanel>
 
@@ -57,6 +91,9 @@
                                 <Style.Triggers>
                                     <DataTrigger Binding="{Binding IsManage}" Value="True">
                                         <Setter Property="Content" Value="{CommonControls:Localize Apply}"/>
+                                    </DataTrigger>
+                                    <DataTrigger Binding="{Binding IsSaveOnly}" Value="True">
+                                        <Setter Property="Content" Value="{CommonControls:Localize Save}"/>
                                     </DataTrigger>
                                 </Style.Triggers>
                             </Style>
@@ -93,15 +130,49 @@
             </DockPanel>
         </StackPanel>
 
+        <!--First Time Settings-->
+        <Border DockPanel.Dock="Top" Style="{StaticResource WizardSection}" Visibility="{Binding IsFirstRun, Converter={StaticResource BooleanToVisibilityConverter}}">
+            <Grid IsEnabled="{Binding IsExecuting, Converter={StaticResource InverseBoolConverter}}">
+                <Grid IsEnabled="{Binding IsComplete, Converter={StaticResource InverseBoolConverter}}">
+                    <DockPanel>
+                        <StackPanel Style="{StaticResource WizardSectionHeader}">
+                            <TextBlock Text="{CommonControls:Localize FirstRunSettings}" FontWeight="SemiBold" FontSize="13"/>
+                            <TextBlock Text="{CommonControls:Localize FirstRunSettingsMessage}" FontSize="11" Opacity=".7" TextWrapping="Wrap"/>
+                        </StackPanel>
+                        <StackPanel Margin="0,0,0,4">
+                            <DockPanel ToolTip="{CommonControls:Localize ToolTip_FirstRunModelFolder}" ToolTipService.InitialShowDelay="200">
+                                <Button DockPanel.Dock="Right" Content="{CommonControls:Localize Browse}" Command="{Binding BrowseModelDirectoryCommand}" Width="90" Height="22" VerticalAlignment="Bottom" />
+                                <StackPanel>
+                                    <TextBlock Text="{CommonControls:Localize ModelFolder}" Style="{StaticResource FieldTextBlockStyle}"/>
+                                    <TextBox Text="{Binding ModelDirectory, Mode=OneWay}" IsReadOnly="True" />
+                                </StackPanel>
+                            </DockPanel>
+                            <UniformGrid Columns="3">
+                                <StackPanel Margin="0,0,4,0">
+                                    <TextBlock Text="{CommonControls:Localize Language}" Style="{StaticResource FieldTextBlockStyle}"/>
+                                    <CommonControls:LocalizationControl UILanguage="{Binding Settings.UILanguage, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+                                </StackPanel>
+                                <StackPanel Margin="4,0,4,0" ToolTip="{CommonControls:Localize ToolTip_UIScale}" ToolTipService.InitialShowDelay="200">
+                                    <TextBlock Text="{CommonControls:Localize UIScale}" Style="{StaticResource FieldTextBlockStyle}"/>
+                                    <ComboBox ItemsSource="{Binding ScaleOptions}" SelectedValue="{Binding Settings.UIScale, Mode=TwoWay}" SelectedValuePath="Value" DisplayMemberPath="Label" />
+                                </StackPanel>
+                                <CheckBox Content="{CommonControls:Localize CheckForUpdates}" IsChecked="{Binding Settings.IsAutoUpdateEnabled}" Margin="8,20,0,0"/>
+                            </UniformGrid>
+                        </StackPanel>
+                    </DockPanel>
+                </Grid>
+            </Grid>
+        </Border>
+
         <!--Backends-->
         <ItemsControl ItemsSource="{Binding Groups}">
             <ItemsControl.ItemTemplate>
                 <DataTemplate DataType="{x:Type Common:EnvironmentSetupGroup}">
-                    <Border Background="{StaticResource ContainerBackground}" Margin="0,2" Padding="8,6">
+                    <Border Style="{StaticResource WizardSection}">
                         <DockPanel>
 
                             <!--Backend-->
-                            <StackPanel DockPanel.Dock="Left" Width="180" Margin="0,2,10,0">
+                            <StackPanel Style="{StaticResource WizardSectionHeader}">
                                 <TextBlock Text="{Binding Backend, Converter={StaticResource EnumShortNameConverter}}" FontWeight="SemiBold" FontSize="13"/>
                                 <TextBlock Text="{Binding Description}" FontSize="11" Opacity=".7" TextWrapping="Wrap" Visibility="{Binding Description, Converter={StaticResource NullOrEmptyVisibilityConverter}}"/>
                             </StackPanel>

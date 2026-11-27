@@ -7,18 +7,28 @@
              xmlns:local="clr-namespace:Amuse.App.Controls"
              xmlns:CommonControls="clr-namespace:TensorStack.WPF.Controls;assembly=TensorStack.WPF">
     <DockPanel DataContext="{Binding RelativeSource={RelativeSource AncestorType={x:Type local:ContextControl}}}">
+        <!--Add/Capture/Clear, each media add button is followed by its capture button-->
         <UniformGrid Rows="1" Height="35" DockPanel.Dock="Bottom">
-            <Button Command="{Binding AddTextCommand}">
+            <Button Command="{Binding AddTextCommand}" ToolTip="{CommonControls:Localize ImportDocument}" ToolTipService.InitialShowDelay="200">
                 <CommonControls:FontAwesome Icon="f15c"/>
             </Button>
-            <Button Command="{Binding AddImageCommand}">
+            <Button Command="{Binding AddImageCommand}" ToolTip="{CommonControls:Localize ImportImage}" ToolTipService.InitialShowDelay="200">
                 <CommonControls:FontAwesome Icon="f03e"/>
             </Button>
-            <Button Command="{Binding AddAudioCommand}">
+            <Button Command="{Binding CaptureImageCommand}" ToolTip="{CommonControls:Localize Tooltip_CaptureImage}" ToolTipService.InitialShowDelay="200">
+                <CommonControls:FontAwesome Icon="f030"/>
+            </Button>
+            <Button Command="{Binding AddAudioCommand}" ToolTip="{CommonControls:Localize ImportAudio}" ToolTipService.InitialShowDelay="200">
                 <CommonControls:FontAwesome Icon="f001"/>
             </Button>
-            <Button Command="{Binding AddVideoCommand}">
+            <Button Command="{Binding CaptureAudioCommand}" ToolTip="{CommonControls:Localize Tooltip_CaptureAudio}" ToolTipService.InitialShowDelay="200">
+                <CommonControls:FontAwesome Icon="f130"/>
+            </Button>
+            <Button Command="{Binding AddVideoCommand}" ToolTip="{CommonControls:Localize ImportVideo}" ToolTipService.InitialShowDelay="200">
                 <CommonControls:FontAwesome Icon="f008"/>
+            </Button>
+            <Button Command="{Binding CaptureVideoCommand}" ToolTip="{CommonControls:Localize Tooltip_CaptureVideo}" ToolTipService.InitialShowDelay="200">
+                <CommonControls:FontAwesome Icon="f03d"/>
             </Button>
             <Button Command="{Binding ClearCommand}" >
                 <CommonControls:FontAwesome Icon="f00d" Color="{StaticResource DangerColour}"/>
@@ -78,7 +88,24 @@
 
                             <StackPanel Margin="3">
                                 <TextBlock Text="{CommonControls:Localize Document}" Visibility="{Binding MediaType, Converter={StaticResource EnumToVisibilityConverter}, ConverterParameter=Text}"/>
-                                <TextBlock Text="{Binding MediaType}" Visibility="{Binding MediaType, Converter={StaticResource InverseEnumToVisibilityConverter}, ConverterParameter=Text}"/>
+                                <TextBlock Visibility="{Binding MediaType, Converter={StaticResource InverseEnumToVisibilityConverter}, ConverterParameter=Text}">
+                                    <TextBlock.Style>
+                                        <Style TargetType="{x:Type TextBlock}" BasedOn="{StaticResource {x:Type TextBlock}}">
+                                            <Setter Property="Text" Value="{Binding MediaType}" />
+                                            <Style.Triggers>
+                                                <DataTrigger Binding="{Binding MediaType}" Value="Image">
+                                                    <Setter Property="Text" Value="{CommonControls:Localize Image}" />
+                                                </DataTrigger>
+                                                <DataTrigger Binding="{Binding MediaType}" Value="Video">
+                                                    <Setter Property="Text" Value="{CommonControls:Localize Video}" />
+                                                </DataTrigger>
+                                                <DataTrigger Binding="{Binding MediaType}" Value="Audio">
+                                                    <Setter Property="Text" Value="{CommonControls:Localize Audio}" />
+                                                </DataTrigger>
+                                            </Style.Triggers>
+                                        </Style>
+                                    </TextBlock.Style>
+                                </TextBlock>
                                 <TextBlock Text="{Binding Filename, Converter={StaticResource FullPathToFileNameConverter}}" FontStyle="Italic" Opacity=".8"/>
                             </StackPanel>
 

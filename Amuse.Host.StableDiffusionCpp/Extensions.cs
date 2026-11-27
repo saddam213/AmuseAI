@@ -52,7 +52,9 @@ namespace Amuse.Host.StableDiffusionCpp
             };
 
 
-            if (pipelineOptions.Pipeline == PipelineType.StableDiffusionXLPipeline)
+            if (pipelineOptions.Pipeline == PipelineType.StableDiffusionPipeline
+             || pipelineOptions.Pipeline == PipelineType.LatentConsistencyPipeline
+             || pipelineOptions.Pipeline == PipelineType.StableDiffusionXLPipeline)
             {
                 return stableDiffusionOptions with
                 {
@@ -87,7 +89,8 @@ namespace Amuse.Host.StableDiffusionCpp
                     ControlNetPath = pipelineOptions.ControlNet?.Path
                 };
             }
-            if (pipelineOptions.Pipeline == PipelineType.ChromaPipeline)
+            if (pipelineOptions.Pipeline == PipelineType.ChromaPipeline
+             || pipelineOptions.Pipeline == PipelineType.PixArtPipeline)
             {
                 return stableDiffusionOptions with
                 {
@@ -137,6 +140,18 @@ namespace Amuse.Host.StableDiffusionCpp
                     VaePath = pipelineOptions.CheckpointConfig.Vae,
                     AudioVaePath = pipelineOptions.CheckpointConfig.AudioVae,
                     LlmPath = pipelineOptions.CheckpointConfig.TextEncoder,
+                    LlmVisionPath = pipelineOptions.CheckpointConfig.TextEncoder2,
+                    EmbeddingsConnectorsPath = pipelineOptions.CheckpointConfig.Connectors,
+                    DiffusionModelPath = pipelineOptions.CheckpointConfig.Transformer
+                };
+            }
+            if (pipelineOptions.Pipeline == PipelineType.HunyuanVideoPipeline)
+            {
+                return stableDiffusionOptions with
+                {
+                    VaePath = pipelineOptions.CheckpointConfig.Vae,
+                    LlmPath = pipelineOptions.CheckpointConfig.TextEncoder,
+                    T5xxlPath = pipelineOptions.CheckpointConfig.TextEncoder2,
                     DiffusionModelPath = pipelineOptions.CheckpointConfig.Transformer
                 };
             }
@@ -153,7 +168,8 @@ namespace Amuse.Host.StableDiffusionCpp
                 };
             }
             if (pipelineOptions.Pipeline == PipelineType.LensPipeline
-             || pipelineOptions.Pipeline == PipelineType.MossImagePipeline)
+             || pipelineOptions.Pipeline == PipelineType.MossImagePipeline
+             || pipelineOptions.Pipeline == PipelineType.MingImagePipeline)
             {
                 return stableDiffusionOptions with
                 {
@@ -176,6 +192,19 @@ namespace Amuse.Host.StableDiffusionCpp
                     ControlNetPath = pipelineOptions.ControlNet?.Path
                 };
             }
+            if (pipelineOptions.Pipeline == PipelineType.PH3ImagePipeline
+             || pipelineOptions.Pipeline == PipelineType.MiniMaxImagePipeline)
+            {
+                return stableDiffusionOptions with
+                {
+                    VaePath = pipelineOptions.CheckpointConfig.Vae,
+                    LlmPath = pipelineOptions.CheckpointConfig.TextEncoder,
+                    LlmVisionPath = pipelineOptions.CheckpointConfig.TextEncoder2,
+                    EmbeddingsConnectorsPath = pipelineOptions.CheckpointConfig.Connectors,
+                    DiffusionModelPath = pipelineOptions.CheckpointConfig.Transformer,
+                    ControlNetPath = pipelineOptions.ControlNet?.Path
+                };
+            }
             if (pipelineOptions.Pipeline == PipelineType.IrisPipeline)
             {
                 return stableDiffusionOptions with
@@ -193,7 +222,9 @@ namespace Amuse.Host.StableDiffusionCpp
                 };
             }
             if (pipelineOptions.Pipeline == PipelineType.Fibo2Pipeline
-             || pipelineOptions.Pipeline == PipelineType.MiniMaxImagePipeline)
+             || pipelineOptions.Pipeline == PipelineType.Krea2Pipeline
+             || pipelineOptions.Pipeline == PipelineType.MageFlowPipeline
+             || pipelineOptions.Pipeline == PipelineType.BooguImagePipeline)
             {
                 return stableDiffusionOptions with
                 {
@@ -206,12 +237,13 @@ namespace Amuse.Host.StableDiffusionCpp
             }
             if (pipelineOptions.Pipeline == PipelineType.AnimaPipeline
              || pipelineOptions.Pipeline == PipelineType.ErniePipeline
+             || pipelineOptions.Pipeline == PipelineType.Flux2Pipeline
              || pipelineOptions.Pipeline == PipelineType.Flux2KleinPipeline
              || pipelineOptions.Pipeline == PipelineType.Flux3KleinPipeline
-             || pipelineOptions.Pipeline == PipelineType.Krea2Pipeline
              || pipelineOptions.Pipeline == PipelineType.ZImagePipeline
-             || pipelineOptions.Pipeline == PipelineType.BooguImagePipeline
-             || pipelineOptions.Pipeline == PipelineType.LongCatImagePipeline)
+             || pipelineOptions.Pipeline == PipelineType.LongCatImagePipeline
+             || pipelineOptions.Pipeline == PipelineType.OvisImagePipeline
+             || pipelineOptions.Pipeline == PipelineType.SeFiImagePipeline)
             {
                 return stableDiffusionOptions with
                 {
@@ -250,6 +282,26 @@ namespace Amuse.Host.StableDiffusionCpp
 
 
         /// <summary>
+        /// Determines whether the video is generated as a chain of chunks, each starting from the last frame of the one before it.
+        /// The model must take a first frame, reference inputs and latent upscaling cannot be combined with one.
+        /// </summary>
+        /// <param name="options">The options.</param>
+        /// <param name="pipelineOptions">The pipeline options.</param>
+        internal static bool IsChunkedVideo(this GenerateVideoOptions options, PipelineLoadOptions pipelineOptions)
+        {
+            var frameRule = VideoFrameRule.Get(pipelineOptions.Pipeline);
+            if (!frameRule.IsChunkSupported)
+                return false;
+            if (pipelineOptions.ProcessType != ProcessType.TextToVideo && pipelineOptions.ProcessType != ProcessType.ImageToVideo)
+                return false;
+            if (options.LatentUpscale != LatentUpscale.None || string.IsNullOrEmpty(options.TempFileName))
+                return false;
+
+            return options.FrameChunk > 0 && ChunkedVideoGenerator.GetChunkCount(options.Frames, options.FrameChunk, frameRule) > 1;
+        }
+
+
+        /// <summary>
         /// Creates the upscale options.
         /// </summary>
         /// <param name="options">The options.</param>
@@ -279,6 +331,7 @@ namespace Amuse.Host.StableDiffusionCpp
             {
                 return upscaleOptions with
                 {
+                    UpscalerType = upscaleConfig.Pipeline == PipelineType.RelayVSRPipeline ? Pipeline.UpscalerType.RelayVSR : Pipeline.UpscalerType.SeedVR2,
                     DiffusionModelPath = upscaleConfig.DiffusionModelPath,
                     VaePath = upscaleConfig.VaePath,
                     FlashAttnMode = executionOptions is null ? null : GetFlashAttention(pipelineOptions),
@@ -334,21 +387,29 @@ namespace Amuse.Host.StableDiffusionCpp
                 Height = generateOptions.Height,
                 Strength = generateOptions.Strength,
                 ControlStrength = generateOptions.ControlNetScale,
+                ControlNetType = GetControlNetType(generateOptions.ControlType, pipelineOptions),
+                ClipSkip = generateOptions.ClipSkip > 0 ? generateOptions.ClipSkip : defaultOptions.ClipSkip,
+                CircularX = generateOptions.EnableCircularX,
+                CircularY = generateOptions.EnableCircularY,
                 Loras = GetLoraOptions(pipelineOptions.LoraAdapters, generateOptions.LoraOptions),
                 InitImage = GetInitImage(generateOptions, pipelineOptions.ProcessType),
                 RefImages = GetReferenceImages(generateOptions, pipelineOptions.ProcessType),
                 ControlImage = GetControlNetImage(generateOptions, pipelineOptions.ProcessType),
                 MaskImage = GetMaskImage(generateOptions, pipelineOptions.ProcessType),
                 Hires = hiresDefaults.GetHiresOptions(generateOptions, pipelineOptions),
+                Cache = defaultOptions.Cache.GetCacheOptions(generateOptions.CacheOptions),
                 SampleParameters = samplerDefaults with
                 {
                     SampleSteps = generateOptions.Steps,
                     TxtCfg = GetTextGuidance(generateOptions.GuidanceScale, generateOptions.GuidanceScale2, pipelineOptions.Pipeline),
                     DistilledGuidance = GetDistilledGuidance(generateOptions.GuidanceScale, generateOptions.GuidanceScale2, pipelineOptions.Pipeline),
-                    Eta = generateOptions.SchedulerOptions.Eta > 0 ? generateOptions.SchedulerOptions.Eta : samplerDefaults.Eta,
-                    FlowShift = generateOptions.SchedulerOptions.FlowShift > 0 ? generateOptions.SchedulerOptions.FlowShift : samplerDefaults.FlowShift,
-                    SampleMethod = GetSamplerType(generateOptions.SchedulerOptions),
-                    Scheduler = GetSchedulerType(generateOptions.SchedulerOptions)
+                    Eta = generateOptions.SamplerOptions.Eta > 0 ? generateOptions.SamplerOptions.Eta : samplerDefaults.Eta,
+                    FlowShift = generateOptions.SamplerOptions.FlowShift > 0 ? generateOptions.SamplerOptions.FlowShift : samplerDefaults.FlowShift,
+                    ImgCfg = generateOptions.SamplerOptions.ImageGuidance > 0 ? generateOptions.SamplerOptions.ImageGuidance : samplerDefaults.ImgCfg,
+                    ExtraSampleArgs = string.IsNullOrWhiteSpace(generateOptions.SamplerOptions.ExtraArgs) ? samplerDefaults.ExtraSampleArgs : generateOptions.SamplerOptions.ExtraArgs,
+                    CustomSigmas = generateOptions.SamplerOptions.Sigmas.IsNullOrEmpty() ? samplerDefaults.CustomSigmas : generateOptions.SamplerOptions.Sigmas,
+                    SampleMethod = GetSamplerType(generateOptions.SamplerOptions),
+                    Scheduler = GetSchedulerType(generateOptions.SamplerOptions)
                 },
                 VaeTilingParameters = defaultOptions.VaeTilingParameters with
                 {
@@ -369,7 +430,6 @@ namespace Amuse.Host.StableDiffusionCpp
         {
             var hiresDefaults = defaultOptions.Hires;
             var samplerDefaults = defaultOptions.SampleParameters;
-            var samplerHighNoiseDefaults = defaultOptions.HighNoiseSampleParameters;
             return defaultOptions with
             {
                 Seed = generateOptions.Seed,
@@ -379,37 +439,35 @@ namespace Amuse.Host.StableDiffusionCpp
                 Height = generateOptions.Height,
                 Strength = generateOptions.Strength,
                 VideoFrames = generateOptions.Frames,
+                ClipSkip = generateOptions.ClipSkip > 0 ? generateOptions.ClipSkip : defaultOptions.ClipSkip,
+                MoeBoundary = generateOptions.MoeBoundary > 0 ? generateOptions.MoeBoundary : defaultOptions.MoeBoundary,
+                CircularX = generateOptions.EnableCircularX,
+                CircularY = generateOptions.EnableCircularY,
                 Fps = (int)generateOptions.FrameRate,
                 Loras = GetLoraOptions(pipelineOptions.LoraAdapters, generateOptions.LoraOptions),
                 InitImage = GetFirstFrame(generateOptions, pipelineOptions.ProcessType),
                 EndImage = GetLastFrame(generateOptions, pipelineOptions.ProcessType),
-                ControlFrames = GetControlFrames(generateOptions, pipelineOptions.ProcessType),
+                ControlFrames = GetControlFrames(generateOptions, pipelineOptions.ProcessType, pipelineOptions.Pipeline),
                 RefImages = GetReferenceImages(generateOptions, pipelineOptions.ProcessType),
-                RefVideos = GetReferenceVideos(generateOptions, pipelineOptions.ProcessType),
+                RefVideos = GetReferenceVideos(generateOptions, pipelineOptions.ProcessType, pipelineOptions.Pipeline),
                 RefAudios = GetReferenceAudios(generateOptions, pipelineOptions.ProcessType),
                 VaceStrength = generateOptions.ControlNetScale,
                 Hires = hiresDefaults.GetHiresOptions(generateOptions, pipelineOptions),
+                Cache = defaultOptions.Cache.GetCacheOptions(generateOptions.CacheOptions),
                 SampleParameters = samplerDefaults with
                 {
                     SampleSteps = generateOptions.Steps,
                     TxtCfg = GetTextGuidance(generateOptions.GuidanceScale, generateOptions.GuidanceScale2, pipelineOptions.Pipeline),
                     DistilledGuidance = GetDistilledGuidance(generateOptions.GuidanceScale, generateOptions.GuidanceScale2, pipelineOptions.Pipeline),
-                    Eta = generateOptions.SchedulerOptions.Eta > 0 ? generateOptions.SchedulerOptions.Eta : samplerDefaults.Eta,
-                    FlowShift = generateOptions.SchedulerOptions.FlowShift > 0 ? generateOptions.SchedulerOptions.FlowShift : samplerDefaults.FlowShift,
-                    SampleMethod = GetSamplerType(generateOptions.SchedulerOptions),
-                    Scheduler = GetSchedulerType(generateOptions.SchedulerOptions),
+                    Eta = generateOptions.SamplerOptions.Eta > 0 ? generateOptions.SamplerOptions.Eta : samplerDefaults.Eta,
+                    FlowShift = generateOptions.SamplerOptions.FlowShift > 0 ? generateOptions.SamplerOptions.FlowShift : samplerDefaults.FlowShift,
+                    ImgCfg = generateOptions.SamplerOptions.ImageGuidance > 0 ? generateOptions.SamplerOptions.ImageGuidance : samplerDefaults.ImgCfg,
+                    ExtraSampleArgs = string.IsNullOrWhiteSpace(generateOptions.SamplerOptions.ExtraArgs) ? samplerDefaults.ExtraSampleArgs : generateOptions.SamplerOptions.ExtraArgs,
+                    CustomSigmas = generateOptions.SamplerOptions.Sigmas.IsNullOrEmpty() ? samplerDefaults.CustomSigmas : generateOptions.SamplerOptions.Sigmas,
+                    SampleMethod = GetSamplerType(generateOptions.SamplerOptions),
+                    Scheduler = GetSchedulerType(generateOptions.SamplerOptions),
                 },
-                HighNoiseSampleParameters = samplerHighNoiseDefaults with
-                {
-                    SampleSteps = generateOptions.Steps2,
-                    TxtCfg = GetTextGuidanceHighNoise(generateOptions.GuidanceScale, generateOptions.GuidanceScale2, pipelineOptions.Pipeline),
-                    DistilledGuidance = GetDistilledGuidanceHighNoise(generateOptions.GuidanceScale, generateOptions.GuidanceScale2, pipelineOptions.Pipeline),
-                    Eta = generateOptions.SchedulerOptions.Eta > 0 ? generateOptions.SchedulerOptions.Eta : samplerDefaults.Eta,
-                    FlowShift = generateOptions.SchedulerOptions.FlowShift > 0 ? generateOptions.SchedulerOptions.FlowShift : samplerDefaults.FlowShift,
-                    SampleMethod = GetSamplerType(generateOptions.SchedulerOptions),
-                    Scheduler = GetSchedulerType(generateOptions.SchedulerOptions),
-
-                },
+                HighNoiseSteps = generateOptions.Steps2,
                 VaeTilingParameters = defaultOptions.VaeTilingParameters with
                 {
                     Enabled = generateOptions.EnableVaeTiling,
@@ -449,7 +507,7 @@ namespace Amuse.Host.StableDiffusionCpp
             var autoEncoderDevice = pipelineOptions.ExecutionOptions.IsAutoEncoderCpuEnabled ? "cpu" : diffusionDevice;
             var textEncoderDevice = pipelineOptions.ExecutionOptions.IsTextEncoderCpuEnabled ? "cpu" : diffusionDevice;
             var controlnetDevice = pipelineOptions.ExecutionOptions.IsControlNetCpuEnabled ? "cpu" : diffusionDevice;
-            return $"*={diffusionDevice},vae={autoEncoderDevice},te={textEncoderDevice},clip_vision={textEncoderDevice},audio_encoder={controlnetDevice},controlnet={autoEncoderDevice}";
+            return $"*={diffusionDevice},vae={autoEncoderDevice},te={textEncoderDevice},clip_vision={textEncoderDevice},audio_encoder={autoEncoderDevice},controlnet={controlnetDevice}";
         }
 
 
@@ -575,6 +633,56 @@ namespace Amuse.Host.StableDiffusionCpp
 
 
         /// <summary>
+        /// Gets the inference cache options, values of 0 keep the StableDiffusion.cpp defaults.
+        /// </summary>
+        /// <param name="defaultOptions">The default options.</param>
+        /// <param name="cacheOptions">The cache options.</param>
+        /// <returns>PipelineCommon.CacheOptions.</returns>
+        private static PipelineCommon.CacheOptions GetCacheOptions(this PipelineCommon.CacheOptions defaultOptions, DiffusionCacheOptions cacheOptions)
+        {
+            defaultOptions ??= new PipelineCommon.CacheOptions();
+            if (cacheOptions == null || cacheOptions.Mode == DiffusionCacheType.Disabled)
+                return defaultOptions;
+
+            var isResidualCache = cacheOptions.Mode == DiffusionCacheType.DBCache || cacheOptions.Mode == DiffusionCacheType.TaylorSeer || cacheOptions.Mode == DiffusionCacheType.CacheDit;
+            var isReuseCache = cacheOptions.Mode == DiffusionCacheType.EasyCache || cacheOptions.Mode == DiffusionCacheType.UCache;
+            var isSpectrumCache = cacheOptions.Mode == DiffusionCacheType.Spectrum;
+            var hasThreshold = cacheOptions.Threshold > 0;
+            var hasWarmup = cacheOptions.WarmupSteps > 0;
+            return defaultOptions with
+            {
+                Mode = GetCacheType(cacheOptions.Mode),
+                ReuseThreshold = isReuseCache && hasThreshold ? cacheOptions.Threshold : defaultOptions.ReuseThreshold,
+                StartPercent = isReuseCache && cacheOptions.StartPercent > 0 ? cacheOptions.StartPercent : defaultOptions.StartPercent,
+                EndPercent = isReuseCache && cacheOptions.EndPercent > 0 ? cacheOptions.EndPercent : defaultOptions.EndPercent,
+                ResidualDiffThreshold = isResidualCache && hasThreshold ? cacheOptions.Threshold : defaultOptions.ResidualDiffThreshold,
+                MaxWarmupSteps = isResidualCache && hasWarmup ? cacheOptions.WarmupSteps : defaultOptions.MaxWarmupSteps,
+                SpectrumWarmupSteps = isSpectrumCache && hasWarmup ? cacheOptions.WarmupSteps : defaultOptions.SpectrumWarmupSteps
+            };
+        }
+
+
+        /// <summary>
+        /// Gets the StableDiffusion.cpp cache type.
+        /// </summary>
+        /// <param name="cacheType">The cache type.</param>
+        /// <returns>Pipeline.SDCacheType.</returns>
+        private static Pipeline.SDCacheType GetCacheType(DiffusionCacheType cacheType)
+        {
+            return cacheType switch
+            {
+                DiffusionCacheType.EasyCache => Pipeline.SDCacheType.EasyCache,
+                DiffusionCacheType.UCache => Pipeline.SDCacheType.UCache,
+                DiffusionCacheType.DBCache => Pipeline.SDCacheType.DBCache,
+                DiffusionCacheType.TaylorSeer => Pipeline.SDCacheType.TaylorSeer,
+                DiffusionCacheType.CacheDit => Pipeline.SDCacheType.DitCache,
+                DiffusionCacheType.Spectrum => Pipeline.SDCacheType.Spectrum,
+                _ => Pipeline.SDCacheType.Disabled
+            };
+        }
+
+
+        /// <summary>
         /// Gets the initial image.
         /// </summary>
         /// <param name="options">The options.</param>
@@ -686,16 +794,17 @@ namespace Amuse.Host.StableDiffusionCpp
 
 
         /// <summary>
-        /// Gets the control frames.
+        /// Gets the control frames, MiniMax takes the Video to Video source as a reference video instead.
         /// </summary>
         /// <param name="options">The options.</param>
         /// <param name="processType">Type of the process.</param>
-        private static ImageTensor[] GetControlFrames(GenerateVideoOptions options, ProcessType processType)
+        /// <param name="pipelineType">Type of the pipeline.</param>
+        private static ImageTensor[] GetControlFrames(GenerateVideoOptions options, ProcessType processType, PipelineType pipelineType)
         {
             if (options.InputVideos.IsNullOrEmpty())
                 return default;
 
-            if (processType == ProcessType.VideoToVideo)
+            if (processType == ProcessType.VideoToVideo && pipelineType != PipelineType.MiniMaxVideoPipeline)
                 return [.. options.InputVideos[0].Frames];
 
             return default;
@@ -720,16 +829,20 @@ namespace Amuse.Host.StableDiffusionCpp
 
 
         /// <summary>
-        /// Gets the reference videos.
+        /// Gets the reference videos, MiniMax also takes the Video to Video source as a reference video.
         /// </summary>
         /// <param name="options">The options.</param>
         /// <param name="processType">Type of the process.</param>
-        private static VideoSequence[] GetReferenceVideos(GenerateVideoOptions options, ProcessType processType)
+        /// <param name="pipelineType">Type of the pipeline.</param>
+        private static VideoSequence[] GetReferenceVideos(GenerateVideoOptions options, ProcessType processType, PipelineType pipelineType)
         {
             if (options.InputVideos.IsNullOrEmpty())
                 return default;
 
             if (processType == ProcessType.MediaToVideo)
+                return [.. options.InputVideos];
+
+            if (processType == ProcessType.VideoToVideo && pipelineType == PipelineType.MiniMaxVideoPipeline)
                 return [.. options.InputVideos];
 
             return default;
@@ -754,14 +867,14 @@ namespace Amuse.Host.StableDiffusionCpp
 
 
         /// <summary>
-        /// Gets the text guidance.
+        /// Gets the text guidance, dual expert Wan models share one guidance so the low noise guidance is used when set.
         /// </summary>
         /// <param name="guidanceScale">The guidance scale.</param>
         /// <param name="guidanceScale2">The guidance scale2.</param>
         /// <param name="pipelineType">Type of the pipeline.</param>
         private static float GetTextGuidance(float guidanceScale, float guidanceScale2, PipelineType pipelineType)
         {
-            if (pipelineType == PipelineType.WanPipeline)
+            if (pipelineType == PipelineType.WanPipeline && guidanceScale2 > 0)
                 return Math.Max(1, guidanceScale2);
             return Math.Max(1, guidanceScale);
         }
@@ -782,58 +895,34 @@ namespace Amuse.Host.StableDiffusionCpp
 
 
         /// <summary>
-        /// Gets the text guidance (high noise).
-        /// </summary>
-        /// <param name="guidanceScale">The guidance scale.</param>
-        /// <param name="guidanceScale2">The guidance scale2.</param>
-        /// <param name="pipelineType">Type of the pipeline.</param>
-        private static float GetTextGuidanceHighNoise(float guidanceScale, float guidanceScale2, PipelineType pipelineType)
-        {
-            if (pipelineType == PipelineType.WanPipeline)
-                return Math.Max(1, guidanceScale);
-            return Math.Max(1, guidanceScale2);
-        }
-
-
-        /// <summary>
-        /// Gets the distilled guidance (high noise).
-        /// </summary>
-        /// <param name="guidanceScale">The guidance scale.</param>
-        /// <param name="guidanceScale2">The guidance scale2.</param>
-        /// <param name="pipelineType">Type of the pipeline.</param>
-        private static float GetDistilledGuidanceHighNoise(float guidanceScale, float guidanceScale2, PipelineType pipelineType)
-        {
-            if (pipelineType == PipelineType.WanPipeline)
-                return Math.Max(1, guidanceScale);
-            return Math.Max(1, guidanceScale);
-        }
-
-
-        /// <summary>
         /// Gets the type of the sampler.
         /// </summary>
         /// <param name="options">The options.</param>
-        private static Pipeline.SamplerType GetSamplerType(SchedulerOptions options)
+        private static Pipeline.SamplerType GetSamplerType(SamplerOptions options)
         {
-            return options.Scheduler switch
+            return options.Sampler switch
             {
-                SchedulerType.Euler => Pipeline.SamplerType.Euler,
-                SchedulerType.EulerAncestral => Pipeline.SamplerType.Euler_A,
-                SchedulerType.Heun => Pipeline.SamplerType.Heun,
-                SchedulerType.DPM2 => Pipeline.SamplerType.DPM2,
-                SchedulerType.DPMPlusPlus2SAncestral => Pipeline.SamplerType.DPMPP2S_A,
-                SchedulerType.DPMPlusPlus2M => Pipeline.SamplerType.DPMPP2M,
-                SchedulerType.DPMPlusPlus2Mv2 => Pipeline.SamplerType.DPMPP2Mv2,
-                SchedulerType.IPNDM => Pipeline.SamplerType.IPNDM,
-                SchedulerType.LCM => Pipeline.SamplerType.LCM,
-                SchedulerType.DDIM => Pipeline.SamplerType.DDIM,
-                SchedulerType.TCD => Pipeline.SamplerType.TCD,
-                SchedulerType.ResidualMultistep => Pipeline.SamplerType.ResidualMultiStep,
-                SchedulerType.Residual2S => Pipeline.SamplerType.Residual2S,
-                SchedulerType.ERSDE => Pipeline.SamplerType.ER_SDE,
-                SchedulerType.DPMPlusPlus2MSDE => Pipeline.SamplerType.DPMPP2M_SDE,
-                SchedulerType.DPMPlusPlus2MSDEBT => Pipeline.SamplerType.DPMPP2M_SDE_BT,
-                SchedulerType.LMS => Pipeline.SamplerType.LMS,
+                SamplerType.Euler => Pipeline.SamplerType.Euler,
+                SamplerType.EulerAncestral => Pipeline.SamplerType.Euler_A,
+                SamplerType.Heun => Pipeline.SamplerType.Heun,
+                SamplerType.DPM2 => Pipeline.SamplerType.DPM2,
+                SamplerType.DPMPlusPlus2SAncestral => Pipeline.SamplerType.DPMPP2S_A,
+                SamplerType.DPMPlusPlus2M => Pipeline.SamplerType.DPMPP2M,
+                SamplerType.DPMPlusPlus2Mv2 => Pipeline.SamplerType.DPMPP2Mv2,
+                SamplerType.IPNDM => Pipeline.SamplerType.IPNDM,
+                SamplerType.IPNDMV => Pipeline.SamplerType.IPNDM_V,
+                SamplerType.LCM => Pipeline.SamplerType.LCM,
+                SamplerType.DDIM => Pipeline.SamplerType.DDIM,
+                SamplerType.TCD => Pipeline.SamplerType.TCD,
+                SamplerType.ResidualMultistep => Pipeline.SamplerType.ResidualMultiStep,
+                SamplerType.Residual2S => Pipeline.SamplerType.Residual2S,
+                SamplerType.ERSDE => Pipeline.SamplerType.ER_SDE,
+                SamplerType.EulerCFGPP => Pipeline.SamplerType.Euler_CFG_PP,
+                SamplerType.EulerAncestralCFGPP => Pipeline.SamplerType.Euler_A_CFG_PP,
+                SamplerType.EulerGE => Pipeline.SamplerType.Euler_GE,
+                SamplerType.DPMPlusPlus2MSDE => Pipeline.SamplerType.DPMPP2M_SDE,
+                SamplerType.DPMPlusPlus2MSDEBT => Pipeline.SamplerType.DPMPP2M_SDE_BT,
+                SamplerType.LMS => Pipeline.SamplerType.LMS,
                 _ => Pipeline.SamplerType.Default
             };
         }
@@ -844,28 +933,59 @@ namespace Amuse.Host.StableDiffusionCpp
         /// </summary>
         /// <param name="options">The options.</param>
         /// <returns>Pipeline.SchedulerType.</returns>
-        private static Pipeline.SchedulerType GetSchedulerType(SchedulerOptions options)
+        private static Pipeline.SchedulerType GetSchedulerType(SamplerOptions options)
         {
-            return options.SigmaScheduleType switch
+            return options.Scheduler switch
             {
-                SigmaScheduleType.Discrete => Pipeline.SchedulerType.Discrete,
-                SigmaScheduleType.Karras => Pipeline.SchedulerType.Karras,
-                SigmaScheduleType.Exponential => Pipeline.SchedulerType.Exponential,
-                SigmaScheduleType.AYS => Pipeline.SchedulerType.AYS,
-                SigmaScheduleType.GITS => Pipeline.SchedulerType.GITS,
-                SigmaScheduleType.SGMUniform => Pipeline.SchedulerType.SGMUniform,
-                SigmaScheduleType.Simple => Pipeline.SchedulerType.Simple,
-                SigmaScheduleType.Smoothstep => Pipeline.SchedulerType.Smoothstep,
-                SigmaScheduleType.KLOptimal => Pipeline.SchedulerType.KlOptimal,
-                SigmaScheduleType.LCM => Pipeline.SchedulerType.LCM,
-                SigmaScheduleType.BongTangent => Pipeline.SchedulerType.BongTangent,
-                SigmaScheduleType.LTX2 => Pipeline.SchedulerType.LTX2,
-                SigmaScheduleType.LogitNormal => Pipeline.SchedulerType.LogitNormal,
-                SigmaScheduleType.Flux => Pipeline.SchedulerType.FLUX,
-                SigmaScheduleType.Flux2 => Pipeline.SchedulerType.FLUX2,
-                SigmaScheduleType.Beta => Pipeline.SchedulerType.Beta,
-                SigmaScheduleType.LLADA => Pipeline.SchedulerType.LLADA,
+                SchedulerType.Discrete => Pipeline.SchedulerType.Discrete,
+                SchedulerType.Karras => Pipeline.SchedulerType.Karras,
+                SchedulerType.Exponential => Pipeline.SchedulerType.Exponential,
+                SchedulerType.AYS => Pipeline.SchedulerType.AYS,
+                SchedulerType.GITS => Pipeline.SchedulerType.GITS,
+                SchedulerType.SGMUniform => Pipeline.SchedulerType.SGMUniform,
+                SchedulerType.Simple => Pipeline.SchedulerType.Simple,
+                SchedulerType.Smoothstep => Pipeline.SchedulerType.Smoothstep,
+                SchedulerType.KLOptimal => Pipeline.SchedulerType.KlOptimal,
+                SchedulerType.LCM => Pipeline.SchedulerType.LCM,
+                SchedulerType.BongTangent => Pipeline.SchedulerType.BongTangent,
+                SchedulerType.LTX2 => Pipeline.SchedulerType.LTX2,
+                SchedulerType.LogitNormal => Pipeline.SchedulerType.LogitNormal,
+                SchedulerType.Flux => Pipeline.SchedulerType.FLUX,
+                SchedulerType.Flux2 => Pipeline.SchedulerType.FLUX2,
+                SchedulerType.Beta => Pipeline.SchedulerType.Beta,
+                SchedulerType.LLADA => Pipeline.SchedulerType.LLADA,
                 _ => Pipeline.SchedulerType.Default
+            };
+        }
+
+
+        /// <summary>
+        /// Gets the control type of the control image, union models need it and only UNet ControlNets accept one.
+        /// </summary>
+        /// <param name="controlType">The control type.</param>
+        /// <param name="pipelineOptions">The pipeline options.</param>
+        /// <returns>Pipeline.ControlNetType.</returns>
+        private static Pipeline.ControlNetType GetControlNetType(ControlNetType controlType, PipelineLoadOptions pipelineOptions)
+        {
+            if (pipelineOptions.ControlNet == null)
+                return Pipeline.ControlNetType.None;
+
+            if (pipelineOptions.Pipeline != PipelineType.StableDiffusionPipeline
+             && pipelineOptions.Pipeline != PipelineType.LatentConsistencyPipeline
+             && pipelineOptions.Pipeline != PipelineType.StableDiffusionXLPipeline)
+                return Pipeline.ControlNetType.None;
+
+            return controlType switch
+            {
+                ControlNetType.OpenPose => Pipeline.ControlNetType.OpenPose,
+                ControlNetType.Depth => Pipeline.ControlNetType.Depth,
+                ControlNetType.Scribble => Pipeline.ControlNetType.Scribble,
+                ControlNetType.Canny => Pipeline.ControlNetType.Canny,
+                ControlNetType.Normal => Pipeline.ControlNetType.Normal,
+                ControlNetType.Segment => Pipeline.ControlNetType.Segment,
+                ControlNetType.Tile => Pipeline.ControlNetType.Tile,
+                ControlNetType.Repaint => Pipeline.ControlNetType.Repaint,
+                _ => Pipeline.ControlNetType.None
             };
         }
 

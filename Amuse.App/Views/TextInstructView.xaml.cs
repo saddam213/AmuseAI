@@ -24,8 +24,8 @@ namespace Amuse.App.Views
         /// <summary>
         /// Initializes a new instance of the <see cref="TextInstructView"/> class.
         /// </summary>
-        public TextInstructView(Settings settings, NavigationService navigationService, IModelDownloadService downloadService, IGenerateService generateService, IExtractService extractService, IUpscaleService upscaleService, IHistoryService historyService, IToolService toolService, ILogger<TextInstructView> logger)
-            : base(settings, navigationService, downloadService, generateService, extractService, upscaleService, historyService, toolService, logger)
+        public TextInstructView(Settings settings, NavigationService navigationService, IModelDownloadService downloadService, IModelAccessService modelAccessService, ILanguageService languageService, IGenerateService generateService, IHistoryService historyService, IToolService toolService, ILogger<TextInstructView> logger)
+            : base(settings, navigationService, downloadService, modelAccessService, languageService, generateService, historyService, toolService, logger)
         {
             InitializeComponent();
         }
@@ -52,7 +52,7 @@ namespace Amuse.App.Views
         {
             await base.OpenAsync(args);
             if (!IsPipelineLoaded)
-                ModelControl.SetPipeline(GenerateService.Pipeline);
+                ModelControl.SetPipeline(LanguageService.Pipeline);
         }
 
 
@@ -112,7 +112,7 @@ namespace Amuse.App.Views
             catch (Exception ex)
             {
                 Statistics.Clear();
-                IsPipelineLoaded = GenerateService.IsLoaded;
+                IsPipelineLoaded = LanguageService.IsLoaded;
                 Logger.LogError(ex, "[TextInstruct] [Execute] An exception occurred executing pipeline, Elapsed: {Elapsed:c}", Stopwatch.GetElapsedTime(timestamp));
                 await DialogService.ShowErrorAsync(AppErrors.ExecutePipelineTitle, ex.Message);
             }
@@ -148,7 +148,7 @@ namespace Amuse.App.Views
                 {
                     cancellationToken.ThrowIfCancellationRequested();
                     await TextResultElement.ResetAsync();
-                    AutomationPrompt = $"{Options.Prompt}{automationJob.GenerateOptions.Prompt}";
+                    AutomationPrompt = automationJob.GenerateOptions.Prompt.Trim();
 
                     // Context
                     var prompt = AutomationPrompt;
@@ -179,12 +179,13 @@ namespace Amuse.App.Views
                     TextResultElement.AddBeamResults(textResult.Results);
 
                     // History
+                    var responseText = MarkdownConverter.GetResponseText(textResult.Result.Text);
                     if (AutomationOptions.IsHistoryEnabled)
                     {
                         await SaveHistoryAsync(textResult.Result, options);
                     }
 
-                    await automationJob.SaveAsync(MarkdownConverter.GetResponseText(textResult.Result.Text));
+                    await automationJob.SaveAsync(responseText);
                     AutomationProgress.Update(automationJob.Id, automationJob.Count, $"{AppDefault.Automation}: {automationJob.Id}/{automationJob.Count}");
                 }
 
@@ -199,7 +200,7 @@ namespace Amuse.App.Views
             catch (Exception ex)
             {
                 Statistics.Clear();
-                IsPipelineLoaded = GenerateService.IsLoaded;
+                IsPipelineLoaded = LanguageService.IsLoaded;
                 Logger.LogError(ex, "[TextInstruct] [ExecuteAutomation] An exception occurred executing pipeline, Elapsed: {Elapsed:c}", Stopwatch.GetElapsedTime(timestamp));
                 await DialogService.ShowErrorAsync(AppErrors.ExecuteAutomationTitle, ex.Message);
             }
@@ -211,6 +212,7 @@ namespace Amuse.App.Views
                 CancellationTokenSource?.Dispose();
                 CancellationTokenSource = null;
                 AutomationPrompt = null;
+                await TextResultElement.EndStreamResponseAsync();
             }
         }
 
@@ -221,6 +223,15 @@ namespace Amuse.App.Views
         protected override bool CanExecute()
         {
             return base.CanExecute() && !string.IsNullOrEmpty(Options?.Prompt);
+        }
+
+
+        /// <summary>
+        /// Determines whether this process can execute automations, the prompts come from the automation input so the prompt can be empty.
+        /// </summary>
+        protected override bool CanExecuteAutomation()
+        {
+            return base.CanExecute() && AutomationOptions?.IsValid() == true;
         }
 
 

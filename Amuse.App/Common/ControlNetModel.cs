@@ -2,7 +2,6 @@
 using Amuse.Common;
 using System.Linq;
 using System.Text.Json.Serialization;
-using TensorStack.Common.Common;
 using TensorStack.WPF;
 
 namespace Amuse.App.Common
@@ -11,15 +10,16 @@ namespace Amuse.App.Common
     {
         private string _name;
         private PipelineType _pipeline;
+        private ControlNetType _controlType;
         private bool _invert;
         private int _layerCount;
         private bool _disableProjections;
         private View[] _viewFilter;
         private CheckpointComponent _checkpoint;
         private ModelStatusType _status;
-        private string _accessToken;
         private bool _isDefault;
         private string _link;
+        private ModelMetadata _metadata;
 
         [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingDefault)]
         public int Id { get; set; }
@@ -50,6 +50,13 @@ namespace Amuse.App.Common
         }
 
         [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingDefault)]
+        public ControlNetType ControlType
+        {
+            get { return _controlType; }
+            set { SetProperty(ref _controlType, value); }
+        }
+
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingDefault)]
         public bool Invert
         {
             get { return _invert; }
@@ -77,13 +84,6 @@ namespace Amuse.App.Common
         }
 
         [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingDefault)]
-        public string AccessToken
-        {
-            get { return _accessToken; }
-            set { SetProperty(ref _accessToken, value); }
-        }
-
-        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingDefault)]
         public bool IsDefault
         {
             get { return _isDefault; }
@@ -97,28 +97,28 @@ namespace Amuse.App.Common
             set { SetProperty(ref _link, value); }
         }
 
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+        public ModelMetadata Metadata
+        {
+            get { return _metadata; }
+            set { SetProperty(ref _metadata, value); }
+        }
+
 
         public void Initialize(Settings settings)
         {
+            _metadata?.Initialize(settings);
             Status = GetModelStatus(settings);
         }
 
 
+        /// <summary>
+        /// Deletes the checkpoint files, from the model directory and from the model search folders.
+        /// </summary>
+        /// <param name="settings">The settings.</param>
         public void Delete(Settings settings)
         {
-            var resolvedCheckpoint = Checkpoint.Resolve(settings, settings.DirectoryControlNet);
-            if (string.IsNullOrEmpty(resolvedCheckpoint))
-                return;
-
-            if (System.IO.File.Exists(resolvedCheckpoint))
-            {
-                FileHelper.DeleteFile(resolvedCheckpoint);
-                FileHelper.DeleteDirectory(System.IO.Path.GetDirectoryName(resolvedCheckpoint), false);
-            }
-            else if (System.IO.Directory.Exists(resolvedCheckpoint))
-            {
-                FileHelper.DeleteDirectory(resolvedCheckpoint);
-            }
+            Checkpoint?.DeleteFiles(settings, settings.DirectoryControlNet);
         }
 
 
@@ -140,13 +140,11 @@ namespace Amuse.App.Common
             if (Checkpoint == null)
                 return ModelStatusType.Available;
 
-            var isValid = Checkpoint.IsInstalled(settings.DirectoryControlNet, settings.Components);
+            var isValid = Checkpoint.IsInstalled(settings, settings.DirectoryControlNet);
             if ((Status == ModelStatusType.Available || Status == ModelStatusType.Unknown) && isValid)
                 return ModelStatusType.Installed;
             else if (Status == ModelStatusType.Installed && !isValid)
                 return ModelStatusType.Unknown;
-            else if (Status == ModelStatusType.Downloading || Status == ModelStatusType.DownloadQueue || Status == ModelStatusType.DownloadFailed)
-                return ModelStatusType.Available;
 
             return Status;
         }
@@ -159,9 +157,10 @@ namespace Amuse.App.Common
                 Id = id,
                 Name = Name,
                 Pipeline = Pipeline,
-                AccessToken = AccessToken,
                 Link = Link,
+                Metadata = Metadata?.DeepClone(),
                 ViewFilter = ViewFilter?.ToArray(),
+                ControlType = ControlType,
                 Invert = Invert,
                 LayerCount = LayerCount,
                 DisableProjections = DisableProjections,

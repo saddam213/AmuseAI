@@ -1,7 +1,6 @@
 ﻿using Amuse.App.Common;
 using Amuse.App.Resources;
 using Amuse.App.Services;
-using Amuse.Common;
 using Microsoft.Extensions.Logging;
 using System;
 using System.Diagnostics;
@@ -23,40 +22,35 @@ namespace Amuse.App.Views
         private GenerateInputOptions _options;
         private AutomationOptions _automationOptions;
         private bool _isAutomating;
+        private bool _isPipelineBusy;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="ViewBaseLanguage"/> class.
         /// </summary>
-        public ViewBaseLanguage(Settings settings, NavigationService navigationService, IModelDownloadService downloadService, IGenerateService generateService, IExtractService extractService, IUpscaleService upscaleService, IHistoryService historyService, IToolService toolService, ILogger logger)
-            : base(settings, navigationService, downloadService, historyService, logger)
+        public ViewBaseLanguage(Settings settings, NavigationService navigationService, IModelDownloadService downloadService, IModelAccessService modelAccessService, ILanguageService languageService, IGenerateService generateService, IHistoryService historyService, IToolService toolService, ILogger logger)
+            : base(settings, navigationService, downloadService, modelAccessService, historyService, logger)
         {
+            LanguageService = languageService;
             GenerateService = generateService;
-            ExtractService = extractService;
-            UpscaleService = upscaleService;
             ToolService = toolService;
             Statistics = new StatisticsModel(Dispatcher);
             ProgressCallback = new Progress<RunProgress>(OnProgress);
-            ExecuteCommand = new AsyncRelayCommand(ExecuteAsync, CanExecute);
-            ExecuteAutomationCommand = new AsyncRelayCommand(ExecuteAutomationAsync, CanExecuteAutomation);
-            StopCommand = new AsyncRelayCommand(GenerateService.StopAsync);
+            ExecuteCommand = new AsyncRelayCommand(() => ExecutePipelineAsync(ExecuteAsync), CanExecute);
+            ExecuteAutomationCommand = new AsyncRelayCommand(() => ExecutePipelineAsync(ExecuteAutomationAsync), CanExecuteAutomation);
+            StopCommand = new AsyncRelayCommand(LanguageService.StopAsync);
             PipelineProgressCallback = new Progress<PipelineProgress>(OnProgress);
             AutomationProgress = new ProgressInfo();
         }
 
         /// <summary>
-        /// Gets the diffusion service.
+        /// Gets the language service.
+        /// </summary>
+        public ILanguageService LanguageService { get; }
+
+        /// <summary>
+        /// Gets the generate service, its diffusion model can stay loaded next to the language model.
         /// </summary>
         public IGenerateService GenerateService { get; }
-
-        /// <summary>
-        /// Gets the extract service.
-        /// </summary>
-        public IExtractService ExtractService { get; }
-
-        /// <summary>
-        /// Gets the upscale service.
-        /// </summary>
-        public IUpscaleService UpscaleService { get; }
 
         /// <summary>
         /// Gets the tool service.
@@ -152,6 +146,33 @@ namespace Amuse.App.Views
             set { SetProperty(ref _isAutomating, value); }
         }
 
+        /// <summary>
+        /// Gets or sets a value indicating whether the view is loading, executing or automating, the model controls are locked while set.
+        /// </summary>
+        public bool IsPipelineBusy
+        {
+            get { return _isPipelineBusy; }
+            set { SetProperty(ref _isPipelineBusy, value); }
+        }
+
+
+        /// <summary>
+        /// Executes the operation with the model controls locked for every stage, not only while a service is executing.
+        /// </summary>
+        /// <param name="operation">The operation.</param>
+        private async Task ExecutePipelineAsync(Func<Task> operation)
+        {
+            try
+            {
+                IsPipelineBusy = true;
+                await operation();
+            }
+            finally
+            {
+                IsPipelineBusy = false;
+            }
+        }
+
 
         /// <summary>
         /// Executes the pipeline.
@@ -172,9 +193,26 @@ namespace Amuse.App.Views
         /// <param name="args">The arguments.</param>
         public override Task OpenAsync(OpenViewArgs args = null)
         {
-            IsPipelineLoaded = GenerateService.IsLoaded && GenerateService.Pipeline == CurrentPipeline;
+            IsPipelineLoaded = LanguageService.IsLoaded && LanguageService.Pipeline == CurrentPipeline;
             Logger.LogInformation("[{View}] [Open] View opened, IsPipelineLoaded: {IsPipelineLoaded}", ViewName, IsPipelineLoaded);
+            _ = ConnectToolsAsync();
             return base.OpenAsync(args);
+        }
+
+
+        /// <summary>
+        /// Connects the MCP servers in the background, the view does not wait for them and a server that fails is skipped.
+        /// </summary>
+        private async Task ConnectToolsAsync()
+        {
+            try
+            {
+                await ToolService.ConnectAsync();
+            }
+            catch (Exception ex)
+            {
+                Logger.LogError(ex, "[{View}] [ConnectTools] An exception occurred connecting the MCP servers", ViewName);
+            }
         }
 
 
@@ -188,6 +226,7 @@ namespace Amuse.App.Views
 
             try
             {
+                await RequestModelAccessAsync(CurrentPipeline);
                 await LoadLanguageModelAsync();
                 await Settings.SetDefaultsAsync(CurrentPipeline);
 
@@ -218,22 +257,10 @@ namespace Amuse.App.Views
 
             try
             {
-                if (ExtractService.IsLoaded)
+                if (LanguageService.IsLoaded)
                 {
-                    await ExtractService.UnloadAsync();
-                    Logger.LogInformation("[{View}] [UnloadPipeline] Unloaded extract model.", ViewName);
-                }
-
-                if (GenerateService.IsLoaded)
-                {
-                    await GenerateService.UnloadAsync();
+                    await LanguageService.UnloadAsync();
                     Logger.LogInformation("[{View}] [UnloadPipeline] Unloaded language model.", ViewName);
-                }
-
-                if (UpscaleService.IsLoaded)
-                {
-                    await UpscaleService.UnloadAsync();
-                    Logger.LogInformation("[{View}] [UnloadPipeline] Unloaded upscale model.", ViewName);
                 }
 
                 Logger.LogInformation("[{View}] [UnloadPipeline] Pipeline unloaded successfully, Elapsed: {Elapsed:c}", ViewName, Stopwatch.GetElapsedTime(timestamp));
@@ -253,9 +280,7 @@ namespace Amuse.App.Views
         /// </summary>
         protected virtual bool CanExecute()
         {
-            return !GenerateService.IsExecuting
-                && !UpscaleService.IsExecuting
-                && !ExtractService.IsExecuting;
+            return !LanguageService.IsExecuting;
         }
 
 
@@ -264,7 +289,7 @@ namespace Amuse.App.Views
         /// </summary>
         protected virtual bool CanExecuteAutomation()
         {
-            return CanExecute();
+            return CanExecute() && AutomationOptions?.IsValid() == true;
         }
 
 
@@ -276,24 +301,10 @@ namespace Amuse.App.Views
             await base.CancelAsync();
 
             var timestamp = Stopwatch.GetTimestamp();
-            if (UpscaleService.CanCancel)
-            {
-                Logger.LogInformation("[{View}] [Cancel] Canceling upscale process...", ViewName);
-                await UpscaleService.CancelAsync();
-                Logger.LogInformation("[{View}] [Cancel] Upscale process canceled, Elapsed: {Elapsed:c}", ViewName, Stopwatch.GetElapsedTime(timestamp));
-            }
-
-            if (ExtractService.CanCancel)
-            {
-                Logger.LogInformation("[{View}] [Cancel] Canceling extract process...", ViewName);
-                await ExtractService.CancelAsync();
-                Logger.LogInformation("[{View}] [Cancel] Extract process canceled, Elapsed: {Elapsed:c}", ViewName, Stopwatch.GetElapsedTime(timestamp));
-            }
-
-            if (GenerateService.CanCancel)
+            if (LanguageService.CanCancel)
             {
                 Logger.LogInformation("[{View}] [Cancel] Canceling generation process...", ViewName);
-                await GenerateService.CancelAsync();
+                await LanguageService.CancelAsync();
                 Logger.LogInformation("[{View}] [Cancel] Generation process canceled, Elapsed: {Elapsed:c}", ViewName, Stopwatch.GetElapsedTime(timestamp));
             }
         }
@@ -304,10 +315,7 @@ namespace Amuse.App.Views
         /// </summary>
         protected override bool CanCancel()
         {
-            return base.CanCancel()
-                || GenerateService.CanCancel
-                || UpscaleService.CanCancel
-                || ExtractService.CanCancel;
+            return base.CanCancel() || LanguageService.CanCancel;
         }
 
 
@@ -319,32 +327,32 @@ namespace Amuse.App.Views
             var timestamp = Stopwatch.GetTimestamp();
             if (CurrentPipeline.LanguageModel is not null)
             {
-                if (GenerateService.IsLoaded)
+                if (LanguageService.IsLoaded)
                 {
-                    if (GenerateService.Pipeline.IsLoadRequired(CurrentPipeline))
+                    if (LanguageService.Pipeline.IsLoadRequired(CurrentPipeline))
                     {
                         Logger.LogInformation("[{View}] [LoadLanguageModel] Loading language model {Name}...", ViewName, CurrentPipeline.LanguageModel.Name);
-                        await GenerateService.LoadAsync(CurrentPipeline, PipelineProgressCallback);
+                        await LanguageService.LoadAsync(CurrentPipeline, PipelineProgressCallback);
                     }
-                    else if (GenerateService.Pipeline.IsReloadRequired(CurrentPipeline))
+                    else if (LanguageService.Pipeline.IsReloadRequired(CurrentPipeline))
                     {
                         Logger.LogInformation("[{View}] [LoadLanguageModel] Reloading language model {Name}...", ViewName, CurrentPipeline.LanguageModel.Name);
-                        await GenerateService.ReloadAsync(CurrentPipeline, PipelineProgressCallback);
+                        await LanguageService.ReloadAsync(CurrentPipeline, PipelineProgressCallback);
                     }
                     else
                     {
-                        await GenerateService.UpdateAsync(CurrentPipeline);
+                        await LanguageService.UpdateAsync(CurrentPipeline);
                     }
                     return true;
                 }
 
                 Logger.LogInformation("[{View}] [LoadLanguageModel] Loading language model {Name}...", ViewName, CurrentPipeline.LanguageModel.Name);
-                await GenerateService.LoadAsync(CurrentPipeline, PipelineProgressCallback);
+                await LanguageService.LoadAsync(CurrentPipeline, PipelineProgressCallback);
                 Logger.LogInformation("[{View}] [LoadLanguageModel] Successfully loaded language model, Elapsed: {Elapsed:c}", ViewName, Stopwatch.GetElapsedTime(timestamp));
                 return true;
             }
 
-            await GenerateService.UnloadAsync();
+            await LanguageService.UnloadAsync();
             Logger.LogInformation("[{View}] [LoadLanguageModel] Unloaded language model.", ViewName);
             return false;
         }
@@ -359,7 +367,7 @@ namespace Amuse.App.Views
             var timestamp = Stopwatch.GetTimestamp();
             Logger.LogInformation("[{View}] [ExecuteLanguageModel] Executing language model...", ViewName);
 
-            var textResult = await GenerateService.GenerateTextAsync(options);
+            var textResult = await LanguageService.GenerateTextAsync(options);
 
             Logger.LogInformation("[{View}] [ExecuteLanguageModel] Execution complete, Elapsed: {Elapsed:c}", ViewName, Stopwatch.GetElapsedTime(timestamp));
             return textResult;
@@ -375,6 +383,7 @@ namespace Amuse.App.Views
         {
             try
             {
+                IsPipelineBusy = true;
                 IsPipelineLoaded = false;
                 CurrentPipeline = pipeline;
                 Logger.LogInformation("[{View}] [SelectedPipelineChanged] A new pipeline has been created.", ViewName);
@@ -393,6 +402,7 @@ namespace Amuse.App.Views
             }
             finally
             {
+                IsPipelineBusy = false;
                 Progress.Clear();
                 Statistics.Clear();
             }
@@ -439,7 +449,7 @@ namespace Amuse.App.Views
                 }
                 else
                 {
-                    if (GenerateService.IsExecuting)
+                    if (LanguageService.IsExecuting)
                     {
                         var message = progress.Subkey == "Transformer" && Options.Beams > 1
                             ? AppDefault.GeneratingBeamResults

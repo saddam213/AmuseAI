@@ -1,6 +1,7 @@
-// Copyright (c) Adam Clark. All rights reserved.
+﻿// Copyright (c) Adam Clark. All rights reserved.
 // Licensed under the Apache 2.0 License.
 using Amuse.App.Common;
+using Amuse.App.Resources;
 using Amuse.App.Services;
 using Amuse.Common;
 using Microsoft.Extensions.Logging;
@@ -9,11 +10,13 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Diagnostics;
+using System.IO;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using TensorStack.WPF;
 using TensorStack.WPF.Controls;
+using TensorStack.WPF.Services;
 
 namespace Amuse.App.Dialogs
 {
@@ -21,7 +24,8 @@ namespace Amuse.App.Dialogs
     {
         private readonly Settings _settings;
         private readonly IEnvironmentService _environmentService;
-        private readonly IGenerateService _generateService;
+        private readonly IModelAccessService _modelAccessService;
+        private readonly IMigrationService _migrationService;
         private readonly ILogger<AppSetupDialog> _logger;
         private readonly IProgress<PipelineProgress> _progressCallback;
         private readonly CancellationTokenSource _cancellation;
@@ -34,19 +38,23 @@ namespace Amuse.App.Dialogs
         private string _downloadSpeed;
         private string _downloadRemaining;
         private int _environmentColumns;
+        private bool _isFirstRun;
+        private string _modelDirectory;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="AppSetupDialog"/> class.
         /// </summary>
         /// <param name="settings">The settings.</param>
         /// <param name="environmentService">The environment service.</param>
-        /// <param name="generateService">The generate service.</param>
+        /// <param name="modelAccessService">The model access service.</param>
+        /// <param name="migrationService">The migration service.</param>
         /// <param name="logger">The logger.</param>
-        public AppSetupDialog(Settings settings, IEnvironmentService environmentService, IGenerateService generateService, ILogger<AppSetupDialog> logger)
+        public AppSetupDialog(Settings settings, IEnvironmentService environmentService, IModelAccessService modelAccessService, IMigrationService migrationService, ILogger<AppSetupDialog> logger)
         {
             _settings = settings;
             _environmentService = environmentService;
-            _generateService = generateService;
+            _modelAccessService = modelAccessService;
+            _migrationService = migrationService;
             _logger = logger;
             _cancellation = new CancellationTokenSource();
             _progressCallback = new Progress<PipelineProgress>(OnProgressUpdate);
@@ -55,12 +63,16 @@ namespace Amuse.App.Dialogs
             Progress = new ProgressInfo();
             InstallCommand = new AsyncRelayCommand(InstallAsync, CanInstall);
             LaterCommand = new AsyncRelayCommand(LaterAsync);
+            BrowseModelDirectoryCommand = new AsyncRelayCommand(BrowseModelDirectoryAsync);
             InitializeComponent();
         }
 
+        public Settings Settings => _settings;
+        public AsyncRelayCommand BrowseModelDirectoryCommand { get; }
         public ObservableCollection<EnvironmentSetupItem> Items { get; }
         public ObservableCollection<EnvironmentSetupGroup> Groups { get; }
         public ProgressInfo Progress { get; }
+        public IReadOnlyList<ScaleOption> ScaleOptions => ScaleOption.Options;
         public AsyncRelayCommand InstallCommand { get; }
         public AsyncRelayCommand LaterCommand { get; }
 
@@ -118,6 +130,18 @@ namespace Amuse.App.Dialogs
             set { SetProperty(ref _environmentColumns, value); }
         }
 
+        public bool IsFirstRun
+        {
+            get { return _isFirstRun; }
+            set { SetProperty(ref _isFirstRun, value); }
+        }
+
+        public string ModelDirectory
+        {
+            get { return _modelDirectory; }
+            set { SetProperty(ref _modelDirectory, value); }
+        }
+
 
         /// <summary>
         /// Gets a value indicating whether any backend has no installed environment on startup, the don't ask again option only applies to these.
@@ -126,11 +150,21 @@ namespace Amuse.App.Dialogs
 
 
         /// <summary>
-        /// Shows the dialog with the backends to set up on startup.
+        /// Gets a value indicating whether the first run has no environment selected, so there are only the first time settings to save.
+        /// </summary>
+        public bool IsSaveOnly => IsFirstRun && !Items.Any(x => x.IsSelected);
+
+
+        /// <summary>
+        /// Shows the dialog with the backends to set up on startup, the first run also shows the first time settings.
         /// </summary>
         /// <param name="items">The environments that need an update, and the backends with no installed environment.</param>
         public Task<bool> ShowDialogAsync(IReadOnlyList<EnvironmentSetupItem> items)
         {
+            IsFirstRun = !_settings.IsFirstRunComplete;
+            ModelDirectory = IsFirstRun
+                ? GetSuggestedModelDirectory(_settings.DirectoryModel, App.DirectoryData, App.DirectoryBase)
+                : _settings.DirectoryModel;
             LoadItems(items);
             return base.ShowDialogAsync();
         }
@@ -163,16 +197,20 @@ namespace Amuse.App.Dialogs
             foreach (var group in items.GroupBy(x => x.Backend))
                 Groups.Add(new EnvironmentSetupGroup(group.Key, [.. group]));
 
-            EnvironmentColumns = Math.Max(1, items.Max(x => x.Environments.Count));
+            EnvironmentColumns = items.Select(x => x.Environments.Count).DefaultIfEmpty(1).Max();
             NotifyPropertyChanged(nameof(HasMissingEnvironments));
+            NotifyPropertyChanged(nameof(IsSaveOnly));
         }
 
 
         /// <summary>
-        /// Installs or updates the selected environments, and makes each installed environment the default.
+        /// Installs or updates the selected environments, and makes each installed environment the default, with none selected on the first run only the first time settings are saved.
         /// </summary>
         private async Task InstallAsync()
         {
+            if (!await SaveFirstRunAsync())
+                return;
+
             IsExecuting = true;
             var selectedItems = Items.Where(x => x.IsSelected).ToList();
             try
@@ -181,8 +219,11 @@ namespace Amuse.App.Dialogs
                 await SaveDontAskAsync();
 
                 // Unload, the loaded pipeline may be using an environment that is being installed or replaced as the default
-                if (_generateService.IsLoaded)
-                    await _generateService.UnloadAsync();
+                foreach (var item in selectedItems)
+                {
+                    if (!await _modelAccessService.RequestEnvironmentReleaseAsync(item.Environment))
+                        throw new OperationCanceledException();
+                }
 
                 // Install
                 foreach (var item in selectedItems)
@@ -195,6 +236,13 @@ namespace Amuse.App.Dialogs
             {
                 _logger.LogInformation("[AppSetup] [Install] Install cancelled.");
                 await base.CloseAsync();
+                return;
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "[AppSetup] [Install] Install failed.");
+                IsExecuting = false;
+                await DialogService.ShowErrorAsync(AppErrors.UnexpectedErrorTitle, ex.Message);
                 return;
             }
             finally
@@ -267,8 +315,111 @@ namespace Amuse.App.Dialogs
                 return;
             }
 
+            if (!await SaveFirstRunAsync())
+                return;
+
             await SaveDontAskAsync();
             await base.CloseAsync();
+        }
+
+
+        /// <summary>
+        /// Chooses the location of the model folder, a Models folder is created in the location unless it is one already.
+        /// </summary>
+        private async Task BrowseModelDirectoryAsync()
+        {
+            var directory = await DialogService.OpenFolderAsync(AppDefault.SelectModelFolder, ModelDirectory);
+            if (string.IsNullOrEmpty(directory))
+                return;
+
+            var folderName = Path.GetFileName(Path.TrimEndingDirectorySeparator(directory));
+            ModelDirectory = string.Equals(folderName, "Models", StringComparison.OrdinalIgnoreCase)
+                ? directory
+                : Path.Combine(directory, "Models");
+        }
+
+
+        /// <summary>
+        /// Gets the model folder suggested on the first run. An installed app defaults to a folder in the local application data, which is hard to find,
+        /// so a folder on the internal drive with the most free space is suggested instead.
+        /// The current folder is kept when the app is portable, when it is not the default folder, or when it already holds files.
+        /// </summary>
+        /// <param name="currentDirectory">The current model directory.</param>
+        /// <param name="dataDirectory">The application data directory.</param>
+        /// <param name="baseDirectory">The application directory, a portable app keeps its data here.</param>
+        private static string GetSuggestedModelDirectory(string currentDirectory, string dataDirectory, string baseDirectory)
+        {
+            try
+            {
+                var defaultDirectory = Path.Combine(dataDirectory, "Models");
+                if (IsSameDirectory(dataDirectory, baseDirectory) || !IsSameDirectory(currentDirectory, defaultDirectory))
+                    return currentDirectory;
+
+                if (Directory.Exists(currentDirectory) && Directory.EnumerateFiles(currentDirectory, "*", SearchOption.AllDirectories).Any())
+                    return currentDirectory;
+
+                var drive = DriveInfo.GetDrives()
+                    .Where(x => x.DriveType == DriveType.Fixed && x.IsReady)
+                    .OrderByDescending(x => x.AvailableFreeSpace)
+                    .FirstOrDefault();
+                if (drive == null)
+                    return currentDirectory;
+
+                return Path.Combine(drive.RootDirectory.FullName, "Amuse", "Models");
+            }
+            catch (Exception)
+            {
+                return currentDirectory;
+            }
+        }
+
+
+        /// <summary>
+        /// Determines whether two paths are the same directory.
+        /// </summary>
+        /// <param name="directory">The directory.</param>
+        /// <param name="other">The other directory.</param>
+        private static bool IsSameDirectory(string directory, string other)
+        {
+            return string.Equals(
+                Path.TrimEndingDirectorySeparator(Path.GetFullPath(directory)),
+                Path.TrimEndingDirectorySeparator(Path.GetFullPath(other)),
+                StringComparison.OrdinalIgnoreCase);
+        }
+
+
+        /// <summary>
+        /// Saves the first time settings, so they are only shown on the first run.
+        /// </summary>
+        /// <returns><c>true</c> if the settings were saved or there is nothing to save, <c>false</c> if the model folder could not be created.</returns>
+        private async Task<bool> SaveFirstRunAsync()
+        {
+            if (!IsFirstRun || _settings.IsFirstRunComplete)
+                return true;
+
+            var currentDirectory = _settings.DirectoryModel;
+            try
+            {
+                if (!string.Equals(ModelDirectory, currentDirectory, StringComparison.OrdinalIgnoreCase))
+                {
+                    _settings.SetModelDirectory(ModelDirectory);
+                    _settings.NotifyPropertyChanged(nameof(Settings.DirectoryModel));
+                    await _migrationService.RunMigrationsAsync();
+                }
+
+                _settings.IsFirstRunComplete = true;
+                await _settings.SaveAsync();
+                _logger.LogInformation("[AppSetup] [FirstRun] First time settings saved, ModelDirectory: {ModelDirectory}, Language: {Language}, UIScale: {UIScale}", _settings.DirectoryModel, _settings.UILanguage, _settings.UIScale);
+                return true;
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "[AppSetup] [FirstRun] An exception occurred saving the first time settings, ModelDirectory: {ModelDirectory}", ModelDirectory);
+                _settings.SetModelDirectory(currentDirectory);
+                ModelDirectory = currentDirectory;
+                await DialogService.ShowErrorAsync(AppErrors.UnexpectedErrorTitle, ex.Message);
+                return false;
+            }
         }
 
 
@@ -277,7 +428,7 @@ namespace Amuse.App.Dialogs
         /// </summary>
         private bool CanInstall()
         {
-            return !IsExecuting && !IsComplete && Items.Any(x => x.IsSelected);
+            return !IsExecuting && !IsComplete && (IsSaveOnly || Items.Any(x => x.IsSelected));
         }
 
 
@@ -313,7 +464,10 @@ namespace Amuse.App.Dialogs
         private void OnItemPropertyChanged(object sender, PropertyChangedEventArgs e)
         {
             if (e.PropertyName == nameof(EnvironmentSetupItem.IsSelected))
+            {
+                NotifyPropertyChanged(nameof(IsSaveOnly));
                 InstallCommand.RaiseCanExecuteChanged();
+            }
         }
 
 

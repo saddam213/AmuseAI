@@ -26,20 +26,19 @@
                 <TextBlock Text="{Binding ErrorMessage}" Foreground="White" TextWrapping="Wrap" HorizontalAlignment="Center" VerticalAlignment="Center"/>
             </Border>
             <DockPanel Margin="0,10,0,10">
-                <Border DockPanel.Dock="Top" Background="{StaticResource ContainerBackground}" BorderBrush="{StaticResource ControlDarkerBorderBrush}" BorderThickness="1" Padding="4">
+                <Border DockPanel.Dock="Top" Background="{StaticResource ContainerGlassBackground}" BorderBrush="{StaticResource ControlDarkerBorderBrush}" BorderThickness="1" Padding="4">
                     <DockPanel Margin="5" >
                         <Image DockPanel.Dock="Left" Source="/Images/Icon.png" Width="50"/>
                         <StackPanel Margin="10,0,0,0">
                             <TextBlock Text="{Binding AppUpdate.Version, StringFormat=Amuse - {0}}" FontSize="14" FontWeight="SemiBold" />
                             <CommonControls:HyperlinkControl Link="{Binding AppUpdate.Link}" Label="{Binding AppUpdate.Link}" Foreground="{StaticResource InfoColour}"></CommonControls:HyperlinkControl>
-                            <TextBlock Text="{Binding AppAsset.DownloadLink}" TextWrapping="WrapWithOverflow"  FontSize="11"/>
                         </StackPanel>
                     </DockPanel>
                 </Border>
-                <DockPanel DockPanel.Dock="Bottom" LastChildFill="False">
+                <DockPanel DockPanel.Dock="Bottom" LastChildFill="False" Visibility="{Binding DownloadProgress, Converter={StaticResource GreaterThanToVisibilityConverter}, ConverterParameter=0}">
                     <TextBlock DockPanel.Dock="Left" Style="{StaticResource FieldTextBlockStyle}">
                         <Run Text="{Binding DownloadAmount, Mode=OneWay, StringFormat={}{0:N2} MB}"/>
-                        <Run Text="\" />
+                        <Run Text=" / " />
                         <Run Text="{Binding DownloadSize, Mode=OneWay, StringFormat={}{0:N2} MB}"/>
                         <Run Text="  @  " />
                         <Run Text="{Binding DownloadSpeed, Mode=OneWay, StringFormat={}{0:N2} MB/s}"/>
@@ -50,7 +49,7 @@
                         <Run Text="{Binding DownloadRemaining, Mode=OneWay}"/>
                     </TextBlock>
                 </DockPanel>
-                <ProgressBar Value="{Binding DownloadProgress}" Minimum="1" Maximum="100" Height="20"/>
+                <ProgressBar Value="{Binding DownloadProgress}" Minimum="0" Maximum="100" Height="20"/>
             </DockPanel>
         </DockPanel>
     </DockPanel>

@@ -1,9 +1,12 @@
-﻿using System;
+﻿using Amuse.App.Resources;
+using System;
 using System.Diagnostics;
+using System.IO;
 using System.Linq;
 using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Net.Http.Json;
+using System.Text;
 using System.Text.Json;
 using System.Threading;
 using System.Threading.Tasks;
@@ -34,7 +37,7 @@ namespace Amuse.App.Tools
         /// <summary>
         /// Gets the display name.
         /// </summary>
-        public override string DisplayName => "Web Page Tool";
+        public override string DisplayName => AppDefault.ToolWebPage;
 
         /// <summary>
         /// Gets the tool icon.
@@ -182,15 +185,44 @@ namespace Amuse.App.Tools
                     if (!mediaType.StartsWith("text/") && !mediaType.Contains("html") && !mediaType.Contains("xml") && !mediaType.Contains("json"))
                         throw new NotSupportedException($"Unsupported content type '{mediaType}'.");
 
-                    var body = await response.Content.ReadAsStringAsync(cancellationToken);
-                    if (body.Length > MaxDownloadChars)
-                        body = body[..MaxDownloadChars];
+                    var body = await ReadBodyAsync(response.Content, cancellationToken);
 
                     var isHtml = mediaType.Contains("html");
                     var title = isHtml ? ToolHelper.HtmlTitle(body) : null;
                     var content = isHtml ? ToolHelper.HtmlToText(body) : body.Trim();
                     var text = ToolHelper.Truncate(content, maxChars, out var isTruncated);
                     return new WebPageResult(response.RequestMessage?.RequestUri?.AbsoluteUri ?? uri.AbsoluteUri, title, "Direct", text, isTruncated);
+                }
+            }
+        }
+
+
+        /// <summary>
+        /// Reads the response body up to the download limit, the stream is never buffered whole.
+        /// </summary>
+        /// <param name="content">The content.</param>
+        /// <param name="cancellationToken">The cancellation token.</param>
+        private static async Task<string> ReadBodyAsync(HttpContent content, CancellationToken cancellationToken)
+        {
+            var encoding = Encoding.UTF8;
+            try
+            {
+                var charSet = content.Headers.ContentType?.CharSet?.Trim('"');
+                if (!string.IsNullOrEmpty(charSet))
+                    encoding = Encoding.GetEncoding(charSet);
+            }
+            catch (ArgumentException)
+            {
+                // Unknown charset, read as UTF-8
+            }
+
+            using (var stream = await content.ReadAsStreamAsync(cancellationToken))
+            {
+                using (var reader = new StreamReader(stream, encoding))
+                {
+                    var buffer = new char[MaxDownloadChars];
+                    var length = await reader.ReadBlockAsync(buffer.AsMemory(), cancellationToken);
+                    return new string(buffer, 0, length);
                 }
             }
         }

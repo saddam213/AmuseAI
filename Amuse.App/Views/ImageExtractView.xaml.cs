@@ -27,8 +27,8 @@ namespace Amuse.App.Views
         /// <summary>
         /// Initializes a new instance of the <see cref="ImageExtractView"/> class.
         /// </summary>
-        public ImageExtractView(Settings settings, NavigationService navigationService, IModelDownloadService downloadService, IHistoryService historyService, IExtractService extractService, ILogger<ImageExtractView> logger)
-            : base(settings, navigationService, downloadService, historyService, logger)
+        public ImageExtractView(Settings settings, NavigationService navigationService, IModelDownloadService downloadService, IModelAccessService modelAccessService, IHistoryService historyService, IExtractService extractService, ILogger<ImageExtractView> logger)
+            : base(settings, navigationService, downloadService, modelAccessService, historyService, logger)
         {
             ExtractService = extractService;
             InitializeComponent();
@@ -87,8 +87,8 @@ namespace Amuse.App.Views
         /// <param name="args">The arguments.</param>
         public override Task OpenAsync(OpenViewArgs args = null)
         {
-            ModelControl.SetPipeline(ExtractService.Pipeline);
-            IsPipelineLoaded = ExtractService.IsLoaded && ExtractService.Pipeline.ExtractModel == CurrentPipeline?.ExtractModel;
+            ModelControl.SetPipeline(IsModelOwner() ? ExtractService.Pipeline : null);
+            IsPipelineLoaded = IsModelOwner() && ExtractService.IsLoaded && ExtractService.Pipeline.ExtractModel == CurrentPipeline?.ExtractModel;
             return base.OpenAsync(args);
         }
 
@@ -104,6 +104,7 @@ namespace Amuse.App.Views
             {
                 Progress.Indeterminate($"{Default.Loading} {CurrentPipeline.ExtractModel.Name}...");
 
+                await RequestModelAccessAsync(CurrentPipeline);
                 await ExtractService.LoadAsync(CurrentPipeline);
                 await Settings.SetDefaultsAsync(CurrentPipeline);
 
@@ -138,7 +139,8 @@ namespace Amuse.App.Views
 
             try
             {
-                await ExtractService.UnloadAsync();
+                if (IsModelOwner())
+                    await ExtractService.UnloadAsync();
                 Logger.LogInformation("[ImageExtract] [UnloadPipeline] Pipeline unloaded successfully, Elapsed: {Elapsed:c}", Stopwatch.GetElapsedTime(timestamp));
                 return true;
             }
@@ -148,6 +150,15 @@ namespace Amuse.App.Views
                 await DialogService.ShowErrorAsync(AppErrors.UnloadPipelineTitle, ex.Message);
                 return false;
             }
+        }
+
+
+        /// <summary>
+        /// Determines whether this view loaded the extract model, rather than a diffusion pipeline.
+        /// </summary>
+        private bool IsModelOwner()
+        {
+            return ModelAccessService.GetExtractOwner() == ModelOwnerType.Extract;
         }
 
 
@@ -254,7 +265,7 @@ namespace Amuse.App.Views
                     {
                         await HistoryService.AddAsync(_resultImage, new ExtractHistory
                         {
-                            Options = _options,
+                            Options = automationJob.ExtractOptions,
                             Model = CurrentPipeline.ExtractModel.Name,
                             ExtractorType = CurrentPipeline.ExtractModel.Type,
                             Source = View.ImageExtract,
@@ -297,7 +308,7 @@ namespace Amuse.App.Views
         /// </summary>
         protected override bool CanExecute()
         {
-            return _sourceImage is not null && ExtractService.IsLoaded && !ExtractService.IsExecuting;
+            return _sourceImage is not null && ExtractService.IsLoaded && IsModelOwner() && !ExtractService.IsExecuting;
         }
 
 
@@ -306,7 +317,7 @@ namespace Amuse.App.Views
         /// </summary>
         protected override bool CanExecuteAutomation()
         {
-            return ExtractService.IsLoaded && !ExtractService.IsExecuting && AutomationOptions?.IsValid() == true;
+            return ExtractService.IsLoaded && IsModelOwner() && !ExtractService.IsExecuting && AutomationOptions?.IsValid() == true;
         }
 
 

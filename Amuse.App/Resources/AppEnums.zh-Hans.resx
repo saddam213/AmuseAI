@@ -1,0 +1,345 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <!-- 
+    Microsoft ResX Schema 
+    
+    Version 2.0
+    
+    The primary goals of this format is to allow a simple XML format 
+    that is mostly human readable. The generation and parsing of the 
+    various data types are done through the TypeConverter classes 
+    associated with the data types.
+    
+    Example:
+    
+    ... ado.net/XML headers & schema ...
+    <resheader name="resmimetype">text/microsoft-resx</resheader>
+    <resheader name="version">2.0</resheader>
+    <resheader name="reader">System.Resources.ResXResourceReader, System.Windows.Forms, ...</resheader>
+    <resheader name="writer">System.Resources.ResXResourceWriter, System.Windows.Forms, ...</resheader>
+    <data name="Name1"><value>this is my long string</value><comment>this is a comment</comment></data>
+    <data name="Color1" type="System.Drawing.Color, System.Drawing">Blue</data>
+    <data name="Bitmap1" mimetype="application/x-microsoft.net.object.binary.base64">
+        <value>[base64 mime encoded serialized .NET Framework object]</value>
+    </data>
+    <data name="Icon1" type="System.Drawing.Icon, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
+        <value>[base64 mime encoded string representing a byte array form of the .NET Framework object]</value>
+        <comment>This is a comment</comment>
+    </data>
+                
+    There are any number of "resheader" rows that contain simple 
+    name/value pairs.
+    
+    Each data row contains a name, and value. The row also contains a 
+    type or mimetype. Type corresponds to a .NET class that support 
+    text/value conversion through the TypeConverter architecture. 
+    Classes that don't support this are serialized and stored with the 
+    mimetype set.
+    
+    The mimetype is used for serialized objects, and tells the 
+    ResXResourceReader how to depersist the object. This is currently not 
+    extensible. For a given mimetype the value must be set accordingly:
+    
+    Note - application/x-microsoft.net.object.binary.base64 is the format 
+    that the ResXResourceWriter will generate, however the reader can 
+    read any of the formats listed below.
+    
+    mimetype: application/x-microsoft.net.object.binary.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Binary.BinaryFormatter
+            : and then encoded with base64 encoding.
+    
+    mimetype: application/x-microsoft.net.object.soap.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Soap.SoapFormatter
+            : and then encoded with base64 encoding.
+
+    mimetype: application/x-microsoft.net.object.bytearray.base64
+    value   : The object must be serialized into a byte array 
+            : using a System.ComponentModel.TypeConverter
+            : and then encoded with base64 encoding.
+    -->
+  <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+    <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
+    <xsd:element name="root" msdata:IsDataSet="true">
+      <xsd:complexType>
+        <xsd:choice maxOccurs="unbounded">
+          <xsd:element name="metadata">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" />
+              </xsd:sequence>
+              <xsd:attribute name="name" use="required" type="xsd:string" />
+              <xsd:attribute name="type" type="xsd:string" />
+              <xsd:attribute name="mimetype" type="xsd:string" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="assembly">
+            <xsd:complexType>
+              <xsd:attribute name="alias" type="xsd:string" />
+              <xsd:attribute name="name" type="xsd:string" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="data">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1" />
+              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
+              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="resheader">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" />
+            </xsd:complexType>
+          </xsd:element>
+        </xsd:choice>
+      </xsd:complexType>
+    </xsd:element>
+  </xsd:schema>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="AutomationType0" xml:space="preserve">
+    <value>批量种子</value>
+  </data>
+  <data name="AutomationType0_Description" xml:space="preserve">
+    <value>使用不同的种子值按指定次数生成</value>
+  </data>
+  <data name="AutomationType1" xml:space="preserve">
+    <value>逐行提示词</value>
+  </data>
+  <data name="AutomationType1_Description" xml:space="preserve">
+    <value>对指定文本文件中的每行提示词各生成一次</value>
+  </data>
+  <data name="AutomationType2" xml:space="preserve">
+    <value>提示词文件</value>
+  </data>
+  <data name="AutomationType2_Description" xml:space="preserve">
+    <value>对指定文件夹内每个文本文件中的提示词各生成一次</value>
+  </data>
+  <data name="AutomationType3" xml:space="preserve">
+    <value>输入文件</value>
+  </data>
+  <data name="AutomationType3_Description" xml:space="preserve">
+    <value>对指定文件夹中的每个输入文件各生成一次</value>
+  </data>
+  <data name="CheckpointType0" xml:space="preserve">
+    <value>本地文件夹</value>
+  </data>
+  <data name="CheckpointType1" xml:space="preserve">
+    <value>本地文件</value>
+  </data>
+  <data name="CheckpointType2" xml:space="preserve">
+    <value>在线文件夹</value>
+  </data>
+  <data name="CheckpointType3" xml:space="preserve">
+    <value>在线文件</value>
+  </data>
+  <data name="CheckpointType4" xml:space="preserve">
+    <value>组件</value>
+  </data>
+  <data name="EnvironmentType0" xml:space="preserve">
+    <value>厂商</value>
+  </data>
+  <data name="EnvironmentType1" xml:space="preserve">
+    <value>设备</value>
+  </data>
+  <data name="EnvironmentType2" xml:space="preserve">
+    <value>管线</value>
+  </data>
+  <data name="ExtractorType0" xml:space="preserve">
+    <value>默认</value>
+  </data>
+  <data name="ExtractorType1" xml:space="preserve">
+    <value>背景</value>
+  </data>
+  <data name="ExtractorType2" xml:space="preserve">
+    <value>姿态</value>
+  </data>
+  <data name="MemoryMode0" xml:space="preserve">
+    <value>自动</value>
+  </data>
+  <data name="MemoryMode0_Description" xml:space="preserve">
+    <value>自动选择最佳策略。</value>
+  </data>
+  <data name="MemoryMode1" xml:space="preserve">
+    <value>均衡</value>
+  </data>
+  <data name="MemoryMode1_Description" xml:space="preserve">
+    <value>自动将模型权重分配到显存和内存中。</value>
+  </data>
+  <data name="MemoryMode2" xml:space="preserve">
+    <value>低</value>
+  </data>
+  <data name="MemoryMode2_Description" xml:space="preserve">
+    <value>将模型权重保留在 CPU 内存或磁盘中，需要时再移至 GPU。显存占用最低，速度最慢。</value>
+  </data>
+  <data name="MemoryMode3" xml:space="preserve">
+    <value>中</value>
+  </data>
+  <data name="MemoryMode3_Description" xml:space="preserve">
+    <value>将模型权重保留在 CPU 内存中，需要时再移至 GPU。</value>
+  </data>
+  <data name="MemoryMode4" xml:space="preserve">
+    <value>高</value>
+  </data>
+  <data name="MemoryMode4_Description" xml:space="preserve">
+    <value>将全部权重加载到 GPU，以获得最佳性能。</value>
+  </data>
+  <data name="ModelCategoryType0" xml:space="preserve">
+    <value>扩散模型</value>
+  </data>
+  <data name="ModelCategoryType1" xml:space="preserve">
+    <value>ControlNet</value>
+  </data>
+  <data name="ModelCategoryType2" xml:space="preserve">
+    <value>LoRA 适配器</value>
+  </data>
+  <data name="ModelCategoryType3" xml:space="preserve">
+    <value>放大模型</value>
+  </data>
+  <data name="ModelCategoryType4" xml:space="preserve">
+    <value>提取模型</value>
+  </data>
+  <data name="ModelCategoryType5" xml:space="preserve">
+    <value>组件</value>
+  </data>
+  <data name="ModelCategoryType6" xml:space="preserve">
+    <value>LLM</value>
+  </data>
+  <data name="ModelSourceType0" xml:space="preserve">
+    <value>本地文件</value>
+  </data>
+  <data name="ModelSourceType0_Description" xml:space="preserve">
+    <value>扩散 UNet 或 Transformer 文件（使用默认组件）</value>
+  </data>
+  <data name="ModelSourceType1" xml:space="preserve">
+    <value>本地文件夹</value>
+  </data>
+  <data name="ModelSourceType1_Description" xml:space="preserve">
+    <value>包含所有组件的完整检查点目录（Diffusers 格式）</value>
+  </data>
+  <data name="ModelSourceType2" xml:space="preserve">
+    <value>本地检查点</value>
+  </data>
+  <data name="ModelSourceType2_Description" xml:space="preserve">
+    <value>包含所有组件的单个检查点文件（safetensors 或 gguf）</value>
+  </data>
+  <data name="ModelSourceType3" xml:space="preserve">
+    <value>自定义检查点</value>
+  </data>
+  <data name="ModelSourceType3_Description" xml:space="preserve">
+    <value>手动配置模型组件</value>
+  </data>
+  <data name="ModelStatusType0" xml:space="preserve">
+    <value>可下载</value>
+  </data>
+  <data name="ModelStatusType1" xml:space="preserve">
+    <value>未知</value>
+  </data>
+  <data name="ModelStatusType2" xml:space="preserve">
+    <value>下载中</value>
+  </data>
+  <data name="ModelStatusType3" xml:space="preserve">
+    <value>下载排队中</value>
+  </data>
+  <data name="ModelStatusType4" xml:space="preserve">
+    <value>下载失败</value>
+  </data>
+  <data name="ModelStatusType5" xml:space="preserve">
+    <value>已安装</value>
+  </data>
+  <data name="AspectType0" xml:space="preserve">
+    <value>方形</value>
+  </data>
+  <data name="AspectType1" xml:space="preserve">
+    <value>纵向</value>
+  </data>
+  <data name="AspectType2" xml:space="preserve">
+    <value>横向</value>
+  </data>
+  <data name="InputTabOption0" xml:space="preserve">
+    <value>选项</value>
+  </data>
+  <data name="InputTabOption1" xml:space="preserve">
+    <value>高级</value>
+  </data>
+  <data name="InputTabOption2" xml:space="preserve">
+    <value>自动化</value>
+  </data>
+  <data name="PaintDrawingTool0" xml:space="preserve">
+    <value>圆形画笔</value>
+  </data>
+  <data name="PaintDrawingTool1" xml:space="preserve">
+    <value>方形画笔</value>
+  </data>
+  <data name="PaintDrawingTool2" xml:space="preserve">
+    <value>荧光笔</value>
+  </data>
+  <data name="PaintDrawingTool3" xml:space="preserve">
+    <value>橡皮擦</value>
+  </data>
+  <data name="TimelineSegmentType0" xml:space="preserve">
+    <value>视频</value>
+  </data>
+  <data name="TimelineSegmentType1" xml:space="preserve">
+    <value>图像</value>
+  </data>
+  <data name="TimelineSegmentType3" xml:space="preserve">
+    <value>叠加层</value>
+  </data>
+  <data name="AdapterFlags0" xml:space="preserve">
+    <value>无</value>
+  </data>
+  <data name="AdapterFlags1" xml:space="preserve">
+    <value>远程</value>
+  </data>
+  <data name="AdapterFlags2" xml:space="preserve">
+    <value>软件</value>
+  </data>
+  <data name="AdapterType0" xml:space="preserve">
+    <value>GPU</value>
+  </data>
+  <data name="AdapterType1" xml:space="preserve">
+    <value>NPU</value>
+  </data>
+  <data name="AdapterType2" xml:space="preserve">
+    <value>其他</value>
+  </data>
+  <data name="McpTransportType0" xml:space="preserve">
+    <value>本地命令</value>
+  </data>
+  <data name="McpTransportType0_Description" xml:space="preserve">
+    <value>在此电脑上启动的程序</value>
+  </data>
+  <data name="McpTransportType1" xml:space="preserve">
+    <value>远程 URL</value>
+  </data>
+  <data name="McpTransportType1_Description" xml:space="preserve">
+    <value>通过网络访问的服务器</value>
+  </data>
+  <data name="ModelSourceType4" xml:space="preserve">
+    <value>本地文件 + 视觉</value>
+  </data>
+  <data name="ModelSourceType4_Description" xml:space="preserve">
+    <value>模型文件和视觉投影器（mmproj）文件</value>
+  </data>
+</root>

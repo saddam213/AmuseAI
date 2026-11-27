@@ -20,13 +20,12 @@ namespace Amuse.App.Views
     public partial class TextConverseView : ViewBaseLanguage
     {
         private string _conversationId;
-        private string _automationPrompt;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="TextConverseView"/> class.
         /// </summary>
-        public TextConverseView(Settings settings, NavigationService navigationService, IModelDownloadService downloadService, IGenerateService generateService, IExtractService extractService, IUpscaleService upscaleService, IHistoryService historyService, IToolService toolService, ILogger<TextConverseView> logger)
-            : base(settings, navigationService, downloadService, generateService, extractService, upscaleService, historyService, toolService, logger)
+        public TextConverseView(Settings settings, NavigationService navigationService, IModelDownloadService downloadService, IModelAccessService modelAccessService, ILanguageService languageService, IGenerateService generateService, IHistoryService historyService, IToolService toolService, ILogger<TextConverseView> logger)
+            : base(settings, navigationService, downloadService, modelAccessService, languageService, generateService, historyService, toolService, logger)
         {
             _conversationId = historyService.GetRandomName();
             InitializeComponent();
@@ -38,23 +37,13 @@ namespace Amuse.App.Views
         public override View View => View.TextConverse;
 
         /// <summary>
-        /// Gets or sets the automation prompt.
-        /// </summary>
-        public string AutomationPrompt
-        {
-            get { return _automationPrompt; }
-            set { SetProperty(ref _automationPrompt, value); }
-        }
-
-
-        /// <summary>
         /// On View Open
         /// </summary>
         public override async Task OpenAsync(OpenViewArgs args = null)
         {
             await base.OpenAsync(args);
             if (!IsPipelineLoaded)
-                ModelControl.SetPipeline(GenerateService.Pipeline);
+                ModelControl.SetPipeline(LanguageService.Pipeline);
         }
 
 
@@ -113,7 +102,7 @@ namespace Amuse.App.Views
             catch (Exception ex)
             {
                 Statistics.Clear();
-                IsPipelineLoaded = GenerateService.IsLoaded;
+                IsPipelineLoaded = LanguageService.IsLoaded;
                 Logger.LogError(ex, "[TextConverse] [Execute] An exception occurred executing pipeline, Elapsed: {Elapsed:c}", Stopwatch.GetElapsedTime(timestamp));
                 await DialogService.ShowErrorAsync(AppErrors.ExecutePipelineTitle, ex.Message);
             }
@@ -127,62 +116,11 @@ namespace Amuse.App.Views
 
 
         /// <summary>
-        /// Executes the pipeline automation.
+        /// Executes the pipeline automation, a conversation has no automation.
         /// </summary>
-        protected override async Task ExecuteAutomationAsync()
+        protected override Task ExecuteAutomationAsync()
         {
-            IsAutomating = true;
-            var timestamp = Stopwatch.GetTimestamp();
-            Logger.LogInformation($"[TextConverse] [ExecuteAutomation] Executing pipeline...");
-
-            try
-            {
-                Progress.Clear();
-                AutomationProgress.Clear();
-                Statistics.Clear();
-                Statistics.Start();
-                CancellationTokenSource = new CancellationTokenSource();
-
-                AutomationProgress.Indeterminate(AppDefault.AutomationStarted);
-                var cancellationToken = CancellationTokenSource.Token;
-                await foreach (var automationJob in AutomationManager.CreateJobsAsync(AutomationOptions, Options, MediaType.Text, MediaType.Text))
-                {
-                    cancellationToken.ThrowIfCancellationRequested();
-
-                    // History
-                    if (AutomationOptions.IsHistoryEnabled)
-                    {
-                        // await SaveHistoryAsync(options);
-                    }
-
-                    //await automationJob.SaveAsync(Utils.GetResponseText(ResultText.Result.Text));
-                    // AutomationProgress.Update(automationJob.Id, automationJob.Count, $"{AppDefault.Automation}: {automationJob.Id}/{automationJob.Count}");
-                }
-
-                Statistics.Stop();
-                Logger.LogInformation("[TextConverse] [ExecuteAutomation] Executing pipeline complete, Elapsed: {Elapsed:c}", Stopwatch.GetElapsedTime(timestamp));
-            }
-            catch (OperationCanceledException)
-            {
-                Statistics.Clear();
-                Logger.LogInformation("[TextConverse] [ExecuteAutomation] Executing pipeline cancelled, Elapsed: {Elapsed:c}", Stopwatch.GetElapsedTime(timestamp));
-            }
-            catch (Exception ex)
-            {
-                Statistics.Clear();
-                IsPipelineLoaded = GenerateService.IsLoaded;
-                Logger.LogError(ex, "[TextConverse] [ExecuteAutomation] An exception occurred executing pipeline, Elapsed: {Elapsed:c}", Stopwatch.GetElapsedTime(timestamp));
-                await DialogService.ShowErrorAsync(AppErrors.ExecuteAutomationTitle, ex.Message);
-            }
-            finally
-            {
-                Progress.Clear();
-                AutomationProgress.Clear();
-                IsAutomating = false;
-                CancellationTokenSource?.Dispose();
-                CancellationTokenSource = null;
-                AutomationPrompt = null;
-            }
+            return Task.CompletedTask;
         }
 
 

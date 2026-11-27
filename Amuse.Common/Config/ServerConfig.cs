@@ -12,6 +12,7 @@ namespace Amuse.Common.Config
         public string ChannelPipeName { get; init; }
         public string ChannelProgress { get; init; }
         public string ChannelTensor { get; init; }
+        public string ChannelStream { get; init; }
         public string DirectoryBase { get; init; }
 
         public static ServerConfig GetConfig(ServerType serverType, string directoryBase = null)
@@ -34,7 +35,8 @@ namespace Amuse.Common.Config
                     ChannelCommand = "AmuseHost.OnnxRuntime.Command",
                     ChannelPipeName = "AmuseHost.OnnxRuntime.PipeName",
                     ChannelProgress = "AmuseHost.OnnxRuntime.Progress",
-                    ChannelTensor = "AmuseHost.OnnxRuntime.Tensor"
+                    ChannelTensor = "AmuseHost.OnnxRuntime.Tensor",
+                    ChannelStream = "AmuseHost.OnnxRuntime.Stream"
                 }
             },
             {
@@ -46,7 +48,8 @@ namespace Amuse.Common.Config
                     ChannelCommand = "AmuseHost.OnnxRuntimeUpscale.Command",
                     ChannelPipeName = "AmuseHost.OnnxRuntimeUpscale.PipeName",
                     ChannelProgress = "AmuseHost.OnnxRuntimeUpscale.Progress",
-                    ChannelTensor = "AmuseHost.OnnxRuntimeUpscale.Tensor"
+                    ChannelTensor = "AmuseHost.OnnxRuntimeUpscale.Tensor",
+                    ChannelStream = "AmuseHost.OnnxRuntimeUpscale.Stream"
                 }
             },
             {
@@ -58,19 +61,21 @@ namespace Amuse.Common.Config
                     ChannelCommand = "AmuseHost.OnnxRuntimeExtract.Command",
                     ChannelPipeName = "AmuseHost.OnnxRuntimeExtract.PipeName",
                     ChannelProgress = "AmuseHost.OnnxRuntimeExtract.Progress",
-                    ChannelTensor = "AmuseHost.OnnxRuntimeExtract.Tensor"
+                    ChannelTensor = "AmuseHost.OnnxRuntimeExtract.Tensor",
+                    ChannelStream = "AmuseHost.OnnxRuntimeExtract.Stream"
                 }
             },
             {
-                ServerType.HuggingFace,  new ServerConfig
+                ServerType.OnnxRuntimeInterpolate,  new ServerConfig
                 {
-                    Name = "HuggingFace",
-                    Arguments = [nameof(ServerType.HuggingFace)],
-                    Executable = "AmuseHost.HuggingFace.exe",
-                    ChannelCommand = "AmuseHost.HuggingFace.Command",
-                    ChannelPipeName = "AmuseHost.HuggingFace.PipeName",
-                    ChannelProgress = "AmuseHost.HuggingFace.Progress",
-                    ChannelTensor = "AmuseHost.HuggingFace.Tensor"
+                    Name = "OnnxRuntimeInterpolate",
+                    Arguments = [nameof(ServerType.OnnxRuntimeInterpolate)],
+                    Executable = "AmuseHost.OnnxRuntime.exe",
+                    ChannelCommand = "AmuseHost.OnnxRuntimeInterpolate.Command",
+                    ChannelPipeName = "AmuseHost.OnnxRuntimeInterpolate.PipeName",
+                    ChannelProgress = "AmuseHost.OnnxRuntimeInterpolate.Progress",
+                    ChannelTensor = "AmuseHost.OnnxRuntimeInterpolate.Tensor",
+                    ChannelStream = "AmuseHost.OnnxRuntimeInterpolate.Stream"
                 }
             },
             {
@@ -82,7 +87,8 @@ namespace Amuse.Common.Config
                     ChannelCommand = "AmuseHost.StableDiffusionCpp.Command",
                     ChannelPipeName = "AmuseHost.StableDiffusionCpp.PipeName",
                     ChannelProgress = "AmuseHost.StableDiffusionCpp.Progress",
-                    ChannelTensor = "AmuseHost.StableDiffusionCpp.Tensor"
+                    ChannelTensor = "AmuseHost.StableDiffusionCpp.Tensor",
+                    ChannelStream = "AmuseHost.StableDiffusionCpp.Stream"
                 }
             },
             {
@@ -94,7 +100,8 @@ namespace Amuse.Common.Config
                     ChannelCommand = "AmuseHost.StableDiffusionCppUpscale.Command",
                     ChannelPipeName = "AmuseHost.StableDiffusionCppUpscale.PipeName",
                     ChannelProgress = "AmuseHost.StableDiffusionCppUpscale.Progress",
-                    ChannelTensor = "AmuseHost.StableDiffusionCppUpscale.Tensor"
+                    ChannelTensor = "AmuseHost.StableDiffusionCppUpscale.Tensor",
+                    ChannelStream = "AmuseHost.StableDiffusionCppUpscale.Stream"
                 }
             },
             {
@@ -106,7 +113,8 @@ namespace Amuse.Common.Config
                     ChannelCommand = "AmuseHost.AudioCpp.Command",
                     ChannelPipeName = "AmuseHost.AudioCpp.PipeName",
                     ChannelProgress = "AmuseHost.AudioCpp.Progress",
-                    ChannelTensor = "AmuseHost.AudioCpp.Tensor"
+                    ChannelTensor = "AmuseHost.AudioCpp.Tensor",
+                    ChannelStream = "AmuseHost.AudioCpp.Stream"
                 }
             },
             {
@@ -118,7 +126,8 @@ namespace Amuse.Common.Config
                     ChannelCommand = "AmuseHost.LlamaCpp.Command",
                     ChannelPipeName = "AmuseHost.LlamaCpp.PipeName",
                     ChannelProgress = "AmuseHost.LlamaCpp.Progress",
-                    ChannelTensor = "AmuseHost.LlamaCpp.Tensor"
+                    ChannelTensor = "AmuseHost.LlamaCpp.Tensor",
+                    ChannelStream = "AmuseHost.LlamaCpp.Stream"
                 }
             }
         };

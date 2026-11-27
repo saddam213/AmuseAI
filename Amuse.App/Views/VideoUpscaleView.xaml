@@ -26,7 +26,7 @@
                         <!--ModelControl-->
                         <Grid DockPanel.Dock="Top" IsEnabled="{Binding UpscaleService.IsLoading, Converter={StaticResource InverseBoolConverter}}">
                             <Grid IsEnabled="{Binding UpscaleService.IsExecuting, Mode=OneWay, Converter={StaticResource InverseBoolConverter}}">
-                                <Grid IsEnabled="{Binding IsAutomating, Mode=OneWay, Converter={StaticResource InverseBoolConverter}}">
+                                <Grid IsEnabled="{Binding IsPipelineBusy, Mode=OneWay, Converter={StaticResource InverseBoolConverter}}">
                                     <Controls:ModelControl
                                         x:Name="ModelControl"
                                         ViewType="VideoUpscale"

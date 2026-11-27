@@ -4,7 +4,9 @@ using Amuse.App.Runtime;
 using Amuse.Common;
 using Microsoft.Extensions.Logging;
 using System;
+using System.Collections.Generic;
 using System.Diagnostics;
+using System.Runtime.CompilerServices;
 using System.Threading;
 using System.Threading.Tasks;
 using TensorStack.Common;
@@ -160,7 +162,7 @@ namespace Amuse.App.Services
 
 
         /// <summary>
-        /// Execute the extractor on a video, frame by frame.
+        /// Execute the extractor on a video, the frames are streamed through the host.
         /// </summary>
         /// <param name="request">The request.</param>
         /// <param name="progressCallback">The progress callback.</param>
@@ -179,16 +181,16 @@ namespace Amuse.App.Services
                     // Video frames have no alpha channel
                     var isTransparentSupported = model.Type != ExtractorType.Background;
 
-                    // Extract, frame by frame
-                    var frameCount = request.VideoStream.FrameCount;
-                    async Task<VideoFrame> FrameProcessor(VideoFrame frame)
+                    // Extract, the frames are streamed through the host
+                    var inputFrames = request.VideoStream.GetAsync(cancellationToken: cancellationToken);
+                    var extractedFrames = _backendClient.ExtractVideoStreamAsync(inputFrames, request.Options, isTransparentSupported, cancellationToken);
+                    var resultFrames = ReportProgressAsync(extractedFrames, request.VideoStream.FrameCount, progressCallback, cancellationToken);
+                    var audioSourceFile = request.VideoStream.HasAudio ? request.VideoStream.SourceFile : null;
+                    return await RunOnBackendAsync(async () =>
                     {
-                        var processedFrame = await RunOnBackendAsync(() => _backendClient.ExtractImageAsync(frame.Frame, request.Options, isTransparentSupported));
-                        progressCallback?.Report(new RunProgress(frame.Index, frameCount));
-                        return new VideoFrame(frame.Index, processedFrame, frame.SourceFrameRate, frame.AuxFrame);
-                    }
-
-                    return await request.VideoStream.ProcessAsync(videoFileName, FrameProcessor, true, _settings.ReadBuffer, _settings.WriteBuffer, cancellationToken);
+                        await resultFrames.SaveAsync(videoFileName, audioSourceFile: audioSourceFile, cancellationToken: cancellationToken);
+                        return await VideoInputStream.CreateAsync(videoFileName);
+                    });
                 }
             }
             catch (OperationCanceledException)
@@ -240,7 +242,7 @@ namespace Amuse.App.Services
 
 
         /// <summary>
-        /// Loads the extract model into a new backend host.
+        /// Loads the extract model into a new backend host, the pipeline is set before the host loads so its owner and model are known while it is loading.
         /// </summary>
         /// <param name="pipeline">The pipeline.</param>
         /// <param name="cancellationToken">The cancellation token.</param>
@@ -249,6 +251,7 @@ namespace Amuse.App.Services
             // Unload
             await UnloadBackendAsync();
             cancellationToken.ThrowIfCancellationRequested();
+            _currentPipeline = pipeline;
 
             // Load, an extract-only pipeline, the host ignores the view's generate models
             var model = pipeline.ExtractModel;
@@ -274,7 +277,6 @@ namespace Amuse.App.Services
             }
 
             // Result
-            _currentPipeline = pipeline;
             _defaultOptions = model.DefaultOptions;
             IsLoaded = true;
         }
@@ -300,6 +302,23 @@ namespace Amuse.App.Services
                 _logger.LogError(ex, "[ExtractService] [Execute] Extract failed, stopping the extract host.");
                 await UnloadBackendOnErrorAsync();
                 throw;
+            }
+        }
+
+
+        /// <summary>
+        /// Reports the progress of a frame stream as each frame is returned.
+        /// </summary>
+        /// <param name="frames">The frames.</param>
+        /// <param name="frameCount">The frame count.</param>
+        /// <param name="progressCallback">The progress callback.</param>
+        /// <param name="cancellationToken">The cancellation token.</param>
+        private static async IAsyncEnumerable<VideoFrame> ReportProgressAsync(IAsyncEnumerable<VideoFrame> frames, int frameCount, IProgress<RunProgress> progressCallback, [EnumeratorCancellation] CancellationToken cancellationToken)
+        {
+            await foreach (var frame in frames.WithCancellation(cancellationToken))
+            {
+                progressCallback?.Report(new RunProgress(frame.Index, frameCount));
+                yield return frame;
             }
         }
 

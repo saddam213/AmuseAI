@@ -3,13 +3,16 @@ using Amuse.Common.Config;
 using Amuse.Common.Message;
 using Microsoft.Extensions.Logging;
 using System;
+using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
+using System.Runtime.CompilerServices;
 using System.Threading;
 using System.Threading.Tasks;
 using TensorStack.AudioCpp;
 using TensorStack.Common;
 using TensorStack.Common.Pipeline;
+using TensorStack.Common.Tensor;
 using PipelineProgress = Amuse.Common.PipelineProgress;
 
 namespace Amuse.Host.AudioCpp
@@ -206,6 +209,61 @@ namespace Amuse.Host.AudioCpp
             {
                 Logger.LogError(ex, "[AmuseHost] [PipelineServer] [RunPipeline] An exception occurred running pipeline.");
                 await SendException(ex, cancellationToken);
+            }
+        }
+
+
+        /// <summary>
+        /// Runs a pipeline stream, live speech recognition takes audio chunks and returns the text as it is recognised.
+        /// </summary>
+        /// <param name="request">The request.</param>
+        /// <param name="input">The items streamed from the client.</param>
+        /// <param name="cancellationToken">The cancellation token.</param>
+        protected override IAsyncEnumerable<PipelineStreamItem> RunPipelineStreamAsync(PipelineRequest request, IAsyncEnumerable<PipelineStreamItem> input, CancellationToken cancellationToken)
+        {
+            if (request.RunOptions.TextOptions != null)
+                return GenerateTextStreamAsync(request.RunOptions.TextOptions, input, cancellationToken);
+
+            throw new NotSupportedException("The stream request is not supported by audio.cpp.");
+        }
+
+
+        /// <summary>
+        /// Recognises the audio chunks streamed from the client, returning the text as it is recognised.
+        /// </summary>
+        /// <param name="options">The options.</param>
+        /// <param name="input">The audio chunks streamed from the client.</param>
+        /// <param name="cancellationToken">The cancellation token.</param>
+        private async IAsyncEnumerable<PipelineStreamItem> GenerateTextStreamAsync(GenerateTextOptions options, IAsyncEnumerable<PipelineStreamItem> input, [EnumeratorCancellation] CancellationToken cancellationToken)
+        {
+            if (_pipeline == null || !_pipeline.IsLoaded)
+                throw new Exception("Live speech recognition requires a model to be loaded.");
+
+            var index = 0;
+            var timestamp = Stopwatch.GetTimestamp();
+            var textOptions = options.CreateTextOptions();
+            var inputAudio = CreateAudioChunksAsync(input, cancellationToken);
+            await foreach (var text in _pipeline.GenerateTextStreamAsync(textOptions, inputAudio, cancellationToken))
+            {
+                yield return new PipelineStreamItem { Index = index++, Text = text };
+            }
+            Logger.LogInformation("[AmuseHost] [PipelineServer] [RunStream] Text stream complete, Results: {Results}, Elapsed: {Elapsed:c}", index, Stopwatch.GetElapsedTime(timestamp));
+        }
+
+
+        /// <summary>
+        /// Converts the stream items to audio chunks as the pipeline takes them.
+        /// </summary>
+        /// <param name="input">The items streamed from the client.</param>
+        /// <param name="cancellationToken">The cancellation token.</param>
+        private static async IAsyncEnumerable<AudioTensor> CreateAudioChunksAsync(IAsyncEnumerable<PipelineStreamItem> input, [EnumeratorCancellation] CancellationToken cancellationToken)
+        {
+            await foreach (var item in input.WithCancellation(cancellationToken))
+            {
+                if (item.Tensors.Count == 0)
+                    continue;
+
+                yield return new AudioTensor(item.Tensors[0], (int)item.Rate);
             }
         }
 

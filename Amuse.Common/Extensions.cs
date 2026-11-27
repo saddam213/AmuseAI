@@ -9,11 +9,14 @@ using System.Text.Json;
 using System.Threading;
 using System.Threading.Tasks;
 using TensorStack.Common.Tensor;
+using TensorStack.Common.Video;
 
 namespace Amuse.Common
 {
     public static partial class Extensions
     {
+        private const int MaxMessageLength = 64 * 1024 * 1024;
+
         /// <summary>
         /// Sends a TensorMessage to the PipeStream.
         /// Tensor messages are used for small tensors that dont require a large contiguous memory mapping, eg: latent previews 
@@ -149,6 +152,9 @@ namespace Amuse.Common
             var lengthBytes = new byte[4];
             await pipe.ReadExactlyAsync(lengthBytes, 0, lengthBytes.Length, cancellationToken);
             int jsonLength = BitConverter.ToInt32(lengthBytes);
+            if (jsonLength < 0 || jsonLength > MaxMessageLength)
+                throw new InvalidDataException($"Invalid message length, the channel is out of sync, Length: {jsonLength}");
+
             byte[] jsonData = new byte[jsonLength];
             await pipe.ReadExactlyAsync(jsonData, 0, jsonLength, cancellationToken);
             string jsonString = Encoding.UTF8.GetString(jsonData);
@@ -174,6 +180,31 @@ namespace Amuse.Common
                 offset += read;
             }
             return buffer;
+        }
+
+
+        /// <summary>
+        /// Converts a video frame to a pipeline stream item.
+        /// </summary>
+        /// <param name="frame">The frame.</param>
+        public static PipelineStreamItem ToStreamItem(this VideoFrame frame)
+        {
+            return new PipelineStreamItem
+            {
+                Index = frame.Index,
+                Rate = frame.SourceFrameRate,
+                Tensors = [frame.Frame]
+            };
+        }
+
+
+        /// <summary>
+        /// Converts a pipeline stream item to a video frame.
+        /// </summary>
+        /// <param name="item">The item.</param>
+        public static VideoFrame ToVideoFrame(this PipelineStreamItem item)
+        {
+            return new VideoFrame(item.Index, item.Tensors[0], item.Rate);
         }
 
 

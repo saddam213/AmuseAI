@@ -7,6 +7,7 @@
     xmlns:CommonControls="clr-namespace:TensorStack.WPF.Controls;assembly=TensorStack.WPF"
     xmlns:Controls="clr-namespace:Amuse.App.Controls"
     xmlns:Common="clr-namespace:Amuse.App.Common"
+    xmlns:Resources="clr-namespace:Amuse.App.Resources"
     xmlns:Views="clr-namespace:Amuse.App.Views">
     <Views:ViewBase.Resources>
         <Style x:Key="StatusIcon" TargetType="{x:Type CommonControls:FontAwesome}" >
@@ -41,6 +42,74 @@
                 </DataTrigger>
             </Style.Triggers>
         </Style>
+
+        <!--ModelRow-->
+        <Style x:Key="ModelRowContainer" TargetType="{x:Type ListBoxItem}">
+            <Setter Property="Focusable" Value="False" />
+            <Setter Property="Padding" Value="0" />
+            <Setter Property="HorizontalContentAlignment" Value="Stretch" />
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="{x:Type ListBoxItem}">
+                        <ContentPresenter />
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
+        <!--ModelItem-->
+        <Style x:Key="ModelItemBorder" TargetType="{x:Type Border}">
+            <Setter Property="Margin" Value="2" />
+            <Setter Property="BorderThickness" Value="1" />
+            <Setter Property="Background" Value="{StaticResource TransparentBrush}" />
+            <Setter Property="BorderBrush" Value="{StaticResource AccentBorderBrush}" />
+            <Style.Triggers>
+                <DataTrigger Binding="{Binding IsSelected}" Value="True">
+                    <Setter Property="Background" Value="{StaticResource ControlMouseOverBackground}" />
+                    <Setter Property="BorderBrush" Value="{StaticResource AccentColour2}" />
+                </DataTrigger>
+            </Style.Triggers>
+        </Style>
+
+        <!--PublisherLogo-->
+        <DataTemplate x:Key="PublisherLogoTemplate" DataType="{x:Type Common:ModelMetadata}">
+            <Border Width="60" Height="60" CornerRadius="6" RenderOptions.BitmapScalingMode="HighQuality" Visibility="{Binding PublisherModel.IconSource, Converter={StaticResource NullVisibilityConverter}, FallbackValue=Collapsed}">
+                <Border.Background>
+                    <ImageBrush ImageSource="{Binding PublisherModel.IconSource, FallbackValue={x:Null}}" Stretch="UniformToFill" />
+                </Border.Background>
+            </Border>
+        </DataTemplate>
+
+        <!--Publisher-->
+        <DataTemplate x:Key="PublisherTemplate" DataType="{x:Type Common:ModelMetadata}">
+            <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Margin="0,4,0,0" Visibility="{Binding PublisherModel, Converter={StaticResource NullVisibilityConverter}}">
+                <Border Width="20" Height="20" CornerRadius="3" Margin="0,0,6,0" RenderOptions.BitmapScalingMode="HighQuality" Visibility="{Binding PublisherModel.IconSource, Converter={StaticResource NullVisibilityConverter}, FallbackValue=Collapsed}">
+                    <Border.Background>
+                        <ImageBrush ImageSource="{Binding PublisherModel.IconSource, FallbackValue={x:Null}}" Stretch="UniformToFill" />
+                    </Border.Background>
+                </Border>
+                <CommonControls:HyperlinkControl Link="{Binding PublisherModel.Link}" Label="{Binding PublisherModel.Name}" Foreground="DeepSkyBlue" FontSize="14" VerticalAlignment="Center" Visibility="{Binding PublisherModel.Link, Converter={StaticResource NullVisibilityConverter}}" />
+                <TextBlock Text="{Binding PublisherModel.Name}" FontSize="14" VerticalAlignment="Center" Visibility="{Binding PublisherModel.Link, Converter={StaticResource InverseNullVisibilityConverter}}" />
+            </StackPanel>
+        </DataTemplate>
+
+        <!--Licence-->
+        <DataTemplate x:Key="LicenceTemplate" DataType="{x:Type Common:ModelMetadata}">
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto" MinWidth="60" />
+                    <ColumnDefinition Width="*" />
+                </Grid.ColumnDefinitions>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="Auto" />
+                </Grid.RowDefinitions>
+                <TextBlock Grid.Row="0" Grid.Column="0" FontStyle="Italic" Opacity=".7" Margin="0,0,6,0" Text="{CommonControls:Localize Licence, Append=:}" Visibility="{Binding License, Converter={StaticResource NullVisibilityConverter}}" />
+                <CommonControls:HyperlinkControl Grid.Row="0" Grid.Column="1" Link="{Binding LicenseLink}" Label="{Binding License}" Foreground="DeepSkyBlue" Visibility="{Binding License, Converter={StaticResource NullVisibilityConverter}}" />
+                <TextBlock Grid.Row="1" Grid.Column="0" FontStyle="Italic" Opacity=".7" Margin="0,0,6,0" Text="{CommonControls:Localize Source, Append=:}" Visibility="{Binding SourceLink, Converter={StaticResource NullVisibilityConverter}}" />
+                <CommonControls:HyperlinkControl Grid.Row="1" Grid.Column="1" Link="{Binding SourceLink}" Label="{Binding SourceLink}" Foreground="DeepSkyBlue" Opacity=".9" ToolTip="{Binding SourceLink}" ToolTipService.InitialShowDelay="200" Visibility="{Binding SourceLink, Converter={StaticResource NullVisibilityConverter}}" />
+            </Grid>
+        </DataTemplate>
     </Views:ViewBase.Resources>
     <Grid DataContext="{Binding RelativeSource={RelativeSource AncestorType={x:Type local:ModelsView}}}" >
         <Grid.ColumnDefinitions>
@@ -64,19 +133,36 @@
                     <UniformGrid DockPanel.Dock="Right" Rows="1" Width="780">
                         <StackPanel>
                             <TextBlock Text="{CommonControls:Localize ModelType}" Style="{StaticResource FieldTextBlockStyle}"/>
-                            <CommonControls:NullableComboBox ItemsSource="{Binding Source={StaticResource ModelCategoryType}}" SelectedItem="{Binding FilterCategoryType}" NullPrefix="All Models"/>
+                            <CommonControls:NullableComboBox ItemsSource="{Binding Source={StaticResource ModelCategoryType}}" SelectedItem="{Binding FilterCategoryType}" NullPrefix="{x:Static Resources:AppDefault.AllModels}"/>
                         </StackPanel>
                         <StackPanel>
                             <TextBlock Text="{CommonControls:Localize MediaType}" Style="{StaticResource FieldTextBlockStyle}"/>
-                            <CommonControls:NullableComboBox ItemsSource="{Binding Source={StaticResource MediaType}}" SelectedItem="{Binding FilterMediaType}" NullPrefix="All Media" />
+                            <CommonControls:NullableComboBox ItemsSource="{Binding Source={StaticResource MediaType}}" SelectedItem="{Binding FilterMediaType}" NullPrefix="{x:Static Resources:AppDefault.AllMedia}" />
                         </StackPanel>
                         <StackPanel>
                             <TextBlock Text="{CommonControls:Localize PipelineType}" Style="{StaticResource FieldTextBlockStyle}"/>
-                            <ComboBox ItemsSource="{Binding FilterPipelines}" SelectedItem="{Binding FilterPipeline}" />
+                            <ComboBox ItemsSource="{Binding FilterPipelines}" SelectedItem="{Binding FilterPipeline}">
+                                <ComboBox.ItemTemplate>
+                                    <DataTemplate>
+                                        <TextBlock>
+                                            <TextBlock.Style>
+                                                <Style TargetType="{x:Type TextBlock}" BasedOn="{StaticResource {x:Type TextBlock}}">
+                                                    <Setter Property="Text" Value="{Binding}" />
+                                                    <Style.Triggers>
+                                                        <DataTrigger Binding="{Binding}" Value="">
+                                                            <Setter Property="Text" Value="{CommonControls:Localize AllPipelines}" />
+                                                        </DataTrigger>
+                                                    </Style.Triggers>
+                                                </Style>
+                                            </TextBlock.Style>
+                                        </TextBlock>
+                                    </DataTemplate>
+                                </ComboBox.ItemTemplate>
+                            </ComboBox>
                         </StackPanel>
                         <StackPanel>
                             <TextBlock Text="{CommonControls:Localize BackendType}" Style="{StaticResource FieldTextBlockStyle}"/>
-                            <CommonControls:NullableComboBox ItemsSource="{Binding Source={StaticResource BackendType}}" SelectedItem="{Binding FilterBackendType}" NullPrefix="All Backends"/>
+                            <CommonControls:NullableComboBox ItemsSource="{Binding Source={StaticResource BackendType}}" SelectedItem="{Binding FilterBackendType}" NullPrefix="{x:Static Resources:AppDefault.AllBackends}"/>
                         </StackPanel>
 
                     </UniformGrid>
@@ -92,14 +178,16 @@
                 <DockPanel Height="30">
                     <StackPanel DockPanel.Dock="Left" Orientation="Horizontal" VerticalAlignment="Center">
                         <TextBlock Text="{CommonControls:Localize Items, Append=:}" Margin="0,0,3,0"/>
-                        <TextBlock Text="{Binding ModelCollection.Count}" />
+                        <TextBlock Text="{Binding ModelCount}" />
                         <TextBlock Text=" / " />
                         <TextBlock Text="{Binding ModelCollection.SourceCollection.Count}" />
                     </StackPanel>
                     <StackPanel DockPanel.Dock="Right" VerticalAlignment="Center">
-                        <StackPanel>
-                            <CheckBox Content="{CommonControls:Localize ShowInstalled}" IsChecked="{Binding FilterInstalled}" Margin="0,0,0,0" HorizontalAlignment="Center"/>
-                        </StackPanel>
+                        <UniformGrid Rows="1">
+                            <CheckBox Content="{CommonControls:Localize ShowComponents}" IsChecked="{Binding FilterComponents}" Margin="0,0,12,0" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                            <CheckBox Content="{CommonControls:Localize ShowInstalled}" IsChecked="{Binding FilterInstalled}" Margin="0,0,0,0" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                            <CommonControls:IconButton Text="{CommonControls:Localize QueueAll}" Icon="f0ed" IconStyle="Light" IconColor="{StaticResource AccentColour2}" Command="{Binding QueueAllCommand}" Height="24"  ToolTip="{CommonControls:Localize ToolTip_QueueAll}" ToolTipService.InitialShowDelay="200" ToolTipService.ShowOnDisabled="True"/>
+                        </UniformGrid>
                     </StackPanel>
                     <TextBlock />
                 </DockPanel>
@@ -107,30 +195,33 @@
 
             <!--Middle-->
             <Border BorderBrush="{StaticResource DefaultBorderColor}" BorderThickness="1" Margin="0,4">
-                <ScrollViewer PanningMode="VerticalOnly" HorizontalScrollBarVisibility="Disabled" VerticalScrollBarVisibility="Visible" PreviewMouseWheel="ScrollViewer_PreviewMouseWheel"  >
-                    <Grid>
-                        <ListBox x:Name="ListBoxControl" 
-                                Padding="0"
-                                VerticalAlignment="Top"
-                                BorderThickness="1"
-                                Background="{StaticResource TransparentBrush}"
-                                ScrollViewer.VerticalScrollBarVisibility="Disabled" 
-                                ScrollViewer.HorizontalScrollBarVisibility="Disabled"
-                                IsSynchronizedWithCurrentItem="True"
-                                ItemsSource="{Binding ModelCollection}" 
-                                VirtualizingPanel.IsVirtualizing="True"
-                                VirtualizingPanel.VirtualizationMode="Recycling"
-                                SelectedItem="{Binding SelectedItem, Mode=OneWayToSource}"
-                                ItemContainerStyle="{StaticResource ModelListBoxItem}">
+                <Grid>
+                    <ListBox x:Name="ListBoxControl"
+                            Padding="0"
+                            BorderThickness="0"
+                            Background="{StaticResource TransparentBrush}"
+                            ScrollViewer.VerticalScrollBarVisibility="Visible"
+                            ScrollViewer.HorizontalScrollBarVisibility="Disabled"
+                            ScrollViewer.PanningMode="VerticalOnly"
+                            ScrollViewer.CanContentScroll="True"
+                            ScrollViewer.ScrollChanged="ListBoxControl_ScrollChanged"
+                            PreviewMouseWheel="ListBoxControl_PreviewMouseWheel"
+                            ItemsSource="{Binding ModelRows}"
+                            VirtualizingPanel.IsVirtualizing="True"
+                            VirtualizingPanel.VirtualizationMode="Recycling"
+                            VirtualizingPanel.ScrollUnit="Pixel"
+                            ItemContainerStyle="{StaticResource ModelRowContainer}">
 
-                            <!--DataTemplates-->
-                            <ListBox.Resources>
+                        <!--DataTemplates-->
+                        <ListBox.Resources>
 
-                                <!--DiffusionModel-->
-                                <DataTemplate DataType="{x:Type Common:DiffusionModel}">
-                                    <Grid>
-                                        <DockPanel Height="80">
-                                            <Grid DockPanel.Dock="Left" Width="80" Height="80" Margin="4,0,0,0" Opacity=".2">
+                            <!--DiffusionModel-->
+                            <DataTemplate DataType="{x:Type Common:DiffusionModel}">
+                                <Grid>
+                                    <DockPanel Height="80">
+                                        <Grid DockPanel.Dock="Left" Width="80" Height="80" Margin="4,0,0,0">
+                                            <ContentControl Content="{Binding Metadata}" ContentTemplate="{StaticResource PublisherLogoTemplate}" Focusable="False" />
+                                            <Grid Opacity=".2" Visibility="{Binding Metadata.PublisherModel.IconSource, Converter={StaticResource InverseNullVisibilityConverter}}">
                                                 <Grid Visibility="{Binding MediaType, Converter={StaticResource EnumToVisibilityConverter}, ConverterParameter=Image}">
                                                     <CommonControls:FontAwesome Icon="f03e" IconStyle="SharpLight" Size="80" Color="{StaticResource DefaultForeground}"  />
                                                 </Grid>
@@ -141,148 +232,174 @@
                                                     <CommonControls:FontAwesome Icon="f001" IconStyle="SharpRegular" Size="76" Color="{StaticResource DefaultForeground}" Margin="0,4,0,0" />
                                                 </Grid>
                                             </Grid>
-                                            <TextBlock DockPanel.Dock="Bottom" Text="{Binding Name}" FontSize="13" FontWeight="DemiBold" TextWrapping="Wrap" Margin="4,0,0,10"/>
-                                            <StackPanel Margin="4,6,0,0" Opacity=".7">
-                                                <TextBlock Text="{Binding Pipeline, Converter={StaticResource EnumShortNameConverter}}"/>
-                                                <TextBlock Text="{Binding Backend}" Margin="0,-2,0,0"/>
-                                            </StackPanel>
-                                        </DockPanel>
-                                        <CommonControls:FontAwesome Style="{StaticResource StatusIcon}" Tag="{Binding Status}" Icon="f0ed" IconStyle="Solid" VerticalAlignment="Top" HorizontalAlignment="Right" Margin="0,8,8,0" />
-                                    </Grid>
+                                        </Grid>
+                                        <TextBlock DockPanel.Dock="Bottom" Text="{Binding Name}" FontSize="13" FontWeight="DemiBold" TextWrapping="Wrap" Margin="4,0,0,10"/>
+                                        <StackPanel Margin="4,6,0,0" Opacity=".7">
+                                            <TextBlock Text="{Binding Pipeline, Converter={StaticResource EnumShortNameConverter}}"/>
+                                            <TextBlock Text="{Binding Backend}" Margin="0,-2,0,0"/>
+                                        </StackPanel>
+                                    </DockPanel>
+                                    <CommonControls:FontAwesome Style="{StaticResource StatusIcon}" Tag="{Binding Status}" Icon="f0ed" IconStyle="Solid" VerticalAlignment="Top" HorizontalAlignment="Right" Margin="0,8,8,0" />
+                                </Grid>
 
-                                </DataTemplate>
+                            </DataTemplate>
 
-                                <!--LanguageModel-->
-                                <DataTemplate DataType="{x:Type Common:LanguageModel}">
-                                    <Grid>
-                                        <DockPanel Height="80">
-                                            <Grid DockPanel.Dock="Left" Width="80" Height="80" Margin="4,0,0,0" >
+                            <!--LanguageModel-->
+                            <DataTemplate DataType="{x:Type Common:LanguageModel}">
+                                <Grid>
+                                    <DockPanel Height="80">
+                                        <Grid DockPanel.Dock="Left" Width="80" Height="80" Margin="4,0,0,0">
+                                            <ContentControl Content="{Binding Metadata}" ContentTemplate="{StaticResource PublisherLogoTemplate}" Focusable="False" />
+                                            <Grid Visibility="{Binding Metadata.PublisherModel.IconSource, Converter={StaticResource InverseNullVisibilityConverter}}">
                                                 <Grid Visibility="{Binding MediaType, Converter={StaticResource EnumToVisibilityConverter}, ConverterParameter=Text}" >
                                                     <CommonControls:FontAwesome Icon="f893" IconStyle="SharpSolid" Size="80" Color="{StaticResource DefaultForeground}" Opacity=".2" />
                                                 </Grid>
                                             </Grid>
-                                            <TextBlock DockPanel.Dock="Bottom" Text="{Binding Name}" FontSize="13" FontWeight="DemiBold" TextWrapping="Wrap" Margin="4,0,0,10"/>
-                                            <StackPanel Margin="4,6,0,0" Opacity=".7">
-                                                <TextBlock Text="{Binding Pipeline, Converter={StaticResource EnumShortNameConverter}}"/>
-                                                <TextBlock Text="{Binding Backend}" Margin="0,-2,0,0"/>
-                                            </StackPanel>
-                                        </DockPanel>
-                                        <CommonControls:FontAwesome Style="{StaticResource StatusIcon}" Tag="{Binding Status}" Icon="f0ed" IconStyle="Solid" VerticalAlignment="Top" HorizontalAlignment="Right" Margin="0,8,8,0" />
-                                    </Grid>
-                                </DataTemplate>
+                                        </Grid>
+                                        <TextBlock DockPanel.Dock="Bottom" Text="{Binding Name}" FontSize="13" FontWeight="DemiBold" TextWrapping="Wrap" Margin="4,0,0,10"/>
+                                        <StackPanel Margin="4,6,0,0" Opacity=".7">
+                                            <TextBlock Text="{Binding Pipeline, Converter={StaticResource EnumShortNameConverter}}"/>
+                                            <TextBlock Text="{Binding Backend}" Margin="0,-2,0,0"/>
+                                        </StackPanel>
+                                    </DockPanel>
+                                    <CommonControls:FontAwesome Style="{StaticResource StatusIcon}" Tag="{Binding Status}" Icon="f0ed" IconStyle="Solid" VerticalAlignment="Top" HorizontalAlignment="Right" Margin="0,8,8,0" />
+                                </Grid>
+                            </DataTemplate>
 
-                                <!--LoraAdapterModel-->
-                                <DataTemplate DataType="{x:Type Common:LoraAdapterModel}">
-                                    <Grid>
-                                        <DockPanel Height="80">
-                                            <Grid DockPanel.Dock="Left" Width="80" Height="80" Margin="4,0,0,0">
+                            <!--LoraAdapterModel-->
+                            <DataTemplate DataType="{x:Type Common:LoraAdapterModel}">
+                                <Grid>
+                                    <DockPanel Height="80">
+                                        <Grid DockPanel.Dock="Left" Width="80" Height="80" Margin="4,0,0,0">
+                                            <ContentControl Content="{Binding Metadata}" ContentTemplate="{StaticResource PublisherLogoTemplate}" Focusable="False" />
+                                            <Grid Visibility="{Binding Metadata.PublisherModel.IconSource, Converter={StaticResource InverseNullVisibilityConverter}}">
                                                 <CommonControls:FontAwesome Icon="f1e0" IconStyle="SharpLight" Size="70" Color="{StaticResource DefaultForeground}" Opacity=".2" />
                                             </Grid>
-                                            <TextBlock DockPanel.Dock="Bottom" Text="{Binding Name}" FontSize="13" FontWeight="DemiBold" TextWrapping="Wrap" Margin="4,0,0,10"/>
-                                            <StackPanel Margin="4,6,0,0" Opacity=".7">
-                                                <TextBlock Text="{Binding Pipeline, Converter={StaticResource EnumShortNameConverter}}"/>
-                                                <TextBlock Text="{CommonControls:Localize LoraAdapter}" Margin="0,-2,0,0"/>
-                                            </StackPanel>
-                                        </DockPanel>
-                                        <CommonControls:FontAwesome Style="{StaticResource StatusIcon}" Tag="{Binding Status}" Icon="f0ed" IconStyle="Solid" VerticalAlignment="Top" HorizontalAlignment="Right" Margin="0,8,8,0" />
-                                    </Grid>
-                                </DataTemplate>
+                                        </Grid>
+                                        <TextBlock DockPanel.Dock="Bottom" Text="{Binding Name}" FontSize="13" FontWeight="DemiBold" TextWrapping="Wrap" Margin="4,0,0,10"/>
+                                        <StackPanel Margin="4,6,0,0" Opacity=".7">
+                                            <TextBlock Text="{Binding Pipeline, Converter={StaticResource EnumShortNameConverter}}"/>
+                                            <TextBlock Text="{CommonControls:Localize LoraAdapter}" Margin="0,-2,0,0"/>
+                                        </StackPanel>
+                                    </DockPanel>
+                                    <CommonControls:FontAwesome Style="{StaticResource StatusIcon}" Tag="{Binding Status}" Icon="f0ed" IconStyle="Solid" VerticalAlignment="Top" HorizontalAlignment="Right" Margin="0,8,8,0" />
+                                </Grid>
+                            </DataTemplate>
 
-                                <!--ControlNetModel-->
-                                <DataTemplate DataType="{x:Type Common:ControlNetModel}">
-                                    <Grid>
-                                        <DockPanel Height="80">
-                                            <Grid DockPanel.Dock="Left" Width="80" Height="80" Margin="4,0,0,0">
+                            <!--ControlNetModel-->
+                            <DataTemplate DataType="{x:Type Common:ControlNetModel}">
+                                <Grid>
+                                    <DockPanel Height="80">
+                                        <Grid DockPanel.Dock="Left" Width="80" Height="80" Margin="4,0,0,0">
+                                            <ContentControl Content="{Binding Metadata}" ContentTemplate="{StaticResource PublisherLogoTemplate}" Focusable="False" />
+                                            <Grid Visibility="{Binding Metadata.PublisherModel.IconSource, Converter={StaticResource InverseNullVisibilityConverter}}">
                                                 <CommonControls:FontAwesome Icon="f78a" IconStyle="SharpLight" Size="60" Color="{StaticResource DefaultForeground}" Opacity=".2" />
                                             </Grid>
-                                            <TextBlock DockPanel.Dock="Bottom" Text="{Binding Name}" FontSize="13" FontWeight="DemiBold" TextWrapping="Wrap" Margin="4,0,0,10" />
-                                            <StackPanel Margin="4,6,0,0" Opacity=".7">
-                                                <TextBlock Text="{Binding Pipeline, Converter={StaticResource EnumShortNameConverter}}"/>
-                                                <TextBlock Text="{CommonControls:Localize ControlNet}" Margin="0,-2,0,0"/>
-                                            </StackPanel>
-                                        </DockPanel>
-                                        <CommonControls:FontAwesome Style="{StaticResource StatusIcon}" Tag="{Binding Status}" Icon="f0ed" IconStyle="Solid" VerticalAlignment="Top" HorizontalAlignment="Right" Margin="0,8,8,0" />
-                                    </Grid>
-                                </DataTemplate>
+                                        </Grid>
+                                        <TextBlock DockPanel.Dock="Bottom" Text="{Binding Name}" FontSize="13" FontWeight="DemiBold" TextWrapping="Wrap" Margin="4,0,0,10" />
+                                        <StackPanel Margin="4,6,0,0" Opacity=".7">
+                                            <TextBlock Text="{Binding Pipeline, Converter={StaticResource EnumShortNameConverter}}"/>
+                                            <TextBlock Text="{CommonControls:Localize ControlNet}" Margin="0,-2,0,0"/>
+                                        </StackPanel>
+                                    </DockPanel>
+                                    <CommonControls:FontAwesome Style="{StaticResource StatusIcon}" Tag="{Binding Status}" Icon="f0ed" IconStyle="Solid" VerticalAlignment="Top" HorizontalAlignment="Right" Margin="0,8,8,0" />
+                                </Grid>
+                            </DataTemplate>
 
-                                <!--UpscaleModel-->
-                                <DataTemplate DataType="{x:Type Common:UpscaleModel}">
-                                    <Grid>
-                                        <DockPanel Height="80">
-                                            <Grid DockPanel.Dock="Left" Width="80" Height="80" Margin="4,0,0,0">
+                            <!--UpscaleModel-->
+                            <DataTemplate DataType="{x:Type Common:UpscaleModel}">
+                                <Grid>
+                                    <DockPanel Height="80">
+                                        <Grid DockPanel.Dock="Left" Width="80" Height="80" Margin="4,0,0,0">
+                                            <ContentControl Content="{Binding Metadata}" ContentTemplate="{StaticResource PublisherLogoTemplate}" Focusable="False" />
+                                            <Grid Visibility="{Binding Metadata.PublisherModel.IconSource, Converter={StaticResource InverseNullVisibilityConverter}}">
                                                 <CommonControls:FontAwesome Icon="f424" IconStyle="SharpLight" Size="68" Color="{StaticResource DefaultForeground}" Opacity=".2" />
                                             </Grid>
-                                            <TextBlock DockPanel.Dock="Bottom" Text="{Binding Name}" FontSize="13" FontWeight="DemiBold" TextWrapping="Wrap" Margin="4,0,0,10"/>
-                                            <StackPanel Margin="4,6,0,0" Opacity=".7">
-                                                <TextBlock Text="{Binding Pipeline, Converter={StaticResource EnumShortNameConverter}}"/>
-                                                <TextBlock Text="{Binding Backend}" Margin="0,-2,0,0"/>
-                                            </StackPanel>
-                                        </DockPanel>
-                                        <CommonControls:FontAwesome Style="{StaticResource StatusIcon}" Tag="{Binding Status}" Icon="f0ed" IconStyle="Solid" VerticalAlignment="Top" HorizontalAlignment="Right" Margin="0,8,8,0" />
-                                    </Grid>
-                                </DataTemplate>
+                                        </Grid>
+                                        <TextBlock DockPanel.Dock="Bottom" Text="{Binding Name}" FontSize="13" FontWeight="DemiBold" TextWrapping="Wrap" Margin="4,0,0,10"/>
+                                        <StackPanel Margin="4,6,0,0" Opacity=".7">
+                                            <TextBlock Text="{Binding Pipeline, Converter={StaticResource EnumShortNameConverter}}"/>
+                                            <TextBlock Text="{Binding Backend}" Margin="0,-2,0,0"/>
+                                        </StackPanel>
+                                    </DockPanel>
+                                    <CommonControls:FontAwesome Style="{StaticResource StatusIcon}" Tag="{Binding Status}" Icon="f0ed" IconStyle="Solid" VerticalAlignment="Top" HorizontalAlignment="Right" Margin="0,8,8,0" />
+                                </Grid>
+                            </DataTemplate>
 
-                                <!--ExtractModel-->
-                                <DataTemplate DataType="{x:Type Common:ExtractModel}">
-                                    <Grid>
-                                        <DockPanel Height="80">
-                                            <Grid DockPanel.Dock="Left" Width="80" Height="80" Margin="4,0,0,0">
+                            <!--ExtractModel-->
+                            <DataTemplate DataType="{x:Type Common:ExtractModel}">
+                                <Grid>
+                                    <DockPanel Height="80">
+                                        <Grid DockPanel.Dock="Left" Width="80" Height="80" Margin="4,0,0,0">
+                                            <ContentControl Content="{Binding Metadata}" ContentTemplate="{StaticResource PublisherLogoTemplate}" Focusable="False" />
+                                            <Grid Visibility="{Binding Metadata.PublisherModel.IconSource, Converter={StaticResource InverseNullVisibilityConverter}}">
                                                 <CommonControls:FontAwesome Icon="f302" IconStyle="SharpLight" Size="68" Color="{StaticResource DefaultForeground}" Opacity=".2" />
                                             </Grid>
-                                            <TextBlock DockPanel.Dock="Bottom" Text="{Binding Name}" FontSize="13" FontWeight="DemiBold" TextWrapping="Wrap" Margin="4,0,0,10"/>
-                                            <StackPanel Margin="4,6,0,0" Opacity=".7">
-                                                <TextBlock Text="{Binding Pipeline, Converter={StaticResource EnumShortNameConverter}}"/>
-                                                <TextBlock Text="{Binding Backend}" Margin="0,-2,0,0"/>
-                                            </StackPanel>
-                                        </DockPanel>
-                                        <CommonControls:FontAwesome Style="{StaticResource StatusIcon}" Tag="{Binding Status}" Icon="f0ed" IconStyle="Solid" VerticalAlignment="Top" HorizontalAlignment="Right" Margin="0,8,8,0" />
-                                    </Grid>
-                                </DataTemplate>
+                                        </Grid>
+                                        <TextBlock DockPanel.Dock="Bottom" Text="{Binding Name}" FontSize="13" FontWeight="DemiBold" TextWrapping="Wrap" Margin="4,0,0,10"/>
+                                        <StackPanel Margin="4,6,0,0" Opacity=".7">
+                                            <TextBlock Text="{Binding Pipeline, Converter={StaticResource EnumShortNameConverter}}"/>
+                                            <TextBlock Text="{Binding Backend}" Margin="0,-2,0,0"/>
+                                        </StackPanel>
+                                    </DockPanel>
+                                    <CommonControls:FontAwesome Style="{StaticResource StatusIcon}" Tag="{Binding Status}" Icon="f0ed" IconStyle="Solid" VerticalAlignment="Top" HorizontalAlignment="Right" Margin="0,8,8,0" />
+                                </Grid>
+                            </DataTemplate>
 
-                                <!--ComponentModel-->
-                                <DataTemplate DataType="{x:Type Common:ComponentModel}">
-                                    <Grid>
-                                        <DockPanel Height="80">
-                                            <Grid DockPanel.Dock="Left" Width="80" Height="80" Margin="4,0,0,0">
+                            <!--ComponentModel-->
+                            <DataTemplate DataType="{x:Type Common:ComponentModel}">
+                                <Grid>
+                                    <DockPanel Height="80">
+                                        <Grid DockPanel.Dock="Left" Width="80" Height="80" Margin="4,0,0,0">
+                                            <ContentControl Content="{Binding Metadata}" ContentTemplate="{StaticResource PublisherLogoTemplate}" Focusable="False" />
+                                            <Grid Visibility="{Binding Metadata.PublisherModel.IconSource, Converter={StaticResource InverseNullVisibilityConverter}}">
                                                 <CommonControls:FontAwesome Icon="e479" IconStyle="SharpLight" Size="78" Color="{StaticResource DefaultForeground}" Opacity=".2" />
                                             </Grid>
-                                            <TextBlock DockPanel.Dock="Bottom" Text="{Binding Name}" FontSize="13" FontWeight="DemiBold" TextWrapping="Wrap" Margin="4,0,0,10"/>
-                                            <StackPanel Margin="4,6,0,0" Opacity=".7">
-                                                <TextBlock Text="{Binding Checkpoint.Folder}"/>
-                                                <TextBlock Text="{CommonControls:Localize Component}" Margin="0,-2,0,0"/>
-                                            </StackPanel>
-                                        </DockPanel>
-                                        <CommonControls:FontAwesome Style="{StaticResource StatusIcon}" Tag="{Binding Status}" Icon="f0ed" IconStyle="Solid" VerticalAlignment="Top" HorizontalAlignment="Right" Margin="0,8,8,0" />
-                                    </Grid>
-                                </DataTemplate>
+                                        </Grid>
+                                        <TextBlock DockPanel.Dock="Bottom" Text="{Binding Name}" FontSize="13" FontWeight="DemiBold" TextWrapping="Wrap" Margin="4,0,0,10"/>
+                                        <StackPanel Margin="4,6,0,0" Opacity=".7">
+                                            <TextBlock Text="{Binding Checkpoint.Folder}"/>
+                                            <TextBlock Text="{CommonControls:Localize Component}" Margin="0,-2,0,0"/>
+                                        </StackPanel>
+                                    </DockPanel>
+                                    <CommonControls:FontAwesome Style="{StaticResource StatusIcon}" Tag="{Binding Status}" Icon="f0ed" IconStyle="Solid" VerticalAlignment="Top" HorizontalAlignment="Right" Margin="0,8,8,0" />
+                                </Grid>
+                            </DataTemplate>
 
-                            </ListBox.Resources>
+                        </ListBox.Resources>
 
+                        <!--Rows-->
+                        <ListBox.ItemTemplate>
+                            <DataTemplate>
+                                <Grid>
+                                    <TextBlock Text="{Binding Header}" FontSize="16" FontWeight="SemiBold" Opacity=".9" Margin="6,12,5,4" Visibility="{Binding Header, Converter={StaticResource NullVisibilityConverter}}" />
+                                    <ItemsControl ItemsSource="{Binding Items}" Focusable="False" Visibility="{Binding Items, Converter={StaticResource NullVisibilityConverter}}">
+                                        <ItemsControl.ItemsPanel>
+                                            <ItemsPanelTemplate>
+                                                <UniformGrid Rows="1" Columns="{Binding Columns}" />
+                                            </ItemsPanelTemplate>
+                                        </ItemsControl.ItemsPanel>
+                                        <ItemsControl.ItemTemplate>
+                                            <DataTemplate>
+                                                <Border Style="{StaticResource ModelItemBorder}" MouseLeftButtonDown="ModelItem_MouseLeftButtonDown">
+                                                    <ContentControl Content="{Binding Model}" Focusable="False" />
+                                                </Border>
+                                            </DataTemplate>
+                                        </ItemsControl.ItemTemplate>
+                                    </ItemsControl>
+                                </Grid>
+                            </DataTemplate>
+                        </ListBox.ItemTemplate>
 
-                            <!--ItemsPanel-->
-                            <ListBox.ItemsPanel>
-                                <ItemsPanelTemplate>
-                                    <CommonControls:UniformWrapPanel  IsItemsHost="True" SnapsToDevicePixels="True" VerticalAlignment="Top" >
-                                        <CommonControls:UniformWrapPanel.Style>
-                                            <Style TargetType="{x:Type CommonControls:UniformWrapPanel}" >
-                                                <Setter Property="MinItemWidth" Value="240"/>
-                                                <Setter Property="MaxItemWidth" Value="300"/>
-                                            </Style>
-                                        </CommonControls:UniformWrapPanel.Style>
-                                    </CommonControls:UniformWrapPanel>
-                                </ItemsPanelTemplate>
-                            </ListBox.ItemsPanel>
+                    </ListBox>
 
-                        </ListBox>
-
-                        <Grid Visibility="{Binding ModelCollection.Count, Converter={StaticResource LessOrEqualThanToVisibilityConverter}, ConverterParameter=0}">
-                            <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center">
-                                <TextBlock Text="{CommonControls:Localize NoItemsFound}" FontSize="18" Opacity="0.6"/>
-                            </StackPanel>
-                        </Grid>
-
+                    <Grid Visibility="{Binding ModelCount, Converter={StaticResource LessOrEqualThanToVisibilityConverter}, ConverterParameter=0}">
+                        <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center">
+                            <TextBlock Text="{CommonControls:Localize NoItemsFound}" FontSize="18" Opacity="0.6"/>
+                        </StackPanel>
                     </Grid>
-                </ScrollViewer>
+
+                </Grid>
             </Border>
         </DockPanel>
 
@@ -294,7 +411,7 @@
 
             <!--SelectedItem-->
             <Border DockPanel.Dock="Top" BorderBrush="{StaticResource DefaultBorderColor}" BorderThickness="1" >
-                <DockPanel Height="360" Margin="0,6,0,0">
+                <DockPanel Height="420" Margin="0,6,0,0">
 
                     <DockPanel DockPanel.Dock="Bottom"  Margin="6" >
                         <UniformGrid Rows="1" Height="32" Margin="0,6,0,0">
@@ -315,6 +432,7 @@
                                 <DataTemplate DataType="{x:Type Common:DiffusionModel}">
                                     <DockPanel>
 
+                                        <ContentControl DockPanel.Dock="Bottom" Content="{Binding Metadata}" ContentTemplate="{StaticResource LicenceTemplate}" Margin="30,0,10,10" Focusable="False" />
                                         <Grid DockPanel.Dock="Bottom" Margin="30,0,0,10">
                                             <Grid.ColumnDefinitions>
                                                 <ColumnDefinition Width="60"/>
@@ -326,19 +444,33 @@
                                                 <RowDefinition/>
                                                 <RowDefinition/>
                                                 <RowDefinition/>
+                                                <RowDefinition Height="Auto"/>
                                             </Grid.RowDefinitions>
                                             <TextBlock Grid.Row="0" Grid.Column="0" FontStyle="Italic" Opacity=".7" Text="{CommonControls:Localize Memory, Append=:}" />
                                             <TextBlock Grid.Row="0" Grid.Column="1" Text="{Binding MemorySize, StringFormat={}{0}GB}" />
                                             <TextBlock Grid.Row="0" Grid.Column="2" FontStyle="Italic" Opacity=".7" Text="{CommonControls:Localize Type, Append=:}" />
                                             <TextBlock Grid.Row="0" Grid.Column="3" Text="{Binding ModelType}" />
                                             <TextBlock Grid.Row="1" Grid.Column="0" FontStyle="Italic" Opacity=".7" Text="{CommonControls:Localize Status, Append=:}" />
-                                            <TextBlock Grid.Row="1" Grid.Column="1" Text="{Binding Status}" />
+                                            <TextBlock Grid.Row="1" Grid.Column="1" Text="{Binding Status, Converter={StaticResource EnumDisplayNameConverter}}" />
                                             <TextBlock Grid.Row="1" Grid.Column="2" FontStyle="Italic" Opacity=".7" Text="{CommonControls:Localize Output, Append=:}" />
                                             <TextBlock Grid.Row="1" Grid.Column="3" Text="{Binding MediaType}" />
                                             <TextBlock Grid.Row="2" Grid.Column="0" FontStyle="Italic" Opacity=".7" Text="{CommonControls:Localize Backend, Append=:}" />
                                             <TextBlock Grid.Row="2" Grid.Column="1" Text="{Binding Backend}" />
-                                            <TextBlock Grid.Row="2" Grid.Column="2" FontStyle="Italic" Opacity=".7" Text="{CommonControls:Localize Access, Append=:}" />
-                                            <TextBlock Grid.Row="2" Grid.Column="3" Text="{Binding AccessToken, TargetNullValue=Not Required}" />
+                                            <TextBlock Grid.Row="3" Grid.Column="0" FontStyle="Italic" Opacity=".7" Text="{CommonControls:Localize Quants, Append=:}" Visibility="{Binding HasCheckpointSets, Converter={StaticResource BooleanToVisibilityConverter}}" />
+                                            <ItemsControl Grid.Row="3" Grid.Column="1" Grid.ColumnSpan="3" ItemsSource="{Binding Checkpoints}" Visibility="{Binding HasCheckpointSets, Converter={StaticResource BooleanToVisibilityConverter}}">
+                                                <ItemsControl.ItemTemplate>
+                                                    <DataTemplate>
+                                                        <StackPanel Orientation="Horizontal" Margin="0,0,10,0">
+                                                            <TextBlock Text="{Binding Type, Converter={StaticResource EnumDisplayNameConverter}}" />
+                                                        </StackPanel>
+                                                    </DataTemplate>
+                                                </ItemsControl.ItemTemplate>
+                                                <ItemsControl.ItemsPanel>
+                                                    <ItemsPanelTemplate>
+                                                        <WrapPanel Orientation="Horizontal"/>
+                                                    </ItemsPanelTemplate>
+                                                </ItemsControl.ItemsPanel>
+                                            </ItemsControl>
                                         </Grid>
 
                                         <StackPanel Margin="6,2">
@@ -358,7 +490,7 @@
                                                     </ItemsPanelTemplate>
                                                 </ItemsControl.ItemsPanel>
                                             </ItemsControl>
-                                            <CommonControls:HyperlinkControl Link="{Binding Link}" Label="{Binding Link}" Foreground="DeepSkyBlue" HorizontalAlignment="Center" Opacity=".9" Margin="0,2,0,0"/>
+                                            <ContentControl Content="{Binding Metadata}" ContentTemplate="{StaticResource PublisherTemplate}" Focusable="False" />
                                             <Border BorderBrush="{StaticResource DefaultForeground}" BorderThickness="0,2,0,0" Margin="0,10" Opacity=".2"/>
                                             <TextBlock Text="{Binding Pipeline, Converter={StaticResource EnumDescriptionConverter}}" TextWrapping="Wrap" Opacity=".9"/>
                                         </StackPanel>
@@ -369,6 +501,7 @@
                                 <DataTemplate DataType="{x:Type Common:LanguageModel}">
                                     <DockPanel>
 
+                                        <ContentControl DockPanel.Dock="Bottom" Content="{Binding Metadata}" ContentTemplate="{StaticResource LicenceTemplate}" Margin="30,0,10,10" Focusable="False" />
                                         <Grid DockPanel.Dock="Bottom" Margin="30,0,0,10">
                                             <Grid.ColumnDefinitions>
                                                 <ColumnDefinition Width="60"/>
@@ -380,19 +513,33 @@
                                                 <RowDefinition/>
                                                 <RowDefinition/>
                                                 <RowDefinition/>
+                                                <RowDefinition Height="Auto"/>
                                             </Grid.RowDefinitions>
                                             <TextBlock Grid.Row="0" Grid.Column="0" FontStyle="Italic" Opacity=".7" Text="{CommonControls:Localize Memory, Append=:}" />
                                             <TextBlock Grid.Row="0" Grid.Column="1" Text="{Binding MemorySize, StringFormat={}{0}GB}" />
                                             <TextBlock Grid.Row="0" Grid.Column="2" FontStyle="Italic" Opacity=".7" Text="{CommonControls:Localize Type, Append=:}" />
                                             <TextBlock Grid.Row="0" Grid.Column="3" Text="{Binding ModelType}" />
                                             <TextBlock Grid.Row="1" Grid.Column="0" FontStyle="Italic" Opacity=".7" Text="{CommonControls:Localize Status, Append=:}" />
-                                            <TextBlock Grid.Row="1" Grid.Column="1" Text="{Binding Status}" />
+                                            <TextBlock Grid.Row="1" Grid.Column="1" Text="{Binding Status, Converter={StaticResource EnumDisplayNameConverter}}" />
                                             <TextBlock Grid.Row="1" Grid.Column="2" FontStyle="Italic" Opacity=".7" Text="{CommonControls:Localize Output, Append=:}" />
                                             <TextBlock Grid.Row="1" Grid.Column="3" Text="{Binding MediaType}" />
                                             <TextBlock Grid.Row="2" Grid.Column="0" FontStyle="Italic" Opacity=".7" Text="{CommonControls:Localize Backend, Append=:}" />
                                             <TextBlock Grid.Row="2" Grid.Column="1" Text="{Binding Backend}" />
-                                            <TextBlock Grid.Row="2" Grid.Column="2" FontStyle="Italic" Opacity=".7" Text="{CommonControls:Localize Access, Append=:}" />
-                                            <TextBlock Grid.Row="2" Grid.Column="3" Text="{Binding AccessToken, TargetNullValue=Not Required}" />
+                                            <TextBlock Grid.Row="3" Grid.Column="0" FontStyle="Italic" Opacity=".7" Text="{CommonControls:Localize Quants, Append=:}" Visibility="{Binding HasCheckpointSets, Converter={StaticResource BooleanToVisibilityConverter}}" />
+                                            <ItemsControl Grid.Row="3" Grid.Column="1" Grid.ColumnSpan="3" ItemsSource="{Binding Checkpoints}" Visibility="{Binding HasCheckpointSets, Converter={StaticResource BooleanToVisibilityConverter}}">
+                                                <ItemsControl.ItemTemplate>
+                                                    <DataTemplate>
+                                                        <StackPanel Orientation="Horizontal" Margin="0,0,10,0">
+                                                            <TextBlock Text="{Binding Type, Converter={StaticResource EnumDisplayNameConverter}}" />
+                                                        </StackPanel>
+                                                    </DataTemplate>
+                                                </ItemsControl.ItemTemplate>
+                                                <ItemsControl.ItemsPanel>
+                                                    <ItemsPanelTemplate>
+                                                        <WrapPanel Orientation="Horizontal"/>
+                                                    </ItemsPanelTemplate>
+                                                </ItemsControl.ItemsPanel>
+                                            </ItemsControl>
                                         </Grid>
 
                                         <StackPanel Margin="6,2">
@@ -412,7 +559,7 @@
                                                     </ItemsPanelTemplate>
                                                 </ItemsControl.ItemsPanel>
                                             </ItemsControl>
-                                            <CommonControls:HyperlinkControl Link="{Binding Link}" Label="{Binding Link}" Foreground="DeepSkyBlue" HorizontalAlignment="Center" Opacity=".9" Margin="0,2,0,0"/>
+                                            <ContentControl Content="{Binding Metadata}" ContentTemplate="{StaticResource PublisherTemplate}" Focusable="False" />
                                             <Border BorderBrush="{StaticResource DefaultForeground}" BorderThickness="0,2,0,0" Margin="0,10" Opacity=".2"/>
                                             <TextBlock Text="{Binding Pipeline, Converter={StaticResource EnumDescriptionConverter}}" TextWrapping="Wrap" Opacity=".9"/>
                                         </StackPanel>
@@ -422,9 +569,10 @@
                                 <!--LoraAdapterModel-->
                                 <DataTemplate DataType="{x:Type Common:LoraAdapterModel}">
                                     <DockPanel>
+                                        <ContentControl DockPanel.Dock="Bottom" Content="{Binding Metadata}" ContentTemplate="{StaticResource LicenceTemplate}" Margin="30,0,10,10" Focusable="False" />
                                         <Grid DockPanel.Dock="Bottom" Margin="30,0,0,10">
                                             <Grid.ColumnDefinitions>
-                                                <ColumnDefinition Width="45"/>
+                                                <ColumnDefinition Width="60"/>
                                                 <ColumnDefinition Width="*"/>
                                                 <ColumnDefinition Width="45"/>
                                                 <ColumnDefinition Width="*"/>
@@ -434,9 +582,7 @@
                                                 <RowDefinition/>
                                             </Grid.RowDefinitions>
                                             <TextBlock Grid.Row="0" Grid.Column="0" FontStyle="Italic" Opacity=".7" Text="{CommonControls:Localize Status, Append=:}" />
-                                            <TextBlock Grid.Row="0" Grid.Column="1" Text="{Binding Status}" />
-                                            <TextBlock Grid.Row="0" Grid.Column="2" FontStyle="Italic" Opacity=".7" Text="{CommonControls:Localize Access, Append=:}" />
-                                            <TextBlock Grid.Row="0" Grid.Column="3" Text="{Binding AccessToken, TargetNullValue=Not Required}" />
+                                            <TextBlock Grid.Row="0" Grid.Column="1" Text="{Binding Status, Converter={StaticResource EnumDisplayNameConverter}}" />
                                         </Grid>
                                         <StackPanel Margin="6,2">
                                             <TextBlock Text="{Binding Pipeline, Converter={StaticResource EnumDisplayNameConverter}}" FontSize="15"  TextAlignment="Center" Opacity=".7" />
@@ -455,7 +601,7 @@
                                                     </ItemsPanelTemplate>
                                                 </ItemsControl.ItemsPanel>
                                             </ItemsControl>
-                                            <CommonControls:HyperlinkControl Link="{Binding Link}" Label="{Binding Link}" Foreground="DeepSkyBlue" HorizontalAlignment="Center" Opacity=".9" Margin="0,2,0,0"/>
+                                            <ContentControl Content="{Binding Metadata}" ContentTemplate="{StaticResource PublisherTemplate}" Focusable="False" />
                                             <Border BorderBrush="{StaticResource DefaultForeground}" BorderThickness="0,2,0,0" Margin="0,10" Opacity=".2"/>
                                         </StackPanel>
                                     </DockPanel>
@@ -464,9 +610,10 @@
                                 <!--ControlNetModel-->
                                 <DataTemplate DataType="{x:Type Common:ControlNetModel}">
                                     <DockPanel>
+                                        <ContentControl DockPanel.Dock="Bottom" Content="{Binding Metadata}" ContentTemplate="{StaticResource LicenceTemplate}" Margin="30,0,10,10" Focusable="False" />
                                         <Grid DockPanel.Dock="Bottom" Margin="30,0,0,10">
                                             <Grid.ColumnDefinitions>
-                                                <ColumnDefinition Width="45"/>
+                                                <ColumnDefinition Width="60"/>
                                                 <ColumnDefinition Width="*"/>
                                                 <ColumnDefinition Width="45"/>
                                                 <ColumnDefinition Width="*"/>
@@ -476,9 +623,7 @@
                                                 <RowDefinition/>
                                             </Grid.RowDefinitions>
                                             <TextBlock Grid.Row="0" Grid.Column="0" FontStyle="Italic" Opacity=".7" Text="{CommonControls:Localize Status, Append=:}" />
-                                            <TextBlock Grid.Row="0" Grid.Column="1" Text="{Binding Status}" />
-                                            <TextBlock Grid.Row="0" Grid.Column="2" FontStyle="Italic" Opacity=".7" Text="{CommonControls:Localize Access, Append=:}" />
-                                            <TextBlock Grid.Row="0" Grid.Column="3" Text="{Binding AccessToken, TargetNullValue=Not Required}" />
+                                            <TextBlock Grid.Row="0" Grid.Column="1" Text="{Binding Status, Converter={StaticResource EnumDisplayNameConverter}}" />
                                         </Grid>
                                         <StackPanel Margin="6,2">
                                             <TextBlock Text="{Binding Pipeline, Converter={StaticResource EnumDisplayNameConverter}}" FontSize="15"  TextAlignment="Center" Opacity=".7" />
@@ -497,7 +642,7 @@
                                                     </ItemsPanelTemplate>
                                                 </ItemsControl.ItemsPanel>
                                             </ItemsControl>
-                                            <CommonControls:HyperlinkControl Link="{Binding Link}" Label="{Binding Link}" Foreground="DeepSkyBlue" HorizontalAlignment="Center" Opacity=".9" Margin="0,2,0,0"/>
+                                            <ContentControl Content="{Binding Metadata}" ContentTemplate="{StaticResource PublisherTemplate}" Focusable="False" />
                                             <Border BorderBrush="{StaticResource DefaultForeground}" BorderThickness="0,2,0,0" Margin="0,10" Opacity=".2"/>
                                         </StackPanel>
                                     </DockPanel>
@@ -506,9 +651,10 @@
                                 <!--UpscaleModel-->
                                 <DataTemplate DataType="{x:Type Common:UpscaleModel}">
                                     <DockPanel>
+                                        <ContentControl DockPanel.Dock="Bottom" Content="{Binding Metadata}" ContentTemplate="{StaticResource LicenceTemplate}" Margin="30,0,10,10" Focusable="False" />
                                         <Grid DockPanel.Dock="Bottom" Margin="30,0,0,10">
                                             <Grid.ColumnDefinitions>
-                                                <ColumnDefinition Width="55"/>
+                                                <ColumnDefinition Width="60"/>
                                                 <ColumnDefinition Width="*"/>
                                                 <ColumnDefinition Width="45"/>
                                                 <ColumnDefinition Width="*"/>
@@ -522,14 +668,12 @@
                                             <TextBlock Grid.Row="0" Grid.Column="2" FontStyle="Italic" Opacity=".7" Text="{CommonControls:Localize Scale, Append=:}" />
                                             <TextBlock Grid.Row="0" Grid.Column="3" Text="{Binding ScaleFactor, StringFormat={}{0}x}" />
                                             <TextBlock Grid.Row="1" Grid.Column="0" FontStyle="Italic" Opacity=".7" Text="{CommonControls:Localize Status, Append=:}" />
-                                            <TextBlock Grid.Row="1" Grid.Column="1" Text="{Binding Status}" />
-                                            <TextBlock Grid.Row="1" Grid.Column="2" FontStyle="Italic" Opacity=".7" Text="{CommonControls:Localize Access, Append=:}" />
-                                            <TextBlock Grid.Row="1" Grid.Column="3" Text="{Binding AccessToken, TargetNullValue=Not Required}" />
+                                            <TextBlock Grid.Row="1" Grid.Column="1" Text="{Binding Status, Converter={StaticResource EnumDisplayNameConverter}}" />
                                         </Grid>
                                         <StackPanel Margin="6,2">
                                             <TextBlock Text="{Binding Pipeline, Converter={StaticResource EnumDisplayNameConverter}}" FontSize="15"  TextAlignment="Center" Opacity=".7" />
                                             <TextBlock Text="{Binding Name}" FontSize="23" FontWeight="DemiBold" TextAlignment="Center" Margin="0,-2,0,2" TextWrapping="Wrap"/>
-                                            <CommonControls:HyperlinkControl Link="{Binding Link}" Label="{Binding Link}" Foreground="DeepSkyBlue" HorizontalAlignment="Center" Opacity=".9" Margin="0,2,0,0"/>
+                                            <ContentControl Content="{Binding Metadata}" ContentTemplate="{StaticResource PublisherTemplate}" Focusable="False" />
                                             <Border BorderBrush="{StaticResource DefaultForeground}" BorderThickness="0,2,0,0" Margin="0,10" Opacity=".2"/>
                                         </StackPanel>
                                     </DockPanel>
@@ -538,9 +682,10 @@
                                 <!--ExtractModel-->
                                 <DataTemplate DataType="{x:Type Common:ExtractModel}">
                                     <DockPanel>
+                                        <ContentControl DockPanel.Dock="Bottom" Content="{Binding Metadata}" ContentTemplate="{StaticResource LicenceTemplate}" Margin="30,0,10,10" Focusable="False" />
                                         <Grid DockPanel.Dock="Bottom" Margin="30,0,0,10">
                                             <Grid.ColumnDefinitions>
-                                                <ColumnDefinition Width="55"/>
+                                                <ColumnDefinition Width="60"/>
                                                 <ColumnDefinition Width="*"/>
                                                 <ColumnDefinition Width="45"/>
                                                 <ColumnDefinition Width="*"/>
@@ -552,16 +697,14 @@
                                             <TextBlock Grid.Row="0" Grid.Column="0" FontStyle="Italic" Opacity=".7" Text="{CommonControls:Localize Memory, Append=:}" />
                                             <TextBlock Grid.Row="0" Grid.Column="1" Text="{Binding MemorySize, StringFormat={}{0}GB}" />
                                             <TextBlock Grid.Row="0" Grid.Column="2" FontStyle="Italic" Opacity=".7" Text="{CommonControls:Localize Type, Append=:}" />
-                                            <TextBlock Grid.Row="0" Grid.Column="3" Text="{Binding Type}" />
+                                            <TextBlock Grid.Row="0" Grid.Column="3" Text="{Binding Type, Converter={StaticResource EnumDisplayNameConverter}}" />
                                             <TextBlock Grid.Row="1" Grid.Column="0" FontStyle="Italic" Opacity=".7" Text="{CommonControls:Localize Status, Append=:}" />
-                                            <TextBlock Grid.Row="1" Grid.Column="1" Text="{Binding Status}" />
-                                            <TextBlock Grid.Row="1" Grid.Column="2" FontStyle="Italic" Opacity=".7" Text="{CommonControls:Localize Access, Append=:}" />
-                                            <TextBlock Grid.Row="1" Grid.Column="3" Text="{Binding AccessToken, TargetNullValue=Not Required}" />
+                                            <TextBlock Grid.Row="1" Grid.Column="1" Text="{Binding Status, Converter={StaticResource EnumDisplayNameConverter}}" />
                                         </Grid>
                                         <StackPanel Margin="6,2">
                                             <TextBlock Text="{Binding Pipeline, Converter={StaticResource EnumDisplayNameConverter}}" FontSize="15"  TextAlignment="Center" Opacity=".7" />
                                             <TextBlock Text="{Binding Name}" FontSize="23" FontWeight="DemiBold" TextAlignment="Center" Margin="0,-2,0,2" TextWrapping="Wrap"/>
-                                            <CommonControls:HyperlinkControl Link="{Binding Link}" Label="{Binding Link}" Foreground="DeepSkyBlue" HorizontalAlignment="Center" Opacity=".9" Margin="0,2,0,0"/>
+                                            <ContentControl Content="{Binding Metadata}" ContentTemplate="{StaticResource PublisherTemplate}" Focusable="False" />
                                             <Border BorderBrush="{StaticResource DefaultForeground}" BorderThickness="0,2,0,0" Margin="0,10" Opacity=".2"/>
                                         </StackPanel>
                                     </DockPanel>
@@ -570,9 +713,10 @@
                                 <!--ComponentModel-->
                                 <DataTemplate DataType="{x:Type Common:ComponentModel}">
                                     <DockPanel>
+                                        <ContentControl DockPanel.Dock="Bottom" Content="{Binding Metadata}" ContentTemplate="{StaticResource LicenceTemplate}" Margin="30,0,10,10" Focusable="False" />
                                         <Grid DockPanel.Dock="Bottom" Margin="30,0,0,10">
                                             <Grid.ColumnDefinitions>
-                                                <ColumnDefinition Width="45"/>
+                                                <ColumnDefinition Width="60"/>
                                                 <ColumnDefinition Width="*"/>
                                                 <ColumnDefinition Width="45"/>
                                                 <ColumnDefinition Width="*"/>
@@ -582,14 +726,12 @@
                                                 <RowDefinition/>
                                             </Grid.RowDefinitions>
                                             <TextBlock Grid.Row="0" Grid.Column="0" FontStyle="Italic" Opacity=".7" Text="{CommonControls:Localize Status, Append=:}" />
-                                            <TextBlock Grid.Row="0" Grid.Column="1" Text="{Binding Status}" />
-                                            <TextBlock Grid.Row="0" Grid.Column="2" FontStyle="Italic" Opacity=".7" Text="{CommonControls:Localize Access, Append=:}" />
-                                            <TextBlock Grid.Row="0" Grid.Column="3" Text="{Binding AccessToken, TargetNullValue=Not Required}" />
+                                            <TextBlock Grid.Row="0" Grid.Column="1" Text="{Binding Status, Converter={StaticResource EnumDisplayNameConverter}}" />
                                         </Grid>
                                         <StackPanel Margin="6,2">
                                             <TextBlock Text="{Binding Checkpoint.Folder}" FontSize="15"  TextAlignment="Center" Opacity=".7" />
                                             <TextBlock Text="{Binding Name}" FontSize="23" FontWeight="DemiBold" TextAlignment="Center" Margin="0,-2,0,2" TextWrapping="Wrap"/>
-                                            <CommonControls:HyperlinkControl Link="{Binding Link}" Label="{Binding Link}" Foreground="DeepSkyBlue" HorizontalAlignment="Center" Opacity=".9" Margin="0,2,0,0"/>
+                                            <ContentControl Content="{Binding Metadata}" ContentTemplate="{StaticResource PublisherTemplate}" Focusable="False" />
                                             <Border BorderBrush="{StaticResource DefaultForeground}" BorderThickness="0,2,0,0" Margin="0,10" Opacity=".2"/>
                                         </StackPanel>
                                     </DockPanel>
@@ -610,7 +752,7 @@
                     <UniformGrid  Columns="2" Height="32">
                         <Grid>
                             <CommonControls:IconButton Text="{CommonControls:Localize Cancel}" FontSize="13" Icon="f05e" IconStyle="Light" IconColor="{StaticResource DangerColour}" Command="{Binding DownloadCancelCommand}" />
-                            <CommonControls:IconButton Text="{CommonControls:Localize Retry}" FontSize="13" Icon="f01e" IconStyle="Light" IconColor="{StaticResource WarningColour}" Command="{Binding DownloadRetryCommand}" Visibility="{Binding SelectedDownload.Status, Converter={StaticResource EnumToVisibilityConverter}, ConverterParameter=DownloadFailed, FallbackValue=Collapsed}"/>
+                            <CommonControls:IconButton Text="{CommonControls:Localize Retry}" FontSize="13" Icon="f01e" IconStyle="Light" IconColor="{StaticResource WarningColour}" Command="{Binding DownloadRetryCommand}" Visibility="{Binding SelectedDownload.IsFailed, Converter={StaticResource BooleanToVisibilityConverter}, FallbackValue=Collapsed}"/>
                         </Grid>
                         <CommonControls:IconButton Text="{CommonControls:Localize CancelAll}" FontSize="13" Icon="f05e" IconStyle="Light" IconColor="{StaticResource DangerColour}" Command="{Binding DownloadCancelAllCommand}" />
                     </UniformGrid>
@@ -628,7 +770,7 @@
                                         <Grid Margin="0,0,2,2">
                                             <TextBlock Text="{CommonControls:Localize Queued}" TextAlignment="Right"  Opacity=".7" FontSize="11" Visibility="{Binding Status, Converter={StaticResource EnumToVisibilityConverter}, ConverterParameter=DownloadQueue}"/>
                                             <TextBlock Text="{CommonControls:Localize Downloading}" TextAlignment="Right"  Opacity=".7" FontSize="11" Visibility="{Binding Status, Converter={StaticResource EnumToVisibilityConverter}, ConverterParameter=Downloading}"/>
-                                            <TextBlock Text="{CommonControls:Localize Failed}" TextAlignment="Right"  Opacity=".7" FontSize="11" Visibility="{Binding Status, Converter={StaticResource EnumToVisibilityConverter}, ConverterParameter=DownloadFailed}"/>
+                                            <TextBlock Text="{CommonControls:Localize Failed}" TextAlignment="Right"  Opacity=".7" FontSize="11" Visibility="{Binding IsFailed, Converter={StaticResource BooleanToVisibilityConverter}}"/>
                                         </Grid>
                                         <StackPanel Margin="0,0,2,2" Visibility="{Binding Status, Converter={StaticResource EnumToVisibilityConverter}, ConverterParameter=Downloading}">
                                             <TextBlock Opacity=".7" FontSize="11" HorizontalAlignment="Right">

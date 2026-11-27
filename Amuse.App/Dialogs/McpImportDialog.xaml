@@ -1,0 +1,50 @@
+﻿<CommonControls:DialogControl x:Class="Amuse.App.Dialogs.McpImportDialog"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:Amuse.App.Dialogs"
+        xmlns:CommonControls="clr-namespace:TensorStack.WPF.Controls;assembly=TensorStack.WPF"
+        mc:Ignorable="d"
+        MinWidth="640"
+        MaxWidth="640"
+        MinHeight="360"
+        Title="{CommonControls:Localize Title_McpImport}"
+        Icon="/Images/Icon.ico"
+        Style="{StaticResource {x:Type CommonControls:DialogControl}}">
+    <DockPanel DataContext="{Binding RelativeSource={RelativeSource AncestorType={x:Type local:McpImportDialog}}}" Margin="15, 15, 15, 10">
+
+        <!--Save/Cancel/Errors-->
+        <DockPanel DockPanel.Dock="Bottom" Height="30" Margin="0,15,0,0">
+            <UniformGrid DockPanel.Dock="Right" Columns="2" >
+                <Button Content="{CommonControls:Localize Import}" Command="{Binding SaveCommand}" Width="100" IsDefault="True"/>
+                <Button Content="{CommonControls:Localize Cancel}" Command="{Binding CancelCommand}"/>
+            </UniformGrid>
+            <ItemsControl ItemsSource="{Binding Errors}">
+                <ItemsControl.ItemTemplate>
+                    <DataTemplate>
+                        <TextBlock Text="{Binding}" Foreground="IndianRed" TextWrapping="Wrap" FontSize="11"/>
+                    </DataTemplate>
+                </ItemsControl.ItemTemplate>
+            </ItemsControl>
+        </DockPanel>
+
+        <!--Description-->
+        <Border DockPanel.Dock="Top" Style="{StaticResource WizardSection}">
+            <DockPanel>
+                <CommonControls:FontAwesome DockPanel.Dock="Left" Icon="f071" Size="14" Color="{StaticResource WarningColour}" VerticalAlignment="Top" Margin="0,1,8,0"/>
+                <TextBlock Text="{CommonControls:Localize McpImportMessage}" TextWrapping="Wrap" FontSize="11" />
+            </DockPanel>
+        </Border>
+
+        <!--Open-->
+        <DockPanel DockPanel.Dock="Top" Height="22" Margin="0,10,0,4">
+            <Button DockPanel.Dock="Right" Content="{CommonControls:Localize McpImportOpenFile}" Command="{Binding OpenFileCommand}" Width="150" />
+            <TextBlock Text="{CommonControls:Localize McpConfiguration}" Style="{StaticResource FieldTextBlockStyle}" VerticalAlignment="Bottom" />
+        </DockPanel>
+
+        <!--Json-->
+        <TextBox Text="{Binding ImportText, UpdateSourceTrigger=PropertyChanged}" AcceptsReturn="True" AcceptsTab="True" Height="260" FontFamily="Consolas" VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Auto" VerticalContentAlignment="Top"/>
+
+    </DockPanel>
+</CommonControls:DialogControl>

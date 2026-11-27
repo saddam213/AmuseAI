@@ -101,13 +101,23 @@
                                 <TextBlock Text="{CommonControls:Localize Status}" Style="{StaticResource FieldTextBlockStyle}" />
                                 <TextBlock Text="{Binding SelectedModel.Status}" FontWeight="DemiBold" FontSize="14" Opacity=".8" Margin="3,1,0,0" Style="{StaticResource ModelStatusTextBlock}" Tag="{Binding SelectedModel.Status}" />
                             </StackPanel>
-                        </UniformGrid>
-                        <UniformGrid Columns="2">
-                            <StackPanel Margin="2,6,2,0">
-                                <TextBlock Text="{CommonControls:Localize ModelLink}" Style="{StaticResource FieldTextBlockStyle}" />
-                                <CommonControls:HyperlinkControl Label="{Binding SelectedModel.Link}" Link="{Binding SelectedModel.Link}" />
+                            <StackPanel Margin="2,0,2,0">
+                                <TextBlock Text="{CommonControls:Localize Key}" Style="{StaticResource FieldTextBlockStyle}" />
+                                <TextBox Text="{Binding SelectedModel.Key, Mode=OneWay}" IsReadOnly="True"/>
                             </StackPanel>
                         </UniformGrid>
+                        <StackPanel Margin="0,6,2,0">
+                            <TextBlock Text="{CommonControls:Localize TriggerWords}" Style="{StaticResource FieldTextBlockStyle}" />
+                            <TextBox Text="{Binding SelectedModel.Triggers, Converter={StaticResource StringArrayCommaConverter}, Mode=OneWay}" IsReadOnly="True"/>
+                        </StackPanel>
+                        <StackPanel Margin="2,6,2,0">
+                            <TextBlock Text="{CommonControls:Localize ModelLink}" Style="{StaticResource FieldTextBlockStyle}" />
+                            <CommonControls:HyperlinkControl Label="{Binding SelectedModel.Link}" Link="{Binding SelectedModel.Link}" />
+                        </StackPanel>
+                        <StackPanel Margin="0,6,2,0">
+                            <TextBlock Text="{CommonControls:Localize Description}" Style="{StaticResource FieldTextBlockStyle}" />
+                            <TextBox Text="{Binding SelectedModel.Pipeline, Mode=OneWay, Converter={StaticResource EnumDescriptionConverter}}" IsReadOnly="True" TextWrapping="Wrap" />
+                        </StackPanel>
                     </StackPanel>
 
                 </DockPanel>

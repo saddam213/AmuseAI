@@ -121,19 +121,19 @@ namespace Amuse.App.Common
 
         /// <summary>
         /// Determines whether another environment shares this environment's default, only one environment per group is the default.
-        /// Groups are the same backend and type, with the same vendor, device or pipeline.
+        /// Groups are the same backend, vendor and type, with the same device or pipeline, the way an environment is selected for a pipeline.
         /// </summary>
         /// <param name="other">The other environment.</param>
         public bool IsSameDefaultGroup(EnvironmentModel other)
         {
-            if (other.Backend != Backend || other.Type != Type)
+            if (other.Backend != Backend || other.Vendor != Vendor || other.Type != Type)
                 return false;
 
             return Type switch
             {
-                EnvironmentType.Vendor => other.Vendor == Vendor,
                 EnvironmentType.Device => other.Device == Device,
-                _ => other.Pipeline == Pipeline
+                EnvironmentType.Pipeline => other.Pipeline == Pipeline,
+                _ => true
             };
         }
     }

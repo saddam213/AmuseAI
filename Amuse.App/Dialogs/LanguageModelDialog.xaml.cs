@@ -1,6 +1,7 @@
 ﻿// Copyright (c) Adam Clark. All rights reserved.
 // Licensed under the Apache 2.0 License.
 using Amuse.App.Common;
+using Amuse.App.Resources;
 using Amuse.App.Views;
 using Amuse.Common;
 using System;
@@ -11,6 +12,7 @@ using System.Threading.Tasks;
 using TensorStack.Common;
 using TensorStack.WPF;
 using TensorStack.WPF.Controls;
+using TensorStack.WPF.Resources;
 using TensorStack.WPF.Services;
 
 namespace Amuse.App.Dialogs
@@ -23,35 +25,40 @@ namespace Amuse.App.Dialogs
         private LanguageModel _languageModel;
         private LanguageModel _originalLanguageModel;
         private LanguageCheckpointModel _checkpointModel;
-        private SchedulerInputOptions[] _schedulers;
-        private DataType[] _dataTypes;
+        private DataType[] _checkpointTypes;
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="LanguageModelDialog"/> class.
+        /// </summary>
+        /// <param name="settings">The settings.</param>
         public LanguageModelDialog(Settings settings)
         {
             Settings = settings;
             SaveCommand = new AsyncRelayCommand(SaveAsync, CanExecuteSave);
             CancelCommand = new AsyncRelayCommand(CancelAsync);
+            AddCheckpointCommand = new AsyncRelayCommand(AddCheckpointAsync, CanAddCheckpoint);
+            RemoveCheckpointCommand = new AsyncRelayCommand(RemoveCheckpointAsync, CanRemoveCheckpoint);
             EstimateMemoryCommand = new AsyncRelayCommand(EstimateMemoryAsync);
             Errors = new ObservableCollection<string>();
-            AccessTokens = [new AccessToken("None", null), .. settings.AccessTokens.Select(x => new AccessToken(x.Name, x.Name))];
             InitializeComponent();
         }
 
         public Settings Settings { get; }
         public AsyncRelayCommand SaveCommand { get; }
         public AsyncRelayCommand CancelCommand { get; }
+        public AsyncRelayCommand AddCheckpointCommand { get; }
+        public AsyncRelayCommand RemoveCheckpointCommand { get; }
         public AsyncRelayCommand EstimateMemoryCommand { get; }
         public ObservableCollection<string> Errors { get; }
         public bool IsUpdateMode => _originalLanguageModel is not null;
         /// <summary>
-        /// Gets or sets the data types the model backend can load.
+        /// Gets or sets the data types a checkpoint set can be labelled with.
         /// </summary>
-        public DataType[] DataTypes
+        public DataType[] CheckpointTypes
         {
-            get { return _dataTypes; }
-            set { SetProperty(ref _dataTypes, value); }
+            get { return _checkpointTypes; }
+            set { SetProperty(ref _checkpointTypes, value); }
         }
-        public AccessToken[] AccessTokens { get; }
 
         public LanguageModel LanguageModel
         {
@@ -62,35 +69,52 @@ namespace Amuse.App.Dialogs
         public LanguageCheckpointModel CheckpointModel
         {
             get { return _checkpointModel; }
-            set { SetProperty(ref _checkpointModel, value); }
+            set
+            {
+                SetProperty(ref _checkpointModel, value);
+                AddCheckpointCommand.RaiseCanExecuteChanged();
+                RemoveCheckpointCommand.RaiseCanExecuteChanged();
+            }
         }
 
-        public SchedulerInputOptions[] Schedulers
-        {
-            get { return _schedulers; }
-            set { SetProperty(ref _schedulers, value); }
-        }
 
-
+        /// <summary>
+        /// Shows the dialog to update a model.
+        /// </summary>
+        /// <param name="languageModel">The model to update.</param>
         public Task<bool> UpdateAsync(LanguageModel languageModel)
         {
             var modelId = languageModel.Id;
             _originalLanguageModel = languageModel;
             LanguageModel = languageModel.DeepClone(modelId);
+            LanguageModel.IsDefault = languageModel.IsDefault;
+            LanguageModel.IsNew = languageModel.IsNew;
+            LanguageModel.IsRecommended = languageModel.IsRecommended;
+            LanguageModel.UserMemoryMode = languageModel.UserMemoryMode;
+            LanguageModel.UserExecutionOptions = languageModel.UserExecutionOptions;
             Populate();
             return base.ShowDialogAsync();
         }
 
 
+        /// <summary>
+        /// Shows the dialog to add a copy of a model.
+        /// </summary>
+        /// <param name="languageModel">The model to copy.</param>
         public Task<bool> CopyAsync(LanguageModel languageModel)
         {
             var modelId = Settings.LanguageModels.NextId();
             LanguageModel = languageModel.DeepClone(modelId);
+            LanguageModel.Name += " copy";
             Populate();
             return base.ShowDialogAsync();
         }
 
 
+        /// <summary>
+        /// Imports models, showing the dialog for a single model and adding several directly.
+        /// </summary>
+        /// <param name="modelImports">The models to import.</param>
         public async Task<bool> ImportAsync(LanguageModel[] modelImports)
         {
             var modelId = Settings.LanguageModels.NextId();
@@ -110,22 +134,30 @@ namespace Amuse.App.Dialogs
                     if (Settings.LanguageModels.Any(x => x.Backend == modelImport.Backend && x.Name == modelImport.Name))
                         continue;
 
+                    if (!modelImport.GetComponents().Any())
+                        continue;
+
                     imported++;
                     modelImport.Id = modelId++;
                     Settings.LanguageModels.Add(modelImport);
                 }
 
-                await DialogService.ShowMessageAsync("Import Complete", $"{imported}/{modelImports.Length} Models Imported.");
+                await DialogService.ShowMessageAsync(AppDefault.ImportCompleteTitle, string.Format(AppDefault.ImportCompleteModels, imported, modelImports.Length));
                 return true;
             }
         }
 
 
+        /// <summary>
+        /// Saves the model, replacing the original when updating.
+        /// </summary>
         protected override Task SaveAsync()
         {
+            LanguageModel.Name = LanguageModel.Name.Trim();
             LanguageModel.ProcessTypes = GetProcessTypes();
             LanguageModel.ViewFilter = GetViewFilter();
-            LanguageModel.Initialize(Settings);
+            if (LanguageModel.Checkpoints.All(x => x.Type != LanguageModel.CurrentCheckpointType))
+                LanguageModel.CurrentCheckpointType = null;
 
             var index = Settings.LanguageModels.Count;
             if (IsUpdateMode)
@@ -139,6 +171,9 @@ namespace Amuse.App.Dialogs
         }
 
 
+        /// <summary>
+        /// Determines whether the model can be saved, listing the validation errors.
+        /// </summary>
         protected override bool CanExecuteSave()
         {
             if (LanguageModel == null)
@@ -152,6 +187,9 @@ namespace Amuse.App.Dialogs
         }
 
 
+        /// <summary>
+        /// Cancels the dialog.
+        /// </summary>
         protected override Task CancelAsync()
         {
             LanguageModel = default;
@@ -160,94 +198,95 @@ namespace Amuse.App.Dialogs
         }
 
 
+        /// <summary>
+        /// Closes the dialog.
+        /// </summary>
         protected override async Task CloseAsync()
         {
             await base.CloseAsync();
         }
 
 
+        /// <summary>
+        /// Fills the functions, view filters and quality sets from the model.
+        /// </summary>
         private void Populate()
         {
-            // DataTypes, keep the current type if the backend list does not have it
             var dataTypes = LanguageModel.Backend.GetDataTypes();
-            DataTypes = dataTypes.Contains(LanguageModel.BaseType) ? dataTypes : [.. dataTypes, LanguageModel.BaseType];
-
-            if (LanguageModel.DefaultOptions.Schedulers != null)
-                Schedulers = LanguageModel.DefaultOptions.Schedulers.Copy();
 
             SetViewFilters();
             SetProcessTypes();
+            CheckpointTypes = [.. new[] { DataType.Default }.Concat(dataTypes).Concat(LanguageModel.Checkpoints.Select(x => x.Type)).Distinct()];
             CheckpointModel = LanguageModel.Checkpoint;
-            NotifyPropertyChanged(nameof(AccessTokens));
             NotifyPropertyChanged(nameof(IsUpdateMode));
-            LanguageModel.NotifyPropertyChanged(nameof(LanguageModel.AccessToken));
         }
 
 
+        /// <summary>
+        /// Gets the validation errors of the current input.
+        /// </summary>
         private IEnumerable<string> GetValidationErrors()
         {
-            // Name
             if (string.IsNullOrWhiteSpace(LanguageModel.Name))
-                yield return "Name cannot be empty";
-            if (!IsUpdateMode)
-            {
-                if (Settings.LanguageModels.Any(x => x.Name.Equals(LanguageModel.Name, StringComparison.OrdinalIgnoreCase)))
-                    yield return $"Model with Name '{LanguageModel.Name}' already exists";
-            }
+                yield return AppErrors.ValidationNameEmpty;
+            else if (Settings.LanguageModels.Any(x => x != _originalLanguageModel && x.Name.Equals(LanguageModel.Name.Trim(), StringComparison.OrdinalIgnoreCase)))
+                yield return string.Format(AppErrors.ValidationModelNameExists, LanguageModel.Name.Trim());
 
-            if (LanguageModel.DefaultOptions.Steps2 < 0)
-                yield return "Steps2 must be be >= 0";
-            if (LanguageModel.DefaultOptions.GuidanceScale < 0)
-                yield return "GuidanceScale must be be >= 0";
-            if (LanguageModel.DefaultOptions.GuidanceScale2 < 0)
-                yield return "GuidanceScale2 must be be >= 0";
-            if (LanguageModel.DefaultOptions.Strength < 0)
-                yield return "Strength must be be >= 0";
-            if (LanguageModel.DefaultOptions.Channels < 0)
-                yield return "Channels must be be >= 0";
+            if (LanguageModel.ModelParams < 0)
+                yield return string.Format(AppErrors.ValidationZeroOrGreater, AppDefault.ModelParametersB);
+            if (LanguageModel.ModelSize < 0)
+                yield return string.Format(AppErrors.ValidationZeroOrGreater, AppDefault.ModelSizeGB);
             if (LanguageModel.DefaultOptions.MinLength < 0)
-                yield return "MinLength must be be >= 0";
+                yield return string.Format(AppErrors.ValidationZeroOrGreater, AppDefault.MinLength);
             if (LanguageModel.DefaultOptions.MaxLength < 0)
-                yield return "MaxLength must be be >= 0";
-            if (LanguageModel.DefaultOptions.MaxLength2 < 0)
-                yield return "MaxLength2 must be be >= 0";
-            if (LanguageModel.DefaultOptions.Duration < 0)
-                yield return "Duration must be be >= 0";
-            if (LanguageModel.DefaultOptions.SilenceDuration < 0)
-                yield return "SilenceDuration must be be >= 0";
-            if (LanguageModel.DefaultOptions.FrameChunkOverlap < 0)
-                yield return "FrameChunkOverlap must be be >= 0";
-            if (LanguageModel.DefaultOptions.NoiseCondition < 0)
-                yield return "NoiseCondition must be be >= 0";
-            if (LanguageModel.DefaultOptions.FrameChunk < 0)
-                yield return "FrameChunk must be be >= 0";
-            if (LanguageModel.DefaultOptions.NoRepeatNgramSize < 0)
-                yield return "NoRepeatNgramSize must be be >= 0";
-            if (LanguageModel.DefaultOptions.Beams < 0)
-                yield return "Beams must be be >= 0";
-            if (LanguageModel.DefaultOptions.TopP < 0)
-                yield return "TopP must be be >= 0";
+                yield return string.Format(AppErrors.ValidationZeroOrGreater, AppDefault.MaxLength);
+            if (LanguageModel.DefaultOptions.MaxLength > 0 && LanguageModel.DefaultOptions.MinLength > LanguageModel.DefaultOptions.MaxLength)
+                yield return string.Format(AppErrors.ValidationLessOrEqual, AppDefault.MinLength, AppDefault.MaxLength);
             if (LanguageModel.DefaultOptions.ChunkSize < 0)
-                yield return "ChunkSize must be be >= 0";
+                yield return string.Format(AppErrors.ValidationZeroOrGreater, AppDefault.ChunkSize);
+            if (LanguageModel.DefaultOptions.Beams < 0)
+                yield return string.Format(AppErrors.ValidationZeroOrGreater, AppDefault.Beams);
+            if (LanguageModel.DefaultOptions.TopK < 0)
+                yield return string.Format(AppErrors.ValidationZeroOrGreater, AppDefault.TopK);
+            if (LanguageModel.DefaultOptions.TopP < 0 || LanguageModel.DefaultOptions.TopP > 1)
+                yield return string.Format(AppErrors.ValidationBetween, AppDefault.TopP, 0, 1);
+            if (LanguageModel.DefaultOptions.TypicalP < 0 || LanguageModel.DefaultOptions.TypicalP > 1)
+                yield return string.Format(AppErrors.ValidationBetween, AppDefault.TypicalP, 0, 1);
+            if (LanguageModel.DefaultOptions.Temperature < 0)
+                yield return string.Format(AppErrors.ValidationZeroOrGreater, AppDefault.Temperature);
+            if (LanguageModel.DefaultOptions.RepetitionPenalty < 0)
+                yield return string.Format(AppErrors.ValidationZeroOrGreater, AppDefault.RepetitionPenalty);
+            if (LanguageModel.DefaultOptions.NoRepeatNgramSize < 0)
+                yield return string.Format(AppErrors.ValidationZeroOrGreater, AppDefault.NoRepeatNgrams);
 
-            // Memory
-            if (LanguageModel.MemorySize < 0)
-                yield return "Memory Size must be >= 0";
-
-            // ProcessTypes
             var processTypes = GetProcessTypes();
             if (processTypes.IsNullOrEmpty())
-                yield return "ProcessTypes cannot be empty";
+                yield return AppErrors.ValidationProcessTypesEmpty;
 
-            // Checkpoint
-            foreach (var checkpoint in LanguageModel.Checkpoint.GetComponents())
+            if (LanguageModel.Checkpoints.Count == 0 || LanguageModel.Checkpoints.Any(x => !x.GetComponents().Any()))
+                yield return AppErrors.ValidationCheckpointEmpty;
+
+            foreach (var checkpointSet in LanguageModel.Checkpoints)
             {
-                if (!checkpoint.IsValid(out var checkpointValidation))
-                    yield return $"{checkpoint.Name} {checkpointValidation}";
+                if (checkpointSet.MemorySize < 0)
+                    yield return string.Format(AppErrors.ValidationZeroOrGreater, AppDefault.MemorySize);
+
+                foreach (var checkpoint in checkpointSet.GetComponents())
+                {
+                    if (!checkpoint.IsValid(out var checkpointValidation))
+                        yield return LanguageModel.HasCheckpointSets
+                            ? $"{checkpointSet.Type.GetDisplayName()} {checkpoint.Name} {checkpointValidation}"
+                            : $"{checkpoint.Name} {checkpointValidation}";
+                }
             }
+            if (LanguageModel.Checkpoints.Select(x => x.Type).Distinct().Count() != LanguageModel.Checkpoints.Count)
+                yield return AppErrors.ValidationQuantTypeExists;
         }
 
 
+        /// <summary>
+        /// Checks the supported functions of the model.
+        /// </summary>
         private void SetProcessTypes()
         {
             foreach (var processType in LanguageModel.ProcessTypes)
@@ -260,6 +299,9 @@ namespace Amuse.App.Dialogs
         }
 
 
+        /// <summary>
+        /// Gets the checked supported functions.
+        /// </summary>
         private ProcessType[] GetProcessTypes()
         {
             IEnumerable<ProcessType> ProcessTypes()
@@ -273,6 +315,9 @@ namespace Amuse.App.Dialogs
         }
 
 
+        /// <summary>
+        /// Gets the checked views, <c>null</c> when none are checked.
+        /// </summary>
         private View[] GetViewFilter()
         {
             IEnumerable<View> ViewFilters()
@@ -293,6 +338,9 @@ namespace Amuse.App.Dialogs
         }
 
 
+        /// <summary>
+        /// Checks the views of the model view filter.
+        /// </summary>
         private void SetViewFilters()
         {
             if (LanguageModel.ViewFilter.IsNullOrEmpty())
@@ -310,16 +358,60 @@ namespace Amuse.App.Dialogs
         }
 
 
+        /// <summary>
+        /// Estimates the memory size of the selected quality set from the model parameters.
+        /// </summary>
         private Task EstimateMemoryAsync()
         {
-            if (_languageModel.ModelParams > 0)
+            if (_languageModel.ModelParams > 0 && _checkpointModel is not null)
             {
-                _languageModel.MemorySize = Utils.GetMemorySize(_languageModel.ModelParams);
+                _checkpointModel.MemorySize = Utils.GetMemorySize(_languageModel.ModelParams, _checkpointModel.Type);
             }
             return Task.CompletedTask;
         }
 
 
-        public record AccessToken(string Name, string Value);
+        /// <summary>
+        /// Adds a checkpoint set copied from the selected one, with the first type not already used.
+        /// </summary>
+        private Task AddCheckpointAsync()
+        {
+            var checkpoint = _checkpointModel.DeepClone();
+            checkpoint.Type = _checkpointTypes.FirstOrDefault(x => LanguageModel.Checkpoints.All(c => c.Type != x));
+            LanguageModel.Checkpoints = [.. LanguageModel.Checkpoints, checkpoint];
+            CheckpointModel = checkpoint;
+            RemoveCheckpointCommand.RaiseCanExecuteChanged();
+            return Task.CompletedTask;
+        }
+
+
+        /// <summary>
+        /// Determines whether there is a selected checkpoint set to copy.
+        /// </summary>
+        private bool CanAddCheckpoint()
+        {
+            return _checkpointModel is not null && _checkpointTypes?.Any(x => LanguageModel.Checkpoints.All(c => c.Type != x)) == true;
+        }
+
+
+        /// <summary>
+        /// Removes the selected checkpoint set and selects the first one left.
+        /// </summary>
+        private Task RemoveCheckpointAsync()
+        {
+            LanguageModel.Checkpoints = [.. LanguageModel.Checkpoints.Where(x => x != _checkpointModel)];
+            CheckpointModel = LanguageModel.Checkpoints.FirstOrDefault();
+            RemoveCheckpointCommand.RaiseCanExecuteChanged();
+            return Task.CompletedTask;
+        }
+
+
+        /// <summary>
+        /// Determines whether the selected checkpoint set can be removed, a model keeps at least one.
+        /// </summary>
+        private bool CanRemoveCheckpoint()
+        {
+            return _checkpointModel is not null && LanguageModel?.Checkpoints.Count > 1;
+        }
     }
 }

@@ -21,12 +21,12 @@ namespace Amuse.App.Views
     {
         private ComponentModel _selectedModel;
         private string _filterText;
-        private string _filterStatus;
+        private FilterOption _filterStatus;
 
-        public SettingsComponentView(Settings settings, NavigationService navigationService, IModelDownloadService downloadService, IHistoryService historyService, ILogger<SettingsComponentView> logger)
-            : base(settings, navigationService, downloadService, historyService, logger)
+        public SettingsComponentView(Settings settings, NavigationService navigationService, IModelDownloadService downloadService, IModelAccessService modelAccessService, IHistoryService historyService, ILogger<SettingsComponentView> logger)
+            : base(settings, navigationService, downloadService, modelAccessService, historyService, logger)
         {
-            FilterStatuses = ["Show All", "Installed", "Unknown"];
+            FilterStatuses = FilterOption.ModelStatuses();
             FilterStatus = FilterStatuses[0];
             AddModelCommand = new AsyncRelayCommand(AddModelAsync);
             CopyModelCommand = new AsyncRelayCommand(CopyModelAsync, () => SelectedModel is not null);
@@ -59,7 +59,7 @@ namespace Amuse.App.Views
         public AsyncRelayCommand DownloadModelCancelCommand { get; }
         public AsyncRelayCommand FilterClearCommand { get; }
         public ListCollectionView ModelCollection { get; }
-        public string[] FilterStatuses { get; }
+        public FilterOption[] FilterStatuses { get; }
 
         public ComponentModel SelectedModel
         {
@@ -73,7 +73,7 @@ namespace Amuse.App.Views
             set { SetProperty(ref _filterText, value); ModelCollection?.Refresh(); }
         }
 
-        public string FilterStatus
+        public FilterOption FilterStatus
         {
             get { return _filterStatus; }
             set { SetProperty(ref _filterStatus, value); ModelCollection?.Refresh(); }
@@ -94,13 +94,13 @@ namespace Amuse.App.Views
                 if (obj is not ComponentModel model)
                     return false;
 
-                if (model.Status != ModelStatusType.Installed && model.Status != ModelStatusType.Unknown)
+                if (model.Id <= Utils.FixedIdRange && model.Status != ModelStatusType.Installed && model.Status != ModelStatusType.Unknown)
                     return false;
 
                 var isvalid = true;
-                if (!string.IsNullOrEmpty(_filterStatus))
+                if (!string.IsNullOrEmpty(_filterStatus?.Value))
                 {
-                    if (Enum.TryParse<ModelStatusType>(_filterStatus, out var statusType))
+                    if (Enum.TryParse<ModelStatusType>(_filterStatus.Value, out var statusType))
                     {
                         isvalid = isvalid && model.Status == statusType;
                     }
@@ -131,10 +131,11 @@ namespace Amuse.App.Views
 
         private async Task AddModelAsync()
         {
-            var dialog = DialogService.GetDialog<ComponentModelDialog>();
+            var dialog = DialogService.GetDialog<ComponentModelWizardDialog>();
             if (await dialog.AddAsync())
             {
                 await SaveAsync();
+                SelectedModel = dialog.ComponentModel;
             }
         }
 
@@ -178,7 +179,7 @@ namespace Amuse.App.Views
                 var modelImports = await Json.LoadArrayAsync<ComponentModel>(importPath);
                 if (modelImports.IsNullOrEmpty())
                 {
-                    await DialogService.ShowMessageAsync(AppErrors.ImportErrorTitle, AppErrors.ImportComponent);
+                    await DialogService.ShowErrorAsync(AppErrors.ImportErrorTitle, AppErrors.ImportComponentFailed);
                     return;
                 }
 
@@ -212,6 +213,10 @@ namespace Amuse.App.Views
         {
             if (await DialogService.ShowMessageAsync(AppDefault.DeleteComponent, AppDefault.DeleteComponentMessage, TensorStack.WPF.Dialogs.MessageDialogType.YesNo, TensorStack.WPF.Dialogs.MessageBoxIconType.Warning, TensorStack.WPF.Dialogs.MessageBoxStyleType.Danger))
             {
+                if (!await ModelAccessService.RequestModelReleaseAsync(_selectedModel))
+                    return;
+
+                await DownloadService.CancelAsync(_selectedModel);
                 await Task.Run(() => _selectedModel.Delete(Settings));
                 _selectedModel.Status = ModelStatusType.Available;
                 await SaveAsync();
@@ -221,7 +226,7 @@ namespace Amuse.App.Views
 
         private async Task DownloadModelAsync()
         {
-            await DownloadService.QueueAsync(_selectedModel);
+            await DownloadService.DownloadAsync(_selectedModel);
         }
 
 

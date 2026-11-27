@@ -95,7 +95,6 @@ namespace Amuse.App.Common
         {
             var prefix = backend switch
             {
-                BackendType.HuggingFace => "HuggingFace ",
                 BackendType.StableDiffusionCpp => "StableDiffusion.cpp ",
                 BackendType.AudioCpp => "Audio.cpp ",
                 BackendType.LlamaCpp => "Llama.cpp ",
@@ -143,7 +142,6 @@ namespace Amuse.App.Common
                 BackendType.StableDiffusionCpp => AppDefault.BackendDescriptionStableDiffusionCpp,
                 BackendType.AudioCpp => AppDefault.BackendDescriptionAudioCpp,
                 BackendType.LlamaCpp => AppDefault.BackendDescriptionLlamaCpp,
-                BackendType.HuggingFace => AppDefault.BackendDescriptionHuggingFace,
                 _ => null
             };
         }

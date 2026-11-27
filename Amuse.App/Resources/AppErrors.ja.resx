@@ -123,9 +123,6 @@
   <data name="GeneratedImageNotFound" xml:space="preserve">
     <value>生成された画像結果が見つかりません。</value>
   </data>
-  <data name="GeneratedTextNotFound" xml:space="preserve">
-    <value>生成されたテキスト結果が見つかりません。</value>
-  </data>
   <data name="GeneratedVideoNotFound" xml:space="preserve">
     <value>生成された動画結果が見つかりません。</value>
   </data>
@@ -133,25 +130,25 @@
     <value>パイプラインが予期せず終了しました</value>
   </data>
   <data name="ExecuteAutomationTitle" xml:space="preserve">
-    <value>自動化を実行</value>
+    <value>自動化に失敗しました</value>
   </data>
   <data name="ExecutePipelineTitle" xml:space="preserve">
-    <value>パイプラインを実行</value>
+    <value>生成に失敗しました</value>
   </data>
-  <data name="ImportComponent" xml:space="preserve">
+  <data name="ImportComponentFailed" xml:space="preserve">
     <value>コンポーネントファイルのインポートに失敗しました。</value>
   </data>
-  <data name="ImportEnvironment" xml:space="preserve">
+  <data name="ImportEnvironmentFailed" xml:space="preserve">
     <value>環境ファイルのインポートに失敗しました。</value>
   </data>
   <data name="ImportErrorTitle" xml:space="preserve">
     <value>インポートエラー</value>
   </data>
-  <data name="ImportModel" xml:space="preserve">
+  <data name="ImportModelFailed" xml:space="preserve">
     <value>モデルファイルのインポートに失敗しました。</value>
   </data>
   <data name="LoadPipelineTitle" xml:space="preserve">
-    <value>パイプラインを読み込む</value>
+    <value>モデルの読み込みに失敗しました</value>
   </data>
   <data name="ParseErrorDocument" xml:space="preserve">
     <value>ドキュメントの解析に失敗しました。</value>
@@ -166,10 +163,10 @@
     <value>予期しないエラー</value>
   </data>
   <data name="UnloadPipelineTitle" xml:space="preserve">
-    <value>パイプラインをアンロード</value>
+    <value>モデルのアンロードに失敗しました</value>
   </data>
   <data name="ExtractedImageNotFound" xml:space="preserve">
-    <value>抽出画像の結果が見つかりません。</value>
+    <value>抽出された画像結果が見つかりません。</value>
   </data>
   <data name="ExtractModelNotLoaded" xml:space="preserve">
     <value>抽出モデルが読み込まれていません。</value>
@@ -200,5 +197,201 @@
   </data>
   <data name="UpscaleCheckpointFormat" xml:space="preserve">
     <value>{1} バックエンドのチェックポイントは {0} ファイルである必要があります</value>
+  </data>
+  <data name="ValidationNameEmpty" xml:space="preserve">
+    <value>名前は空にできません</value>
+  </data>
+  <data name="ValidationModelNameExists" xml:space="preserve">
+    <value>「{0}」という名前のモデルは既に存在します</value>
+  </data>
+  <data name="ValidationGreaterThanZero" xml:space="preserve">
+    <value>{0} は0より大きい値にしてください</value>
+  </data>
+  <data name="ValidationZeroOrGreater" xml:space="preserve">
+    <value>{0} は0以上にしてください</value>
+  </data>
+  <data name="ValidationPipelineEmpty" xml:space="preserve">
+    <value>パイプラインは空にできません</value>
+  </data>
+  <data name="ValidationMinimum" xml:space="preserve">
+    <value>{0} は {1} 以上にしてください</value>
+  </data>
+  <data name="ValidationResolutionsEmpty" xml:space="preserve">
+    <value>解像度は空にできません</value>
+  </data>
+  <data name="ValidationDefaultResolutionNotSet" xml:space="preserve">
+    <value>デフォルトの解像度が設定されていません</value>
+  </data>
+  <data name="ValidationProcessTypesEmpty" xml:space="preserve">
+    <value>対応機能は空にできません</value>
+  </data>
+  <data name="ValidationMainFileEmpty" xml:space="preserve">
+    <value>メインファイルは空にできません</value>
+  </data>
+  <data name="ValidationTypeEmpty" xml:space="preserve">
+    <value>タイプは空にできません</value>
+  </data>
+  <data name="ValidationModelNameEmpty" xml:space="preserve">
+    <value>モデル名は空にできません</value>
+  </data>
+  <data name="ValidationModelFileNameEmpty" xml:space="preserve">
+    <value>モデルファイル名は空にできません</value>
+  </data>
+  <data name="ValidationModelFolderNameEmpty" xml:space="preserve">
+    <value>モデルフォルダー名は空にできません</value>
+  </data>
+  <data name="ValidationModelFileNotFound" xml:space="preserve">
+    <value>モデルファイルが見つかりません</value>
+  </data>
+  <data name="ValidationRequirementsEmpty" xml:space="preserve">
+    <value>要件は空にできません</value>
+  </data>
+  <data name="ValidationEnvironmentEmpty" xml:space="preserve">
+    <value>環境は空にできません</value>
+  </data>
+  <data name="ValidationEnvironmentInvalidCharacters" xml:space="preserve">
+    <value>環境名に使用できるのは、英数字、「.」、「_」、「-」のみです</value>
+  </data>
+  <data name="ValidationEnvironmentExists" xml:space="preserve">
+    <value>「{0}」という名前の環境は既に存在します</value>
+  </data>
+  <data name="ValidationDeviceEmpty" xml:space="preserve">
+    <value>デバイスは空にできません</value>
+  </data>
+  <data name="UpdateDownloadFailed" xml:space="preserve">
+    <value>更新ファイルのダウンロードに失敗しました。
+問題が解決しない場合は、しばらくしてからもう一度お試しください。</value>
+  </data>
+  <data name="CheckpointNoDownloadFiles" xml:space="preserve">
+    <value>ダウンロードするファイルがありません</value>
+  </data>
+  <data name="CheckpointDownloadFileNotFound" xml:space="preserve">
+    <value>ダウンロードファイルが見つかりません</value>
+  </data>
+  <data name="CheckpointLocalFolderNotFound" xml:space="preserve">
+    <value>ローカルフォルダーが見つかりません</value>
+  </data>
+  <data name="CheckpointLocalFileNotFound" xml:space="preserve">
+    <value>ローカルファイルが見つかりません</value>
+  </data>
+  <data name="CheckpointComponentNotSelected" xml:space="preserve">
+    <value>コンポーネントが選択されていません</value>
+  </data>
+  <data name="CheckpointResolveOnlineFile" xml:space="preserve">
+    <value>チェックポイントのオンラインファイル「{0}」を解決できませんでした</value>
+  </data>
+  <data name="CheckpointResolveComponent" xml:space="preserve">
+    <value>チェックポイントのコンポーネント「{0}」を解決できませんでした</value>
+  </data>
+  <data name="ValidationQuantTypeExists" xml:space="preserve">
+    <value>各品質には異なるタイプを指定してください</value>
+  </data>
+  <data name="ValidationQuantTypeEmpty" xml:space="preserve">
+    <value>品質を選択してください</value>
+  </data>
+  <data name="ValidationCheckpointEmpty" xml:space="preserve">
+    <value>モデルにチェックポイントファイルがありません</value>
+  </data>
+  <data name="ValidationSearchFolderEmpty" xml:space="preserve">
+    <value>検索フォルダーは空にできません</value>
+  </data>
+  <data name="ValidationSearchFolderInsideModels" xml:space="preserve">
+    <value>検索フォルダーはモデルディレクトリ内に指定できません</value>
+  </data>
+  <data name="ValidationModelFolderNotFound" xml:space="preserve">
+    <value>モデルフォルダーが見つかりません</value>
+  </data>
+  <data name="MissingInputTitle" xml:space="preserve">
+    <value>入力が不足しています</value>
+  </data>
+  <data name="SourceAudioRequired" xml:space="preserve">
+    <value>先にソース音声を読み込むか録音してください。</value>
+  </data>
+  <data name="AudioRangeRequired" xml:space="preserve">
+    <value>先に再生成するソース音声の範囲を選択してください。</value>
+  </data>
+  <data name="VoiceReferenceRequired" xml:space="preserve">
+    <value>先に参照ボイスを読み込むか録音してください。</value>
+  </data>
+  <data name="ReferenceTextRequired" xml:space="preserve">
+    <value>このモデルには参照ボイスの文字起こしが必要です。話されている内容を入力してください。</value>
+  </data>
+  <data name="ValidationDownloadLinkEmpty" xml:space="preserve">
+    <value>ダウンロードリンクは空にできません</value>
+  </data>
+  <data name="ValidationDownloadLinkInvalid" xml:space="preserve">
+    <value>ダウンロードリンクは {0} で終わるファイルへの直接リンクである必要があります</value>
+  </data>
+  <data name="ValidationKeyEmpty" xml:space="preserve">
+    <value>キーは空にできません</value>
+  </data>
+  <data name="ValidationKeyExists" xml:space="preserve">
+    <value>キー「{0}」のコンポーネントは既に存在します</value>
+  </data>
+  <data name="ValidationModelFileType" xml:space="preserve">
+    <value>モデルファイルは {0} で終わる必要があります</value>
+  </data>
+  <data name="MoveFolderErrorTitle" xml:space="preserve">
+    <value>フォルダーの移動に失敗しました</value>
+  </data>
+  <data name="MoveFolderInsideSource" xml:space="preserve">
+    <value>新しい場所を現在のフォルダーまたはその中にすることはできません</value>
+  </data>
+  <data name="MoveFolderNotEmpty" xml:space="preserve">
+    <value>「{0}」には既にファイルがあります。別の場所を選択してください</value>
+  </data>
+  <data name="ValidationLessOrEqual" xml:space="preserve">
+    <value>{0} は {1} 以下である必要があります</value>
+  </data>
+  <data name="ValidationLessThan" xml:space="preserve">
+    <value>{0} は {1} より小さい必要があります</value>
+  </data>
+  <data name="ValidationBetween" xml:space="preserve">
+    <value>{0} は {1} から {2} の間である必要があります</value>
+  </data>
+  <data name="ValidationSearchFolderContainsModels" xml:space="preserve">
+    <value>検索フォルダーにAmuseのモデルフォルダーを含めることはできません</value>
+  </data>
+  <data name="ValidationSearchFolderNotFound" xml:space="preserve">
+    <value>検索フォルダー「{0}」が見つかりません</value>
+  </data>
+  <data name="MoveFolderNoSpace" xml:space="preserve">
+    <value>新しいドライブの空き容量が不足しています。{0:N1} GB 必要です</value>
+  </data>
+  <data name="McpServerErrorTitle" xml:space="preserve">
+    <value>MCPサーバーエラー</value>
+  </data>
+  <data name="McpRequiresNode" xml:space="preserve">
+    <value>このサーバーの実行には Node.js が必要です。nodejs.org からインストールして Amuse を再起動してください。</value>
+  </data>
+  <data name="McpRequiresUv" xml:space="preserve">
+    <value>このサーバーの実行には uv が必要です。docs.astral.sh/uv からインストールして Amuse を再起動してください。</value>
+  </data>
+  <data name="McpCommandNotFound" xml:space="preserve">
+    <value>コマンド「{0}」が見つかりません。</value>
+  </data>
+  <data name="McpUrlInvalid" xml:space="preserve">
+    <value>「{0}」は有効な http または https のURLではありません。</value>
+  </data>
+  <data name="ValidationMcpNameEmpty" xml:space="preserve">
+    <value>サーバー名は空にできません</value>
+  </data>
+  <data name="ValidationMcpNameExists" xml:space="preserve">
+    <value>この名前のサーバーは既に存在します</value>
+  </data>
+  <data name="ValidationMcpCommandEmpty" xml:space="preserve">
+    <value>コマンドは空にできません</value>
+  </data>
+  <data name="ValidationMcpUrlInvalid" xml:space="preserve">
+    <value>URLは有効な http または https のアドレスである必要があります</value>
+  </data>
+  <data name="ValidationMcpToolsEmpty" xml:space="preserve">
+    <value>少なくとも1つのツールを含める必要があります</value>
+  </data>
+  <data name="ValidationMcpImportEmpty" xml:space="preserve">
+    <value>設定にサーバーが見つかりません</value>
+  </data>
+  <data name="ValidationMcpIconInvalid" xml:space="preserve">
+    <value>アイコンは f1e6 のような Font Awesome のコードである必要があります</value>
   </data>
 </root>

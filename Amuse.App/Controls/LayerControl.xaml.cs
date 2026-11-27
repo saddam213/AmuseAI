@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Amuse.App.Resources;
+using System;
 using System.Collections.ObjectModel;
 using System.Collections.Specialized;
 using System.Linq;
@@ -15,6 +16,7 @@ using TensorStack.Common;
 using TensorStack.WPF;
 using TensorStack.WPF.Controls;
 using TensorStack.WPF.Image;
+using TensorStack.WPF.Resources;
 using TensorStack.WPF.Services;
 
 
@@ -178,7 +180,7 @@ namespace Amuse.App.Controls
 
         private async Task Clear()
         {
-            if (await DialogService.ShowMessageAsync("Clear Layers", "Are you sure you would like to clear all layers?", TensorStack.WPF.Dialogs.MessageDialogType.YesNo, TensorStack.WPF.Dialogs.MessageBoxIconType.Question, TensorStack.WPF.Dialogs.MessageBoxStyleType.Info))
+            if (await DialogService.ShowMessageAsync(AppDefault.ClearLayers, AppDefault.ClearLayersMessage, TensorStack.WPF.Dialogs.MessageDialogType.YesNo, TensorStack.WPF.Dialogs.MessageBoxIconType.Question, TensorStack.WPF.Dialogs.MessageBoxStyleType.Info))
             {
                 Layers.Clear();
             }
@@ -228,7 +230,7 @@ namespace Amuse.App.Controls
         {
             if (layer is ImageLayer imageLayer)
             {
-                var newLayer = new ImageLayer($"{imageLayer.Name} copy", imageLayer.Image);
+                var newLayer = new ImageLayer(string.Format(AppDefault.LayerCopyName, imageLayer.Name), imageLayer.Image);
                 newLayer.Stretch = imageLayer.Stretch;
                 newLayer.Width = imageLayer.Width;
                 newLayer.Height = imageLayer.Height;
@@ -238,7 +240,7 @@ namespace Amuse.App.Controls
             }
             else if (layer is TextLayer textLayer)
             {
-                var newLayer = new TextLayer($"{textLayer.Name} copy", textLayer.Text);
+                var newLayer = new TextLayer(string.Format(AppDefault.LayerCopyName, textLayer.Name), textLayer.Text);
                 newLayer.PositionX = textLayer.PositionX;
                 newLayer.PositionY = textLayer.PositionY;
                 newLayer.FontSize = textLayer.FontSize;
@@ -253,13 +255,13 @@ namespace Amuse.App.Controls
 
         private void AddTextLayer()
         {
-            Layers.Insert(0, new TextLayer($"Layer {Layers.Count + 1}", "Hello World"));
+            Layers.Insert(0, new TextLayer(string.Format(AppDefault.LayerName, Layers.Count + 1), AppDefault.TextLayerDefault));
         }
 
 
         private async Task AddImageLayer()
         {
-            var imageFile = await DialogService.OpenFileAsync("Open Image", filter: "Image Files|*.bmp;*.jpg;*.jpeg;*.png;*.gif;*.tif;*.tiff|All Files|*.*");
+            var imageFile = await DialogService.OpenFileAsync(Default.OpenImage, filter: TensorStack.WPF.Common.ImageFileFilter);
             if (string.IsNullOrEmpty(imageFile))
                 return;
 
@@ -267,7 +269,7 @@ namespace Amuse.App.Controls
             if (bitmapSource == null)
                 return;
 
-            Layers.Insert(0, new ImageLayer($"Layer {Layers.Count + 1}", bitmapSource));
+            Layers.Insert(0, new ImageLayer(string.Format(AppDefault.LayerName, Layers.Count + 1), bitmapSource));
         }
 
 
@@ -288,7 +290,7 @@ namespace Amuse.App.Controls
 
             if (bitmapSource != null)
             {
-                Layers.Insert(0, new ImageLayer($"Layer {Layers.Count + 1}", bitmapSource));
+                Layers.Insert(0, new ImageLayer(string.Format(AppDefault.LayerName, Layers.Count + 1), bitmapSource));
             }
             base.OnDrop(e);
         }

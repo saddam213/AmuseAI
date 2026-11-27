@@ -17,6 +17,7 @@ using TensorStack.WPF;
 using TensorStack.WPF.Controls;
 using TensorStack.WPF.Dialogs;
 using TensorStack.WPF.Image;
+using TensorStack.WPF.Resources;
 using TensorStack.WPF.Services;
 
 namespace Amuse.App.Controls
@@ -320,7 +321,7 @@ namespace Amuse.App.Controls
         private async void ShowCropImageDialog(BitmapSource source = null)
         {
             var cropImageDialog = DialogService.GetDialog<CropImageDialog>();
-            if (!await cropImageDialog.ShowDialogAsync(Options.Width, Options.Height, source))
+            if (!await cropImageDialog.ShowDialogAsync(source, new CropImageOptions { Width = Options.Width, Height = Options.Height }))
                 return;
 
             PaintCanvas.Background = new ImageBrush(cropImageDialog.GetImageResult());
@@ -380,7 +381,7 @@ namespace Amuse.App.Controls
         private async Task SaveCanvas()
         {
             var canvasImage = GetInputImage();
-            var saveFilename = await DialogService.SaveFileAsync("Save Image", "Image", filter: "png files (*.png)|*.png", defualtExt: "png");
+            var saveFilename = await DialogService.SaveFileAsync(Default.SaveImage, Default.Image, filter: $"{Default.ImageFiles}|*.png", defualtExt: "png");
             if (!string.IsNullOrEmpty(saveFilename))
             {
                 await canvasImage.SaveAsync(saveFilename);
@@ -613,7 +614,7 @@ namespace Amuse.App.Controls
                     return new ImageInput(initialImage);
 
                 var loadImageDialog = DialogService.GetDialog<CropImageDialog>();
-                if (await loadImageDialog.ShowDialogAsync(Options.Width, Options.Height, initialImage))
+                if (await loadImageDialog.ShowDialogAsync(initialImage, new CropImageOptions { Width = Options.Width, Height = Options.Height }))
                 {
                     return new ImageInput(loadImageDialog.GetImageResult());
                 }
@@ -624,7 +625,7 @@ namespace Amuse.App.Controls
             }
             else
             {
-                var imageFilename = initialFilename ?? await DialogService.OpenFileAsync("Open Image", filter: "Image Files|*.bmp;*.jpg;*.jpeg;*.png;*.gif;*.tif;*.tiff|All Files|*.*");
+                var imageFilename = initialFilename ?? await DialogService.OpenFileAsync(Default.OpenImage, filter: TensorStack.WPF.Common.ImageFileFilter);
                 if (!string.IsNullOrEmpty(imageFilename))
                 {
                     return new ImageInput(imageFilename);

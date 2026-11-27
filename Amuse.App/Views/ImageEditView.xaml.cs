@@ -26,8 +26,8 @@ namespace Amuse.App.Views
         private ImageInput _sourceImage3;
         private ImageInput _sourceImage4;
 
-        public ImageEditView(Settings settings, NavigationService navigationService, IModelDownloadService downloadService, IGenerateService generateService, IExtractService extractService, IUpscaleService upscaleService, IHistoryService historyService, ILogger<ImageEditView> logger)
-            : base(settings, navigationService, downloadService, generateService, extractService, upscaleService, historyService, logger)
+        public ImageEditView(Settings settings, NavigationService navigationService, IModelDownloadService downloadService, IModelAccessService modelAccessService, IGenerateService generateService, ILanguageService languageService, IExtractService extractService, IUpscaleService upscaleService, IHistoryService historyService, ILogger<ImageEditView> logger)
+            : base(settings, navigationService, downloadService, modelAccessService, generateService, languageService, extractService, upscaleService, historyService, logger)
         {
             InitializeComponent();
         }
@@ -100,7 +100,7 @@ namespace Amuse.App.Views
                 Statistics.Start();
 
                 // Options
-                var options = Options with { InputImages = GetInputTensors() };
+                var options = Options with { InputImages = GetInputTensors(ImageEditControl.GetImageCanvas()) };
 
                 // Execute
                 var resultTensor = await ExecuteImageDiffusionAsync(options);
@@ -165,11 +165,15 @@ namespace Amuse.App.Views
                     cancellationToken.ThrowIfCancellationRequested();
 
                     // Source
+                    var inputImage = ImageEditControl.GetImageCanvas();
                     if (!automationJob.InputImages.IsNullOrEmpty())
-                        SourceImage1 = automationJob.InputImages[0];
+                    {
+                        inputImage = automationJob.InputImages[0];
+                        SourceImage1 = inputImage;
+                    }
 
                     // Options
-                    var options = automationJob.GenerateOptions with { InputImages = GetInputTensors() };
+                    var options = automationJob.GenerateOptions with { InputImages = GetInputTensors(inputImage) };
 
                     // Execute
                     var resultTensor = await ExecuteImageDiffusionAsync(options);
@@ -184,7 +188,7 @@ namespace Amuse.App.Views
                     // History
                     if (AutomationOptions.IsHistoryEnabled)
                     {
-                        await SaveHistoryAsync(automationJob.GenerateOptions);
+                        await SaveHistoryAsync(options);
                     }
 
                     await automationJob.SaveAsync(ResultImage);
@@ -221,10 +225,10 @@ namespace Amuse.App.Views
         /// <summary>
         /// Gets the input tensors.
         /// </summary>
-        private List<ImageTensor> GetInputTensors()
+        /// <param name="inputImage">The first source image, the edit canvas or an automation input.</param>
+        private List<ImageTensor> GetInputTensors(ImageInput inputImage)
         {
             var inputImages = new List<ImageTensor>();
-            var inputImage = ImageEditControl.GetImageCanvas();
             if (Options.IsSource1Enabled)
                 inputImages.AddIfNotNull(inputImage);
             if (Options.IsSource2Enabled)
@@ -250,8 +254,8 @@ namespace Amuse.App.Views
                 Options = options,
                 Model = CurrentPipeline.DiffusionModel.Name,
                 LoraModels = CurrentPipeline.LoraAdapterModel?.Select(x => x.Name).ToArray(),
-                UpscaleModel = UpscaledModel?.Name,
-                UpscaleOptions = UpscaledModel is not null ? UpscaleOptions : null,
+                UpscaleModel = CurrentPipeline?.UpscaleModel?.Name,
+                UpscaleOptions = CurrentPipeline?.UpscaleModel is not null ? UpscaleOptions : null,
                 Source = View.ImageEdit,
             });
             Logger.LogInformation($"[ImageEdit] [SaveHistory] History saved.");

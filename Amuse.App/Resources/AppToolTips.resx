@@ -139,7 +139,11 @@
     <value>Model Not Installed</value>
   </data>
   <data name="ToolTip_ModelStatus_Unknown" xml:space="preserve">
-    <value>Model Update Required</value>
+    <value>Files Missing
+• The download did not finish
+• Files were moved or deleted
+• The model was updated
+Download again to complete it.</value>
   </data>
   <data name="ToolTip_Text_Branch" xml:space="preserve">
     <value>Branch Conversation</value>
@@ -220,7 +224,7 @@
     <value>Zoom Out</value>
   </data>
   <data name="ToolTip_VideoTimeline_FrameRemove" xml:space="preserve">
-    <value>Remove Selected Frames(s)</value>
+    <value>Remove Selected Frame(s)</value>
   </data>
   <data name="ToolTip_VideoTimeline_FrameSave" xml:space="preserve">
     <value>Save Selected Frame To History</value>
@@ -240,7 +244,7 @@
   <data name="ToolTip_VideoTimeline_SegmentRemove" xml:space="preserve">
     <value>Remove Segment</value>
   </data>
-  <data name="ToolTop_MemoryEstimate" xml:space="preserve">
+  <data name="ToolTip_MemoryEstimate" xml:space="preserve">
     <value>Estimated Memory Modes</value>
   </data>
   <data name="ToolTip_Text_StreamEnable" xml:space="preserve">
@@ -261,14 +265,11 @@
   <data name="ToolTip_Text_ThinkingShow" xml:space="preserve">
     <value>Show Thinking Content</value>
   </data>
-  <data name="ToolTip_Acsess_HuggingFace" xml:space="preserve">
-    <value>Gated Model - HuggingFace Authentication Required.</value>
-  </data>
-  <data name="ToolTip_Acsess_Civitai" xml:space="preserve">
-    <value>Gated Model - Civitai Authentication Required.</value>
-  </data>
   <data name="ToolTip_Theme" xml:space="preserve">
     <value>Restart Amuse to apply the theme.</value>
+  </data>
+  <data name="ToolTip_UIScale" xml:space="preserve">
+    <value>The size of the interface, set to fit your screen.</value>
   </data>
   <data name="ToolTip_ModelFilterAll" xml:space="preserve">
     <value>Showing all models, click to show installed models only</value>
@@ -294,9 +295,6 @@
   <data name="ToolTip_CacheOffload" xml:space="preserve">
     <value>Keep the conversation (key/value) cache in GPU memory</value>
   </data>
-  <data name="ToolTip_Home" xml:space="preserve">
-    <value>Home</value>
-  </data>
   <data name="ToolTip_BackendReady" xml:space="preserve">
     <value>The backend environment is installed and ready to use.</value>
   </data>
@@ -305,18 +303,6 @@
   </data>
   <data name="ToolTip_BackendUnsupported" xml:space="preserve">
     <value>This backend is not available for this device.</value>
-  </data>
-  <data name="ToolTip_MemoryMode_HuggingFace_High" xml:space="preserve">
-    <value>Loads the whole model to the GPU. Fastest, needs the most VRAM.</value>
-  </data>
-  <data name="ToolTip_MemoryMode_HuggingFace_Medium" xml:space="preserve">
-    <value>Model CPU offload: keeps each sub-model in CPU memory and moves it to the GPU while it runs.</value>
-  </data>
-  <data name="ToolTip_MemoryMode_HuggingFace_Low" xml:space="preserve">
-    <value>Sequential CPU offload: moves individual layers to the GPU only while they run. Lowest VRAM, much slower.</value>
-  </data>
-  <data name="ToolTip_MemoryMode_HuggingFace_Balanced" xml:space="preserve">
-    <value>Spreads the model weights across the available GPUs and CPU memory.</value>
   </data>
   <data name="ToolTip_MemoryMode_StableDiffusionCpp_High" xml:space="preserve">
     <value>Keeps all weights on the GPU.</value>
@@ -377,5 +363,146 @@
   </data>
   <data name="ToolTip_UpscaleWindowSize" xml:space="preserve">
     <value>Spacing of the reference frames, a window of 16 uses frames 0, 15, 30 and so on, the last frame is always included</value>
+  </data>
+  <data name="ToolTip_HistoryFilterAudio" xml:space="preserve">
+    <value>Filter Audio</value>
+  </data>
+  <data name="ToolTip_HistoryFilterClear" xml:space="preserve">
+    <value>Clear Filter</value>
+  </data>
+  <data name="ToolTip_HistoryFilterImage" xml:space="preserve">
+    <value>Filter Images</value>
+  </data>
+  <data name="ToolTip_HistoryFilterText" xml:space="preserve">
+    <value>Filter Text</value>
+  </data>
+  <data name="ToolTip_HistoryFilterVideo" xml:space="preserve">
+    <value>Filter Videos</value>
+  </data>
+  <data name="ToolTip_GuidanceImage" xml:space="preserve">
+    <value>Image guidance scale for edit and reference images, 0 uses the model default</value>
+  </data>
+  <data name="ToolTip_ShiftedTimestep" xml:space="preserve">
+    <value>Shifted timestep used by distilled timestep models, 0 disables it</value>
+  </data>
+  <data name="ToolTip_Sigmas" xml:space="preserve">
+    <value>Custom sigma schedule, a comma separated descending list ending in 0, for example 14.61, 7.8, 3.5, 0. Replaces the scheduler and the step count</value>
+  </data>
+  <data name="ToolTip_SkipLayers" xml:space="preserve">
+    <value>Skip layer guidance, a comma separated list of layers such as 7, 8, 9, applied between the start and end fraction of the steps. A scale of 0 disables it</value>
+  </data>
+  <data name="ToolTip_SamplerArgs" xml:space="preserve">
+    <value>Extra sampler arguments passed to stable-diffusion.cpp as key=value pairs</value>
+  </data>
+  <data name="ToolTip_ClipSkip" xml:space="preserve">
+    <value>Number of final CLIP text encoder layers to skip, 0 uses the model default</value>
+  </data>
+  <data name="ToolTip_MoeBoundary" xml:space="preserve">
+    <value>Point between 0 and 1 where sampling switches from the high noise model to the low noise model, 0 uses the default of 0.875</value>
+  </data>
+  <data name="ToolTip_FrameChunk" xml:space="preserve">
+    <value>Generate long videos in chunks, each continuing from the last frame of the one before. The length is no longer limited to a single pass, smaller chunks use less memory</value>
+  </data>
+  <data name="ToolTip_FrameCount_Frames" xml:space="preserve">
+    <value>Enter the length in frames</value>
+  </data>
+  <data name="ToolTip_FrameCount_Seconds" xml:space="preserve">
+    <value>Enter the length in seconds</value>
+  </data>
+  <data name="ToolTip_SeamlessTiling" xml:space="preserve">
+    <value>Wraps the image around the edge so the result tiles seamlessly in that direction</value>
+  </data>
+  <data name="ToolTip_LiveStart" xml:space="preserve">
+    <value>Transcribe the microphone live, the text appears while you speak.</value>
+  </data>
+  <data name="ToolTip_LiveStop" xml:space="preserve">
+    <value>Stop listening and complete the transcript.</value>
+  </data>
+  <data name="ToolTip_AudioTimeline_SaveAudio" xml:space="preserve">
+    <value>Save Audio</value>
+  </data>
+  <data name="ToolTip_AudioTimeline_SaveVideo" xml:space="preserve">
+    <value>Save Reference Video With Audio</value>
+  </data>
+  <data name="ToolTip_AudioTimeline_ReferenceRemove" xml:space="preserve">
+    <value>Remove Reference Video</value>
+  </data>
+  <data name="ToolTip_AudioTimeline_ClipMove" xml:space="preserve">
+    <value>Move Clip To Playhead</value>
+  </data>
+  <data name="ToolTip_AudioTimeline_ClipTrimStart" xml:space="preserve">
+    <value>Trim Clip Start To Playhead</value>
+  </data>
+  <data name="ToolTip_AudioTimeline_ClipTrimEnd" xml:space="preserve">
+    <value>Trim Clip End To Playhead</value>
+  </data>
+  <data name="ToolTip_AudioTimeline_ClipSplit" xml:space="preserve">
+    <value>Split Clip At Playhead</value>
+  </data>
+  <data name="ToolTip_AudioTimeline_ClipRestore" xml:space="preserve">
+    <value>Restore Trimmed Clip</value>
+  </data>
+  <data name="ToolTip_AudioTimeline_ClipCopy" xml:space="preserve">
+    <value>Copy Clip</value>
+  </data>
+  <data name="ToolTip_AudioTimeline_ClipRemove" xml:space="preserve">
+    <value>Remove Clip</value>
+  </data>
+  <data name="ToolTip_VideoTimeline_ReferenceRemove" xml:space="preserve">
+    <value>Remove Reference Audio</value>
+  </data>
+  <data name="ToolTip_FirstRunModelFolder" xml:space="preserve">
+    <value>Models are downloaded to a Models folder in the location you choose, pick a drive with plenty of free space.</value>
+  </data>
+  <data name="ToolTip_ModelSearchFolders" xml:space="preserve">
+    <value>Use model files that other applications such as ComfyUI already have, without copying or downloading them again.</value>
+  </data>
+  <data name="ToolTip_SelectAudioRange" xml:space="preserve">
+    <value>Select the range of the source audio to regenerate</value>
+  </data>
+  <data name="ToolTip_TrackName" xml:space="preserve">
+    <value>The track the task works on, e.g. vocals, guitar, drums, bass or piano</value>
+  </data>
+  <data name="ToolTip_CacheMode" xml:space="preserve">
+    <value>Reuses results between sampling steps to speed up generation. EasyCache, DBCache, TaylorSeer and Cache-DiT suit DiT models, UCache suits UNet models and Spectrum suits both</value>
+  </data>
+  <data name="ToolTip_CacheThreshold" xml:space="preserve">
+    <value>How much change is allowed before a step is computed again, higher is faster but lowers quality, 0 uses the default</value>
+  </data>
+  <data name="ToolTip_CacheWarmupSteps" xml:space="preserve">
+    <value>Steps that always run before caching starts, 0 uses the default</value>
+  </data>
+  <data name="ToolTip_CacheRange" xml:space="preserve">
+    <value>The part of the sampling steps where caching is allowed</value>
+  </data>
+  <data name="ToolTip_NavigateBack" xml:space="preserve">
+    <value>Back (Alt+Left)</value>
+  </data>
+  <data name="ToolTip_NavigateForward" xml:space="preserve">
+    <value>Forward (Alt+Right)</value>
+  </data>
+  <data name="ToolTip_QueueAll" xml:space="preserve">
+    <value>Queues every model in the list that is not installed</value>
+  </data>
+  <data name="ToolTip_RescanModels" xml:space="preserve">
+    <value>Looks for model files again, after you have copied files into the model or search folders yourself.</value>
+  </data>
+  <data name="ToolTip_McpTest" xml:space="preserve">
+    <value>Start the server once and list its tools.</value>
+  </data>
+  <data name="ToolTip_McpImport" xml:space="preserve">
+    <value>Add servers from a configuration snippet or the configuration file of another MCP application.</value>
+  </data>
+  <data name="ToolTip_McpEnable" xml:space="preserve">
+    <value>Start this server and offer its tools when you chat.</value>
+  </data>
+  <data name="ToolTip_McpReconnect" xml:space="preserve">
+    <value>Restart the server and connect again.</value>
+  </data>
+  <data name="ToolTip_McpIconCode" xml:space="preserve">
+    <value>The code of any Font Awesome icon, such as f1e6.</value>
+  </data>
+  <data name="ToolTip_FrameRate_Fixed" xml:space="preserve">
+    <value>This model generates at a fixed frame rate</value>
   </data>
 </root>
