@@ -57,7 +57,7 @@
                                     <TextBlock Text="{Binding Pipeline}" Opacity=".7" FontSize="11"/>
                                 </StackPanel>
                                 <StackPanel>
-                                    <TextBlock Text="{Binding Status}" TextAlignment="Right" FontSize="11"/>
+                                    <TextBlock Text="{Binding Status, Converter={StaticResource EnumDisplayNameConverter}}" TextAlignment="Right" FontSize="11"/>
                                     <TextBlock Text="{Binding Backend}" TextAlignment="Right" Opacity=".7" FontSize="11"/>
                                 </StackPanel>
                             </DockPanel>
@@ -85,7 +85,7 @@
 
                 <!--DiffusionModel-->
                 <StackPanel>
-                    <UniformGrid Columns="4" >
+                    <UniformGrid Columns="4">
                         <StackPanel Margin="0,0,2,0">
                             <TextBlock Text="{CommonControls:Localize Name}" Style="{StaticResource FieldTextBlockStyle}" />
                             <TextBox Text="{Binding SelectedModel.Name}" IsReadOnly="True"/>
@@ -96,15 +96,74 @@
                         </StackPanel>
                         <StackPanel Margin="2,0,2,0">
                             <TextBlock Text="{CommonControls:Localize Status}" Style="{StaticResource FieldTextBlockStyle}" />
-                            <TextBlock Text="{Binding SelectedModel.Status}" FontWeight="Bold" FontSize="14" Opacity=".8" Margin="3,1,0,0" Style="{StaticResource ModelStatusTextBlock}" Tag="{Binding SelectedModel.Status}" />
+                            <TextBlock Text="{Binding SelectedModel.Status, Converter={StaticResource EnumDisplayNameConverter}}" FontWeight="Bold" FontSize="14" Opacity=".8" Margin="3,1,0,0" Style="{StaticResource ModelStatusTextBlock}" Tag="{Binding SelectedModel.Status}" />
                         </StackPanel>
                     </UniformGrid>
-                    <UniformGrid Columns="2">
-                        <StackPanel Margin="2,6,2,0">
-                            <TextBlock Text="{CommonControls:Localize ModelLink}" Style="{StaticResource FieldTextBlockStyle}" />
-                            <CommonControls:HyperlinkControl Label="{Binding SelectedModel.Link}" Link="{Binding SelectedModel.Link}" />
+                    <UniformGrid Columns="4" Margin="0,6,0,0">
+                        <StackPanel Margin="0,0,2,0">
+                            <TextBlock Text="{CommonControls:Localize Backend}" Style="{StaticResource FieldTextBlockStyle}" />
+                            <TextBox Text="{Binding SelectedModel.Backend, Mode=OneWay}" IsReadOnly="True"/>
+                        </StackPanel>
+                        <StackPanel Margin="2,0,2,0">
+                            <TextBlock Text="{CommonControls:Localize ModelType}" Style="{StaticResource FieldTextBlockStyle}" />
+                            <TextBox Text="{Binding SelectedModel.ModelType, Mode=OneWay}" IsReadOnly="True"/>
+                        </StackPanel>
+                        <StackPanel Margin="2,0,2,0">
+                            <TextBlock Text="{CommonControls:Localize MemorySize}" Style="{StaticResource FieldTextBlockStyle}" />
+                            <TextBox Text="{Binding SelectedModel.MemorySize, Mode=OneWay, StringFormat={}{0:0.#} GB}" IsReadOnly="True"/>
+                        </StackPanel>
+                        <StackPanel Margin="2,0,2,0">
+                            <TextBlock Text="{CommonControls:Localize Quant}" Style="{StaticResource FieldTextBlockStyle}" />
+                            <TextBox Text="{Binding SelectedModel.Checkpoint.Type, Mode=OneWay, Converter={StaticResource EnumDisplayNameConverter}}" IsReadOnly="True"/>
                         </StackPanel>
                     </UniformGrid>
+                    <UniformGrid Columns="4" Margin="0,6,0,0">
+                        <StackPanel Margin="0,0,2,0">
+                            <TextBlock Text="{CommonControls:Localize Steps}" Style="{StaticResource FieldTextBlockStyle}" />
+                            <TextBox Text="{Binding SelectedModel.DefaultOptions.Steps, Mode=OneWay}" IsReadOnly="True"/>
+                        </StackPanel>
+                        <StackPanel Margin="2,0,2,0">
+                            <TextBlock Text="{CommonControls:Localize Guidance}" Style="{StaticResource FieldTextBlockStyle}" />
+                            <TextBox Text="{Binding SelectedModel.DefaultOptions.GuidanceScale, Mode=OneWay}" IsReadOnly="True"/>
+                        </StackPanel>
+                        <StackPanel Margin="2,0,2,0">
+                            <TextBlock Text="{CommonControls:Localize Sampler}" Style="{StaticResource FieldTextBlockStyle}" />
+                            <TextBox Text="{Binding SelectedModel.DefaultOptions.Sampler, Mode=OneWay}" IsReadOnly="True"/>
+                        </StackPanel>
+                    </UniformGrid>
+                    <StackPanel Margin="0,6,2,0">
+                        <TextBlock Text="{CommonControls:Localize Quants}" Style="{StaticResource FieldTextBlockStyle}" />
+                        <Border BorderThickness="1" BorderBrush="{StaticResource DefaultBorderColor}">
+                            <ItemsControl ItemsSource="{Binding SelectedModel.Checkpoints}" Margin="0,2">
+                                <ItemsControl.ItemTemplate>
+                                    <DataTemplate>
+                                        <Grid Margin="6,2">
+                                            <Grid.ColumnDefinitions>
+                                                <ColumnDefinition Width="90" />
+                                                <ColumnDefinition Width="*" />
+                                                <ColumnDefinition Width="70" />
+                                                <ColumnDefinition Width="Auto" MinWidth="80" />
+                                                <ColumnDefinition Width="20" />
+                                            </Grid.ColumnDefinitions>
+                                            <TextBlock Grid.Column="0" Text="{Binding Type, Converter={StaticResource EnumDisplayNameConverter}}" FontWeight="SemiBold" />
+                                            <TextBlock Grid.Column="1" Text="{Binding QualityDescription}" FontSize="11" Opacity=".7" VerticalAlignment="Center" TextTrimming="CharacterEllipsis" />
+                                            <TextBlock Grid.Column="2" Text="{Binding MemorySize, StringFormat={}{0:0.#} GB}" FontSize="11" Opacity=".7" VerticalAlignment="Center" TextAlignment="Right" />
+                                            <TextBlock Grid.Column="3" Text="{CommonControls:Localize Installed}" FontSize="11" VerticalAlignment="Center" TextAlignment="Right" Foreground="{StaticResource SuccessColour}" Visibility="{Binding IsInstalled, Converter={StaticResource BooleanToVisibilityConverter}}" />
+                                            <CommonControls:FontAwesome Grid.Column="4" Style="{StaticResource CheckpointStatusFontAwesome}" Size="10" IconStyle="Solid" HorizontalAlignment="Right" ToolTipService.InitialShowDelay="200" />
+                                        </Grid>
+                                    </DataTemplate>
+                                </ItemsControl.ItemTemplate>
+                            </ItemsControl>
+                        </Border>
+                    </StackPanel>
+                    <StackPanel Margin="2,6,2,0">
+                        <TextBlock Text="{CommonControls:Localize ModelLink}" Style="{StaticResource FieldTextBlockStyle}" />
+                        <CommonControls:HyperlinkControl Label="{Binding SelectedModel.Link}" Link="{Binding SelectedModel.Link}" />
+                    </StackPanel>
+                    <StackPanel Margin="0,6,2,0">
+                        <TextBlock Text="{CommonControls:Localize Description}" Style="{StaticResource FieldTextBlockStyle}" />
+                        <TextBox Text="{Binding SelectedModel.Pipeline, Mode=OneWay, Converter={StaticResource EnumDescriptionConverter}}" IsReadOnly="True" TextWrapping="Wrap" />
+                    </StackPanel>
                 </StackPanel>
 
             </DockPanel>

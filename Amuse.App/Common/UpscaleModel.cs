@@ -4,7 +4,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text.Json.Serialization;
 using TensorStack.Common;
-using TensorStack.Common.Common;
 using TensorStack.WPF;
 
 namespace Amuse.App.Common
@@ -25,9 +24,9 @@ namespace Amuse.App.Common
         private CheckpointComponent _vae;
         private UpscaleInputOptions _defaultOptions;
         private ModelStatusType _status;
-        private string _accessToken;
         private bool _isDefault;
         private string _link;
+        private ModelMetadata _metadata;
 
         [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingDefault)]
         public int Id { get; set; }
@@ -129,13 +128,6 @@ namespace Amuse.App.Common
         }
 
         [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingDefault)]
-        public string AccessToken
-        {
-            get { return _accessToken; }
-            set { SetProperty(ref _accessToken, value); }
-        }
-
-        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingDefault)]
         public bool IsDefault
         {
             get { return _isDefault; }
@@ -149,9 +141,17 @@ namespace Amuse.App.Common
             set { SetProperty(ref _link, value); }
         }
 
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+        public ModelMetadata Metadata
+        {
+            get { return _metadata; }
+            set { SetProperty(ref _metadata, value); }
+        }
+
 
         public void Initialize(Settings settings)
         {
+            _metadata?.Initialize(settings);
             Status = GetModelStatus(settings);
         }
 
@@ -176,7 +176,7 @@ namespace Amuse.App.Common
 
 
         /// <summary>
-        /// Deletes a checkpoint, shared components are kept for other models.
+        /// Deletes the files of a checkpoint, from the model directory and from the model search folders, shared components are kept for other models.
         /// </summary>
         /// <param name="settings">The settings.</param>
         /// <param name="checkpoint">The checkpoint.</param>
@@ -185,19 +185,7 @@ namespace Amuse.App.Common
             if (checkpoint == null || checkpoint.Type == CheckpointType.Component)
                 return;
 
-            var resolvedCheckpoint = checkpoint.Resolve(settings, settings.DirectoryUpscale);
-            if (string.IsNullOrEmpty(resolvedCheckpoint))
-                return;
-
-            if (System.IO.File.Exists(resolvedCheckpoint))
-            {
-                FileHelper.DeleteFile(resolvedCheckpoint);
-                FileHelper.DeleteDirectory(System.IO.Path.GetDirectoryName(resolvedCheckpoint), false);
-            }
-            else if (System.IO.Directory.Exists(resolvedCheckpoint))
-            {
-                FileHelper.DeleteDirectory(resolvedCheckpoint);
-            }
+            checkpoint.DeleteFiles(settings, settings.DirectoryUpscale);
         }
 
 
@@ -219,14 +207,12 @@ namespace Amuse.App.Common
             if (Checkpoint == null)
                 return ModelStatusType.Available;
 
-            var isValid = Checkpoint.IsInstalled(settings.DirectoryUpscale, settings.Components)
-                && (Vae == null || Vae.IsInstalled(settings.DirectoryUpscale, settings.Components));
+            var isValid = Checkpoint.IsInstalled(settings, settings.DirectoryUpscale)
+                && (Vae == null || Vae.IsInstalled(settings, settings.DirectoryUpscale));
             if ((Status == ModelStatusType.Available || Status == ModelStatusType.Unknown) && isValid)
                 return ModelStatusType.Installed;
             else if (Status == ModelStatusType.Installed && !isValid)
                 return ModelStatusType.Unknown;
-            else if (Status == ModelStatusType.Downloading || Status == ModelStatusType.DownloadQueue || Status == ModelStatusType.DownloadFailed)
-                return ModelStatusType.Available;
 
             return Status;
         }
@@ -250,8 +236,8 @@ namespace Amuse.App.Common
                 Vae = Vae?.DeepClone(),
                 DefaultOptions = DefaultOptions.DeepClone(),
                 MemorySize = MemorySize,
-                AccessToken = AccessToken,
-                Link = Link
+                Link = Link,
+                Metadata = Metadata?.DeepClone()
             };
         }
     }

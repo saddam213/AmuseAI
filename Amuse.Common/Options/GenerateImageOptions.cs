@@ -18,6 +18,7 @@ namespace Amuse.Common
         public int Width { get; set; }
         public float Strength { get; set; } = 1;
         public float ControlNetScale { get; set; } = 1;
+        public ControlNetType ControlType { get; set; }
         public string TempFileName { get; set; }
         public bool EnableVaeTiling { get; set; }
         public bool EnableVaeSlicing { get; set; }
@@ -30,7 +31,11 @@ namespace Amuse.Common
         public int LatentUpscaleSteps { get; set; }
         public float LatentUpscaleStrength { get; set; }
         public int LatentUpscaleTileSize { get; set; }
-        public SchedulerOptions SchedulerOptions { get; set; }
+        public int ClipSkip { get; set; }
+        public bool EnableCircularX { get; set; }
+        public bool EnableCircularY { get; set; }
+        public SamplerOptions SamplerOptions { get; set; }
+        public DiffusionCacheOptions CacheOptions { get; set; }
         public List<LoraOptions> LoraOptions { get; set; }
 
 

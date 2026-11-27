@@ -31,7 +31,11 @@ namespace Amuse.Common
         public float Speed { get; set; }
         public float SilenceDuration { get; set; }
         public int SampleRate { get; set; }
-        public SchedulerOptions SchedulerOptions { get; set; }
+        public float RangeStart { get; set; }
+        public float RangeEnd { get; set; }
+        public string ReferenceText { get; set; }
+        public string Emotion { get; set; }
+        public bool HasReferenceAudio { get; set; }
         public List<LoraOptions> LoraOptions { get; set; }
 
 

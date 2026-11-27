@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Amuse.App.Resources;
+using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.Text.Json;
@@ -31,7 +32,7 @@ namespace Amuse.App.Tools
         /// <summary>
         /// Gets the display name.
         /// </summary>
-        public override string DisplayName => "Weather Tool";
+        public override string DisplayName => AppDefault.ToolWeather;
 
         /// <summary>
         /// Gets the tool icon.

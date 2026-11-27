@@ -121,10 +121,10 @@
     <value>コンポーネント</value>
   </data>
   <data name="ControlNet" xml:space="preserve">
-    <value>コントロールネット</value>
+    <value>ControlNet</value>
   </data>
   <data name="ControlNets" xml:space="preserve">
-    <value>コントロールネット</value>
+    <value>ControlNet</value>
   </data>
   <data name="Diffusion" xml:space="preserve">
     <value>拡散モデル</value>
@@ -136,19 +136,16 @@
     <value>環境</value>
   </data>
   <data name="Extractor" xml:space="preserve">
-    <value>エクストラクタ</value>
+    <value>エクストラクター</value>
   </data>
   <data name="Extractors" xml:space="preserve">
-    <value>エクストラクタ</value>
+    <value>エクストラクター</value>
   </data>
   <data name="Gallery" xml:space="preserve">
     <value>ギャラリー</value>
   </data>
   <data name="General" xml:space="preserve">
     <value>一般</value>
-  </data>
-  <data name="LLM" xml:space="preserve">
-    <value>LLM</value>
   </data>
   <data name="LoraAdapter" xml:space="preserve">
     <value>LoRAアダプター</value>
@@ -163,7 +160,7 @@
     <value>新しいバージョンがあります！</value>
   </data>
   <data name="Menu_TextToImage" xml:space="preserve">
-    <value>Text ➔ Image</value>
+    <value>テキスト ➔ 画像</value>
   </data>
   <data name="Upscaler" xml:space="preserve">
     <value>アップスケーラー</value>
@@ -172,79 +169,73 @@
     <value>アップスケーラー</value>
   </data>
   <data name="Menu_ImageToImage" xml:space="preserve">
-    <value>Image ➔ Image</value>
+    <value>画像 ➔ 画像</value>
   </data>
   <data name="Menu_ImageEdit" xml:space="preserve">
-    <value>Image Edit</value>
+    <value>画像編集</value>
   </data>
   <data name="Menu_ImageInpaint" xml:space="preserve">
-    <value>Image Inpaint</value>
+    <value>画像インペイント</value>
   </data>
   <data name="Menu_PaintToImage" xml:space="preserve">
-    <value>Paint ➔ Image</value>
+    <value>ペイント ➔ 画像</value>
   </data>
   <data name="Menu_ImageExtract" xml:space="preserve">
-    <value>Image Extract</value>
+    <value>画像抽出</value>
   </data>
   <data name="Menu_ImageUpscale" xml:space="preserve">
-    <value>Image Upscale</value>
+    <value>画像アップスケール</value>
   </data>
   <data name="Menu_ImageCompose" xml:space="preserve">
-    <value>Image Compose</value>
+    <value>画像合成</value>
   </data>
   <data name="Menu_TextToVideo" xml:space="preserve">
-    <value>Text ➔ Video</value>
+    <value>テキスト ➔ 動画</value>
   </data>
   <data name="Menu_ImageToVideo" xml:space="preserve">
-    <value>Image ➔ Video</value>
+    <value>画像 ➔ 動画</value>
   </data>
   <data name="Menu_VideoToVideo" xml:space="preserve">
-    <value>Video ➔ Video</value>
+    <value>動画 ➔ 動画</value>
   </data>
   <data name="Menu_MediaToVideo" xml:space="preserve">
-    <value>Media ➔ Video</value>
+    <value>メディア ➔ 動画</value>
   </data>
   <data name="Menu_FrameToFrame" xml:space="preserve">
-    <value>Frame ➔ Frame</value>
+    <value>フレーム ➔ フレーム</value>
   </data>
   <data name="Menu_VideoExtract" xml:space="preserve">
-    <value>VideoExtract</value>
+    <value>動画抽出</value>
   </data>
   <data name="Menu_VideoUpscale" xml:space="preserve">
-    <value>VideoUpscale</value>
+    <value>動画アップスケール</value>
   </data>
   <data name="Menu_VideoInterpolate" xml:space="preserve">
-    <value>VideoInterpolate</value>
+    <value>動画補間</value>
   </data>
   <data name="Menu_VideoCompose" xml:space="preserve">
-    <value>VideoCompose</value>
+    <value>動画合成</value>
   </data>
   <data name="Menu_TextToMusic" xml:space="preserve">
-    <value>Text ➔ Music</value>
+    <value>テキスト ➔ 音楽</value>
   </data>
   <data name="Menu_TextToAudio" xml:space="preserve">
-    <value>Text ➔ Audio</value>
+    <value>テキスト ➔ 音声</value>
   </data>
   <data name="Menu_AudioToText" xml:space="preserve">
-    <value>Audio ➔ Text</value>
+    <value>音声 ➔ テキスト</value>
   </data>
   <data name="Menu_ImageToText" xml:space="preserve">
-    <value>Image ➔ Text</value>
+    <value>画像 ➔ テキスト</value>
   </data>
   <data name="Menu_TextInstruct" xml:space="preserve">
-    <value>Instruct</value>
+    <value>指示</value>
   </data>
   <data name="Menu_TextConverse" xml:space="preserve">
-    <value>Converse</value>
+    <value>会話</value>
   </data>
   <data name="Install" xml:space="preserve">
     <value>インストール</value>
-  </data>
-  <data name="Download" xml:space="preserve">
-    <value>ダウンロード</value>
-  </data>
-  <data name="Update" xml:space="preserve">
-    <value>更新</value>
   </data>
   <data name="Information" xml:space="preserve">
     <value>情報</value>
@@ -262,7 +253,7 @@
     <value>コンポーネントモデル</value>
   </data>
   <data name="Title_ControlNetModel" xml:space="preserve">
-    <value>コントロールネットモデル</value>
+    <value>ControlNetモデル</value>
   </data>
   <data name="Title_DiffusionModel" xml:space="preserve">
     <value>拡散モデル</value>
@@ -274,10 +265,7 @@
     <value>環境</value>
   </data>
   <data name="Title_ExtractModel" xml:space="preserve">
-    <value>モデルを抽出</value>
-  </data>
-  <data name="Title_GatedModelAccess" xml:space="preserve">
-    <value>制限付きモデルへのアクセス</value>
+    <value>抽出モデル</value>
   </data>
   <data name="Title_LanguageModel" xml:space="preserve">
     <value>言語モデル</value>
@@ -288,14 +276,14 @@
   <data name="Title_MediaPreview" xml:space="preserve">
     <value>メディアプレビュー</value>
   </data>
-  <data name="Title_DownloadInformation" xml:space="preserve">
-    <value>ダウンロード情報</value>
-  </data>
   <data name="Title_UpscaleModel" xml:space="preserve">
     <value>アップスケールモデル</value>
   </data>
   <data name="AllBeamsResults" xml:space="preserve">
-    <value>すべてのBeam結果</value>
+    <value>すべてのビーム結果</value>
+  </data>
+  <data name="AllowChunking" xml:space="preserve">
+    <value>チャンク生成を許可</value>
   </data>
   <data name="EnableTiling" xml:space="preserve">
     <value>タイリングを有効化</value>
@@ -316,7 +304,7 @@
     <value>LoRA</value>
   </data>
   <data name="Extract" xml:space="preserve">
-    <value>エクストラクト</value>
+    <value>抽出</value>
   </data>
   <data name="Upscale" xml:space="preserve">
     <value>アップスケール</value>
@@ -328,7 +316,7 @@
     <value>出力を反転</value>
   </data>
   <data name="ThinkingEnabled" xml:space="preserve">
-    <value>シンキングを有効化</value>
+    <value>思考を有効化</value>
   </data>
   <data name="MinLength" xml:space="preserve">
     <value>最小長</value>
@@ -357,9 +345,6 @@
   <data name="Default_" xml:space="preserve">
     <value>デフォルト</value>
   </data>
-  <data name="Open" xml:space="preserve">
-    <value>開く</value>
-  </data>
   <data name="Move" xml:space="preserve">
     <value>移動</value>
   </data>
@@ -387,60 +372,6 @@
   <data name="MergeOutput" xml:space="preserve">
     <value>出力を結合</value>
   </data>
-  <data name="RescaleBetasSNR" xml:space="preserve">
-    <value>ベータをSNRで再スケール</value>
-  </data>
-  <data name="SetAlphaToOne" xml:space="preserve">
-    <value>Alphaを1に設定</value>
-  </data>
-  <data name="ClipSample" xml:space="preserve">
-    <value>クリップサンプル</value>
-  </data>
-  <data name="Thresholding" xml:space="preserve">
-    <value>しきい値処理を有効化</value>
-  </data>
-  <data name="DynamicShifting" xml:space="preserve">
-    <value>動的シフトを有効化</value>
-  </data>
-  <data name="InvertSigmas" xml:space="preserve">
-    <value>シグマを反転</value>
-  </data>
-  <data name="StochasticSampling" xml:space="preserve">
-    <value>確率的サンプリングを有効化</value>
-  </data>
-  <data name="SkipPrkSteps" xml:space="preserve">
-    <value>PRKステップをスキップ</value>
-  </data>
-  <data name="LowerOrderFinal" xml:space="preserve">
-    <value>最終段階で低次を使用</value>
-  </data>
-  <data name="FlowSigmas" xml:space="preserve">
-    <value>フローシグマを使用</value>
-  </data>
-  <data name="PredictorOrder" xml:space="preserve">
-    <value>予測次数</value>
-  </data>
-  <data name="CorrectorOrder" xml:space="preserve">
-    <value>修正次数</value>
-  </data>
-  <data name="Predictx0" xml:space="preserve">
-    <value>x0を予測</value>
-  </data>
-  <data name="UseFlowSigmas" xml:space="preserve">
-    <value>フローシグマを使用</value>
-  </data>
-  <data name="EulerAtFinal" xml:space="preserve">
-    <value>最終段階でEulerを使用</value>
-  </data>
-  <data name="LuLambdas" xml:space="preserve">
-    <value>Luラムダを使用</value>
-  </data>
-  <data name="SNRShiftScale" xml:space="preserve">
-    <value>SNRシフトスケール</value>
-  </data>
-  <data name="RescaleBetasZeroSNR" xml:space="preserve">
-    <value>ベータをZeroSNRで再スケール</value>
-  </data>
   <data name="Prev" xml:space="preserve">
     <value>前へ</value>
   </data>
@@ -456,8 +387,14 @@
   <data name="ShowInstalled" xml:space="preserve">
     <value>インストール済みを表示</value>
   </data>
+  <data name="ShowComponents" xml:space="preserve">
+    <value>コンポーネントを表示</value>
+  </data>
   <data name="AddRecentItems" xml:space="preserve">
     <value>最近の項目を追加</value>
+  </data>
+  <data name="MaxToolRounds" xml:space="preserve">
+    <value>ツール呼び出しの最大回数</value>
   </data>
   <data name="MaxItems" xml:space="preserve">
     <value>最大項目数</value>
@@ -475,31 +412,16 @@
     <value>外部リンクを有効化</value>
   </data>
   <data name="PipelineDebug" xml:space="preserve">
-    <value>パイプラインデバッグ</value>
-  </data>
-  <data name="OptimizeDevice" xml:space="preserve">
-    <value>デバイスを最適化</value>
-  </data>
-  <data name="OptimizeChannels" xml:space="preserve">
-    <value>チャンネルを最適化</value>
-  </data>
-  <data name="DeviceQuantization" xml:space="preserve">
-    <value>デバイス量子化</value>
-  </data>
-  <data name="DiffusionStepPreview" xml:space="preserve">
-    <value>拡散モデルステッププレビュー</value>
-  </data>
-  <data name="StyleSample" xml:space="preserve">
-    <value>スタイルサンプル</value>
-  </data>
-  <data name="LyricsSample" xml:space="preserve">
-    <value>歌詞サンプル</value>
+    <value>バックエンドプロセスのデバッグ</value>
   </data>
   <data name="CheckForUpdates" xml:space="preserve">
     <value>アップデートを確認</value>
   </data>
-  <data name="SchedulerOptions" xml:space="preserve">
-    <value>スケジューラーオプション</value>
+  <data name="Sampler" xml:space="preserve">
+    <value>サンプラー</value>
+  </data>
+  <data name="SamplerOptions" xml:space="preserve">
+    <value>サンプラーオプション</value>
   </data>
   <data name="LatentUpscale" xml:space="preserve">
     <value>レイテントアップスケール</value>
@@ -508,28 +430,10 @@
     <value>オートエンコーダー</value>
   </data>
   <data name="ExtractOptions" xml:space="preserve">
-    <value>エクストラクトオプション</value>
+    <value>抽出オプション</value>
   </data>
   <data name="UpscaleOptions" xml:space="preserve">
     <value>アップスケールオプション</value>
-  </data>
-  <data name="CopyText" xml:space="preserve">
-    <value>テキストをコピー</value>
-  </data>
-  <data name="CopyResponse" xml:space="preserve">
-    <value>応答をコピー</value>
-  </data>
-  <data name="CopyThinking" xml:space="preserve">
-    <value>Thinkingをコピー</value>
-  </data>
-  <data name="CopyHtml" xml:space="preserve">
-    <value>HTMLをコピー</value>
-  </data>
-  <data name="CopyResponseHtml" xml:space="preserve">
-    <value>応答をHTMLとしてコピー</value>
-  </data>
-  <data name="CopyThinkingHtml" xml:space="preserve">
-    <value>ThinkingをHTMLとしてコピー</value>
   </data>
   <data name="Model" xml:space="preserve">
     <value>モデル</value>
@@ -553,10 +457,7 @@
     <value>コンポーネント設定</value>
   </data>
   <data name="ControlNetSettings" xml:space="preserve">
-    <value>コントロールネット設定</value>
-  </data>
-  <data name="DiffusionSettings" xml:space="preserve">
-    <value>拡散モデル設定</value>
+    <value>ControlNet設定</value>
   </data>
   <data name="ImageSettings" xml:space="preserve">
     <value>画像設定</value>
@@ -591,17 +492,8 @@
   <data name="UpscaleSettings" xml:space="preserve">
     <value>アップスケール設定</value>
   </data>
-  <data name="ModelSettings" xml:space="preserve">
-    <value>モデル設定</value>
-  </data>
   <data name="AccessTokens" xml:space="preserve">
     <value>アクセストークン</value>
-  </data>
-  <data name="HistorySettings" xml:space="preserve">
-    <value>履歴設定</value>
-  </data>
-  <data name="OtherSettings" xml:space="preserve">
-    <value>その他の設定</value>
   </data>
   <data name="ExperimentalSettings" xml:space="preserve">
     <value>実験的機能</value>
@@ -613,16 +505,19 @@
     <value>シード</value>
   </data>
   <data name="Steps" xml:space="preserve">
-    <value>ステップ</value>
+    <value>ステップ数</value>
   </data>
   <data name="Guidance" xml:space="preserve">
     <value>ガイダンス</value>
   </data>
   <data name="Strength" xml:space="preserve">
-    <value>ストレングス</value>
+    <value>強度</value>
   </data>
   <data name="Duration" xml:space="preserve">
     <value>長さ</value>
+  </data>
+  <data name="Seconds" xml:space="preserve">
+    <value>秒</value>
   </data>
   <data name="DurationSeconds" xml:space="preserve">
     <value>長さ（秒）</value>
@@ -643,13 +538,13 @@
     <value>タスク</value>
   </data>
   <data name="LengthPenalty" xml:space="preserve">
-    <value>レングスペナルティ</value>
+    <value>長さペナルティ</value>
   </data>
   <data name="ChunkSize" xml:space="preserve">
     <value>チャンクサイズ</value>
   </data>
   <data name="EarlyStopping" xml:space="preserve">
-    <value>アーリーストッピング</value>
+    <value>早期終了</value>
   </data>
   <data name="Advanced" xml:space="preserve">
     <value>詳細設定</value>
@@ -657,35 +552,35 @@
   <data name="Automation" xml:space="preserve">
     <value>自動化</value>
   </data>
-  <data name="ImageCount" xml:space="preserve">
-    <value>画像数</value>
+  <data name="AutomationCount" xml:space="preserve">
+    <value>数</value>
   </data>
   <data name="PromptFolder" xml:space="preserve">
-    <value>プロンプトフォルダ</value>
+    <value>プロンプトフォルダー</value>
   </data>
   <data name="PromptFile" xml:space="preserve">
     <value>プロンプトファイル</value>
   </data>
   <data name="ImageFolder" xml:space="preserve">
-    <value>画像フォルダ</value>
+    <value>画像フォルダー</value>
   </data>
   <data name="VideoFolder" xml:space="preserve">
-    <value>動画フォルダ</value>
+    <value>動画フォルダー</value>
   </data>
   <data name="TextFolder" xml:space="preserve">
-    <value>テキストフォルダ</value>
+    <value>テキストフォルダー</value>
   </data>
   <data name="AudioFolder" xml:space="preserve">
-    <value>音声フォルダ</value>
+    <value>音声フォルダー</value>
   </data>
   <data name="OutputFolder" xml:space="preserve">
-    <value>出力フォルダ</value>
+    <value>出力フォルダー</value>
   </data>
   <data name="Beams" xml:space="preserve">
-    <value>Beams</value>
+    <value>ビーム数</value>
   </data>
   <data name="Temperature" xml:space="preserve">
-    <value>Temperature</value>
+    <value>温度</value>
   </data>
   <data name="TopK" xml:space="preserve">
     <value>TopK</value>
@@ -693,14 +588,11 @@
   <data name="TopP" xml:space="preserve">
     <value>TopP</value>
   </data>
-  <data name="Type" xml:space="preserve">
-    <value>タイプ</value>
-  </data>
   <data name="Folder" xml:space="preserve">
-    <value>フォルダ</value>
+    <value>フォルダー</value>
   </data>
   <data name="SubFolderOptional" xml:space="preserve">
-    <value>サブフォルダ（任意）</value>
+    <value>サブフォルダー（任意）</value>
   </data>
   <data name="Component" xml:space="preserve">
     <value>コンポーネント</value>
@@ -709,7 +601,7 @@
     <value>モデルファイル</value>
   </data>
   <data name="ModelFolder" xml:space="preserve">
-    <value>モデルフォルダ</value>
+    <value>モデルフォルダー</value>
   </data>
   <data name="DownloadFiles" xml:space="preserve">
     <value>ファイルをダウンロード</value>
@@ -733,16 +625,16 @@
     <value>ノイズコンディション</value>
   </data>
   <data name="StepsStage1" xml:space="preserve">
-    <value>ステップ（Stage 1）</value>
+    <value>ステップ数（ステージ1）</value>
   </data>
   <data name="StepsStage2" xml:space="preserve">
-    <value>ステップ（Stage 2）</value>
+    <value>ステップ数（ステージ2）</value>
   </data>
   <data name="StepsHighNoise" xml:space="preserve">
-    <value>ステップ（High Noise）</value>
+    <value>ステップ数（高ノイズ）</value>
   </data>
   <data name="StepsLowNoise" xml:space="preserve">
-    <value>ステップ（Low Noise）</value>
+    <value>ステップ数（低ノイズ）</value>
   </data>
   <data name="GuidanceModel" xml:space="preserve">
     <value>ガイダンス（モデル）</value>
@@ -751,13 +643,16 @@
     <value>ガイダンス（CFG）</value>
   </data>
   <data name="GuidanceHighNoise" xml:space="preserve">
-    <value>ガイダンス（High Noise）</value>
+    <value>ガイダンス（高ノイズ）</value>
   </data>
   <data name="GuidanceLowNoise" xml:space="preserve">
-    <value>ガイダンス（Low Noise）</value>
+    <value>ガイダンス（低ノイズ）</value>
   </data>
   <data name="ControlStrength" xml:space="preserve">
-    <value>コントロールストレングス</value>
+    <value>コントロール強度</value>
+  </data>
+  <data name="ControlType" xml:space="preserve">
+    <value>コントロールタイプ</value>
   </data>
   <data name="Prompt" xml:space="preserve">
     <value>プロンプト</value>
@@ -766,7 +661,7 @@
     <value>ネガティブプロンプト</value>
   </data>
   <data name="DenoiseStrength" xml:space="preserve">
-    <value>デノイズストレングス</value>
+    <value>ノイズ除去強度</value>
   </data>
   <data name="Ready" xml:space="preserve">
     <value>準備完了</value>
@@ -784,7 +679,7 @@
     <value>メモリ</value>
   </data>
   <data name="BackgroundMode" xml:space="preserve">
-    <value>バックグラウンドモード</value>
+    <value>背景モード</value>
   </data>
   <data name="MaxDetections" xml:space="preserve">
     <value>最大検出数</value>
@@ -814,16 +709,16 @@
     <value>システムプロンプト</value>
   </data>
   <data name="RepetitionPenalty" xml:space="preserve">
-    <value>レペティションペナルティ</value>
+    <value>繰り返しペナルティ</value>
   </data>
   <data name="NoRepeatNgrams" xml:space="preserve">
-    <value>ノーリピートN-グラム</value>
+    <value>N-gramの繰り返し禁止</value>
   </data>
   <data name="TopH" xml:space="preserve">
     <value>TopH</value>
   </data>
   <data name="TypicalP" xml:space="preserve">
-    <value>ティピカルP</value>
+    <value>TypicalP</value>
   </data>
   <data name="KVCache" xml:space="preserve">
     <value>KVキャッシュ</value>
@@ -842,9 +737,6 @@
   </data>
   <data name="TotalUsed" xml:space="preserve">
     <value>使用量合計</value>
-  </data>
-  <data name="Remaining" xml:space="preserve">
-    <value>残り</value>
   </data>
   <data name="CurrentTime" xml:space="preserve">
     <value>現在時刻</value>
@@ -882,122 +774,14 @@
   <data name="PreviewQuality" xml:space="preserve">
     <value>プレビュー品質</value>
   </data>
-  <data name="BetaSchedule" xml:space="preserve">
-    <value>ベータスケジュール</value>
-  </data>
-  <data name="BetaStart" xml:space="preserve">
-    <value>ベータスタート</value>
-  </data>
-  <data name="BetaEnd" xml:space="preserve">
-    <value>ベータエンド</value>
-  </data>
-  <data name="Prediction" xml:space="preserve">
-    <value>プレディクション</value>
-  </data>
-  <data name="TimestepSpacing" xml:space="preserve">
-    <value>タイムステップスペーシング</value>
-  </data>
-  <data name="StepsOffset" xml:space="preserve">
-    <value>ステップオフセット</value>
-  </data>
-  <data name="SigmaMin" xml:space="preserve">
-    <value>シグマ最小値</value>
-  </data>
-  <data name="SigmaMax" xml:space="preserve">
-    <value>シグマ最大値</value>
-  </data>
-  <data name="FinalSigmasType" xml:space="preserve">
-    <value>ファイナルシグマタイプ</value>
-  </data>
-  <data name="SigmaType" xml:space="preserve">
-    <value>シグマタイプ</value>
-  </data>
-  <data name="InterpolationType" xml:space="preserve">
-    <value>補間方式</value>
-  </data>
-  <data name="TimestepType" xml:space="preserve">
-    <value>タイムステップタイプ</value>
-  </data>
-  <data name="ClipSampleRange" xml:space="preserve">
-    <value>クリップサンプルレンジ</value>
-  </data>
-  <data name="SampleMaxValue" xml:space="preserve">
-    <value>サンプル最大値</value>
-  </data>
-  <data name="ThresholdingRatio" xml:space="preserve">
-    <value>スレッショルディングレシオ</value>
-  </data>
-  <data name="Variance" xml:space="preserve">
-    <value>バリアンス</value>
-  </data>
-  <data name="TimestepScaling" xml:space="preserve">
-    <value>タイムステップスケーリング</value>
-  </data>
-  <data name="Shift" xml:space="preserve">
-    <value>シフト</value>
-  </data>
-  <data name="BaseShift" xml:space="preserve">
-    <value>ベースシフト</value>
-  </data>
-  <data name="MaxShift" xml:space="preserve">
-    <value>最大シフト</value>
-  </data>
-  <data name="ShiftTerminal" xml:space="preserve">
-    <value>終端シフト</value>
-  </data>
-  <data name="TimeShift" xml:space="preserve">
-    <value>タイムシフト</value>
-  </data>
-  <data name="Solver" xml:space="preserve">
-    <value>ソルバー</value>
-  </data>
-  <data name="SolverOrder" xml:space="preserve">
-    <value>ソルバーオーダー</value>
-  </data>
   <data name="FlowShift" xml:space="preserve">
     <value>フローシフト</value>
-  </data>
-  <data name="AlgorithmType" xml:space="preserve">
-    <value>アルゴリズムタイプ</value>
-  </data>
-  <data name="VarianceType" xml:space="preserve">
-    <value>バリアンスタイプ</value>
-  </data>
-  <data name="NoiseSeed" xml:space="preserve">
-    <value>ノイズシード</value>
-  </data>
-  <data name="Rho" xml:space="preserve">
-    <value>ロー（Rho）</value>
-  </data>
-  <data name="SigmaData" xml:space="preserve">
-    <value>シグマデータ</value>
-  </data>
-  <data name="SigmaScheduleType" xml:space="preserve">
-    <value>シグマスケジュールタイプ</value>
-  </data>
-  <data name="UpscaleMode" xml:space="preserve">
-    <value>アップスケールモード</value>
-  </data>
-  <data name="Gamma" xml:space="preserve">
-    <value>ガンマ</value>
-  </data>
-  <data name="TimeShiftType" xml:space="preserve">
-    <value>タイムシフトタイプ</value>
-  </data>
-  <data name="OriginalSteps" xml:space="preserve">
-    <value>オリジナルステップ</value>
   </data>
   <data name="Eta" xml:space="preserve">
     <value>イータ（Eta）</value>
   </data>
-  <data name="SNoise" xml:space="preserve">
-    <value>SNoise</value>
-  </data>
   <data name="Scheduler" xml:space="preserve">
     <value>スケジューラー</value>
-  </data>
-  <data name="SigmaSchedule" xml:space="preserve">
-    <value>シグマスケジュール</value>
   </data>
   <data name="NewVersionMessage" xml:space="preserve">
     <value>新しいバージョンのAmuseを利用できます</value>
@@ -1016,6 +800,9 @@
   </data>
   <data name="Key" xml:space="preserve">
     <value>キー</value>
+  </data>
+  <data name="Licence" xml:space="preserve">
+    <value>ライセンス</value>
   </data>
   <data name="Link" xml:space="preserve">
     <value>リンク</value>
@@ -1039,16 +826,13 @@
     <value>無音時間</value>
   </data>
   <data name="MaxLength2" xml:space="preserve">
-    <value>最大長 2</value>
-  </data>
-  <data name="Channels" xml:space="preserve">
-    <value>チャンネル</value>
+    <value>最大長2</value>
   </data>
   <data name="SampleRate" xml:space="preserve">
     <value>サンプルレート</value>
   </data>
-  <data name="FrameOptions" xml:space="preserve">
-    <value>フレームオプション</value>
+  <data name="MaxFrames" xml:space="preserve">
+    <value>最大フレーム数</value>
   </data>
   <data name="FrameChunkOverlap" xml:space="preserve">
     <value>フレームチャンクオーバーラップ</value>
@@ -1057,7 +841,7 @@
     <value>フレームチャンク</value>
   </data>
   <data name="Steps2" xml:space="preserve">
-    <value>ステップ 2</value>
+    <value>ステップ数2</value>
   </data>
   <data name="RepositoryLink" xml:space="preserve">
     <value>リポジトリリンク</value>
@@ -1068,23 +852,8 @@
   <data name="OriginalModelDataType" xml:space="preserve">
     <value>元のモデルデータ型</value>
   </data>
-  <data name="Quality" xml:space="preserve">
-    <value>品質</value>
-  </data>
-  <data name="Low" xml:space="preserve">
-    <value>Low</value>
-  </data>
-  <data name="Medium" xml:space="preserve">
-    <value>Medium</value>
-  </data>
-  <data name="High" xml:space="preserve">
-    <value>High</value>
-  </data>
   <data name="Source" xml:space="preserve">
     <value>ソース</value>
-  </data>
-  <data name="VariantOptional" xml:space="preserve">
-    <value>バリアント（任意）</value>
   </data>
   <data name="ModelName" xml:space="preserve">
     <value>モデル名</value>
@@ -1115,12 +884,6 @@
   </data>
   <data name="MemorySize" xml:space="preserve">
     <value>メモリサイズ</value>
-  </data>
-  <data name="AccessTokenTerms" xml:space="preserve">
-    <value>モデルの利用規約に同意</value>
-  </data>
-  <data name="AccessTokenMessage" xml:space="preserve">
-    <value>このモデルは公開されていますが、ファイルとコンテンツにアクセスするには利用条件への同意が必要です。</value>
   </data>
   <data name="ModelParametersB" xml:space="preserve">
     <value>モデルパラメーター（B）</value>
@@ -1162,7 +925,7 @@
     <value>ダウンロードをキャンセル</value>
   </data>
   <data name="OpenFolder" xml:space="preserve">
-    <value>フォルダを開く</value>
+    <value>フォルダーを開く</value>
   </data>
   <data name="DeleteFiles" xml:space="preserve">
     <value>ファイルを削除</value>
@@ -1230,9 +993,6 @@
   <data name="Stretch" xml:space="preserve">
     <value>ストレッチ</value>
   </data>
-  <data name="Text" xml:space="preserve">
-    <value>テキスト</value>
-  </data>
   <data name="Font" xml:space="preserve">
     <value>フォント</value>
   </data>
@@ -1243,7 +1003,7 @@
     <value>スタイル</value>
   </data>
   <data name="Weight" xml:space="preserve">
-    <value>重み</value>
+    <value>太さ</value>
   </data>
   <data name="Color" xml:space="preserve">
     <value>色</value>
@@ -1259,9 +1019,6 @@
   </data>
   <data name="BackendType" xml:space="preserve">
     <value>バックエンドタイプ</value>
-  </data>
-  <data name="Access" xml:space="preserve">
-    <value>アクセス</value>
   </data>
   <data name="Output" xml:space="preserve">
     <value>出力</value>
@@ -1299,9 +1056,6 @@
   <data name="Lyrics" xml:space="preserve">
     <value>歌詞</value>
   </data>
-  <data name="LyricTags" xml:space="preserve">
-    <value>歌詞タグ</value>
-  </data>
   <data name="ReferenceAudio" xml:space="preserve">
     <value>参照音声</value>
   </data>
@@ -1309,13 +1063,13 @@
     <value>LoRAモデル</value>
   </data>
   <data name="ControlNetModel" xml:space="preserve">
-    <value>コントロールネットモデル</value>
+    <value>ControlNetモデル</value>
   </data>
   <data name="LoraStrength" xml:space="preserve">
-    <value>LoRAストレングス</value>
+    <value>LoRA強度</value>
   </data>
   <data name="ControlNetStrength" xml:space="preserve">
-    <value>コントロールネットストレングス</value>
+    <value>ControlNet強度</value>
   </data>
   <data name="Tiled" xml:space="preserve">
     <value>タイル化</value>
@@ -1360,16 +1114,10 @@
     <value>アップスケール済み</value>
   </data>
   <data name="Recent" xml:space="preserve">
-    <value>Recent</value>
+    <value>最近</value>
   </data>
   <data name="UpdateAvailable" xml:space="preserve">
     <value>アップデートがあります</value>
-  </data>
-  <data name="EnableExternalTools" xml:space="preserve">
-    <value>外部ツールを有効化</value>
-  </data>
-  <data name="EnableDangerousTools" xml:space="preserve">
-    <value>危険なツールを有効化</value>
   </data>
   <data name="Interpolate" xml:space="preserve">
     <value>補間</value>
@@ -1387,10 +1135,19 @@
     <value>ステップ: {5}/{6}</value>
   </data>
   <data name="ProgressAutoEncoder" xml:space="preserve">
-    <value>生成結果を処理中...</value>
+    <value>結果をデコード中...</value>
   </data>
   <data name="ProgressComplete" xml:space="preserve">
     <value>生成結果を処理中...</value>
+  </data>
+  <data name="ProgressEncoder" xml:space="preserve">
+    <value>入力をエンコード中...</value>
+  </data>
+  <data name="ProgressUpscaling" xml:space="preserve">
+    <value>アップスケール中...</value>
+  </data>
+  <data name="ProgressChunk" xml:space="preserve">
+    <value>チャンク {7}/{8} を生成中...</value>
   </data>
   <data name="ActiveDownloadsMessage" xml:space="preserve">
     <value>実行中のダウンロードがあります。キャンセルして終了してもよろしいですか？</value>
@@ -1402,16 +1159,13 @@
     <value>動画をレンダリング中</value>
   </data>
   <data name="DeleteGalleryItems" xml:space="preserve">
-    <value>ギャラリーの全{0}項目を削除してもよろしいですか？</value>
+    <value>ギャラリーの項目を全{0}件削除してもよろしいですか？</value>
   </data>
   <data name="DeleteGalleryItemsFiltered" xml:space="preserve">
     <value>フィルター済みのギャラリー項目{0}件を削除してもよろしいですか？</value>
   </data>
   <data name="LoadingPipeline" xml:space="preserve">
     <value>パイプラインを読み込み中</value>
-  </data>
-  <data name="LoadPipeline" xml:space="preserve">
-    <value>パイプラインを読み込む</value>
   </data>
   <data name="EncodingVideoFrames" xml:space="preserve">
     <value>動画フレームをエンコード中</value>
@@ -1444,13 +1198,13 @@
     <value>タイル</value>
   </data>
   <data name="GeneratingBeamResults" xml:space="preserve">
-    <value>Beam結果を生成中</value>
+    <value>ビーム結果を生成中</value>
   </data>
   <data name="RemoveComponent" xml:space="preserve">
     <value>コンポーネントの登録を解除</value>
   </data>
   <data name="RemoveComponentMessage" xml:space="preserve">
-    <value>このコンポーネントの登録を解除してもよろしいですか？</value>
+    <value>このコンポーネントの登録を Amuse から解除してもよろしいですか？ダウンロード済みのファイルは削除されません。</value>
   </data>
   <data name="ImportComponent" xml:space="preserve">
     <value>コンポーネントをインポート</value>
@@ -1462,13 +1216,13 @@
     <value>コンポーネントを削除</value>
   </data>
   <data name="DeleteComponentMessage" xml:space="preserve">
-    <value>このコンポーネントを削除してもよろしいですか？</value>
+    <value>このコンポーネントのダウンロード済みファイルを削除してもよろしいですか？</value>
   </data>
   <data name="RemoveModel" xml:space="preserve">
     <value>モデルの登録を解除</value>
   </data>
   <data name="RemoveModelMessage" xml:space="preserve">
-    <value>このモデルの登録を解除してもよろしいですか？</value>
+    <value>このモデルの登録を Amuse から解除してもよろしいですか？ダウンロード済みのファイルは削除されません。</value>
   </data>
   <data name="ImportModel" xml:space="preserve">
     <value>モデルをインポート</value>
@@ -1480,13 +1234,13 @@
     <value>モデルを削除</value>
   </data>
   <data name="DeleteModelMessage" xml:space="preserve">
-    <value>このモデルを削除してもよろしいですか？</value>
+    <value>このモデルのダウンロード済みファイルを削除してもよろしいですか？</value>
   </data>
   <data name="RemoveEnvironment" xml:space="preserve">
     <value>環境の登録を解除</value>
   </data>
   <data name="RemoveEnvironmentMessage" xml:space="preserve">
-    <value>この環境の登録を解除してもよろしいですか？</value>
+    <value>この環境の登録を Amuse から解除してもよろしいですか？インストール済みのファイルも削除されます。</value>
   </data>
   <data name="ImportEnvironment" xml:space="preserve">
     <value>環境をインポート</value>
@@ -1498,10 +1252,19 @@
     <value>環境を削除</value>
   </data>
   <data name="DeleteEnvironmentMessage" xml:space="preserve">
-    <value>この環境を削除してもよろしいですか？</value>
+    <value>この環境のインストール済みファイルを削除してもよろしいですか？</value>
+  </data>
+  <data name="EnableExternalTools" xml:space="preserve">
+    <value>外部ツールを有効化</value>
+  </data>
+  <data name="EnableExecuteTools" xml:space="preserve">
+    <value>実行ツールを有効化</value>
+  </data>
+  <data name="EnableDangerousTools" xml:space="preserve">
+    <value>危険なツールを有効化</value>
   </data>
   <data name="References" xml:space="preserve">
-    <value>参照</value>
+    <value>参照メディア</value>
   </data>
   <data name="ReferenceAddImage" xml:space="preserve">
     <value>参照画像を追加</value>
@@ -1519,31 +1282,31 @@
     <value>生成のガイドとなる画像、動画、音声</value>
   </data>
   <data name="Prompt2" xml:space="preserve">
-    <value>Prompt2</value>
+    <value>プロンプト2</value>
   </data>
   <data name="BPM" xml:space="preserve">
     <value>BPM</value>
   </data>
   <data name="AttachDocumentsMedia" xml:space="preserve">
-    <value>Attach Documents / Media</value>
+    <value>ドキュメント／メディアを添付</value>
   </data>
   <data name="AttachDocumentsMediaMessage" xml:space="preserve">
-    <value>Provides additional context for your conversation</value>
+    <value>会話に追加のコンテキストを提供します</value>
   </data>
   <data name="Compute" xml:space="preserve">
-    <value>Compute</value>
+    <value>演算</value>
   </data>
   <data name="Tokenizer" xml:space="preserve">
-    <value>Tokenizer</value>
+    <value>トークナイザー</value>
   </data>
   <data name="TextEncoder" xml:space="preserve">
-    <value>Text Encoder</value>
+    <value>テキストエンコーダー</value>
   </data>
   <data name="TextEncoder2" xml:space="preserve">
-    <value>Text Encoder 2</value>
+    <value>テキストエンコーダー2</value>
   </data>
   <data name="TextEncoder3" xml:space="preserve">
-    <value>Text Encoder 3</value>
+    <value>テキストエンコーダー3</value>
   </data>
   <data name="Unet" xml:space="preserve">
     <value>Unet</value>
@@ -1555,46 +1318,46 @@
     <value>Transformer 2</value>
   </data>
   <data name="AudioVae" xml:space="preserve">
-    <value>Audio VAE</value>
+    <value>音声VAE</value>
   </data>
   <data name="Vocoder" xml:space="preserve">
-    <value>Vocoder</value>
+    <value>ボコーダー</value>
   </data>
   <data name="Connectors" xml:space="preserve">
-    <value>Connectors</value>
+    <value>コネクター</value>
   </data>
   <data name="LatentUpsampler" xml:space="preserve">
-    <value>Latent Upsampler</value>
+    <value>レイテントアップサンプラー</value>
   </data>
   <data name="LatentUpsamplerTemporal" xml:space="preserve">
-    <value>Latent Upsampler Temporal</value>
+    <value>レイテントアップサンプラー（時間方向）</value>
   </data>
   <data name="ConditionEncoder" xml:space="preserve">
-    <value>Condition Encoder</value>
+    <value>コンディションエンコーダー</value>
   </data>
   <data name="AudioTokenizer" xml:space="preserve">
-    <value>Audio Tokenizer</value>
+    <value>音声トークナイザー</value>
   </data>
   <data name="AudioDetokenizer" xml:space="preserve">
-    <value>Audio Detokenizer</value>
+    <value>音声デトークナイザー</value>
   </data>
   <data name="TextModel" xml:space="preserve">
-    <value>Text Model</value>
+    <value>テキストモデル</value>
   </data>
   <data name="TextModel2" xml:space="preserve">
-    <value>Text Model 2</value>
+    <value>テキストモデル2</value>
   </data>
   <data name="InputStrength" xml:space="preserve">
-    <value>Input Strength</value>
+    <value>入力強度</value>
   </data>
   <data name="NoHistoryItemsFound" xml:space="preserve">
-    <value>No History Items Found</value>
+    <value>履歴項目が見つかりません</value>
   </data>
   <data name="ToolCallsEnabled" xml:space="preserve">
-    <value>Tool Calls Enabled</value>
+    <value>ツール呼び出しを有効化</value>
   </data>
   <data name="BeamResultsMessage" xml:space="preserve">
-    <value>Beam results won't be displayed until all beams have completed</value>
+    <value>すべてのビームが完了するまで、ビーム結果は表示されません</value>
   </data>
   <data name="Karras" xml:space="preserve">
     <value>Karras</value>
@@ -1603,91 +1366,76 @@
     <value>Beta</value>
   </data>
   <data name="Exponential" xml:space="preserve">
-    <value>Exponential</value>
-  </data>
-  <data name="SValue" xml:space="preserve">
-    <value>S Value</value>
-  </data>
-  <data name="Scaler" xml:space="preserve">
-    <value>Scaler</value>
+    <value>指数</value>
   </data>
   <data name="BeamLabel" xml:space="preserve">
-    <value>Beam:</value>
+    <value>ビーム:</value>
   </data>
   <data name="Function_TextToImage" xml:space="preserve">
-    <value>TextToImage</value>
+    <value>テキストから画像</value>
   </data>
   <data name="Function_ImageToImage" xml:space="preserve">
-    <value>ImageToImage</value>
+    <value>画像から画像</value>
   </data>
   <data name="Function_ImageEdit" xml:space="preserve">
-    <value>ImageEdit</value>
+    <value>画像編集</value>
   </data>
   <data name="Function_ImageInpaint" xml:space="preserve">
-    <value>ImageInpaint</value>
+    <value>画像インペイント</value>
   </data>
   <data name="Function_ImageControlNet" xml:space="preserve">
-    <value>Image (ControlNet)</value>
+    <value>画像（ControlNet）</value>
   </data>
   <data name="Function_ImageToImageControlNet" xml:space="preserve">
-    <value>ImageToImage (ControlNet)</value>
+    <value>画像から画像（ControlNet）</value>
   </data>
   <data name="Function_PaintToImage" xml:space="preserve">
-    <value>PaintToImage</value>
+    <value>ペイントから画像</value>
   </data>
   <data name="Function_FrameToFrame" xml:space="preserve">
-    <value>FrameToFrame</value>
+    <value>フレームからフレーム</value>
   </data>
   <data name="Function_TextToVideo" xml:space="preserve">
-    <value>TextToVideo</value>
+    <value>テキストから動画</value>
   </data>
   <data name="Function_ImageToVideo" xml:space="preserve">
-    <value>ImageToVideo</value>
+    <value>画像から動画</value>
   </data>
   <data name="Function_VideoToVideo" xml:space="preserve">
-    <value>VideoToVideo</value>
+    <value>動画から動画</value>
   </data>
   <data name="Function_TextToMusic" xml:space="preserve">
-    <value>TextToMusic</value>
+    <value>テキストから音楽</value>
   </data>
   <data name="Function_TextToAudio" xml:space="preserve">
-    <value>TextToAudio</value>
+    <value>テキストから音声</value>
   </data>
   <data name="Function_AudioToText" xml:space="preserve">
-    <value>AudioToText</value>
+    <value>音声からテキスト</value>
   </data>
   <data name="Function_TextToText" xml:space="preserve">
-    <value>TextToText</value>
+    <value>テキストからテキスト</value>
   </data>
   <data name="Function_ImageToText" xml:space="preserve">
-    <value>ImageToText</value>
+    <value>画像からテキスト</value>
   </data>
   <data name="Function_TextInstruct" xml:space="preserve">
-    <value>TextInstruct</value>
+    <value>指示</value>
   </data>
   <data name="Function_TextConverse" xml:space="preserve">
-    <value>TextConverse</value>
+    <value>会話</value>
   </data>
   <data name="Title_ExecutionOptions" xml:space="preserve">
-    <value>Execution Options</value>
-  </data>
-  <data name="OptimizeDeviceMessage" xml:space="preserve">
-    <value>Set device specific optimizations (matmul_precision, reduced_precision, allow_tf32 etc.)</value>
-  </data>
-  <data name="OptimizeChannelsMessage" xml:space="preserve">
-    <value>Set the model channel order NCHW -&gt; NHWC</value>
-  </data>
-  <data name="DeviceQuantizationMessage" xml:space="preserve">
-    <value>Quantize model on GPU device</value>
+    <value>実行オプション</value>
   </data>
   <data name="SegmentPrefetch" xml:space="preserve">
-    <value>Segment Prefetch</value>
+    <value>セグメントのプリフェッチ</value>
   </data>
   <data name="SegmentedCompute" xml:space="preserve">
-    <value>Segmented Compute</value>
+    <value>セグメント単位の演算</value>
   </data>
   <data name="MemoryReserveGB" xml:space="preserve">
-    <value>Memory Reserve (GB)</value>
+    <value>メモリ予約（GB）</value>
   </data>
   <data name="GpuLayers" xml:space="preserve">
     <value>GPUレイヤー</value>
@@ -1705,136 +1453,73 @@
     <value>Flash Attention</value>
   </data>
   <data name="EnableSageAttention" xml:space="preserve">
-    <value>Enable Sage Attention</value>
+    <value>Sage Attentionを有効化</value>
   </data>
   <data name="ConvDirect" xml:space="preserve">
     <value>Conv-Direct</value>
   </data>
   <data name="CPUExecution" xml:space="preserve">
-    <value>CPU Execution</value>
+    <value>CPU実行</value>
   </data>
   <data name="MadeInNewZealand" xml:space="preserve">
-    <value>Made in New Zealand</value>
+    <value>ニュージーランド製</value>
   </data>
   <data name="CreatedBy" xml:space="preserve">
-    <value>Created By: </value>
+    <value>作成者: </value>
   </data>
   <data name="Image1" xml:space="preserve">
-    <value>Image 1</value>
+    <value>画像1</value>
   </data>
   <data name="Image2" xml:space="preserve">
-    <value>Image 2</value>
+    <value>画像2</value>
   </data>
   <data name="Image3" xml:space="preserve">
-    <value>Image 3</value>
+    <value>画像3</value>
   </data>
   <data name="Image4" xml:space="preserve">
-    <value>Image 4</value>
+    <value>画像4</value>
   </data>
   <data name="PosX" xml:space="preserve">
-    <value>Pos X</value>
+    <value>X位置</value>
   </data>
   <data name="PosY" xml:space="preserve">
-    <value>Pos Y</value>
+    <value>Y位置</value>
   </data>
   <data name="FirstFrame" xml:space="preserve">
-    <value>First Frame</value>
+    <value>先頭フレーム</value>
   </data>
   <data name="LastFrame" xml:space="preserve">
-    <value>Last Frame</value>
+    <value>最終フレーム</value>
   </data>
   <data name="SearchComponents" xml:space="preserve">
-    <value>Search Components</value>
+    <value>コンポーネントを検索</value>
   </data>
   <data name="SearchControlNetModels" xml:space="preserve">
-    <value>Search ControlNet Models</value>
+    <value>ControlNetモデルを検索</value>
   </data>
   <data name="SearchDiffusionModels" xml:space="preserve">
-    <value>Search Diffusion Models</value>
+    <value>拡散モデルを検索</value>
   </data>
   <data name="SearchEnvironments" xml:space="preserve">
-    <value>Search Environments</value>
+    <value>環境を検索</value>
   </data>
   <data name="SearchExtractModels" xml:space="preserve">
-    <value>Search Extract Models</value>
+    <value>抽出モデルを検索</value>
   </data>
   <data name="SearchLanguageModels" xml:space="preserve">
-    <value>Search Language Models</value>
+    <value>言語モデルを検索</value>
   </data>
   <data name="SearchLoraModels" xml:space="preserve">
-    <value>Search Lora Models</value>
+    <value>LoRAモデルを検索</value>
   </data>
   <data name="SearchUpscaleModels" xml:space="preserve">
-    <value>Search Upscale Models</value>
+    <value>アップスケールモデルを検索</value>
   </data>
   <data name="PipelineDebugMessage" xml:space="preserve">
-    <value>Show the pipeline status in a separate console window</value>
-  </data>
-  <data name="DiffusionStepPreviewMessage" xml:space="preserve">
-    <value>Enable step preview images</value>
+    <value>バックエンドプロセスの出力を別のコンソールウィンドウに表示します</value>
   </data>
   <data name="AskQuestionPlaceholder" xml:space="preserve">
-    <value>Please ask a question...</value>
-  </data>
-  <data name="MusicStyleTip" xml:space="preserve">
-    <value>Combine genre, instruments, mood, and style for the most accurate results. For example, 'Dreamy lo-fi hip-hop with soft piano and bedroom-pop production' works better than a single-word prompt.</value>
-  </data>
-  <data name="MusicStyleTipGenre" xml:space="preserve">
-    <value>- Name the genre: synthwave, hip-hop, lo-fi, or folk</value>
-  </data>
-  <data name="MusicStyleTipInstruments" xml:space="preserve">
-    <value>- List instruments: 808 drums, piano, or acoustic guitar</value>
-  </data>
-  <data name="MusicStyleTipMood" xml:space="preserve">
-    <value>- Define the mood: energetic, dreamy, or melancholic</value>
-  </data>
-  <data name="MusicStyleTipProduction" xml:space="preserve">
-    <value>- Production: polished, live recording, or bedroom pop</value>
-  </data>
-  <data name="MusicLyricsTipSyllables" xml:space="preserve">
-    <value>- Keep lines around 6-10 syllables</value>
-  </data>
-  <data name="MusicLyricsTipUppercase" xml:space="preserve">
-    <value>- Use UPPERCASE for words you want emphasized or shouted</value>
-  </data>
-  <data name="MusicLyricsTipBrackets" xml:space="preserve">
-    <value>- Use ( ) for background vocals or echoes</value>
-  </data>
-  <data name="MusicLyricsTipDescriptors" xml:space="preserve">
-    <value>- Add descriptors: [Chorus - anthemic] or [Verse - whispered]</value>
-  </data>
-  <data name="LyricTagIntroMessage" xml:space="preserve">
-    <value>Sets up atmosphere, usually instrumental</value>
-  </data>
-  <data name="LyricTagVerseMessage" xml:space="preserve">
-    <value>Main storytelling section, moderate energy</value>
-  </data>
-  <data name="LyricTagPreChorusMessage" xml:space="preserve">
-    <value>Builds tension before the chorus</value>
-  </data>
-  <data name="LyricTagChorusMessage" xml:space="preserve">
-    <value>Emotional peak, highest energy</value>
-  </data>
-  <data name="LyricTagBridgeMessage" xml:space="preserve">
-    <value>A shift — different melody, different feel</value>
-  </data>
-  <data name="LyricTagInstrumentalMessage" xml:space="preserve">
-    <value>No vocals, just instruments</value>
-  </data>
-  <data name="LyricTagOutroMessage" xml:space="preserve">
-    <value>Winds down, often fades</value>
-  </data>
-  <data name="MusicReferenceTip" xml:space="preserve">
-    <value>Use an optional audio file as a template for the final output</value>
-  </data>
-  <data name="MusicReferenceTipTonal" xml:space="preserve">
-    <value>- Matches the tonal warmth and frequency balance</value>
-  </data>
-  <data name="MusicReferenceTipTexture" xml:space="preserve">
-    <value>- Replicates specific instrumental textures and grain</value>
-  </data>
-  <data name="MusicReferenceTipVibe" xml:space="preserve">
-    <value>- Captures the unique rhythmic and atmospheric vibe</value>
+    <value>質問を入力してください...</value>
   </data>
   <data name="Theme" xml:space="preserve">
     <value>テーマ</value>
@@ -1846,10 +1531,13 @@
     <value>新しいテーマを適用するにはAmuseを再起動してください。</value>
   </data>
   <data name="ToolActionReadFile" xml:space="preserve">
-    <value>ファイルの読み取り: {0}</value>
+    <value>ファイルを読み取る: {0}</value>
+  </data>
+  <data name="ToolActionOpenLink" xml:space="preserve">
+    <value>リンクを開く: {0}</value>
   </data>
   <data name="ToolActionRunProgram" xml:space="preserve">
-    <value>プログラムまたはスクリプトの実行: {0}</value>
+    <value>プログラムまたはスクリプトを実行する: {0}</value>
   </data>
   <data name="ToolExternalAccessTitle" xml:space="preserve">
     <value>外部アクセス</value>
@@ -1875,20 +1563,23 @@
   <data name="HomeTitle" xml:space="preserve">
     <value>何を作りますか？</value>
   </data>
+  <data name="HomeWelcome" xml:space="preserve">
+    <value>Amuse へようこそ</value>
+  </data>
   <data name="HomeSubtitle" xml:space="preserve">
     <value>タスクを選んで始めるか、最近使ったモデルや結果に戻りましょう。</value>
   </data>
   <data name="HomeImageDescription" xml:space="preserve">
-    <value>画像の生成、編集、インペイント、アップスケール。</value>
+    <value>画像を生成、編集、インペイント、アップスケールします。</value>
   </data>
   <data name="HomeVideoDescription" xml:space="preserve">
     <value>テキストや画像から動画を作成し、スタイル変換やアップスケールを行います。</value>
   </data>
   <data name="HomeAudioDescription" xml:space="preserve">
-    <value>音楽や音声を作成し、音声をテキストに書き起こします。</value>
+    <value>音楽やスピーチを作成したり、音声をテキストに書き起こしたりします。</value>
   </data>
   <data name="HomeTextDescription" xml:space="preserve">
-    <value>チャット、指示の実行、画像の説明。</value>
+    <value>チャット、指示の実行、画像の説明を行います。</value>
   </data>
   <data name="NewModels" xml:space="preserve">
     <value>新しいモデル</value>
@@ -1914,17 +1605,8 @@
   <data name="BackendUnsupported" xml:space="preserve">
     <value>非対応</value>
   </data>
-  <data name="QueueDownloadTitle" xml:space="preserve">
-    <value>ダウンロードをキューに追加</value>
-  </data>
-  <data name="QueueDownloadMessage" xml:space="preserve">
-    <value>{0} はインストールされていません。ダウンロードのキューに追加しますか？</value>
-  </data>
   <data name="ModelDownloadingTitle" xml:space="preserve">
     <value>モデルをダウンロード中</value>
-  </data>
-  <data name="ModelDownloadingMessage" xml:space="preserve">
-    <value>{0} はダウンロード中、またはダウンロード待ちです。</value>
   </data>
   <data name="WeightType" xml:space="preserve">
     <value>重みの型</value>
@@ -1957,30 +1639,934 @@
     <value>画像と動画の生成</value>
   </data>
   <data name="BackendDescriptionAudioCpp" xml:space="preserve">
-    <value>音声、音楽、オーディオの生成</value>
+    <value>スピーチ、音楽、音声の生成</value>
   </data>
   <data name="BackendDescriptionLlamaCpp" xml:space="preserve">
     <value>チャットとテキストアシスタント（言語モデル）</value>
-  </data>
-  <data name="BackendDescriptionHuggingFace" xml:space="preserve">
-    <value>HuggingFaceモデル用の上級者向けPythonバックエンド</value>
   </data>
   <data name="Apply" xml:space="preserve">
     <value>適用</value>
   </data>
   <data name="EnvironmentManageSubMessage" xml:space="preserve">
-    <value>各バックエンドがグラフィックカードで使用する環境を選択します。行にチェックを入れて環境を選ぶと、インストール済みの環境はすぐに既定になり、それ以外は先にインストールされます。</value>
+    <value>各バックエンドがグラフィックスカードで使用する環境を選択します。行にチェックを入れて環境を選ぶと、インストール済みの環境はすぐにデフォルトになり、それ以外は先にインストールされます。</value>
   </data>
   <data name="Description" xml:space="preserve">
     <value>説明</value>
   </data>
   <data name="DownloadSizeGB" xml:space="preserve">
-    <value>ダウンロードサイズ (GB)</value>
+    <value>ダウンロードサイズ（GB）</value>
   </data>
   <data name="UpscaleTemporalChunkSize" xml:space="preserve">
     <value>時間チャンクサイズ</value>
   </data>
   <data name="UpscaleWindowSize" xml:space="preserve">
     <value>ウィンドウサイズ</value>
+  </data>
+  <data name="ModelFiles" xml:space="preserve">
+    <value>モデルファイル</value>
+  </data>
+  <data name="ShowAll" xml:space="preserve">
+    <value>すべて表示</value>
+  </data>
+  <data name="AllPipelines" xml:space="preserve">
+    <value>すべてのパイプライン</value>
+  </data>
+  <data name="ImportCompleteTitle" xml:space="preserve">
+    <value>インポート完了</value>
+  </data>
+  <data name="ImportCompleteModels" xml:space="preserve">
+    <value>{0}/{1} 個のモデルをインポートしました。</value>
+  </data>
+  <data name="ImportCompleteComponents" xml:space="preserve">
+    <value>{0}/{1} 個のコンポーネントをインポートしました。</value>
+  </data>
+  <data name="ImportCompleteEnvironments" xml:space="preserve">
+    <value>{0}/{1} 個の環境をインポートしました。</value>
+  </data>
+  <data name="ImportCompleteLoras" xml:space="preserve">
+    <value>{0}/{1} 個のLoRAアダプターをインポートしました。</value>
+  </data>
+  <data name="MyEnvironment" xml:space="preserve">
+    <value>マイ環境</value>
+  </data>
+  <data name="None" xml:space="preserve">
+    <value>なし</value>
+  </data>
+  <data name="History" xml:space="preserve">
+    <value>履歴</value>
+  </data>
+  <data name="Temp" xml:space="preserve">
+    <value>一時</value>
+  </data>
+  <data name="MoveFolderTitle" xml:space="preserve">
+    <value>{0} を移動</value>
+  </data>
+  <data name="EnvironmentCreateMessage" xml:space="preserve">
+    <value>{0}環境を作成しますか？</value>
+  </data>
+  <data name="EnvironmentCreateSubMessage" xml:space="preserve">
+    <value>ローカルモデルの実行に必要な{0}環境をこのコンピューターに作成します。このセットアップは初回のみ必要です。</value>
+  </data>
+  <data name="EnvironmentUpdateMessage" xml:space="preserve">
+    <value>{0}環境を更新しますか？</value>
+  </data>
+  <data name="EnvironmentUpdateSubMessage" xml:space="preserve">
+    <value>{0}環境を最新の必須パッケージで更新します。この処理は1回だけ実行されます。</value>
+  </data>
+  <data name="EnvironmentUpdateWaitMessage" xml:space="preserve">
+    <value>（数分かかる場合があります）</value>
+  </data>
+  <data name="EnvironmentNameVirtual" xml:space="preserve">
+    <value>仮想</value>
+  </data>
+  <data name="AllModels" xml:space="preserve">
+    <value>すべてのモデル</value>
+  </data>
+  <data name="AllMedia" xml:space="preserve">
+    <value>すべてのメディア</value>
+  </data>
+  <data name="AllProcesses" xml:space="preserve">
+    <value>すべての処理</value>
+  </data>
+  <data name="AllBackends" xml:space="preserve">
+    <value>すべてのバックエンド</value>
+  </data>
+  <data name="TokensPerSecond" xml:space="preserve">
+    <value>tokens/s</value>
+  </data>
+  <data name="Unknown" xml:space="preserve">
+    <value>不明</value>
+  </data>
+  <data name="Auto" xml:space="preserve">
+    <value>自動</value>
+  </data>
+  <data name="DurationSecondsFormat" xml:space="preserve">
+    <value>{0} 秒</value>
+  </data>
+  <data name="DurationOneMinute" xml:space="preserve">
+    <value>1分</value>
+  </data>
+  <data name="DurationMinutesFormat" xml:space="preserve">
+    <value>{0} 分</value>
+  </data>
+  <data name="TimeSignature24" xml:space="preserve">
+    <value>2/4拍子（マーチ、ポルカ）</value>
+  </data>
+  <data name="TimeSignature34" xml:space="preserve">
+    <value>3/4拍子（ワルツ、バラード）</value>
+  </data>
+  <data name="TimeSignature44" xml:space="preserve">
+    <value>4/4拍子（ポップ、ロック、ヒップホップ）</value>
+  </data>
+  <data name="TimeSignature68" xml:space="preserve">
+    <value>6/8拍子（複合拍子、フォークダンス）</value>
+  </data>
+  <data name="KeyScaleMajor" xml:space="preserve">
+    <value>メジャー</value>
+  </data>
+  <data name="KeyScaleMinor" xml:space="preserve">
+    <value>マイナー</value>
+  </data>
+  <data name="UnknownCPU" xml:space="preserve">
+    <value>不明なCPU</value>
+  </data>
+  <data name="SplashStarting" xml:space="preserve">
+    <value>Amuse {0} を起動中...</value>
+  </data>
+  <data name="ImportDocument" xml:space="preserve">
+    <value>ドキュメントをインポート</value>
+  </data>
+  <data name="Documents" xml:space="preserve">
+    <value>ドキュメント</value>
+  </data>
+  <data name="MaxInputsReached" xml:space="preserve">
+    <value>入力は最大 {0} 個までです</value>
+  </data>
+  <data name="PipelineDownloadingMessage" xml:space="preserve">
+    <value>このモデルはダウンロード中、またはダウンロード待機中です。</value>
+  </data>
+  <data name="PipelineQueueDownloadMessage" xml:space="preserve">
+    <value>このモデルをダウンロードのキューに追加しますか？</value>
+  </data>
+  <data name="ClearLayers" xml:space="preserve">
+    <value>レイヤーをクリア</value>
+  </data>
+  <data name="ClearLayersMessage" xml:space="preserve">
+    <value>すべてのレイヤーをクリアしてもよろしいですか？</value>
+  </data>
+  <data name="LayerCopyName" xml:space="preserve">
+    <value>{0} のコピー</value>
+  </data>
+  <data name="LayerName" xml:space="preserve">
+    <value>レイヤー {0}</value>
+  </data>
+  <data name="TextLayerDefault" xml:space="preserve">
+    <value>Hello World</value>
+  </data>
+  <data name="ClearTimeline" xml:space="preserve">
+    <value>タイムラインをクリア</value>
+  </data>
+  <data name="ClearTimelineMessage" xml:space="preserve">
+    <value>タイムラインをクリアしてもよろしいですか？</value>
+  </data>
+  <data name="VideoFrameProgress" xml:space="preserve">
+    <value>動画フレーム: {0}/{1}</value>
+  </data>
+  <data name="ToolApplication" xml:space="preserve">
+    <value>アプリケーションツール</value>
+  </data>
+  <data name="ToolCalculator" xml:space="preserve">
+    <value>電卓ツール</value>
+  </data>
+  <data name="ToolDateTime" xml:space="preserve">
+    <value>日付と時刻ツール</value>
+  </data>
+  <data name="ToolFileRead" xml:space="preserve">
+    <value>ファイル読み取りツール</value>
+  </data>
+  <data name="ToolFileSearch" xml:space="preserve">
+    <value>ファイル検索ツール</value>
+  </data>
+  <data name="ToolScreenshot" xml:space="preserve">
+    <value>スクリーンショット</value>
+  </data>
+  <data name="ToolSystemInfo" xml:space="preserve">
+    <value>システム情報ツール</value>
+  </data>
+  <data name="ToolWeather" xml:space="preserve">
+    <value>天気ツール</value>
+  </data>
+  <data name="ToolWebPage" xml:space="preserve">
+    <value>Webページツール</value>
+  </data>
+  <data name="ToolWebSearch" xml:space="preserve">
+    <value>Web検索ツール</value>
+  </data>
+  <data name="ToolWikipedia" xml:space="preserve">
+    <value>Wikipediaツール</value>
+  </data>
+  <data name="ToolWorldNews" xml:space="preserve">
+    <value>ワールドニュースツール</value>
+  </data>
+  <data name="KeyScaleFormat" xml:space="preserve">
+    <value>{0} {1}</value>
+  </data>
+  <data name="LanguageChangedTitle" xml:space="preserve">
+    <value>言語が変更されました</value>
+  </data>
+  <data name="LanguageChangedMessage" xml:space="preserve">
+    <value>一部のテキストは、Amuseを再起動するまで更新されない場合があります。</value>
+  </data>
+  <data name="Publisher" xml:space="preserve">
+    <value>公開元</value>
+  </data>
+  <data name="Quant" xml:space="preserve">
+    <value>品質</value>
+  </data>
+  <data name="Title_QuantDownload" xml:space="preserve">
+    <value>モデルのダウンロード</value>
+  </data>
+  <data name="QuantDownloadMessage" xml:space="preserve">
+    <value>ダウンロードする {0} の品質を選択してください</value>
+  </data>
+  <data name="QuantDownloadSubMessage" xml:space="preserve">
+    <value>品質が低いほどダウンロードが速く、メモリ使用量も少なくなります。</value>
+  </data>
+  <data name="QuantQualityBest" xml:space="preserve">
+    <value>最高品質、メモリ使用量大、ダウンロードサイズ大</value>
+  </data>
+  <data name="QuantQualityStandard" xml:space="preserve">
+    <value>標準品質、メモリ使用量中、ダウンロードサイズ中</value>
+  </data>
+  <data name="QuantQualityReduced" xml:space="preserve">
+    <value>品質やや低め、メモリ使用量小、ダウンロードサイズ小</value>
+  </data>
+  <data name="Quants" xml:space="preserve">
+    <value>品質</value>
+  </data>
+  <data name="GuidanceImage" xml:space="preserve">
+    <value>画像ガイダンス</value>
+  </data>
+  <data name="ShiftedTimestep" xml:space="preserve">
+    <value>シフトタイムステップ</value>
+  </data>
+  <data name="Sigmas" xml:space="preserve">
+    <value>シグマ</value>
+  </data>
+  <data name="SkipLayers" xml:space="preserve">
+    <value>スキップレイヤー</value>
+  </data>
+  <data name="SkipLayerScale" xml:space="preserve">
+    <value>スキップレイヤースケール</value>
+  </data>
+  <data name="SkipLayerStart" xml:space="preserve">
+    <value>スキップレイヤー開始</value>
+  </data>
+  <data name="SkipLayerEnd" xml:space="preserve">
+    <value>スキップレイヤー終了</value>
+  </data>
+  <data name="SamplerArgs" xml:space="preserve">
+    <value>追加引数</value>
+  </data>
+  <data name="ModelOptions" xml:space="preserve">
+    <value>モデルオプション</value>
+  </data>
+  <data name="ClipSkip" xml:space="preserve">
+    <value>CLIP スキップ</value>
+  </data>
+  <data name="MoeBoundary" xml:space="preserve">
+    <value>高ノイズ境界</value>
+  </data>
+  <data name="SeamlessX" xml:space="preserve">
+    <value>水平シームレス</value>
+  </data>
+  <data name="SeamlessY" xml:space="preserve">
+    <value>垂直シームレス</value>
+  </data>
+  <data name="ProgressListening" xml:space="preserve">
+    <value>聞き取り中...</value>
+  </data>
+  <data name="LiveMicrophone" xml:space="preserve">
+    <value>ライブマイク</value>
+  </data>
+  <data name="Menu_AudioCompose" xml:space="preserve">
+    <value>音声合成</value>
+  </data>
+  <data name="ReferenceVideo" xml:space="preserve">
+    <value>参照動画</value>
+  </data>
+  <data name="Clips" xml:space="preserve">
+    <value>クリップ</value>
+  </data>
+  <data name="Volume" xml:space="preserve">
+    <value>音量</value>
+  </data>
+  <data name="Mute" xml:space="preserve">
+    <value>ミュート</value>
+  </data>
+  <data name="Position" xml:space="preserve">
+    <value>位置</value>
+  </data>
+  <data name="Start" xml:space="preserve">
+    <value>開始</value>
+  </data>
+  <data name="PreviewVolume" xml:space="preserve">
+    <value>プレビュー音量</value>
+  </data>
+  <data name="ModelLoadedTitle" xml:space="preserve">
+    <value>モデル読み込み済み</value>
+  </data>
+  <data name="ModelLoadedMessage" xml:space="preserve">
+    <value>モデルはすでに読み込まれています</value>
+  </data>
+  <data name="ModelLoadedDetail" xml:space="preserve">
+    <value>「{0}」はすでに読み込まれています。両方のモデルを同時に実行するには、両方に十分なデバイスメモリが必要です。先にアンロードするか、両方を読み込んだまま続行するか、キャンセルしてください。</value>
+  </data>
+  <data name="ModelLoadedUnload" xml:space="preserve">
+    <value>アンロード</value>
+  </data>
+  <data name="ModelLoadedContinue" xml:space="preserve">
+    <value>続行</value>
+  </data>
+  <data name="ModelBusyTitle" xml:space="preserve">
+    <value>モデル使用中</value>
+  </data>
+  <data name="ModelBusyMessage" xml:space="preserve">
+    <value>別のモデルが読み込み中または生成中です。このモデルを読み込む前に、完了するまで待つか、キャンセルしてください。</value>
+  </data>
+  <data name="ModelPipelineReplaceDetail" xml:space="preserve">
+    <value>「{0}」は、このモデルを読み込むと置き換えられるアップスケーラーまたはエクストラクターと一緒に読み込まれています。先に「{0}」をアンロードするか、アップスケーラーまたはエクストラクターのみを置き換えて続行するか、キャンセルしてください。</value>
+  </data>
+  <data name="ModelViewReplaceDetail" xml:space="preserve">
+    <value>「{0}」は別のビューで読み込まれており、このパイプラインを読み込むと置き換えられます。先にアンロードするか、置き換えて続行するか、キャンセルしてください。</value>
+  </data>
+  <data name="ModelLoadedListMessage" xml:space="preserve">
+    <value>他のモデルがすでに読み込まれています</value>
+  </data>
+  <data name="ModelLoadedListDetail" xml:space="preserve">
+    <value>複数のモデルを同時に実行するには、すべてに十分なデバイスメモリが必要です。不要なモデルをアンロードするか、残りを読み込んだまま続行するか、キャンセルしてください。</value>
+  </data>
+  <data name="ModelLoadedUnloadAll" xml:space="preserve">
+    <value>すべてアンロード</value>
+  </data>
+  <data name="ModelLoadedUnloading" xml:space="preserve">
+    <value>アンロード中</value>
+  </data>
+  <data name="ModelLoadedUnloaded" xml:space="preserve">
+    <value>アンロード済み</value>
+  </data>
+  <data name="ModelPipelineReplaceNote" xml:space="preserve">
+    <value>このモデルを読み込むと、アップスケーラーまたはエクストラクターが置き換えられます</value>
+  </data>
+  <data name="ModelViewReplaceNote" xml:space="preserve">
+    <value>このパイプラインを読み込むと置き換えられます</value>
+  </data>
+  <data name="ModelReleaseMessage" xml:space="preserve">
+    <value>「{0}」はこのモデルを使用して読み込まれています。モデルファイルを変更する前にアンロードする必要があります。今すぐアンロードしますか？</value>
+  </data>
+  <data name="EnvironmentReleaseMessage" xml:space="preserve">
+    <value>「{0}」は読み込まれており、この環境で実行されている可能性があります。環境を変更する前にアンロードする必要があります。今すぐアンロードしますか？</value>
+  </data>
+  <data name="FolderReleaseMessage" xml:space="preserve">
+    <value>「{0}」は読み込まれています。モデルフォルダーを移動する前にアンロードする必要があります。今すぐアンロードしますか？</value>
+  </data>
+  <data name="FolderDownloadingMessage" xml:space="preserve">
+    <value>モデルをダウンロード中、またはダウンロード待機中です。モデルフォルダーを移動する前に、完了を待つかキャンセルしてください。</value>
+  </data>
+  <data name="FirstRunSettings" xml:space="preserve">
+    <value>初回設定</value>
+  </data>
+  <data name="FirstRunSettingsMessage" xml:space="preserve">
+    <value>モデルの保存場所と Amuse の外観を選択します。これらは後で設定ページから変更できます。</value>
+  </data>
+  <data name="FirstRunSetupMessage" xml:space="preserve">
+    <value>Amuseへようこそ</value>
+  </data>
+  <data name="FirstRunSetupSubMessage" xml:space="preserve">
+    <value>初回設定と、今すぐインストールするバックエンド環境を選択してください。チェックを外したものは後でホームまたは設定ページからインストールできます。</value>
+  </data>
+  <data name="FirstRunSetupSettingsOnlyMessage" xml:space="preserve">
+    <value>初回設定を選択して始めましょう。すべてのバックエンド環境はインストール済みです。</value>
+  </data>
+  <data name="SelectModelFolder" xml:space="preserve">
+    <value>モデルフォルダーの場所を選択</value>
+  </data>
+  <data name="Title_ModelSearchFolders" xml:space="preserve">
+    <value>モデル検索フォルダー</value>
+  </data>
+  <data name="ModelSearchFoldersMessage" xml:space="preserve">
+    <value>Amuse はモデルのファイルをダウンロードする前に、これらのフォルダーも検索します。ファイルはその場所のまま使用されます。Amuse でモデルを削除すると、これらのフォルダー内のファイルも削除されます。</value>
+  </data>
+  <data name="ModelSearchFoldersComfyUI" xml:space="preserve">
+    <value>ComfyUI フォルダーを追加</value>
+  </data>
+  <data name="ModelSearchFoldersComfyUISelect" xml:space="preserve">
+    <value>ComfyUI フォルダーを選択</value>
+  </data>
+  <data name="ModelSearchFoldersComfyUINotFound" xml:space="preserve">
+    <value>選択したフォルダーに ComfyUI のモデルフォルダーが見つかりませんでした。</value>
+  </data>
+  <data name="ModelSearchFolderSelect" xml:space="preserve">
+    <value>検索フォルダーを選択</value>
+  </data>
+  <data name="WizardModelDescription" xml:space="preserve">
+    <value>ダウンロードしたファイルのモデルファミリーとバージョン。</value>
+  </data>
+  <data name="WizardSourceDescription" xml:space="preserve">
+    <value>ダウンロードしたファイルの内容。</value>
+  </data>
+  <data name="WizardFilesDescription" xml:space="preserve">
+    <value>ダウンロードしたファイルを選択します。</value>
+  </data>
+  <data name="WizardLocalFileDescription" xml:space="preserve">
+    <value>拡散モデル（UNetまたはTransformer）のみ。テキストエンコーダーとVAEはAmuseが提供します。ほとんどのダウンロードはこの形式です。</value>
+  </data>
+  <data name="WizardLocalCheckpoint" xml:space="preserve">
+    <value>オールインワンチェックポイント</value>
+  </data>
+  <data name="WizardLocalCheckpointDescription" xml:space="preserve">
+    <value>テキストエンコーダーとVAEを内蔵した単一ファイル。CivitaiのSDXLチェックポイントによく見られます。</value>
+  </data>
+  <data name="WizardCustomCheckpoint" xml:space="preserve">
+    <value>カスタムコンポーネント</value>
+  </data>
+  <data name="WizardCustomCheckpointDescription" xml:space="preserve">
+    <value>すべてのコンポーネントを自分で選択します（上級者向け）。</value>
+  </data>
+  <data name="WizardSuppliedByAmuse" xml:space="preserve">
+    <value>Amuseが提供</value>
+  </data>
+  <data name="WizardSuppliedByAmuseDescription" xml:space="preserve">
+    <value>モデルを初めて読み込むときにAmuseが自動でダウンロードする共有コンポーネント。</value>
+  </data>
+  <data name="WizardWillDownload" xml:space="preserve">
+    <value>ダウンロード予定</value>
+  </data>
+  <data name="WizardLanguageFileDescription" xml:space="preserve">
+    <value>単一のGGUFモデルファイル（テキストのみ）。</value>
+  </data>
+  <data name="WizardLanguageVision" xml:space="preserve">
+    <value>モデル + ビジョン</value>
+  </data>
+  <data name="WizardLanguageVisionDescription" xml:space="preserve">
+    <value>GGUFモデルファイルと、画像入力用のビジョンプロジェクター（mmproj）ファイル。</value>
+  </data>
+  <data name="VisionProjector" xml:space="preserve">
+    <value>ビジョンプロジェクター (mmproj)</value>
+  </data>
+  <data name="WizardLocalFileSingleDescription" xml:space="preserve">
+    <value>ダウンロードしたモデルファイルのみ。</value>
+  </data>
+  <data name="Menu_AudioToMusic" xml:space="preserve">
+    <value>音声 ➔ 音楽</value>
+  </data>
+  <data name="Menu_VoiceClone" xml:space="preserve">
+    <value>ボイスクローン</value>
+  </data>
+  <data name="Function_AudioToMusic" xml:space="preserve">
+    <value>音声から音楽</value>
+  </data>
+  <data name="Function_VoiceClone" xml:space="preserve">
+    <value>ボイスクローン</value>
+  </data>
+  <data name="SourceAudio" xml:space="preserve">
+    <value>ソース音声</value>
+  </data>
+  <data name="VoiceReference" xml:space="preserve">
+    <value>参照ボイス</value>
+  </data>
+  <data name="ReferenceTranscript" xml:space="preserve">
+    <value>参照ボイスの文字起こし</value>
+  </data>
+  <data name="ReferenceTranscriptOptional" xml:space="preserve">
+    <value>参照ボイスで話されている内容（任意）</value>
+  </data>
+  <data name="ReferenceTranscriptRequired" xml:space="preserve">
+    <value>参照ボイスで話されている内容（このモデルでは必須）</value>
+  </data>
+  <data name="Instruction" xml:space="preserve">
+    <value>指示</value>
+  </data>
+  <data name="InstructionPlaceholder" xml:space="preserve">
+    <value>声やスタイルの説明（例：落ち着いた明瞭な大人のナレーター）</value>
+  </data>
+  <data name="Emotion" xml:space="preserve">
+    <value>感情</value>
+  </data>
+  <data name="EmotionNeutral" xml:space="preserve">
+    <value>ニュートラル</value>
+  </data>
+  <data name="EmotionHappy" xml:space="preserve">
+    <value>喜び</value>
+  </data>
+  <data name="EmotionSad" xml:space="preserve">
+    <value>悲しみ</value>
+  </data>
+  <data name="EmotionAngry" xml:space="preserve">
+    <value>怒り</value>
+  </data>
+  <data name="EmotionFearful" xml:space="preserve">
+    <value>恐れ</value>
+  </data>
+  <data name="EmotionDisgusted" xml:space="preserve">
+    <value>嫌悪</value>
+  </data>
+  <data name="EmotionSurprised" xml:space="preserve">
+    <value>驚き</value>
+  </data>
+  <data name="TrackName" xml:space="preserve">
+    <value>トラック名</value>
+  </data>
+  <data name="TrackNamePlaceholder" xml:space="preserve">
+    <value>例：vocals、guitar、drums</value>
+  </data>
+  <data name="AudioRange" xml:space="preserve">
+    <value>範囲</value>
+  </data>
+  <data name="AudioRangeNotSet" xml:space="preserve">
+    <value>未設定</value>
+  </data>
+  <data name="AudioRangeFormat" xml:space="preserve">
+    <value>{0:0.00}秒 – {1:0.00}秒</value>
+  </data>
+  <data name="MusicTaskCover" xml:space="preserve">
+    <value>ソースの構成と長さを保ったまま、プロンプトのスタイルと歌詞でカバーを生成します。</value>
+  </data>
+  <data name="MusicTaskCoverNoFsq" xml:space="preserve">
+    <value>プロンプトにより忠実で、ソースの要素をあまり残さない自由度の高いカバーを生成します。</value>
+  </data>
+  <data name="MusicTaskRepaint" xml:space="preserve">
+    <value>ソースの選択した範囲をプロンプトに沿って再生成し、残りはそのまま保ちます。</value>
+  </data>
+  <data name="MusicTaskLego" xml:space="preserve">
+    <value>ソースに合う新しいトラック（トラック名で指定、例：guitar）を生成します。</value>
+  </data>
+  <data name="MusicTaskExtract" xml:space="preserve">
+    <value>ソースからトラック名で指定したトラック（例：vocals）を抽出します。</value>
+  </data>
+  <data name="MusicTaskComplete" xml:space="preserve">
+    <value>ソースを完成させます（例：ボーカルトラックに伴奏を追加）。トラック名で追加する楽器を指定します。</value>
+  </data>
+  <data name="MusicTaskInitAudio" xml:space="preserve">
+    <value>ソースを起点に新しい音楽を生成します。強度でソースからどれだけ離れるかを設定します。</value>
+  </data>
+  <data name="MusicTaskInpaintAudio" xml:space="preserve">
+    <value>ソースの選択した範囲をプロンプトに沿って再生成し、残りはそのまま保ちます。</value>
+  </data>
+  <data name="CacheEnd" xml:space="preserve">
+    <value>終了</value>
+  </data>
+  <data name="CacheStart" xml:space="preserve">
+    <value>開始</value>
+  </data>
+  <data name="CacheThreshold" xml:space="preserve">
+    <value>しきい値</value>
+  </data>
+  <data name="CacheWarmupSteps" xml:space="preserve">
+    <value>ウォームアップステップ</value>
+  </data>
+  <data name="DiffusionCache" xml:space="preserve">
+    <value>キャッシュ</value>
+  </data>
+  <data name="QueueAll" xml:space="preserve">
+    <value>すべてキューに追加</value>
+  </data>
+  <data name="QueueAllMessage" xml:space="preserve">
+    <value>{0} 個のモデルをダウンロードキューに追加しますか？
+
+必要な共有コンポーネントもキューに追加されます。</value>
+  </data>
+  <data name="Title_Disclaimer" xml:space="preserve">
+    <value>免責事項</value>
+  </data>
+  <data name="Continue" xml:space="preserve">
+    <value>続行</value>
+  </data>
+  <data name="Exit" xml:space="preserve">
+    <value>終了</value>
+  </data>
+  <data name="DisclaimerAccept" xml:space="preserve">
+    <value>これらの利用規約を読み、同意します</value>
+  </data>
+  <data name="Title_AddLora" xml:space="preserve">
+    <value>LoRAを追加</value>
+  </data>
+  <data name="LoraWizardModelDescription" xml:space="preserve">
+    <value>LoRAの対象モデル。同じパイプラインのモデルでのみ使用できます。</value>
+  </data>
+  <data name="LoraWizardSourceDescription" xml:space="preserve">
+    <value>LoRAファイルの入手元。</value>
+  </data>
+  <data name="LoraWizardLocalFile" xml:space="preserve">
+    <value>ダウンロード済みファイル</value>
+  </data>
+  <data name="LoraWizardLocalFileDescription" xml:space="preserve">
+    <value>このPCにあるLoRAファイル。通常は .safetensors ファイルです。</value>
+  </data>
+  <data name="LoraWizardOnlineFile" xml:space="preserve">
+    <value>ダウンロードリンク</value>
+  </data>
+  <data name="LoraWizardOnlineFileDescription" xml:space="preserve">
+    <value>LoRAファイルへの直接リンク。Amuseがダウンロードします。</value>
+  </data>
+  <data name="LoraWizardFilesDescription" xml:space="preserve">
+    <value>LoRAファイルを選択して名前を付けます。</value>
+  </data>
+  <data name="LoraWizardDownloadLinkHint" xml:space="preserve">
+    <value>Hugging Faceでは、ファイルのダウンロードボタンのリンクをコピーします(末尾は .safetensors)。</value>
+  </data>
+  <data name="LoraWizardTriggerWordsHint" xml:space="preserve">
+    <value>LoRAの学習に使われた単語をカンマ区切りで入力します(ダウンロードページに記載されています)。</value>
+  </data>
+  <data name="LoraTriggerWordsDescription" xml:space="preserve">
+    <value>LoRAの学習に使われた単語(ダウンロードページに記載されています)。</value>
+  </data>
+  <data name="LoraViewFilterDescription" xml:space="preserve">
+    <value>選択したビューでのみLoRAを表示します。未選択の場合はすべてのビューに表示します。</value>
+  </data>
+  <data name="LoraFileDescription" xml:space="preserve">
+    <value>LoRAファイルの読み込み元またはダウンロード元。</value>
+  </data>
+  <data name="Title_AddControlNet" xml:space="preserve">
+    <value>ControlNetを追加</value>
+  </data>
+  <data name="Title_AddUpscaler" xml:space="preserve">
+    <value>アップスケーラーを追加</value>
+  </data>
+  <data name="Title_AddExtractor" xml:space="preserve">
+    <value>抽出モデルを追加</value>
+  </data>
+  <data name="Title_AddComponent" xml:space="preserve">
+    <value>コンポーネントを追加</value>
+  </data>
+  <data name="WizardFileSourceDescription" xml:space="preserve">
+    <value>モデルファイルの入手元。</value>
+  </data>
+  <data name="WizardOnlineFileDescription" xml:space="preserve">
+    <value>モデルファイルへの直接リンク。Amuseがダウンロードします。</value>
+  </data>
+  <data name="WizardFileNameDescription" xml:space="preserve">
+    <value>モデルファイルを選択して名前を付けます。</value>
+  </data>
+  <data name="WizardDownloadLinkHint" xml:space="preserve">
+    <value>Hugging Faceでは、ファイルのダウンロードボタンのリンクをコピーします。</value>
+  </data>
+  <data name="ModelFileDescription" xml:space="preserve">
+    <value>モデルファイルの読み込み元またはダウンロード元。</value>
+  </data>
+  <data name="ModelSettingsDescription" xml:space="preserve">
+    <value>モデルの動作設定。モデルファイルに合わせる必要があります。</value>
+  </data>
+  <data name="ModelOptionsDescription" xml:space="preserve">
+    <value>モデルを最初に選択したときに使用されるオプション。</value>
+  </data>
+  <data name="ControlNetWizardModelDescription" xml:space="preserve">
+    <value>ControlNetの対象モデル。同じパイプラインのモデルでのみ使用できます。</value>
+  </data>
+  <data name="ControlNetWizardLocalFileDescription" xml:space="preserve">
+    <value>このPCにあるControlNetファイル。通常は .safetensors ファイルです。</value>
+  </data>
+  <data name="ControlNetViewFilterDescription" xml:space="preserve">
+    <value>選択したビューでのみControlNetを表示します。未選択の場合はすべてのビューに表示します。</value>
+  </data>
+  <data name="UpscaleWizardModelDescription" xml:space="preserve">
+    <value>ESRGANなどの画像アップスケーラーはUpscaleパイプラインを使用します。SeedVR2とRelayVSRは動画アップスケーラーです。</value>
+  </data>
+  <data name="UpscaleWizardLocalFileDescription" xml:space="preserve">
+    <value>このPCにあるアップスケーラーファイル(.pth、.safetensors、.onnx など)。</value>
+  </data>
+  <data name="UpscaleModelDescription" xml:space="preserve">
+    <value>アップスケーラーを実行するバックエンドとパイプライン、および入手元。</value>
+  </data>
+  <data name="ExtractWizardModelDescription" xml:space="preserve">
+    <value>最も近い内蔵の抽出モデルを選択します。その設定が新しいモデルに使用されます。</value>
+  </data>
+  <data name="ExtractWizardWorksLike" xml:space="preserve">
+    <value>類似モデル</value>
+  </data>
+  <data name="ExtractWizardLocalFileDescription" xml:space="preserve">
+    <value>このPCにある抽出モデルファイル(.onnx)。</value>
+  </data>
+  <data name="ExtractModelDescription" xml:space="preserve">
+    <value>抽出モデルの種類、名前、入手元。</value>
+  </data>
+  <data name="ComponentWizardModelDescription" xml:space="preserve">
+    <value>共有ファイルの種類。キーの接頭辞とダウンロード先フォルダーを決めます。</value>
+  </data>
+  <data name="ComponentWizardLocalFileDescription" xml:space="preserve">
+    <value>このPCにあるコンポーネントファイル。通常は .safetensors または .gguf ファイルです。</value>
+  </data>
+  <data name="ComponentWizardKeyHint" xml:space="preserve">
+    <value>モデルはキーでコンポーネントを参照します。キーは一意である必要があります。</value>
+  </data>
+  <data name="DownloadNowTitle" xml:space="preserve">
+    <value>今すぐダウンロードしますか？</value>
+  </data>
+  <data name="DownloadNowMessage" xml:space="preserve">
+    <value>{0} を使用するには、次のダウンロードが必要です:
+
+{1}
+
+今すぐダウンロードしますか？</value>
+  </data>
+  <data name="EditModelDescription" xml:space="preserve">
+    <value>モデル一覧に表示される名前と、モデルの入手元。</value>
+  </data>
+  <data name="ResolutionsDescription" xml:space="preserve">
+    <value>ビューで選べるサイズ。既定のサイズが最初に選択されます。</value>
+  </data>
+  <data name="FunctionsDescription" xml:space="preserve">
+    <value>モデルでできることと、表示されるビュー。ビューを選択しない場合は、対応するすべてのビューに表示されます。</value>
+  </data>
+  <data name="QualityDescription" xml:space="preserve">
+    <value>品質ごとにモデルファイルのセットがあり、選択した品質を下で編集します。</value>
+  </data>
+  <data name="EnvironmentSectionDescription" xml:space="preserve">
+    <value>Amuseに表示される名前と、環境のインストール先フォルダー。</value>
+  </data>
+  <data name="EnvironmentFolder" xml:space="preserve">
+    <value>フォルダー名</value>
+  </data>
+  <data name="EnvironmentRuntime" xml:space="preserve">
+    <value>ランタイム</value>
+  </data>
+  <data name="EnvironmentRuntimeDescription" xml:space="preserve">
+    <value>環境で動作するバックエンドと、使用するハードウェア。</value>
+  </data>
+  <data name="EnvironmentRequirementsDescription" xml:space="preserve">
+    <value>環境にインストールするパッケージ（1行に1つ）。</value>
+  </data>
+  <data name="EnvironmentVariablesDescription" xml:space="preserve">
+    <value>バックエンドの起動時に設定される変数。</value>
+  </data>
+  <data name="Value" xml:space="preserve">
+    <value>値</value>
+  </data>
+  <data name="Title_ModelFiles" xml:space="preserve">
+    <value>モデルファイル</value>
+  </data>
+  <data name="ModelInfoSharedComponent" xml:space="preserve">
+    <value>共有コンポーネント: {0}</value>
+  </data>
+  <data name="ModelInfoDownload" xml:space="preserve">
+    <value>ダウンロード元</value>
+  </data>
+  <data name="ModelInfoLocal" xml:space="preserve">
+    <value>ローカルファイル</value>
+  </data>
+  <data name="AllParts" xml:space="preserve">
+    <value>すべて</value>
+  </data>
+  <data name="ExecutionMemoryDescription" xml:space="preserve">
+    <value>モデルをメモリに読み込む方法。</value>
+  </data>
+  <data name="ExecutionFlashAttentionDescription" xml:space="preserve">
+    <value>メモリ使用量が少ない高速なアテンション。自動の場合はバックエンドが決定します。</value>
+  </data>
+  <data name="ExecutionConvDirectDescription" xml:space="preserve">
+    <value>直接畳み込み。自動の場合はバックエンドが決定します。</value>
+  </data>
+  <data name="ExecutionCpuDescription" xml:space="preserve">
+    <value>GPUメモリを節約するためにこれらの部分をCPUで実行します（速度は低下します）。</value>
+  </data>
+  <data name="DestinationFolder" xml:space="preserve">
+    <value>移動先フォルダー</value>
+  </data>
+  <data name="Appearance" xml:space="preserve">
+    <value>外観</value>
+  </data>
+  <data name="Application" xml:space="preserve">
+    <value>アプリケーション</value>
+  </data>
+  <data name="Tools" xml:space="preserve">
+    <value>ツール</value>
+  </data>
+  <data name="GeneralModelsDescription" xml:space="preserve">
+    <value>モデルの保存先と、Amuseがモデルファイルを探す他のフォルダー。</value>
+  </data>
+  <data name="GeneralHistoryDescription" xml:space="preserve">
+    <value>結果の保存先と、履歴リストでの表示方法。</value>
+  </data>
+  <data name="GeneralAppearanceDescription" xml:space="preserve">
+    <value>アプリのテーマ、言語、サイズ。</value>
+  </data>
+  <data name="GeneralToolsDescription" xml:space="preserve">
+    <value>チャット中にアシスタントのツールが実行できること。</value>
+  </data>
+  <data name="GeneralApplicationDescription" xml:space="preserve">
+    <value>更新、一時ファイル、ログ、再表示しないように選択したダイアログ。</value>
+  </data>
+  <data name="GeneralExperimentalDescription" xml:space="preserve">
+    <value>テスト中の機能です。変更または削除される可能性があります。</value>
+  </data>
+  <data name="GeneralAccessTokensDescription" xml:space="preserve">
+    <value>制限付きモデルやオンラインサービス用のトークン。Amuseの設定に保存されます。</value>
+  </data>
+  <data name="TextSettings" xml:space="preserve">
+    <value>テキスト設定</value>
+  </data>
+  <data name="RescanModels" xml:space="preserve">
+    <value>モデルを再スキャン</value>
+  </data>
+  <data name="RescanModelsComplete" xml:space="preserve">
+    <value>再スキャンが完了しました。{0} 個のモデルがインストールされています。</value>
+  </data>
+  <data name="McpServers" xml:space="preserve">
+    <value>MCPサーバー</value>
+  </data>
+  <data name="McpServersDescription" xml:space="preserve">
+    <value>MCPサーバーを接続して、アシスタントが使えるツールを増やします。サーバーはあなたのアカウントでこのコンピューター上で実行されるため、信頼できるサーバーだけを追加してください。</value>
+  </data>
+  <data name="McpServersEmpty" xml:space="preserve">
+    <value>サーバーはまだ追加されていません。</value>
+  </data>
+  <data name="McpAddServer" xml:space="preserve">
+    <value>サーバーを追加</value>
+  </data>
+  <data name="McpImportJson" xml:space="preserve">
+    <value>JSONをインポート</value>
+  </data>
+  <data name="McpImportOpenFile" xml:space="preserve">
+    <value>ファイルを開く</value>
+  </data>
+  <data name="McpImportMessage" xml:space="preserve">
+    <value>サーバーの説明にある設定を貼り付けるか、他のMCPアプリケーションの設定ファイルを開きます。インポートしたサーバーはあなたのアカウントですぐに起動されるため、信頼できるサーバーだけをインポートしてください。</value>
+  </data>
+  <data name="McpConfiguration" xml:space="preserve">
+    <value>設定</value>
+  </data>
+  <data name="Title_McpImport" xml:space="preserve">
+    <value>MCPサーバーのインポート</value>
+  </data>
+  <data name="Title_McpServer" xml:space="preserve">
+    <value>MCPサーバー</value>
+  </data>
+  <data name="McpServer" xml:space="preserve">
+    <value>サーバー</value>
+  </data>
+  <data name="McpServerDescription" xml:space="preserve">
+    <value>サーバーの名前と、Amuseからの接続方法。</value>
+  </data>
+  <data name="McpServerNew" xml:space="preserve">
+    <value>マイサーバー</value>
+  </data>
+  <data name="McpConnection" xml:space="preserve">
+    <value>接続</value>
+  </data>
+  <data name="McpCommand" xml:space="preserve">
+    <value>コマンド</value>
+  </data>
+  <data name="McpCommandDescription" xml:space="preserve">
+    <value>サーバーを起動するプログラム（npx や uvx など）と、その引数（1行に1つ）。</value>
+  </data>
+  <data name="McpArguments" xml:space="preserve">
+    <value>引数</value>
+  </data>
+  <data name="McpUrl" xml:space="preserve">
+    <value>URL</value>
+  </data>
+  <data name="McpUrlDescription" xml:space="preserve">
+    <value>サーバーのアドレス。Streamable HTTP と SSE のサーバーに対応しています。</value>
+  </data>
+  <data name="McpHeaders" xml:space="preserve">
+    <value>ヘッダー</value>
+  </data>
+  <data name="McpVariablesDescription" xml:space="preserve">
+    <value>APIキーなど、サーバーが必要とする値。</value>
+  </data>
+  <data name="McpToolsDescription" xml:space="preserve">
+    <value>接続をテストするとツールが一覧表示されます。アシスタントに見せないツールのチェックを外してください。</value>
+  </data>
+  <data name="McpTest" xml:space="preserve">
+    <value>テスト</value>
+  </data>
+  <data name="McpStatusDisabled" xml:space="preserve">
+    <value>無効</value>
+  </data>
+  <data name="McpStatusDisconnected" xml:space="preserve">
+    <value>未接続</value>
+  </data>
+  <data name="McpStatusConnecting" xml:space="preserve">
+    <value>接続中...</value>
+  </data>
+  <data name="McpStatusConnected" xml:space="preserve">
+    <value>接続済み、ツール {0} 個</value>
+  </data>
+  <data name="McpStatusFailed" xml:space="preserve">
+    <value>接続に失敗しました</value>
+  </data>
+  <data name="McpRemoveServer" xml:space="preserve">
+    <value>サーバーを削除</value>
+  </data>
+  <data name="McpRemoveServerMessage" xml:space="preserve">
+    <value>サーバー「{0}」を削除してもよろしいですか？</value>
+  </data>
+  <data name="ToolActionMcpTool" xml:space="preserve">
+    <value>MCPツールを実行: {0} ({1})</value>
+  </data>
+  <data name="McpAbout" xml:space="preserve">
+    <value>MCPについて</value>
+  </data>
+  <data name="McpAboutDescription" xml:space="preserve">
+    <value>MCP（Model Context Protocol）サーバーは、ウェブ検索、ファイルの読み取り、他のアプリケーションとの連携などのツールをアシスタントに追加します。
+
+接続済みのサーバーは、チャット時に内蔵ツールの隣にプラグのアイコンとして表示され、オンにするまで無効です。
+
+npx で起動するサーバーには Node.js が、uvx で起動するサーバーには uv が必要です。</value>
+  </data>
+  <data name="McpIcon" xml:space="preserve">
+    <value>アイコン</value>
+  </data>
+  <data name="LlmTools" xml:space="preserve">
+    <value>LLMツール</value>
+  </data>
+  <data name="SelectableFrameRate" xml:space="preserve">
+    <value>フレームレート選択可</value>
+  </data>
+  <data name="ImageToTextDefaultPrompt" xml:space="preserve">
+    <value>この画像を説明してください。</value>
+  </data>
+  <data name="AddSongTemplate" xml:space="preserve">
+    <value>曲テンプレートを追加</value>
   </data>
 </root>

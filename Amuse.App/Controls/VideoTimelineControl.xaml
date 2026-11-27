@@ -1,4 +1,4 @@
-﻿<CommonControls:BaseControl x:Class="Amuse.App.Controls.VideoTimelineControl"
+﻿<local:TimelineControlBase x:Class="Amuse.App.Controls.VideoTimelineControl"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
@@ -7,6 +7,7 @@
              xmlns:local="clr-namespace:Amuse.App.Controls"
              xmlns:CommonControls="clr-namespace:TensorStack.WPF.Controls;assembly=TensorStack.WPF" 
              xmlns:CommonBehaviors="clr-namespace:TensorStack.WPF.Behaviors;assembly=TensorStack.WPF"
+             xmlns:Resources="clr-namespace:Amuse.App.Resources"
              Foreground="{StaticResource DefaultForeground}">
     <DockPanel DataContext="{Binding RelativeSource={RelativeSource AncestorType={x:Type local:VideoTimelineControl}}}">
 
@@ -57,6 +58,8 @@
                         <TextBlock Text="{Binding TimelineHeight, FallbackValue=0, TargetNullValue=0, StringFormat={}{0} px}" Opacity=".9"/>
                         <TextBlock Text="{CommonControls:Localize FrameRate, Append=:}" Opacity=".7" FontStyle="Italic"/>
                         <TextBlock Text="{Binding TimelineFrameRate, FallbackValue=0, TargetNullValue=0, StringFormat={}{0:N0} fps}" Opacity=".9"/>
+                        <TextBlock Text="{CommonControls:Localize ReferenceAudio, Append=:}" Opacity=".7" FontStyle="Italic"/>
+                        <TextBlock Text="{Binding ReferenceAudio.Duration, FallbackValue=00:00:00, StringFormat={}hh\\:mm\\:ss\\.ff}" Opacity=".9"/>
                     </UniformGrid>
                 </DockPanel>
             </DockPanel>
@@ -70,7 +73,7 @@
                         <UniformGrid Columns="3">
                             <StackPanel Orientation="Horizontal" >
                                 <TextBlock Text="{CommonControls:Localize Type, Append=:}" FontStyle="Italic" Opacity=".7" Margin="0,0,3,0"/>
-                                <TextBlock Text="{Binding SelectedSegement.SegmentType, FallbackValue=Unknown}"/>
+                                <TextBlock Text="{Binding SelectedSegement.SegmentType, Converter={StaticResource EnumDisplayNameConverter}, FallbackValue={x:Static Resources:AppDefault.Unknown}}"/>
                             </StackPanel>
                             <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
                                 <TextBlock Text="{CommonControls:Localize Frame, Append=:}" FontStyle="Italic" Opacity=".7" Margin="0,0,3,0"/>
@@ -85,46 +88,15 @@
 
                 <!--Import Buttons-->
                 <Grid VerticalAlignment="Bottom">
-                    <Grid.Resources>
-                        <Style x:Key="AllowDropButton" TargetType="{x:Type CommonControls:IconButton}">
-                            <Setter Property="IconSize" Value="18"/>
-                            <Setter Property="IconOpacity" Value=".8"/>
-                            <Setter Property="IconMargin" Value="0,6,0,0"/>
-                            <Setter Property="TextMargin" Value="0,-3,0,4"/>
-                            <Setter Property="Orientation" Value="Vertical"/>
-                            <Setter Property="IconColor" Value="{StaticResource DefaultForeground}"/>
-                            <Setter Property="Foreground" Value="{StaticResource DefaultForeground}"/>
-                            <Style.Triggers>
-                                <Trigger Property="AllowDrop" Value="True">
-                                    <Setter Property="IconColor" Value="{StaticResource AccentColour2}"/>
-                                    <Setter Property="Foreground" Value="{StaticResource AccentColour2}"/>
-                                </Trigger>
-                            </Style.Triggers>
-                        </Style>
-                    </Grid.Resources>
-
                     <UniformGrid DockPanel.Dock="Bottom" Columns="2" Margin="40,0,40,0" VerticalAlignment="Top">
                         <Border Style="{StaticResource VideoDropZoneStyle}" >
-                            <CommonControls:IconButton Text="{CommonControls:Localize ImportVideo}" Icon="f008" Command="{Binding LoadVideoCommand}" Drop="OnTimelineDrop" Style="{StaticResource AllowDropButton}"/>
+                            <CommonControls:IconButton Text="{CommonControls:Localize ImportVideo}" Icon="f008" Command="{Binding LoadVideoCommand}" Drop="OnTimelineDrop" Style="{StaticResource TimelineDropButton}"/>
+                        </Border>
+                        <Border Style="{StaticResource AudioDropZoneStyle}" IsEnabled="{Binding IsControlBusy, Converter={StaticResource InverseBoolConverter}}">
+                            <CommonControls:IconButton Text="{CommonControls:Localize ReferenceAudio}" Icon="f001" Command="{Binding LoadReferenceCommand}" Drop="OnReferenceDrop" Style="{StaticResource TimelineDropButton}"/>
                         </Border>
                         <Border>
-                            <CommonControls:IconButton Text="{CommonControls:Localize ImportAudio}" Icon="f001" Command="{Binding LoadAudioCommand}" Drop="OnAudioDrop" Style="{StaticResource AllowDropButton}"/>
-                            <Border.Style>
-                                <Style TargetType="{x:Type Border}" BasedOn="{StaticResource AudioDropZoneStyle}">
-                                    <Setter Property="IsEnabled" Value="True"/>
-                                    <Style.Triggers>
-                                        <DataTrigger Binding="{Binding TimelineFrameRate, RelativeSource={RelativeSource AncestorType={x:Type local:VideoTimelineControl}}}" Value="{x:Null}">
-                                            <Setter Property="IsEnabled" Value="False"/>
-                                        </DataTrigger>
-                                        <DataTrigger Binding="{Binding IsControlBusy, RelativeSource={RelativeSource AncestorType={x:Type local:VideoTimelineControl}}}" Value="True">
-                                            <Setter Property="IsEnabled" Value="False"/>
-                                        </DataTrigger>
-                                    </Style.Triggers>
-                                </Style>
-                            </Border.Style>
-                        </Border>
-                        <Border>
-                            <CommonControls:IconButton Text="{CommonControls:Localize ImportImage}" Icon="f03e" Command="{Binding LoadImageCommand}" Drop="OnImageDrop" Style="{StaticResource AllowDropButton}"/>
+                            <CommonControls:IconButton Text="{CommonControls:Localize ImportImage}" Icon="f03e" Command="{Binding LoadImageCommand}" Drop="OnImageDrop" Style="{StaticResource TimelineDropButton}"/>
                             <Border.Style>
                                 <Style TargetType="{x:Type Border}" BasedOn="{StaticResource ImageDropZoneStyle}">
                                     <Setter Property="IsEnabled" Value="True"/>
@@ -140,7 +112,7 @@
                             </Border.Style>
                         </Border>
                         <Border>
-                            <CommonControls:IconButton Text="{CommonControls:Localize ImportOverlay}" Icon="f302" Command="{Binding LoadOverlayCommand}" Drop="OnOverlayDrop" Style="{StaticResource AllowDropButton}"/>
+                            <CommonControls:IconButton Text="{CommonControls:Localize ImportOverlay}" Icon="f302" Command="{Binding LoadOverlayCommand}" Drop="OnOverlayDrop" Style="{StaticResource TimelineDropButton}"/>
                             <Border.Style>
                                 <Style TargetType="{x:Type Border}" BasedOn="{StaticResource ImageDropZoneStyle}">
                                     <Setter Property="IsEnabled" Value="True"/>
@@ -171,7 +143,10 @@
                         <CommonControls:SliderControl Text="{CommonControls:Localize FrameWidth}" Minimum="3" Maximum="{Binding PreviewFrameSize}" Value="{Binding TimelineFrameWidth}" TickFrequency="1" ValueFormat="N0"/>
                         <CommonControls:SliderControl Text="{CommonControls:Localize FrameSize}" Minimum="20" Maximum="260" TickFrequency="10" ValueFormat="N0" Value="{Binding PreviewFrameSize}"/>
                         <CommonControls:SliderControl Text="{CommonControls:Localize PreviewQuality}" Minimum="20" Maximum="260" TickFrequency="10" ValueFormat="N0" Value="{Binding TimelineThumbHeight}"/>
-                        <CheckBox Content="{CommonControls:Localize EnableAudioProcessing}" IsChecked="{Binding IsAudioEnabled}"  Margin="0,5,0,0"/>
+                        <DockPanel Margin="0,5,0,0">
+                            <CheckBox DockPanel.Dock="Left" Content="{CommonControls:Localize EnableAudioProcessing}" IsChecked="{Binding IsAudioEnabled}" VerticalAlignment="Center"/>
+                            <Slider Margin="10,0,0,0" Minimum="0" Maximum="1" TickFrequency="0.01" IsMoveToPointEnabled="True" VerticalAlignment="Center" Value="{Binding PreviewVolume}" IsEnabled="{Binding HasReference}" ToolTip="{CommonControls:Localize PreviewVolume}" ToolTipService.InitialShowDelay="200"/>
+                        </DockPanel>
                     </StackPanel>
                 </DockPanel>
             </DockPanel>
@@ -202,58 +177,53 @@
                         </DockPanel>
 
                         <DockPanel DockPanel.Dock="Bottom" Margin="0,10,0,0" Height="22">
-                            <DockPanel.Resources>
-                                <Style x:Key="OptionButton" TargetType="{x:Type Button}" BasedOn="{StaticResource {x:Type Button}}">
-                                    <Setter Property="ToolTipService.Placement" Value="Top"/>
-                                    <Setter Property="ToolTipService.InitialShowDelay" Value="200"/>
-                                    <Setter Property="ToolTipService.ShowOnDisabled" Value="True"/>
-                                </Style>
-                            </DockPanel.Resources>
-
                             <!--Timeline Controls-->
                             <UniformGrid DockPanel.Dock="Left" Rows="1">
-                                <Button Command="{Binding TimelineClearCommand}" Width="50" Style="{StaticResource OptionButton}" ToolTip="{CommonControls:Localize ToolTip_VideoTimeline_Clear}" >
+                                <Button Command="{Binding TimelineClearCommand}" Width="50" Style="{StaticResource TimelineOptionButton}" ToolTip="{CommonControls:Localize ToolTip_VideoTimeline_Clear}" >
                                     <CommonControls:FontAwesome Icon="e2ab" Size="12" Color="{StaticResource DangerColour}" Opacity=".8"/>
                                 </Button>
-                                <Button Command="{Binding SaveVideoCommand}" Style="{StaticResource OptionButton}" ToolTip="{CommonControls:Localize ToolTip_VideoTimeline_Save}">
+                                <Button Command="{Binding SaveVideoCommand}" Style="{StaticResource TimelineOptionButton}" ToolTip="{CommonControls:Localize ToolTip_VideoTimeline_Save}">
                                     <CommonControls:FontAwesome Icon="f0c7" Size="12"/>
                                 </Button>
                                 <TextBox x:Name="ExtendTimelineTextBox" DockPanel.Dock="Right" Text="120" TextAlignment="Center"/>
-                                <Button Command="{Binding TimelineExtendCommand}" CommandParameter="{Binding Text, ElementName=ExtendTimelineTextBox, Converter={StaticResource StringToIntConverter}}" Style="{StaticResource OptionButton}" ToolTip="{CommonControls:Localize ToolTip_VideoTimeline_Extend}">
+                                <Button Command="{Binding TimelineExtendCommand}" CommandParameter="{Binding Text, ElementName=ExtendTimelineTextBox, Converter={StaticResource StringToIntConverter}}" Style="{StaticResource TimelineOptionButton}" ToolTip="{CommonControls:Localize ToolTip_VideoTimeline_Extend}">
                                     <CommonControls:FontAwesome Icon="e6c4" Size="12"/>
                                 </Button>
-                                <Button Command="{Binding TimelineTrimCommand}" Style="{StaticResource OptionButton}" ToolTip="{CommonControls:Localize ToolTip_VideoTimeline_Trim}">
+                                <Button Command="{Binding TimelineTrimCommand}" Style="{StaticResource TimelineOptionButton}" ToolTip="{CommonControls:Localize ToolTip_VideoTimeline_Trim}">
                                     <CommonControls:FontAwesome Icon="e4ba" Size="12"/>
                                 </Button>
-                                <Button Command="{Binding TimelineZoomInCommand}" Style="{StaticResource OptionButton}" ToolTip="{CommonControls:Localize ToolTip_VideoTimeline_ZoomIn}">
+                                <Button Command="{Binding RemoveReferenceCommand}" Style="{StaticResource TimelineOptionButton}" ToolTip="{CommonControls:Localize ToolTip_VideoTimeline_ReferenceRemove}">
+                                    <CommonControls:FontAwesome Icon="f6a9" Size="12"/>
+                                </Button>
+                                <Button Command="{Binding TimelineZoomInCommand}" Style="{StaticResource TimelineOptionButton}" ToolTip="{CommonControls:Localize ToolTip_VideoTimeline_ZoomIn}">
                                     <CommonControls:FontAwesome Icon="f00e" Size="12"/>
                                 </Button>
-                                <Button Command="{Binding TimelineZoomOutCommand}" Style="{StaticResource OptionButton}" ToolTip="{CommonControls:Localize ToolTip_VideoTimeline_ZoomOut}">
+                                <Button Command="{Binding TimelineZoomOutCommand}" Style="{StaticResource TimelineOptionButton}" ToolTip="{CommonControls:Localize ToolTip_VideoTimeline_ZoomOut}">
                                     <CommonControls:FontAwesome Icon="f010" Size="12"/>
                                 </Button>
                             </UniformGrid>
 
                             <!--Segment Controls-->
                             <UniformGrid DockPanel.Dock="Right" Rows="1">
-                                <Button Command="{Binding SegmentRemoveFrameCommand}" Width="50" Style="{StaticResource OptionButton}" ToolTip="{CommonControls:Localize ToolTip_VideoTimeline_FrameRemove}">
+                                <Button Command="{Binding SegmentRemoveFrameCommand}" Width="50" Style="{StaticResource TimelineOptionButton}" ToolTip="{CommonControls:Localize ToolTip_VideoTimeline_FrameRemove}">
                                     <CommonControls:FontAwesome Icon="f0c4" Size="12"/>
                                 </Button>
-                                <Button Command="{Binding SegmentSaveFrameCommand}" Style="{StaticResource OptionButton}" ToolTip="{CommonControls:Localize ToolTip_VideoTimeline_FrameSave}">
+                                <Button Command="{Binding SegmentSaveFrameCommand}" Style="{StaticResource TimelineOptionButton}" ToolTip="{CommonControls:Localize ToolTip_VideoTimeline_FrameSave}">
                                     <CommonControls:FontAwesome Icon="f03e" Size="12"/>
                                 </Button>
-                                <Button Command="{Binding SegmentSplitCommand}" Style="{StaticResource OptionButton}" ToolTip="{CommonControls:Localize ToolTip_VideoTimeline_SegmentSplit}">
+                                <Button Command="{Binding SegmentSplitCommand}" Style="{StaticResource TimelineOptionButton}" ToolTip="{CommonControls:Localize ToolTip_VideoTimeline_SegmentSplit}">
                                     <CommonControls:FontAwesome Icon="e254" Size="12"/>
                                 </Button>
-                                <Button Command="{Binding SegmentCopyCommand}" Style="{StaticResource OptionButton}" ToolTip="{CommonControls:Localize ToolTip_VideoTimeline_SegmentCopy}">
+                                <Button Command="{Binding SegmentCopyCommand}" Style="{StaticResource TimelineOptionButton}" ToolTip="{CommonControls:Localize ToolTip_VideoTimeline_SegmentCopy}">
                                     <CommonControls:FontAwesome Icon="f0c5" Size="12"/>
                                 </Button>
-                                <Button Command="{Binding SegmentMoveUpCommand}" Style="{StaticResource OptionButton}" ToolTip="{CommonControls:Localize ToolTip_VideoTimeline_SegmentUp}">
+                                <Button Command="{Binding SegmentMoveUpCommand}" Style="{StaticResource TimelineOptionButton}" ToolTip="{CommonControls:Localize ToolTip_VideoTimeline_SegmentUp}">
                                     <CommonControls:FontAwesome Icon="f077" Size="12"/>
                                 </Button>
-                                <Button Command="{Binding SegmentMoveDownCommand}" Style="{StaticResource OptionButton}" ToolTip="{CommonControls:Localize ToolTip_VideoTimeline_SegmentDown}">
+                                <Button Command="{Binding SegmentMoveDownCommand}" Style="{StaticResource TimelineOptionButton}" ToolTip="{CommonControls:Localize ToolTip_VideoTimeline_SegmentDown}">
                                     <CommonControls:FontAwesome Icon="f078" Size="12"/>
                                 </Button>
-                                <Button Command="{Binding SegmentRemoveCommand}" Style="{StaticResource OptionButton}" ToolTip="{CommonControls:Localize ToolTip_VideoTimeline_SegmentRemove}" >
+                                <Button Command="{Binding SegmentRemoveCommand}" Style="{StaticResource TimelineOptionButton}" ToolTip="{CommonControls:Localize ToolTip_VideoTimeline_SegmentRemove}" >
                                     <CommonControls:FontAwesome Icon="f2ed" Size="12" Color="{StaticResource DangerColour}" Opacity=".8"/>
                                 </Button>
                             </UniformGrid>
@@ -303,7 +273,38 @@
                             Drop="OnTimelineDrop"
                             PreviewKeyUp="OnTimelineViewerKeyUp"
                             PreviewMouseWheel="OnTimelineViewerMouseWheel">
-                            <ItemsControl ItemsSource="{Binding TimelineSegements}" VerticalAlignment="Center">
+                            <StackPanel VerticalAlignment="Center">
+
+                            <!--Reference Audio-->
+                            <Grid HorizontalAlignment="Left" Height="40" Margin="0,0,0,2" Cursor="Hand" Background="{StaticResource TransparentBrush}" MouseLeftButtonDown="OnReferenceMouseDown" Visibility="{Binding HasReference, Converter={StaticResource BooleanToVisibilityConverter}}">
+                                <Border BorderBrush="Purple" BorderThickness="0,0,0,2" IsHitTestVisible="False">
+                                    <ItemsControl ItemsSource="{Binding ReferencePeaks}">
+                                        <ItemsControl.ItemTemplate>
+                                            <DataTemplate>
+                                                <Border Width="{Binding TimelineFrameWidth, RelativeSource={RelativeSource AncestorType={x:Type local:VideoTimelineControl}}}" Padding="0,2">
+                                                    <Border Background="{StaticResource AccentColour2}" Opacity=".7" RenderTransformOrigin="0.5,0.5">
+                                                        <Border.RenderTransform>
+                                                            <ScaleTransform ScaleY="{Binding}"/>
+                                                        </Border.RenderTransform>
+                                                    </Border>
+                                                </Border>
+                                            </DataTemplate>
+                                        </ItemsControl.ItemTemplate>
+                                        <ItemsControl.ItemsPanel>
+                                            <ItemsPanelTemplate>
+                                                <StackPanel Orientation="Horizontal"/>
+                                            </ItemsPanelTemplate>
+                                        </ItemsControl.ItemsPanel>
+                                    </ItemsControl>
+                                </Border>
+                                <Border Width="2" HorizontalAlignment="Left" Background="{StaticResource DangerColour}" IsHitTestVisible="False">
+                                    <Border.RenderTransform>
+                                        <TranslateTransform X="{Binding PlayheadLeft}"/>
+                                    </Border.RenderTransform>
+                                </Border>
+                            </Grid>
+
+                            <ItemsControl ItemsSource="{Binding TimelineSegements}">
                                 <ItemsControl.ItemTemplate>
                                     <DataTemplate>
                                         <ListBox ItemsSource="{Binding Frames}" RequestBringIntoView="OnTimelineSegementRequestBringIntoView" MouseLeftButtonUp="OnTimelineSegementMouseUp" MouseDoubleClick="OnTimelineSegementMouseDoubleClick" Background="{StaticResource TransparentBrush}" BorderThickness="0" Padding="0">
@@ -343,29 +344,6 @@
                                                                                 <MultiDataTrigger.Conditions>
                                                                                     <Condition  Binding="{Binding IsPadding}" Value="False"/>
                                                                                     <Condition  Binding="{Binding Type}" Value="Overlay"/>
-                                                                                </MultiDataTrigger.Conditions>
-                                                                                <MultiDataTrigger.Setters>
-                                                                                    <Setter Property="Visibility" Value="Visible" />
-                                                                                </MultiDataTrigger.Setters>
-                                                                            </MultiDataTrigger>
-                                                                        </Style.Triggers>
-                                                                    </Style>
-                                                                </Border.Style>
-                                                            </Border>
-
-                                                            <!--Audio-->
-                                                            <Border>
-                                                                <Viewbox>
-                                                                    <CommonControls:FontAwesome Size="40" Icon="f8f2" IconStyle="SharpSolid" Margin="8" Opacity=".8"/>
-                                                                </Viewbox>
-                                                                <Border.Style>
-                                                                    <Style TargetType="{x:Type Border}">
-                                                                        <Setter Property="Visibility" Value="Hidden" />
-                                                                        <Style.Triggers>
-                                                                            <MultiDataTrigger>
-                                                                                <MultiDataTrigger.Conditions>
-                                                                                    <Condition  Binding="{Binding IsPadding}" Value="False"/>
-                                                                                    <Condition  Binding="{Binding Type}" Value="Audio"/>
                                                                                 </MultiDataTrigger.Conditions>
                                                                                 <MultiDataTrigger.Setters>
                                                                                     <Setter Property="Visibility" Value="Visible" />
@@ -467,16 +445,6 @@
                                                                 <Setter Property="BorderBrush" Value="Orange"/>
                                                             </MultiDataTrigger.Setters>
                                                         </MultiDataTrigger>
-                                                        <MultiDataTrigger>
-                                                            <MultiDataTrigger.Conditions>
-                                                                <Condition  Binding="{Binding IsPadding}" Value="False"/>
-                                                                <Condition  Binding="{Binding Type}" Value="Audio"/>
-                                                            </MultiDataTrigger.Conditions>
-                                                            <MultiDataTrigger.Setters>
-                                                                <Setter Property="BorderThickness" Value="0,0,0,2" />
-                                                                <Setter Property="BorderBrush" Value="Purple"/>
-                                                            </MultiDataTrigger.Setters>
-                                                        </MultiDataTrigger>
                                                     </Style.Triggers>
                                                 </Style>
                                             </ListBox.ItemContainerStyle>
@@ -484,6 +452,7 @@
                                     </DataTemplate>
                                 </ItemsControl.ItemTemplate>
                             </ItemsControl>
+                            </StackPanel>
                         </ScrollViewer>
                     </Border>
 
@@ -501,4 +470,4 @@
             </DockPanel>
         </Border>
     </DockPanel>
-</CommonControls:BaseControl>
+</local:TimelineControlBase>

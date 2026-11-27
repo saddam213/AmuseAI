@@ -29,8 +29,8 @@ namespace Amuse.App.Views
         /// <summary>
         /// Initializes a new instance of the <see cref="ImageToTextView"/> class.
         /// </summary>
-        public ImageToTextView(Settings settings, NavigationService navigationService, IModelDownloadService downloadService, IGenerateService generateService, IExtractService extractService, IUpscaleService upscaleService, IHistoryService historyService, IToolService toolService, ILogger<ImageToTextView> logger)
-            : base(settings, navigationService, downloadService, generateService, extractService, upscaleService, historyService, toolService, logger)
+        public ImageToTextView(Settings settings, NavigationService navigationService, IModelDownloadService downloadService, IModelAccessService modelAccessService, ILanguageService languageService, IGenerateService generateService, IHistoryService historyService, IToolService toolService, ILogger<ImageToTextView> logger)
+            : base(settings, navigationService, downloadService, modelAccessService, languageService, generateService, historyService, toolService, logger)
         {
             InitializeComponent();
         }
@@ -84,7 +84,7 @@ namespace Amuse.App.Views
         {
             await base.OpenAsync(args);
             if (!IsPipelineLoaded)
-                ModelControl.SetPipeline(GenerateService.Pipeline);
+                ModelControl.SetPipeline(LanguageService.Pipeline);
         }
 
 
@@ -142,7 +142,7 @@ namespace Amuse.App.Views
             catch (Exception ex)
             {
                 Statistics.Clear();
-                IsPipelineLoaded = GenerateService.IsLoaded;
+                IsPipelineLoaded = LanguageService.IsLoaded;
                 Logger.LogError(ex, "[ImageToText] [Execute] An exception occurred executing pipeline, Elapsed: {Elapsed:c}", Stopwatch.GetElapsedTime(timestamp));
                 await DialogService.ShowErrorAsync(AppErrors.ExecutePipelineTitle, ex.Message);
             }
@@ -207,15 +207,15 @@ namespace Amuse.App.Views
                     // Result
                     await TextResultElement.EndStreamResponseAsync();
                     TextResultElement.AddBeamResults(textResult.Results);
-                    Statistics.Stop();
 
                     // History
+                    var responseText = MarkdownConverter.GetResponseText(textResult.Result.Text);
                     if (AutomationOptions.IsHistoryEnabled)
                     {
                         await SaveHistoryAsync(textResult.Result, options);
                     }
 
-                    await automationJob.SaveAsync(MarkdownConverter.GetResponseText(textResult.Result.Text));
+                    await automationJob.SaveAsync(responseText);
                     AutomationProgress.Update(automationJob.Id, automationJob.Count, $"{AppDefault.Automation}: {automationJob.Id}/{automationJob.Count}");
                 }
 
@@ -230,7 +230,7 @@ namespace Amuse.App.Views
             catch (Exception ex)
             {
                 Statistics.Clear();
-                IsPipelineLoaded = GenerateService.IsLoaded;
+                IsPipelineLoaded = LanguageService.IsLoaded;
                 Logger.LogError(ex, "[ImageToText] [ExecuteAutomation] An exception occurred executing pipeline, Elapsed: {Elapsed:c}", Stopwatch.GetElapsedTime(timestamp));
                 await DialogService.ShowErrorAsync(AppErrors.ExecuteAutomationTitle, ex.Message);
             }
@@ -241,6 +241,7 @@ namespace Amuse.App.Views
                 IsAutomating = false;
                 CancellationTokenSource?.Dispose();
                 CancellationTokenSource = null;
+                await TextResultElement.EndStreamResponseAsync();
             }
         }
 
@@ -262,7 +263,8 @@ namespace Amuse.App.Views
         protected override bool CanExecuteAutomation()
         {
             return base.CanExecute()
-                && !string.IsNullOrEmpty(Options?.Prompt);
+                && !string.IsNullOrEmpty(Options?.Prompt)
+                && AutomationOptions?.IsValid() == true;
         }
 
 

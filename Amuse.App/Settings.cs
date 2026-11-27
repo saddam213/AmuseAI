@@ -18,6 +18,7 @@ namespace Amuse.App
     public sealed class Settings : BaseModel, IUIConfiguration
     {
         private Orientation _historyOrientation;
+        private bool _isFrameCountInFrames;
         private int _historyItems = 500;
         private double _uiScale = 1;
         private ThemeType _theme;
@@ -72,20 +73,30 @@ namespace Amuse.App
         [JsonIgnore]
         public string DirectoryLangaugeModel { get; private set; }
 
+        public List<ModelSearchPath> ModelSearchPaths { get; set; }
+
+        [JsonIgnore]
+        public ModelSearchIndex ModelSearch { get; private set; } = ModelSearchIndex.Empty;
+
         public int ReadBuffer { get; set; } = 32;
         public int WriteBuffer { get; set; } = 32;
         public bool IsLegacyDeviceDetection { get; set; }
         public bool IsServerDebugEnabled { get; set; } = false;
         public bool IsHistoryRecentItemsEnabled { get; set; } = true;
         public bool IsHistoryAutoSortEnabled { get; set; } = true;
-        public bool IsDiffusionImagePreviewEnabled { get; set; } = true;
         public bool IsExternalLinksEnabled { get; set; }
         public bool IsExternalLinksAcknowledged { get; set; }
         public bool IsExternalToolsEnabled { get; set; }
         public bool IsExternalToolsAcknowledged { get; set; }
         public bool IsDangerousToolsEnabled { get; set; }
         public bool IsDangerousToolsAcknowledged { get; set; }
+        public bool IsExecuteToolsEnabled { get; set; }
+        public bool IsExecuteToolsAcknowledged { get; set; }
+        public int MaxToolRounds { get; set; } = 16;
+        public List<McpServerConfig> McpServers { get; set; }
         public bool IsAppSetupAcknowledged { get; set; }
+        public bool IsDisclaimerAccepted { get; set; }
+        public bool IsFirstRunComplete { get; set; }
         public string UserAgent { get; set; }
 
         public double VolumeInput
@@ -142,6 +153,12 @@ namespace Amuse.App
             set { SetProperty(ref _historyOrientation, value); }
         }
 
+        public bool IsFrameCountInFrames
+        {
+            get { return _isFrameCountInFrames; }
+            set { SetProperty(ref _isFrameCountInFrames, value); }
+        }
+
         public bool IsAutoUpdateEnabled
         {
             get { return _isAutoUpdateEnabled; }
@@ -188,6 +205,9 @@ namespace Amuse.App
         [AppDefault]
         public ObservableCollection<ExtractModel> ExtractModels { get; set; }
 
+        [AppDefault]
+        public ObservableCollection<PublisherModel> Publishers { get; set; } = [];
+
         [JsonIgnore]
         public List<DeviceModel> Devices { get; set; }
 
@@ -214,9 +234,30 @@ namespace Amuse.App
                 Templates = await Json.LoadAsync<TemplateSettings>(templateSettings);
             }
 
+            ResetDownloadStatus();
             ScanModels();
             Vendors = [.. Environments.Select(x => x.Vendor).Distinct()];
             await SaveAsync();
+        }
+
+
+        /// <summary>
+        /// Resets the download statuses left by the last session, the download queue is empty at startup.
+        /// </summary>
+        private void ResetDownloadStatus()
+        {
+            var models = Components.Cast<IDownloadModel>()
+                .Concat(DiffusionModels)
+                .Concat(LanguageModels)
+                .Concat(LoraAdapterModels)
+                .Concat(ControlNetModels)
+                .Concat(UpscaleModels)
+                .Concat(ExtractModels);
+            foreach (var model in models)
+            {
+                if (model.Status.IsDownloadActive())
+                    model.Status = ModelStatusType.Available;
+            }
         }
 
 
@@ -225,6 +266,19 @@ namespace Amuse.App
             Devices = devices
                 .Where(x => x.Type == DeviceType.GPU)
                 .ToList();
+        }
+
+
+        /// <summary>
+        /// Gets the publisher with the key, null when the key is empty or not listed.
+        /// </summary>
+        /// <param name="key">The publisher key.</param>
+        public PublisherModel GetPublisher(string key)
+        {
+            if (string.IsNullOrEmpty(key))
+                return null;
+
+            return Publishers?.FirstOrDefault(x => x.Key == key);
         }
 
 
@@ -239,7 +293,7 @@ namespace Amuse.App
         {
             if (pipeline.DiffusionModel != null)
             {
-                var defaultModel = DiffusionModels.FirstOrDefault(x => x.IsDefault);
+                var defaultModel = DiffusionModels.FirstOrDefault(x => x.IsDefault && x.ProcessTypes.Contains(pipeline.ProcessType));
                 if (defaultModel is not null)
                     defaultModel.IsDefault = false;
 
@@ -249,7 +303,7 @@ namespace Amuse.App
             }
             if (pipeline.LanguageModel != null)
             {
-                var defaultModel = LanguageModels.FirstOrDefault(x => x.IsDefault);
+                var defaultModel = LanguageModels.FirstOrDefault(x => x.IsDefault && x.ProcessTypes.Contains(pipeline.ProcessType));
                 if (defaultModel is not null)
                     defaultModel.IsDefault = false;
 
@@ -279,8 +333,13 @@ namespace Amuse.App
         }
 
 
+        /// <summary>
+        /// Refreshes the installed state of every model, the model search folders are read again first.
+        /// </summary>
         public void ScanModels()
         {
+            ModelSearch = new ModelSearchIndex(DirectoryModel, ModelSearchPaths, GetCheckpointComponents());
+
             foreach (var component in Components)
                 component.Initialize(this);
 
@@ -304,6 +363,33 @@ namespace Amuse.App
         }
 
 
+        /// <summary>
+        /// Changes the key of a shared component in every model checkpoint that uses it.
+        /// </summary>
+        /// <param name="oldKey">The current key.</param>
+        /// <param name="newKey">The new key.</param>
+        public void RenameComponentKey(string oldKey, string newKey)
+        {
+            foreach (var checkpoint in GetCheckpointComponents().Where(x => x.Type == CheckpointType.Component && x.Path == oldKey))
+                checkpoint.Path = newKey;
+        }
+
+
+        /// <summary>
+        /// Gets the checkpoints of every model, including the checkpoint sets that are not current.
+        /// </summary>
+        private IEnumerable<CheckpointComponent> GetCheckpointComponents()
+        {
+            return Components.Select(x => x.Checkpoint)
+                .Concat(DiffusionModels.SelectMany(x => x.GetCheckpoints()).SelectMany(x => x.GetComponents()))
+                .Concat(LanguageModels.SelectMany(x => x.GetCheckpoints()).SelectMany(x => x.GetComponents()))
+                .Concat(LoraAdapterModels.Select(x => x.Checkpoint))
+                .Concat(ControlNetModels.Select(x => x.Checkpoint))
+                .Concat(UpscaleModels.SelectMany(x => x.GetComponents()))
+                .Concat(ExtractModels.Select(x => x.Checkpoint));
+        }
+
+
         public void SetTempDirectory(string directory)
         {
             DirectoryTemp = directory;
@@ -322,12 +408,12 @@ namespace Amuse.App
         public void SetModelDirectory(string directory)
         {
             DirectoryModel = directory;
-            DirectoryDiffusion = Path.Combine(directory, "Diffusion");
-            DirectoryLangaugeModel = Path.Combine(directory, "TextEncoder");
-            DirectoryUpscale = Path.Combine(directory, "Upscale");
-            DirectoryExtract = Path.Combine(directory, "Extract");
-            DirectoryControlNet = Path.Combine(directory, "ControlNet");
-            DirectoryLoraAdapter = Path.Combine(directory, "LoraAdapter");
+            DirectoryDiffusion = Path.Combine(directory, ModelFolders.Diffusion);
+            DirectoryLangaugeModel = Path.Combine(directory, ModelFolders.LLM);
+            DirectoryUpscale = Path.Combine(directory, ModelFolders.Upscale);
+            DirectoryExtract = Path.Combine(directory, ModelFolders.Extract);
+            DirectoryControlNet = Path.Combine(directory, ModelFolders.ControlNet);
+            DirectoryLoraAdapter = Path.Combine(directory, ModelFolders.LoraAdapter);
             CreateModelDirectories();
         }
 
@@ -374,6 +460,40 @@ namespace Amuse.App
 
         [JsonIgnore]
         public PipelineType[] LanguagePipelines { get; }
+
+
+        /// <summary>
+        /// Gets the pipelines that support LoRA, ordered by display name.
+        /// </summary>
+        public PipelineType[] GetLoraPipelines()
+        {
+            return [.. Pipelines.Where(IsLoraPipeline)];
+        }
+
+
+        /// <summary>
+        /// Gets the pipelines that support ControlNet, those with ControlNets already or with a ControlNet template, ordered by display name.
+        /// </summary>
+        public PipelineType[] GetControlNetPipelines()
+        {
+            return [.. Pipelines.Where(pipeline => ControlNetModels?.Any(x => x.Pipeline == pipeline) == true
+                || Templates?.DiffusionTemplates?.Any(x => x.Pipeline == pipeline && x.ProcessTypes?.Contains(ProcessType.ImageControlNet) == true) == true)];
+        }
+
+
+        /// <summary>
+        /// Determines whether a pipeline supports LoRA, it has LoRAs already or an image or video template on a backend that loads them.
+        /// </summary>
+        /// <param name="pipeline">The pipeline.</param>
+        private bool IsLoraPipeline(PipelineType pipeline)
+        {
+            if (LoraAdapterModels?.Any(x => x.Pipeline == pipeline) == true)
+                return true;
+
+            return Templates?.DiffusionTemplates?.Any(x => x.Pipeline == pipeline
+                && x.Backend != BackendType.OnnxRuntime
+                && (x.MediaType == MediaType.Image || x.MediaType == MediaType.Video)) == true;
+        }
 
 
         public void Save()

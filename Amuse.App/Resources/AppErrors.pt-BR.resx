@@ -1,0 +1,397 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <!-- 
+    Microsoft ResX Schema 
+    
+    Version 2.0
+    
+    The primary goals of this format is to allow a simple XML format 
+    that is mostly human readable. The generation and parsing of the 
+    various data types are done through the TypeConverter classes 
+    associated with the data types.
+    
+    Example:
+    
+    ... ado.net/XML headers & schema ...
+    <resheader name="resmimetype">text/microsoft-resx</resheader>
+    <resheader name="version">2.0</resheader>
+    <resheader name="reader">System.Resources.ResXResourceReader, System.Windows.Forms, ...</resheader>
+    <resheader name="writer">System.Resources.ResXResourceWriter, System.Windows.Forms, ...</resheader>
+    <data name="Name1"><value>this is my long string</value><comment>this is a comment</comment></data>
+    <data name="Color1" type="System.Drawing.Color, System.Drawing">Blue</data>
+    <data name="Bitmap1" mimetype="application/x-microsoft.net.object.binary.base64">
+        <value>[base64 mime encoded serialized .NET Framework object]</value>
+    </data>
+    <data name="Icon1" type="System.Drawing.Icon, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
+        <value>[base64 mime encoded string representing a byte array form of the .NET Framework object]</value>
+        <comment>This is a comment</comment>
+    </data>
+                
+    There are any number of "resheader" rows that contain simple 
+    name/value pairs.
+    
+    Each data row contains a name, and value. The row also contains a 
+    type or mimetype. Type corresponds to a .NET class that support 
+    text/value conversion through the TypeConverter architecture. 
+    Classes that don't support this are serialized and stored with the 
+    mimetype set.
+    
+    The mimetype is used for serialized objects, and tells the 
+    ResXResourceReader how to depersist the object. This is currently not 
+    extensible. For a given mimetype the value must be set accordingly:
+    
+    Note - application/x-microsoft.net.object.binary.base64 is the format 
+    that the ResXResourceWriter will generate, however the reader can 
+    read any of the formats listed below.
+    
+    mimetype: application/x-microsoft.net.object.binary.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Binary.BinaryFormatter
+            : and then encoded with base64 encoding.
+    
+    mimetype: application/x-microsoft.net.object.soap.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Soap.SoapFormatter
+            : and then encoded with base64 encoding.
+
+    mimetype: application/x-microsoft.net.object.bytearray.base64
+    value   : The object must be serialized into a byte array 
+            : using a System.ComponentModel.TypeConverter
+            : and then encoded with base64 encoding.
+    -->
+  <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+    <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
+    <xsd:element name="root" msdata:IsDataSet="true">
+      <xsd:complexType>
+        <xsd:choice maxOccurs="unbounded">
+          <xsd:element name="metadata">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" />
+              </xsd:sequence>
+              <xsd:attribute name="name" use="required" type="xsd:string" />
+              <xsd:attribute name="type" type="xsd:string" />
+              <xsd:attribute name="mimetype" type="xsd:string" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="assembly">
+            <xsd:complexType>
+              <xsd:attribute name="alias" type="xsd:string" />
+              <xsd:attribute name="name" type="xsd:string" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="data">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1" />
+              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
+              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="resheader">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" />
+            </xsd:complexType>
+          </xsd:element>
+        </xsd:choice>
+      </xsd:complexType>
+    </xsd:element>
+  </xsd:schema>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="ExecuteAutomationTitle" xml:space="preserve">
+    <value>Falha na automação</value>
+  </data>
+  <data name="ExecutePipelineTitle" xml:space="preserve">
+    <value>Falha na geração</value>
+  </data>
+  <data name="GeneratedAudioNotFound" xml:space="preserve">
+    <value>O áudio gerado não foi encontrado.</value>
+  </data>
+  <data name="GeneratedImageNotFound" xml:space="preserve">
+    <value>A imagem gerada não foi encontrada.</value>
+  </data>
+  <data name="GeneratedVideoNotFound" xml:space="preserve">
+    <value>O vídeo gerado não foi encontrado.</value>
+  </data>
+  <data name="ImportComponentFailed" xml:space="preserve">
+    <value>Falha ao importar o arquivo de componente.</value>
+  </data>
+  <data name="ImportEnvironmentFailed" xml:space="preserve">
+    <value>Falha ao importar o arquivo de ambiente.</value>
+  </data>
+  <data name="ImportErrorTitle" xml:space="preserve">
+    <value>Erro de importação</value>
+  </data>
+  <data name="ImportModelFailed" xml:space="preserve">
+    <value>Falha ao importar o arquivo de modelo.</value>
+  </data>
+  <data name="LoadPipelineTitle" xml:space="preserve">
+    <value>Falha ao carregar o modelo</value>
+  </data>
+  <data name="ParseErrorDocument" xml:space="preserve">
+    <value>Falha ao analisar o documento.</value>
+  </data>
+  <data name="ParseErrorTitle" xml:space="preserve">
+    <value>Erro de análise</value>
+  </data>
+  <data name="PipelineClosedUnexpectedly" xml:space="preserve">
+    <value>O pipeline foi fechado inesperadamente</value>
+  </data>
+  <data name="UnexpectedError" xml:space="preserve">
+    <value>Ocorreu um erro inesperado</value>
+  </data>
+  <data name="UnexpectedErrorTitle" xml:space="preserve">
+    <value>Erro inesperado</value>
+  </data>
+  <data name="UnloadPipelineTitle" xml:space="preserve">
+    <value>Falha ao descarregar o modelo</value>
+  </data>
+  <data name="ExtractedImageNotFound" xml:space="preserve">
+    <value>A imagem extraída não foi encontrada.</value>
+  </data>
+  <data name="ExtractModelNotLoaded" xml:space="preserve">
+    <value>Nenhum modelo de extração carregado.</value>
+  </data>
+  <data name="ExtractBackendNotSupported" xml:space="preserve">
+    <value>A extração não é compatível com o backend {0}.</value>
+  </data>
+  <data name="UpscaledImageNotFound" xml:space="preserve">
+    <value>A imagem com upscale não foi encontrada.</value>
+  </data>
+  <data name="UpscaledVideoNotFound" xml:space="preserve">
+    <value>O vídeo com upscale não foi encontrado.</value>
+  </data>
+  <data name="UpscaleModelNotLoaded" xml:space="preserve">
+    <value>Nenhum modelo de upscale carregado.</value>
+  </data>
+  <data name="UpscaleVideoOnly" xml:space="preserve">
+    <value>{0} só pode fazer upscale de vídeos.</value>
+  </data>
+  <data name="UpscaleBackendNotSupported" xml:space="preserve">
+    <value>O upscale não é compatível com o backend {0}.</value>
+  </data>
+  <data name="UpscaleFailedTitle" xml:space="preserve">
+    <value>Falha no upscale</value>
+  </data>
+  <data name="UpscaleFailedResultKept" xml:space="preserve">
+    <value>O upscale falhou; o resultado foi mantido sem upscale.</value>
+  </data>
+  <data name="UpscaleCheckpointFormat" xml:space="preserve">
+    <value>O checkpoint deve ser um arquivo {0} para o backend {1}</value>
+  </data>
+  <data name="ValidationNameEmpty" xml:space="preserve">
+    <value>O nome não pode ficar vazio</value>
+  </data>
+  <data name="ValidationModelNameExists" xml:space="preserve">
+    <value>Já existe um modelo com o nome '{0}'</value>
+  </data>
+  <data name="ValidationGreaterThanZero" xml:space="preserve">
+    <value>{0} deve ser maior que 0</value>
+  </data>
+  <data name="ValidationZeroOrGreater" xml:space="preserve">
+    <value>{0} deve ser 0 ou maior</value>
+  </data>
+  <data name="ValidationPipelineEmpty" xml:space="preserve">
+    <value>O pipeline não pode ficar vazio</value>
+  </data>
+  <data name="ValidationMinimum" xml:space="preserve">
+    <value>{0} deve ser {1} ou maior</value>
+  </data>
+  <data name="ValidationResolutionsEmpty" xml:space="preserve">
+    <value>As resoluções não podem ficar vazias</value>
+  </data>
+  <data name="ValidationDefaultResolutionNotSet" xml:space="preserve">
+    <value>A resolução padrão não foi definida</value>
+  </data>
+  <data name="ValidationProcessTypesEmpty" xml:space="preserve">
+    <value>As funções compatíveis não podem ficar vazias</value>
+  </data>
+  <data name="ValidationMainFileEmpty" xml:space="preserve">
+    <value>O arquivo principal não pode ficar vazio</value>
+  </data>
+  <data name="ValidationTypeEmpty" xml:space="preserve">
+    <value>O tipo não pode ficar vazio</value>
+  </data>
+  <data name="ValidationModelNameEmpty" xml:space="preserve">
+    <value>O nome do modelo não pode ficar vazio</value>
+  </data>
+  <data name="ValidationModelFileNameEmpty" xml:space="preserve">
+    <value>O nome do arquivo do modelo não pode ficar vazio</value>
+  </data>
+  <data name="ValidationModelFolderNameEmpty" xml:space="preserve">
+    <value>O nome da pasta do modelo não pode ficar vazio</value>
+  </data>
+  <data name="ValidationModelFileNotFound" xml:space="preserve">
+    <value>Arquivo do modelo não encontrado</value>
+  </data>
+  <data name="ValidationRequirementsEmpty" xml:space="preserve">
+    <value>Os requisitos não podem ficar vazios</value>
+  </data>
+  <data name="ValidationEnvironmentEmpty" xml:space="preserve">
+    <value>O ambiente não pode ficar vazio</value>
+  </data>
+  <data name="ValidationEnvironmentInvalidCharacters" xml:space="preserve">
+    <value>O ambiente só pode conter letras, números, '.', '_' e '-'</value>
+  </data>
+  <data name="ValidationEnvironmentExists" xml:space="preserve">
+    <value>Já existe um ambiente com o nome '{0}'</value>
+  </data>
+  <data name="ValidationDeviceEmpty" xml:space="preserve">
+    <value>O dispositivo não pode ficar vazio</value>
+  </data>
+  <data name="UpdateDownloadFailed" xml:space="preserve">
+    <value>Falha ao baixar os arquivos de atualização.
+Se o problema persistir, tente novamente mais tarde.</value>
+  </data>
+  <data name="CheckpointNoDownloadFiles" xml:space="preserve">
+    <value>Nenhum arquivo para download encontrado</value>
+  </data>
+  <data name="CheckpointDownloadFileNotFound" xml:space="preserve">
+    <value>Arquivo para download não encontrado</value>
+  </data>
+  <data name="CheckpointLocalFolderNotFound" xml:space="preserve">
+    <value>Pasta local não encontrada</value>
+  </data>
+  <data name="CheckpointLocalFileNotFound" xml:space="preserve">
+    <value>Arquivo local não encontrado</value>
+  </data>
+  <data name="CheckpointComponentNotSelected" xml:space="preserve">
+    <value>Nenhum componente selecionado</value>
+  </data>
+  <data name="CheckpointResolveOnlineFile" xml:space="preserve">
+    <value>Não foi possível localizar o arquivo online '{0}' do checkpoint</value>
+  </data>
+  <data name="CheckpointResolveComponent" xml:space="preserve">
+    <value>Não foi possível localizar o componente '{0}' do checkpoint</value>
+  </data>
+  <data name="ValidationQuantTypeExists" xml:space="preserve">
+    <value>Cada qualidade deve ter um tipo diferente</value>
+  </data>
+  <data name="ValidationQuantTypeEmpty" xml:space="preserve">
+    <value>A qualidade deve ser selecionada</value>
+  </data>
+  <data name="ValidationCheckpointEmpty" xml:space="preserve">
+    <value>O modelo não tem arquivos de checkpoint</value>
+  </data>
+  <data name="AudioRangeRequired" xml:space="preserve">
+    <value>Selecione primeiro o intervalo do áudio de origem a regenerar.</value>
+  </data>
+  <data name="McpCommandNotFound" xml:space="preserve">
+    <value>O comando '{0}' não foi encontrado.</value>
+  </data>
+  <data name="McpRequiresNode" xml:space="preserve">
+    <value>O Node.js é necessário para executar este servidor. Instale-o em nodejs.org e reinicie o Amuse.</value>
+  </data>
+  <data name="McpRequiresUv" xml:space="preserve">
+    <value>O uv é necessário para executar este servidor. Instale-o em docs.astral.sh/uv e reinicie o Amuse.</value>
+  </data>
+  <data name="McpServerErrorTitle" xml:space="preserve">
+    <value>Erro do servidor MCP</value>
+  </data>
+  <data name="McpUrlInvalid" xml:space="preserve">
+    <value>'{0}' não é uma URL http ou https válida.</value>
+  </data>
+  <data name="MissingInputTitle" xml:space="preserve">
+    <value>Entrada ausente</value>
+  </data>
+  <data name="MoveFolderErrorTitle" xml:space="preserve">
+    <value>Falha ao mover a pasta</value>
+  </data>
+  <data name="MoveFolderInsideSource" xml:space="preserve">
+    <value>O novo local não pode ser a pasta atual nem estar dentro dela</value>
+  </data>
+  <data name="MoveFolderNoSpace" xml:space="preserve">
+    <value>Espaço livre insuficiente na nova unidade, são necessários {0:N1} GB</value>
+  </data>
+  <data name="MoveFolderNotEmpty" xml:space="preserve">
+    <value>'{0}' já contém arquivos, escolha outro local</value>
+  </data>
+  <data name="ReferenceTextRequired" xml:space="preserve">
+    <value>Este modelo precisa da transcrição da referência de voz; digite o que é dito nela.</value>
+  </data>
+  <data name="SourceAudioRequired" xml:space="preserve">
+    <value>Carregue ou grave primeiro um áudio de origem.</value>
+  </data>
+  <data name="ValidationBetween" xml:space="preserve">
+    <value>{0} deve estar entre {1} e {2}</value>
+  </data>
+  <data name="ValidationDownloadLinkEmpty" xml:space="preserve">
+    <value>O link de download não pode estar vazio</value>
+  </data>
+  <data name="ValidationDownloadLinkInvalid" xml:space="preserve">
+    <value>O link de download deve ser um link direto para um arquivo terminado em {0}</value>
+  </data>
+  <data name="ValidationKeyEmpty" xml:space="preserve">
+    <value>A chave não pode estar vazia</value>
+  </data>
+  <data name="ValidationKeyExists" xml:space="preserve">
+    <value>Já existe um componente com a chave '{0}'</value>
+  </data>
+  <data name="ValidationLessOrEqual" xml:space="preserve">
+    <value>{0} deve ser menor ou igual a {1}</value>
+  </data>
+  <data name="ValidationLessThan" xml:space="preserve">
+    <value>{0} deve ser menor que {1}</value>
+  </data>
+  <data name="ValidationMcpCommandEmpty" xml:space="preserve">
+    <value>O comando não pode estar vazio</value>
+  </data>
+  <data name="ValidationMcpIconInvalid" xml:space="preserve">
+    <value>O ícone deve ser um código do Font Awesome, como f1e6</value>
+  </data>
+  <data name="ValidationMcpImportEmpty" xml:space="preserve">
+    <value>Nenhum servidor foi encontrado na configuração</value>
+  </data>
+  <data name="ValidationMcpNameEmpty" xml:space="preserve">
+    <value>O nome do servidor não pode estar vazio</value>
+  </data>
+  <data name="ValidationMcpNameExists" xml:space="preserve">
+    <value>Já existe um servidor com este nome</value>
+  </data>
+  <data name="ValidationMcpToolsEmpty" xml:space="preserve">
+    <value>Pelo menos uma ferramenta deve ser incluída</value>
+  </data>
+  <data name="ValidationMcpUrlInvalid" xml:space="preserve">
+    <value>A URL deve ser um endereço http ou https válido</value>
+  </data>
+  <data name="ValidationModelFileType" xml:space="preserve">
+    <value>O arquivo do modelo deve terminar em {0}</value>
+  </data>
+  <data name="ValidationModelFolderNotFound" xml:space="preserve">
+    <value>Pasta de modelos não encontrada</value>
+  </data>
+  <data name="ValidationSearchFolderContainsModels" xml:space="preserve">
+    <value>Uma pasta de busca não pode conter a pasta de modelos do Amuse</value>
+  </data>
+  <data name="ValidationSearchFolderEmpty" xml:space="preserve">
+    <value>A pasta de busca não pode estar vazia</value>
+  </data>
+  <data name="ValidationSearchFolderInsideModels" xml:space="preserve">
+    <value>A pasta de busca não pode estar dentro do diretório de modelos</value>
+  </data>
+  <data name="ValidationSearchFolderNotFound" xml:space="preserve">
+    <value>A pasta de busca '{0}' não foi encontrada</value>
+  </data>
+  <data name="VoiceReferenceRequired" xml:space="preserve">
+    <value>Carregue ou grave primeiro uma referência de voz.</value>
+  </data>
+</root>

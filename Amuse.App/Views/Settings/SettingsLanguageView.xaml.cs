@@ -22,18 +22,18 @@ namespace Amuse.App.Views
     {
         private LanguageModel _selectedModel;
         private string _filterText;
-        private string _filterBackend;
-        private string _filterPipeline;
-        private string _filterStatus;
-        private string _filterMediaType;
+        private FilterOption _filterBackend;
+        private FilterOption _filterPipeline;
+        private FilterOption _filterStatus;
+        private FilterOption _filterMediaType;
 
-        public SettingsLanguageView(Settings settings, NavigationService navigationService, IModelDownloadService downloadService, IHistoryService historyService, ILogger<SettingsLanguageView> logger)
-            : base(settings, navigationService, downloadService, historyService, logger)
+        public SettingsLanguageView(Settings settings, NavigationService navigationService, IModelDownloadService downloadService, IModelAccessService modelAccessService, IHistoryService historyService, ILogger<SettingsLanguageView> logger)
+            : base(settings, navigationService, downloadService, modelAccessService, historyService, logger)
         {
-            FilterBackends = ["Show All", .. Enum.GetNames<BackendType>()];
-            FilterStatuses = ["Show All", "Installed", "Unknown"];
-            FilterPipelines = ["Show All", .. settings.LanguagePipelines.Select(x => x.ToString())];
-            FilterMediaTypes = ["Show All", .. Enum.GetNames<MediaType>()];
+            FilterBackends = [FilterOption.ShowAll(), .. Enum.GetValues<BackendType>().Where(x => x != BackendType.HuggingFace).Select(x => FilterOption.FromEnum(x))];
+            FilterStatuses = FilterOption.ModelStatuses();
+            FilterPipelines = [FilterOption.ShowAll(), .. settings.LanguagePipelines.Select(x => FilterOption.FromValue(x.ToString()))];
+            FilterMediaTypes = [FilterOption.ShowAll(), .. Enum.GetValues<MediaType>().Select(x => FilterOption.FromEnum(x))];
             FilterBackend = FilterBackends[0];
             FilterStatus = FilterStatuses[0];
             FilterPipeline = FilterPipelines[0];
@@ -73,10 +73,10 @@ namespace Amuse.App.Views
         public AsyncRelayCommand DownloadModelCancelCommand { get; }
         public AsyncRelayCommand FilterClearCommand { get; }
         public ListCollectionView ModelCollection { get; }
-        public string[] FilterBackends { get; }
-        public string[] FilterPipelines { get; }
-        public string[] FilterStatuses { get; }
-        public string[] FilterMediaTypes { get; }
+        public FilterOption[] FilterBackends { get; }
+        public FilterOption[] FilterPipelines { get; }
+        public FilterOption[] FilterStatuses { get; }
+        public FilterOption[] FilterMediaTypes { get; }
 
         public LanguageModel SelectedModel
         {
@@ -90,25 +90,25 @@ namespace Amuse.App.Views
             set { SetProperty(ref _filterText, value); ModelCollection?.Refresh(); }
         }
 
-        public string FilterBackend
+        public FilterOption FilterBackend
         {
             get { return _filterBackend; }
             set { SetProperty(ref _filterBackend, value); ModelCollection?.Refresh(); }
         }
 
-        public string FilterPipeline
+        public FilterOption FilterPipeline
         {
             get { return _filterPipeline; }
             set { SetProperty(ref _filterPipeline, value); ModelCollection?.Refresh(); }
         }
 
-        public string FilterStatus
+        public FilterOption FilterStatus
         {
             get { return _filterStatus; }
             set { SetProperty(ref _filterStatus, value); ModelCollection?.Refresh(); }
         }
 
-        public string FilterMediaType
+        public FilterOption FilterMediaType
         {
             get { return _filterMediaType; }
             set { SetProperty(ref _filterMediaType, value); ModelCollection?.Refresh(); }
@@ -128,34 +128,34 @@ namespace Amuse.App.Views
                 if (obj is not LanguageModel model)
                     return false;
 
-                if (model.Status != ModelStatusType.Installed && model.Status != ModelStatusType.Unknown)
+                if (model.Id <= Utils.FixedIdRange && model.Status != ModelStatusType.Installed && model.Status != ModelStatusType.Unknown)
                     return false;
 
                 var isvalid = true;
-                if (!string.IsNullOrEmpty(_filterBackend))
+                if (!string.IsNullOrEmpty(_filterBackend?.Value))
                 {
-                    if (Enum.TryParse<BackendType>(_filterBackend, out var backendType))
+                    if (Enum.TryParse<BackendType>(_filterBackend.Value, out var backendType))
                     {
                         isvalid = isvalid && model.Backend == backendType;
                     }
                 }
-                if (!string.IsNullOrEmpty(_filterStatus))
+                if (!string.IsNullOrEmpty(_filterStatus?.Value))
                 {
-                    if (Enum.TryParse<ModelStatusType>(_filterStatus, out var statusType))
+                    if (Enum.TryParse<ModelStatusType>(_filterStatus.Value, out var statusType))
                     {
                         isvalid = isvalid && model.Status == statusType;
                     }
                 }
-                if (!string.IsNullOrEmpty(_filterMediaType))
+                if (!string.IsNullOrEmpty(_filterMediaType?.Value))
                 {
-                    if (Enum.TryParse<MediaType>(_filterMediaType, out var mediaType))
+                    if (Enum.TryParse<MediaType>(_filterMediaType.Value, out var mediaType))
                     {
                         isvalid = isvalid && model.MediaType == mediaType;
                     }
                 }
-                if (!string.IsNullOrEmpty(_filterPipeline))
+                if (!string.IsNullOrEmpty(_filterPipeline?.Value))
                 {
-                    isvalid = isvalid && (_filterPipeline == FilterPipelines[0] || model.Pipeline.ToString() == _filterPipeline);
+                    isvalid = isvalid && model.Pipeline.ToString() == _filterPipeline.Value;
                 }
                 if (!string.IsNullOrEmpty(_filterText))
                 {
@@ -241,7 +241,7 @@ namespace Amuse.App.Views
                 var modelImports = await Json.LoadArrayAsync<LanguageModel>(importPath);
                 if (modelImports.IsNullOrEmpty())
                 {
-                    await DialogService.ShowMessageAsync(AppErrors.ImportErrorTitle, AppErrors.ImportModel);
+                    await DialogService.ShowErrorAsync(AppErrors.ImportErrorTitle, AppErrors.ImportModelFailed);
                     return;
                 }
 
@@ -275,6 +275,10 @@ namespace Amuse.App.Views
         {
             if (await DialogService.ShowMessageAsync(AppDefault.DeleteModel, AppDefault.DeleteModelMessage, TensorStack.WPF.Dialogs.MessageDialogType.YesNo, TensorStack.WPF.Dialogs.MessageBoxIconType.Warning, TensorStack.WPF.Dialogs.MessageBoxStyleType.Danger))
             {
+                if (!await ModelAccessService.RequestModelReleaseAsync(_selectedModel))
+                    return;
+
+                await DownloadService.CancelAsync(_selectedModel);
                 await Task.Run(() => _selectedModel.Delete(Settings));
                 _selectedModel.Status = ModelStatusType.Available;
                 await SaveAsync();
@@ -284,7 +288,7 @@ namespace Amuse.App.Views
 
         private async Task DownloadModelAsync()
         {
-            await DownloadService.QueueAsync(_selectedModel);
+            await DownloadService.DownloadAsync(_selectedModel);
         }
 
 

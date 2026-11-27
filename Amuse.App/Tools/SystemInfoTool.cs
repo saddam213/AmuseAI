@@ -1,4 +1,5 @@
-﻿using Amuse.App.Services;
+﻿using Amuse.App.Resources;
+using Amuse.App.Services;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -6,6 +7,7 @@ using System.Runtime.InteropServices;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using TensorStack.Common;
 using TensorStack.WPF.Controls;
 
 namespace Amuse.App.Tools
@@ -30,7 +32,7 @@ namespace Amuse.App.Tools
         /// <summary>
         /// Gets the display name.
         /// </summary>
-        public override string DisplayName => "System Info Tool";
+        public override string DisplayName => AppDefault.ToolSystemInfo;
 
         /// <summary>
         /// Gets the tool icon.
@@ -89,6 +91,7 @@ namespace Amuse.App.Tools
                 // GPU
                 var gpuStatus = hardwareService.GPUStatus;
                 var gpus = hardwareService.GPUDevices
+                    .Where(device => IsDetectedDevice(settings, device))
                     .Select(device =>
                     {
                         var status = gpuStatus.FirstOrDefault(x => x.Id == device.Id);
@@ -126,6 +129,20 @@ namespace Amuse.App.Tools
             {
                 return Task.FromResult(ErrorResult(ex));
             }
+        }
+
+
+        /// <summary>
+        /// Determines whether the adapter is one of the devices Amuse detected, Windows can list the same graphics card as more than one adapter.
+        /// </summary>
+        /// <param name="settings">The settings.</param>
+        /// <param name="device">The adapter.</param>
+        private static bool IsDetectedDevice(Settings settings, GPUDevice device)
+        {
+            if (settings.Devices.IsNullOrEmpty())
+                return true;
+
+            return settings.Devices.Any(x => x.HardwareLUID == device.HardwareLUID);
         }
 
 

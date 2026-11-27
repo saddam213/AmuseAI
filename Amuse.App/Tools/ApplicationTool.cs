@@ -13,10 +13,11 @@ namespace Amuse.App.Tools
     public sealed class ApplicationTool : ToolCallBase
     {
         private static ApplicationName[] _applications;
-        private static readonly HashSet<string> ProgramExtensions =new HashSet<string>(StringComparer.OrdinalIgnoreCase)
+        private static readonly HashSet<string> DocumentExtensions = new HashSet<string>(StringComparer.OrdinalIgnoreCase)
         {
-            ".exe", ".com", ".bat", ".cmd", ".ps1", ".psm1", ".vbs", ".vbe", ".js", ".jse", ".wsf", ".wsh", ".hta",
-            ".msi", ".msp", ".scr", ".pif", ".cpl", ".lnk", ".url", ".reg", ".jar", ".appref-ms", ".application", ".library-ms"
+            ".txt", ".md", ".log", ".csv", ".json", ".pdf",
+            ".png", ".jpg", ".jpeg", ".gif", ".bmp", ".webp", ".tif", ".tiff",
+            ".mp4", ".mkv", ".mov", ".avi", ".webm", ".mp3", ".wav", ".flac", ".ogg", ".m4a"
         };
 
         /// <summary>
@@ -45,7 +46,7 @@ namespace Amuse.App.Tools
         /// <summary>
         /// Gets the display name.
         /// </summary>
-        public override string DisplayName => "Application Tool";
+        public override string DisplayName => AppDefault.ToolApplication;
 
         /// <summary>
         /// Gets the tool icon.
@@ -119,7 +120,7 @@ namespace Amuse.App.Tools
                     "list" => ListApplications(GetArgumentOrDefault("name", string.Empty)),
                     "open" => await OpenAsync(settings, GetTarget(), false),
                     "reveal" => await OpenAsync(settings, GetTarget(), true),
-                    _ => StartApplication(GetArgument<string>("name"), GetArgumentOrDefault<string>("arg1"), GetArgumentOrDefault<string>("arg2"))
+                    _ => await StartApplicationAsync(settings, GetArgument<string>("name"), GetArgumentOrDefault<string>("arg1"), GetArgumentOrDefault<string>("arg2"))
                 };
                 return SuccessResult(result);
             }
@@ -148,15 +149,19 @@ namespace Amuse.App.Tools
         /// <summary>
         /// Starts the application.
         /// </summary>
+        /// <param name="settings">The settings.</param>
         /// <param name="name">The application name.</param>
         /// <param name="arg1">The first argument.</param>
         /// <param name="arg2">The second argument.</param>
-        private static ApplicationName StartApplication(string name, string arg1, string arg2)
+        private async Task<ApplicationName> StartApplicationAsync(Settings settings, string name, string arg1, string arg2)
         {
             var application = _applications.FirstOrDefault(x => x.Name.Equals(name, StringComparison.OrdinalIgnoreCase))
                             ?? _applications.FirstOrDefault(x => x.Name.StartsWith(name, StringComparison.OrdinalIgnoreCase))
                             ?? _applications.FirstOrDefault(x => x.Name.Contains(name, StringComparison.OrdinalIgnoreCase))
                             ?? throw new Exception($"Application '{name}' not found. Use the 'list' action to find installed applications.");
+
+            var arguments = string.Join(" ", new[] { arg1, arg2 }.Where(x => !string.IsNullOrEmpty(x)));
+            await CheckExecuteAccess(settings, string.Format(AppDefault.ToolActionRunProgram, $"{application.Name} {arguments}".Trim()));
 
             var processInfo = new ProcessStartInfo
             {
@@ -185,12 +190,13 @@ namespace Amuse.App.Tools
             if (target.StartsWith("http://", StringComparison.OrdinalIgnoreCase) || target.StartsWith("https://", StringComparison.OrdinalIgnoreCase))
             {
                 var uri = ToolHelper.GetWebUri(target);
+                await CheckExecuteAccess(settings, string.Format(AppDefault.ToolActionOpenLink, uri.AbsoluteUri));
                 Process.Start(new ProcessStartInfo { FileName = uri.AbsoluteUri, UseShellExecute = true });
                 return new OpenResult(uri.AbsoluteUri, "open", "Url");
             }
 
             // Path
-            var path = Path.GetFullPath(Environment.ExpandEnvironmentVariables(target));
+            var path = ToolHelper.GetLocalPath(target);
             var isDirectory = Directory.Exists(path);
             if (!isDirectory && !File.Exists(path))
                 throw new FileNotFoundException($"'{target}' is not a valid url, file or folder.");
@@ -208,9 +214,8 @@ namespace Amuse.App.Tools
                 return new OpenResult(path, "open", "Folder");
             }
 
-            // Programs and scripts
-            if (ProgramExtensions.Contains(Path.GetExtension(path)))
-                await CheckDangerousAccess(settings, string.Format(AppDefault.ToolActionRunProgram, path));
+            if (!DocumentExtensions.Contains(Path.GetExtension(path)))
+                await CheckExecuteAccess(settings, string.Format(AppDefault.ToolActionRunProgram, path));
 
             Process.Start(new ProcessStartInfo { FileName = path, UseShellExecute = true });
             return new OpenResult(path, "open", "File");

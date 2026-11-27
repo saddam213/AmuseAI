@@ -18,8 +18,8 @@ namespace Amuse.App.Views
         /// <param name="downloadService">The download service.</param>
         /// <param name="historyService">The history service.</param>
         /// <param name="logger">The logger.</param>
-        public SettingsAudioView(Settings settings, NavigationService navigationService, IModelDownloadService downloadService, IHistoryService historyService, ILogger<SettingsAudioView> logger)
-            : base(MediaType.Audio, settings, navigationService, downloadService, historyService, logger)
+        public SettingsAudioView(Settings settings, NavigationService navigationService, IModelDownloadService downloadService, IModelAccessService modelAccessService, IHistoryService historyService, ILogger<SettingsAudioView> logger)
+            : base(MediaType.Audio, settings, navigationService, downloadService, modelAccessService, historyService, logger)
         {
             InitializeComponent();
         }

@@ -134,7 +134,7 @@ namespace Amuse.Common
         /// <param name="tensorMetadata">The shapes.</param>
         /// <returns>List&lt;Tensor&lt;System.Single&gt;&gt;.</returns>
         /// <exception cref="System.ArgumentNullException"></exception>
-        private static List<Tensor<float>> ReadFromMappedFile(string mapName, IReadOnlyList<int[]> tensorMetadata)
+        internal static List<Tensor<float>> ReadFromMappedFile(string mapName, IReadOnlyList<int[]> tensorMetadata)
         {
             ArgumentException.ThrowIfNullOrEmpty(mapName);
             ArgumentNullException.ThrowIfNull(tensorMetadata);

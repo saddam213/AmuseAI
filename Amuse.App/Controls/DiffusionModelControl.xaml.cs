@@ -57,6 +57,9 @@ namespace Amuse.App.Controls
         private UpscaleModel _currentUpscaler;
         private MemoryMode _currentMemoryMode;
         private ExecutionOptionsModel _currentExecutionOptions;
+        private DiffusionCheckpointModel _selectedCheckpoint;
+        private List<DiffusionCheckpointModel> _checkpointCollection;
+        private DataType? _currentCheckpointType;
 
         private bool _currentControlNetEnabled;
         private bool _currentUpscalerEnabled;
@@ -150,7 +153,7 @@ namespace Amuse.App.Controls
         public DiffusionModel SelectedModel
         {
             get { return _selectedModel; }
-            set { SetProperty(ref _selectedModel, value); ValidateSelection(); }
+            set { SetProperty(ref _selectedModel, value); NotifyPropertyChanged(nameof(IsControlNetAvailable)); ValidateSelection(); }
         }
 
         public ControlNetModel SelectedControlNet
@@ -175,6 +178,23 @@ namespace Amuse.App.Controls
         {
             get { return _selectedMemoryMode; }
             set { SetProperty(ref _selectedMemoryMode, value); ValidateSelection(); }
+        }
+
+        public List<DiffusionCheckpointModel> CheckpointCollection
+        {
+            get { return _checkpointCollection; }
+            set { SetProperty(ref _checkpointCollection, value); }
+        }
+
+        public DiffusionCheckpointModel SelectedCheckpoint
+        {
+            get { return _selectedCheckpoint; }
+            set
+            {
+                SetProperty(ref _selectedCheckpoint, value);
+                RefreshMemoryProfile();
+                ValidateSelection();
+            }
         }
 
         public ExecutionOptionsModel SelectedExecutionOptions
@@ -222,7 +242,12 @@ namespace Amuse.App.Controls
         public bool IsControlNetSupported
         {
             get { return _isControlNetSupported; }
-            set { SetProperty(ref _isControlNetSupported, value); }
+            set { SetProperty(ref _isControlNetSupported, value); NotifyPropertyChanged(nameof(IsControlNetAvailable)); }
+        }
+
+        public bool IsControlNetAvailable
+        {
+            get { return _isControlNetSupported && _selectedModel?.ProcessTypes.Contains(ProcessType.ImageControlNet) == true; }
         }
 
         public bool IsControlNetEnabled
@@ -276,11 +301,14 @@ namespace Amuse.App.Controls
 
         private async Task LoadAsync()
         {
-            if (await IsDownloadingAsync())
+            var isReady = await DownloadService.PrepareLoadAsync(_selectedModel, _selectedCheckpoint?.Type, GetPipelineModels());
+            RefreshCheckpointSelection();
+            if (!isReady)
                 return;
 
             _currentDevice = SelectedDevice;
             _currentModel = SelectedModel;
+            _currentCheckpointType = _currentModel.Checkpoint?.Type;
             _currentControlNet = SelectedControlNet;
             _currentExtractor = SelectedExtractor;
             _currentLora = _isLoraEnabled ? [.. LoraAdapters] : default;
@@ -297,6 +325,7 @@ namespace Amuse.App.Controls
             {
                 Device = _currentDevice,
                 DiffusionModel = _currentModel,
+                CheckpointType = _currentCheckpointType,
                 ControlNetModel = _isControlNetEnabled ? _currentControlNet : default,
                 ExtractModel = _currentExtractorEnabled ? _currentExtractor : default,
                 UpscaleModel = _currentUpscalerEnabled ? _currentUpscaler : default,
@@ -321,6 +350,7 @@ namespace Amuse.App.Controls
         private Task UnloadAsync()
         {
             _currentModel = default;
+            _currentCheckpointType = default;
 
             IsSelectionValid = false;
             LoraAdapters.Clear();
@@ -406,6 +436,7 @@ namespace Amuse.App.Controls
         {
             return _currentDevice != SelectedDevice
                 || _currentModel != SelectedModel
+                || _currentCheckpointType != SelectedCheckpoint?.Type
                 || _currentControlNet != SelectedControlNet
                 || _currentControlNetEnabled != _isControlNetEnabled
                 || _currentExtractor != SelectedExtractor
@@ -598,6 +629,9 @@ namespace Amuse.App.Controls
             {
                 ModelCollectionView.Refresh();
                 SelectedModel = ModelCollectionView.Cast<DiffusionModel>().FirstOrDefault(x => x == _currentModel)
+                             ?? ModelCollectionView.Cast<DiffusionModel>().FirstOrDefault(x => x.IsDefault && x.Status == ModelStatusType.Installed && x.ProcessTypes.Contains(_processType))
+                             ?? ModelCollectionView.Cast<DiffusionModel>().FirstOrDefault(x => x.Status == ModelStatusType.Installed)
+                             ?? ModelCollectionView.Cast<DiffusionModel>().FirstOrDefault(x => x.IsDefault && x.ProcessTypes.Contains(_processType))
                              ?? ModelCollectionView.Cast<DiffusionModel>().FirstOrDefault();
             }
 
@@ -626,6 +660,9 @@ namespace Amuse.App.Controls
                 SetDefaultLora();
             }
 
+            if (IsControlNetEnabled && !IsControlNetAvailable)
+                IsControlNetEnabled = false;
+
             if (ControlNetCollectionView is not null)
             {
                 ControlNetCollectionView.Refresh();
@@ -633,6 +670,7 @@ namespace Amuse.App.Controls
                                   ?? ControlNetCollectionView.Cast<ControlNetModel>().FirstOrDefault();
             }
 
+            RefreshCheckpointSelection();
             RefreshMemoryProfile();
             if (_selectedModel is null)
                 return;
@@ -673,6 +711,16 @@ namespace Amuse.App.Controls
 
 
         /// <summary>
+        /// Refreshes the checkpoint sets and the selected set from the selected model.
+        /// </summary>
+        private void RefreshCheckpointSelection()
+        {
+            CheckpointCollection = _selectedModel?.Checkpoints;
+            SelectedCheckpoint = _selectedModel?.Checkpoint;
+        }
+
+
+        /// <summary>
         /// Refreshes the backend descriptions and the mode Auto resolves to for the selected model and device.
         /// </summary>
         private void RefreshMemoryProfile()
@@ -683,7 +731,7 @@ namespace Amuse.App.Controls
             if (_selectedDevice is null || _selectedModel is null)
                 return;
 
-            MemoryModes[0].DetectedMode = Extensions.ResolveMemoryMode(_selectedModel.MemorySize, _selectedDevice.MemoryGB);
+            MemoryModes[0].DetectedMode = Extensions.ResolveMemoryMode(_selectedCheckpoint?.MemorySize ?? _selectedModel.MemorySize, _selectedDevice.MemoryGB);
         }
 
 
@@ -707,6 +755,7 @@ namespace Amuse.App.Controls
 
             SelectedDevice = pipeline.Device;
             SelectedModel = pipeline.DiffusionModel;
+            RefreshCheckpointSelection();
 
             SelectedMemoryMode = MemoryModes.FirstOrDefault(x => x.MemoryMode == pipeline.MemoryMode);
             SelectedExecutionOptions = _selectedModel?.UserExecutionOptions ?? new ExecutionOptionsModel();
@@ -772,6 +821,8 @@ namespace Amuse.App.Controls
                 LoraCollectionView?.Refresh();
                 if (!ModelCollectionView.IsEmpty && _selectedModel == null)
                     ModelCollectionView.MoveCurrentToFirst();
+
+                RefreshCheckpointSelection();
             }
 
             if (ControlNetCollectionView != null)
@@ -791,96 +842,31 @@ namespace Amuse.App.Controls
             if (UpscaleCollectionView != null)
             {
                 UpscaleCollectionView.Refresh();
-                if (!UpscaleCollectionView.IsEmpty && _selectedExtractor == null && _isUpscalerEnabled)
+                if (!UpscaleCollectionView.IsEmpty && _selectedUpscaler == null && _isUpscalerEnabled)
                     UpscaleCollectionView.MoveCurrentToFirst();
             }
         }
 
 
-        private async Task<bool> IsDownloadingAsync()
+        /// <summary>
+        /// Gets the enabled models the pipeline needs besides the diffusion model.
+        /// </summary>
+        private List<IDownloadModel> GetPipelineModels()
         {
-            var status = GetPipelineStatus();
-            if (status.Contains(ModelStatusType.Downloading) || status.Contains(ModelStatusType.DownloadQueue) || status.Contains(ModelStatusType.DownloadFailed))
-            {
-                await DialogService.ShowMessageAsync("Model Downloading", "This model is downloading or queued for download", TensorStack.WPF.Dialogs.MessageDialogType.Ok, TensorStack.WPF.Dialogs.MessageBoxIconType.Info, TensorStack.WPF.Dialogs.MessageBoxStyleType.Info);
-                return true;
-            }
-            else if (status.Contains(ModelStatusType.Available) || status.Contains(ModelStatusType.Unknown))
-            {
-                var queueDownload = await DialogService.ShowMessageAsync("Queue Download", "Would you like to queue this model for download?", TensorStack.WPF.Dialogs.MessageDialogType.YesNo, TensorStack.WPF.Dialogs.MessageBoxIconType.Question, TensorStack.WPF.Dialogs.MessageBoxStyleType.Info);
-                if (queueDownload)
-                {
-                    // LoraAdapters
-                    if (_isLoraEnabled && !LoraAdapters.IsNullOrEmpty())
-                    {
-                        foreach (var adapter in LoraAdapters.Where(x => x.Status != ModelStatusType.Installed))
-                        {
-                            if (!await DownloadService.QueueAsync(adapter))
-                                return true;
-                        }
-                    }
-
-                    // ControlNet
-                    if (_isControlNetEnabled && _selectedControlNet != null && _selectedControlNet.Status != ModelStatusType.Installed)
-                    {
-                        if (!await DownloadService.QueueAsync(_selectedControlNet))
-                            return true;
-                    }
-
-                    // Extract
-                    if (_isExtractorEnabled && _selectedExtractor != null && _selectedExtractor.Status != ModelStatusType.Installed)
-                    {
-                        if (!await DownloadService.QueueAsync(_selectedExtractor))
-                            return true;
-                    }
-
-                    // Upscale
-                    if (_isUpscalerEnabled && _selectedUpscaler != null && _selectedUpscaler.Status != ModelStatusType.Installed)
-                    {
-                        if (!await DownloadService.QueueAsync(_selectedUpscaler))
-                            return true;
-                    }
-
-                    // Base Model
-                    if (_selectedModel.Status != ModelStatusType.Installed)
-                    {
-                        if (!await DownloadService.QueueAsync(_selectedModel))
-                            return true;
-                    }
-                    await NavigationService.NavigateAsync((int)View.Models);
-                }
-                return true;
-            }
-            return false;
-        }
-
-
-        private List<ModelStatusType> GetPipelineStatus()
-        {
-            var statuses = new List<ModelStatusType> { _selectedModel.Status };
-            if (_isControlNetEnabled && _selectedControlNet != null)
-            {
-                statuses.Add(_selectedControlNet.Status);
-            }
-
+            var models = new List<IDownloadModel>();
             if (_isLoraEnabled && !LoraAdapters.IsNullOrEmpty())
-            {
-                foreach (var lora in LoraAdapters)
-                {
-                    statuses.Add(lora.Status);
-                }
-            }
+                models.AddRange(LoraAdapters);
+
+            if (_isControlNetEnabled && _selectedControlNet != null)
+                models.Add(_selectedControlNet);
 
             if (_isExtractorEnabled && _selectedExtractor != null)
-            {
-                statuses.Add(_selectedExtractor.Status);
-            }
+                models.Add(_selectedExtractor);
 
             if (_isUpscalerEnabled && _selectedUpscaler != null)
-            {
-                statuses.Add(_selectedUpscaler.Status);
-            }
-            return statuses;
+                models.Add(_selectedUpscaler);
+
+            return models;
         }
 
 
@@ -900,15 +886,21 @@ namespace Amuse.App.Controls
         {
             if (sender.Equals("Diffusion"))
             {
+                var mediaType = _processType switch
+                {
+                    ProcessType.TextToVideo or ProcessType.ImageToVideo or ProcessType.VideoToVideo or ProcessType.MediaToVideo => MediaType.Video,
+                    ProcessType.TextToAudio or ProcessType.AudioToText => MediaType.Audio,
+                    _ => MediaType.Image
+                };
                 var dialog = DialogService.GetDialog<DiffusionModelWizardDialog>();
-                if (await dialog.ShowDialogAsync())
+                if (await dialog.AddAsync(mediaType, _processType))
                 {
                     SelectedModel = dialog.SelectedTemplate;
                 }
             }
             else if (sender.Equals("ControlNet"))
             {
-                var dialog = DialogService.GetDialog<ControlNetModelDialog>();
+                var dialog = DialogService.GetDialog<ControlNetModelWizardDialog>();
                 if (await dialog.AddAsync(_selectedModel.Pipeline))
                 {
                     SelectedControlNet = dialog.ControlNetModel;
@@ -916,7 +908,7 @@ namespace Amuse.App.Controls
             }
             else if (sender.Equals("LoraAdapter"))
             {
-                var dialog = DialogService.GetDialog<LoraModelDialog>();
+                var dialog = DialogService.GetDialog<LoraModelWizardDialog>();
                 if (await dialog.AddAsync(_selectedModel.Pipeline))
                 {
                     LoraCollectionView?.Refresh();
@@ -924,7 +916,7 @@ namespace Amuse.App.Controls
             }
             else if (sender.Equals("Extract"))
             {
-                var dialog = DialogService.GetDialog<ExtractModelDialog>();
+                var dialog = DialogService.GetDialog<ExtractModelWizardDialog>();
                 if (await dialog.AddAsync())
                 {
                     SelectedExtractor = dialog.ExtractModel;
@@ -932,7 +924,7 @@ namespace Amuse.App.Controls
             }
             else if (sender.Equals("Upscale"))
             {
-                var dialog = DialogService.GetDialog<UpscaleModelDialog>();
+                var dialog = DialogService.GetDialog<UpscaleModelWizardDialog>();
                 if (await dialog.AddAsync())
                 {
                     SelectedUpscaler = dialog.UpscaleModel;

@@ -15,10 +15,19 @@
         IsHitTestVisible="False"
         IsTabStop="False"
         Name="UI">
-    <Border DataContext="{Binding ElementName=UI}" UseLayoutRounding="True" Background="#FF272727" BorderBrush="#80d3ae58" BorderThickness="1" SnapsToDevicePixels="True" RenderOptions.BitmapScalingMode="Fant">
-        <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center">
-            <Image Source="/Images/Splash_Logo.png" Width="200" Opacity=".95" />
-            <TextBlock Text="{Binding Title}" TextAlignment="Center" FontSize="15"/>
-        </StackPanel>
+    <Border DataContext="{Binding ElementName=UI}" UseLayoutRounding="True" BorderBrush="#800D72BA" BorderThickness="1,1,0,0" SnapsToDevicePixels="True" RenderOptions.BitmapScalingMode="Fant">
+        <Border BorderBrush="#8074B768" BorderThickness="0,0,1,1">
+            <Border.Background>
+                <LinearGradientBrush StartPoint="0,0" EndPoint="1,1">
+                    <GradientStop Color="#FF23323D" Offset="0"/>
+                    <GradientStop Color="#FF272727" Offset="0.5"/>
+                    <GradientStop Color="#FF30382F" Offset="1"/>
+                </LinearGradientBrush>
+            </Border.Background>
+            <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center">
+                <Image Source="/Images/Splash_Logo.png" Width="200" Opacity=".95" />
+                <TextBlock Text="{Binding Title}" TextAlignment="Center" FontSize="15"/>
+            </StackPanel>
+        </Border>
     </Border>
 </Window>

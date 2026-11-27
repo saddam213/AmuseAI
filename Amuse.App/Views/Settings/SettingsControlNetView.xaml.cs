@@ -22,22 +22,21 @@ namespace Amuse.App.Views
     {
         private ControlNetModel _selectedModel;
         private string _filterText;
-        private string _filterBackend;
-        private string _filterPipeline;
-        private string _filterStatus;
+        private FilterOption _filterBackend;
+        private FilterOption _filterPipeline;
+        private FilterOption _filterStatus;
 
-        public SettingsControlNetView(Settings settings, NavigationService navigationService, IModelDownloadService downloadService, IHistoryService historyService, ILogger<SettingsControlNetView> logger)
-            : base(settings, navigationService, downloadService, historyService, logger)
+        public SettingsControlNetView(Settings settings, NavigationService navigationService, IModelDownloadService downloadService, IModelAccessService modelAccessService, IHistoryService historyService, ILogger<SettingsControlNetView> logger)
+            : base(settings, navigationService, downloadService, modelAccessService, historyService, logger)
         {
-            FilterBackends = ["Show All", .. Enum.GetNames<BackendType>()];
-            FilterStatuses = ["Show All", "Installed", "Unknown"];
-            FilterPipelines = ["Show All", .. settings.DiffusionPipelines.Select(x => x.ToString())];
+            FilterBackends = [FilterOption.ShowAll(), .. Enum.GetValues<BackendType>().Where(x => x != BackendType.HuggingFace).Select(x => FilterOption.FromEnum(x))];
+            FilterStatuses = FilterOption.ModelStatuses();
+            FilterPipelines = [FilterOption.ShowAll(), .. settings.DiffusionPipelines.Select(x => FilterOption.FromValue(x.ToString()))];
             FilterBackend = FilterBackends[0];
             FilterStatus = FilterStatuses[0];
             FilterPipeline = FilterPipelines[0];
             SaveCommand = new AsyncRelayCommand(SaveAsync);
             AddModelCommand = new AsyncRelayCommand(AddModelAsync);
-            AddModelWizardCommand = new AsyncRelayCommand(AddModelWizardAsync);
             CopyModelCommand = new AsyncRelayCommand(CopyModelAsync, () => SelectedModel is not null);
             UpdateModelCommand = new AsyncRelayCommand(UpdateModelAsync, () => SelectedModel?.Id > Utils.FixedIdRange);
             RemoveModelCommand = new AsyncRelayCommand(RemoveModelAsync, () => SelectedModel?.Id > Utils.FixedIdRange);
@@ -59,7 +58,6 @@ namespace Amuse.App.Views
         public override View View => View.SettingsControlNet;
         public AsyncRelayCommand SaveCommand { get; }
         public AsyncRelayCommand AddModelCommand { get; }
-        public AsyncRelayCommand AddModelWizardCommand { get; }
         public AsyncRelayCommand CopyModelCommand { get; }
         public AsyncRelayCommand UpdateModelCommand { get; }
         public AsyncRelayCommand RemoveModelCommand { get; }
@@ -71,9 +69,9 @@ namespace Amuse.App.Views
         public AsyncRelayCommand DownloadModelCancelCommand { get; }
         public AsyncRelayCommand FilterClearCommand { get; }
         public ListCollectionView ModelCollection { get; }
-        public string[] FilterBackends { get; }
-        public string[] FilterPipelines { get; }
-        public string[] FilterStatuses { get; }
+        public FilterOption[] FilterBackends { get; }
+        public FilterOption[] FilterPipelines { get; }
+        public FilterOption[] FilterStatuses { get; }
 
         public ControlNetModel SelectedModel
         {
@@ -87,19 +85,19 @@ namespace Amuse.App.Views
             set { SetProperty(ref _filterText, value); ModelCollection?.Refresh(); }
         }
 
-        public string FilterBackend
+        public FilterOption FilterBackend
         {
             get { return _filterBackend; }
             set { SetProperty(ref _filterBackend, value); ModelCollection?.Refresh(); }
         }
 
-        public string FilterPipeline
+        public FilterOption FilterPipeline
         {
             get { return _filterPipeline; }
             set { SetProperty(ref _filterPipeline, value); ModelCollection?.Refresh(); }
         }
 
-        public string FilterStatus
+        public FilterOption FilterStatus
         {
             get { return _filterStatus; }
             set { SetProperty(ref _filterStatus, value); ModelCollection?.Refresh(); }
@@ -119,20 +117,20 @@ namespace Amuse.App.Views
                 if (obj is not ControlNetModel model)
                     return false;
 
-                if (model.Status != ModelStatusType.Installed && model.Status != ModelStatusType.Unknown)
+                if (model.Id <= Utils.FixedIdRange && model.Status != ModelStatusType.Installed && model.Status != ModelStatusType.Unknown)
                     return false;
 
                 var isvalid = true;
-                if (!string.IsNullOrEmpty(_filterStatus))
+                if (!string.IsNullOrEmpty(_filterStatus?.Value))
                 {
-                    if (Enum.TryParse<ModelStatusType>(_filterStatus, out var statusType))
+                    if (Enum.TryParse<ModelStatusType>(_filterStatus.Value, out var statusType))
                     {
                         isvalid = isvalid && model.Status == statusType;
                     }
                 }
-                if (!string.IsNullOrEmpty(_filterPipeline))
+                if (!string.IsNullOrEmpty(_filterPipeline?.Value))
                 {
-                    isvalid = isvalid && (_filterPipeline == FilterPipelines[0] || model.Pipeline.ToString() == _filterPipeline);
+                    isvalid = isvalid && model.Pipeline.ToString() == _filterPipeline.Value;
                 }
                 if (!string.IsNullOrEmpty(_filterText))
                 {
@@ -166,17 +164,12 @@ namespace Amuse.App.Views
 
         private async Task AddModelAsync()
         {
-            var dialog = DialogService.GetDialog<ControlNetModelDialog>();
+            var dialog = DialogService.GetDialog<ControlNetModelWizardDialog>();
             if (await dialog.AddAsync())
             {
                 await SaveAsync();
+                SelectedModel = dialog.ControlNetModel;
             }
-        }
-
-
-        private Task AddModelWizardAsync()
-        {
-            return Task.CompletedTask; //TODO: Model Wizard
         }
 
 
@@ -219,7 +212,7 @@ namespace Amuse.App.Views
                 var modelImports = await Json.LoadArrayAsync<ControlNetModel>(importPath);
                 if (modelImports.IsNullOrEmpty())
                 {
-                    await DialogService.ShowMessageAsync(AppErrors.ImportErrorTitle, AppErrors.ImportModel);
+                    await DialogService.ShowErrorAsync(AppErrors.ImportErrorTitle, AppErrors.ImportModelFailed);
                     return;
                 }
 
@@ -253,6 +246,10 @@ namespace Amuse.App.Views
         {
             if (await DialogService.ShowMessageAsync(AppDefault.DeleteModel, AppDefault.DeleteModelMessage, TensorStack.WPF.Dialogs.MessageDialogType.YesNo, TensorStack.WPF.Dialogs.MessageBoxIconType.Warning, TensorStack.WPF.Dialogs.MessageBoxStyleType.Danger))
             {
+                if (!await ModelAccessService.RequestModelReleaseAsync(_selectedModel))
+                    return;
+
+                await DownloadService.CancelAsync(_selectedModel);
                 await Task.Run(() => _selectedModel.Delete(Settings));
                 _selectedModel.Status = ModelStatusType.Available;
                 await SaveAsync();
@@ -262,7 +259,7 @@ namespace Amuse.App.Views
 
         private async Task DownloadModelAsync()
         {
-            await DownloadService.QueueAsync(_selectedModel);
+            await DownloadService.DownloadAsync(_selectedModel);
         }
 
 

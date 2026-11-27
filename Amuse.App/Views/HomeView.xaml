@@ -13,21 +13,8 @@
     <Views:ViewBase.Resources>
 
         <!--Card-->
-        <Style x:Key="HomeCard" TargetType="{x:Type Border}">
-            <Setter Property="Background" Value="{StaticResource ContainerBackground}"/>
-            <Setter Property="BorderBrush" Value="{StaticResource ContainerBorder}"/>
-            <Setter Property="BorderThickness" Value="1"/>
-            <Setter Property="CornerRadius" Value="4"/>
-            <Setter Property="Padding" Value="14,10"/>
+        <Style x:Key="HomeCard" TargetType="{x:Type Border}" BasedOn="{StaticResource CardBorder}">
             <Setter Property="Margin" Value="5,5,10,5"/>
-        </Style>
-
-        <!--Section Header-->
-        <Style x:Key="HomeSectionHeader" TargetType="{x:Type TextBlock}" BasedOn="{StaticResource {x:Type TextBlock}}">
-            <Setter Property="FontSize" Value="16"/>
-            <Setter Property="FontWeight" Value="SemiBold"/>
-            <Setter Property="Opacity" Value=".9"/>
-            <Setter Property="Margin" Value="5,16,5,2"/>
         </Style>
 
         <!--Create Shortcut-->
@@ -42,7 +29,7 @@
         <!--Backend Status Icon-->
         <Style x:Key="HomeBackendStatusIcon" TargetType="{x:Type CommonControls:FontAwesome}" BasedOn="{StaticResource {x:Type CommonControls:FontAwesome}}">
             <Setter Property="Icon" Value="f05e"/>
-            <Setter Property="Size" Value="13"/>
+            <Setter Property="Size" Value="11"/>
             <Setter Property="Color" Value="{StaticResource DefaultForeground}"/>
             <Setter Property="Opacity" Value=".35"/>
             <Style.Triggers>
@@ -64,32 +51,35 @@
             <Setter Property="Text" Value="{CommonControls:Localize BackendUnsupported}"/>
             <Setter Property="Opacity" Value=".35"/>
             <Setter Property="FontSize" Value="11"/>
-            <Setter Property="Margin" Value="4,0,0,0"/>
+            <Setter Property="Margin" Value="5,0,0,0"/>
             <Setter Property="VerticalAlignment" Value="Center"/>
             <Style.Triggers>
                 <DataTrigger Binding="{Binding Status}" Value="Ready">
                     <Setter Property="Text" Value="{CommonControls:Localize BackendReady}"/>
-                    <Setter Property="Opacity" Value=".9"/>
+                    <Setter Property="Foreground" Value="{StaticResource SuccessColour}"/>
+                    <Setter Property="Opacity" Value="1"/>
                 </DataTrigger>
                 <DataTrigger Binding="{Binding Status}" Value="NotInstalled">
                     <Setter Property="Text" Value="{CommonControls:Localize BackendNotInstalled}"/>
-                    <Setter Property="Opacity" Value=".9"/>
+                    <Setter Property="Foreground" Value="{StaticResource WarningColour}"/>
+                    <Setter Property="Opacity" Value="1"/>
                 </DataTrigger>
             </Style.Triggers>
         </Style>
 
-        <!--Backend Status Cell-->
-        <Style x:Key="HomeBackendStatusCell" TargetType="{x:Type StackPanel}">
-            <Setter Property="Orientation" Value="Horizontal"/>
-            <Setter Property="VerticalAlignment" Value="Center"/>
-            <Setter Property="Background" Value="Transparent"/>
+        <!--Backend Status Tag-->
+        <Style x:Key="HomeBackendStatusTag" TargetType="{x:Type Border}" BasedOn="{StaticResource StatusTagBorder}">
             <Setter Property="ToolTipService.InitialShowDelay" Value="200"/>
             <Setter Property="ToolTip" Value="{CommonControls:Localize ToolTip_BackendUnsupported}"/>
             <Style.Triggers>
                 <DataTrigger Binding="{Binding Status}" Value="Ready">
+                    <Setter Property="Background" Value="{StaticResource SuccessTintBrush}"/>
+                    <Setter Property="BorderBrush" Value="{StaticResource SuccessTintBorderBrush}"/>
                     <Setter Property="ToolTip" Value="{CommonControls:Localize ToolTip_BackendReady}"/>
                 </DataTrigger>
                 <DataTrigger Binding="{Binding Status}" Value="NotInstalled">
+                    <Setter Property="Background" Value="{StaticResource WarningTintBrush}"/>
+                    <Setter Property="BorderBrush" Value="{StaticResource WarningTintBorderBrush}"/>
                     <Setter Property="ToolTip" Value="{CommonControls:Localize ToolTip_BackendNotInstalled}"/>
                 </DataTrigger>
             </Style.Triggers>
@@ -97,19 +87,35 @@
 
         <!--Model Card-->
         <DataTemplate x:Key="HomeModelTemplate">
-            <Button Style="{StaticResource HighlightButton}" Height="64" Margin="0,0,6,6" Padding="4,6" HorizontalContentAlignment="Stretch" VerticalContentAlignment="Stretch"
+            <Button Style="{StaticResource TileButton}" BorderBrush="{StaticResource AccentBorderBrush}" Height="66" Margin="0,0,8,8" Padding="10,7" HorizontalContentAlignment="Stretch" VerticalContentAlignment="Stretch"
                     Command="{Binding OpenModelCommand, RelativeSource={RelativeSource AncestorType={x:Type local:HomeView}}}" CommandParameter="{Binding}">
                 <DockPanel>
+
+                    <!--Logo-->
+                    <Grid DockPanel.Dock="Left" Width="38" Height="38" Margin="0,0,10,0" VerticalAlignment="Center">
+                        <Border Style="{StaticResource MediaTypeBorder}"/>
+                        <CommonControls:FontAwesome Style="{StaticResource MediaTypeFontAwesome}" Size="16" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                        <Border RenderOptions.BitmapScalingMode="HighQuality" Visibility="{Binding Metadata.PublisherModel.IconSource, Converter={StaticResource NullVisibilityConverter}, FallbackValue=Collapsed}">
+                            <Border.Background>
+                                <ImageBrush ImageSource="{Binding Metadata.PublisherModel.IconSource, FallbackValue={x:Null}}" Stretch="UniformToFill"/>
+                            </Border.Background>
+                        </Border>
+                    </Grid>
+
+                    <!--Details-->
                     <DockPanel DockPanel.Dock="Bottom">
-                        <CommonControls:FontAwesome DockPanel.Dock="Right" Style="{StaticResource ModelStatusFontAwesome}" Tag="{Binding Status}" Size="12" ToolTipService.InitialShowDelay="200"/>
+                        <CommonControls:FontAwesome DockPanel.Dock="Right" Style="{StaticResource ModelStatusFontAwesome}" Tag="{Binding Status}" Size="12" VerticalAlignment="Center" ToolTipService.InitialShowDelay="200"/>
                         <StackPanel Orientation="Horizontal">
-                            <Border Background="{StaticResource AccentColour1}" CornerRadius="2" VerticalAlignment="Center">
-                                <TextBlock Text="{Binding Backend, Converter={StaticResource EnumShortNameConverter}}" Foreground="White" FontSize="10" Margin="5,1" Opacity=".9"/>
+                            <Border Style="{StaticResource TagBorder}">
+                                <TextBlock Style="{StaticResource TagTextBlock}" Text="{Binding Backend, Converter={StaticResource EnumShortNameConverter}}"/>
                             </Border>
                             <TextBlock Text="{Binding MediaType}" FontSize="11" Opacity=".6" Margin="6,0,0,0" VerticalAlignment="Center"/>
                         </StackPanel>
                     </DockPanel>
-                    <TextBlock Text="{Binding Name}" FontSize="13" FontWeight="SemiBold" TextTrimming="CharacterEllipsis" VerticalAlignment="Top"/>
+                    <StackPanel VerticalAlignment="Top">
+                        <TextBlock Text="{Binding Name}" FontSize="13" FontWeight="SemiBold" TextTrimming="CharacterEllipsis"/>
+                        <TextBlock Text="{Binding Metadata.PublisherModel.Name, FallbackValue={x:Null}}" FontSize="11" Opacity=".55" TextTrimming="CharacterEllipsis"/>
+                    </StackPanel>
                 </DockPanel>
             </Button>
         </DataTemplate>
@@ -121,225 +127,291 @@
     </Views:ViewBase.Resources>
 
     <Grid DataContext="{Binding RelativeSource={RelativeSource AncestorType={x:Type local:HomeView}}}">
+        <ScrollViewer VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Disabled">
+            <StackPanel Margin="25,15,25,20" MaxWidth="1500">
 
-        <StackPanel Margin="25,15,25,20" MaxWidth="1500">
-
-            <!--Header-->
-            <StackPanel Margin="5,0,5,6">
-                <TextBlock Text="{CommonControls:Localize HomeTitle}" FontSize="28" FontWeight="SemiBold"/>
-                <TextBlock Text="{CommonControls:Localize HomeSubtitle}" FontSize="13" Opacity=".7"/>
-            </StackPanel>
-
-            <!--Create-->
-            <UniformGrid Columns="4">
-
-                <!--Image-->
-                <Border Style="{StaticResource HomeCard}">
-                    <DockPanel>
-                        <StackPanel DockPanel.Dock="Top" Orientation="Horizontal" Margin="0,0,0,2">
-                            <CommonControls:FontAwesome Icon="f03e" IconStyle="SharpLight" Size="20" Color="{StaticResource AccentColour2}" VerticalAlignment="Center"/>
-                            <TextBlock Text="{CommonControls:Localize Image}" FontSize="18" FontWeight="SemiBold" Margin="8,0,0,0" VerticalAlignment="Center"/>
+                <!--Hero-->
+                <Border Style="{StaticResource HomeCard}" Margin="5,0,10,10" ClipToBounds="True">
+                    <Grid>
+                        <Border Opacity=".11" IsHitTestVisible="False">
+                            <Border.Background>
+                                <LinearGradientBrush StartPoint="0,0" EndPoint="1,1">
+                                    <GradientStop Color="{StaticResource Accent1}" Offset="0"/>
+                                    <GradientStop Color="{StaticResource Accent2}" Offset="1"/>
+                                </LinearGradientBrush>
+                            </Border.Background>
+                        </Border>
+                        <Canvas IsHitTestVisible="False" ClipToBounds="True">
+                            <CommonControls:FontAwesome Icon="f890" IconStyle="SharpLight" Size="150" Color="{StaticResource DefaultForeground}" Opacity=".08" Canvas.Right="40" Canvas.Top="-22"/>
+                        </Canvas>
+                        <StackPanel Margin="24,14,24,16">
+                            <StackPanel Orientation="Horizontal" Margin="0,0,0,2">
+                                <CommonControls:FontAwesome Icon="f890" IconStyle="Solid" Size="13" Color="{StaticResource AccentColour2}" VerticalAlignment="Center"/>
+                                <TextBlock Text="{CommonControls:Localize HomeWelcome}" FontSize="13" FontWeight="SemiBold" Opacity=".85" Margin="7,0,0,0" VerticalAlignment="Center"/>
+                            </StackPanel>
+                            <TextBlock Text="{CommonControls:Localize HomeTitle}" FontSize="28" FontWeight="SemiBold"/>
+                            <TextBlock Text="{CommonControls:Localize HomeSubtitle}" FontSize="14" Opacity=".75" Margin="0,2,0,0"/>
                         </StackPanel>
-                        <TextBlock DockPanel.Dock="Top" Text="{CommonControls:Localize HomeImageDescription}" TextWrapping="Wrap" Opacity=".7" Margin="0,0,0,8"/>
-                        <WrapPanel>
-                            <CommonControls:IconButton Style="{StaticResource HomeShortcutButton}" Text="{CommonControls:Localize Menu_TextToImage}" Icon="f894" Command="{Binding NavigateCommand}" CommandParameter="{x:Static Views:View.TextToImage}"/>
-                            <CommonControls:IconButton Style="{StaticResource HomeShortcutButton}" Text="{CommonControls:Localize Menu_ImageToImage}" Icon="f03e" Command="{Binding NavigateCommand}" CommandParameter="{x:Static Views:View.ImageToImage}"/>
-                            <CommonControls:IconButton Style="{StaticResource HomeShortcutButton}" Text="{CommonControls:Localize Menu_ImageEdit}" Icon="f4a4" Command="{Binding NavigateCommand}" CommandParameter="{x:Static Views:View.ImageEdit}"/>
-                            <CommonControls:IconButton Style="{StaticResource HomeShortcutButton}" Text="{CommonControls:Localize Menu_ImageInpaint}" Icon="f044" Command="{Binding NavigateCommand}" CommandParameter="{x:Static Views:View.ImageInpaint}"/>
-                            <CommonControls:IconButton Style="{StaticResource HomeShortcutButton}" Text="{CommonControls:Localize Menu_PaintToImage}" Icon="f1fc" Command="{Binding NavigateCommand}" CommandParameter="{x:Static Views:View.PaintToImage}"/>
-                            <CommonControls:IconButton Style="{StaticResource HomeShortcutButton}" Text="{CommonControls:Localize Menu_ImageUpscale}" Icon="f424" Command="{Binding NavigateCommand}" CommandParameter="{x:Static Views:View.ImageUpscale}"/>
-                        </WrapPanel>
-                    </DockPanel>
+                    </Grid>
                 </Border>
 
-                <!--Video-->
-                <Border Style="{StaticResource HomeCard}">
-                    <DockPanel>
-                        <StackPanel DockPanel.Dock="Top" Orientation="Horizontal" Margin="0,0,0,2">
-                            <CommonControls:FontAwesome Icon="f008" IconStyle="SharpLight" Size="20" Color="{StaticResource AccentColour2}" VerticalAlignment="Center"/>
-                            <TextBlock Text="{CommonControls:Localize Video}" FontSize="18" FontWeight="SemiBold" Margin="8,0,0,0" VerticalAlignment="Center"/>
-                        </StackPanel>
-                        <TextBlock DockPanel.Dock="Top" Text="{CommonControls:Localize HomeVideoDescription}" TextWrapping="Wrap" Opacity=".7" Margin="0,0,0,8"/>
-                        <WrapPanel>
-                            <CommonControls:IconButton Style="{StaticResource HomeShortcutButton}" Text="{CommonControls:Localize Menu_TextToVideo}" Icon="f894" Command="{Binding NavigateCommand}" CommandParameter="{x:Static Views:View.TextToVideo}"/>
-                            <CommonControls:IconButton Style="{StaticResource HomeShortcutButton}" Text="{CommonControls:Localize Menu_ImageToVideo}" Icon="f03e" Command="{Binding NavigateCommand}" CommandParameter="{x:Static Views:View.ImageToVideo}"/>
-                            <CommonControls:IconButton Style="{StaticResource HomeShortcutButton}" Text="{CommonControls:Localize Menu_VideoToVideo}" Icon="f008" Command="{Binding NavigateCommand}" CommandParameter="{x:Static Views:View.VideoToVideo}"/>
-                            <CommonControls:IconButton Style="{StaticResource HomeShortcutButton}" Text="{CommonControls:Localize Menu_MediaToVideo}" Icon="f87c" Command="{Binding NavigateCommand}" CommandParameter="{x:Static Views:View.MediaToVideo}"/>
-                            <CommonControls:IconButton Style="{StaticResource HomeShortcutButton}" Text="{CommonControls:Localize Menu_VideoUpscale}" Icon="f424" Command="{Binding NavigateCommand}" CommandParameter="{x:Static Views:View.VideoUpscale}"/>
-                            <CommonControls:IconButton Style="{StaticResource HomeShortcutButton}" Text="{CommonControls:Localize Menu_VideoInterpolate}" Icon="e4a2" Command="{Binding NavigateCommand}" CommandParameter="{x:Static Views:View.VideoInterpolate}"/>
-                        </WrapPanel>
-                    </DockPanel>
-                </Border>
+                <!--Create-->
+                <UniformGrid Columns="4">
 
-                <!--Audio-->
-                <Border Style="{StaticResource HomeCard}">
-                    <DockPanel>
-                        <StackPanel DockPanel.Dock="Top" Orientation="Horizontal" Margin="0,0,0,2">
-                            <CommonControls:FontAwesome Icon="f001" IconStyle="SharpLight" Size="20" Color="{StaticResource AccentColour2}" VerticalAlignment="Center"/>
-                            <TextBlock Text="{CommonControls:Localize Audio}" FontSize="18" FontWeight="SemiBold" Margin="8,0,0,0" VerticalAlignment="Center"/>
-                        </StackPanel>
-                        <TextBlock DockPanel.Dock="Top" Text="{CommonControls:Localize HomeAudioDescription}" TextWrapping="Wrap" Opacity=".7" Margin="0,0,0,8"/>
-                        <WrapPanel>
-                            <CommonControls:IconButton Style="{StaticResource HomeShortcutButton}" Text="{CommonControls:Localize Menu_TextToMusic}" Icon="f8c9" Command="{Binding NavigateCommand}" CommandParameter="{x:Static Views:View.TextToMusic}"/>
-                            <CommonControls:IconButton Style="{StaticResource HomeShortcutButton}" Text="{CommonControls:Localize Menu_TextToAudio}" Icon="f894" Command="{Binding NavigateCommand}" CommandParameter="{x:Static Views:View.TextToAudio}"/>
-                            <CommonControls:IconButton Style="{StaticResource HomeShortcutButton}" Text="{CommonControls:Localize Menu_AudioToText}" Icon="f001" Command="{Binding NavigateCommand}" CommandParameter="{x:Static Views:View.AudioToText}"/>
-                        </WrapPanel>
-                    </DockPanel>
-                </Border>
+                    <!--Image-->
+                    <Border Style="{StaticResource HomeCard}">
+                        <Grid>
+                            <Border Background="{StaticResource MediaImageGlowBrush}" IsHitTestVisible="False"/>
+                            <DockPanel Margin="14,12,14,8">
+                                <DockPanel DockPanel.Dock="Top" Margin="0,0,0,6">
+                                    <Grid DockPanel.Dock="Left" Width="38" Height="38" Margin="0,0,10,0">
+                                        <Border Style="{StaticResource IconTileBorder}" Background="{StaticResource MediaImageBrush}"/>
+                                        <CommonControls:FontAwesome Icon="f03e" IconStyle="Regular" Size="18" Color="{StaticResource MediaImageBrush}" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                                    </Grid>
+                                    <TextBlock Text="{CommonControls:Localize Image}" FontSize="18" FontWeight="SemiBold" VerticalAlignment="Center"/>
+                                </DockPanel>
+                                <TextBlock DockPanel.Dock="Top" Text="{CommonControls:Localize HomeImageDescription}" TextTrimming="CharacterEllipsis" FontSize="12" Opacity=".7" Margin="0,0,0,8" ToolTip="{CommonControls:Localize HomeImageDescription}" ToolTipService.InitialShowDelay="200"/>
+                                <WrapPanel>
+                                    <CommonControls:IconButton Style="{StaticResource HomeShortcutButton}" IconColor="{StaticResource MediaImageBrush}" Text="{CommonControls:Localize Menu_TextToImage}" Icon="f894" Command="{Binding NavigateCommand}" CommandParameter="{x:Static Views:View.TextToImage}"/>
+                                    <CommonControls:IconButton Style="{StaticResource HomeShortcutButton}" IconColor="{StaticResource MediaImageBrush}" Text="{CommonControls:Localize Menu_ImageEdit}" Icon="f4a4" Command="{Binding NavigateCommand}" CommandParameter="{x:Static Views:View.ImageEdit}"/>
+                                    <CommonControls:IconButton Style="{StaticResource HomeShortcutButton}" IconColor="{StaticResource MediaImageBrush}" Text="{CommonControls:Localize Menu_ImageUpscale}" Icon="f424" Command="{Binding NavigateCommand}" CommandParameter="{x:Static Views:View.ImageUpscale}"/>
+                                </WrapPanel>
+                            </DockPanel>
+                        </Grid>
+                    </Border>
 
-                <!--Text-->
-                <Border Style="{StaticResource HomeCard}">
-                    <DockPanel>
-                        <StackPanel DockPanel.Dock="Top" Orientation="Horizontal" Margin="0,0,0,2">
-                            <CommonControls:FontAwesome Icon="f893" IconStyle="Regular" Size="20" Color="{StaticResource AccentColour2}" VerticalAlignment="Center"/>
-                            <TextBlock Text="{CommonControls:Localize Text}" FontSize="18" FontWeight="SemiBold" Margin="8,0,0,0" VerticalAlignment="Center"/>
-                        </StackPanel>
-                        <TextBlock DockPanel.Dock="Top" Text="{CommonControls:Localize HomeTextDescription}" TextWrapping="Wrap" Opacity=".7" Margin="0,0,0,8"/>
-                        <WrapPanel>
-                            <CommonControls:IconButton Style="{StaticResource HomeShortcutButton}" Text="{CommonControls:Localize Menu_TextConverse}" Icon="e1e7" Command="{Binding NavigateCommand}" CommandParameter="{x:Static Views:View.TextConverse}"/>
-                            <CommonControls:IconButton Style="{StaticResource HomeShortcutButton}" Text="{CommonControls:Localize Menu_TextInstruct}" Icon="e1e3" Command="{Binding NavigateCommand}" CommandParameter="{x:Static Views:View.TextInstruct}"/>
-                            <CommonControls:IconButton Style="{StaticResource HomeShortcutButton}" Text="{CommonControls:Localize Menu_ImageToText}" Icon="f03e" Command="{Binding NavigateCommand}" CommandParameter="{x:Static Views:View.ImageToText}"/>
-                        </WrapPanel>
-                    </DockPanel>
-                </Border>
-            </UniformGrid>
+                    <!--Video-->
+                    <Border Style="{StaticResource HomeCard}">
+                        <Grid>
+                            <Border Background="{StaticResource MediaVideoGlowBrush}" IsHitTestVisible="False"/>
+                            <DockPanel Margin="14,12,14,8">
+                                <DockPanel DockPanel.Dock="Top" Margin="0,0,0,6">
+                                    <Grid DockPanel.Dock="Left" Width="38" Height="38" Margin="0,0,10,0">
+                                        <Border Style="{StaticResource IconTileBorder}" Background="{StaticResource MediaVideoBrush}"/>
+                                        <CommonControls:FontAwesome Icon="f008" IconStyle="Regular" Size="18" Color="{StaticResource MediaVideoBrush}" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                                    </Grid>
+                                    <TextBlock Text="{CommonControls:Localize Video}" FontSize="18" FontWeight="SemiBold" VerticalAlignment="Center"/>
+                                </DockPanel>
+                                <TextBlock DockPanel.Dock="Top" Text="{CommonControls:Localize HomeVideoDescription}" TextTrimming="CharacterEllipsis" FontSize="12" Opacity=".7" Margin="0,0,0,8" ToolTip="{CommonControls:Localize HomeVideoDescription}" ToolTipService.InitialShowDelay="200"/>
+                                <WrapPanel>
+                                    <CommonControls:IconButton Style="{StaticResource HomeShortcutButton}" IconColor="{StaticResource MediaVideoBrush}" Text="{CommonControls:Localize Menu_TextToVideo}" Icon="f894" Command="{Binding NavigateCommand}" CommandParameter="{x:Static Views:View.TextToVideo}"/>
+                                    <CommonControls:IconButton Style="{StaticResource HomeShortcutButton}" IconColor="{StaticResource MediaVideoBrush}" Text="{CommonControls:Localize Menu_ImageToVideo}" Icon="f03e" Command="{Binding NavigateCommand}" CommandParameter="{x:Static Views:View.ImageToVideo}"/>
+                                    <CommonControls:IconButton Style="{StaticResource HomeShortcutButton}" IconColor="{StaticResource MediaVideoBrush}" Text="{CommonControls:Localize Menu_VideoUpscale}" Icon="f424" Command="{Binding NavigateCommand}" CommandParameter="{x:Static Views:View.VideoUpscale}"/>
+                                </WrapPanel>
+                            </DockPanel>
+                        </Grid>
+                    </Border>
 
-            <!--Devices-->
-            <DockPanel Margin="0,16,6,2">
-                <CommonControls:IconButton DockPanel.Dock="Right" Text="{CommonControls:Localize ManageEnvironments}" Icon="f233" IconSize="13" FontSize="12" Width="170" Height="24" Margin="5,0" IconColor="{StaticResource AccentColour2}" Command="{Binding ManageEnvironmentsCommand}"/>
-                <TextBlock Text="{CommonControls:Localize HomeDevices}" Style="{StaticResource HomeSectionHeader}" Margin="5,0"/>
-            </DockPanel>
-            <Border Style="{StaticResource HomeCard}">
-                <StackPanel>
+                    <!--Audio-->
+                    <Border Style="{StaticResource HomeCard}">
+                        <Grid>
+                            <Border Background="{StaticResource MediaAudioGlowBrush}" IsHitTestVisible="False"/>
+                            <DockPanel Margin="14,12,14,8">
+                                <DockPanel DockPanel.Dock="Top" Margin="0,0,0,6">
+                                    <Grid DockPanel.Dock="Left" Width="38" Height="38" Margin="0,0,10,0">
+                                        <Border Style="{StaticResource IconTileBorder}" Background="{StaticResource MediaAudioBrush}"/>
+                                        <CommonControls:FontAwesome Icon="f001" IconStyle="Regular" Size="18" Color="{StaticResource MediaAudioBrush}" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                                    </Grid>
+                                    <TextBlock Text="{CommonControls:Localize Audio}" FontSize="18" FontWeight="SemiBold" VerticalAlignment="Center"/>
+                                </DockPanel>
+                                <TextBlock DockPanel.Dock="Top" Text="{CommonControls:Localize HomeAudioDescription}" TextTrimming="CharacterEllipsis" FontSize="12" Opacity=".7" Margin="0,0,0,8" ToolTip="{CommonControls:Localize HomeAudioDescription}" ToolTipService.InitialShowDelay="200"/>
+                                <WrapPanel>
+                                    <CommonControls:IconButton Style="{StaticResource HomeShortcutButton}" IconColor="{StaticResource MediaAudioBrush}" Text="{CommonControls:Localize Menu_TextToAudio}" Icon="f894" Command="{Binding NavigateCommand}" CommandParameter="{x:Static Views:View.TextToAudio}"/>
+                                    <CommonControls:IconButton Style="{StaticResource HomeShortcutButton}" IconColor="{StaticResource MediaAudioBrush}" Text="{CommonControls:Localize Menu_TextToMusic}" Icon="f8c9" Command="{Binding NavigateCommand}" CommandParameter="{x:Static Views:View.TextToMusic}"/>
+                                    <CommonControls:IconButton Style="{StaticResource HomeShortcutButton}" IconColor="{StaticResource MediaAudioBrush}" Text="{CommonControls:Localize Menu_AudioToText}" Icon="f001" Command="{Binding NavigateCommand}" CommandParameter="{x:Static Views:View.AudioToText}"/>
+                                </WrapPanel>
+                            </DockPanel>
+                        </Grid>
+                    </Border>
+
+                    <!--Text-->
+                    <Border Style="{StaticResource HomeCard}">
+                        <Grid>
+                            <Border Background="{StaticResource MediaTextGlowBrush}" IsHitTestVisible="False"/>
+                            <DockPanel Margin="14,12,14,8">
+                                <DockPanel DockPanel.Dock="Top" Margin="0,0,0,6">
+                                    <Grid DockPanel.Dock="Left" Width="38" Height="38" Margin="0,0,10,0">
+                                        <Border Style="{StaticResource IconTileBorder}" Background="{StaticResource MediaTextBrush}"/>
+                                        <CommonControls:FontAwesome Icon="f893" IconStyle="Regular" Size="18" Color="{StaticResource MediaTextBrush}" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                                    </Grid>
+                                    <TextBlock Text="{CommonControls:Localize Text}" FontSize="18" FontWeight="SemiBold" VerticalAlignment="Center"/>
+                                </DockPanel>
+                                <TextBlock DockPanel.Dock="Top" Text="{CommonControls:Localize HomeTextDescription}" TextTrimming="CharacterEllipsis" FontSize="12" Opacity=".7" Margin="0,0,0,8" ToolTip="{CommonControls:Localize HomeTextDescription}" ToolTipService.InitialShowDelay="200"/>
+                                <WrapPanel>
+                                    <CommonControls:IconButton Style="{StaticResource HomeShortcutButton}" IconColor="{StaticResource MediaTextBrush}" Text="{CommonControls:Localize Menu_TextConverse}" Icon="e1e7" Command="{Binding NavigateCommand}" CommandParameter="{x:Static Views:View.TextConverse}"/>
+                                    <CommonControls:IconButton Style="{StaticResource HomeShortcutButton}" IconColor="{StaticResource MediaTextBrush}" Text="{CommonControls:Localize Menu_TextInstruct}" Icon="e1e3" Command="{Binding NavigateCommand}" CommandParameter="{x:Static Views:View.TextInstruct}"/>
+                                    <CommonControls:IconButton Style="{StaticResource HomeShortcutButton}" IconColor="{StaticResource MediaTextBrush}" Text="{CommonControls:Localize Menu_ImageToText}" Icon="f03e" Command="{Binding NavigateCommand}" CommandParameter="{x:Static Views:View.ImageToText}"/>
+                                </WrapPanel>
+                            </DockPanel>
+                        </Grid>
+                    </Border>
+                </UniformGrid>
+
+                <!--Devices-->
+                <DockPanel Margin="5,14,10,4">
+                    <CommonControls:IconButton DockPanel.Dock="Right" Text="{CommonControls:Localize ManageEnvironments}" Icon="f233" IconSize="13" FontSize="12" Width="170" Height="26" IconColor="{StaticResource AccentColour2}" Command="{Binding ManageEnvironmentsCommand}"/>
+                    <StackPanel DockPanel.Dock="Left" Orientation="Horizontal" Margin="0,0,16,0">
+                        <CommonControls:FontAwesome Style="{StaticResource SectionHeaderFontAwesome}" Icon="f2db"/>
+                        <TextBlock Text="{CommonControls:Localize HomeDevices}" Style="{StaticResource SectionHeaderTextBlock}"/>
+                    </StackPanel>
 
                     <!--System-->
-                    <WrapPanel Margin="0,0,0,8" Opacity=".8">
-                        <CommonControls:FontAwesome Icon="f2db" IconStyle="Light" Size="13" VerticalAlignment="Center"/>
-                        <TextBlock Text="{Binding CPUName}" Margin="6,0,0,0" VerticalAlignment="Center"/>
-                        <TextBlock Text="{Binding SystemMemory, StringFormat={}{0} GB RAM}" Margin="12,0,0,0" Opacity=".7" VerticalAlignment="Center"/>
-                        <StackPanel Orientation="Horizontal" Margin="20,0,0,0" Visibility="{Binding NPUName, Converter={StaticResource NullVisibilityConverter}}">
-                            <CommonControls:FontAwesome Icon="f544" IconStyle="Light" Size="13" VerticalAlignment="Center"/>
-                            <TextBlock Text="{Binding NPUName}" Margin="6,0,0,0" VerticalAlignment="Center"/>
-                        </StackPanel>
+                    <WrapPanel VerticalAlignment="Center">
+                        <Border Style="{StaticResource ChipBorder}">
+                            <StackPanel Orientation="Horizontal">
+                                <CommonControls:FontAwesome Icon="f2db" IconStyle="Light" Size="12" Color="{StaticResource DefaultForeground}" VerticalAlignment="Center"/>
+                                <TextBlock Text="{Binding CPUName}" FontSize="12" Margin="6,0,0,0" VerticalAlignment="Center"/>
+                            </StackPanel>
+                        </Border>
+                        <Border Style="{StaticResource ChipBorder}">
+                            <StackPanel Orientation="Horizontal">
+                                <CommonControls:FontAwesome Icon="f538" IconStyle="Light" Size="12" Color="{StaticResource DefaultForeground}" VerticalAlignment="Center"/>
+                                <TextBlock Text="{Binding SystemMemory, StringFormat={}{0} GB RAM}" FontSize="12" Margin="6,0,0,0" VerticalAlignment="Center"/>
+                            </StackPanel>
+                        </Border>
+                        <Border Style="{StaticResource ChipBorder}" Visibility="{Binding NPUName, Converter={StaticResource NullVisibilityConverter}}">
+                            <StackPanel Orientation="Horizontal">
+                                <CommonControls:FontAwesome Icon="f544" IconStyle="Light" Size="12" Color="{StaticResource DefaultForeground}" VerticalAlignment="Center"/>
+                                <TextBlock Text="{Binding NPUName}" FontSize="12" Margin="6,0,0,0" VerticalAlignment="Center"/>
+                            </StackPanel>
+                        </Border>
                     </WrapPanel>
+                </DockPanel>
+                <Border Style="{StaticResource HomeCard}" Padding="16,10,16,12">
+                    <StackPanel>
 
-                    <!--Backend Header-->
-                    <DockPanel Margin="0,0,0,4">
-                        <TextBlock DockPanel.Dock="Left" Width="300" Text="{CommonControls:Localize Device}" FontWeight="SemiBold" Opacity=".7"/>
-                        <ItemsControl ItemsSource="{Binding Backends}">
-                            <ItemsControl.ItemsPanel>
-                                <ItemsPanelTemplate>
-                                    <UniformGrid Rows="1"/>
-                                </ItemsPanelTemplate>
-                            </ItemsControl.ItemsPanel>
+                        <!--Backend Header-->
+                        <DockPanel Margin="0,0,0,6">
+                            <TextBlock DockPanel.Dock="Left" Width="340" Text="{CommonControls:Localize Device}" FontSize="11" FontWeight="SemiBold" Opacity=".55"/>
+                            <ItemsControl ItemsSource="{Binding Backends}">
+                                <ItemsControl.ItemsPanel>
+                                    <ItemsPanelTemplate>
+                                        <UniformGrid Rows="1"/>
+                                    </ItemsPanelTemplate>
+                                </ItemsControl.ItemsPanel>
+                                <ItemsControl.ItemTemplate>
+                                    <DataTemplate>
+                                        <TextBlock
+                                            Text="{Binding ., Converter={StaticResource EnumShortNameConverter}}"
+                                            FontSize="11" FontWeight="SemiBold" Opacity=".55"
+                                            ToolTip="{Binding ., Converter={StaticResource EnumDescriptionConverter}}"
+                                            ToolTipService.InitialShowDelay="200"/>
+                                    </DataTemplate>
+                                </ItemsControl.ItemTemplate>
+                            </ItemsControl>
+                        </DockPanel>
+                        <Border BorderBrush="{StaticResource ContainerBorder}" BorderThickness="0,1,0,0" Margin="0,0,0,2"/>
+
+                        <!--Device Rows-->
+                        <ItemsControl ItemsSource="{Binding Devices}">
                             <ItemsControl.ItemTemplate>
-                                <DataTemplate>
-                                    <TextBlock 
-                                        Text="{Binding ., Converter={StaticResource EnumShortNameConverter}}"
-                                        FontWeight="SemiBold" Opacity=".7"
-                                        ToolTip="{Binding ., Converter={StaticResource EnumDescriptionConverter}}" 
-                                        ToolTipService.InitialShowDelay="200"/>
+                                <DataTemplate DataType="{x:Type Common:HomeDeviceItem}">
+                                    <DockPanel Margin="0,8,0,0">
+                                        <DockPanel DockPanel.Dock="Left" Width="340">
+                                            <Grid DockPanel.Dock="Left" Width="34" Height="34" Margin="0,0,10,0">
+                                                <Border Style="{StaticResource IconTileBorder}" Width="34" Height="34" Background="{StaticResource AccentColour1}"/>
+                                                <CommonControls:FontAwesome Icon="f390" IconStyle="Light" Size="15" Color="{StaticResource InfoColour}" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                                            </Grid>
+                                            <StackPanel VerticalAlignment="Center">
+                                                <TextBlock Text="{Binding Device.Name}" FontWeight="SemiBold" TextTrimming="CharacterEllipsis"/>
+                                                <StackPanel Orientation="Horizontal" Opacity=".6">
+                                                    <TextBlock Text="{Binding Device.Vendor}" FontSize="11"/>
+                                                    <TextBlock Text="{Binding Device.MemoryGB, StringFormat={} · {0} GB}" FontSize="11"/>
+                                                    <TextBlock Text="{Binding Device.DeviceType, StringFormat={} · {0}}" FontSize="11"/>
+                                                </StackPanel>
+                                            </StackPanel>
+                                        </DockPanel>
+                                        <ItemsControl ItemsSource="{Binding Backends}" VerticalAlignment="Center">
+                                            <ItemsControl.ItemsPanel>
+                                                <ItemsPanelTemplate>
+                                                    <UniformGrid Rows="1"/>
+                                                </ItemsPanelTemplate>
+                                            </ItemsControl.ItemsPanel>
+                                            <ItemsControl.ItemTemplate>
+                                                <DataTemplate DataType="{x:Type Common:HomeBackendItem}">
+                                                    <Border Style="{StaticResource HomeBackendStatusTag}">
+                                                        <StackPanel Orientation="Horizontal">
+                                                            <CommonControls:FontAwesome Style="{StaticResource HomeBackendStatusIcon}" VerticalAlignment="Center"/>
+                                                            <TextBlock Style="{StaticResource HomeBackendStatusText}"/>
+                                                        </StackPanel>
+                                                    </Border>
+                                                </DataTemplate>
+                                            </ItemsControl.ItemTemplate>
+                                        </ItemsControl>
+                                    </DockPanel>
                                 </DataTemplate>
                             </ItemsControl.ItemTemplate>
                         </ItemsControl>
-                    </DockPanel>
-                    <Border BorderBrush="{StaticResource ContainerBorder}" BorderThickness="0,1,0,0" Margin="0,0,0,4"/>
+                        <TextBlock Text="{CommonControls:Localize NoDevicesFound}" FontStyle="Italic" Opacity=".5" Margin="0,6,0,0">
+                            <TextBlock.Style>
+                                <Style TargetType="{x:Type TextBlock}" BasedOn="{StaticResource {x:Type TextBlock}}">
+                                    <Setter Property="Visibility" Value="Collapsed"/>
+                                    <Style.Triggers>
+                                        <DataTrigger Binding="{Binding Devices.Count}" Value="0">
+                                            <Setter Property="Visibility" Value="Visible"/>
+                                        </DataTrigger>
+                                    </Style.Triggers>
+                                </Style>
+                            </TextBlock.Style>
+                        </TextBlock>
+                    </StackPanel>
+                </Border>
 
-                    <!--Device Rows-->
-                    <ItemsControl ItemsSource="{Binding Devices}">
-                        <ItemsControl.ItemTemplate>
-                            <DataTemplate DataType="{x:Type Common:HomeDeviceItem}">
-                                <DockPanel Margin="0,5,0,0">
-                                    <StackPanel DockPanel.Dock="Left" Width="300">
-                                        <TextBlock Text="{Binding Device.Name}" FontWeight="SemiBold" TextTrimming="CharacterEllipsis"/>
-                                        <StackPanel Orientation="Horizontal" Opacity=".6">
-                                            <TextBlock Text="{Binding Device.Vendor}" FontSize="11"/>
-                                            <TextBlock Text="{Binding Device.MemoryGB, StringFormat={} · {0} GB}" FontSize="11"/>
-                                            <TextBlock Text="{Binding Device.DeviceType, StringFormat={} · {0}}" FontSize="11"/>
-                                        </StackPanel>
-                                    </StackPanel>
-                                    <ItemsControl ItemsSource="{Binding Backends}" VerticalAlignment="Center">
-                                        <ItemsControl.ItemsPanel>
-                                            <ItemsPanelTemplate>
-                                                <UniformGrid Rows="1"/>
-                                            </ItemsPanelTemplate>
-                                        </ItemsControl.ItemsPanel>
-                                        <ItemsControl.ItemTemplate>
-                                            <DataTemplate DataType="{x:Type Common:HomeBackendItem}">
-                                                <StackPanel Style="{StaticResource HomeBackendStatusCell}" HorizontalAlignment="Left">
-                                                    <CommonControls:FontAwesome Style="{StaticResource HomeBackendStatusIcon}" VerticalAlignment="Center"/>
-                                                    <TextBlock Style="{StaticResource HomeBackendStatusText}"/>
-                                                </StackPanel>
-                                            </DataTemplate>
-                                        </ItemsControl.ItemTemplate>
-                                    </ItemsControl>
-                                </DockPanel>
-                            </DataTemplate>
-                        </ItemsControl.ItemTemplate>
-                    </ItemsControl>
-                    <TextBlock Text="{CommonControls:Localize NoDevicesFound}" FontStyle="Italic" Opacity=".5">
-                        <TextBlock.Style>
-                            <Style TargetType="{x:Type TextBlock}" BasedOn="{StaticResource {x:Type TextBlock}}">
-                                <Setter Property="Visibility" Value="Collapsed"/>
-                                <Style.Triggers>
-                                    <DataTrigger Binding="{Binding Devices.Count}" Value="0">
-                                        <Setter Property="Visibility" Value="Visible"/>
-                                    </DataTrigger>
-                                </Style.Triggers>
-                            </Style>
-                        </TextBlock.Style>
-                    </TextBlock>
+                <!--Recent Models-->
+                <StackPanel>
+                    <StackPanel Orientation="Horizontal" Margin="5,14,5,8">
+                        <CommonControls:FontAwesome Style="{StaticResource SectionHeaderFontAwesome}" Icon="f1da"/>
+                        <TextBlock Text="{CommonControls:Localize RecentModels}" Style="{StaticResource SectionHeaderTextBlock}"/>
+                    </StackPanel>
+                    <ItemsControl ItemsSource="{Binding RecentModels}" ItemTemplate="{StaticResource HomeModelTemplate}" ItemsPanel="{StaticResource HomeWrapPanel}" Margin="5,0,2,0"/>
+                    <StackPanel.Style>
+                        <Style TargetType="{x:Type StackPanel}">
+                            <Style.Triggers>
+                                <DataTrigger Binding="{Binding RecentModels.Count}" Value="0">
+                                    <Setter Property="Visibility" Value="Collapsed"/>
+                                </DataTrigger>
+                            </Style.Triggers>
+                        </Style>
+                    </StackPanel.Style>
                 </StackPanel>
-            </Border>
 
-            <!--Recent Models-->
-            <StackPanel>
-                <TextBlock Text="{CommonControls:Localize RecentModels}" Style="{StaticResource HomeSectionHeader}"/>
-                <ItemsControl ItemsSource="{Binding RecentModels}" ItemTemplate="{StaticResource HomeModelTemplate}" ItemsPanel="{StaticResource HomeWrapPanel}" Margin="5,4,5,0"/>
-                <StackPanel.Style>
-                    <Style TargetType="{x:Type StackPanel}">
-                        <Style.Triggers>
-                            <DataTrigger Binding="{Binding RecentModels.Count}" Value="0">
-                                <Setter Property="Visibility" Value="Collapsed"/>
-                            </DataTrigger>
-                        </Style.Triggers>
-                    </Style>
-                </StackPanel.Style>
+                <!--New Models-->
+                <StackPanel>
+                    <StackPanel Orientation="Horizontal" Margin="5,6,5,8">
+                        <CommonControls:FontAwesome Style="{StaticResource SectionHeaderFontAwesome}" Icon="f890"/>
+                        <TextBlock Text="{CommonControls:Localize NewModels}" Style="{StaticResource SectionHeaderTextBlock}"/>
+                    </StackPanel>
+                    <ItemsControl ItemsSource="{Binding NewModels}" ItemTemplate="{StaticResource HomeModelTemplate}" ItemsPanel="{StaticResource HomeWrapPanel}" Margin="5,0,2,0"/>
+                    <StackPanel.Style>
+                        <Style TargetType="{x:Type StackPanel}">
+                            <Style.Triggers>
+                                <DataTrigger Binding="{Binding NewModels.Count}" Value="0">
+                                    <Setter Property="Visibility" Value="Collapsed"/>
+                                </DataTrigger>
+                            </Style.Triggers>
+                        </Style>
+                    </StackPanel.Style>
+                </StackPanel>
+
+                <!--Recommended Models-->
+                <StackPanel>
+                    <StackPanel Orientation="Horizontal" Margin="5,6,5,8">
+                        <CommonControls:FontAwesome Style="{StaticResource SectionHeaderFontAwesome}" Icon="f005"/>
+                        <TextBlock Text="{CommonControls:Localize RecommendedModels}" Style="{StaticResource SectionHeaderTextBlock}"/>
+                    </StackPanel>
+                    <ItemsControl ItemsSource="{Binding RecommendedModels}" ItemTemplate="{StaticResource HomeModelTemplate}" ItemsPanel="{StaticResource HomeWrapPanel}" Margin="5,0,2,0"/>
+                    <StackPanel.Style>
+                        <Style TargetType="{x:Type StackPanel}">
+                            <Style.Triggers>
+                                <DataTrigger Binding="{Binding RecommendedModels.Count}" Value="0">
+                                    <Setter Property="Visibility" Value="Collapsed"/>
+                                </DataTrigger>
+                            </Style.Triggers>
+                        </Style>
+                    </StackPanel.Style>
+                </StackPanel>
+
             </StackPanel>
-
-            <!--New Models-->
-            <StackPanel>
-                <TextBlock Text="{CommonControls:Localize NewModels}" Style="{StaticResource HomeSectionHeader}"/>
-                <ItemsControl ItemsSource="{Binding NewModels}" ItemTemplate="{StaticResource HomeModelTemplate}" ItemsPanel="{StaticResource HomeWrapPanel}" Margin="5,4,5,0"/>
-                <StackPanel.Style>
-                    <Style TargetType="{x:Type StackPanel}">
-                        <Style.Triggers>
-                            <DataTrigger Binding="{Binding NewModels.Count}" Value="0">
-                                <Setter Property="Visibility" Value="Collapsed"/>
-                            </DataTrigger>
-                        </Style.Triggers>
-                    </Style>
-                </StackPanel.Style>
-            </StackPanel>
-
-            <!--Recommended Models-->
-            <StackPanel>
-                <TextBlock Text="{CommonControls:Localize RecommendedModels}" Style="{StaticResource HomeSectionHeader}"/>
-                <ItemsControl ItemsSource="{Binding RecommendedModels}" ItemTemplate="{StaticResource HomeModelTemplate}" ItemsPanel="{StaticResource HomeWrapPanel}" Margin="5,4,5,0"/>
-                <StackPanel.Style>
-                    <Style TargetType="{x:Type StackPanel}">
-                        <Style.Triggers>
-                            <DataTrigger Binding="{Binding RecommendedModels.Count}" Value="0">
-                                <Setter Property="Visibility" Value="Collapsed"/>
-                            </DataTrigger>
-                        </Style.Triggers>
-                    </Style>
-                </StackPanel.Style>
-            </StackPanel>
-
-
-
-        </StackPanel>
-
+        </ScrollViewer>
     </Grid>
 </Views:ViewBase>

@@ -36,7 +36,15 @@ namespace Amuse.Common.Message
             Type = RequestType.Run;
         }
 
+        public PipelineRequest(PipelineRunOptions options, int streamId)
+        {
+            RunOptions = options;
+            StreamId = streamId;
+            Type = RequestType.RunStream;
+        }
+
         public RequestType Type { get; init; }
+        public int StreamId { get; init; }
         public PipelineCreateOptions CreateOptions { get; init; }
         public PipelineLoadOptions LoadOptions { get; init; }
         public PipelineReloadOptions ReloadOptions { get; init; }

@@ -72,6 +72,16 @@ namespace Amuse.App.Tools
 
 
         /// <summary>
+        /// Creates a call of the tool from the tool call JSON of the model, a new instance holding its arguments.
+        /// </summary>
+        /// <param name="toolCall">The tool call, a JSON object with name and arguments.</param>
+        public virtual ToolCallBase CreateCall(string toolCall)
+        {
+            return (ToolCallBase)JsonSerializer.Deserialize(toolCall, GetType(), Json.DefaultOptions);
+        }
+
+
+        /// <summary>
         /// Gets the result.
         /// </summary>
         /// <param name="result">The result.</param>
@@ -199,6 +209,27 @@ namespace Amuse.App.Tools
 
             if (!settings.IsDangerousToolsEnabled)
                 throw new Exception("ToolCall dangerous access denied by the user.");
+        }
+
+
+        /// <summary>
+        /// Checks the execute access, e.g. starting applications or opening links, remembered separately from dangerous access.
+        /// </summary>
+        /// <param name="settings">The settings.</param>
+        /// <param name="action">The action description shown to the user.</param>
+        /// <exception cref="System.Exception">ToolCall execute access denied.</exception>
+        protected async Task CheckExecuteAccess(Settings settings, string action)
+        {
+            if (!settings.IsExecuteToolsAcknowledged)
+            {
+                var dialogResult = await DialogService.ShowMessageAsync(AppDefault.ToolDangerousAccessTitle, string.Format(AppDefault.ToolDangerousAccessMessage, DisplayName, action), TensorStack.WPF.Dialogs.MessageDialogType.YesNo, TensorStack.WPF.Dialogs.MessageBoxIconType.Warning, TensorStack.WPF.Dialogs.MessageBoxStyleType.Warning, true);
+                settings.IsExecuteToolsEnabled = dialogResult;
+                settings.IsExecuteToolsAcknowledged = dialogResult.DontAskAgain;
+                await settings.SaveAsync();
+            }
+
+            if (!settings.IsExecuteToolsEnabled)
+                throw new Exception("ToolCall execute access denied by the user.");
         }
     }
 }

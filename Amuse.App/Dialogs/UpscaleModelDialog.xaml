@@ -31,24 +31,44 @@
         <!--Main Content-->
         <StackPanel>
 
-            <!--Model Settings-->
-            <GroupBox Header="{CommonControls:Localize Settings}" Padding="4">
-                <StackPanel>
-                    <UniformGrid  Rows="1">
-                        <StackPanel Margin="0,0,2,0">
-                            <TextBlock Text="{CommonControls:Localize Backend}" Style="{StaticResource FieldTextBlockStyle}"/>
-                            <ComboBox ItemsSource="{Binding Backends}" SelectedItem="{Binding UpscaleModel.Backend}" IsEnabled="{Binding UpscaleModel.IsVideoUpscaler, Converter={StaticResource InverseBoolConverter}}" Style="{StaticResource EnumComboBox}"/>
+            <!--Model-->
+            <Border Style="{StaticResource WizardSection}">
+                <DockPanel>
+                    <StackPanel Style="{StaticResource WizardSectionHeader}">
+                        <TextBlock Text="{CommonControls:Localize Model}" FontWeight="SemiBold" FontSize="13"/>
+                        <TextBlock Text="{CommonControls:Localize UpscaleModelDescription}" FontSize="11" Opacity=".7" TextWrapping="Wrap"/>
+                    </StackPanel>
+                    <StackPanel VerticalAlignment="Top">
+                        <UniformGrid Rows="1">
+                            <StackPanel Margin="0,0,2,0">
+                                <TextBlock Text="{CommonControls:Localize Backend}" Style="{StaticResource FieldTextBlockStyle}"/>
+                                <ComboBox ItemsSource="{Binding Backends}" SelectedItem="{Binding UpscaleModel.Backend}" IsEnabled="{Binding UpscaleModel.IsVideoUpscaler, Converter={StaticResource InverseBoolConverter}}" Style="{StaticResource EnumComboBox}"/>
+                            </StackPanel>
+                            <StackPanel Margin="2,0,2,0">
+                                <TextBlock Text="{CommonControls:Localize Pipeline}" Style="{StaticResource FieldTextBlockStyle}"/>
+                                <ComboBox ItemsSource="{Binding Settings.Pipelines}" SelectedItem="{Binding UpscaleModel.Pipeline}" IsEnabled="False" Style="{StaticResource EnumComboBox}"/>
+                            </StackPanel>
+                            <StackPanel Margin="2,0,0,0">
+                                <TextBlock Text="{CommonControls:Localize ModelName}" Style="{StaticResource FieldTextBlockStyle}"/>
+                                <TextBox Text="{Binding UpscaleModel.Name, UpdateSourceTrigger=PropertyChanged}" />
+                            </StackPanel>
+                        </UniformGrid>
+                        <StackPanel Margin="0,4,0,0">
+                            <TextBlock Text="{CommonControls:Localize ModelLink}" Style="{StaticResource FieldTextBlockStyle}"/>
+                            <TextBox Text="{Binding UpscaleModel.Link, UpdateSourceTrigger=PropertyChanged}" />
                         </StackPanel>
-                        <StackPanel Margin="2,0,2,0">
-                            <TextBlock Text="{CommonControls:Localize Pipeline}" Style="{StaticResource FieldTextBlockStyle}"/>
-                            <ComboBox ItemsSource="{Binding Settings.Pipelines}" SelectedItem="{Binding UpscaleModel.Pipeline}"  IsEnabled="False" Style="{StaticResource EnumComboBox}"/>
-                        </StackPanel>
-                        <StackPanel Margin="2,0,2,0">
-                            <TextBlock Text="{CommonControls:Localize Name}" Style="{StaticResource FieldTextBlockStyle}"/>
-                            <TextBox Text="{Binding UpscaleModel.Name, UpdateSourceTrigger=PropertyChanged}" />
-                        </StackPanel>
-                    </UniformGrid>
-                    <UniformGrid Columns="4">
+                    </StackPanel>
+                </DockPanel>
+            </Border>
+
+            <!--Settings-->
+            <Border Style="{StaticResource WizardSection}">
+                <DockPanel>
+                    <StackPanel Style="{StaticResource WizardSectionHeader}">
+                        <TextBlock Text="{CommonControls:Localize Settings}" FontWeight="SemiBold" FontSize="13"/>
+                        <TextBlock Text="{CommonControls:Localize ModelSettingsDescription}" FontSize="11" Opacity=".7" TextWrapping="Wrap"/>
+                    </StackPanel>
+                    <UniformGrid Columns="3" VerticalAlignment="Top">
                         <StackPanel Margin="0,0,2,0">
                             <TextBlock Text="{CommonControls:Localize ScaleFactor}" Style="{StaticResource FieldTextBlockStyle}"/>
                             <TextBox Text="{Binding UpscaleModel.ScaleFactor, UpdateSourceTrigger=PropertyChanged}" />
@@ -57,65 +77,104 @@
                             <TextBlock Text="{CommonControls:Localize MemorySize}" Style="{StaticResource FieldTextBlockStyle}"/>
                             <TextBox Text="{Binding UpscaleModel.MemorySize, UpdateSourceTrigger=PropertyChanged}" />
                         </StackPanel>
-
-                        <!--OnnxRuntime-->
-                        <StackPanel Margin="2,0,2,0" Visibility="{Binding UpscaleModel.Backend, Converter={StaticResource EnumToVisibilityConverter}, ConverterParameter=OnnxRuntime}">
+                        <StackPanel Margin="2,0,0,0" Visibility="{Binding UpscaleModel.Backend, Converter={StaticResource EnumToVisibilityConverter}, ConverterParameter=OnnxRuntime}">
                             <TextBlock Text="{CommonControls:Localize SampleSize}" Style="{StaticResource FieldTextBlockStyle}"/>
                             <TextBox Text="{Binding UpscaleModel.SampleSize, UpdateSourceTrigger=PropertyChanged}" />
                         </StackPanel>
-                        <StackPanel Margin="2,0,0,0" Visibility="{Binding UpscaleModel.Backend, Converter={StaticResource EnumToVisibilityConverter}, ConverterParameter=OnnxRuntime}">
+                        <StackPanel Margin="0,4,2,0" Visibility="{Binding UpscaleModel.Backend, Converter={StaticResource EnumToVisibilityConverter}, ConverterParameter=OnnxRuntime}">
                             <TextBlock Text="{CommonControls:Localize InputNormalization}" Style="{StaticResource FieldTextBlockStyle}"/>
                             <ComboBox ItemsSource="{Binding Source={StaticResource NormalizationType}}" SelectedItem="{Binding UpscaleModel.Normalization}" SelectedIndex="0" Style="{StaticResource EnumComboBox}"/>
                         </StackPanel>
-                        <StackPanel Margin="0,0,2,0" Visibility="{Binding UpscaleModel.Backend, Converter={StaticResource EnumToVisibilityConverter}, ConverterParameter=OnnxRuntime}">
+                        <StackPanel Margin="2,4,2,0" Visibility="{Binding UpscaleModel.Backend, Converter={StaticResource EnumToVisibilityConverter}, ConverterParameter=OnnxRuntime}">
                             <TextBlock Text="{CommonControls:Localize OutputNormalization}" Style="{StaticResource FieldTextBlockStyle}"/>
                             <ComboBox ItemsSource="{Binding Source={StaticResource NormalizationType}}" SelectedItem="{Binding UpscaleModel.OutputNormalization}" SelectedIndex="0" Style="{StaticResource EnumComboBox}"/>
                         </StackPanel>
-
-                        <!--DefaultOptions, image upscalers only-->
-                        <StackPanel IsEnabled="{Binding UpscaleModel.DefaultOptions.IsTileEnabled}" Margin="2,0,2,0" Visibility="{Binding UpscaleModel.IsVideoUpscaler, Converter={StaticResource InverseBooleanToVisibilityConverter}}">
-                            <TextBlock Text="{CommonControls:Localize TileSize}" Style="{StaticResource FieldTextBlockStyle}" />
-                            <TextBox Text="{Binding UpscaleModel.DefaultOptions.TileSize}" />
-                        </StackPanel>
-                        <StackPanel IsEnabled="{Binding UpscaleModel.DefaultOptions.IsTileEnabled}" Margin="2,0,2,0" Visibility="{Binding UpscaleModel.Backend, Converter={StaticResource EnumToVisibilityConverter}, ConverterParameter=OnnxRuntime}">
-                            <TextBlock Text="{CommonControls:Localize TileOverlap}" Style="{StaticResource FieldTextBlockStyle}" />
-                            <TextBox Text="{Binding UpscaleModel.DefaultOptions.TileOverlap}" />
-                        </StackPanel>
-                        <StackPanel Margin="2,0,0,0" Visibility="{Binding UpscaleModel.IsVideoUpscaler, Converter={StaticResource InverseBooleanToVisibilityConverter}}">
-                            <CheckBox Content="{CommonControls:Localize EnableTiling}" IsChecked="{Binding UpscaleModel.DefaultOptions.IsTileEnabled}" Margin="0,19,0,0"/>
-                        </StackPanel>
-
-                        <!--DefaultOptions, video upscalers only-->
-                        <StackPanel Margin="2,0,2,0" Visibility="{Binding UpscaleModel.IsVideoUpscaler, Converter={StaticResource BooleanToVisibilityConverter}}" ToolTip="{CommonControls:Localize ToolTip_UpscaleSeed}" ToolTipService.InitialShowDelay="200">
-                            <TextBlock Text="{CommonControls:Localize Seed}" Style="{StaticResource FieldTextBlockStyle}" />
-                            <TextBox Text="{Binding UpscaleModel.DefaultOptions.Seed}" />
-                        </StackPanel>
-                        <StackPanel Margin="2,0,0,0" Visibility="{Binding UpscaleModel.Pipeline, Converter={StaticResource EnumToVisibilityConverter}, ConverterParameter=SeedVR2Pipeline}" ToolTip="{CommonControls:Localize ToolTip_UpscaleTemporalChunkSize}" ToolTipService.InitialShowDelay="200">
-                            <TextBlock Text="{CommonControls:Localize UpscaleTemporalChunkSize}" Style="{StaticResource FieldTextBlockStyle}" />
-                            <TextBox Text="{Binding UpscaleModel.DefaultOptions.TemporalChunkSize}" />
-                        </StackPanel>
-                        <StackPanel Margin="2,0,0,0" Visibility="{Binding UpscaleModel.Pipeline, Converter={StaticResource EnumToVisibilityConverter}, ConverterParameter=RelayVSRPipeline}" ToolTip="{CommonControls:Localize ToolTip_UpscaleWindowSize}" ToolTipService.InitialShowDelay="200">
-                            <TextBlock Text="{CommonControls:Localize UpscaleWindowSize}" Style="{StaticResource FieldTextBlockStyle}" />
-                            <TextBox Text="{Binding UpscaleModel.DefaultOptions.WindowSize}" />
-                        </StackPanel>
                     </UniformGrid>
+                </DockPanel>
+            </Border>
 
-                    <StackPanel Margin="0,2,0,0">
-                        <TextBlock Text="{CommonControls:Localize ModelLink}" Style="{StaticResource FieldTextBlockStyle}"/>
-                        <TextBox Text="{Binding UpscaleModel.Link, UpdateSourceTrigger=PropertyChanged}" />
+            <!--Defaults-->
+            <Border Style="{StaticResource WizardSection}">
+                <DockPanel>
+                    <StackPanel Style="{StaticResource WizardSectionHeader}">
+                        <TextBlock Text="{CommonControls:Localize Options}" FontWeight="SemiBold" FontSize="13"/>
+                        <TextBlock Text="{CommonControls:Localize ModelOptionsDescription}" FontSize="11" Opacity=".7" TextWrapping="Wrap"/>
                     </StackPanel>
-                </StackPanel>
-            </GroupBox>
+                    <StackPanel VerticalAlignment="Top">
 
-            <!--Checkpoint Settings-->
-            <GroupBox Header="{Binding UpscaleModel.Checkpoint.Name}" Margin="0,10,0,0" Height="160">
-                <Controls:CheckpointControl Settings="{Binding Settings}" Checkpoint="{Binding UpscaleModel.Checkpoint}" SupportedTypes="{Binding CheckpointTypes, Mode=OneWay}" FileFilter="{Binding FileFilter, Mode=OneWay}"/>
-            </GroupBox>
+                        <!--Image Upscalers-->
+                        <UniformGrid Columns="3" Visibility="{Binding UpscaleModel.IsVideoUpscaler, Converter={StaticResource InverseBooleanToVisibilityConverter}}">
+                            <StackPanel Margin="0,0,2,0">
+                                <CheckBox Content="{CommonControls:Localize EnableTiling}" IsChecked="{Binding UpscaleModel.DefaultOptions.IsTileEnabled}" Margin="0,19,0,0"/>
+                            </StackPanel>
+                            <StackPanel IsEnabled="{Binding UpscaleModel.DefaultOptions.IsTileEnabled}" Margin="2,0,2,0">
+                                <TextBlock Text="{CommonControls:Localize TileSize}" Style="{StaticResource FieldTextBlockStyle}" />
+                                <TextBox Text="{Binding UpscaleModel.DefaultOptions.TileSize}" />
+                            </StackPanel>
+                            <StackPanel IsEnabled="{Binding UpscaleModel.DefaultOptions.IsTileEnabled}" Margin="2,0,0,0" Visibility="{Binding UpscaleModel.Backend, Converter={StaticResource EnumToVisibilityConverter}, ConverterParameter=OnnxRuntime}">
+                                <TextBlock Text="{CommonControls:Localize TileOverlap}" Style="{StaticResource FieldTextBlockStyle}" />
+                                <TextBox Text="{Binding UpscaleModel.DefaultOptions.TileOverlap}" />
+                            </StackPanel>
+                        </UniformGrid>
 
-            <!--VAE Checkpoint Settings, video upscalers-->
-            <GroupBox Header="{Binding UpscaleModel.Vae.Name}" Margin="0,10,0,0" Height="160" Visibility="{Binding UpscaleModel.Vae, Converter={StaticResource NullVisibilityConverter}, FallbackValue=Collapsed}">
-                <Controls:CheckpointControl Settings="{Binding Settings}" Checkpoint="{Binding UpscaleModel.Vae}" SupportedTypes="{Binding VaeCheckpointTypes, Mode=OneWay}" FileFilter="{Binding FileFilter, Mode=OneWay}"/>
-            </GroupBox>
+                        <!--Video Upscalers-->
+                        <UniformGrid Columns="3" Visibility="{Binding UpscaleModel.IsVideoUpscaler, Converter={StaticResource BooleanToVisibilityConverter}}">
+                            <StackPanel Margin="0,0,2,0" ToolTip="{CommonControls:Localize ToolTip_UpscaleSeed}" ToolTipService.InitialShowDelay="200">
+                                <TextBlock Text="{CommonControls:Localize Seed}" Style="{StaticResource FieldTextBlockStyle}" />
+                                <TextBox Text="{Binding UpscaleModel.DefaultOptions.Seed}" />
+                            </StackPanel>
+                            <StackPanel Margin="2,0,2,0" Visibility="{Binding UpscaleModel.Pipeline, Converter={StaticResource EnumToVisibilityConverter}, ConverterParameter=SeedVR2Pipeline}" ToolTip="{CommonControls:Localize ToolTip_UpscaleTemporalChunkSize}" ToolTipService.InitialShowDelay="200">
+                                <TextBlock Text="{CommonControls:Localize UpscaleTemporalChunkSize}" Style="{StaticResource FieldTextBlockStyle}" />
+                                <TextBox Text="{Binding UpscaleModel.DefaultOptions.TemporalChunkSize}" />
+                            </StackPanel>
+                            <StackPanel Margin="2,0,2,0" Visibility="{Binding UpscaleModel.Pipeline, Converter={StaticResource EnumToVisibilityConverter}, ConverterParameter=RelayVSRPipeline}" ToolTip="{CommonControls:Localize ToolTip_UpscaleWindowSize}" ToolTipService.InitialShowDelay="200">
+                                <TextBlock Text="{CommonControls:Localize UpscaleWindowSize}" Style="{StaticResource FieldTextBlockStyle}" />
+                                <TextBox Text="{Binding UpscaleModel.DefaultOptions.WindowSize}" />
+                            </StackPanel>
+                        </UniformGrid>
+
+                    </StackPanel>
+                </DockPanel>
+            </Border>
+
+            <!--File-->
+            <Border Style="{StaticResource WizardSection}">
+                <DockPanel>
+                    <StackPanel Style="{StaticResource WizardSectionHeader}">
+                        <TextBlock Text="{CommonControls:Localize Upscaler}" FontWeight="SemiBold" FontSize="13"/>
+                        <TextBlock Text="{CommonControls:Localize ModelFileDescription}" FontSize="11" Opacity=".7" TextWrapping="Wrap"/>
+                    </StackPanel>
+                    <StackPanel>
+                        <Controls:CheckpointControl Margin="-4" Settings="{Binding Settings}" Checkpoint="{Binding UpscaleModel.Checkpoint}" SupportedTypes="{Binding CheckpointTypes, Mode=OneWay}" FileFilter="{Binding FileFilter, Mode=OneWay}">
+                            <Controls:CheckpointControl.Style>
+                                <Style TargetType="{x:Type Controls:CheckpointControl}">
+                                    <Style.Triggers>
+                                        <DataTrigger Binding="{Binding UpscaleModel.Checkpoint.Type}" Value="OnlineFile">
+                                            <Setter Property="Height" Value="150"/>
+                                        </DataTrigger>
+                                    </Style.Triggers>
+                                </Style>
+                            </Controls:CheckpointControl.Style>
+                        </Controls:CheckpointControl>
+
+                        <!--VAE, video upscalers-->
+                        <StackPanel Margin="0,6,0,0" Visibility="{Binding UpscaleModel.IsVideoUpscaler, Converter={StaticResource BooleanToVisibilityConverter}, FallbackValue=Collapsed}">
+                            <TextBlock Text="{CommonControls:Localize AutoEncoder}" FontWeight="SemiBold"/>
+                            <Controls:CheckpointControl Margin="-4" Settings="{Binding Settings}" Checkpoint="{Binding UpscaleModel.Vae}" SupportedTypes="{Binding VaeCheckpointTypes, Mode=OneWay}" FileFilter="{Binding FileFilter, Mode=OneWay}">
+                                <Controls:CheckpointControl.Style>
+                                    <Style TargetType="{x:Type Controls:CheckpointControl}">
+                                        <Style.Triggers>
+                                            <DataTrigger Binding="{Binding UpscaleModel.Vae.Type}" Value="OnlineFile">
+                                                <Setter Property="Height" Value="150"/>
+                                            </DataTrigger>
+                                        </Style.Triggers>
+                                    </Style>
+                                </Controls:CheckpointControl.Style>
+                            </Controls:CheckpointControl>
+                        </StackPanel>
+                    </StackPanel>
+                </DockPanel>
+            </Border>
 
         </StackPanel>
     </DockPanel>

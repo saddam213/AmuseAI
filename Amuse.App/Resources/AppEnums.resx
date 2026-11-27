@@ -286,10 +286,10 @@
     <value>Automation</value>
   </data>
   <data name="PaintDrawingTool0" xml:space="preserve">
-    <value>RoundBrush</value>
+    <value>Round Brush</value>
   </data>
   <data name="PaintDrawingTool1" xml:space="preserve">
-    <value>SquareBrush</value>
+    <value>Square Brush</value>
   </data>
   <data name="PaintDrawingTool2" xml:space="preserve">
     <value>Highlight</value>
@@ -302,9 +302,6 @@
   </data>
   <data name="TimelineSegmentType1" xml:space="preserve">
     <value>Image</value>
-  </data>
-  <data name="TimelineSegmentType2" xml:space="preserve">
-    <value>Audio</value>
   </data>
   <data name="TimelineSegmentType3" xml:space="preserve">
     <value>Overlay</value>
@@ -327,22 +324,22 @@
   <data name="AdapterType2" xml:space="preserve">
     <value>Other</value>
   </data>
-  <data name="ViewCategory0" xml:space="preserve">
-    <value>Other</value>
+  <data name="ModelSourceType4" xml:space="preserve">
+    <value>Local File + Vision</value>
   </data>
-  <data name="ViewCategory1" xml:space="preserve">
-    <value>Settings</value>
+  <data name="ModelSourceType4_Description" xml:space="preserve">
+    <value>Model file and vision projector (mmproj) file</value>
   </data>
-  <data name="ViewCategory2" xml:space="preserve">
-    <value>Image</value>
+  <data name="McpTransportType0" xml:space="preserve">
+    <value>Local Command</value>
   </data>
-  <data name="ViewCategory3" xml:space="preserve">
-    <value>Video</value>
+  <data name="McpTransportType0_Description" xml:space="preserve">
+    <value>A program started on this computer</value>
   </data>
-  <data name="ViewCategory4" xml:space="preserve">
-    <value>Audio</value>
+  <data name="McpTransportType1" xml:space="preserve">
+    <value>Remote URL</value>
   </data>
-  <data name="ViewCategory5" xml:space="preserve">
-    <value>Text</value>
+  <data name="McpTransportType1_Description" xml:space="preserve">
+    <value>A server reached over the network</value>
   </data>
 </root>

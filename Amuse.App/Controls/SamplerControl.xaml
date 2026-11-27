@@ -1,0 +1,87 @@
+﻿<CommonControls:BaseControl x:Class="Amuse.App.Controls.SamplerControl"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:local="clr-namespace:Amuse.App.Controls"
+             xmlns:CommonControls="clr-namespace:TensorStack.WPF.Controls;assembly=TensorStack.WPF">
+    <Grid DataContext="{Binding RelativeSource={RelativeSource AncestorType={x:Type local:SamplerControl}}}">
+        <StackPanel>
+
+            <!--Sampler-->
+            <StackPanel>
+                <TextBlock Text="{CommonControls:Localize Sampler}" Style="{StaticResource FieldTextBlockStyle}" />
+                <ComboBox SelectedItem="{Binding SelectedOptions}" ItemsSource="{Binding Options}"/>
+            </StackPanel>
+
+            <!--Sampler Options-->
+            <StackPanel Visibility="{Binding IsSelectorOnly, Converter={StaticResource InverseBooleanToVisibilityConverter}}">
+
+                <!--Scheduler-->
+                <StackPanel Margin="0,4,0,0">
+                    <TextBlock Text="{CommonControls:Localize Scheduler}" Style="{StaticResource FieldTextBlockStyle}" />
+                    <ComboBox SelectedItem="{Binding SelectedOptions.Scheduler}" ItemsSource="{Binding Source={StaticResource SchedulerType}}" Style="{StaticResource EnumComboBox}"/>
+                </StackPanel>
+
+                <!--FlowShift/Eta-->
+                <UniformGrid Columns="2" Margin="0,4,0,0">
+                    <StackPanel Margin="0,0,2,0">
+                        <TextBlock Text="{CommonControls:Localize FlowShift}" Style="{StaticResource FieldTextBlockStyle}" />
+                        <CommonControls:FloatBox FloatValue="{Binding SelectedOptions.FlowShift, UpdateSourceTrigger=PropertyChanged}" />
+                    </StackPanel>
+                    <StackPanel Margin="2,0,0,0">
+                        <TextBlock Text="{CommonControls:Localize Eta}" Style="{StaticResource FieldTextBlockStyle}" />
+                        <CommonControls:FloatBox FloatValue="{Binding SelectedOptions.Eta, UpdateSourceTrigger=PropertyChanged}" />
+                    </StackPanel>
+                </UniformGrid>
+
+                <!--ImageGuidance/ShiftedTimestep-->
+                <UniformGrid Columns="2" Margin="0,4,0,0">
+                    <StackPanel Margin="0,0,2,0" ToolTip="{CommonControls:Localize ToolTip_GuidanceImage}" ToolTipService.InitialShowDelay="200">
+                        <TextBlock Text="{CommonControls:Localize GuidanceImage}" Style="{StaticResource FieldTextBlockStyle}" />
+                        <CommonControls:FloatBox FloatValue="{Binding SelectedOptions.ImageGuidance, UpdateSourceTrigger=PropertyChanged}" />
+                    </StackPanel>
+                    <StackPanel Margin="2,0,0,0" ToolTip="{CommonControls:Localize ToolTip_ShiftedTimestep}" ToolTipService.InitialShowDelay="200">
+                        <TextBlock Text="{CommonControls:Localize ShiftedTimestep}" Style="{StaticResource FieldTextBlockStyle}" />
+                        <TextBox Text="{Binding SelectedOptions.ShiftedTimestep, UpdateSourceTrigger=PropertyChanged}" />
+                    </StackPanel>
+                </UniformGrid>
+
+                <!--Sigmas-->
+                <StackPanel Margin="0,4,0,0" ToolTip="{CommonControls:Localize ToolTip_Sigmas}" ToolTipService.InitialShowDelay="200">
+                    <TextBlock Text="{CommonControls:Localize Sigmas}" Style="{StaticResource FieldTextBlockStyle}" />
+                    <TextBox Text="{Binding SelectedOptions.Sigmas, UpdateSourceTrigger=PropertyChanged}" />
+                </StackPanel>
+
+                <!--SkipLayers/Scale-->
+                <UniformGrid Columns="2" Margin="0,4,0,0">
+                    <StackPanel Margin="0,0,2,0" ToolTip="{CommonControls:Localize ToolTip_SkipLayers}" ToolTipService.InitialShowDelay="200">
+                        <TextBlock Text="{CommonControls:Localize SkipLayers}" Style="{StaticResource FieldTextBlockStyle}" />
+                        <TextBox Text="{Binding SelectedOptions.SkipLayers, UpdateSourceTrigger=PropertyChanged}" />
+                    </StackPanel>
+                    <StackPanel Margin="2,0,0,0" ToolTip="{CommonControls:Localize ToolTip_SkipLayers}" ToolTipService.InitialShowDelay="200">
+                        <TextBlock Text="{CommonControls:Localize SkipLayerScale}" Style="{StaticResource FieldTextBlockStyle}" />
+                        <CommonControls:FloatBox FloatValue="{Binding SelectedOptions.SkipLayerScale, UpdateSourceTrigger=PropertyChanged}" />
+                    </StackPanel>
+                </UniformGrid>
+
+                <!--SkipLayers Start/End-->
+                <UniformGrid Columns="2" Margin="0,4,0,0">
+                    <StackPanel Margin="0,0,2,0" ToolTip="{CommonControls:Localize ToolTip_SkipLayers}" ToolTipService.InitialShowDelay="200">
+                        <TextBlock Text="{CommonControls:Localize SkipLayerStart}" Style="{StaticResource FieldTextBlockStyle}" />
+                        <CommonControls:FloatBox FloatValue="{Binding SelectedOptions.SkipLayerStart, UpdateSourceTrigger=PropertyChanged}" />
+                    </StackPanel>
+                    <StackPanel Margin="2,0,0,0" ToolTip="{CommonControls:Localize ToolTip_SkipLayers}" ToolTipService.InitialShowDelay="200">
+                        <TextBlock Text="{CommonControls:Localize SkipLayerEnd}" Style="{StaticResource FieldTextBlockStyle}" />
+                        <CommonControls:FloatBox FloatValue="{Binding SelectedOptions.SkipLayerEnd, UpdateSourceTrigger=PropertyChanged}" />
+                    </StackPanel>
+                </UniformGrid>
+
+                <!--Extra Arguments-->
+                <StackPanel Margin="0,4,0,0" ToolTip="{CommonControls:Localize ToolTip_SamplerArgs}" ToolTipService.InitialShowDelay="200">
+                    <TextBlock Text="{CommonControls:Localize SamplerArgs}" Style="{StaticResource FieldTextBlockStyle}" />
+                    <TextBox Text="{Binding SelectedOptions.ExtraArgs, UpdateSourceTrigger=PropertyChanged}" />
+                </StackPanel>
+
+            </StackPanel>
+        </StackPanel>
+    </Grid>
+</CommonControls:BaseControl>

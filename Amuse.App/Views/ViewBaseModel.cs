@@ -17,17 +17,18 @@ namespace Amuse.App.Views
         private PipelineModel _currentPipeline;
         private AutomationOptions _automationOptions;
         private bool _isAutomating;
+        private bool _isPipelineBusy;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="ViewBaseModel"/> class.
         /// </summary>
-        public ViewBaseModel(Settings settings, NavigationService navigationService, IModelDownloadService downloadService, IHistoryService historyService, ILogger logger)
-            : base(settings, navigationService, downloadService, historyService, logger)
+        public ViewBaseModel(Settings settings, NavigationService navigationService, IModelDownloadService downloadService, IModelAccessService modelAccessService, IHistoryService historyService, ILogger logger)
+            : base(settings, navigationService, downloadService, modelAccessService, historyService, logger)
         {
             Statistics = new StatisticsModel(Dispatcher);
             ProgressCallback = new Progress<RunProgress>(OnProgress);
-            ExecuteCommand = new AsyncRelayCommand(ExecuteAsync, CanExecute);
-            ExecuteAutomationCommand = new AsyncRelayCommand(ExecuteAutomationAsync, CanExecuteAutomation);
+            ExecuteCommand = new AsyncRelayCommand(() => ExecutePipelineAsync(ExecuteAsync), CanExecute);
+            ExecuteAutomationCommand = new AsyncRelayCommand(() => ExecutePipelineAsync(ExecuteAutomationAsync), CanExecuteAutomation);
             AutomationProgress = new ProgressInfo();
         }
 
@@ -92,6 +93,33 @@ namespace Amuse.App.Views
             set { SetProperty(ref _isAutomating, value); }
         }
 
+        /// <summary>
+        /// Gets or sets a value indicating whether the view is loading, executing or automating, the model controls are locked while set.
+        /// </summary>
+        public bool IsPipelineBusy
+        {
+            get { return _isPipelineBusy; }
+            set { SetProperty(ref _isPipelineBusy, value); }
+        }
+
+
+        /// <summary>
+        /// Executes the operation with the model controls locked for every stage, not only while a service is executing.
+        /// </summary>
+        /// <param name="operation">The operation.</param>
+        private async Task ExecutePipelineAsync(Func<Task> operation)
+        {
+            try
+            {
+                IsPipelineBusy = true;
+                await operation();
+            }
+            finally
+            {
+                IsPipelineBusy = false;
+            }
+        }
+
 
         /// <summary>
         /// Executes the asynchronous.
@@ -132,7 +160,7 @@ namespace Amuse.App.Views
         /// </summary>
         protected virtual bool CanExecuteAutomation()
         {
-            return CanExecute();
+            return CanExecute() && AutomationOptions?.IsValid() == true;
         }
 
 

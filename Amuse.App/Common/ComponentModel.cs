@@ -1,5 +1,4 @@
 ﻿using System.Text.Json.Serialization;
-using TensorStack.Common.Common;
 using TensorStack.WPF;
 
 namespace Amuse.App.Common
@@ -9,7 +8,7 @@ namespace Amuse.App.Common
         private string _name;
         private string _key;
         private string _link;
-        private string _accessToken;
+        private ModelMetadata _metadata;
         private ModelStatusType _status;
 
         [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingDefault)]
@@ -35,38 +34,30 @@ namespace Amuse.App.Common
             set { SetProperty(ref _status, value); }
         }
 
-        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingDefault)]
-        public string AccessToken
-        {
-            get { return _accessToken; }
-            set { SetProperty(ref _accessToken, value); }
-        }
-
         public string Link
         {
             get { return _link; }
             set { SetProperty(ref _link, value); }
         }
 
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+        public ModelMetadata Metadata
+        {
+            get { return _metadata; }
+            set { SetProperty(ref _metadata, value); }
+        }
+
 
         public void Initialize(Settings settings)
         {
+            _metadata?.Initialize(settings);
             Status = GetModelStatus(settings);
         }
 
 
         public void Delete(Settings settings)
         {
-            var resolvedCheckpoint = GetDirectory(settings);
-            if (System.IO.File.Exists(resolvedCheckpoint))
-            {
-                FileHelper.DeleteFile(resolvedCheckpoint);
-                FileHelper.DeleteDirectory(System.IO.Path.GetDirectoryName(resolvedCheckpoint), false);
-            }
-            else if (System.IO.Directory.Exists(resolvedCheckpoint))
-            {
-                FileHelper.DeleteDirectory(resolvedCheckpoint);
-            }
+            Checkpoint?.DeleteFiles(settings, null);
         }
 
 
@@ -88,13 +79,11 @@ namespace Amuse.App.Common
             if (Checkpoint == null)
                 return ModelStatusType.Available;
 
-            var isValid = Checkpoint.IsInstalled(settings.DirectoryModel);
-            if (Status == ModelStatusType.Available && isValid)
+            var isValid = Checkpoint.IsInstalled(settings, settings.DirectoryModel);
+            if ((Status == ModelStatusType.Available || Status == ModelStatusType.Unknown) && isValid)
                 return ModelStatusType.Installed;
             else if (Status == ModelStatusType.Installed && !isValid)
                 return ModelStatusType.Unknown;
-            else if (Status == ModelStatusType.Downloading || Status == ModelStatusType.DownloadQueue || Status == ModelStatusType.DownloadFailed)
-                return ModelStatusType.Available;
 
             return Status;
         }
@@ -108,8 +97,8 @@ namespace Amuse.App.Common
                 Name = Name,
                 Key = Key,
                 Link = Link,
-                Checkpoint = Checkpoint.DeepClone(),
-                AccessToken = AccessToken
+                Metadata = Metadata?.DeepClone(),
+                Checkpoint = Checkpoint.DeepClone()
             };
         }
     }

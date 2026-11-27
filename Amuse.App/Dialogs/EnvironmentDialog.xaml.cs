@@ -1,14 +1,17 @@
 ﻿// Copyright (c) Adam Clark. All rights reserved.
 // Licensed under the Apache 2.0 License.
 using Amuse.App.Common;
+using Amuse.App.Resources;
 using Amuse.App.Services;
 using Amuse.Common;
+using Microsoft.Extensions.Logging;
 using System;
 using System.Threading;
 using System.Threading.Tasks;
 using TensorStack.Common;
 using TensorStack.WPF;
 using TensorStack.WPF.Controls;
+using TensorStack.WPF.Services;
 
 namespace Amuse.App.Dialogs
 {
@@ -18,10 +21,11 @@ namespace Amuse.App.Dialogs
     public partial class EnvironmentDialog : DialogControl
     {
         private readonly IEnvironmentService _environmentService;
-        private readonly IGenerateService _generateService;
+        private readonly IModelAccessService _modelAccessService;
+        private readonly ILogger<EnvironmentDialog> _logger;
         private readonly IProgress<PipelineProgress> _progressCallback;
         private bool _isExecuting;
-        private PipelineModel _pipeline;
+        private PipelineModel _loadingPipeline;
         private EnvironmentModel _environment;
         private readonly CancellationTokenSource _cancellation;
         private string _message;
@@ -33,16 +37,22 @@ namespace Amuse.App.Dialogs
         private string _downloadRemaining;
         private EnvironmentSetupItem _setupItem;
 
-        public EnvironmentDialog(IEnvironmentService environmentService, IGenerateService generateService)
+        /// <summary>
+        /// Initializes a new instance of the <see cref="EnvironmentDialog"/> class.
+        /// </summary>
+        /// <param name="environmentService">The environment service.</param>
+        /// <param name="modelAccessService">The model access service.</param>
+        /// <param name="logger">The logger.</param>
+        public EnvironmentDialog(IEnvironmentService environmentService, IModelAccessService modelAccessService, ILogger<EnvironmentDialog> logger)
         {
+            _logger = logger;
             _cancellation = new CancellationTokenSource();
             _environmentService = environmentService;
-            _generateService = generateService;
+            _modelAccessService = modelAccessService;
             _progressCallback = new Progress<PipelineProgress>(OnProgressUpdate);
             CancelCommand = new AsyncRelayCommand(CloseAsync);
             CreateCommand = new AsyncRelayCommand(CreateEnvironment);
             UpdateCommand = new AsyncRelayCommand(UpdateEnvironment);
-            RebuildCommand = new AsyncRelayCommand(RebuildEnvironment);
             Progress = new ProgressInfo();
             InitializeComponent();
         }
@@ -50,11 +60,9 @@ namespace Amuse.App.Dialogs
         public AsyncRelayCommand CancelCommand { get; }
         public AsyncRelayCommand CreateCommand { get; }
         public AsyncRelayCommand UpdateCommand { get; }
-        public AsyncRelayCommand RebuildCommand { get; }
         public ProgressInfo Progress { get; set; }
         public bool IsCreate { get; set; }
         public bool IsUpdate { get; set; }
-        public bool IsRebuild { get; set; }
 
         public bool IsExecuting
         {
@@ -123,21 +131,15 @@ namespace Amuse.App.Dialogs
             var backendName = GetBackendName(backendType);
             if (IsCreate)
             {
-                Message = $"Create {backendName} Environment?";
-                SubMessage = $"This will create the required {backendName} Environment on your machine for running local models, this is a one-time setup.";
-                WaitMessage = "(This may take several minutes)";
+                Message = string.Format(AppDefault.EnvironmentCreateMessage, backendName);
+                SubMessage = string.Format(AppDefault.EnvironmentCreateSubMessage, backendName);
+                WaitMessage = AppDefault.EnvironmentSetupWaitMessage;
             }
             if (IsUpdate)
             {
-                Message = $"Update {backendName} Environment?";
-                SubMessage = $"This will update your {backendName} Environment with the latest required packages, This is a one-off process.";
-                WaitMessage = "(This may take few minutes)";
-            }
-            if (IsRebuild)
-            {
-                Message = $"Rebuild {backendName} Environment?";
-                SubMessage = $"This will completely wipe and reinstall your {backendName} Environment to fix any broken dependencies or corrupted files";
-                WaitMessage = "(This may take several minutes)";
+                Message = string.Format(AppDefault.EnvironmentUpdateMessage, backendName);
+                SubMessage = string.Format(AppDefault.EnvironmentUpdateSubMessage, backendName);
+                WaitMessage = AppDefault.EnvironmentUpdateWaitMessage;
             }
         }
 
@@ -146,23 +148,12 @@ namespace Amuse.App.Dialogs
         {
             return backendType switch
             {
-                BackendType.HuggingFace => "Python Virtual",
                 BackendType.StableDiffusionCpp => "StableDiffusion.cpp",
                 BackendType.AudioCpp => "Audio.cpp",
                 BackendType.LlamaCpp => "Llama.cpp",
                 BackendType.OnnxRuntime => "OnnxRuntime",
-                _ => "Virtual"
+                _ => AppDefault.EnvironmentNameVirtual
             };
-        }
-
-
-        public Task<bool> CreateAsync(PipelineModel pipeline)
-        {
-            IsCreate = true;
-            _pipeline = pipeline;
-            NotifyPropertyChanged(nameof(IsCreate));
-            SetMessages(pipeline.Backend);
-            return base.ShowDialogAsync();
         }
 
 
@@ -177,10 +168,12 @@ namespace Amuse.App.Dialogs
         /// </summary>
         /// <param name="environment">The environment.</param>
         /// <param name="isSelectable">if set to <c>true</c> the user can choose any environment in the same group, the chosen one becomes the default.</param>
-        public Task<bool> CreateAsync(EnvironmentModel environment, bool isSelectable)
+        /// <param name="loadingPipeline">The pipeline that is loading and needs the environment, its own loaded models are unloaded without asking.</param>
+        public Task<bool> CreateAsync(EnvironmentModel environment, bool isSelectable, PipelineModel loadingPipeline = null)
         {
             IsCreate = true;
             _environment = environment;
+            _loadingPipeline = loadingPipeline;
             if (isSelectable)
                 SetupItem = new EnvironmentSetupItem(environment.Backend, environment.Vendor, _environmentService.GetEnvironmentGroup(environment), false, true, _environmentService.Exists);
 
@@ -190,40 +183,37 @@ namespace Amuse.App.Dialogs
         }
 
 
-        public Task<bool> UpdateAsync(EnvironmentModel environment)
+        /// <summary>
+        /// Shows the dialog to update an environment.
+        /// </summary>
+        /// <param name="environment">The environment.</param>
+        /// <param name="loadingPipeline">The pipeline that is loading and needs the environment, its own loaded models are unloaded without asking.</param>
+        public Task<bool> UpdateAsync(EnvironmentModel environment, PipelineModel loadingPipeline = null)
         {
             IsUpdate = true;
             _environment = environment;
+            _loadingPipeline = loadingPipeline;
             NotifyPropertyChanged(nameof(IsUpdate));
             SetMessages(environment.Backend);
             return base.ShowDialogAsync();
         }
 
 
-        public Task<bool> RebuildAsync(EnvironmentModel environment)
-        {
-            IsRebuild = true;
-            _environment = environment;
-            NotifyPropertyChanged(nameof(IsRebuild));
-            SetMessages(environment.Backend);
-            return base.ShowDialogAsync();
-        }
-
-
         /// <summary>
-        /// Create an new environment
+        /// Create an new environment, choosing one that is already installed only makes it the default, so nothing is unloaded.
         /// </summary>
         private async Task CreateEnvironment()
         {
-            IsExecuting = true;
             try
             {
-                if (_generateService.IsLoaded)
-                    await _generateService.UnloadAsync();
+                var isInstallRequired = !_environmentService.Exists(Environment);
+                if (isInstallRequired && !await _modelAccessService.RequestEnvironmentReleaseAsync(Environment, _loadingPipeline))
+                {
+                    await base.CloseAsync();
+                    return;
+                }
 
-                if (_pipeline != null)
-                    await _environmentService.CreateAsync(_pipeline, _progressCallback, _cancellation.Token);
-
+                IsExecuting = true;
                 if (_setupItem != null)
                 {
                     // Chosen, install it unless already installed, then make it the default so inference uses it
@@ -240,6 +230,13 @@ namespace Amuse.App.Dialogs
             }
             catch (OperationCanceledException)
             {
+                _logger.LogInformation("[EnvironmentDialog] [Create] Creating environment cancelled");
+                await base.CloseAsync();
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "[EnvironmentDialog] [Create] Creating environment failed");
+                await DialogService.ShowErrorAsync(AppErrors.UnexpectedErrorTitle, ex.Message);
                 await base.CloseAsync();
             }
         }
@@ -250,38 +247,27 @@ namespace Amuse.App.Dialogs
         /// </summary>
         private async Task UpdateEnvironment()
         {
-            IsExecuting = true;
             try
             {
-                if (_generateService.IsLoaded)
-                    await _generateService.UnloadAsync();
+                if (!await _modelAccessService.RequestEnvironmentReleaseAsync(_environment, _loadingPipeline))
+                {
+                    await base.CloseAsync();
+                    return;
+                }
 
+                IsExecuting = true;
                 await _environmentService.UpdateAsync(_environment, _progressCallback, _cancellation.Token);
                 await base.SaveAsync();
             }
             catch (OperationCanceledException)
             {
+                _logger.LogInformation("[EnvironmentDialog] [Update] Updating environment cancelled");
                 await base.CloseAsync();
             }
-        }
-
-
-        /// <summary>
-        /// Rebuild an existing environment
-        /// </summary>
-        private async Task RebuildEnvironment()
-        {
-            IsExecuting = true;
-            try
+            catch (Exception ex)
             {
-                if (_generateService.IsLoaded)
-                    await _generateService.UnloadAsync();
-
-                await _environmentService.RebuildAsync(_environment, _progressCallback, _cancellation.Token);
-                await base.SaveAsync();
-            }
-            catch (OperationCanceledException)
-            {
+                _logger.LogError(ex, "[EnvironmentDialog] [Update] Updating environment failed");
+                await DialogService.ShowErrorAsync(AppErrors.UnexpectedErrorTitle, ex.Message);
                 await base.CloseAsync();
             }
         }

@@ -29,8 +29,8 @@ namespace Amuse.App.Views
         private ImageInput _sourceImage4;
         private VideoInputStream _sourceVideo;
 
-        public FrameToFrameView(Settings settings, NavigationService navigationService, IModelDownloadService downloadService, IGenerateService generateService, IExtractService extractService, IUpscaleService upscaleService, IHistoryService historyService, IMediaService mediaService, ILogger<FrameToFrameView> logger)
-        : base(settings, navigationService, downloadService, generateService, extractService, upscaleService, historyService, logger)
+        public FrameToFrameView(Settings settings, NavigationService navigationService, IModelDownloadService downloadService, IModelAccessService modelAccessService, IGenerateService generateService, ILanguageService languageService, IExtractService extractService, IUpscaleService upscaleService, IHistoryService historyService, IMediaService mediaService, ILogger<FrameToFrameView> logger)
+        : base(settings, navigationService, downloadService, modelAccessService, generateService, languageService, extractService, upscaleService, historyService, logger)
         {
             MediaService = mediaService;
             VideoFrameProgress = new ProgressInfo();
@@ -175,7 +175,8 @@ namespace Amuse.App.Views
             try
             {
                 await ResultControl.ClearAsync();
-                var previousImage = ResultImage;
+                Progress.Clear();
+                AutomationProgress.Clear();
                 Statistics.Clear();
                 ResultImage = default;
                 CompareImage = default;
@@ -186,23 +187,17 @@ namespace Amuse.App.Views
 
                 AutomationProgress.Indeterminate(AppDefault.AutomationStarted);
                 var cancellationToken = CancellationTokenSource.Token;
-                await foreach (var automationJob in AutomationManager.CreateJobsAsync(AutomationOptions, Options, MediaType.Image, MediaType.Image))
+                await foreach (var automationJob in AutomationManager.CreateJobsAsync(AutomationOptions, Options, MediaType.Video, MediaType.Image))
                 {
                     cancellationToken.ThrowIfCancellationRequested();
-
-                    // Source
-                    if (!automationJob.VideoStreams.IsNullOrEmpty())
-                        SourceVideo = automationJob.VideoStreams[0];
-
 
                     var tempVideoStreamFile = MediaService.GetTempFile(MediaType.Video);
                     await ExecuteVideoFramesAsync(automationJob.GenerateOptions).SaveAsync(tempVideoStreamFile, audioSourceFile: _sourceVideo.SourceFile);
                     var resultVideoStream = await VideoInputStream.CreateAsync(tempVideoStreamFile);
 
-                    Statistics.Stop();
                     ResultVideo = !AutomationOptions.IsHistoryEnabled
                         ? resultVideoStream
-                        : await SaveHistoryAsync(Options, resultVideoStream);
+                        : await SaveHistoryAsync(automationJob.GenerateOptions, resultVideoStream);
                     CompareVideo = _sourceVideo;
 
                     await automationJob.SaveAsync(ResultVideo);
@@ -239,6 +234,15 @@ namespace Amuse.App.Views
 
 
         /// <summary>
+        /// Determines whether this process can execute, a source video is required.
+        /// </summary>
+        protected override bool CanExecute()
+        {
+            return base.CanExecute() && _sourceVideo is not null;
+        }
+
+
+        /// <summary>
         /// Execute diffusion for each video frame
         /// </summary>
         private async IAsyncEnumerable<VideoFrame> ExecuteVideoFramesAsync(GenerateInputOptions inputOptions)
@@ -254,12 +258,12 @@ namespace Amuse.App.Views
                 var resultTensor = await ExecuteImageDiffusionAsync(options);
 
                 // Upscale
-                resultTensor = await ExecuteImageUpscaleAsync(resultTensor, isResultKeptOnError: false);
+                resultTensor = await ExecuteImageUpscaleAsync(resultTensor);
 
                 // Result
                 ResultImage = await resultTensor.ToImageInputAsync();
                 yield return new VideoFrame(videoFrame.Index, ResultImage, videoFrame.SourceFrameRate);
-                VideoFrameProgress.Update(videoFrame.Index + 1, _sourceVideo.FrameCount, $"Video Frame: {videoFrame.Index}/{_sourceVideo.FrameCount}");
+                VideoFrameProgress.Update(videoFrame.Index + 1, _sourceVideo.FrameCount, string.Format(AppDefault.VideoFrameProgress, videoFrame.Index, _sourceVideo.FrameCount));
             }
         }
 
@@ -295,8 +299,8 @@ namespace Amuse.App.Views
                 Options = options,
                 Model = CurrentPipeline.DiffusionModel.Name,
                 LoraModels = CurrentPipeline.LoraAdapterModel?.Select(x => x.Name).ToArray(),
-                UpscaleModel = UpscaledModel?.Name,
-                UpscaleOptions = UpscaledModel is not null ? UpscaleOptions : null,
+                UpscaleModel = CurrentPipeline?.UpscaleModel?.Name,
+                UpscaleOptions = CurrentPipeline?.UpscaleModel is not null ? UpscaleOptions : null,
                 Source = View.FrameToFrame,
             });
             Logger.LogInformation($"[FrameToFrame] [SaveHistory] History saved.");

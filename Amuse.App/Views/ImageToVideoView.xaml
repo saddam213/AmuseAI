@@ -26,7 +26,7 @@
                         <!--ModelControl-->
                         <Grid DockPanel.Dock="Top" IsEnabled="{Binding GenerateService.IsLoading, Mode=OneWay, Converter={StaticResource InverseBoolConverter}}">
                             <Grid IsEnabled="{Binding GenerateService.IsExecuting, Mode=OneWay, Converter={StaticResource InverseBoolConverter}}">
-                                <Grid IsEnabled="{Binding IsAutomating, Mode=OneWay, Converter={StaticResource InverseBoolConverter}}">
+                                <Grid IsEnabled="{Binding IsPipelineBusy, Mode=OneWay, Converter={StaticResource InverseBoolConverter}}">
                                     <Controls:DiffusionModelControl
                                         x:Name="ModelControl"
                                         ViewType="ImageToVideo"
@@ -55,7 +55,7 @@
                                         <Button Command="{Binding CancelCommand, Mode=OneWay}" >
                                             <Button.Style>
                                                 <Style TargetType="{x:Type Button}" BasedOn="{StaticResource {x:Type Button}}">
-                                                    <Setter Property="Content" Value="Cancel" />
+                                                    <Setter Property="Content" Value="{CommonControls:Localize Cancel}" />
                                                     <Style.Triggers>
                                                         <DataTrigger Binding="{Binding GenerateService.IsCanceling, Mode=OneWay}" Value="True">
                                                             <Setter Property="Content" Value="{CommonControls:Localize Canceling}" />

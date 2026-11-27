@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Amuse.App.Resources;
+using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
@@ -50,7 +51,7 @@ namespace Amuse.App.Tools
         /// <summary>
         /// Gets the display name.
         /// </summary>
-        public override string DisplayName => "File Search Tool";
+        public override string DisplayName => AppDefault.ToolFileSearch;
 
         /// <summary>
         /// Gets the tool icon.
@@ -442,8 +443,8 @@ namespace Amuse.App.Tools
         {
             if (!string.IsNullOrWhiteSpace(path))
             {
-                var directory = Environment.ExpandEnvironmentVariables(path.Trim().Trim('"'));
-                return Directory.Exists(directory) ? [Path.GetFullPath(directory)] : [];
+                var directory = ToolHelper.GetLocalPath(path);
+                return Directory.Exists(directory) ? [directory] : [];
             }
 
             var userProfile = Environment.GetFolderPath(Environment.SpecialFolder.UserProfile);

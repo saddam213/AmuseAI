@@ -23,9 +23,17 @@ namespace Amuse.App.Controls
         private Point _dragStartPoint;
         private ScrollBarVisibility _horizontalScrollBarVisibility = ScrollBarVisibility.Visible;
         private ScrollBarVisibility _verticalScrollBarVisibility = ScrollBarVisibility.Hidden;
+        private bool _isImageFilter;
+        private bool _isVideoFilter;
+        private bool _isAudioFilter;
+        private bool _isTextFilter;
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="HistoryControl"/> class.
+        /// </summary>
         public HistoryControl()
         {
+            ClearFilterCommand = new RelayCommand(ClearFilter, CanClearFilter);
             InitializeComponent();
         }
 
@@ -111,7 +119,41 @@ namespace Amuse.App.Controls
             set { SetValue(RemoveItemCommandProperty, value); }
         }
 
+        public RelayCommand ClearFilterCommand { get; }
 
+        public bool IsImageFilter
+        {
+            get { return _isImageFilter; }
+            set { SetProperty(ref _isImageFilter, value); RefreshFilter(); }
+        }
+
+        public bool IsVideoFilter
+        {
+            get { return _isVideoFilter; }
+            set { SetProperty(ref _isVideoFilter, value); RefreshFilter(); }
+        }
+
+        public bool IsAudioFilter
+        {
+            get { return _isAudioFilter; }
+            set { SetProperty(ref _isAudioFilter, value); RefreshFilter(); }
+        }
+
+        public bool IsTextFilter
+        {
+            get { return _isTextFilter; }
+            set { SetProperty(ref _isTextFilter, value); RefreshFilter(); }
+        }
+
+        public bool IsFilterActive
+        {
+            get { return _isImageFilter || _isVideoFilter || _isAudioFilter || _isTextFilter; }
+        }
+
+
+        /// <summary>
+        /// Called when the item source changed.
+        /// </summary>
         private Task OnItemSourceChanged()
         {
             CollectionView = new ListCollectionView(ItemSource) { IsLiveSorting = true };
@@ -120,10 +162,66 @@ namespace Amuse.App.Controls
                 if (obj is not IHistoryItem item)
                     return false;
 
-                return true;
+                return IsMediaTypeVisible(item.MediaType);
             };
             OnSortChanged();
             return Task.CompletedTask;
+        }
+
+
+        /// <summary>
+        /// Determines whether the media type passes the current filter.
+        /// </summary>
+        /// <param name="mediaType">The media type.</param>
+        private bool IsMediaTypeVisible(MediaType mediaType)
+        {
+            if (!IsFilterActive)
+                return true;
+
+            return mediaType switch
+            {
+                MediaType.Image => _isImageFilter,
+                MediaType.Video => _isVideoFilter,
+                MediaType.Audio => _isAudioFilter,
+                MediaType.Text => _isTextFilter,
+                _ => false
+            };
+        }
+
+
+        /// <summary>
+        /// Refreshes the filter.
+        /// </summary>
+        private void RefreshFilter()
+        {
+            NotifyPropertyChanged(nameof(IsFilterActive));
+            CollectionView?.Refresh();
+        }
+
+
+        /// <summary>
+        /// Clears the filter.
+        /// </summary>
+        private void ClearFilter()
+        {
+            _isImageFilter = false;
+            _isVideoFilter = false;
+            _isAudioFilter = false;
+            _isTextFilter = false;
+            NotifyPropertyChanged(nameof(IsImageFilter));
+            NotifyPropertyChanged(nameof(IsVideoFilter));
+            NotifyPropertyChanged(nameof(IsAudioFilter));
+            NotifyPropertyChanged(nameof(IsTextFilter));
+            RefreshFilter();
+        }
+
+
+        /// <summary>
+        /// Determines whether the filter can be cleared.
+        /// </summary>
+        private bool CanClearFilter()
+        {
+            return IsFilterActive;
         }
 
 
@@ -152,6 +250,9 @@ namespace Amuse.App.Controls
             base.OnPreviewMouseMove(e);
             if (e.LeftButton == MouseButtonState.Pressed)
             {
+                if (e.OriginalSource is not DependencyObject source || ItemsControl.ContainerFromElement(ListBoxControl, source) is null)
+                    return;
+
                 // check if drag threshold is passed
                 var diff = e.GetPosition(null) - _dragStartPoint;
                 if (Math.Abs(diff.X) > TensorStack.WPF.Common.DragDistance || Math.Abs(diff.Y) > TensorStack.WPF.Common.DragDistance)

@@ -1,0 +1,129 @@
+﻿<Views:ViewBase x:Class="Amuse.App.Views.SettingsToolView"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:local="clr-namespace:Amuse.App.Views"
+    xmlns:CommonControls="clr-namespace:TensorStack.WPF.Controls;assembly=TensorStack.WPF"
+    xmlns:Views="clr-namespace:Amuse.App.Views">
+    <Grid DataContext="{Binding RelativeSource={RelativeSource AncestorType={x:Type local:SettingsToolView}}}" Margin="10, 20, 20, 20">
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="5*" />
+            <ColumnDefinition Width="3*" />
+        </Grid.ColumnDefinitions>
+
+        <DockPanel Grid.Column="0">
+            <Button DockPanel.Dock="Bottom" Command="{Binding SaveCommand}" MinWidth="120" Padding="10,0" Height="30" HorizontalAlignment="Right" Margin="0,10,0,0">
+                <StackPanel Orientation="Horizontal">
+                    <CommonControls:FontAwesome Icon="f0c7" IconStyle="Light" Color="{StaticResource InfoColour}"/>
+                    <TextBlock Text="{CommonControls:Localize SaveChanges}" Margin="5,0,0,0"/>
+                </StackPanel>
+            </Button>
+            <ScrollViewer VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Disabled">
+                <StackPanel Margin="0,0,4,0">
+
+                    <!--Permissions-->
+                    <Border Style="{StaticResource WizardSection}">
+                        <DockPanel>
+                            <StackPanel Style="{StaticResource WizardSectionHeader}">
+                                <TextBlock Text="{CommonControls:Localize Tools}" FontWeight="SemiBold" FontSize="13"/>
+                                <TextBlock Text="{CommonControls:Localize GeneralToolsDescription}" FontSize="11" Opacity=".7" TextWrapping="Wrap"/>
+                            </StackPanel>
+                            <StackPanel VerticalAlignment="Top">
+                                <UniformGrid Columns="3">
+                                    <StackPanel Margin="0,0,4,0">
+                                        <TextBlock Text="{CommonControls:Localize MaxToolRounds}" Style="{StaticResource FieldTextBlockStyle}"/>
+                                        <TextBox Text="{Binding Settings.MaxToolRounds, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+                                    </StackPanel>
+                                </UniformGrid>
+                                <UniformGrid Columns="2" Margin="0,6,0,0">
+                                    <CheckBox Content="{CommonControls:Localize EnableExternalLinks}" IsChecked="{Binding Settings.IsExternalLinksEnabled}" Margin="0,2"/>
+                                    <CheckBox Content="{CommonControls:Localize EnableExternalTools}" IsChecked="{Binding Settings.IsExternalToolsEnabled}" Margin="0,2"/>
+                                    <CheckBox Content="{CommonControls:Localize EnableDangerousTools}" IsChecked="{Binding Settings.IsDangerousToolsEnabled}" Margin="0,2"/>
+                                    <CheckBox Content="{CommonControls:Localize EnableExecuteTools}" IsChecked="{Binding Settings.IsExecuteToolsEnabled}" Margin="0,2"/>
+                                </UniformGrid>
+                            </StackPanel>
+                        </DockPanel>
+                    </Border>
+
+                    <!--MCP Servers-->
+                    <Border Style="{StaticResource WizardSection}">
+                        <DockPanel>
+                            <StackPanel Style="{StaticResource WizardSectionHeader}">
+                                <TextBlock Text="{CommonControls:Localize McpServers}" FontWeight="SemiBold" FontSize="13"/>
+                                <TextBlock Text="{CommonControls:Localize McpServersDescription}" FontSize="11" Opacity=".7" TextWrapping="Wrap"/>
+                            </StackPanel>
+                            <StackPanel VerticalAlignment="Top">
+                                <DockPanel Height="22">
+                                    <UniformGrid DockPanel.Dock="Right" Columns="2" Width="304">
+                                        <Button Content="{CommonControls:Localize McpImportJson}" Command="{Binding ImportServersCommand}" Margin="0,0,2,0" ToolTip="{CommonControls:Localize ToolTip_McpImport}" ToolTipService.InitialShowDelay="200"/>
+                                        <Button Content="{CommonControls:Localize McpAddServer}" Command="{Binding AddServerCommand}" Margin="2,0,0,0"/>
+                                    </UniformGrid>
+                                    <TextBlock />
+                                </DockPanel>
+                                <TextBlock Text="{CommonControls:Localize McpServersEmpty}" FontSize="11" Opacity=".7" Margin="0,8,0,4" Visibility="{Binding McpService.Servers.Count, Converter={StaticResource LessThanToVisibilityConverter}, ConverterParameter=1}"/>
+                                <ItemsControl ItemsSource="{Binding McpService.Servers}" Margin="0,6,0,0">
+                                    <ItemsControl.ItemTemplate>
+                                        <DataTemplate>
+                                            <Border Background="{StaticResource ButtonBackgroundDisabled}" Margin="0,1" Padding="6,4">
+                                                <DockPanel>
+                                                    <CheckBox DockPanel.Dock="Left" IsChecked="{Binding IsEnabled, Mode=TwoWay}" VerticalAlignment="Center" Margin="0,0,8,0" ToolTip="{CommonControls:Localize ToolTip_McpEnable}" ToolTipService.InitialShowDelay="200"/>
+                                                    <StackPanel DockPanel.Dock="Right" Orientation="Horizontal" VerticalAlignment="Center">
+                                                        <Button Command="{Binding ReconnectServerCommand, RelativeSource={RelativeSource AncestorType={x:Type local:SettingsToolView}}}" CommandParameter="{Binding}" Style="{StaticResource TransparentButton}" Width="28" ToolTip="{CommonControls:Localize ToolTip_McpReconnect}" ToolTipService.InitialShowDelay="200">
+                                                            <CommonControls:FontAwesome Icon="f021" />
+                                                        </Button>
+                                                        <Button Command="{Binding EditServerCommand, RelativeSource={RelativeSource AncestorType={x:Type local:SettingsToolView}}}" CommandParameter="{Binding}" Style="{StaticResource TransparentButton}" Width="28" ToolTip="{CommonControls:Localize Edit}" ToolTipService.InitialShowDelay="200">
+                                                            <CommonControls:FontAwesome Icon="f044" />
+                                                        </Button>
+                                                        <Button Command="{Binding RemoveServerCommand, RelativeSource={RelativeSource AncestorType={x:Type local:SettingsToolView}}}" CommandParameter="{Binding}" Style="{StaticResource TransparentButton}" Width="28" ToolTip="{CommonControls:Localize Remove}" ToolTipService.InitialShowDelay="200">
+                                                            <CommonControls:FontAwesome Icon="f00d" Color="{StaticResource DangerColour}" />
+                                                        </Button>
+                                                    </StackPanel>
+                                                    <CommonControls:FontAwesome DockPanel.Dock="Left" Icon="{Binding Icon}" Size="18" Color="{StaticResource DefaultForeground}" Width="24" VerticalAlignment="Center" Margin="0,0,8,0"/>
+                                                    <StackPanel>
+                                                        <TextBlock Text="{Binding Config.Name}" FontWeight="SemiBold"/>
+                                                        <TextBlock Text="{Binding Config.Description}" FontSize="11" Opacity=".85" TextWrapping="Wrap" Visibility="{Binding Config.Description, Converter={StaticResource NullOrEmptyVisibilityConverter}}"/>
+                                                        <TextBlock Text="{Binding Summary}" FontSize="11" Opacity=".7" TextTrimming="CharacterEllipsis"/>
+                                                        <TextBlock Text="{Binding StatusText}" FontSize="11" TextWrapping="Wrap" ToolTip="{Binding ToolSummary}" ToolTipService.InitialShowDelay="200">
+                                                            <TextBlock.Style>
+                                                                <Style TargetType="{x:Type TextBlock}" BasedOn="{StaticResource {x:Type TextBlock}}">
+                                                                    <Setter Property="Opacity" Value=".7"/>
+                                                                    <Style.Triggers>
+                                                                        <DataTrigger Binding="{Binding IsConnected}" Value="True">
+                                                                            <Setter Property="Foreground" Value="{StaticResource SuccessColour}"/>
+                                                                            <Setter Property="Opacity" Value="1"/>
+                                                                        </DataTrigger>
+                                                                        <DataTrigger Binding="{Binding IsFailed}" Value="True">
+                                                                            <Setter Property="Foreground" Value="{StaticResource DangerColour}"/>
+                                                                            <Setter Property="Opacity" Value="1"/>
+                                                                        </DataTrigger>
+                                                                    </Style.Triggers>
+                                                                </Style>
+                                                            </TextBlock.Style>
+                                                        </TextBlock>
+                                                    </StackPanel>
+                                                </DockPanel>
+                                            </Border>
+                                        </DataTemplate>
+                                    </ItemsControl.ItemTemplate>
+                                </ItemsControl>
+                            </StackPanel>
+                        </DockPanel>
+                    </Border>
+
+                </StackPanel>
+            </ScrollViewer>
+        </DockPanel>
+
+        <!--About-->
+        <DockPanel Grid.Column="1" Margin="10,0,0,0" VerticalAlignment="Top">
+            <Border Style="{StaticResource WizardSection}">
+                <StackPanel>
+                    <TextBlock Text="{CommonControls:Localize McpAbout}" FontWeight="SemiBold" FontSize="13"/>
+                    <TextBlock Text="{CommonControls:Localize McpAboutDescription}" FontSize="11" Opacity=".7" TextWrapping="Wrap" Margin="0,0,0,4"/>
+                </StackPanel>
+            </Border>
+        </DockPanel>
+
+    </Grid>
+</Views:ViewBase>

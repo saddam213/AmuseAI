@@ -144,10 +144,7 @@ namespace Amuse.App.Controls
 
         private async Task LoadAsync()
         {
-            if (!await IsAccessGrantedAsync())
-                return;
-
-            if (await IsDownloadingAsync())
+            if (!await DownloadService.PrepareLoadAsync(null, null, GetPipelineModels()))
                 return;
 
             _currentDevice = SelectedDevice;
@@ -347,58 +344,19 @@ namespace Amuse.App.Controls
         }
 
 
-        private async Task<bool> IsDownloadingAsync()
+        /// <summary>
+        /// Gets the enabled models of the pipeline.
+        /// </summary>
+        private List<IDownloadModel> GetPipelineModels()
         {
-            var status = GetModelStatus();
-            if (status.Contains(ModelStatusType.Downloading) || status.Contains(ModelStatusType.DownloadQueue) || status.Contains(ModelStatusType.DownloadFailed))
-            {
-                await DialogService.ShowMessageAsync("Model Downloading", "This model is downloading or queued for download", TensorStack.WPF.Dialogs.MessageDialogType.Ok, TensorStack.WPF.Dialogs.MessageBoxIconType.Info, TensorStack.WPF.Dialogs.MessageBoxStyleType.Info);
-                return true;
-            }
-            else if (status.Contains(ModelStatusType.Available) || status.Contains(ModelStatusType.Unknown))
-            {
-                var queueDownload = await DialogService.ShowMessageAsync("Queue Download", "Would you like to queue this model for download?", TensorStack.WPF.Dialogs.MessageDialogType.YesNo, TensorStack.WPF.Dialogs.MessageBoxIconType.Question, TensorStack.WPF.Dialogs.MessageBoxStyleType.Info);
-                if (queueDownload)
-                {
-                    // Extract
-                    if (_isExtractorEnabled && _selectedExtractor != null && _selectedExtractor.Status != ModelStatusType.Installed)
-                    {
-                        await DownloadService.QueueAsync(_selectedExtractor);
-                    }
-
-                    // Upscale
-                    if (_isUpscalerEnabled && _selectedUpscaler != null && _selectedUpscaler.Status != ModelStatusType.Installed)
-                    {
-                        await DownloadService.QueueAsync(_selectedUpscaler);
-                    }
-                    await NavigationService.NavigateAsync((int)View.Models);
-                }
-                return true;
-            }
-            return false;
-        }
-
-
-        private List<ModelStatusType> GetModelStatus()
-        {
-            var statuses = new List<ModelStatusType>();
+            var models = new List<IDownloadModel>();
             if (_isExtractorEnabled && _selectedExtractor != null)
-            {
-                statuses.Add(_selectedExtractor.Status);
-            }
+                models.Add(_selectedExtractor);
 
             if (_isUpscalerEnabled && _selectedUpscaler != null)
-            {
-                statuses.Add(_selectedUpscaler.Status);
-            }
+                models.Add(_selectedUpscaler);
 
-            return statuses;
-        }
-
-
-        private Task<bool> IsAccessGrantedAsync()
-        {
-            return Task.FromResult(true);
+            return models;
         }
 
 
@@ -406,7 +364,7 @@ namespace Amuse.App.Controls
         {
             if (sender.Equals("Extract"))
             {
-                var dialog = DialogService.GetDialog<ExtractModelDialog>();
+                var dialog = DialogService.GetDialog<ExtractModelWizardDialog>();
                 if (await dialog.AddAsync())
                 {
                     SelectedExtractor = dialog.ExtractModel;
@@ -414,7 +372,7 @@ namespace Amuse.App.Controls
             }
             else if (sender.Equals("Upscale"))
             {
-                var dialog = DialogService.GetDialog<UpscaleModelDialog>();
+                var dialog = DialogService.GetDialog<UpscaleModelWizardDialog>();
                 if (await dialog.AddAsync())
                 {
                     SelectedUpscaler = dialog.UpscaleModel;

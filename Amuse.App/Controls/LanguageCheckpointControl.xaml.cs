@@ -84,7 +84,7 @@ namespace Amuse.App.Controls
         private Task OnBackendChanged()
         {
             CheckpointTypes = Backend == BackendType.LlamaCpp
-                ? [CheckpointType.LocalFile, CheckpointType.OnlineFile, CheckpointType.OnlineFolder]
+                ? [CheckpointType.LocalFile, CheckpointType.LocalFolder, CheckpointType.OnlineFile, CheckpointType.OnlineFolder]
                 : [CheckpointType.LocalFolder, CheckpointType.OnlineFolder];
             return Task.CompletedTask;
         }

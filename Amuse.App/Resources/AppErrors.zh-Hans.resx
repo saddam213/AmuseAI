@@ -1,0 +1,397 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <!-- 
+    Microsoft ResX Schema 
+    
+    Version 2.0
+    
+    The primary goals of this format is to allow a simple XML format 
+    that is mostly human readable. The generation and parsing of the 
+    various data types are done through the TypeConverter classes 
+    associated with the data types.
+    
+    Example:
+    
+    ... ado.net/XML headers & schema ...
+    <resheader name="resmimetype">text/microsoft-resx</resheader>
+    <resheader name="version">2.0</resheader>
+    <resheader name="reader">System.Resources.ResXResourceReader, System.Windows.Forms, ...</resheader>
+    <resheader name="writer">System.Resources.ResXResourceWriter, System.Windows.Forms, ...</resheader>
+    <data name="Name1"><value>this is my long string</value><comment>this is a comment</comment></data>
+    <data name="Color1" type="System.Drawing.Color, System.Drawing">Blue</data>
+    <data name="Bitmap1" mimetype="application/x-microsoft.net.object.binary.base64">
+        <value>[base64 mime encoded serialized .NET Framework object]</value>
+    </data>
+    <data name="Icon1" type="System.Drawing.Icon, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
+        <value>[base64 mime encoded string representing a byte array form of the .NET Framework object]</value>
+        <comment>This is a comment</comment>
+    </data>
+                
+    There are any number of "resheader" rows that contain simple 
+    name/value pairs.
+    
+    Each data row contains a name, and value. The row also contains a 
+    type or mimetype. Type corresponds to a .NET class that support 
+    text/value conversion through the TypeConverter architecture. 
+    Classes that don't support this are serialized and stored with the 
+    mimetype set.
+    
+    The mimetype is used for serialized objects, and tells the 
+    ResXResourceReader how to depersist the object. This is currently not 
+    extensible. For a given mimetype the value must be set accordingly:
+    
+    Note - application/x-microsoft.net.object.binary.base64 is the format 
+    that the ResXResourceWriter will generate, however the reader can 
+    read any of the formats listed below.
+    
+    mimetype: application/x-microsoft.net.object.binary.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Binary.BinaryFormatter
+            : and then encoded with base64 encoding.
+    
+    mimetype: application/x-microsoft.net.object.soap.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Soap.SoapFormatter
+            : and then encoded with base64 encoding.
+
+    mimetype: application/x-microsoft.net.object.bytearray.base64
+    value   : The object must be serialized into a byte array 
+            : using a System.ComponentModel.TypeConverter
+            : and then encoded with base64 encoding.
+    -->
+  <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+    <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
+    <xsd:element name="root" msdata:IsDataSet="true">
+      <xsd:complexType>
+        <xsd:choice maxOccurs="unbounded">
+          <xsd:element name="metadata">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" />
+              </xsd:sequence>
+              <xsd:attribute name="name" use="required" type="xsd:string" />
+              <xsd:attribute name="type" type="xsd:string" />
+              <xsd:attribute name="mimetype" type="xsd:string" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="assembly">
+            <xsd:complexType>
+              <xsd:attribute name="alias" type="xsd:string" />
+              <xsd:attribute name="name" type="xsd:string" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="data">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1" />
+              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
+              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="resheader">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" />
+            </xsd:complexType>
+          </xsd:element>
+        </xsd:choice>
+      </xsd:complexType>
+    </xsd:element>
+  </xsd:schema>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="ExecuteAutomationTitle" xml:space="preserve">
+    <value>自动化失败</value>
+  </data>
+  <data name="ExecutePipelineTitle" xml:space="preserve">
+    <value>生成失败</value>
+  </data>
+  <data name="GeneratedAudioNotFound" xml:space="preserve">
+    <value>未找到生成的音频结果。</value>
+  </data>
+  <data name="GeneratedImageNotFound" xml:space="preserve">
+    <value>未找到生成的图像结果。</value>
+  </data>
+  <data name="GeneratedVideoNotFound" xml:space="preserve">
+    <value>未找到生成的视频结果。</value>
+  </data>
+  <data name="ImportComponentFailed" xml:space="preserve">
+    <value>导入组件文件失败。</value>
+  </data>
+  <data name="ImportEnvironmentFailed" xml:space="preserve">
+    <value>导入环境文件失败。</value>
+  </data>
+  <data name="ImportErrorTitle" xml:space="preserve">
+    <value>导入错误</value>
+  </data>
+  <data name="ImportModelFailed" xml:space="preserve">
+    <value>导入模型文件失败。</value>
+  </data>
+  <data name="LoadPipelineTitle" xml:space="preserve">
+    <value>模型加载失败</value>
+  </data>
+  <data name="ParseErrorDocument" xml:space="preserve">
+    <value>解析文档失败。</value>
+  </data>
+  <data name="ParseErrorTitle" xml:space="preserve">
+    <value>解析错误</value>
+  </data>
+  <data name="PipelineClosedUnexpectedly" xml:space="preserve">
+    <value>管线意外关闭</value>
+  </data>
+  <data name="UnexpectedError" xml:space="preserve">
+    <value>发生意外错误</value>
+  </data>
+  <data name="UnexpectedErrorTitle" xml:space="preserve">
+    <value>意外错误</value>
+  </data>
+  <data name="UnloadPipelineTitle" xml:space="preserve">
+    <value>模型卸载失败</value>
+  </data>
+  <data name="ExtractedImageNotFound" xml:space="preserve">
+    <value>未找到提取的图像结果。</value>
+  </data>
+  <data name="ExtractModelNotLoaded" xml:space="preserve">
+    <value>未加载提取模型。</value>
+  </data>
+  <data name="ExtractBackendNotSupported" xml:space="preserve">
+    <value>{0} 后端不支持提取。</value>
+  </data>
+  <data name="UpscaledImageNotFound" xml:space="preserve">
+    <value>未找到放大后的图像结果。</value>
+  </data>
+  <data name="UpscaledVideoNotFound" xml:space="preserve">
+    <value>未找到放大后的视频结果。</value>
+  </data>
+  <data name="UpscaleModelNotLoaded" xml:space="preserve">
+    <value>未加载放大模型。</value>
+  </data>
+  <data name="UpscaleVideoOnly" xml:space="preserve">
+    <value>{0} 只能放大视频。</value>
+  </data>
+  <data name="UpscaleBackendNotSupported" xml:space="preserve">
+    <value>{0} 后端不支持放大。</value>
+  </data>
+  <data name="UpscaleFailedTitle" xml:space="preserve">
+    <value>放大失败</value>
+  </data>
+  <data name="UpscaleFailedResultKept" xml:space="preserve">
+    <value>放大失败，已保留未放大的结果。</value>
+  </data>
+  <data name="UpscaleCheckpointFormat" xml:space="preserve">
+    <value>{1} 后端要求检查点为 {0} 文件</value>
+  </data>
+  <data name="ValidationNameEmpty" xml:space="preserve">
+    <value>名称不能为空</value>
+  </data>
+  <data name="ValidationModelNameExists" xml:space="preserve">
+    <value>名为“{0}”的模型已存在</value>
+  </data>
+  <data name="ValidationGreaterThanZero" xml:space="preserve">
+    <value>{0} 必须大于 0</value>
+  </data>
+  <data name="ValidationZeroOrGreater" xml:space="preserve">
+    <value>{0} 必须大于或等于 0</value>
+  </data>
+  <data name="ValidationPipelineEmpty" xml:space="preserve">
+    <value>管线不能为空</value>
+  </data>
+  <data name="ValidationMinimum" xml:space="preserve">
+    <value>{0} 必须大于或等于 {1}</value>
+  </data>
+  <data name="ValidationResolutionsEmpty" xml:space="preserve">
+    <value>分辨率不能为空</value>
+  </data>
+  <data name="ValidationDefaultResolutionNotSet" xml:space="preserve">
+    <value>未设置默认分辨率</value>
+  </data>
+  <data name="ValidationProcessTypesEmpty" xml:space="preserve">
+    <value>支持的功能不能为空</value>
+  </data>
+  <data name="ValidationMainFileEmpty" xml:space="preserve">
+    <value>主文件不能为空</value>
+  </data>
+  <data name="ValidationTypeEmpty" xml:space="preserve">
+    <value>类型不能为空</value>
+  </data>
+  <data name="ValidationModelNameEmpty" xml:space="preserve">
+    <value>模型名称不能为空</value>
+  </data>
+  <data name="ValidationModelFileNameEmpty" xml:space="preserve">
+    <value>模型文件名不能为空</value>
+  </data>
+  <data name="ValidationModelFolderNameEmpty" xml:space="preserve">
+    <value>模型文件夹名称不能为空</value>
+  </data>
+  <data name="ValidationModelFileNotFound" xml:space="preserve">
+    <value>未找到模型文件</value>
+  </data>
+  <data name="ValidationRequirementsEmpty" xml:space="preserve">
+    <value>依赖项不能为空</value>
+  </data>
+  <data name="ValidationEnvironmentEmpty" xml:space="preserve">
+    <value>环境不能为空</value>
+  </data>
+  <data name="ValidationEnvironmentInvalidCharacters" xml:space="preserve">
+    <value>环境名称只能包含字母、数字以及“.”、“_”和“-”</value>
+  </data>
+  <data name="ValidationEnvironmentExists" xml:space="preserve">
+    <value>名为“{0}”的环境已存在</value>
+  </data>
+  <data name="ValidationDeviceEmpty" xml:space="preserve">
+    <value>设备不能为空</value>
+  </data>
+  <data name="UpdateDownloadFailed" xml:space="preserve">
+    <value>下载更新文件失败。
+如果问题仍然存在，请稍后重试。</value>
+  </data>
+  <data name="CheckpointNoDownloadFiles" xml:space="preserve">
+    <value>没有可下载的文件</value>
+  </data>
+  <data name="CheckpointDownloadFileNotFound" xml:space="preserve">
+    <value>未找到下载文件</value>
+  </data>
+  <data name="CheckpointLocalFolderNotFound" xml:space="preserve">
+    <value>未找到本地文件夹</value>
+  </data>
+  <data name="CheckpointLocalFileNotFound" xml:space="preserve">
+    <value>未找到本地文件</value>
+  </data>
+  <data name="CheckpointComponentNotSelected" xml:space="preserve">
+    <value>未选择组件</value>
+  </data>
+  <data name="CheckpointResolveOnlineFile" xml:space="preserve">
+    <value>检查点无法解析在线文件“{0}”</value>
+  </data>
+  <data name="CheckpointResolveComponent" xml:space="preserve">
+    <value>检查点无法解析组件“{0}”</value>
+  </data>
+  <data name="ValidationQuantTypeExists" xml:space="preserve">
+    <value>每种质量必须使用不同的类型</value>
+  </data>
+  <data name="ValidationQuantTypeEmpty" xml:space="preserve">
+    <value>必须选择质量</value>
+  </data>
+  <data name="ValidationCheckpointEmpty" xml:space="preserve">
+    <value>模型没有检查点文件</value>
+  </data>
+  <data name="AudioRangeRequired" xml:space="preserve">
+    <value>请先选择要重新生成的源音频范围。</value>
+  </data>
+  <data name="McpCommandNotFound" xml:space="preserve">
+    <value>未找到命令“{0}”。</value>
+  </data>
+  <data name="McpRequiresNode" xml:space="preserve">
+    <value>运行此服务器需要 Node.js。请从 nodejs.org 安装后重启 Amuse。</value>
+  </data>
+  <data name="McpRequiresUv" xml:space="preserve">
+    <value>运行此服务器需要 uv。请从 docs.astral.sh/uv 安装后重启 Amuse。</value>
+  </data>
+  <data name="McpServerErrorTitle" xml:space="preserve">
+    <value>MCP 服务器错误</value>
+  </data>
+  <data name="McpUrlInvalid" xml:space="preserve">
+    <value>“{0}”不是有效的 http 或 https URL。</value>
+  </data>
+  <data name="MissingInputTitle" xml:space="preserve">
+    <value>缺少输入</value>
+  </data>
+  <data name="MoveFolderErrorTitle" xml:space="preserve">
+    <value>移动文件夹失败</value>
+  </data>
+  <data name="MoveFolderInsideSource" xml:space="preserve">
+    <value>新位置不能是当前文件夹或其子文件夹</value>
+  </data>
+  <data name="MoveFolderNoSpace" xml:space="preserve">
+    <value>新驱动器可用空间不足，需要 {0:N1} GB</value>
+  </data>
+  <data name="MoveFolderNotEmpty" xml:space="preserve">
+    <value>“{0}”中已有文件，请选择其他位置</value>
+  </data>
+  <data name="ReferenceTextRequired" xml:space="preserve">
+    <value>此模型需要声音参考的文本，请输入其中所说的内容。</value>
+  </data>
+  <data name="SourceAudioRequired" xml:space="preserve">
+    <value>请先加载或录制源音频。</value>
+  </data>
+  <data name="ValidationBetween" xml:space="preserve">
+    <value>{0} 必须介于 {1} 和 {2} 之间</value>
+  </data>
+  <data name="ValidationDownloadLinkEmpty" xml:space="preserve">
+    <value>下载链接不能为空</value>
+  </data>
+  <data name="ValidationDownloadLinkInvalid" xml:space="preserve">
+    <value>下载链接必须是以 {0} 结尾的文件直接链接</value>
+  </data>
+  <data name="ValidationKeyEmpty" xml:space="preserve">
+    <value>键不能为空</value>
+  </data>
+  <data name="ValidationKeyExists" xml:space="preserve">
+    <value>键为“{0}”的组件已存在</value>
+  </data>
+  <data name="ValidationLessOrEqual" xml:space="preserve">
+    <value>{0} 必须小于或等于 {1}</value>
+  </data>
+  <data name="ValidationLessThan" xml:space="preserve">
+    <value>{0} 必须小于 {1}</value>
+  </data>
+  <data name="ValidationMcpCommandEmpty" xml:space="preserve">
+    <value>命令不能为空</value>
+  </data>
+  <data name="ValidationMcpIconInvalid" xml:space="preserve">
+    <value>图标必须是 Font Awesome 代码，例如 f1e6</value>
+  </data>
+  <data name="ValidationMcpImportEmpty" xml:space="preserve">
+    <value>在配置中未找到任何服务器</value>
+  </data>
+  <data name="ValidationMcpNameEmpty" xml:space="preserve">
+    <value>服务器名称不能为空</value>
+  </data>
+  <data name="ValidationMcpNameExists" xml:space="preserve">
+    <value>已存在同名服务器</value>
+  </data>
+  <data name="ValidationMcpToolsEmpty" xml:space="preserve">
+    <value>至少需要包含一个工具</value>
+  </data>
+  <data name="ValidationMcpUrlInvalid" xml:space="preserve">
+    <value>URL 必须是有效的 http 或 https 地址</value>
+  </data>
+  <data name="ValidationModelFileType" xml:space="preserve">
+    <value>模型文件必须以 {0} 结尾</value>
+  </data>
+  <data name="ValidationModelFolderNotFound" xml:space="preserve">
+    <value>未找到模型文件夹</value>
+  </data>
+  <data name="ValidationSearchFolderContainsModels" xml:space="preserve">
+    <value>搜索文件夹不能包含 Amuse 模型文件夹</value>
+  </data>
+  <data name="ValidationSearchFolderEmpty" xml:space="preserve">
+    <value>搜索文件夹不能为空</value>
+  </data>
+  <data name="ValidationSearchFolderInsideModels" xml:space="preserve">
+    <value>搜索文件夹不能位于模型目录内</value>
+  </data>
+  <data name="ValidationSearchFolderNotFound" xml:space="preserve">
+    <value>未找到搜索文件夹“{0}”</value>
+  </data>
+  <data name="VoiceReferenceRequired" xml:space="preserve">
+    <value>请先加载或录制声音参考。</value>
+  </data>
+</root>

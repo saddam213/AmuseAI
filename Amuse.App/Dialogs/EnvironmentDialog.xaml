@@ -21,7 +21,6 @@
                 <Grid IsEnabled="{Binding IsExecuting, Converter={StaticResource InverseBoolConverter}}">
                     <Button Content="{CommonControls:Localize Create}" Command="{Binding CreateCommand}" Width="100" IsDefault="True" Visibility="{Binding IsCreate, Converter={StaticResource BooleanToVisibilityConverter}}"/>
                     <Button Content="{CommonControls:Localize Update}" Command="{Binding UpdateCommand}" Width="100" IsDefault="True" Visibility="{Binding IsUpdate, Converter={StaticResource BooleanToVisibilityConverter}}"/>
-                    <Button Content="{CommonControls:Localize Rebuild}" Command="{Binding RebuildCommand}" Width="100" IsDefault="True" Visibility="{Binding IsRebuild, Converter={StaticResource BooleanToVisibilityConverter}}"/>
                 </Grid>
                 <Button Content="{CommonControls:Localize Cancel}" Command="{Binding CancelCommand}" Width="100"/>
             </UniformGrid>
@@ -43,7 +42,7 @@
                         </StackPanel>
                     </Grid>
                     <StackPanel>
-                        <TextBlock Text="{CommonControls:Localize EnvironmentSetupWaitMessage}" TextWrapping="Wrap" FontStyle="Italic" HorizontalAlignment="Center" Visibility="{Binding IsExecuting, Converter={StaticResource BooleanToVisibilityConverter}}"/>
+                        <TextBlock Text="{Binding WaitMessage}" TextWrapping="Wrap" FontStyle="Italic" HorizontalAlignment="Center" Visibility="{Binding IsExecuting, Converter={StaticResource BooleanToVisibilityConverter}}"/>
                     </StackPanel>
                 </DockPanel>
             </StackPanel>

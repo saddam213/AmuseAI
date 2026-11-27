@@ -33,6 +33,9 @@ namespace Amuse.App.Common
         public float FrameRate { get; set; }
 
         [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingDefault)]
+        public bool IsFrameRateEnabled { get; set; }
+
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingDefault)]
         public int FrameChunk { get; set; }
 
         [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingDefault)]
@@ -45,10 +48,16 @@ namespace Amuse.App.Common
         public float Strength { get; set; }
 
         [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingDefault)]
-        public SchedulerType Scheduler { get; set; }
+        public int ClipSkip { get; set; }
+
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingDefault)]
+        public float MoeBoundary { get; set; }
+
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingDefault)]
+        public SamplerType Sampler { get; set; }
 
         [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
-        public SchedulerInputOptions[] Schedulers { get; set; }
+        public SamplerInputOptions[] Samplers { get; set; }
 
         [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingDefault)]
         public int Channels { get; set; }
@@ -56,8 +65,8 @@ namespace Amuse.App.Common
         [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingDefault)]
         public int SampleRate { get; set; }
 
-        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
-        public int[] FrameOptions { get; set; }
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingDefault)]
+        public int MaxFrames { get; set; }
 
         [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingDefault)]
         public bool IsVaeTilingEnabled { get; set; }
@@ -82,6 +91,9 @@ namespace Amuse.App.Common
 
         [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingDefault)]
         public int BPM { get; set; }
+
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+        public string Lyrics { get; set; }
 
         [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingDefault)]
         public float Speed { get; set; }
@@ -164,6 +176,9 @@ namespace Amuse.App.Common
         [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingDefault)]
         public bool IsToolCallsSupported { get; set; }
 
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingDefault)]
+        public bool IsLiveSupported { get; set; }
+
         public GenerateDefaultOptions DeepClone()
         {
             return new GenerateDefaultOptions
@@ -176,13 +191,16 @@ namespace Amuse.App.Common
                 GuidanceScale2 = GuidanceScale2,
                 Frames = Frames,
                 FrameRate = FrameRate,
+                IsFrameRateEnabled = IsFrameRateEnabled,
                 SampleRate = SampleRate,
                 FrameChunk = FrameChunk,
                 FrameChunkOverlap = FrameChunkOverlap,
-                FrameOptions = FrameOptions?.ToArray(),
+                MaxFrames = MaxFrames,
                 NoiseCondition = NoiseCondition,
-                Scheduler = Scheduler,
-                Schedulers = Schedulers.Copy(),
+                ClipSkip = ClipSkip,
+                MoeBoundary = MoeBoundary,
+                Sampler = Sampler,
+                Samplers = Samplers.Copy(),
                 Strength = Strength,
                 IsVaeSlicingEnabled = IsVaeSlicingEnabled,
                 IsVaeTilingEnabled = IsVaeTilingEnabled,
@@ -192,6 +210,7 @@ namespace Amuse.App.Common
                 Channels = Channels,
                 Beams = Beams,
                 BPM = BPM,
+                Lyrics = Lyrics,
                 ChunkSize = ChunkSize,
                 Duration = Duration,
                 EarlyStopping = EarlyStopping,
@@ -216,7 +235,8 @@ namespace Amuse.App.Common
                 InputAudioMaxCount = InputAudioMaxCount,
                 InputImageMaxCount = InputImageMaxCount,
                 InputVideoMaxCount = InputVideoMaxCount,
-                IsToolCallsSupported = IsToolCallsSupported
+                IsToolCallsSupported = IsToolCallsSupported,
+                IsLiveSupported = IsLiveSupported
             };
         }
 

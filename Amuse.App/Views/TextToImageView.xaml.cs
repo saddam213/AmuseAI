@@ -22,8 +22,8 @@ namespace Amuse.App.Views
         /// <summary>
         /// Initializes a new instance of the <see cref="TextToImageView"/> class.
         /// </summary>
-        public TextToImageView(Settings settings, NavigationService navigationService, IModelDownloadService downloadService, IGenerateService generateService, IExtractService extractService, IUpscaleService upscaleService, IHistoryService historyService, ILogger<TextToImageView> logger)
-            : base(settings, navigationService, downloadService, generateService, extractService, upscaleService, historyService, logger)
+        public TextToImageView(Settings settings, NavigationService navigationService, IModelDownloadService downloadService, IModelAccessService modelAccessService, IGenerateService generateService, ILanguageService languageService, IExtractService extractService, IUpscaleService upscaleService, IHistoryService historyService, ILogger<TextToImageView> logger)
+            : base(settings, navigationService, downloadService, modelAccessService, generateService, languageService, extractService, upscaleService, historyService, logger)
         {
             InitializeComponent();
         }
@@ -133,7 +133,9 @@ namespace Amuse.App.Views
                     resultTensor = await ExecuteImageUpscaleAsync(resultTensor);
 
                     // Result
-                    ResultImage = await resultTensor.ToImageInputAsync();
+                    var resultImage = await resultTensor.ToImageInputAsync();
+                    CompareImage = ResultImage ?? previousImage;
+                    ResultImage = resultImage;
 
                     // History
                     if (AutomationOptions.IsHistoryEnabled)
@@ -185,8 +187,8 @@ namespace Amuse.App.Views
                 Options = options,
                 Model = CurrentPipeline.DiffusionModel.Name,
                 LoraModels = CurrentPipeline.LoraAdapterModel?.Select(x => x.Name).ToArray(),
-                UpscaleModel = UpscaledModel?.Name,
-                UpscaleOptions = UpscaledModel is not null ? UpscaleOptions : null,
+                UpscaleModel = CurrentPipeline?.UpscaleModel?.Name,
+                UpscaleOptions = CurrentPipeline?.UpscaleModel is not null ? UpscaleOptions : null,
                 Source = View.TextToImage,
             });
             Logger.LogInformation($"[TextToImage] [SaveHistory] History saved.");

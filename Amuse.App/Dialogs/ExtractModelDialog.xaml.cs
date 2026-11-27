@@ -1,6 +1,7 @@
 ﻿// Copyright (c) Adam Clark. All rights reserved.
 // Licensed under the Apache 2.0 License.
 using Amuse.App.Common;
+using Amuse.App.Resources;
 using Amuse.Common;
 using System;
 using System.Collections.Generic;
@@ -10,6 +11,7 @@ using System.Threading.Tasks;
 using TensorStack.Common;
 using TensorStack.WPF;
 using TensorStack.WPF.Controls;
+using TensorStack.WPF.Resources;
 using TensorStack.WPF.Services;
 
 namespace Amuse.App.Dialogs
@@ -22,6 +24,10 @@ namespace Amuse.App.Dialogs
         private ExtractModel _extractModel;
         private ExtractModel _originalExtractModel;
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="ExtractModelDialog"/> class.
+        /// </summary>
+        /// <param name="settings">The settings.</param>
         public ExtractModelDialog(Settings settings)
         {
             Settings = settings;
@@ -36,6 +42,7 @@ namespace Amuse.App.Dialogs
         public AsyncRelayCommand CancelCommand { get; }
         public ObservableCollection<string> Errors { get; }
         public CheckpointType[] CheckpointTypes { get; } = [CheckpointType.OnlineFile, CheckpointType.LocalFile];
+        public string FileFilter { get; } = DownloadLink.GetFileFilter(AppDefault.ModelFiles, [".onnx"]);
         public bool IsUpdateMode => _originalExtractModel is not null;
 
         public ExtractModel ExtractModel
@@ -44,32 +51,10 @@ namespace Amuse.App.Dialogs
             set { SetProperty(ref _extractModel, value); }
         }
 
-        public Task<bool> AddAsync()
-        {
-            var modelId = Settings.ExtractModels.NextId();
-            ExtractModel = new ExtractModel
-            {
-                Id = modelId,
-                Backend = BackendType.OnnxRuntime,
-                Pipeline = PipelineType.ExtractPipeline,
-                Status = ModelStatusType.Unknown,
-                Name = "New Extractor",
-                Checkpoint = new CheckpointComponent
-                {
-                    Name = "Extract",
-                    Type = CheckpointType.LocalFile
-                },
-                DefaultOptions = new ExtractInputOptions
-                {
-                    IsTileEnabled = true,
-                    TileOverlap = 16,
-                    TileSize = 512
-                }
-            };
-            return base.ShowDialogAsync();
-        }
-
-
+        /// <summary>
+        /// Shows the dialog to update an extractor.
+        /// </summary>
+        /// <param name="extractModel">The extractor to update.</param>
         public Task<bool> UpdateAsync(ExtractModel extractModel)
         {
             var modelId = extractModel.Id;
@@ -79,6 +64,10 @@ namespace Amuse.App.Dialogs
         }
 
 
+        /// <summary>
+        /// Shows the dialog to add a copy of an extractor.
+        /// </summary>
+        /// <param name="extractModel">The extractor to copy.</param>
         public Task<bool> CopyAsync(ExtractModel extractModel)
         {
             var modelId = Settings.ExtractModels.NextId();
@@ -88,6 +77,10 @@ namespace Amuse.App.Dialogs
         }
 
 
+        /// <summary>
+        /// Imports extractors, showing the dialog for a single extractor and adding several directly.
+        /// </summary>
+        /// <param name="modelImports">The extractors to import.</param>
         public async Task<bool> ImportAsync(ExtractModel[] modelImports)
         {
             var modelId = Settings.ExtractModels.NextId();
@@ -111,14 +104,18 @@ namespace Amuse.App.Dialogs
                     Settings.ExtractModels.Add(modelImport);
                 }
 
-                await DialogService.ShowMessageAsync("Import Complete", $"{imported}/{modelImports.Length} Models Imported.");
+                await DialogService.ShowMessageAsync(AppDefault.ImportCompleteTitle, string.Format(AppDefault.ImportCompleteModels, imported, modelImports.Length));
                 return true;
             }
         }
 
 
+        /// <summary>
+        /// Saves the extractor, replacing the original when updating.
+        /// </summary>
         protected override async Task SaveAsync()
         {
+            ExtractModel.Name = ExtractModel.Name.Trim();
             var index = Settings.ExtractModels.Count;
             if (IsUpdateMode)
             {
@@ -132,6 +129,9 @@ namespace Amuse.App.Dialogs
         }
 
 
+        /// <summary>
+        /// Determines whether the extractor can be saved, listing the validation errors.
+        /// </summary>
         protected override bool CanExecuteSave()
         {
             if (ExtractModel == null)
@@ -145,6 +145,9 @@ namespace Amuse.App.Dialogs
         }
 
 
+        /// <summary>
+        /// Cancels the dialog.
+        /// </summary>
         protected override Task CancelAsync()
         {
             ExtractModel = default;
@@ -153,36 +156,39 @@ namespace Amuse.App.Dialogs
         }
 
 
+        /// <summary>
+        /// Closes the dialog.
+        /// </summary>
         protected override async Task CloseAsync()
         {
             await base.CloseAsync();
         }
 
 
+        /// <summary>
+        /// Gets the validation errors of the current input.
+        /// </summary>
         private IEnumerable<string> GetValidationErrors()
         {
             // Name
             if (string.IsNullOrWhiteSpace(ExtractModel.Name))
-                yield return "Name cannot be empty";
-            if (!IsUpdateMode)
-            {
-                if (Settings.ExtractModels.Any(x => x.Name.Equals(ExtractModel.Name, StringComparison.OrdinalIgnoreCase)))
-                    yield return $"Model with Name '{ExtractModel.Name}' already exists";
-            }
+                yield return AppErrors.ValidationNameEmpty;
+            else if (Settings.ExtractModels.Any(x => x != _originalExtractModel && x.Name.Equals(ExtractModel.Name.Trim(), StringComparison.OrdinalIgnoreCase)))
+                yield return string.Format(AppErrors.ValidationModelNameExists, ExtractModel.Name.Trim());
 
             // Options
             if (ExtractModel.Channels <= 0)
-                yield return "Channels must be > 0";
+                yield return string.Format(AppErrors.ValidationGreaterThanZero, Default.Channels);
             if (ExtractModel.SampleSize < 0)
-                yield return "Sample Size must be >= 0";
+                yield return string.Format(AppErrors.ValidationZeroOrGreater, AppDefault.SampleSize);
             if (ExtractModel.MemorySize < 0)
-                yield return "Sample Size must be >= 0";
+                yield return string.Format(AppErrors.ValidationZeroOrGreater, AppDefault.MemorySize);
 
             //DefaultOptions
             if (ExtractModel.DefaultOptions.TileSize < 0)
-                yield return "TileSize Size must be >= 0";
+                yield return string.Format(AppErrors.ValidationZeroOrGreater, Default.TileSize);
             if (ExtractModel.DefaultOptions.TileOverlap < 0)
-                yield return "TileOverlap Size must be >= 0";
+                yield return string.Format(AppErrors.ValidationZeroOrGreater, Default.TileOverlap);
 
             // Checkpoint
             if (!ExtractModel.Checkpoint.IsValid(out var checkpointValidation))

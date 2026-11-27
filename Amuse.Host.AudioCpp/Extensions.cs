@@ -35,7 +35,7 @@ namespace Amuse.Host.AudioCpp
 
 
         /// <summary>
-        /// Creates the GenerateAudioOptions (music, sound effects, speech).
+        /// Creates the GenerateAudioOptions (music, sound effects, speech), the last input audio is the reference audio when the options have one.
         /// </summary>
         /// <param name="options">The options.</param>
         /// <param name="pipelineOptions">The pipeline options.</param>
@@ -43,6 +43,11 @@ namespace Amuse.Host.AudioCpp
         /// <returns>PipelineCommon.GenerateAudioOptions.</returns>
         internal static PipelineCommon.GenerateAudioOptions CreateAudioOptions(this GenerateAudioOptions options, PipelineLoadOptions pipelineOptions, ILogger logger)
         {
+            var inputAudios = options.InputAudios ?? [];
+            var referenceAudio = options.HasReferenceAudio && inputAudios.Count > 0 ? inputAudios[^1] : default;
+            if (referenceAudio != null)
+                inputAudios = inputAudios.Take(inputAudios.Count - 1).ToList();
+
             return new PipelineCommon.GenerateAudioOptions
             {
                 Seed = options.Seed,
@@ -62,7 +67,12 @@ namespace Amuse.Host.AudioCpp
                 TrackName = options.TrackName,
                 TimeSignature = options.TimeSignature,
                 Speed = options.Speed,
-                InputAudios = options.InputAudios,
+                RangeStart = options.RangeStart,
+                RangeEnd = options.RangeEnd,
+                ReferenceText = options.ReferenceText,
+                Emotion = options.Emotion,
+                InputAudios = inputAudios,
+                ReferenceAudio = referenceAudio,
                 SessionOptions = GetLoraSessionOptions(pipelineOptions?.LoraAdapters, options.LoraOptions, logger)
             };
         }
@@ -187,14 +197,30 @@ namespace Amuse.Host.AudioCpp
                 PipelineType.CanaryPipeline => "canary_asr",
                 PipelineType.ChatterboxPipeline => "chatterbox_turbo",
                 PipelineType.CohereASRPipeline => "cohere_asr",
+                PipelineType.CrisperWhisperPipeline => "crisperwhisper",
+                PipelineType.FishAudioPipeline => "fish_audio",
+                PipelineType.GraniteSpeechPipeline => "granite5asr",
+                PipelineType.GraniteSpeech2BPipeline => "granite_speech5",
+                PipelineType.HeartMuLaPipeline => "heartmula",
+                PipelineType.HiggsAudioSTTPipeline => "higgs_audio_stt",
+                PipelineType.HiggsAudioTTSPipeline => "higgs_audio_tts",
+                PipelineType.MagpieTTSPipeline => "magpie_tts",
                 PipelineType.MiniMaxAudioPipeline => "minimax_music3",
                 PipelineType.MossSoundEffectPipeline => "moss_soundeffect",
+                PipelineType.MossTranscribePipeline => "moss_transcribe_diarize",
+                PipelineType.NeuTTSPipeline => "neutts",
                 PipelineType.OmniVoicePipeline => "omnivoice",
                 PipelineType.ParakeetPipeline => "parakeet_tdt",
                 PipelineType.Qwen3ASRPipeline => "qwen3_asr",
                 PipelineType.Qwen3TTSPipeline => "qwen3_tts",
+                PipelineType.SenseVoicePipeline => "sense_asr",
                 PipelineType.StableAudioPipeline => "stable_audio",
                 PipelineType.SupertonicPipeline => "supertonic",
+                PipelineType.TinyVocaPipeline => "tiny_voca",
+                PipelineType.VibeVoiceASRPipeline => "vibevoice_asr",
+                PipelineType.VoxCPMPipeline => "voxcpm2",
+                PipelineType.VoxMelPipeline => "voxmel_tts",
+                PipelineType.VoxtralRealtimePipeline => "voxtral_realtime",
                 PipelineType.VoxtralTTSPipeline => "voxtral_tts",
                 PipelineType.YuEPipeline => "yue2",
                 _ => default

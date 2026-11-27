@@ -118,10 +118,10 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="ExecuteAutomationTitle" xml:space="preserve">
-    <value>Execute Automation</value>
+    <value>Automation Failed</value>
   </data>
   <data name="ExecutePipelineTitle" xml:space="preserve">
-    <value>Execute Pipeline</value>
+    <value>Generation Failed</value>
   </data>
   <data name="GeneratedAudioNotFound" xml:space="preserve">
     <value>Generated audio result not found.</value>
@@ -129,26 +129,23 @@
   <data name="GeneratedImageNotFound" xml:space="preserve">
     <value>Generated image result not found.</value>
   </data>
-  <data name="GeneratedTextNotFound" xml:space="preserve">
-    <value>Generated text result not found.</value>
-  </data>
   <data name="GeneratedVideoNotFound" xml:space="preserve">
     <value>Generated video result not found.</value>
   </data>
-  <data name="ImportComponent" xml:space="preserve">
+  <data name="ImportComponentFailed" xml:space="preserve">
     <value>Failed to import component file.</value>
   </data>
-  <data name="ImportEnvironment" xml:space="preserve">
-    <value>Failed to import Environment file.</value>
+  <data name="ImportEnvironmentFailed" xml:space="preserve">
+    <value>Failed to import environment file.</value>
   </data>
   <data name="ImportErrorTitle" xml:space="preserve">
     <value>Import Error</value>
   </data>
-  <data name="ImportModel" xml:space="preserve">
+  <data name="ImportModelFailed" xml:space="preserve">
     <value>Failed to import model file.</value>
   </data>
   <data name="LoadPipelineTitle" xml:space="preserve">
-    <value>Load Pipeline</value>
+    <value>Model Load Failed</value>
   </data>
   <data name="ParseErrorDocument" xml:space="preserve">
     <value>Failed to parse document.</value>
@@ -166,7 +163,7 @@
     <value>Unexpected Error</value>
   </data>
   <data name="UnloadPipelineTitle" xml:space="preserve">
-    <value>Unload Pipeline</value>
+    <value>Model Unload Failed</value>
   </data>
   <data name="ExtractedImageNotFound" xml:space="preserve">
     <value>Extracted image result not found.</value>
@@ -200,5 +197,201 @@
   </data>
   <data name="UpscaleCheckpointFormat" xml:space="preserve">
     <value>The checkpoint must be a {0} file for the {1} backend</value>
+  </data>
+  <data name="ValidationNameEmpty" xml:space="preserve">
+    <value>Name cannot be empty</value>
+  </data>
+  <data name="ValidationModelNameExists" xml:space="preserve">
+    <value>Model with name '{0}' already exists</value>
+  </data>
+  <data name="ValidationGreaterThanZero" xml:space="preserve">
+    <value>{0} must be greater than 0</value>
+  </data>
+  <data name="ValidationZeroOrGreater" xml:space="preserve">
+    <value>{0} must be 0 or greater</value>
+  </data>
+  <data name="ValidationPipelineEmpty" xml:space="preserve">
+    <value>Pipeline cannot be empty</value>
+  </data>
+  <data name="ValidationMinimum" xml:space="preserve">
+    <value>{0} must be {1} or greater</value>
+  </data>
+  <data name="ValidationResolutionsEmpty" xml:space="preserve">
+    <value>Resolutions cannot be empty</value>
+  </data>
+  <data name="ValidationDefaultResolutionNotSet" xml:space="preserve">
+    <value>Default resolution is not set</value>
+  </data>
+  <data name="ValidationProcessTypesEmpty" xml:space="preserve">
+    <value>Supported functions cannot be empty</value>
+  </data>
+  <data name="ValidationMainFileEmpty" xml:space="preserve">
+    <value>Main file cannot be empty</value>
+  </data>
+  <data name="ValidationTypeEmpty" xml:space="preserve">
+    <value>Type cannot be empty</value>
+  </data>
+  <data name="ValidationModelNameEmpty" xml:space="preserve">
+    <value>Model name cannot be empty</value>
+  </data>
+  <data name="ValidationModelFileNameEmpty" xml:space="preserve">
+    <value>Model file name cannot be empty</value>
+  </data>
+  <data name="ValidationModelFolderNameEmpty" xml:space="preserve">
+    <value>Model folder name cannot be empty</value>
+  </data>
+  <data name="ValidationModelFileNotFound" xml:space="preserve">
+    <value>Model file not found</value>
+  </data>
+  <data name="ValidationRequirementsEmpty" xml:space="preserve">
+    <value>Requirements cannot be empty</value>
+  </data>
+  <data name="ValidationEnvironmentEmpty" xml:space="preserve">
+    <value>Environment cannot be empty</value>
+  </data>
+  <data name="ValidationEnvironmentInvalidCharacters" xml:space="preserve">
+    <value>Environment can only contain letters, numbers, '.', '_' and '-'</value>
+  </data>
+  <data name="ValidationEnvironmentExists" xml:space="preserve">
+    <value>Environment with name '{0}' already exists</value>
+  </data>
+  <data name="ValidationDeviceEmpty" xml:space="preserve">
+    <value>Device cannot be empty</value>
+  </data>
+  <data name="UpdateDownloadFailed" xml:space="preserve">
+    <value>Failed to download update files.
+If problems persist please try again later.</value>
+  </data>
+  <data name="CheckpointNoDownloadFiles" xml:space="preserve">
+    <value>No download files found</value>
+  </data>
+  <data name="CheckpointDownloadFileNotFound" xml:space="preserve">
+    <value>Download file not found</value>
+  </data>
+  <data name="CheckpointLocalFolderNotFound" xml:space="preserve">
+    <value>Local folder not found</value>
+  </data>
+  <data name="CheckpointLocalFileNotFound" xml:space="preserve">
+    <value>Local file not found</value>
+  </data>
+  <data name="CheckpointComponentNotSelected" xml:space="preserve">
+    <value>Component not selected</value>
+  </data>
+  <data name="CheckpointResolveOnlineFile" xml:space="preserve">
+    <value>Checkpoint could not resolve online file '{0}'</value>
+  </data>
+  <data name="CheckpointResolveComponent" xml:space="preserve">
+    <value>Checkpoint could not resolve component '{0}'</value>
+  </data>
+  <data name="ValidationQuantTypeExists" xml:space="preserve">
+    <value>Each quality must have a different type</value>
+  </data>
+  <data name="ValidationQuantTypeEmpty" xml:space="preserve">
+    <value>Quality must be selected</value>
+  </data>
+  <data name="ValidationCheckpointEmpty" xml:space="preserve">
+    <value>Model has no checkpoint files</value>
+  </data>
+  <data name="ValidationSearchFolderEmpty" xml:space="preserve">
+    <value>Search folder cannot be empty</value>
+  </data>
+  <data name="ValidationSearchFolderInsideModels" xml:space="preserve">
+    <value>Search folder cannot be inside the model directory</value>
+  </data>
+  <data name="ValidationModelFolderNotFound" xml:space="preserve">
+    <value>Model folder not found</value>
+  </data>
+  <data name="MissingInputTitle" xml:space="preserve">
+    <value>Missing Input</value>
+  </data>
+  <data name="SourceAudioRequired" xml:space="preserve">
+    <value>Load or record a source audio first.</value>
+  </data>
+  <data name="AudioRangeRequired" xml:space="preserve">
+    <value>Select the range of the source audio to regenerate first.</value>
+  </data>
+  <data name="VoiceReferenceRequired" xml:space="preserve">
+    <value>Load or record a voice reference first.</value>
+  </data>
+  <data name="ReferenceTextRequired" xml:space="preserve">
+    <value>This model needs the transcript of the voice reference, enter what is said in it.</value>
+  </data>
+  <data name="ValidationDownloadLinkEmpty" xml:space="preserve">
+    <value>Download link cannot be empty</value>
+  </data>
+  <data name="ValidationDownloadLinkInvalid" xml:space="preserve">
+    <value>Download link must be a direct link to a file ending in {0}</value>
+  </data>
+  <data name="ValidationKeyEmpty" xml:space="preserve">
+    <value>Key cannot be empty</value>
+  </data>
+  <data name="ValidationKeyExists" xml:space="preserve">
+    <value>Component with key '{0}' already exists</value>
+  </data>
+  <data name="ValidationModelFileType" xml:space="preserve">
+    <value>Model file must end in {0}</value>
+  </data>
+  <data name="MoveFolderErrorTitle" xml:space="preserve">
+    <value>Move Folder Failed</value>
+  </data>
+  <data name="MoveFolderInsideSource" xml:space="preserve">
+    <value>The new location can't be the current folder or inside it</value>
+  </data>
+  <data name="MoveFolderNotEmpty" xml:space="preserve">
+    <value>'{0}' already has files in it, choose another location</value>
+  </data>
+  <data name="ValidationLessOrEqual" xml:space="preserve">
+    <value>{0} must be less than or equal to {1}</value>
+  </data>
+  <data name="ValidationLessThan" xml:space="preserve">
+    <value>{0} must be less than {1}</value>
+  </data>
+  <data name="ValidationBetween" xml:space="preserve">
+    <value>{0} must be between {1} and {2}</value>
+  </data>
+  <data name="ValidationSearchFolderContainsModels" xml:space="preserve">
+    <value>A search folder can't contain the Amuse model folder</value>
+  </data>
+  <data name="ValidationSearchFolderNotFound" xml:space="preserve">
+    <value>Search folder '{0}' was not found</value>
+  </data>
+  <data name="MoveFolderNoSpace" xml:space="preserve">
+    <value>Not enough free space on the new drive, {0:N1} GB is needed</value>
+  </data>
+  <data name="McpServerErrorTitle" xml:space="preserve">
+    <value>MCP Server Error</value>
+  </data>
+  <data name="McpRequiresNode" xml:space="preserve">
+    <value>Node.js is required to run this server. Install it from nodejs.org and restart Amuse.</value>
+  </data>
+  <data name="McpRequiresUv" xml:space="preserve">
+    <value>uv is required to run this server. Install it from docs.astral.sh/uv and restart Amuse.</value>
+  </data>
+  <data name="McpCommandNotFound" xml:space="preserve">
+    <value>The command '{0}' was not found.</value>
+  </data>
+  <data name="McpUrlInvalid" xml:space="preserve">
+    <value>'{0}' is not a valid http or https URL.</value>
+  </data>
+  <data name="ValidationMcpNameEmpty" xml:space="preserve">
+    <value>Server name cannot be empty</value>
+  </data>
+  <data name="ValidationMcpNameExists" xml:space="preserve">
+    <value>A server with this name already exists</value>
+  </data>
+  <data name="ValidationMcpCommandEmpty" xml:space="preserve">
+    <value>Command cannot be empty</value>
+  </data>
+  <data name="ValidationMcpUrlInvalid" xml:space="preserve">
+    <value>URL must be a valid http or https address</value>
+  </data>
+  <data name="ValidationMcpToolsEmpty" xml:space="preserve">
+    <value>At least one tool must be included</value>
+  </data>
+  <data name="ValidationMcpImportEmpty" xml:space="preserve">
+    <value>No servers were found in the configuration</value>
+  </data>
+  <data name="ValidationMcpIconInvalid" xml:space="preserve">
+    <value>Icon must be a Font Awesome code such as f1e6</value>
   </data>
 </root>

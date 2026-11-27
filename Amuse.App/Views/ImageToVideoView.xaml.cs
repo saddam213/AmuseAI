@@ -29,8 +29,8 @@ namespace Amuse.App.Views
         /// <summary>
         /// Initializes a new instance of the <see cref="ImageToVideoView"/> class.
         /// </summary>
-        public ImageToVideoView(Settings settings, NavigationService navigationService, IModelDownloadService downloadService, IGenerateService generateService, IExtractService extractService, IUpscaleService upscaleService, IHistoryService historyService, ILogger<ImageToVideoView> logger)
-            : base(settings, navigationService, downloadService, generateService, extractService, upscaleService, historyService, logger)
+        public ImageToVideoView(Settings settings, NavigationService navigationService, IModelDownloadService downloadService, IModelAccessService modelAccessService, IGenerateService generateService, ILanguageService languageService, IExtractService extractService, IUpscaleService upscaleService, IHistoryService historyService, ILogger<ImageToVideoView> logger)
+            : base(settings, navigationService, downloadService, modelAccessService, generateService, languageService, extractService, upscaleService, historyService, logger)
         {
             InitializeComponent();
         }
@@ -143,11 +143,13 @@ namespace Amuse.App.Views
 
             try
             {
+                var previousVideo = ResultVideo;
+                await ResultControl.ClearAsync();
                 Progress.Clear();
                 AutomationProgress.Clear();
                 Statistics.Clear();
-                ResultImage = default;
-                CompareImage = default;
+                ResultVideo = default;
+                CompareVideo = default;
                 Statistics.Start();
                 CancellationTokenSource = new CancellationTokenSource();
 
@@ -159,7 +161,10 @@ namespace Amuse.App.Views
 
                     // Source
                     if (!automationJob.InputImages.IsNullOrEmpty())
-                        SourceImage1 = automationJob.InputImages[0];
+                    {
+                        _extractImage = await ExecuteImageExtractAsync(automationJob.InputImages[0]);
+                        SourceImage1 = _extractImage;
+                    }
 
                     // Options
                     var options = automationJob.GenerateOptions with { InputImages = GetInputTensors() };
@@ -171,10 +176,11 @@ namespace Amuse.App.Views
                     resultTensor = await ExecuteVideoUpscaleAsync(resultTensor);
 
                     // Result
+                    var compareVideo = ResultVideo ?? previousVideo;
                     ResultVideo = !AutomationOptions.IsHistoryEnabled
                         ? resultTensor
-                        : await SaveHistoryAsync(automationJob.GenerateOptions, resultTensor);
-                    CompareImage = SourceImage1;
+                        : await SaveHistoryAsync(options, resultTensor);
+                    CompareVideo = compareVideo;
 
                     await automationJob.SaveAsync(ResultVideo);
                     AutomationProgress.Update(automationJob.Id, automationJob.Count, $"{AppDefault.Automation}: {automationJob.Id}/{automationJob.Count}");
@@ -217,12 +223,15 @@ namespace Amuse.App.Views
 
 
         /// <summary>
-        /// Called when SourceImage changed.
+        /// Called when SourceImage changed, an automation extracts its own images before setting them.
         /// </summary>
         /// <param name="sender">The sender.</param>
         /// <param name="image">The image.</param>
         protected async void OnSourceImageChanged(object sender, ImageInput image)
         {
+            if (IsAutomating)
+                return;
+
             try
             {
                 if (CurrentPipeline?.ExtractModel == null)
@@ -271,8 +280,8 @@ namespace Amuse.App.Views
                 Options = options,
                 Model = CurrentPipeline.DiffusionModel.Name,
                 LoraModels = CurrentPipeline.LoraAdapterModel?.Select(x => x.Name).ToArray(),
-                UpscaleModel = UpscaledModel?.Name,
-                UpscaleOptions = UpscaledModel is not null ? UpscaleOptions : null,
+                UpscaleModel = CurrentPipeline?.UpscaleModel?.Name,
+                UpscaleOptions = CurrentPipeline?.UpscaleModel is not null ? UpscaleOptions : null,
                 ExtractModel = CurrentPipeline.ExtractModel?.Name,
                 ExtractorType = CurrentPipeline.ExtractModel?.Type,
                 ExtractOptions = CurrentPipeline.ExtractModel is not null ? ExtractOptions : null,

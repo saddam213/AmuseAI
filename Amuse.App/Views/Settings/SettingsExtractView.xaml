@@ -74,7 +74,7 @@
 
                     <!--ExtractModel-->
                     <StackPanel>
-                        <UniformGrid Columns="4" >
+                        <UniformGrid Columns="4">
                             <StackPanel Margin="0,0,2,0">
                                 <TextBlock Text="{CommonControls:Localize Name}" Style="{StaticResource FieldTextBlockStyle}" />
                                 <TextBox Text="{Binding SelectedModel.Name}" IsReadOnly="True"/>
@@ -88,13 +88,50 @@
                                 <TextBlock Text="{Binding SelectedModel.Status}" FontWeight="Bold" FontSize="14" Opacity=".8" Margin="3,1,0,0" Style="{StaticResource ModelStatusTextBlock}" Tag="{Binding SelectedModel.Status}" />
                             </StackPanel>
                         </UniformGrid>
-
-                        <UniformGrid Columns="2">
-                            <StackPanel Margin="2,6,2,0">
-                                <TextBlock Text="{CommonControls:Localize ModelLink}" Style="{StaticResource FieldTextBlockStyle}" />
-                                <CommonControls:HyperlinkControl Label="{Binding SelectedModel.Link}" Link="{Binding SelectedModel.Link}" />
+                        <UniformGrid Columns="4" Margin="0,6,0,0">
+                            <StackPanel Margin="0,0,2,0">
+                                <TextBlock Text="{CommonControls:Localize Backend}" Style="{StaticResource FieldTextBlockStyle}" />
+                                <TextBox Text="{Binding SelectedModel.Backend, Mode=OneWay}" IsReadOnly="True"/>
+                            </StackPanel>
+                            <StackPanel Margin="2,0,2,0">
+                                <TextBlock Text="{CommonControls:Localize Type}" Style="{StaticResource FieldTextBlockStyle}" />
+                                <TextBox Text="{Binding SelectedModel.Type, Mode=OneWay}" IsReadOnly="True"/>
+                            </StackPanel>
+                            <StackPanel Margin="2,0,2,0">
+                                <TextBlock Text="{CommonControls:Localize MemorySize}" Style="{StaticResource FieldTextBlockStyle}" />
+                                <TextBox Text="{Binding SelectedModel.MemorySize, Mode=OneWay, StringFormat={}{0:0.#} GB}" IsReadOnly="True"/>
+                            </StackPanel>
+                            <StackPanel Margin="2,0,2,0">
+                                <TextBlock Text="{CommonControls:Localize Channels}" Style="{StaticResource FieldTextBlockStyle}" />
+                                <TextBox Text="{Binding SelectedModel.Channels, Mode=OneWay}" IsReadOnly="True"/>
                             </StackPanel>
                         </UniformGrid>
+                        <UniformGrid Columns="4" Margin="0,6,0,0">
+                            <StackPanel Margin="0,0,2,0">
+                                <TextBlock Text="{CommonControls:Localize SampleSize}" Style="{StaticResource FieldTextBlockStyle}" />
+                                <TextBox Text="{Binding SelectedModel.SampleSize, Mode=OneWay}" IsReadOnly="True"/>
+                            </StackPanel>
+                            <StackPanel Margin="2,0,2,0">
+                                <TextBlock Text="{CommonControls:Localize OutputChannels}" Style="{StaticResource FieldTextBlockStyle}" />
+                                <TextBox Text="{Binding SelectedModel.OutputChannels, Mode=OneWay}" IsReadOnly="True"/>
+                            </StackPanel>
+                            <StackPanel Margin="2,0,2,0">
+                                <TextBlock Text="{CommonControls:Localize InputNormalization}" Style="{StaticResource FieldTextBlockStyle}" />
+                                <TextBox Text="{Binding SelectedModel.Normalization, Mode=OneWay}" IsReadOnly="True"/>
+                            </StackPanel>
+                            <StackPanel Margin="2,0,2,0">
+                                <TextBlock Text="{CommonControls:Localize OutputNormalization}" Style="{StaticResource FieldTextBlockStyle}" />
+                                <TextBox Text="{Binding SelectedModel.OutputNormalization, Mode=OneWay}" IsReadOnly="True"/>
+                            </StackPanel>
+                        </UniformGrid>
+                        <StackPanel Margin="2,6,2,0">
+                            <TextBlock Text="{CommonControls:Localize ModelLink}" Style="{StaticResource FieldTextBlockStyle}" />
+                            <CommonControls:HyperlinkControl Label="{Binding SelectedModel.Link}" Link="{Binding SelectedModel.Link}" />
+                        </StackPanel>
+                        <StackPanel Margin="0,6,2,0">
+                            <TextBlock Text="{CommonControls:Localize Description}" Style="{StaticResource FieldTextBlockStyle}" />
+                            <TextBox Text="{Binding SelectedModel.Pipeline, Mode=OneWay, Converter={StaticResource EnumDescriptionConverter}}" IsReadOnly="True" TextWrapping="Wrap" />
+                        </StackPanel>
                     </StackPanel>
 
                 </DockPanel>

@@ -5,6 +5,7 @@ using Amuse.App.Services;
 using Microsoft.Extensions.Logging;
 using System;
 using System.ComponentModel;
+using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Windows.Data;
@@ -22,24 +23,23 @@ namespace Amuse.App.Views
     {
         private EnvironmentModel _selectedEnvironment;
         private string _filterText;
-        private string _filterBackend;
-        private string _filterVendor;
-        private string _filterType;
+        private FilterOption _filterBackend;
+        private FilterOption _filterVendor;
+        private FilterOption _filterType;
         private bool _isDeviceFilterEnabled = true;
 
-        public SettingsEnvironmentView(Settings settings, NavigationService navigationService, IModelDownloadService downloadService, IHistoryService historyService, IEnvironmentService environmentService, ILogger<SettingsEnvironmentView> logger)
-            : base(settings, navigationService, downloadService, historyService, logger)
+        public SettingsEnvironmentView(Settings settings, NavigationService navigationService, IModelDownloadService downloadService, IModelAccessService modelAccessService, IHistoryService historyService, IEnvironmentService environmentService, ILogger<SettingsEnvironmentView> logger)
+            : base(settings, navigationService, downloadService, modelAccessService, historyService, logger)
         {
             EnvironmentService = environmentService;
-            FilterBackends = ["Show All", .. Enum.GetValues<BackendType>().Where(x => x != BackendType.PyTorch && x != BackendType.OnnxRuntime).Select(x => x.ToString())];
-            FilterVendors = ["Show All", .. Enum.GetValues<VendorType>().Where(x => x !=  VendorType.CPU).Select(x => x.ToString())];
-            FilterTypes = ["Show All", .. Enum.GetNames<EnvironmentType>()];
+            FilterBackends = [FilterOption.ShowAll(), .. Enum.GetValues<BackendType>().Where(x => x != BackendType.PyTorch && x != BackendType.HuggingFace && x != BackendType.OnnxRuntime).Select(x => FilterOption.FromEnum(x))];
+            FilterVendors = [FilterOption.ShowAll(), .. Enum.GetValues<VendorType>().Where(x => x != VendorType.CPU).Select(x => FilterOption.FromEnum(x))];
+            FilterTypes = [FilterOption.ShowAll(), .. Enum.GetValues<EnvironmentType>().Select(x => FilterOption.FromEnum(x))];
             _filterBackend = FilterBackends[0];
             _filterVendor = FilterVendors[0];
             _filterType = FilterTypes[0];
             SaveCommand = new AsyncRelayCommand(SaveAsync);
             AddEnvironmentCommand = new AsyncRelayCommand(AddEnvironmentAsync);
-            AddEnvironmentWizardCommand = new AsyncRelayCommand(AddEnvironmentWizardAsync);
             CopyEnvironmentCommand = new AsyncRelayCommand(CopyEnvironmentAsync, () => SelectedEnvironment is not null);
             UpdateEnvironmentCommand = new AsyncRelayCommand(UpdateEnvironmentAsync);
             RemoveEnvironmentCommand = new AsyncRelayCommand(RemoveEnvironmentAsync, () => SelectedEnvironment?.Id > Utils.FixedIdRange);
@@ -47,10 +47,10 @@ namespace Amuse.App.Views
             ExportEnvironmentCommand = new AsyncRelayCommand(ExportEnvironmentAsync, () => SelectedEnvironment is not null);
             EnvironmentServiceCreateCommand = new AsyncRelayCommand(EnvironmentCreateAsync, CanEnvironmentCreate);
             EnvironmentServiceUpdateCommand = new AsyncRelayCommand(EnvironmentUpdateAsync, CanEnvironmentUpdate);
-            EnvironmentServiceRebuildCommand = new AsyncRelayCommand(EnvironmentRebuildAsync, CanEnvironmentUpdate);
             EnvironmentServiceDeleteCommand = new AsyncRelayCommand(EnvironmentDeleteAsync, CanEnvironmentUpdate);
             EnvironmentDefaultCommand = new AsyncRelayCommand(EnvironmentDefaultAsync, CanEnvironmentDefault);
             FilterClearCommand = new AsyncRelayCommand(FilterClearAsync, CanClearFilter);
+            ManageEnvironmentsCommand = new AsyncRelayCommand(ManageEnvironmentsAsync);
             ModelCollection = new ListCollectionView(settings.Environments) { Filter = CollectionFilter(), IsLiveSorting = true, IsLiveFiltering = true, IsLiveGrouping = true };
             ModelCollection.GroupDescriptions.Add(new PropertyGroupDescription(nameof(EnvironmentModel.Vendor)));
             ModelCollection.SortDescriptions.Add(new SortDescription(nameof(EnvironmentModel.Vendor), ListSortDirection.Ascending));
@@ -65,7 +65,6 @@ namespace Amuse.App.Views
         public IEnvironmentService EnvironmentService { get; }
         public AsyncRelayCommand SaveCommand { get; }
         public AsyncRelayCommand AddEnvironmentCommand { get; }
-        public AsyncRelayCommand AddEnvironmentWizardCommand { get; }
         public AsyncRelayCommand CopyEnvironmentCommand { get; }
         public AsyncRelayCommand UpdateEnvironmentCommand { get; }
         public AsyncRelayCommand RemoveEnvironmentCommand { get; }
@@ -73,26 +72,26 @@ namespace Amuse.App.Views
         public AsyncRelayCommand ExportEnvironmentCommand { get; }
         public AsyncRelayCommand EnvironmentServiceCreateCommand { get; }
         public AsyncRelayCommand EnvironmentServiceUpdateCommand { get; }
-        public AsyncRelayCommand EnvironmentServiceRebuildCommand { get; }
         public AsyncRelayCommand EnvironmentServiceDeleteCommand { get; }
         public AsyncRelayCommand EnvironmentDefaultCommand { get; }
         public AsyncRelayCommand FilterClearCommand { get; }
+        public AsyncRelayCommand ManageEnvironmentsCommand { get; }
         public ListCollectionView ModelCollection { get; }
 
         /// <summary>
         /// Gets the backend filter options.
         /// </summary>
-        public string[] FilterBackends { get; }
+        public FilterOption[] FilterBackends { get; }
 
         /// <summary>
         /// Gets the vendor filter options.
         /// </summary>
-        public string[] FilterVendors { get; }
+        public FilterOption[] FilterVendors { get; }
 
         /// <summary>
         /// Gets the environment type filter options.
         /// </summary>
-        public string[] FilterTypes { get; }
+        public FilterOption[] FilterTypes { get; }
 
         public EnvironmentModel SelectedEnvironment
         {
@@ -109,7 +108,7 @@ namespace Amuse.App.Views
         /// <summary>
         /// Gets or sets the backend filter.
         /// </summary>
-        public string FilterBackend
+        public FilterOption FilterBackend
         {
             get { return _filterBackend; }
             set { SetProperty(ref _filterBackend, value); ModelCollection?.Refresh(); }
@@ -118,7 +117,7 @@ namespace Amuse.App.Views
         /// <summary>
         /// Gets or sets the vendor filter.
         /// </summary>
-        public string FilterVendor
+        public FilterOption FilterVendor
         {
             get { return _filterVendor; }
             set { SetProperty(ref _filterVendor, value); ModelCollection?.Refresh(); }
@@ -127,7 +126,7 @@ namespace Amuse.App.Views
         /// <summary>
         /// Gets or sets the environment type filter.
         /// </summary>
-        public string FilterType
+        public FilterOption FilterType
         {
             get { return _filterType; }
             set { SetProperty(ref _filterType, value); ModelCollection?.Refresh(); }
@@ -168,15 +167,15 @@ namespace Amuse.App.Views
                     return false;
 
                 // Backend
-                if (Enum.TryParse<BackendType>(_filterBackend, out var backendType) && model.Backend != backendType)
+                if (Enum.TryParse<BackendType>(_filterBackend?.Value, out var backendType) && model.Backend != backendType)
                     return false;
 
                 // Vendor
-                if (Enum.TryParse<VendorType>(_filterVendor, out var vendorType) && model.Vendor != vendorType)
+                if (Enum.TryParse<VendorType>(_filterVendor?.Value, out var vendorType) && model.Vendor != vendorType)
                     return false;
 
                 // Type
-                if (Enum.TryParse<EnvironmentType>(_filterType, out var environmentType) && model.Type != environmentType)
+                if (Enum.TryParse<EnvironmentType>(_filterType?.Value, out var environmentType) && model.Type != environmentType)
                     return false;
 
                 // Text
@@ -224,6 +223,31 @@ namespace Amuse.App.Views
         }
 
 
+        /// <summary>
+        /// Opens the environment setup to install or remove backend environments.
+        /// </summary>
+        private async Task ManageEnvironmentsAsync()
+        {
+            var timestamp = Stopwatch.GetTimestamp();
+            try
+            {
+                Logger.LogInformation("[SettingsEnvironment] [ManageEnvironments] Opening environment setup...");
+                var setupDialog = DialogService.GetDialog<AppSetupDialog>();
+                await setupDialog.ShowDialogAsync();
+                Logger.LogInformation("[SettingsEnvironment] [ManageEnvironments] Environment setup closed, Elapsed: {Elapsed:c}", Stopwatch.GetElapsedTime(timestamp));
+            }
+            catch (Exception ex)
+            {
+                Logger.LogError(ex, "[SettingsEnvironment] [ManageEnvironments] Environment setup failed");
+                await DialogService.ShowErrorAsync(AppErrors.UnexpectedErrorTitle, ex.Message);
+            }
+            finally
+            {
+                ModelCollection.Refresh();
+            }
+        }
+
+
         private async Task AddEnvironmentAsync()
         {
             var dialog = DialogService.GetDialog<EnvironmentModelDialog>();
@@ -232,12 +256,6 @@ namespace Amuse.App.Views
                 await SaveAsync();
                 SelectedEnvironment = dialog.EnvironmentModel;
             }
-        }
-
-
-        private Task AddEnvironmentWizardAsync()
-        {
-            return Task.CompletedTask; // TODO: Environment Wizard
         }
 
 
@@ -267,6 +285,9 @@ namespace Amuse.App.Views
         {
             if (await DialogService.ShowMessageAsync(AppDefault.RemoveEnvironment, AppDefault.RemoveEnvironmentMessage, TensorStack.WPF.Dialogs.MessageDialogType.YesNo, TensorStack.WPF.Dialogs.MessageBoxIconType.Warning, TensorStack.WPF.Dialogs.MessageBoxStyleType.Danger))
             {
+                if (!await ModelAccessService.RequestEnvironmentReleaseAsync(_selectedEnvironment))
+                    return;
+
                 await EnvironmentService.DeleteAsync(_selectedEnvironment);
                 Settings.Environments.Remove(_selectedEnvironment);
                 SelectedEnvironment = Settings.Environments.FirstOrDefault();
@@ -285,7 +306,7 @@ namespace Amuse.App.Views
                 var environmentImports = await Json.LoadArrayAsync<EnvironmentModel>(importPath);
                 if (environmentImports.IsNullOrEmpty())
                 {
-                    await DialogService.ShowMessageAsync(AppErrors.ImportErrorTitle, AppErrors.ImportEnvironment);
+                    await DialogService.ShowErrorAsync(AppErrors.ImportErrorTitle, AppErrors.ImportEnvironmentFailed);
                     return;
                 }
 
@@ -342,17 +363,13 @@ namespace Amuse.App.Views
         }
 
 
-        private async Task EnvironmentRebuildAsync()
-        {
-            var environmentDialog = DialogService.GetDialog<EnvironmentDialog>();
-            await environmentDialog.RebuildAsync(SelectedEnvironment);
-        }
-
-
         private async Task EnvironmentDeleteAsync()
         {
             if (await DialogService.ShowMessageAsync(AppDefault.DeleteEnvironment, AppDefault.DeleteEnvironmentMessage, TensorStack.WPF.Dialogs.MessageDialogType.YesNo, TensorStack.WPF.Dialogs.MessageBoxIconType.Warning, TensorStack.WPF.Dialogs.MessageBoxStyleType.Danger))
             {
+                if (!await ModelAccessService.RequestEnvironmentReleaseAsync(SelectedEnvironment))
+                    return;
+
                 await EnvironmentService.DeleteAsync(SelectedEnvironment);
             }
         }

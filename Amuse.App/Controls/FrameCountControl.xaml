@@ -1,0 +1,59 @@
+﻿<UserControl x:Class="Amuse.App.Controls.FrameCountControl"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:local="clr-namespace:Amuse.App.Controls"
+             xmlns:CommonControls="clr-namespace:TensorStack.WPF.Controls;assembly=TensorStack.WPF"
+             Name="UI" >
+    <UniformGrid DataContext="{Binding ElementName=UI}" Columns="2">
+        <DockPanel Margin="0,0,2,0">
+            <StackPanel DockPanel.Dock="Right" >
+                <TextBlock Style="{StaticResource FieldTextBlockStyle}" />
+                <Grid Height="22" Width="25" >
+                    <CommonControls:AddOnButton Icon="f008" IconSize="14" IconColor="{StaticResource DefaultForeground}" IconOpacity=".8" Command="{Binding ToggleModeCommand}" ToolTip="{CommonControls:Localize ToolTip_FrameCount_Frames}" ToolTipService.InitialShowDelay="200" Visibility="{Binding IsFrameMode, Converter={StaticResource InverseBooleanToVisibilityConverter}}" />
+                    <CommonControls:AddOnButton Icon="f017" IconSize="14" IconColor="{StaticResource DefaultForeground}" IconOpacity=".8" Command="{Binding ToggleModeCommand}" ToolTip="{CommonControls:Localize ToolTip_FrameCount_Seconds}" ToolTipService.InitialShowDelay="200" Visibility="{Binding IsFrameMode, Converter={StaticResource BooleanToVisibilityConverter}}" />
+                </Grid>
+            </StackPanel>
+            <UniformGrid Columns="2">
+                <StackPanel>
+                    <Grid>
+                        <TextBlock Text="{CommonControls:Localize Seconds}" Style="{StaticResource FieldTextBlockStyle}" Visibility="{Binding IsFrameMode, Converter={StaticResource InverseBooleanToVisibilityConverter}}" />
+                        <TextBlock Text="{CommonControls:Localize Frames}" Style="{StaticResource FieldTextBlockStyle}" Visibility="{Binding IsFrameMode, Converter={StaticResource BooleanToVisibilityConverter}}" />
+                    </Grid>
+                    <TextBox x:Name="TextBoxValue" LostFocus="TextBoxValue_LostFocus" PreviewKeyDown="TextBox_PreviewKeyDown" />
+                </StackPanel>
+
+                <StackPanel>
+                    <Grid>
+                        <TextBlock Text="{CommonControls:Localize Frames}" Style="{StaticResource FieldTextBlockStyle}" Visibility="{Binding IsFrameMode, Converter={StaticResource InverseBooleanToVisibilityConverter}}" />
+                        <TextBlock Text="{CommonControls:Localize Duration}" Style="{StaticResource FieldTextBlockStyle}" Visibility="{Binding IsFrameMode, Converter={StaticResource BooleanToVisibilityConverter}}" />
+                    </Grid>
+                    <TextBox x:Name="TextBoxDetail" IsReadOnly="True" IsHitTestVisible="False" Opacity=".8" />
+                </StackPanel>
+            </UniformGrid>
+        </DockPanel>
+
+        <!--FrameRate-->
+        <StackPanel Margin="2,0,0,0">
+            <TextBlock Text="{CommonControls:Localize FrameRate}" Style="{StaticResource FieldTextBlockStyle}" />
+            <ComboBox ItemsSource="{Binding FrameRates}" SelectedItem="{Binding FrameRate}" IsEnabled="{Binding IsFrameRateEnabled}" ToolTip="{CommonControls:Localize ToolTip_FrameRate_Fixed}" ToolTipService.InitialShowDelay="200" ToolTipService.ShowOnDisabled="True" ToolTipService.IsEnabled="{Binding IsFrameRateEnabled, Converter={StaticResource InverseBoolConverter}}">
+                <ComboBox.ItemTemplate>
+                    <DataTemplate>
+                        <TextBlock Text="{Binding ., StringFormat={}{0} fps}" />
+                    </DataTemplate>
+                </ComboBox.ItemTemplate>
+            </ComboBox>
+        </StackPanel>
+
+        <!--Chunking-->
+        <CheckBox Margin="0,14,2,0" Content="{CommonControls:Localize AllowChunking}" IsChecked="{Binding IsChunkAllowed}" ToolTip="{CommonControls:Localize ToolTip_FrameChunk}" ToolTipService.InitialShowDelay="200" Visibility="{Binding IsChunkSupported, Converter={StaticResource BooleanToVisibilityConverter}}" />
+
+        <!--ChunkSize-->
+        <StackPanel Margin="2,0,0,0" IsEnabled="{Binding IsChunkAllowed}" ToolTip="{CommonControls:Localize ToolTip_FrameChunk}" ToolTipService.InitialShowDelay="200" ToolTipService.ShowOnDisabled="True" Visibility="{Binding IsChunkSupported, Converter={StaticResource BooleanToVisibilityConverter}}">
+            <TextBlock Text="{CommonControls:Localize ChunkSize}" Style="{StaticResource FieldTextBlockStyle}" />
+            <TextBox x:Name="TextBoxChunk" LostFocus="TextBoxChunk_LostFocus" PreviewKeyDown="TextBox_PreviewKeyDown" />
+        </StackPanel>
+
+    </UniformGrid>
+</UserControl>

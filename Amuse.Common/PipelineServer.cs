@@ -2,6 +2,7 @@
 using Amuse.Common.Message;
 using Microsoft.Extensions.Logging;
 using System;
+using System.Collections.Generic;
 using System.IO;
 using System.IO.MemoryMappedFiles;
 using System.IO.Pipes;
@@ -18,6 +19,8 @@ namespace Amuse.Common
         private readonly NamedPipeServerStream _commandChannel;
         private readonly NamedPipeServerStream _pipelineChannel;
         private readonly NamedPipeServerStream _progressChannel;
+        private readonly NamedPipeServerStream _streamChannel;
+        private readonly PipelineStreamChannel _pipelineStreamChannel;
         private readonly Channel<PipelineProgress> _progressQueue;
         private RequestType _pipelineState;
         private MemoryMappedFile _tensorChannel;
@@ -32,7 +35,9 @@ namespace Amuse.Common
             _progressChannel = new NamedPipeServerStream(Config.ChannelProgress, PipeDirection.Out, NamedPipeServerStream.MaxAllowedServerInstances, PipeTransmissionMode.Byte, PipeOptions.Asynchronous, Config.ChunkSize, Config.ChunkSize);
             _commandChannel = new NamedPipeServerStream(Config.ChannelCommand, PipeDirection.InOut, NamedPipeServerStream.MaxAllowedServerInstances, PipeTransmissionMode.Byte, PipeOptions.Asynchronous, Config.ChunkSize, Config.ChunkSize);
             _pipelineChannel = new NamedPipeServerStream(Config.ChannelPipeName, PipeDirection.InOut, NamedPipeServerStream.MaxAllowedServerInstances, PipeTransmissionMode.Byte, PipeOptions.Asynchronous, Config.ChunkSize, Config.ChunkSize);
+            _streamChannel = new NamedPipeServerStream(Config.ChannelStream, PipeDirection.InOut, NamedPipeServerStream.MaxAllowedServerInstances, PipeTransmissionMode.Byte, PipeOptions.Asynchronous, Config.ChunkSize, Config.ChunkSize);
             _pipelineTensorChannel = new PipelineTensorChannel(Config);
+            _pipelineStreamChannel = new PipelineStreamChannel(_streamChannel, Config, true);
         }
 
         protected ILogger Logger { get; }
@@ -51,6 +56,7 @@ namespace Amuse.Common
 
             _ = StartProgressChannelAsync(cancellationToken);
             _ = StartCommandChannelAsync(cancellationToken);
+            _ = _pipelineStreamChannel.StartAsync(cancellationToken);
             await StartPipelineChannelAsync(cancellationToken);
             Logger.LogInformation($"[AmuseHost] [PipelineServer] [Start] Generate loop stopped.");
         }
@@ -67,6 +73,7 @@ namespace Amuse.Common
             (
                 _progressChannel.WaitForConnectionAsync(cancellationToken),
                 _commandChannel.WaitForConnectionAsync(cancellationToken),
+                _streamChannel.WaitForConnectionAsync(cancellationToken),
                 _pipelineChannel.WaitForConnectionAsync(cancellationToken)
             );
             Logger.LogInformation($"[AmuseHost] [PipelineServer] [WaitForConnection] Client connected.");
@@ -106,27 +113,30 @@ namespace Amuse.Common
                         await CreatePipelineAsync(request, cancellationToken);
                         _pipelineState = RequestType.Create;
                     }
+                    else if (_pipelineState == RequestType.Create && request.Type == RequestType.Load)
+                    {
+                        await LoadPipelineAsync(request, cancellationToken);
+                    }
+                    else if (_pipelineState == RequestType.Create && request.Type == RequestType.Reload)
+                    {
+                        await ReloadPipelineAsync(request, cancellationToken);
+                    }
+                    else if (_pipelineState == RequestType.Create && request.Type == RequestType.Unload)
+                    {
+                        await UnloadPipelineAsync(request, cancellationToken);
+                    }
+                    else if (_pipelineState == RequestType.Create && request.Type == RequestType.Run)
+                    {
+                        await RunPipelineAsync(request, cancellationToken);
+                    }
+                    else if (_pipelineState == RequestType.Create && request.Type == RequestType.RunStream)
+                    {
+                        await RunStreamAsync(request, cancellationToken);
+                    }
                     else
                     {
-                        if (_pipelineState == RequestType.Create)
-                        {
-                            if (request.Type == RequestType.Load)
-                            {
-                                await LoadPipelineAsync(request, cancellationToken);
-                            }
-                            else if (request.Type == RequestType.Reload)
-                            {
-                                await ReloadPipelineAsync(request, cancellationToken);
-                            }
-                            else if (request.Type == RequestType.Unload)
-                            {
-                                await UnloadPipelineAsync(request, cancellationToken);
-                            }
-                            else if (request.Type == RequestType.Run)
-                            {
-                                await RunPipelineAsync(request, cancellationToken);
-                            }
-                        }
+                        Logger.LogError("[AmuseHost] [PipelineServer] [PipelineChannel] Unexpected request, Type: {Type}, State: {State}", request.Type, _pipelineState);
+                        await SendException(new InvalidOperationException($"Unexpected {request.Type} request, the host state is {_pipelineState}."), cancellationToken);
                     }
 
                     if (_pipelineState == RequestType.Stop)
@@ -305,6 +315,50 @@ namespace Amuse.Common
         }
 
 
+        /// <summary>
+        /// Runs a stream request, items from the client are passed to the pipeline as they arrive and its results are sent back as they are produced.
+        /// The stream is always completed before the final response is sent on the pipeline channel.
+        /// </summary>
+        /// <param name="request">The request.</param>
+        /// <param name="cancellationToken">The cancellation token.</param>
+        private async Task RunStreamAsync(PipelineRequest request, CancellationToken cancellationToken)
+        {
+            Exception exception = null;
+            _pipelineStreamChannel.Open(request.StreamId);
+            try
+            {
+                using (PipelineCancellation = CancellationTokenSource.CreateLinkedTokenSource(cancellationToken))
+                {
+                    var streamToken = PipelineCancellation.Token;
+                    await _pipelineStreamChannel.SendReadyAsync();
+
+                    var input = _pipelineStreamChannel.ReadAllAsync(streamToken);
+                    await foreach (var item in RunPipelineStreamAsync(request, input, streamToken))
+                    {
+                        await _pipelineStreamChannel.WriteAsync(item, streamToken);
+                    }
+                }
+            }
+            catch (OperationCanceledException ex)
+            {
+                Logger.LogInformation("[AmuseHost] [PipelineServer] [RunStream] {Message}", ex.Message);
+                exception = ex;
+            }
+            catch (Exception ex)
+            {
+                Logger.LogError(ex, "[AmuseHost] [PipelineServer] [RunStream] An exception occurred running pipeline stream.");
+                exception = ex;
+            }
+
+            await _pipelineStreamChannel.CompleteAsync();
+            _pipelineStreamChannel.Close();
+            if (exception is null)
+                await SendResponse(cancellationToken);
+            else
+                await SendException(exception, cancellationToken);
+        }
+
+
         protected async Task QueueProgress(PipelineProgress progress)
         {
             await _progressQueue.Writer.WriteAsync(progress);
@@ -376,6 +430,18 @@ namespace Amuse.Common
 
 
         /// <summary>
+        /// Runs the pipeline as a stream, hosts with streaming pipelines override this.
+        /// </summary>
+        /// <param name="request">The request.</param>
+        /// <param name="input">The items streamed from the client.</param>
+        /// <param name="cancellationToken">The cancellation token.</param>
+        protected virtual IAsyncEnumerable<PipelineStreamItem> RunPipelineStreamAsync(PipelineRequest request, IAsyncEnumerable<PipelineStreamItem> input, CancellationToken cancellationToken)
+        {
+            throw new NotSupportedException("Stream requests are not supported by this host.");
+        }
+
+
+        /// <summary>
         /// Performs application-defined tasks associated with freeing, releasing, or resetting unmanaged resources.
         /// </summary>
         public void Dispose()
@@ -385,6 +451,8 @@ namespace Amuse.Common
             _progressChannel?.Dispose();
             _commandChannel?.Dispose();
             _pipelineChannel?.Dispose();
+            _pipelineStreamChannel?.Dispose();
+            _streamChannel?.Dispose();
             GC.SuppressFinalize(this);
         }
     }

@@ -1,0 +1,106 @@
+﻿<CommonControls:DialogControl x:Class="Amuse.App.Dialogs.ControlNetModelWizardDialog"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:Amuse.App.Dialogs"
+        xmlns:CommonControls="clr-namespace:TensorStack.WPF.Controls;assembly=TensorStack.WPF"
+        Title="{CommonControls:Localize Title_AddControlNet}"
+        MinWidth="800"
+        MaxWidth="800"
+        Icon="/Images/Icon.ico"
+        Style="{StaticResource {x:Type CommonControls:DialogControl}}">
+    <DockPanel DataContext="{Binding RelativeSource={RelativeSource AncestorType={x:Type local:ControlNetModelWizardDialog}}}" Margin="15, 15, 15, 10">
+
+        <!--Save/Cancel/Errors-->
+        <DockPanel DockPanel.Dock="Bottom" Height="30" Margin="0,15,0,0">
+            <UniformGrid DockPanel.Dock="Right" Columns="2" >
+                <Button Content="{CommonControls:Localize Save}" Command="{Binding SaveCommand}" Width="100" IsDefault="True"/>
+                <Button Content="{CommonControls:Localize Cancel}" Command="{Binding CancelCommand}"/>
+            </UniformGrid>
+            <ItemsControl ItemsSource="{Binding Errors}">
+                <ItemsControl.ItemTemplate>
+                    <DataTemplate>
+                        <TextBlock Text="{Binding}" Foreground="IndianRed" TextWrapping="Wrap" FontSize="11"/>
+                    </DataTemplate>
+                </ItemsControl.ItemTemplate>
+            </ItemsControl>
+        </DockPanel>
+
+        <!--Main Content-->
+        <StackPanel>
+
+            <!--Model-->
+            <Border Style="{StaticResource WizardSection}">
+                <DockPanel>
+                    <StackPanel Style="{StaticResource WizardSectionHeader}">
+                        <TextBlock Text="{CommonControls:Localize Model}" FontWeight="SemiBold" FontSize="13"/>
+                        <TextBlock Text="{CommonControls:Localize ControlNetWizardModelDescription}" FontSize="11" Opacity=".7" TextWrapping="Wrap"/>
+                    </StackPanel>
+                    <StackPanel VerticalAlignment="Top">
+                        <TextBlock Text="{CommonControls:Localize Pipeline}" Style="{StaticResource FieldTextBlockStyle}"/>
+                        <ComboBox ItemsSource="{Binding PipelineOptions}" SelectedItem="{Binding SelectedPipeline}" Style="{StaticResource EnumComboBox}"/>
+                    </StackPanel>
+                </DockPanel>
+            </Border>
+
+            <!--Source-->
+            <Border Style="{StaticResource WizardSection}">
+                <DockPanel>
+                    <StackPanel Style="{StaticResource WizardSectionHeader}">
+                        <TextBlock Text="{CommonControls:Localize Source}" FontWeight="SemiBold" FontSize="13"/>
+                        <TextBlock Text="{CommonControls:Localize WizardFileSourceDescription}" FontSize="11" Opacity=".7" TextWrapping="Wrap"/>
+                    </StackPanel>
+                    <UniformGrid Rows="1" VerticalAlignment="Top">
+                        <RadioButton IsChecked="{Binding IsLocalFile}" VerticalAlignment="Top" VerticalContentAlignment="Top" Margin="0,2,10,2">
+                            <StackPanel Margin="2,0,0,0">
+                                <TextBlock Text="{CommonControls:Localize LoraWizardLocalFile}" FontWeight="SemiBold"/>
+                                <TextBlock Text="{CommonControls:Localize ControlNetWizardLocalFileDescription}" Margin="0,1,0,0" FontSize="10" Opacity=".7" TextWrapping="Wrap"/>
+                            </StackPanel>
+                        </RadioButton>
+                        <RadioButton IsChecked="{Binding IsOnlineFile}" VerticalAlignment="Top" VerticalContentAlignment="Top" Margin="0,2,0,2">
+                            <StackPanel Margin="2,0,0,0">
+                                <TextBlock Text="{CommonControls:Localize LoraWizardOnlineFile}" FontWeight="SemiBold"/>
+                                <TextBlock Text="{CommonControls:Localize WizardOnlineFileDescription}" Margin="0,1,0,0" FontSize="10" Opacity=".7" TextWrapping="Wrap"/>
+                            </StackPanel>
+                        </RadioButton>
+                    </UniformGrid>
+                </DockPanel>
+            </Border>
+
+            <!--File-->
+            <Border Style="{StaticResource WizardSection}">
+                <DockPanel>
+                    <StackPanel Style="{StaticResource WizardSectionHeader}">
+                        <TextBlock Text="{CommonControls:Localize ControlNet}" FontWeight="SemiBold" FontSize="13"/>
+                        <TextBlock Text="{CommonControls:Localize WizardFileNameDescription}" FontSize="11" Opacity=".7" TextWrapping="Wrap"/>
+                    </StackPanel>
+                    <StackPanel>
+
+                        <!--Local File-->
+                        <StackPanel Visibility="{Binding IsLocalFile, Converter={StaticResource BooleanToVisibilityConverter}}">
+                            <TextBlock Text="{CommonControls:Localize ModelFile}" Style="{StaticResource FieldTextBlockStyle}"/>
+                            <CommonControls:FilePickerTextBox FileName="{Binding SelectedFile, Mode=TwoWay}" IsFolderPicker="False" IsRequired="True" Filter="{Binding FileFilter}" DefaultExt="safetensors"/>
+                        </StackPanel>
+
+                        <!--Online File-->
+                        <StackPanel Visibility="{Binding IsOnlineFile, Converter={StaticResource BooleanToVisibilityConverter}}">
+                            <TextBlock Text="{CommonControls:Localize LoraWizardOnlineFile}" Style="{StaticResource FieldTextBlockStyle}"/>
+                            <TextBox Text="{Binding SelectedLink, UpdateSourceTrigger=PropertyChanged}"/>
+                            <TextBlock Text="{CommonControls:Localize WizardDownloadLinkHint}" Margin="0,2,0,0" FontSize="10" Opacity=".7" TextWrapping="Wrap"/>
+                        </StackPanel>
+
+                        <!--Name-->
+                        <StackPanel Margin="0,6,0,0">
+                            <TextBlock Text="{CommonControls:Localize ModelName}" Style="{StaticResource FieldTextBlockStyle}"/>
+                            <TextBox Text="{Binding SelectedName, UpdateSourceTrigger=PropertyChanged}"/>
+                        </StackPanel>
+
+                    </StackPanel>
+                </DockPanel>
+            </Border>
+
+        </StackPanel>
+
+    </DockPanel>
+</CommonControls:DialogControl>

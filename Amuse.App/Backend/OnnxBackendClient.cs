@@ -20,16 +20,6 @@ namespace Amuse.App.Runtime
         /// Initializes a new instance of the <see cref="OnnxBackendClient"/> class.
         /// </summary>
         /// <param name="settings">The settings.</param>
-        /// <param name="mediaService">The media service.</param>
-        /// <param name="logger">The logger.</param>
-        public OnnxBackendClient(Settings settings, IToolService toolService, IMediaService mediaService, ILogger logger)
-            : this(settings, toolService, mediaService, logger, ServerType.OnnxRuntime) { }
-
-
-        /// <summary>
-        /// Initializes a new instance of the <see cref="OnnxBackendClient"/> class.
-        /// </summary>
-        /// <param name="settings">The settings.</param>
         /// <param name="toolService">The tool service.</param>
         /// <param name="mediaService">The media service.</param>
         /// <param name="logger">The logger.</param>

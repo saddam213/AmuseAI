@@ -7,7 +7,7 @@ namespace Amuse.Common
         OnnxRuntime = 0,
         OnnxRuntimeUpscale = 1,
         OnnxRuntimeExtract = 2,
-        HuggingFace = 10,
+        OnnxRuntimeInterpolate = 3,
         StableDiffusionCpp = 20,
         StableDiffusionCppUpscale = 21,
         AudioCpp = 30,
@@ -16,204 +16,233 @@ namespace Amuse.Common
 
     public enum PipelineType
     {
-        // Image
-        [Display(Name = "Stable-Diffusion Pipeline", ShortName = "SD", Description = "The original Stable Diffusion family, widely supported and highly customizable. Known for its large ecosystem of checkpoints, LoRAs, ControlNets, and community tooling, making it a versatile choice for general image generation and fine-tuned workflows.")]
-        StableDiffusionPipeline = 0,
-
-        [Display(Name = "Stable-Diffusion XL Pipeline", ShortName = "SDXL", Description = "A major evolution of Stable Diffusion with a larger architecture and improved text understanding, composition, and visual detail. Particularly well suited to high-resolution generation, realistic imagery, and complex prompts.")]
-        StableDiffusionXLPipeline = 1,
-
-        [Display(Name = "Stable-Diffusion 3 Pipeline", ShortName = "SD3", Description = "A newer Stable Diffusion architecture focused on stronger prompt comprehension, improved typography and text rendering, and better handling of complex compositions. Uses a substantially different architecture from earlier Stable Diffusion generations.")]
-        StableDiffusion3Pipeline = 2,
-
-        [Display(Name = "Latent Consistency Pipeline", ShortName = "LCM", Description = "Latent Consistency Models are designed to generate images in very few sampling steps rather than the many steps traditionally used by diffusion models. They prioritize speed and interactive generation while retaining reasonable image quality.")]
-        LatentConsistencyPipeline = 3,
-
-        [Display(Name = "FLUX.1 Pipeline", ShortName = "FLUX.1", Description = "The FLUX.1 family uses a large flow-based architecture designed for strong visual quality, prompt adherence, and complex scene composition. It is particularly notable for its ability to follow detailed prompts and produce more convincing text and typography than many earlier diffusion models.")]
-        FluxPipeline = 20,
-
-        [Display(Name = "FLUX.2 Pipeline", ShortName = "FLUX.2", Description = "The next generation of the FLUX family, targeting higher-quality image synthesis, improved instruction following, and stronger control over complex visual compositions. Designed for demanding image-generation workflows where semantic accuracy and visual fidelity are important.")]
-        Flux2Pipeline = 21,
-
-        [Display(Name = "FLUX.2 Klein Pipeline", ShortName = "FLUX.2", Description = "A compact FLUX.2 variant designed to make the capabilities of the FLUX family more accessible with substantially lower computational requirements. Best suited to applications where generation speed, memory usage, and local inference efficiency are important.")]
-        Flux2KleinPipeline = 22,
-
-        [Display(Name = "FLUX.3 Klein Pipeline", ShortName = "FLUX.3", Description = "A compact FLUX.3 variant designed to make the capabilities of the FLUX family more accessible with substantially lower computational requirements. Best suited to applications where generation speed, memory usage, and local inference efficiency are important.")]
-        Flux3KleinPipeline = 23,
-
-        [Display(Name = "Chroma Pipeline", ShortName = "Chroma", Description = "Chroma is a Flux-derived text-to-image model focused on improving prompt understanding, image quality, and detailed visual composition.")]
-        ChromaPipeline = 30,
-
-        [Display(Name = "Z-Image Pipeline", ShortName = "Z-Image", Description = "Z-Image is Alibaba's efficient image-generation model built around a Scalable Single-Stream DiT architecture. It combines strong visual quality, prompt adherence, aesthetic diversity, and controllability, with Z-Image-Turbo providing an aggressively distilled 8-step variant optimized for very fast photorealistic generation and English/Chinese text rendering.")]
-        ZImagePipeline = 40,
-
-        [Display(Name = "Qwen Image Pipeline", ShortName = "Qwen", Description = "Qwen's image-generation family, with particular emphasis on instruction following, complex compositions, and text rendering. It is well suited to tasks where the model needs to understand detailed natural-language instructions rather than simply reproduce a visual style.")]
-        QwenImagePipeline = 50,
-
-        [Display(Name = "MOSS Image Pipeline", ShortName = "MOSS", Description = "MOSS-Image is a text-to-image model family from OpenMOSS that supports natural-language prompts, tag sequences, and JSON layouts for controlling text placement and object arrangement.")]
-        MossImagePipeline = 51,
-
-        [Display(Name = "MiniMax Image Pipeline", ShortName = "MiniMax", Description = "MiniMax-H3-Image is a state-of-the-art open-source model for image generation and editing from the MiniMax H3 family. It combines intelligent understanding of creative intent with the ability to build visual worlds: with precise instruction following, it develops a creative concept into concrete characters, scenes and atmosphere.")]
-        MiniMaxImagePipeline = 52,
-
-        [Display(Name = "Fibo2 Pipeline", ShortName = "Fibo2", Description = "Fibo 2.0 is the next generation of Bria's FIBO family. For the first time, image editing and image generation live in a single unified model. It keeps the foundation that made FIBO the most controllable open image model: training on long, structured captions through the Visual GenAI Language (VGL).")]
-        Fibo2Pipeline = 53,
-
-        [Display(Name = "Iris Pipeline", ShortName = "Iris", Description = "The Iris pipeline uses a pixel-space generative model to produce high-resolution images directly from text prompts and serves as a versatile vision foundation for tasks such as depth estimation, image restoration, and upscaling without requiring a separate decoder")]
-        IrisPipeline = 54,
-
-        [Display(Name = "SenseNova Pipeline", ShortName = "SenseNova", Description = "SenseNova is a multimodal AI pipeline designed to improve the quality, reliability, and controllability of visual generation and editing through advances in model architecture, data, prompting, training, and post-processing.")]
-        SenseNovaPipeline = 55,
-
-        [Display(Name = "LLaDA Image Pipeline", ShortName = "LLaDA", Description = "LLaDA-Image is a 6B text-to-image and instruction-guided editing model. The denoiser is a Lumina2/Z-Image-style NextDiT conditioned by a LLaDA2-MoE diffusion-LLM text encoder, and it reuses the Flux.2 VAE. Two checkpoints are published: a 50-step base model and LLaDA-Image-Turbo, a 4-step distilled model")]
-        LladaImagePipeline = 56,
-
-        [Display(Name = "LongCat Image Pipeline", ShortName = "LongCat", Description = "LongCat-Image, a pioneering open-source and bilingual (Chinese-English) foundation model for image generation, designed to address core challenges in multilingual text rendering, photorealism, deployment efficiency, and developer accessibility prevalent in current leading models.")]
-        LongCatImagePipeline = 57,
-
-        [Display(Name = "Lens Pipeline", ShortName = "Lens", Description = "Microsoft's Lens is a compact 3.8-billion parameter text-to-image model designed for high-speed generation and precise prompt adherence. Built on a dual-stream Multimodal Diffusion Transformer (MMDiT), it bridges multi-layer text features from a large language model with a high-fidelity semantic VAE.")]
-        LensPipeline = 58,
-
-        [Display(Name = "HiDream Pipeline", ShortName = "HiDream", Description = "HiDream-O1 is an 8B-parameter unified image-generation model designed for text-to-image generation, instruction-based editing, long-text rendering, subject-driven personalization, and storyboard generation. It uses a Pixel-level Unified Transformer architecture with native support for complex prompts, detailed compositions.")]
-        HiDreamPipeline = 59,
-
-        [Display(Name = "Ideogram4 Pipeline", ShortName = "Ideogram4", Description = "A model family particularly strong at generating images containing readable, correctly structured text. Well suited to posters, advertisements, logos, typography-heavy designs, and other graphic-design-oriented generations where text accuracy matters.")]
-        IdeogramPipeline = 61,
-
+        // Image (0 - 9999)
         [Display(Name = "Anima Pipeline", ShortName = "Anima", Description = "Anima is a 2B-parameter image-generation model specialized in anime, illustration, characters, and other non-photorealistic artwork. It is trained primarily on anime and artistic imagery, providing strong style adherence and diversity, with Base, Aesthetic, and Turbo variants targeting flexibility, quality, and fast generation respectively.")]
-        AnimaPipeline = 62,
-
-        [Display(Name = "Ernie Pipeline", ShortName = "Ernie", Description = "Baidu's ERNIE-based image-generation models, built around strong multimodal understanding and natural-language instruction following. Designed to translate complex semantic descriptions into coherent visual compositions.")]
-        ErniePipeline = 63,
-
-        [Display(Name = "GLM-Image Pipeline", ShortName = "GLM-Image", Description = "Hybrid autoregressive and diffusion image-generation model with strong semantic understanding, accurate text rendering, fine-grained detail generation, and support for image editing, style transfer, identity preservation, and multi-subject consistency")]
-        GlmImagePipeline = 64,
-
-        [Display(Name = "Krea2 Pipeline", ShortName = "Krea2", Description = "Krea's image-generation model family, oriented toward aesthetically strong, modern image generation. Designed with creative workflows in mind, particularly polished compositions, photorealistic imagery, and visually appealing outputs.")]
-        Krea2Pipeline = 65,
-
-        [Display(Name = "JoyAI Pipeline", ShortName = "JoyAI", Description = "JoyAI-Image is a unified multimodal model combining an 8B multimodal language model with a 16B multimodal diffusion transformer. Its key strengths are spatial understanding, long-form text rendering, multi-view generation, and instruction-guided image editing, allowing generation and editing to be driven by detailed spatial instructions.")]
-        JoyImagePipeline = 66,
-
-        [Display(Name = "PRX-Pixel Pipeline", ShortName = "PRX-Pixel", Description = "PRX-Pixel is a ~7B pixel-space text-to-image foundation model that generates directly in pixel space without a VAE. Built with a Qwen3-VL text encoder and trained from scratch using x-prediction, it explores direct pixel generation with strong multilingual prompting while avoiding the compressed latent representation used by conventional diffusion models.")]
-        PrxPixelPipeline = 67,
-
-        [Display(Name = "Kandinsky5 Image Pipeline", ShortName = "Kandinsky5", Description = "The fifth generation of the Kandinsky family, designed for high-quality text-to-image generation with strong semantic understanding and detailed visual synthesis. Intended as a general-purpose model for both artistic and realistic image generation.")]
-        Kandinsky5ImagePipeline = 68,
+        AnimaPipeline = 0,
 
         [Display(Name = "Boogu Image Pipeline", ShortName = "BooguImage", Description = "BooguImage is an AI-powered image generation and editing tool that helps users quickly turn ideas into high-quality visuals. With simple prompts, users can create, edit, enhance, and transform images for creative, personal, or professional projects.")]
-        BooguImagePipeline = 69,
+        BooguImagePipeline = 10,
+
+        [Display(Name = "Chroma Pipeline", ShortName = "Chroma", Description = "Chroma is a Flux-derived text-to-image model focused on improving prompt understanding, image quality, and detailed visual composition.")]
+        ChromaPipeline = 20,
+
+        [Display(Name = "Ernie Pipeline", ShortName = "Ernie", Description = "Baidu's ERNIE-based image-generation models, built around strong multimodal understanding and natural-language instruction following. Designed to translate complex semantic descriptions into coherent visual compositions.")]
+        ErniePipeline = 30,
+
+        [Display(Name = "Fibo2 Pipeline", ShortName = "Fibo2", Description = "Fibo 2.0 is the next generation of Bria's FIBO family. For the first time, image editing and image generation live in a single unified model. It keeps the foundation that made FIBO the most controllable open image model: training on long, structured captions through the Visual GenAI Language (VGL).")]
+        Fibo2Pipeline = 40,
+
+        [Display(Name = "FLUX.1 Pipeline", ShortName = "FLUX.1", Description = "The FLUX.1 family uses a large flow-based architecture designed for strong visual quality, prompt adherence, and complex scene composition. It is particularly notable for its ability to follow detailed prompts and produce more convincing text and typography than many earlier diffusion models.")]
+        FluxPipeline = 50,
+
+        [Display(Name = "FLUX.2 Pipeline", ShortName = "FLUX.2", Description = "The next generation of the FLUX family, targeting higher-quality image synthesis, improved instruction following, and stronger control over complex visual compositions. Designed for demanding image-generation workflows where semantic accuracy and visual fidelity are important.")]
+        Flux2Pipeline = 60,
+
+        [Display(Name = "FLUX.2 Klein Pipeline", ShortName = "FLUX.2", Description = "A compact FLUX.2 variant designed to make the capabilities of the FLUX family more accessible with substantially lower computational requirements. Best suited to applications where generation speed, memory usage, and local inference efficiency are important.")]
+        Flux2KleinPipeline = 70,
+
+        [Display(Name = "FLUX.3 Klein Pipeline", ShortName = "FLUX.3", Description = "A compact FLUX.3 variant designed to make the capabilities of the FLUX family more accessible with substantially lower computational requirements. Best suited to applications where generation speed, memory usage, and local inference efficiency are important.")]
+        Flux3KleinPipeline = 80,
+
+        [Display(Name = "HiDream Pipeline", ShortName = "HiDream", Description = "HiDream-O1 is an 8B-parameter unified image-generation model designed for text-to-image generation, instruction-based editing, long-text rendering, subject-driven personalization, and storyboard generation. It uses a Pixel-level Unified Transformer architecture with native support for complex prompts, detailed compositions.")]
+        HiDreamPipeline = 90,
+
+        [Display(Name = "Ideogram4 Pipeline", ShortName = "Ideogram4", Description = "A model family particularly strong at generating images containing readable, correctly structured text. Well suited to posters, advertisements, logos, typography-heavy designs, and other graphic-design-oriented generations where text accuracy matters.")]
+        IdeogramPipeline = 100,
+
+        [Display(Name = "Iris Pipeline", ShortName = "Iris", Description = "The Iris pipeline uses a pixel-space generative model to produce high-resolution images directly from text prompts and serves as a versatile vision foundation for tasks such as depth estimation, image restoration, and upscaling without requiring a separate decoder")]
+        IrisPipeline = 110,
+
+        [Display(Name = "Krea2 Pipeline", ShortName = "Krea2", Description = "Krea's image-generation model family, oriented toward aesthetically strong, modern image generation. Designed with creative workflows in mind, particularly polished compositions, photorealistic imagery, and visually appealing outputs.")]
+        Krea2Pipeline = 120,
+
+        [Display(Name = "Latent Consistency Pipeline", ShortName = "LCM", Description = "Latent Consistency Models are designed to generate images in very few sampling steps rather than the many steps traditionally used by diffusion models. They prioritize speed and interactive generation while retaining reasonable image quality.")]
+        LatentConsistencyPipeline = 130,
+
+        [Display(Name = "Lens Pipeline", ShortName = "Lens", Description = "Microsoft's Lens is a compact 3.8-billion parameter text-to-image model designed for high-speed generation and precise prompt adherence. Built on a dual-stream Multimodal Diffusion Transformer (MMDiT), it bridges multi-layer text features from a large language model with a high-fidelity semantic VAE.")]
+        LensPipeline = 140,
+
+        [Display(Name = "LLaDA Image Pipeline", ShortName = "LLaDA", Description = "LLaDA-Image is a 6B text-to-image and instruction-guided editing model. The denoiser is a Lumina2/Z-Image-style NextDiT conditioned by a LLaDA2-MoE diffusion-LLM text encoder, and it reuses the Flux.2 VAE. Two checkpoints are published: a 50-step base model and LLaDA-Image-Turbo, a 4-step distilled model")]
+        LladaImagePipeline = 150,
+
+        [Display(Name = "LongCat Image Pipeline", ShortName = "LongCat", Description = "LongCat-Image, a pioneering open-source and bilingual (Chinese-English) foundation model for image generation, designed to address core challenges in multilingual text rendering, photorealism, deployment efficiency, and developer accessibility prevalent in current leading models.")]
+        LongCatImagePipeline = 160,
+
+        [Display(Name = "Mage-Flow Pipeline", ShortName = "Mage-Flow", Description = "Mage-Flow is a flow-based image-generation and editing model family with Base, Turbo and Edit variants, using a Qwen3-VL text encoder and its own VAE. The Turbo variant is distilled for 4-step generation.")]
+        MageFlowPipeline = 170,
+
+        [Display(Name = "Ming Image Pipeline", ShortName = "Ming", Description = "Ming-Image is a design-oriented text-to-image model from inclusionAI, conditioned by the Ling-mini language model and distilled for fast, few-step generation of posters, layouts and graphic-design imagery.")]
+        MingImagePipeline = 180,
+
+        [Display(Name = "MiniMax Image Pipeline", ShortName = "MiniMax", Description = "MiniMax-H3-Image is a state-of-the-art open-source model for image generation and editing from the MiniMax H3 family. It combines intelligent understanding of creative intent with the ability to build visual worlds: with precise instruction following, it develops a creative concept into concrete characters, scenes and atmosphere.")]
+        MiniMaxImagePipeline = 190,
+
+        [Display(Name = "MOSS Image Pipeline", ShortName = "MOSS", Description = "MOSS-Image is a text-to-image model family from OpenMOSS that supports natural-language prompts, tag sequences, and JSON layouts for controlling text placement and object arrangement.")]
+        MossImagePipeline = 200,
+
+        [Display(Name = "Ovis Image Pipeline", ShortName = "Ovis", Description = "Ovis-Image is a 7B text-to-image model built on the Ovis 2.5 multimodal backbone, designed specifically for high-quality text rendering in posters, banners, logos and UI mockups while remaining small enough for local inference.")]
+        OvisImagePipeline = 210,
+
+        [Display(Name = "P-H3 Image Pipeline", ShortName = "P-H3", Description = "P-H3-Image is Pruna's efficient image-generation and editing model built on the MiniMax H3 family, pairing a compact Qwen3-VL text encoder and connector with a few-step sampler for very high-resolution output.")]
+        PH3ImagePipeline = 220,
+
+        [Display(Name = "PixArt Pipeline", ShortName = "PixArt", Description = "PixArt-Alpha and PixArt-Sigma are efficient diffusion transformer text-to-image models that pair a T5 text encoder with a compact transformer, producing detailed high-resolution images with strong prompt adherence at a fraction of the size of later models.")]
+        PixArtPipeline = 230,
+
+        [Display(Name = "Qwen Image Pipeline", ShortName = "Qwen", Description = "Qwen's image-generation family, with particular emphasis on instruction following, complex compositions, and text rendering. It is well suited to tasks where the model needs to understand detailed natural-language instructions rather than simply reproduce a visual style.")]
+        QwenImagePipeline = 240,
+
+        [Display(Name = "SeFi Image Pipeline", ShortName = "SeFi", Description = "SeFi-Image is a family of compact 1B, 2B and 5B text-to-image models with Base, RL and Turbo variants, using a Qwen3-VL text encoder and the FLUX.2 VAE. Turbo variants generate in 4 steps.")]
+        SeFiImagePipeline = 250,
+
+        [Display(Name = "SenseNova Pipeline", ShortName = "SenseNova", Description = "SenseNova is a multimodal AI pipeline designed to improve the quality, reliability, and controllability of visual generation and editing through advances in model architecture, data, prompting, training, and post-processing.")]
+        SenseNovaPipeline = 260,
+
+        [Display(Name = "Stable-Diffusion 3 Pipeline", ShortName = "SD3", Description = "A newer Stable Diffusion architecture focused on stronger prompt comprehension, improved typography and text rendering, and better handling of complex compositions. Uses a substantially different architecture from earlier Stable Diffusion generations.")]
+        StableDiffusion3Pipeline = 270,
+
+        [Display(Name = "Stable-Diffusion Pipeline", ShortName = "SD", Description = "The original Stable Diffusion family, widely supported and highly customizable. Known for its large ecosystem of checkpoints, LoRAs, ControlNets, and community tooling, making it a versatile choice for general image generation and fine-tuned workflows.")]
+        StableDiffusionPipeline = 280,
+
+        [Display(Name = "Stable-Diffusion XL Pipeline", ShortName = "SDXL", Description = "A major evolution of Stable Diffusion with a larger architecture and improved text understanding, composition, and visual detail. Particularly well suited to high-resolution generation, realistic imagery, and complex prompts.")]
+        StableDiffusionXLPipeline = 290,
+
+        [Display(Name = "Z-Image Pipeline", ShortName = "Z-Image", Description = "Z-Image is Alibaba's efficient image-generation model built around a Scalable Single-Stream DiT architecture. It combines strong visual quality, prompt adherence, aesthetic diversity, and controllability, with Z-Image-Turbo providing an aggressively distilled 8-step variant optimized for very fast photorealistic generation and English/Chinese text rendering.")]
+        ZImagePipeline = 300,
 
 
-        // Video
-        [Display(Name = "Wan Pipeline", ShortName = "Wan", Description = "A general-purpose video-generation family designed for high-quality text-to-video and image-to-video synthesis. Known for strong visual quality, relatively coherent motion, and broad applicability across cinematic and creative video-generation tasks.")]
-        WanPipeline = 70,
-
-        [Display(Name = "LTX Pipeline", ShortName = "LTX", Description = "A video-generation architecture optimized heavily for speed and efficiency. Its ability to generate video with relatively low latency makes it particularly useful for interactive workflows, rapid experimentation, and local inference.")]
-        LTXPipeline = 80,
+        // Video (10000 - 19999)
+        [Display(Name = "HunyuanVideo Pipeline", ShortName = "HunyuanVideo", Description = "Tencent's HunyuanVideo 1.5 is a lightweight video-generation model for text-to-video and image-to-video, combining a Qwen2.5-VL text encoder with a glyph-aware ByT5 encoder for strong prompt adherence, coherent motion and in-video text rendering.")]
+        HunyuanVideoPipeline = 10000,
 
         [Display(Name = "LTX-2 Pipeline", ShortName = "LTX-2", Description = "The next generation of LTX, extending the original architecture with improved video quality, motion, temporal consistency, and multimodal generation capabilities. Designed to provide significantly stronger results while retaining the efficiency that distinguishes the LTX family.")]
-        LTX20Pipeline = 81,
-
-        [Display(Name = "CogVideoX Pipeline", ShortName = "CogVideoX", Description = "An open video-generation model family designed for text-to-video and image-to-video generation. It focuses on maintaining temporal consistency between frames while producing meaningful motion and preserving the semantic content of the prompt.")]
-        CogVideoXPipeline = 90,
-
-        [Display(Name = "Kandinsky5 Video Pipeline", ShortName = "Kandinsky5", Description = "A video-oriented extension of the Kandinsky family, combining the model family's visual synthesis capabilities with temporal generation. Designed for coherent video creation with detailed scenes and stylized visual output.")]
-        Kandinsky5VideoPipeline = 91,
-
-        [Display(Name = "SkyReels v2 Pipeline", ShortName = "SkyReels", Description = "A video-generation family focused on cinematic and high-quality visual generation. Designed for more sophisticated scene composition, character motion, camera movement, and temporal consistency across generated sequences.")]
-        SkyReelsV2Pipeline = 100,
-
-        [Display(Name = "Helios Pipeline", ShortName = "Helios", Description = "Helios is a 14B autoregressive diffusion model designed for real-time, minute-scale video generation. It natively supports text-to-video, image-to-video, and video-to-video generation, using compressed historical context and efficient sampling to achieve high throughput while maintaining temporal consistency over long sequences.")]
-        HeliosPipeline = 110,
-
-        [Display(Name = "Motif Video Pipeline", ShortName = "Motif", Description = "Motif-Video 2B is a 2B-parameter text-to-video and image-to-video diffusion transformer designed to achieve competitive video quality with a fraction of the training compute and model size of larger video models. Its architecture separates prompt alignment, temporal consistency, and fine-detail recovery to reduce objective interference during generation.")]
-        MotifVideoPipeline = 111,
-
-        [Display(Name = "AnyFlow Pipeline", ShortName = "AnyFlow", Description = "AnyFlow is an any-step video diffusion framework based on flow maps that allows a single model to operate across arbitrary inference step counts rather than being locked to a fixed distilled step budget. It supports text-to-video, image-to-video, and video-to-video generation while improving quality progressively as additional sampling steps are used.")]
-        AnyFlowPipeline = 112,
+        LTX20Pipeline = 10010,
 
         [Display(Name = "MiniMax Video Pipeline", ShortName = "MiniMax", Description = "MiniMax's video-generation models are designed for high-quality text-to-video and image-to-video generation, with particular emphasis on realistic motion, detailed scenes, and cinematic output. Suitable for longer-form creative video generation.")]
-        MiniMaxVideoPipeline = 113,
+        MiniMaxVideoPipeline = 10020,
+
+        [Display(Name = "Wan Pipeline", ShortName = "Wan", Description = "A general-purpose video-generation family designed for high-quality text-to-video and image-to-video synthesis. Known for strong visual quality, relatively coherent motion, and broad applicability across cinematic and creative video-generation tasks.")]
+        WanPipeline = 10030,
 
 
-        // Audio
+        // Audio (20000 - 29999)
         [Display(Name = "AceStep Pipeline", ShortName = "AceStep", Description = "An open music-generation model designed for controllable music synthesis from natural-language descriptions. Supports structured musical generation and is particularly useful for generating songs, instrumental pieces, and genre-specific compositions.")]
-        AceStepPipeline = 200,
-
-        [Display(Name = "LongCat Audio Pipeline", ShortName = "LongCat", Description = "A generative audio model designed for producing rich audio content from textual and multimodal instructions. Intended for more general audio-generation workflows beyond simple speech synthesis.")]
-        LongCatAudioPipeline = 210,
-
-        [Display(Name = "MiniMax Audio Pipeline", ShortName = "MiniMax", Description = "MiniMax's audio-generation models cover expressive generative audio and music tasks, with an emphasis on high-quality output and natural musical structure. Suitable for creating music and other complex audio content from prompts.")]
-        MiniMaxAudioPipeline = 213,
-
-        [Display(Name = "Stable Audio Pipeline", ShortName = "StableAudio", Description = "Stability AI's Stable Audio family generates music and sound effects from text prompts, with variable-length output and audio-to-audio editing. Suitable for instrumental music, ambient soundscapes and short sound effects.")]
-        StableAudioPipeline = 214,
-
-        [Display(Name = "YuE Pipeline", ShortName = "YuE", Description = "YuE is an open lyrics-to-song model family that generates full songs with vocals and accompaniment from lyrics and a style prompt, using symbolic score planning followed by acoustic rendering.")]
-        YuEPipeline = 215,
-
-        [Display(Name = "MOSS SoundEffect Pipeline", ShortName = "MOSS-SFX", Description = "MOSS-SoundEffect is an open text-to-sound-effect model that generates short, high-fidelity sound effects, ambiences and foley from natural-language descriptions.")]
-        MossSoundEffectPipeline = 216,
-
-
-        // Other
-        [Display(Name = "Upscale Pipeline", ShortName = "Upscale", Description = "General-purpose image upscaling pipeline designed to increase resolution and enhance visual detail while preserving the original image content.")]
-        UpscalePipeline = 500,
-
-        [Display(Name = "SeedVR2 Pipeline", ShortName = "SeedVR2", Description = "SeedVR2 is a one-step diffusion video restoration and upscaling model that increases the resolution of a whole video while keeping detail consistent from frame to frame, processing frames in temporal chunks.")]
-        SeedVR2Pipeline = 520,
-
-        [Display(Name = "RelayVSR Pipeline", ShortName = "RelayVSR", Description = "RelayVSR is a diffusion video super-resolution model that upscales a whole video by 2x or 4x, using a window of reference frames to keep detail consistent across the video.")]
-        RelayVSRPipeline = 521,
-
-        [Display(Name = "Extract Pipeline", ShortName = "Extract", Description = "General-purpose feature extraction pipeline for extracting useful representations, embeddings, metadata, or other features from supported inputs.")]
-        ExtractPipeline = 501,
-
-        [Display(Name = "Whisper Pipeline", ShortName = "Whisper", Description = "OpenAI's Whisper family is designed for robust automatic speech recognition across languages, accents, and noisy recording conditions. It can transcribe spoken audio into text and is particularly useful for multilingual transcription and speech-to-text workflows.")]
-        WhisperPipeline = 502,
-
-        [Display(Name = "Supertonic Pipeline", ShortName = "Supertonic", Description = "A lightweight text-to-speech model designed to convert text into natural-sounding speech efficiently. Focuses on practical local inference while providing expressive synthesized voices without requiring a large cloud-based speech service.")]
-        SupertonicPipeline = 503,
-
-        [Display(Name = "Parakeet Pipeline", ShortName = "Parakeet", Description = "NVIDIA's Parakeet-TDT is a fast, accurate automatic speech recognition model covering 25 European languages with automatic language detection. It transcribes spoken audio into punctuated text and is well suited to quick local speech-to-text workflows.")]
-        ParakeetPipeline = 504,
-
-        [Display(Name = "Voxtral TTS Pipeline", ShortName = "Voxtral", Description = "Mistral's Voxtral TTS is a multilingual text-to-speech model with a set of built-in preset voices covering English and several European, Arabic and Hindi voices, producing natural, expressive speech.")]
-        VoxtralTTSPipeline = 505,
-
-        [Display(Name = "Qwen3 TTS Pipeline", ShortName = "Qwen3-TTS", Description = "Alibaba's Qwen3-TTS is a multilingual text-to-speech model family. The CustomVoice variant provides a set of packaged speakers with natural prosody across Chinese, English and other major languages.")]
-        Qwen3TTSPipeline = 506,
-
-        [Display(Name = "Chatterbox Pipeline", ShortName = "Chatterbox", Description = "Resemble AI's Chatterbox Turbo is a fast, lightweight English text-to-speech model with a built-in default voice, designed for low-latency local speech synthesis.")]
-        ChatterboxPipeline = 507,
-
-        [Display(Name = "OmniVoice Pipeline", ShortName = "OmniVoice", Description = "OmniVoice is a massively multilingual text-to-speech model covering hundreds of languages, generating speech with an automatic voice when no reference is supplied.")]
-        OmniVoicePipeline = 508,
-
-        [Display(Name = "Qwen3 ASR Pipeline", ShortName = "Qwen3-ASR", Description = "Alibaba's Qwen3-ASR is a multilingual automatic speech recognition model with automatic language detection, robust to noise, accents and singing, producing punctuated transcripts.")]
-        Qwen3ASRPipeline = 509,
+        AceStepPipeline = 20000,
 
         [Display(Name = "Canary Pipeline", ShortName = "Canary", Description = "NVIDIA's Canary Flash is a compact, fast speech recognition and translation model for English, German, Spanish and French, producing punctuated and capitalized transcripts.")]
-        CanaryPipeline = 510,
+        CanaryPipeline = 20010,
+
+        [Display(Name = "Chatterbox Pipeline", ShortName = "Chatterbox", Description = "Resemble AI's Chatterbox Turbo is a fast, lightweight English text-to-speech model with a built-in default voice, designed for low-latency local speech synthesis.")]
+        ChatterboxPipeline = 20020,
 
         [Display(Name = "Cohere Transcribe Pipeline", ShortName = "Cohere", Description = "Cohere Transcribe is an open automatic speech recognition model designed for accurate, multilingual transcription of long-form audio.")]
-        CohereASRPipeline = 511,
+        CohereASRPipeline = 20030,
+
+        [Display(Name = "CrisperWhisper Pipeline", ShortName = "CrisperWhisper", Description = "CrisperWhisper is a Whisper Large based speech recognition model tuned for verbatim transcription, capturing every spoken word including fillers, stutters and false starts. The language is selected explicitly rather than detected.")]
+        CrisperWhisperPipeline = 20040,
+
+        [Display(Name = "Fish Audio Pipeline", ShortName = "FishAudio", Description = "Fish Audio S2 Pro is an expressive text-to-speech model covering more than 80 languages with automatic language handling and inline prosody and emotion tags, generating speech with an automatic voice when no reference is supplied.")]
+        FishAudioPipeline = 20050,
+
+        [Display(Name = "Granite Speech Pipeline", ShortName = "Granite", Description = "IBM's Granite Speech 5.0 TurboCTC is a compact, very fast speech recognition model for English, French, German, Spanish, Portuguese, Italian and Japanese, producing punctuated and capitalized transcripts.")]
+        GraniteSpeechPipeline = 20060,
+
+        [Display(Name = "Granite Speech 2B Pipeline", ShortName = "Granite-2B", Description = "IBM's Granite Speech 5.0 2B is a multilingual speech recognition model that pairs a Conformer speech encoder with a Granite language-model decoder, transcribing English, French, German, Spanish, Portuguese and Japanese with punctuation and capitalization.")]
+        GraniteSpeech2BPipeline = 20070,
+
+        [Display(Name = "HeartMuLa Pipeline", ShortName = "HeartMuLa", Description = "HeartMuLa is an open music foundation model that generates complete songs with vocals from lyrics and a list of style tags, with controllable song structure and multilingual lyric support.")]
+        HeartMuLaPipeline = 20080,
+
+        [Display(Name = "Higgs Audio STT Pipeline", ShortName = "Higgs-STT", Description = "Boson AI's Higgs Audio v3 STT is an English speech-to-text model that pairs a Whisper Large v3 speech encoder with a Qwen language-model decoder for robust transcription.")]
+        HiggsAudioSTTPipeline = 20090,
+
+        [Display(Name = "Higgs Audio TTS Pipeline", ShortName = "Higgs-TTS", Description = "Boson AI's Higgs Audio v3 TTS is a conversational text-to-speech model for expressive speech across 100+ languages, with inline control over emotion, style, prosody, pauses and sound effects.")]
+        HiggsAudioTTSPipeline = 20100,
+
+        [Display(Name = "MagpieTTS Pipeline", ShortName = "Magpie", Description = "NVIDIA's MagpieTTS Multilingual is a compact text-to-speech model with a set of built-in speakers that can each speak any of the supported languages.")]
+        MagpieTTSPipeline = 20110,
+
+        [Display(Name = "MiniMax Audio Pipeline", ShortName = "MiniMax", Description = "MiniMax's audio-generation models cover expressive generative audio and music tasks, with an emphasis on high-quality output and natural musical structure. Suitable for creating music and other complex audio content from prompts.")]
+        MiniMaxAudioPipeline = 20120,
+
+        [Display(Name = "MOSS SoundEffect Pipeline", ShortName = "MOSS-SFX", Description = "MOSS-SoundEffect is an open text-to-sound-effect model that generates short, high-fidelity sound effects, ambiences and foley from natural-language descriptions.")]
+        MossSoundEffectPipeline = 20130,
+
+        [Display(Name = "MOSS Transcribe Pipeline", ShortName = "MOSS-TD", Description = "MOSS-Transcribe-Diarize jointly transcribes speech, labels who is speaking and timestamps each segment across 50+ languages, without requiring a language hint.")]
+        MossTranscribePipeline = 20140,
+
+        [Display(Name = "NeuTTS Pipeline", ShortName = "NeuTTS", Description = "Neuphonic's NeuTTS is an English text-to-speech model with a set of built-in speakers, built on a compact language-model backbone and designed for natural, expressive on-device speech.")]
+        NeuTTSPipeline = 20150,
+
+        [Display(Name = "OmniVoice Pipeline", ShortName = "OmniVoice", Description = "OmniVoice is a massively multilingual text-to-speech model covering hundreds of languages, generating speech with an automatic voice when no reference is supplied.")]
+        OmniVoicePipeline = 20160,
+
+        [Display(Name = "Parakeet Pipeline", ShortName = "Parakeet", Description = "NVIDIA's Parakeet-TDT is a fast, accurate automatic speech recognition model covering 25 European languages with automatic language detection. It transcribes spoken audio into punctuated text and is well suited to quick local speech-to-text workflows.")]
+        ParakeetPipeline = 20170,
+
+        [Display(Name = "Qwen3 ASR Pipeline", ShortName = "Qwen3-ASR", Description = "Alibaba's Qwen3-ASR is a multilingual automatic speech recognition model with automatic language detection, robust to noise, accents and singing, producing punctuated transcripts.")]
+        Qwen3ASRPipeline = 20180,
+
+        [Display(Name = "Qwen3 TTS Pipeline", ShortName = "Qwen3-TTS", Description = "Alibaba's Qwen3-TTS is a multilingual text-to-speech model family. The CustomVoice variant provides a set of packaged speakers with natural prosody across Chinese, English and other major languages.")]
+        Qwen3TTSPipeline = 20190,
+
+        [Display(Name = "SenseVoice Pipeline", ShortName = "SenseVoice", Description = "SenseVoice Small is a very fast multilingual speech recognition model with automatic language detection, strong on Chinese, Cantonese, English, Japanese and Korean and covering many other major languages.")]
+        SenseVoicePipeline = 20200,
+
+        [Display(Name = "Stable Audio Pipeline", ShortName = "StableAudio", Description = "Stability AI's Stable Audio family generates music and sound effects from text prompts, with variable-length output and audio-to-audio editing. Suitable for instrumental music, ambient soundscapes and short sound effects.")]
+        StableAudioPipeline = 20210,
+
+        [Display(Name = "Supertonic Pipeline", ShortName = "Supertonic", Description = "A lightweight text-to-speech model designed to convert text into natural-sounding speech efficiently. Focuses on practical local inference while providing expressive synthesized voices without requiring a large cloud-based speech service.")]
+        SupertonicPipeline = 20220,
+
+        [Display(Name = "Tiny Voca Pipeline", ShortName = "TinyVoca", Description = "tiny-voca is a 4.5M parameter English text-to-speech model with a male and a female voice and its own built-in phonemizer, small enough to run instantly on the CPU.")]
+        TinyVocaPipeline = 20230,
+
+        [Display(Name = "VibeVoice ASR Pipeline", ShortName = "VibeVoice-ASR", Description = "Microsoft's VibeVoice ASR is a long-form speech-to-text model that processes up to an hour of audio in a single pass, producing a structured transcript with speakers and timestamps across 50+ languages.")]
+        VibeVoiceASRPipeline = 20240,
+
+        [Display(Name = "VoxCPM Pipeline", ShortName = "VoxCPM", Description = "OpenBMB's VoxCPM2 is a tokenizer-free text-to-speech model with 48 kHz output covering 30 languages. A voice can be designed by starting the text with a description in parentheses, for example (A young woman, gentle and clear voice).")]
+        VoxCPMPipeline = 20250,
+
+        [Display(Name = "VoxMel Pipeline", ShortName = "VoxMel", Description = "VoxMel is a 0.6B English and Mandarin text-to-speech model that generates speech as a continuous autoregressive mel spectrogram, with the language following the input text.")]
+        VoxMelPipeline = 20260,
+
+        [Display(Name = "Voxtral Realtime Pipeline", ShortName = "Voxtral-Realtime", Description = "Mistral's Voxtral Mini 4B Realtime is a 13-language speech recognition model with a natively streaming audio encoder. It transcribes a live microphone word by word with low latency, and also transcribes audio files.")]
+        VoxtralRealtimePipeline = 20265,
+
+        [Display(Name = "Voxtral TTS Pipeline", ShortName = "Voxtral", Description = "Mistral's Voxtral TTS is a multilingual text-to-speech model with a set of built-in preset voices covering English and several European, Arabic and Hindi voices, producing natural, expressive speech.")]
+        VoxtralTTSPipeline = 20270,
+
+        [Display(Name = "YuE Pipeline", ShortName = "YuE", Description = "YuE is an open lyrics-to-song model family that generates full songs with vocals and accompaniment from lyrics and a style prompt, using symbolic score planning followed by acoustic rendering.")]
+        YuEPipeline = 20290,
 
 
-        // Text
+        // Text (30000 - 39999)
         [Display(Name = "AutoText Pipeline", ShortName = "AutoText", Description = "A general-purpose text-processing pipeline that automatically selects or orchestrates the appropriate text-generation capabilities for a requested operation. Intended as a higher-level abstraction for applications that should not need to know which underlying language model performs the task.")]
-        AutoTextPipeline = 600,
-
-        [Display(Name = "Qwen3 Pipeline", ShortName = "Qwen3", Description = "Qwen3 is Alibaba's next-generation open-weight language model family, designed for strong reasoning, instruction following, coding, multilingual understanding, and general-purpose text generation. It supports both efficient everyday tasks and more complex reasoning workflows, making it suitable for conversational AI, analysis, coding, and agentic applications.")]
-        Qwen3Pipeline = 601,
+        AutoTextPipeline = 30000,
 
         [Display(Name = "Gemma4 Pipeline", ShortName = "Gemma4", Description = "Gemma 4 is Google's latest open model family designed for efficient, high-quality text and multimodal generation. It provides strong instruction following, reasoning, coding, and general-purpose language capabilities while offering model sizes suitable for both local and resource-constrained inference.")]
-        Gemma4Pipeline = 610,
+        Gemma4Pipeline = 30010,
+
+        [Display(Name = "Qwen3 Pipeline", ShortName = "Qwen3", Description = "Qwen3 is Alibaba's next-generation open-weight language model family, designed for strong reasoning, instruction following, coding, multilingual understanding, and general-purpose text generation. It supports both efficient everyday tasks and more complex reasoning workflows, making it suitable for conversational AI, analysis, coding, and agentic applications.")]
+        Qwen3Pipeline = 30020,
 
 
-        // Deprecated
-        Kandinsky5Pipeline = 60,
+        // Other (40000 - 49999)
+        [Display(Name = "Extract Pipeline", ShortName = "Extract", Description = "General-purpose feature extraction pipeline for extracting useful representations, embeddings, metadata, or other features from supported inputs.")]
+        ExtractPipeline = 40000,
+
+        [Display(Name = "Interpolation Pipeline", ShortName = "Interpolation", Description = "Video frame interpolation pipeline that generates in-between frames to raise the frame rate of a video for smoother motion.")]
+        InterpolationPipeline = 40010,
+
+        [Display(Name = "RelayVSR Pipeline", ShortName = "RelayVSR", Description = "RelayVSR is a diffusion video super-resolution model that upscales a whole video by 2x or 4x, using a window of reference frames to keep detail consistent across the video.")]
+        RelayVSRPipeline = 40020,
+
+        [Display(Name = "SeedVR2 Pipeline", ShortName = "SeedVR2", Description = "SeedVR2 is a one-step diffusion video restoration and upscaling model that increases the resolution of a whole video while keeping detail consistent from frame to frame, processing frames in temporal chunks.")]
+        SeedVR2Pipeline = 40030,
+
+        [Display(Name = "Upscale Pipeline", ShortName = "Upscale", Description = "General-purpose image upscaling pipeline designed to increase resolution and enhance visual detail while preserving the original image content.")]
+        UpscalePipeline = 40040,
     }
 
     public enum ProcessType
@@ -276,137 +305,80 @@ namespace Amuse.Common
         Balanced = 3
     }
 
-    public enum SchedulerType
+    public enum SamplerType
     {
-        [Display(Name = "LMS")]
-        LMS = 0,
-
         [Display(Name = "Euler")]
-        Euler = 1,
+        Euler = 0,
 
         [Display(Name = "Euler Ancestral")]
-        EulerAncestral = 2,
-
-        [Display(Name = "DDPM")]
-        DDPM = 3,
-
-        [Display(Name = "DDIM")]
-        DDIM = 4,
-
-        [Display(Name = "KDPM2")]
-        KDPM2 = 5,
-
-        [Display(Name = "KDPM2-Ancestral")]
-        KDPM2Ancestral = 6,
-
-        [Display(Name = "DDPM-Wuerstchen")]
-        DDPMWuerstchen = 10,
-
-        [Display(Name = "LCM")]
-        LCM = 20,
-
-        [Display(Name = "FlowMatch-Euler")]
-        FlowMatchEuler = 30,
-
-        [Display(Name = "FlowMatch-Heun")]
-        FlowMatchHeun = 31,
-
-        [Display(Name = "PNDM")]
-        PNDM = 40,
+        EulerAncestral = 1,
 
         [Display(Name = "Heun")]
-        Heun = 41,
-
-        [Display(Name = "UniPC Multistep")]
-        UniPCMultistep = 42,
-
-        [Display(Name = "DPM Solver Multistep")]
-        DPMSolverMultistep = 43,
-
-        [Display(Name = "DPM Single Step")]
-        DPMSolverSinglestep = 45,
-
-        [Display(Name = "DPM Solver SDE")]
-        DPMSolverSDE = 46,
-
-        [Display(Name = "DEIS Multistep")]
-        DEISMultistep = 47,
-
-        [Display(Name = "EDM Euler")]
-        EDMEuler = 48,
-
-        [Display(Name = "EDM DPM Solver Multistep")]
-        EDMDPMSolverMultistep = 49,
-
-        [Display(Name = "FlowMatch-LCM")]
-        FlowMatchLCM = 50,
-
-        [Display(Name = "IPNDM")]
-        IPNDM = 51,
-
-        [Display(Name = "CogVideoX DDIM")]
-        CogVideoXDDIM = 52,
-
-        [Display(Name = "CogVideoX DPM")]
-        CogVideoXDPM = 53,
-
-        [Display(Name = "Helios")]
-        Helios = 54,
-
-        [Display(Name = "Helios DMD")]
-        HeliosDMD = 55,
-
-        [Display(Name = "TCD")]
-        TCD = 56,
-
-        [Display(Name = "SCM")]
-        SCM = 57,
-
-        [Display(Name = "SA Solver")]
-        SASolver = 58,
-
-        [Display(Name = "LTX Euler Ancestral")]
-        LTXEulerAncestral = 59,
+        Heun = 2,
 
         [Display(Name = "DPM2")]
-        DPM2 = 60,
+        DPM2 = 3,
 
         [Display(Name = "DPM++ 2S Ancestral")]
-        DPMPlusPlus2SAncestral = 61,
+        DPMPlusPlus2SAncestral = 4,
 
         [Display(Name = "DPM++ 2M")]
-        DPMPlusPlus2M = 62,
+        DPMPlusPlus2M = 5,
 
         [Display(Name = "DPM++ 2M v2")]
-        DPMPlusPlus2Mv2 = 63,
+        DPMPlusPlus2Mv2 = 6,
 
-        [Display(Name = "DPM++ 2M SDE")]
-        DPMPlusPlus2MSDE = 64,
+        [Display(Name = "IPNDM")]
+        IPNDM = 7,
 
-        [Display(Name = "DPM++ 2M SDE BT")]
-        DPMPlusPlus2MSDEBT = 65,
+        [Display(Name = "IPNDM-V")]
+        IPNDMV = 8,
+
+        [Display(Name = "LCM")]
+        LCM = 9,
+
+        [Display(Name = "DDIM")]
+        DDIM = 10,
+
+        [Display(Name = "TCD")]
+        TCD = 11,
 
         [Display(Name = "Residual Multistep")]
-        ResidualMultistep = 66,
+        ResidualMultistep = 12,
 
         [Display(Name = "Residual 2S")]
-        Residual2S = 67,
+        Residual2S = 13,
 
         [Display(Name = "ER-SDE")]
-        ERSDE = 68,
+        ERSDE = 14,
+
+        [Display(Name = "Euler CFG++")]
+        EulerCFGPP = 15,
+
+        [Display(Name = "Euler Ancestral CFG++")]
+        EulerAncestralCFGPP = 16,
+
+        [Display(Name = "Euler GE")]
+        EulerGE = 17,
+
+        [Display(Name = "DPM++ 2M SDE")]
+        DPMPlusPlus2MSDE = 18,
+
+        [Display(Name = "DPM++ 2M SDE BT")]
+        DPMPlusPlus2MSDEBT = 19,
+
+        [Display(Name = "LMS")]
+        LMS = 20,
     }
 
 
-    public enum SigmaScheduleType
+    public enum SchedulerType
     {
         [Display(Name = "Default")]
         Default = 0,
 
         [Display(Name = "Discrete")]
         Discrete = 1,
-
-        [Display(Name = "Normal")]
-        Normal = 2,
 
         [Display(Name = "Karras")]
         Karras = 3,
@@ -455,105 +427,6 @@ namespace Amuse.Common
 
         [Display(Name = "LLADA")]
         LLADA = 18,
-    }
-
-    public enum TimestepSpacingType
-    {
-        Leading = 0,
-        Trailing = 1,
-        Linspace = 2
-    }
-
-    public enum AlgorithmType
-    {
-        DPMSolver = 0,
-        DPMSolverPlus = 1,
-        SDE_DPMSolver = 2,
-        SDE_DPMSolverPlus = 3,
-        DEIS = 4,
-        DataPrediction = 5,
-        NoisePrediction = 6
-    }
-
-    public enum SolverType
-    {
-        Midpoint = 0,
-        Heun = 1,
-        BH1 = 2,
-        BH2 = 3,
-        LogRho = 4
-    }
-
-    public enum BetaScheduleType
-    {
-        Linear = 0,
-        ScaledLinear = 1,
-        Cosine = 2,
-        SquaredCosine = 3,
-        Sigmoid = 4,
-        Laplace = 5,
-        Exponential = 6
-    }
-
-    public enum PredictionType
-    {
-        Epsilon = 0,
-        Variable = 1,
-        Sample = 2,
-        FlowPrediction = 3,
-        Trigflow = 4
-    }
-
-    public enum VarianceType
-    {
-        FixedSmall = 0,
-        FixedSmallLog = 1,
-        FixedLarge = 2,
-        FixedLargeLog = 3,
-        Learned = 4,
-        LearnedRange = 5
-    }
-
-    public enum TimeShiftType
-    {
-        Linear = 0,
-        Exponential = 1
-    }
-
-    public enum AlphaTransformType
-    {
-        Cosine = 0,
-        Exponential = 1,
-        Laplace = 2
-    }
-
-    public enum FinalSigmasType
-    {
-        Zero = 0,
-        SigmaMin = 1
-    }
-
-    public enum InterpolationType
-    {
-        Linear = 0,
-        LogLinear = 1
-    }
-
-    public enum TimestepType
-    {
-        Discrete = 0,
-        Continuous = 1
-    }
-
-    public enum UpscaleModeType
-    {
-        Nearest = 0,
-        Linear = 1,
-        Bilinear = 2,
-        Bicubic = 3,
-        Trilinear = 4,
-        Area = 5,
-        NearestExact = 6
     }
 
 
@@ -915,6 +788,31 @@ namespace Amuse.Common
     }
 
 
+    public enum DiffusionCacheType
+    {
+        [Display(Name = "Disabled")]
+        Disabled = 0,
+
+        [Display(Name = "EasyCache (DiT)")]
+        EasyCache = 1,
+
+        [Display(Name = "UCache (UNet)")]
+        UCache = 2,
+
+        [Display(Name = "DBCache (DiT)")]
+        DBCache = 3,
+
+        [Display(Name = "TaylorSeer (DiT)")]
+        TaylorSeer = 4,
+
+        [Display(Name = "Cache-DiT (DiT)")]
+        CacheDit = 5,
+
+        [Display(Name = "Spectrum")]
+        Spectrum = 6
+    }
+
+
     public enum AutoOption
     {
         [Display(Name = "Auto", ShortName = "auto")]
@@ -932,6 +830,36 @@ namespace Amuse.Common
         Default = 0,
         Background = 1,
         Pose = 2
+    }
+
+    public enum ControlNetType
+    {
+        [Display(Name = "None", Description = "No control type, for ControlNets trained on a single kind of control image.")]
+        None = 0,
+
+        [Display(Name = "OpenPose", Description = "Pose skeleton images.")]
+        OpenPose = 1,
+
+        [Display(Name = "Depth", Description = "Depth maps.")]
+        Depth = 2,
+
+        [Display(Name = "Scribble / SoftEdge", Description = "Scribbles and soft edge maps such as HED, PiDi and TEED.")]
+        Scribble = 3,
+
+        [Display(Name = "Canny / Lineart", Description = "Canny edges, line art and MLSD line maps.")]
+        Canny = 4,
+
+        [Display(Name = "Normal", Description = "Surface normal maps.")]
+        Normal = 5,
+
+        [Display(Name = "Segment", Description = "Segmentation maps.")]
+        Segment = 6,
+
+        [Display(Name = "Tile", Description = "Blurred or low resolution images to add detail to.")]
+        Tile = 7,
+
+        [Display(Name = "Repaint", Description = "Images with a blacked out area to repaint or outpaint.")]
+        Repaint = 8
     }
 
     public enum BackgroundMode

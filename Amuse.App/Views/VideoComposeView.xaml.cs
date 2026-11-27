@@ -12,8 +12,8 @@ namespace Amuse.App.Views
     /// </summary>
     public partial class VideoComposeView : ViewBase
     {
-        public VideoComposeView(Settings settings, NavigationService navigationService, IModelDownloadService downloadService, IHistoryService historyService, IMediaService mediaService, ILogger<SettingsControlNetView> logger)
-            : base(settings, navigationService, downloadService, historyService, logger)
+        public VideoComposeView(Settings settings, NavigationService navigationService, IModelDownloadService downloadService, IModelAccessService modelAccessService, IHistoryService historyService, IMediaService mediaService, ILogger<SettingsControlNetView> logger)
+            : base(settings, navigationService, downloadService, modelAccessService, historyService, logger)
         {
             MediaService = mediaService;
             InitializeComponent();

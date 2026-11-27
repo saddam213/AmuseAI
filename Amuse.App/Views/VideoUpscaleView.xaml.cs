@@ -28,8 +28,8 @@ namespace Amuse.App.Views
         /// <summary>
         /// Initializes a new instance of the <see cref="VideoUpscaleView"/> class.
         /// </summary>
-        public VideoUpscaleView(Settings settings, NavigationService navigationService, IModelDownloadService downloadService, IHistoryService historyService, IUpscaleService upscaleService, ILogger<VideoUpscaleView> logger)
-            : base(settings, navigationService, downloadService, historyService, logger)
+        public VideoUpscaleView(Settings settings, NavigationService navigationService, IModelDownloadService downloadService, IModelAccessService modelAccessService, IHistoryService historyService, IUpscaleService upscaleService, ILogger<VideoUpscaleView> logger)
+            : base(settings, navigationService, downloadService, modelAccessService, historyService, logger)
         {
             UpscaleService = upscaleService;
             InitializeComponent();
@@ -88,8 +88,8 @@ namespace Amuse.App.Views
         /// <param name="args">The arguments.</param>
         public override Task OpenAsync(OpenViewArgs args = null)
         {
-            ModelControl.SetPipeline(UpscaleService.Pipeline);
-            IsPipelineLoaded = UpscaleService.IsLoaded && UpscaleService.Pipeline.UpscaleModel == CurrentPipeline?.UpscaleModel;
+            ModelControl.SetPipeline(IsModelOwner() ? UpscaleService.Pipeline : null);
+            IsPipelineLoaded = IsModelOwner() && UpscaleService.IsLoaded && UpscaleService.Pipeline.UpscaleModel == CurrentPipeline?.UpscaleModel;
             return base.OpenAsync(args);
         }
 
@@ -117,6 +117,7 @@ namespace Amuse.App.Views
             {
                 Progress.Indeterminate($"{Default.Loading} {CurrentPipeline.UpscaleModel.Name}...");
 
+                await RequestModelAccessAsync(CurrentPipeline);
                 await UpscaleService.LoadAsync(CurrentPipeline);
                 await Settings.SetDefaultsAsync(CurrentPipeline);
 
@@ -151,7 +152,8 @@ namespace Amuse.App.Views
 
             try
             {
-                await UpscaleService.UnloadAsync();
+                if (IsModelOwner())
+                    await UpscaleService.UnloadAsync();
                 Logger.LogInformation("[VideoUpscale] [UnloadPipeline] Pipeline unloaded successfully, Elapsed: {Elapsed:c}", Stopwatch.GetElapsedTime(timestamp));
                 return true;
             }
@@ -161,6 +163,15 @@ namespace Amuse.App.Views
                 await DialogService.ShowErrorAsync(AppErrors.UnloadPipelineTitle, ex.Message);
                 return false;
             }
+        }
+
+
+        /// <summary>
+        /// Determines whether this view loaded the upscale model, rather than a diffusion pipeline.
+        /// </summary>
+        private bool IsModelOwner()
+        {
+            return ModelAccessService.GetUpscaleOwner() == ModelOwnerType.Upscale;
         }
 
 
@@ -312,7 +323,7 @@ namespace Amuse.App.Views
         /// </summary>
         protected override bool CanExecute()
         {
-            return _sourceVideo is not null && UpscaleService.IsLoaded && !UpscaleService.IsExecuting;
+            return _sourceVideo is not null && UpscaleService.IsLoaded && IsModelOwner() && !UpscaleService.IsExecuting;
         }
 
 
@@ -321,7 +332,7 @@ namespace Amuse.App.Views
         /// </summary>
         protected override bool CanExecuteAutomation()
         {
-            return UpscaleService.IsLoaded && !UpscaleService.IsExecuting && AutomationOptions?.IsValid() == true;
+            return UpscaleService.IsLoaded && IsModelOwner() && !UpscaleService.IsExecuting && AutomationOptions?.IsValid() == true;
         }
 
 

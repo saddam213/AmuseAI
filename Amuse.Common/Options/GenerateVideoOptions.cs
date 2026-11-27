@@ -23,6 +23,8 @@ namespace Amuse.Common
         public string TempFileName { get; set; }
         public int FrameChunk { get; set; }
         public int FrameChunkOverlap { get; set; }
+        public bool EnableFrameChunkColorMatch { get; set; } = true;
+        public float FrameChunkStrength { get; set; } = 0.75f;
         public int NoiseCondition { get; set; }
         public bool EnableVaeTiling { get; set; }
         public bool EnableVaeSlicing { get; set; }
@@ -37,7 +39,12 @@ namespace Amuse.Common
         public int LatentUpscaleSteps { get; set; }
         public float LatentUpscaleStrength { get; set; }
         public int LatentUpscaleTileSize { get; set; }
-        public SchedulerOptions SchedulerOptions { get; set; }
+        public int ClipSkip { get; set; }
+        public float MoeBoundary { get; set; }
+        public bool EnableCircularX { get; set; }
+        public bool EnableCircularY { get; set; }
+        public SamplerOptions SamplerOptions { get; set; }
+        public DiffusionCacheOptions CacheOptions { get; set; }
         public List<LoraOptions> LoraOptions { get; set; }
 
 

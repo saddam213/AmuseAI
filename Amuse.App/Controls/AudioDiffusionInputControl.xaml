@@ -63,15 +63,10 @@
                                 <Controls:SeedControl Seed="{Binding Options.Seed}"/>
                             </StackPanel>
 
-                            <!--Scheduler-->
-                            <StackPanel Margin="2,0,0,0" Visibility="{Binding IsSchedulerSupported, Converter={StaticResource BooleanToVisibilityConverter}}">
-                                <Controls:SchedulerControl Options="{Binding Schedulers}" SelectedOptions="{Binding Options.SchedulerOptions, Mode=TwoWay}" IsSelectorOnly="True"/>
-                            </StackPanel>
-
                             <!--Task-->
-                            <StackPanel Margin="2,0,0,0" Visibility="{Binding Pipeline.DiffusionModel.DefaultOptions.Tasks, Converter={StaticResource InverseEmptyToVisibilityConverter}}">
+                            <StackPanel Margin="2,0,0,0" Visibility="{Binding Tasks.Length, Converter={StaticResource GreaterThanToVisibilityConverter}, ConverterParameter=1}">
                                 <TextBlock Text="{CommonControls:Localize Task}" Style="{StaticResource FieldTextBlockStyle}" />
-                                <ComboBox ItemsSource="{Binding Pipeline.DiffusionModel.DefaultOptions.Tasks}" SelectedItem="{Binding Options.Task}" />
+                                <ComboBox ItemsSource="{Binding Tasks}" SelectedItem="{Binding Options.Task}" />
                             </StackPanel>
 
                         </UniformGrid>
@@ -128,8 +123,8 @@
 
                     </StackPanel>
 
-                    <!--TextToAudio-->
-                    <StackPanel DockPanel.Dock="Top" Visibility="{Binding ViewType, Converter={StaticResource EnumToVisibilityConverter}, ConverterParameter=TextToAudio}" >
+                    <!--AudioToMusic-->
+                    <StackPanel DockPanel.Dock="Top" Visibility="{Binding ViewType, Converter={StaticResource EnumToVisibilityConverter}, ConverterParameter=AudioToMusic}" >
 
                         <UniformGrid Columns="2">
 
@@ -139,9 +134,79 @@
                                 <Controls:SeedControl Seed="{Binding Options.Seed}"/>
                             </StackPanel>
 
-                            <!--Scheduler-->
-                            <StackPanel Margin="2,0,0,0" Visibility="{Binding IsSchedulerSupported, Converter={StaticResource BooleanToVisibilityConverter}}">
-                                <Controls:SchedulerControl Options="{Binding Schedulers}" SelectedOptions="{Binding Options.SchedulerOptions, Mode=TwoWay}" IsSelectorOnly="True"/>
+                            <!--Task-->
+                            <StackPanel Margin="2,0,0,0" Visibility="{Binding Tasks, Converter={StaticResource InverseEmptyToVisibilityConverter}}">
+                                <TextBlock Text="{CommonControls:Localize Task}" Style="{StaticResource FieldTextBlockStyle}" />
+                                <ComboBox ItemsSource="{Binding Tasks}" SelectedItem="{Binding Options.Task}" />
+                            </StackPanel>
+
+                        </UniformGrid>
+
+                        <!--Range-->
+                        <StackPanel Margin="0,2,0,0" Visibility="{Binding IsRangeSupported, Converter={StaticResource BooleanToVisibilityConverter}}">
+                            <TextBlock Text="{CommonControls:Localize AudioRange}" Style="{StaticResource FieldTextBlockStyle}" />
+                            <DockPanel>
+                                <Button DockPanel.Dock="Right" Width="25" Height="22" Command="{Binding SelectRangeCommand}" ToolTip="{CommonControls:Localize ToolTip_SelectAudioRange}" ToolTipService.InitialShowDelay="200">
+                                    <CommonControls:FontAwesome Icon="f545" IconStyle="Light" Size="12"/>
+                                </Button>
+                                <TextBox Text="{Binding RangeText, Mode=OneWay}" IsReadOnly="True" />
+                            </DockPanel>
+                        </StackPanel>
+
+                        <!--Track Name-->
+                        <StackPanel Margin="0,2,0,0" Visibility="{Binding IsTrackNameSupported, Converter={StaticResource BooleanToVisibilityConverter}}">
+                            <TextBlock Text="{CommonControls:Localize TrackName}" Style="{StaticResource FieldTextBlockStyle}" />
+                            <CommonControls:PlaceholderTextBox Text="{Binding Options.TrackName, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Placeholder="{CommonControls:Localize TrackNamePlaceholder}" PlaceholderOpacity=".5" ToolTip="{CommonControls:Localize ToolTip_TrackName}" ToolTipService.InitialShowDelay="200"/>
+                        </StackPanel>
+
+                        <UniformGrid Columns="2">
+
+                            <!--Steps-->
+                            <StackPanel Visibility="{Binding Pipeline.DiffusionModel.DefaultOptions.Steps, Converter={StaticResource GreaterThanToVisibilityConverter}, ConverterParameter=0}">
+                                <CommonControls:SliderControl Text="{CommonControls:Localize Steps}" Value="{Binding Options.Steps}" Minimum="1" Maximum="100" TickFrequency="1" />
+                            </StackPanel>
+
+                            <!--Guidance Scale-->
+                            <StackPanel Visibility="{Binding Pipeline.DiffusionModel.DefaultOptions.GuidanceScale, Converter={StaticResource GreaterThanToVisibilityConverter}, ConverterParameter=0}">
+                                <CommonControls:SliderControl Text="{CommonControls:Localize Guidance}" Value="{Binding Options.GuidanceScale}" Minimum="1" Maximum="20" TickFrequency="0.1" ValueFormat="F2"/>
+                            </StackPanel>
+
+                        </UniformGrid>
+
+
+                        <!--Strength-->
+                        <StackPanel Visibility="{Binding IsStrengthSupported, Converter={StaticResource BooleanToVisibilityConverter}}">
+                            <CommonControls:SliderControl Text="{CommonControls:Localize Strength}" Value="{Binding Options.Strength}"  IsPercent="True"  Minimum="0.01" Maximum="1" TickFrequency="0.01"/>
+                        </StackPanel>
+
+                        <!--Duration-->
+                        <DockPanel Visibility="{Binding IsDurationSupported, Converter={StaticResource BooleanToVisibilityConverter}}">
+                            <ToggleButton x:Name="ToggleButtonDurations3" DockPanel.Dock="Right" Style="{StaticResource ToggleButtonBasic}" Width="25" Height="22" VerticalAlignment="Bottom">
+                                <CommonControls:FontAwesome Icon="f1ec" IconStyle="Light" Size="12"/>
+                            </ToggleButton>
+                            <Grid>
+                                <StackPanel Visibility="{Binding IsChecked, ElementName=ToggleButtonDurations3, Converter={StaticResource InverseBooleanToVisibilityConverter}}">
+                                    <TextBlock Text="{CommonControls:Localize Duration}" Style="{StaticResource FieldTextBlockStyle}" />
+                                    <ComboBox ItemsSource="{Binding Durations}" SelectedValue="{Binding Options.Duration}" SelectedValuePath="FloatValue" DisplayMemberPath="Label" />
+                                </StackPanel>
+                                <StackPanel Visibility="{Binding IsChecked, ElementName=ToggleButtonDurations3, Converter={StaticResource BooleanToVisibilityConverter}}">
+                                    <TextBlock Text="{CommonControls:Localize DurationSeconds}" Style="{StaticResource FieldTextBlockStyle}" />
+                                    <TextBox Text="{Binding Options.Duration}" />
+                                </StackPanel>
+                            </Grid>
+                        </DockPanel>
+
+                    </StackPanel>
+
+                    <!--TextToAudio-->
+                    <StackPanel DockPanel.Dock="Top" Visibility="{Binding ViewType, Converter={StaticResource EnumToVisibilityConverter}, ConverterParameter=TextToAudio}" >
+
+                        <UniformGrid Columns="2">
+
+                            <!--Seed-->
+                            <StackPanel Margin="0,0,2,0">
+                                <TextBlock Text="{CommonControls:Localize Seed}" Style="{StaticResource FieldTextBlockStyle}" />
+                                <Controls:SeedControl Seed="{Binding Options.Seed}"/>
                             </StackPanel>
 
                             <!--VoiceStyle-->
@@ -156,7 +221,21 @@
                                 <ComboBox ItemsSource="{Binding Pipeline.DiffusionModel.DefaultOptions.Languages}" SelectedItem="{Binding Options.Language}" />
                             </StackPanel>
 
+                            <!--Emotion-->
+                            <StackPanel Margin="0,0,2,0" Visibility="{Binding IsEmotionSupported, Converter={StaticResource BooleanToVisibilityConverter}}">
+                                <TextBlock Text="{CommonControls:Localize Emotion}" Style="{StaticResource FieldTextBlockStyle}" />
+                                <ComboBox ItemsSource="{Binding Emotions}" SelectedValue="{Binding Options.Emotion}" SelectedValuePath="Value" DisplayMemberPath="Label" />
+                            </StackPanel>
+
                         </UniformGrid>
+
+                        <!--Instruction-->
+                        <DockPanel Margin="0,4,0,0" Visibility="{Binding IsInstructionSupported, Converter={StaticResource BooleanToVisibilityConverter}}">
+                            <TextBlock DockPanel.Dock="Top" Text="{CommonControls:Localize Instruction}" Style="{StaticResource FieldTextBlockStyle}" />
+                            <Border Style="{StaticResource TextDropZoneStyle}" Height="100">
+                                <CommonControls:PlaceholderTextBox Text="{Binding Options.Instruction, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Placeholder="{CommonControls:Localize InstructionPlaceholder}" PlaceholderOpacity=".5" TextWrapping="Wrap" AcceptsReturn="True" VerticalScrollBarVisibility="Auto" />
+                            </Border>
+                        </DockPanel>
 
                         <!--Steps-->
                         <StackPanel Visibility="{Binding Pipeline.DiffusionModel.DefaultOptions.Steps, Converter={StaticResource GreaterThanToVisibilityConverter}, ConverterParameter=0}">
@@ -191,59 +270,60 @@
 
                     </StackPanel>
 
+                    <!--VoiceClone-->
+                    <StackPanel DockPanel.Dock="Top" Visibility="{Binding ViewType, Converter={StaticResource EnumToVisibilityConverter}, ConverterParameter=VoiceClone}" >
+
+                        <UniformGrid Columns="2">
+                            <!--Seed-->
+                            <StackPanel Margin="0,0,2,0">
+                                <TextBlock Text="{CommonControls:Localize Seed}" Style="{StaticResource FieldTextBlockStyle}" />
+                                <Controls:SeedControl Seed="{Binding Options.Seed}"/>
+                            </StackPanel>
+                        </UniformGrid>
+
+                        <!--Steps-->
+                        <StackPanel Visibility="{Binding Pipeline.DiffusionModel.DefaultOptions.Steps, Converter={StaticResource GreaterThanToVisibilityConverter}, ConverterParameter=0}">
+                            <CommonControls:SliderControl Text="{CommonControls:Localize Steps}" Value="{Binding Options.Steps}" Minimum="1" Maximum="100" TickFrequency="1" />
+                        </StackPanel>
+
+                        <!--Guidance Scale-->
+                        <StackPanel Visibility="{Binding Pipeline.DiffusionModel.DefaultOptions.GuidanceScale, Converter={StaticResource GreaterThanToVisibilityConverter}, ConverterParameter=0}">
+                            <CommonControls:SliderControl Text="{CommonControls:Localize Guidance}" Value="{Binding Options.GuidanceScale}" Minimum="1" Maximum="20" TickFrequency="0.1" ValueFormat="F2"/>
+                        </StackPanel>
+                    </StackPanel>
 
                     <!--AudioToText-->
                     <StackPanel DockPanel.Dock="Top" Visibility="{Binding ViewType, Converter={StaticResource EnumToVisibilityConverter}, ConverterParameter=AudioToText}" >
 
                         <UniformGrid Columns="2" >
-                            <DockPanel>
-                                <StackPanel DockPanel.Dock="Right" Width="60" Margin="0,0,2,0" Visibility="{Binding Pipeline.DiffusionModel.DefaultOptions.Languages, Converter={StaticResource InverseEmptyToVisibilityConverter}}">
-                                    <TextBlock Text="{CommonControls:Localize Language}" Style="{StaticResource FieldTextBlockStyle}" />
-                                    <Controls:LanguageControl SupportedLanguages="{Binding Pipeline.DiffusionModel.DefaultOptions.Languages}" SelectedLanguage="{Binding Options.Language}" />
-                                </StackPanel>
-                                <StackPanel Visibility="{Binding Pipeline.DiffusionModel.DefaultOptions.Tasks, Converter={StaticResource InverseEmptyToVisibilityConverter}}">
-                                    <TextBlock Text="{CommonControls:Localize Task}" Style="{StaticResource FieldTextBlockStyle}" />
-                                    <ComboBox ItemsSource="{Binding Pipeline.DiffusionModel.DefaultOptions.Tasks}" SelectedItem="{Binding Options.Task}" />
-                                </StackPanel>
-                            </DockPanel>
-                            <StackPanel Margin="2,0,0,0">
+
+                            <StackPanel Margin="0,0,1,0">
                                 <TextBlock Text="{CommonControls:Localize Seed}" Style="{StaticResource FieldTextBlockStyle}" />
                                 <Controls:SeedControl Seed="{Binding Options.Seed}" />
                             </StackPanel>
+
+                            <StackPanel Margin="2,0,0,0" Visibility="{Binding Pipeline.DiffusionModel.DefaultOptions.Languages, Converter={StaticResource InverseEmptyToVisibilityConverter}}">
+                                <TextBlock Text="{CommonControls:Localize Language}" Style="{StaticResource FieldTextBlockStyle}" />
+                                <Controls:LanguageControl SupportedLanguages="{Binding Pipeline.DiffusionModel.DefaultOptions.Languages}" SelectedLanguage="{Binding Options.Language}" />
+                            </StackPanel>
+
+                            <StackPanel Margin="2,0,0,0" Visibility="{Binding Pipeline.DiffusionModel.DefaultOptions.Tasks, Converter={StaticResource InverseEmptyToVisibilityConverter}}">
+                                <TextBlock Text="{CommonControls:Localize Task}" Style="{StaticResource FieldTextBlockStyle}" />
+                                <ComboBox ItemsSource="{Binding Pipeline.DiffusionModel.DefaultOptions.Tasks}" SelectedItem="{Binding Options.Task}" />
+                            </StackPanel>
+
                         </UniformGrid>
 
-                        <!--Whisper-->
-                        <UniformGrid Columns="2" Margin="0,4,0,0" Visibility="{Binding IsWhisperPipeline, Converter={StaticResource BooleanToVisibilityConverter}}">
-                            <CommonControls:SliderControl Text="{CommonControls:Localize Beams}" Value="{Binding Options.Beams}" Minimum="0" Maximum="20" TickFrequency="1" />
-                            <CommonControls:SliderControl Text="{CommonControls:Localize Temperature}" Value="{Binding Options.Temperature}" Minimum="0.1" Maximum="5" TickFrequency="0.01" ValueFormat="N2"/>
-                            <CommonControls:SliderControl Text="{CommonControls:Localize TopK}" Value="{Binding Options.TopK}" Minimum="1" Maximum="100" TickFrequency="1" />
-                            <CommonControls:SliderControl Text="{CommonControls:Localize TopP}" Value="{Binding Options.TopP}" Minimum="0.1" Maximum="1" TickFrequency="0.01" ValueFormat="N2"/>
-                            <CommonControls:SliderControl Text="{CommonControls:Localize MinLength}" Value="{Binding Options.MinLength}" Minimum="{Binding Pipeline.DiffusionModel.DefaultOptions.MinLength}" Maximum="{Binding Pipeline.DiffusionModel.DefaultOptions.MaxLength}" TickFrequency="1" />
-                            <CommonControls:SliderControl Text="{CommonControls:Localize MaxLength}" Value="{Binding Options.MaxLength}" Minimum="{Binding Pipeline.DiffusionModel.DefaultOptions.MinLength}" Maximum="{Binding Pipeline.DiffusionModel.DefaultOptions.MaxLength}" TickFrequency="1" />
-                            <CommonControls:SliderControl Text="{CommonControls:Localize LengthPenalty}" Value="{Binding Options.LengthPenalty}" Minimum="-5" Maximum="5" TickFrequency="0.05" ValueFormat="N2" />
-                            <CommonControls:SliderControl Text="{CommonControls:Localize ChunkSize}" Value="{Binding Options.ChunkSize}" Minimum="2" Maximum="30" TickFrequency="1" />
-                        </UniformGrid>
-
-                        <!--ChunkSize, 0 uses the model default-->
-                        <StackPanel Margin="0,4,0,0" Visibility="{Binding IsWhisperPipeline, Converter={StaticResource InverseBooleanToVisibilityConverter}}">
+                        <StackPanel Margin="0,4,0,0">
                             <CommonControls:SliderControl Text="{CommonControls:Localize ChunkSize}" Value="{Binding Options.ChunkSize}" Minimum="0" Maximum="30" TickFrequency="1" />
                         </StackPanel>
-
-                        <UniformGrid Columns="2"  Margin="0,4,0,0" Visibility="{Binding IsWhisperPipeline, Converter={StaticResource BooleanToVisibilityConverter}}">
-                            <StackPanel>
-                                <TextBlock Text="{CommonControls:Localize EarlyStopping}" Style="{StaticResource FieldTextBlockStyle}" />
-                                <ComboBox ItemsSource="{Binding Source={StaticResource EarlyStopping}}" SelectedItem="{Binding Options.EarlyStopping}" Style="{StaticResource EnumComboBox}"/>
-                            </StackPanel>
-                            <CheckBox Content="{CommonControls:Localize AllBeamsResults}" IsChecked="{Binding IsMultipleResult}" Margin="0,21,0,0" HorizontalAlignment="Right"/>
-                        </UniformGrid>
-
                     </StackPanel>
 
                     <!--Negative Prompt-->
                     <StackPanel DockPanel.Dock="Top" Visibility="{Binding IsNegativePromptSupported, Converter={StaticResource BooleanToVisibilityConverter}}">
                         <DockPanel Margin="0,4,0,0" Visibility="{Binding Options.GuidanceScale, Converter={StaticResource GreaterThanToVisibilityConverter}, ConverterParameter=1, FallbackValue=Collapsed}">
                             <TextBlock DockPanel.Dock="Top" Text="{CommonControls:Localize NegativePrompt}" Style="{StaticResource FieldTextBlockStyle}" />
-                            <Border Style="{StaticResource TextDropZoneStyle}" Height="60">
+                            <Border Style="{StaticResource TextDropZoneStyle}" Height="100">
                                 <CommonControls:PlaceholderTextBox Text="{Binding Options.NegativePrompt, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" TextWrapping="Wrap" AcceptsReturn="True" VerticalScrollBarVisibility="Auto" />
                             </Border>
                         </DockPanel>
@@ -281,44 +361,8 @@
             </TabItem>
 
 
-            <!--Advanced-->
-            <TabItem>
-                <TabItem.Header>
-                    <StackPanel Orientation="Horizontal" Margin="3">
-                        <CommonControls:FontAwesome Icon="f085" IconStyle="Solid" Color="{StaticResource AccentColour2}" Size="12"/>
-                        <TextBlock Text="{CommonControls:Localize Advanced}" FontSize="11" FontWeight="DemiBold" Opacity=".9" Margin="5,0,0,0"/>
-                    </StackPanel>
-                </TabItem.Header>
-                <StackPanel VerticalAlignment="Top" Margin="0,4,0,0">
-
-                    <!--SchedulerOptions-->
-                    <GroupBox Header="{CommonControls:Localize SchedulerOptions}" Margin="0,0,0,10" Visibility="{Binding Options.SchedulerOptions, Converter={StaticResource NullVisibilityConverter}}">
-                        <Controls:SchedulerControl Options="{Binding Schedulers}" SelectedOptions="{Binding Options.SchedulerOptions, Mode=TwoWay}" IsSelectorOnly="False"/>
-                    </GroupBox>
-
-                    <!--AutoEncoder-->
-                    <GroupBox Header="{CommonControls:Localize AutoEncoder}" Margin="0,0,0,10" Visibility="{Binding Options.SchedulerOptions, Converter={StaticResource NullVisibilityConverter}}">
-                        <UniformGrid Columns="2" Margin="0,6,0,4">
-                            <CheckBox Content="{CommonControls:Localize EnableTiling}" IsChecked="{Binding Options.IsVaeTilingEnabled}" />
-                            <CheckBox Content="{CommonControls:Localize EnableSlicing}" IsChecked="{Binding Options.IsVaeSlicingEnabled}" />
-                        </UniformGrid>
-                    </GroupBox>
-                </StackPanel>
-
-                <TabItem.Style>
-                    <Style TargetType="{x:Type TabItem}" BasedOn="{StaticResource DiffusionInputTab}">
-                        <Setter Property="Visibility" Value="Collapsed"/>
-                        <Style.Triggers>
-                            <DataTrigger Binding="{Binding IsSchedulerSupported}" Value="True">
-                                <Setter Property="Visibility" Value="Visible"/>
-                            </DataTrigger>
-                            <DataTrigger Binding="{Binding ProcessType}" Value="AudioToText">
-                                <Setter Property="Visibility" Value="Collapsed"/>
-                            </DataTrigger>
-                        </Style.Triggers>
-                    </Style>
-                </TabItem.Style>
-            </TabItem>
+            <!--Advanced, unused placeholder so Automation keeps its InputTabOption index-->
+            <TabItem Visibility="Collapsed" />
 
 
             <!--Automation-->
@@ -345,7 +389,7 @@
                         <Grid Visibility="{Binding AutomationOptions.Type, Converter={StaticResource EnumToVisibilityConverter}, ConverterParameter=Seed}">
                             <UniformGrid Margin="0,0,0,0">
                                 <StackPanel>
-                                    <TextBlock Text="{CommonControls:Localize ImageCount}" Style="{StaticResource FieldTextBlockStyle}"/>
+                                    <TextBlock Text="{CommonControls:Localize AutomationCount}" Style="{StaticResource FieldTextBlockStyle}"/>
                                     <TextBox Text="{Binding AutomationOptions.Count, UpdateSourceTrigger=PropertyChanged}" />
                                 </StackPanel>
                             </UniformGrid>
@@ -366,7 +410,7 @@
                             <UniformGrid Margin="0,0,0,0" >
                                 <StackPanel>
                                     <TextBlock Text="{CommonControls:Localize PromptFile}" Style="{StaticResource FieldTextBlockStyle}"/>
-                                    <CommonControls:FilePickerTextBox FileName="{Binding AutomationOptions.InputFile, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" IsRequired="True" Filter="Text Files|*.txt;" DefaultExt="txt"/>
+                                    <CommonControls:FilePickerTextBox FileName="{Binding AutomationOptions.InputFile, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" IsRequired="True" Filter="{CommonControls:Localize TextFiles, Append='|*.txt;'}" DefaultExt="txt"/>
                                 </StackPanel>
                             </UniformGrid>
                         </Grid>

@@ -5,146 +5,65 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Amuse.App.Dialogs"
         xmlns:CommonControls="clr-namespace:TensorStack.WPF.Controls;assembly=TensorStack.WPF"
-        xmlns:Controls="clr-namespace:Amuse.App.Controls"
         xmlns:Common="clr-namespace:Amuse.App.Common"
         mc:Ignorable="d"
         MinWidth="800"
         MaxWidth="800"
-        Title="{CommonControls:Localize Title_DownloadInformation}"
+        MaxHeight="800"
+        Title="{CommonControls:Localize Title_ModelFiles}"
         Icon="/Images/Icon.ico"
         Style="{StaticResource {x:Type CommonControls:DialogControl}}">
     <DockPanel DataContext="{Binding RelativeSource={RelativeSource AncestorType={x:Type local:ModelInformationDialog}}}" Margin="15, 15, 15, 10">
 
-        <!--Save/Cancel/Errors-->
+        <!--Close-->
         <DockPanel DockPanel.Dock="Bottom" Height="30" Margin="0,15,0,0">
-            <UniformGrid DockPanel.Dock="Right" Columns="2" >
-                <TextBlock />
-                <Button Content="{CommonControls:Localize Close}" Command="{Binding CloseCommand}" Width="100" IsDefault="True"/>
-            </UniformGrid>
+            <Button DockPanel.Dock="Right" Content="{CommonControls:Localize Close}" Command="{Binding CloseCommand}" Width="100" IsDefault="True" IsCancel="True"/>
             <TextBlock />
         </DockPanel>
 
-        <DockPanel Margin="0,0,0,0" >
-            <StackPanel DockPanel.Dock="Top" Margin="2,0,0,6">
-                <TextBlock Text="{Binding DownloadModel.Name}" FontSize="16" FontWeight="DemiBold" />
-                <CommonControls:HyperlinkControl Link="{Binding DownloadModel.Link}" Label="{Binding DownloadModel.Link}" FontSize="13" Foreground="DeepSkyBlue" Margin="1,0,0,0"/>
+        <!--Model-->
+        <DockPanel DockPanel.Dock="Top" Margin="2,0,0,8">
+            <StackPanel DockPanel.Dock="Right" VerticalAlignment="Top">
+                <TextBlock Text="{Binding DownloadModel.Status, Converter={StaticResource EnumDisplayNameConverter}}" FontWeight="DemiBold" FontSize="14" Style="{StaticResource ModelStatusTextBlock}" Tag="{Binding DownloadModel.Status}" ToolTipService.InitialShowDelay="200"/>
             </StackPanel>
+            <StackPanel>
+                <TextBlock Text="{Binding DownloadModel.Name}" FontSize="16" FontWeight="DemiBold" />
+                <CommonControls:HyperlinkControl Link="{Binding DownloadModel.Link}" Label="{Binding DownloadModel.Link}" FontSize="13" Foreground="DeepSkyBlue" Margin="1,0,0,0" Visibility="{Binding DownloadModel.Link, Converter={StaticResource NullOrEmptyVisibilityConverter}}"/>
+            </StackPanel>
+        </DockPanel>
 
-            <ContentControl Content="{Binding DownloadModel}" Foreground="{StaticResource DefaultForeground}" >
-                <ContentControl.Resources>
-                    <local:DictionaryLookupMultiConverter x:Key="DictionaryLookupMultiConverter" />
+        <!--Files-->
+        <ScrollViewer VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Disabled">
+            <ItemsControl ItemsSource="{Binding Items}" Margin="0,0,4,0">
+                <ItemsControl.ItemTemplate>
+                    <DataTemplate DataType="{x:Type Common:ModelInformationItem}">
+                        <Grid>
 
-                    <!--CheckpointComponent-->
-                    <DataTemplate DataType="{x:Type Common:CheckpointComponent}">
-                        <GroupBox Header="{Binding Name}" Margin="0,0,0,6">
-                            <StackPanel Margin="6">
-                                <StackPanel Visibility="{Binding Type, Converter={StaticResource EnumToVisibilityConverter}, ConverterParameter=Component}">
-                                    <ItemsControl>
+                            <!--Quality Set-->
+                            <TextBlock Text="{Binding Heading}" FontSize="14" FontWeight="DemiBold" Margin="2,8,0,2" Visibility="{Binding IsHeading, Converter={StaticResource BooleanToVisibilityConverter}}"/>
+
+                            <!--Model Part-->
+                            <Border Style="{StaticResource WizardSection}" Visibility="{Binding IsHeading, Converter={StaticResource InverseBooleanToVisibilityConverter}}">
+                                <DockPanel>
+                                    <StackPanel Style="{StaticResource WizardSectionHeader}">
+                                        <TextBlock Text="{Binding Name}" FontWeight="SemiBold" FontSize="13"/>
+                                        <TextBlock Text="{Binding Source}" FontSize="11" Opacity=".7" TextWrapping="Wrap"/>
+                                        <TextBlock Text="{Binding Status, Converter={StaticResource EnumDisplayNameConverter}}" FontSize="11" Margin="0,2,0,0" Style="{StaticResource ModelStatusTextBlock}" Tag="{Binding Status}" ToolTipService.InitialShowDelay="200" Visibility="{Binding Status, Converter={StaticResource NullVisibilityConverter}}"/>
+                                    </StackPanel>
+                                    <ItemsControl ItemsSource="{Binding Files}" VerticalAlignment="Center">
                                         <ItemsControl.ItemTemplate>
                                             <DataTemplate>
-                                                <TextBlock Text="{Binding}" />
+                                                <TextBox Text="{Binding Mode=OneWay}" IsReadOnly="True" BorderThickness="0" Background="Transparent" TextWrapping="Wrap" FontSize="11" Padding="0,1"/>
                                             </DataTemplate>
                                         </ItemsControl.ItemTemplate>
-                                        <ItemsControl.ItemsSource>
-                                            <MultiBinding  Converter="{StaticResource DictionaryLookupMultiConverter}">
-                                                <Binding Path="Path" />
-                                                <Binding Path="ComponentMap" RelativeSource="{RelativeSource AncestorType={x:Type local:ModelInformationDialog}}" />
-                                            </MultiBinding>
-                                        </ItemsControl.ItemsSource>
                                     </ItemsControl>
-                                </StackPanel>
-                                <ItemsControl ItemsSource="{Binding DownloadFiles}">
-                                    <ItemsControl.ItemTemplate>
-                                        <DataTemplate>
-                                            <TextBlock Text="{Binding}" />
-                                        </DataTemplate>
-                                    </ItemsControl.ItemTemplate>
-                                </ItemsControl>
-                            </StackPanel>
-                        </GroupBox>
-                    </DataTemplate>
+                                </DockPanel>
+                            </Border>
 
-                    <!--DiffusionModel-->
-                    <DataTemplate DataType="{x:Type Common:DiffusionModel}">
-                        <DockPanel>
-                            <StackPanel DockPanel.Dock="Top">
-                                <ContentPresenter Content="{Binding Checkpoint.Tokenizer}" Visibility="{Binding Checkpoint.Tokenizer, Converter={StaticResource NullVisibilityConverter}}"/>
-                                <ContentPresenter Content="{Binding Checkpoint.TextEncoder}" Visibility="{Binding Checkpoint.TextEncoder, Converter={StaticResource NullVisibilityConverter}}"/>
-                                <ContentPresenter Content="{Binding Checkpoint.TextEncoder2}" Visibility="{Binding Checkpoint.TextEncoder2, Converter={StaticResource NullVisibilityConverter}}"/>
-                                <ContentPresenter Content="{Binding Checkpoint.TextEncoder3}" Visibility="{Binding Checkpoint.TextEncoder3, Converter={StaticResource NullVisibilityConverter}}"/>
-                                <ContentPresenter Content="{Binding Checkpoint.Unet}" Visibility="{Binding Checkpoint.Unet, Converter={StaticResource NullVisibilityConverter}}"/>
-                                <ContentPresenter Content="{Binding Checkpoint.Transformer}" Visibility="{Binding Checkpoint.Transformer, Converter={StaticResource NullVisibilityConverter}}"/>
-                                <ContentPresenter Content="{Binding Checkpoint.Transformer2}" Visibility="{Binding Checkpoint.Transformer2, Converter={StaticResource NullVisibilityConverter}}"/>
-                                <ContentPresenter Content="{Binding Checkpoint.Vae}" Visibility="{Binding Checkpoint.Vae, Converter={StaticResource NullVisibilityConverter}}"/>
-                                <ContentPresenter Content="{Binding Checkpoint.AudioVae}" Visibility="{Binding Checkpoint.AudioVae, Converter={StaticResource NullVisibilityConverter}}"/>
-                                <ContentPresenter Content="{Binding Checkpoint.Vocoder}" Visibility="{Binding Checkpoint.Vocoder, Converter={StaticResource NullVisibilityConverter}}"/>
-                                <ContentPresenter Content="{Binding Checkpoint.Connectors}" Visibility="{Binding Checkpoint.Connectors, Converter={StaticResource NullVisibilityConverter}}"/>
-                                <ContentPresenter Content="{Binding Checkpoint.LatentUpsampler}" Visibility="{Binding Checkpoint.LatentUpsampler, Converter={StaticResource NullVisibilityConverter}}"/>
-                                <ContentPresenter Content="{Binding Checkpoint.LatentUpsamplerTemporal}" Visibility="{Binding Checkpoint.LatentUpsamplerTemporal, Converter={StaticResource NullVisibilityConverter}}"/>
-                                <ContentPresenter Content="{Binding Checkpoint.ConditionEncoder}" Visibility="{Binding Checkpoint.ConditionEncoder, Converter={StaticResource NullVisibilityConverter}}"/>
-                                <ContentPresenter Content="{Binding Checkpoint.AudioTokenizer}" Visibility="{Binding Checkpoint.AudioTokenizer, Converter={StaticResource NullVisibilityConverter}}"/>
-                                <ContentPresenter Content="{Binding Checkpoint.AudioDetokenizer}" Visibility="{Binding Checkpoint.AudioDetokenizer, Converter={StaticResource NullVisibilityConverter}}"/>
-                            </StackPanel>
-                        </DockPanel>
+                        </Grid>
                     </DataTemplate>
-
-                    <!--LanguageModel-->
-                    <DataTemplate DataType="{x:Type Common:LanguageModel}">
-                        <DockPanel>
-                            <StackPanel DockPanel.Dock="Top">
-                                <ContentPresenter Content="{Binding Checkpoint.TextModel}" Visibility="{Binding Checkpoint.TextModel, Converter={StaticResource NullVisibilityConverter}}"/>
-                                <ContentPresenter Content="{Binding Checkpoint.TextModel2}" Visibility="{Binding Checkpoint.TextModel2, Converter={StaticResource NullVisibilityConverter}}"/>
-                            </StackPanel>
-                        </DockPanel>
-                    </DataTemplate>
-
-                    <!--ComponentModel-->
-                    <DataTemplate DataType="{x:Type Common:ComponentModel}">
-                        <DockPanel>
-                            <StackPanel DockPanel.Dock="Top">
-                                <ContentPresenter Content="{Binding Checkpoint}"/>
-                            </StackPanel>
-                        </DockPanel>
-                    </DataTemplate>
-
-                    <!--LoraAdapterModel-->
-                    <DataTemplate DataType="{x:Type Common:LoraAdapterModel}">
-                        <DockPanel>
-                            <StackPanel DockPanel.Dock="Top">
-                                <ContentPresenter Content="{Binding Checkpoint}"/>
-                            </StackPanel>
-                        </DockPanel>
-                    </DataTemplate>
-
-                    <!--ControlNetModel-->
-                    <DataTemplate DataType="{x:Type Common:ControlNetModel}">
-                        <DockPanel>
-                            <StackPanel DockPanel.Dock="Top">
-                                <ContentPresenter Content="{Binding Checkpoint}"/>
-                            </StackPanel>
-                        </DockPanel>
-                    </DataTemplate>
-
-                    <!--UpscaleModel-->
-                    <DataTemplate DataType="{x:Type Common:UpscaleModel}">
-                        <DockPanel>
-                            <StackPanel DockPanel.Dock="Top">
-                                <ContentPresenter Content="{Binding Checkpoint}"/>
-                            </StackPanel>
-                        </DockPanel>
-                    </DataTemplate>
-
-                    <!--ExtractModel-->
-                    <DataTemplate DataType="{x:Type Common:ExtractModel}">
-                        <DockPanel>
-                            <StackPanel DockPanel.Dock="Top">
-                                <ContentPresenter Content="{Binding Checkpoint}"/>
-                            </StackPanel>
-                        </DockPanel>
-                    </DataTemplate>
-
-                </ContentControl.Resources>
-            </ContentControl>
-        </DockPanel>
+                </ItemsControl.ItemTemplate>
+            </ItemsControl>
+        </ScrollViewer>
     </DockPanel>
 </CommonControls:DialogControl>

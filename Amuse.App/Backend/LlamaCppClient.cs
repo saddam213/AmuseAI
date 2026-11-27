@@ -70,17 +70,12 @@ namespace Amuse.App.Runtime
             var environmentDialog = DialogService.GetDialog<EnvironmentDialog>();
             if (environment.Status == BackendStatus.Update)
             {
-                if (await environmentDialog.UpdateAsync(environment))
-                    return environment;
-            }
-            else if (environment.Status == BackendStatus.Rebuild)
-            {
-                if (await environmentDialog.RebuildAsync(environment))
+                if (await environmentDialog.UpdateAsync(environment, Pipeline))
                     return environment;
             }
             else
             {
-                if (await environmentDialog.CreateAsync(environment, true))
+                if (await environmentDialog.CreateAsync(environment, true, Pipeline))
                     return environmentDialog.Environment;
             }
             return null;

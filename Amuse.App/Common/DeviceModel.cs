@@ -1,5 +1,4 @@
 ﻿using Amuse.App.Services;
-using System.Linq;
 using System.Runtime.CompilerServices;
 using TensorStack.Common;
 
@@ -25,10 +24,7 @@ namespace Amuse.App.Common
 
         private static BackendType[] GetSupportedBackends(VendorType vendor, string deviceType)
         {
-            if (vendor == VendorType.Intel)
-                return [BackendType.OnnxRuntime, BackendType.StableDiffusionCpp, BackendType.AudioCpp, BackendType.LlamaCpp];
-
-            return [BackendType.HuggingFace, BackendType.OnnxRuntime, BackendType.StableDiffusionCpp, BackendType.AudioCpp, BackendType.LlamaCpp];
+            return [BackendType.OnnxRuntime, BackendType.StableDiffusionCpp, BackendType.AudioCpp, BackendType.LlamaCpp];
         }
 
 

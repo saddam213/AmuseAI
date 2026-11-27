@@ -4,6 +4,7 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Amuse.App.Dialogs"
+        xmlns:Common="clr-namespace:Amuse.App.Common"
         xmlns:Controls="clr-namespace:Amuse.App.Controls"
         xmlns:CommonControls="clr-namespace:TensorStack.WPF.Controls;assembly=TensorStack.WPF"
         MinWidth="800"
@@ -31,36 +32,44 @@
         <!--Main Content-->
         <StackPanel>
 
-            <!--Model Settings-->
-            <GroupBox Header="{CommonControls:Localize Settings}" Padding="4">
-                <StackPanel>
-                    <UniformGrid Rows="1">
-                        <StackPanel Margin="2,0,2,0">
+            <!--Model-->
+            <Border Style="{StaticResource WizardSection}">
+                <DockPanel>
+                    <StackPanel Style="{StaticResource WizardSectionHeader}">
+                        <TextBlock Text="{CommonControls:Localize Model}" FontWeight="SemiBold" FontSize="13"/>
+                        <TextBlock Text="{CommonControls:Localize LoraWizardModelDescription}" FontSize="11" Opacity=".7" TextWrapping="Wrap"/>
+                    </StackPanel>
+                    <UniformGrid Columns="2" VerticalAlignment="Top">
+                        <StackPanel Margin="0,0,2,0">
                             <TextBlock Text="{CommonControls:Localize Pipeline}" Style="{StaticResource FieldTextBlockStyle}"/>
-                            <ComboBox ItemsSource="{Binding Settings.DiffusionPipelines}" SelectedItem="{Binding LoraModel.Pipeline}" SelectedIndex="0" Style="{StaticResource EnumComboBox}"/>
+                            <ComboBox ItemsSource="{Binding PipelineOptions}" SelectedItem="{Binding SelectedPipeline}" Style="{StaticResource EnumComboBox}"/>
                         </StackPanel>
-                        <StackPanel Margin="2,0,2,0">
-                            <TextBlock Text="{CommonControls:Localize Name}" Style="{StaticResource FieldTextBlockStyle}"/>
+                        <StackPanel Margin="2,0,0,0">
+                            <TextBlock Text="{CommonControls:Localize ModelName}" Style="{StaticResource FieldTextBlockStyle}"/>
                             <TextBox Text="{Binding LoraModel.Name, UpdateSourceTrigger=PropertyChanged}" />
                         </StackPanel>
                     </UniformGrid>
+                </DockPanel>
+            </Border>
 
-                    <!--Trigger Words-->
-                    <DockPanel Margin="0,4,0,0" >
+            <!--Trigger Words-->
+            <Border Style="{StaticResource WizardSection}">
+                <DockPanel>
+                    <StackPanel Style="{StaticResource WizardSectionHeader}">
+                        <StackPanel Orientation="Horizontal">
+                            <TextBlock Text="{CommonControls:Localize TriggerWords}" FontWeight="SemiBold" FontSize="13"/>
+                            <TextBlock Text="{CommonControls:Localize TagOptional}" FontSize="9" Opacity=".7" Margin="4,0,0,2" VerticalAlignment="Bottom"/>
+                        </StackPanel>
+                        <TextBlock Text="{CommonControls:Localize LoraTriggerWordsDescription}" FontSize="11" Opacity=".7" TextWrapping="Wrap"/>
+                    </StackPanel>
+                    <DockPanel VerticalAlignment="Top">
                         <DockPanel DockPanel.Dock="Top">
-                            <Button DockPanel.Dock="Right" Command="{Binding AddTriggerCommand}" Height="22" Width="40" VerticalAlignment="Bottom" HorizontalAlignment="Right">
+                            <Button DockPanel.Dock="Right" Command="{Binding AddTriggerCommand}" Height="22" Width="40" Margin="3,0,0,0">
                                 <CommonControls:FontAwesome Icon="2b" IconStyle="Light" Color="{StaticResource SuccessColour}"/>
                             </Button>
-                            <StackPanel Margin="0,0,3,0">
-                                <StackPanel Orientation="Horizontal">
-                                    <TextBlock Text="{CommonControls:Localize TriggerWords}" Style="{StaticResource FieldTextBlockStyle}"/>
-                                    <TextBlock Text="{CommonControls:Localize TagOptional}" Style="{StaticResource FieldTextBlockStyle}" FontSize="9" Margin="4,0,0,2" VerticalAlignment="Bottom"/>
-                                </StackPanel>
-
-                                <TextBox Text="{Binding SelectedTrigger, UpdateSourceTrigger=PropertyChanged}"/>
-                            </StackPanel>
+                            <TextBox Text="{Binding SelectedTrigger, UpdateSourceTrigger=PropertyChanged}"/>
                         </DockPanel>
-                        <ListBox ItemsSource="{Binding Trigger}" SelectedItem="{Binding SelectedTrigger}" ItemContainerStyle="{StaticResource TransparentListBoxItem}" ScrollViewer.HorizontalScrollBarVisibility="Disabled" Margin="0,3,0,0" Background="Transparent" MinHeight="24">
+                        <ListBox ItemsSource="{Binding Trigger}" SelectedItem="{Binding SelectedTrigger}" ItemContainerStyle="{StaticResource TransparentListBoxItem}" ScrollViewer.HorizontalScrollBarVisibility="Disabled" Margin="0,3,0,0" Background="Transparent" BorderThickness="0" MinHeight="24">
                             <ListBox.ItemsPanel>
                                 <ItemsPanelTemplate>
                                     <WrapPanel IsItemsHost="True"  />
@@ -73,43 +82,61 @@
                                             <Button DockPanel.Dock="Right" Command="{Binding RemoveTriggerCommand, RelativeSource={RelativeSource AncestorType={x:Type local:LoraModelDialog}}}" CommandParameter="{Binding}" Style="{StaticResource TransparentButton}">
                                                 <CommonControls:FontAwesome Icon="f00d" Color="{StaticResource DangerColour}" />
                                             </Button>
-                                            <StackPanel Orientation="Horizontal" VerticalAlignment="Center" Margin="4,0,2,0">
-                                                <TextBlock Text="{Binding}"/>
-                                            </StackPanel>
+                                            <TextBlock Text="{Binding}" VerticalAlignment="Center" Margin="4,0,2,0"/>
                                         </DockPanel>
                                     </Border>
                                 </DataTemplate>
                             </ListBox.ItemTemplate>
                         </ListBox>
                     </DockPanel>
+                </DockPanel>
+            </Border>
 
-                    <!--View Filters-->
-                    <StackPanel Margin="0,4">
+            <!--View Filter-->
+            <Border Style="{StaticResource WizardSection}">
+                <DockPanel>
+                    <StackPanel Style="{StaticResource WizardSectionHeader}">
                         <StackPanel Orientation="Horizontal">
-                            <TextBlock Text="{CommonControls:Localize ViewFilter}" Style="{StaticResource FieldTextBlockStyle}"/>
-                            <TextBlock Text="{CommonControls:Localize TagOptional}" Style="{StaticResource FieldTextBlockStyle}" FontSize="9" Margin="4,0,0,2" VerticalAlignment="Bottom"/>
+                            <TextBlock Text="{CommonControls:Localize ViewFilter}" FontWeight="SemiBold" FontSize="13"/>
+                            <TextBlock Text="{CommonControls:Localize TagOptional}" FontSize="9" Opacity=".7" Margin="4,0,0,2" VerticalAlignment="Bottom"/>
                         </StackPanel>
-                        <UniformGrid Columns="6" >
-                            <CheckBox x:Name="CheckBoxViewTextToImage" Content="{CommonControls:Localize Function_TextToImage}" />
-                            <CheckBox x:Name="CheckBoxViewImageToImage" Content="{CommonControls:Localize Function_ImageToImage}" />
-                            <CheckBox x:Name="CheckBoxViewImageEdit" Content="{CommonControls:Localize Function_ImageEdit}" />
-                            <CheckBox x:Name="CheckBoxViewImageInpaint" Content="{CommonControls:Localize Function_ImageInpaint}" />
-                            <CheckBox x:Name="CheckBoxViewPaintToImage" Content="{CommonControls:Localize Function_PaintToImage}" />
-                            <CheckBox x:Name="CheckBoxViewFrameToFrame" Content="{CommonControls:Localize Function_FrameToFrame}" />
-                            <CheckBox x:Name="CheckBoxViewTextToVideo" Content="{CommonControls:Localize Function_TextToVideo}" />
-                            <CheckBox x:Name="CheckBoxViewImageToVideo" Content="{CommonControls:Localize Function_ImageToVideo}" />
-                            <CheckBox x:Name="CheckBoxViewVideoToVideo" Content="{CommonControls:Localize Function_VideoToVideo}" />
-                            <CheckBox x:Name="CheckBoxViewTextToMusic" Content="{CommonControls:Localize Function_TextToMusic}" />
-                            <CheckBox x:Name="CheckBoxViewTextToAudio" Content="{CommonControls:Localize Function_TextToAudio}" />
-                        </UniformGrid>
+                        <TextBlock Text="{CommonControls:Localize LoraViewFilterDescription}" FontSize="11" Opacity=".7" TextWrapping="Wrap"/>
                     </StackPanel>
-                </StackPanel>
-            </GroupBox>
+                    <ItemsControl ItemsSource="{Binding ViewOptions}" VerticalAlignment="Top">
+                        <ItemsControl.ItemsPanel>
+                            <ItemsPanelTemplate>
+                                <UniformGrid Columns="4"/>
+                            </ItemsPanelTemplate>
+                        </ItemsControl.ItemsPanel>
+                        <ItemsControl.ItemTemplate>
+                            <DataTemplate DataType="{x:Type Common:ViewFilterOption}">
+                                <CheckBox Content="{Binding Name}" IsChecked="{Binding IsSelected}" Margin="0,2"/>
+                            </DataTemplate>
+                        </ItemsControl.ItemTemplate>
+                    </ItemsControl>
+                </DockPanel>
+            </Border>
 
-            <!--Checkpoint Settings-->
-            <GroupBox Header="{Binding LoraModel.Checkpoint.Name}" Margin="0,10,0,0" Height="160">
-                <Controls:CheckpointControl Settings="{Binding Settings}" Checkpoint="{Binding LoraModel.Checkpoint}" SupportedTypes="{Binding CheckpointTypes, Mode=OneWay}"/>
-            </GroupBox>
+            <!--File-->
+            <Border Style="{StaticResource WizardSection}">
+                <DockPanel>
+                    <StackPanel Style="{StaticResource WizardSectionHeader}">
+                        <TextBlock Text="{CommonControls:Localize Lora}" FontWeight="SemiBold" FontSize="13"/>
+                        <TextBlock Text="{CommonControls:Localize LoraFileDescription}" FontSize="11" Opacity=".7" TextWrapping="Wrap"/>
+                    </StackPanel>
+                    <Controls:CheckpointControl Margin="-4" Settings="{Binding Settings}" Checkpoint="{Binding LoraModel.Checkpoint}" SupportedTypes="{Binding CheckpointTypes, Mode=OneWay}">
+                        <Controls:CheckpointControl.Style>
+                            <Style TargetType="{x:Type Controls:CheckpointControl}">
+                                <Style.Triggers>
+                                    <DataTrigger Binding="{Binding LoraModel.Checkpoint.Type}" Value="OnlineFile">
+                                        <Setter Property="Height" Value="150"/>
+                                    </DataTrigger>
+                                </Style.Triggers>
+                            </Style>
+                        </Controls:CheckpointControl.Style>
+                    </Controls:CheckpointControl>
+                </DockPanel>
+            </Border>
 
         </StackPanel>
     </DockPanel>

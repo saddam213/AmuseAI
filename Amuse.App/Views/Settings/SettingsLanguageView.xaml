@@ -7,7 +7,7 @@
     xmlns:CommonControls="clr-namespace:TensorStack.WPF.Controls;assembly=TensorStack.WPF"
     xmlns:Controls="clr-namespace:Amuse.App.Controls"
     xmlns:Views="clr-namespace:Amuse.App.Views">
-    <GroupBox DataContext="{Binding RelativeSource={RelativeSource AncestorType={x:Type local:SettingsLanguageView}}}" Margin="10, 20, 20, 20" Header="{CommonControls:Localize DiffusionSettings}" Padding="4">
+    <GroupBox DataContext="{Binding RelativeSource={RelativeSource AncestorType={x:Type local:SettingsLanguageView}}}" Margin="10, 20, 20, 20" Header="{CommonControls:Localize TextSettings}" Padding="4">
         <Grid >
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="1*" />
@@ -93,7 +93,7 @@
 
                     <!--DiffusionModel-->
                     <StackPanel>
-                        <UniformGrid Columns="4" >
+                        <UniformGrid Columns="4">
                             <StackPanel Margin="0,0,2,0">
                                 <TextBlock Text="{CommonControls:Localize Name}" Style="{StaticResource FieldTextBlockStyle}" />
                                 <TextBox Text="{Binding SelectedModel.Name}" IsReadOnly="True"/>
@@ -107,12 +107,75 @@
                                 <TextBlock Text="{Binding SelectedModel.Status}" FontWeight="Bold" FontSize="14" Opacity=".8" Margin="3,1,0,0" Style="{StaticResource ModelStatusTextBlock}" Tag="{Binding SelectedModel.Status}" />
                             </StackPanel>
                         </UniformGrid>
-                        <UniformGrid Columns="2">
-                            <StackPanel Margin="2,6,2,0">
-                                <TextBlock Text="{CommonControls:Localize ModelLink}" Style="{StaticResource FieldTextBlockStyle}" />
-                                <CommonControls:HyperlinkControl Label="{Binding SelectedModel.Link}" Link="{Binding SelectedModel.Link}" />
+                        <UniformGrid Columns="4" Margin="0,6,0,0">
+                            <StackPanel Margin="0,0,2,0">
+                                <TextBlock Text="{CommonControls:Localize Backend}" Style="{StaticResource FieldTextBlockStyle}" />
+                                <TextBox Text="{Binding SelectedModel.Backend, Mode=OneWay}" IsReadOnly="True"/>
+                            </StackPanel>
+                            <StackPanel Margin="2,0,2,0">
+                                <TextBlock Text="{CommonControls:Localize ModelType}" Style="{StaticResource FieldTextBlockStyle}" />
+                                <TextBox Text="{Binding SelectedModel.ModelType, Mode=OneWay}" IsReadOnly="True"/>
+                            </StackPanel>
+                            <StackPanel Margin="2,0,2,0">
+                                <TextBlock Text="{CommonControls:Localize MemorySize}" Style="{StaticResource FieldTextBlockStyle}" />
+                                <TextBox Text="{Binding SelectedModel.MemorySize, Mode=OneWay, StringFormat={}{0:0.#} GB}" IsReadOnly="True"/>
+                            </StackPanel>
+                            <StackPanel Margin="2,0,2,0">
+                                <TextBlock Text="{CommonControls:Localize Quant}" Style="{StaticResource FieldTextBlockStyle}" />
+                                <TextBox Text="{Binding SelectedModel.Checkpoint.Type, Mode=OneWay, Converter={StaticResource EnumDisplayNameConverter}}" IsReadOnly="True"/>
                             </StackPanel>
                         </UniformGrid>
+                        <UniformGrid Columns="4" Margin="0,6,0,0">
+                            <StackPanel Margin="0,0,2,0">
+                                <TextBlock Text="{CommonControls:Localize ModelParametersB}" Style="{StaticResource FieldTextBlockStyle}" />
+                                <TextBox Text="{Binding SelectedModel.ModelParams, Mode=OneWay}" IsReadOnly="True"/>
+                            </StackPanel>
+                            <StackPanel Margin="2,0,2,0">
+                                <TextBlock Text="{CommonControls:Localize ModelSizeGB}" Style="{StaticResource FieldTextBlockStyle}" />
+                                <TextBox Text="{Binding SelectedModel.ModelSize, Mode=OneWay}" IsReadOnly="True"/>
+                            </StackPanel>
+                            <StackPanel Margin="2,0,2,0">
+                                <TextBlock Text="{CommonControls:Localize ToolCallsEnabled}" Style="{StaticResource FieldTextBlockStyle}" />
+                                <TextBox Text="{Binding SelectedModel.DefaultOptions.IsToolCallsSupported, Mode=OneWay}" IsReadOnly="True"/>
+                            </StackPanel>
+                            <StackPanel Margin="2,0,2,0">
+                                <TextBlock Text="{CommonControls:Localize ThinkingEnabled}" Style="{StaticResource FieldTextBlockStyle}" />
+                                <TextBox Text="{Binding SelectedModel.DefaultOptions.IsThinkingEnabled, Mode=OneWay}" IsReadOnly="True"/>
+                            </StackPanel>
+                        </UniformGrid>
+                        <StackPanel Margin="0,6,2,0">
+                            <TextBlock Text="{CommonControls:Localize Quants}" Style="{StaticResource FieldTextBlockStyle}" />
+                            <Border BorderThickness="1" BorderBrush="{StaticResource DefaultBorderColor}">
+                                <ItemsControl ItemsSource="{Binding SelectedModel.Checkpoints}" Margin="0,2">
+                                    <ItemsControl.ItemTemplate>
+                                        <DataTemplate>
+                                            <Grid Margin="6,2">
+                                                <Grid.ColumnDefinitions>
+                                                    <ColumnDefinition Width="90" />
+                                                    <ColumnDefinition Width="*" />
+                                                    <ColumnDefinition Width="70" />
+                                                    <ColumnDefinition Width="Auto" MinWidth="80" />
+                                                    <ColumnDefinition Width="20" />
+                                                </Grid.ColumnDefinitions>
+                                                <TextBlock Grid.Column="0" Text="{Binding Type, Converter={StaticResource EnumDisplayNameConverter}}" FontWeight="SemiBold" />
+                                                <TextBlock Grid.Column="1" Text="{Binding QualityDescription}" FontSize="11" Opacity=".7" VerticalAlignment="Center" TextTrimming="CharacterEllipsis" />
+                                                <TextBlock Grid.Column="2" Text="{Binding MemorySize, StringFormat={}{0:0.#} GB}" FontSize="11" Opacity=".7" VerticalAlignment="Center" TextAlignment="Right" />
+                                                <TextBlock Grid.Column="3" Text="{CommonControls:Localize Installed}" FontSize="11" VerticalAlignment="Center" TextAlignment="Right" Foreground="{StaticResource SuccessColour}" Visibility="{Binding IsInstalled, Converter={StaticResource BooleanToVisibilityConverter}}" />
+                                                <CommonControls:FontAwesome Grid.Column="4" Style="{StaticResource CheckpointStatusFontAwesome}" Size="10" IconStyle="Solid" HorizontalAlignment="Right" ToolTipService.InitialShowDelay="200" />
+                                            </Grid>
+                                        </DataTemplate>
+                                    </ItemsControl.ItemTemplate>
+                                </ItemsControl>
+                            </Border>
+                        </StackPanel>
+                        <StackPanel Margin="2,6,2,0">
+                            <TextBlock Text="{CommonControls:Localize ModelLink}" Style="{StaticResource FieldTextBlockStyle}" />
+                            <CommonControls:HyperlinkControl Label="{Binding SelectedModel.Link}" Link="{Binding SelectedModel.Link}" />
+                        </StackPanel>
+                        <StackPanel Margin="0,6,2,0">
+                            <TextBlock Text="{CommonControls:Localize Description}" Style="{StaticResource FieldTextBlockStyle}" />
+                            <TextBox Text="{Binding SelectedModel.Pipeline, Mode=OneWay, Converter={StaticResource EnumDescriptionConverter}}" IsReadOnly="True" TextWrapping="Wrap" />
+                        </StackPanel>
                     </StackPanel>
 
                 </DockPanel>

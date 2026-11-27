@@ -74,13 +74,13 @@
                             <CommonControls:SliderControl Text="{CommonControls:Localize MaxLength}" Value="{Binding Options.MaxLength}" Maximum="{Binding Pipeline.LanguageModel.DefaultOptions.MaxLength}" TickFrequency="1024" />
                         </UniformGrid>
 
-                        <UniformGrid Columns="2" Margin="-1,8,0,4">
+                        <UniformGrid Columns="2" Margin="-1,8,0,4" Visibility="{Binding ViewType, Converter={StaticResource InverseEnumToVisibilityConverter}, ConverterParameter=ImageToText}">
                             <CheckBox Content="{CommonControls:Localize ToolCallsEnabled}" IsChecked="{Binding Options.IsToolCallsEnabled}" FontStyle="Italic" FontSize="11" Opacity=".9" Command="{Binding ToolEnableCommand}" CommandParameter="{StaticResource True}" IsEnabled="{Binding Pipeline.LanguageModel.DefaultOptions.IsToolCallsSupported}"/>
                             <CheckBox Content="{CommonControls:Localize ThinkingEnabled}" IsChecked="{Binding Options.IsThinkingEnabled}" FontStyle="Italic" FontSize="11" Opacity=".9"/>
 
                         </UniformGrid>
-                       
-                        <Grid IsEnabled="{Binding Pipeline.LanguageModel.DefaultOptions.IsToolCallsSupported}">
+
+                        <Grid IsEnabled="{Binding Pipeline.LanguageModel.DefaultOptions.IsToolCallsSupported}" Visibility="{Binding ViewType, Converter={StaticResource InverseEnumToVisibilityConverter}, ConverterParameter=ImageToText}">
                             <ItemsControl ItemsSource="{Binding ToolCalls}" IsEnabled="{Binding Options.IsToolCallsEnabled}">
                                 <ItemsControl.ItemTemplate>
                                     <DataTemplate>
@@ -118,10 +118,10 @@
                             SourceCount="4"
                             IsMultiSelect="True" 
                             TextHorizontalAlignment="Center"
-                            SourceText1="Image 1"
-                            SourceText2="Image 2"
-                            SourceText3="Image 3"
-                            SourceText4="Image 4"
+                            SourceText1="{CommonControls:Localize Image1}"
+                            SourceText2="{CommonControls:Localize Image2}"
+                            SourceText3="{CommonControls:Localize Image3}"
+                            SourceText4="{CommonControls:Localize Image4}"
                             IsSource1Selected="{Binding Options.IsSource1Enabled, Mode=TwoWay}"
                             IsSource2Selected="{Binding Options.IsSource2Enabled, Mode=TwoWay}"
                             IsSource3Selected="{Binding Options.IsSource3Enabled, Mode=TwoWay}"
@@ -235,7 +235,7 @@
                             <UniformGrid Margin="0,0,0,0" >
                                 <StackPanel>
                                     <TextBlock Text="{CommonControls:Localize PromptFile}" Style="{StaticResource FieldTextBlockStyle}"/>
-                                    <CommonControls:FilePickerTextBox FileName="{Binding AutomationOptions.InputFile, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" IsRequired="True" Filter="Text Files|*.txt;" DefaultExt="txt"/>
+                                    <CommonControls:FilePickerTextBox FileName="{Binding AutomationOptions.InputFile, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" IsRequired="True" Filter="{CommonControls:Localize TextFiles, Append='|*.txt;'}" DefaultExt="txt"/>
                                 </StackPanel>
                             </UniformGrid>
                         </Grid>

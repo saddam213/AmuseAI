@@ -118,205 +118,202 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="AutomationType0" xml:space="preserve">
-    <value>Seed Batch</value>
+    <value>シードバッチ</value>
   </data>
   <data name="AutomationType0_Description" xml:space="preserve">
-    <value>Generate the specified amount of times with a unique seed value</value>
+    <value>指定した回数だけ、毎回異なるシード値で生成します</value>
   </data>
   <data name="AutomationType1" xml:space="preserve">
-    <value>Prompt Lines</value>
+    <value>プロンプト行</value>
   </data>
   <data name="AutomationType1_Description" xml:space="preserve">
-    <value>Generate for each prompt line in the specified text file</value>
+    <value>指定したテキストファイルの各行をプロンプトとして生成します</value>
   </data>
   <data name="AutomationType2" xml:space="preserve">
-    <value>Prompt Files</value>
+    <value>プロンプトファイル</value>
   </data>
   <data name="AutomationType2_Description" xml:space="preserve">
-    <value>Generate for each prompt in a text file in the specified folder</value>
+    <value>指定したフォルダー内の各テキストファイルのプロンプトで生成します</value>
   </data>
   <data name="AutomationType3" xml:space="preserve">
-    <value>Input Files</value>
+    <value>入力ファイル</value>
   </data>
   <data name="AutomationType3_Description" xml:space="preserve">
-    <value>Generate for each input file in the specified folder</value>
+    <value>指定したフォルダー内の各入力ファイルに対して生成します</value>
   </data>
   <data name="CheckpointType0" xml:space="preserve">
-    <value>Local Folder</value>
+    <value>ローカルフォルダー</value>
   </data>
   <data name="CheckpointType1" xml:space="preserve">
-    <value>Local File</value>
+    <value>ローカルファイル</value>
   </data>
   <data name="CheckpointType2" xml:space="preserve">
-    <value>Online Folder</value>
+    <value>オンラインフォルダー</value>
   </data>
   <data name="CheckpointType3" xml:space="preserve">
-    <value>Online File</value>
+    <value>オンラインファイル</value>
   </data>
   <data name="CheckpointType4" xml:space="preserve">
-    <value>Component</value>
+    <value>コンポーネント</value>
   </data>
   <data name="EnvironmentType0" xml:space="preserve">
-    <value>Vendor</value>
+    <value>ベンダー</value>
   </data>
   <data name="EnvironmentType1" xml:space="preserve">
-    <value>Device</value>
+    <value>デバイス</value>
   </data>
   <data name="EnvironmentType2" xml:space="preserve">
-    <value>Pipeline</value>
+    <value>パイプライン</value>
   </data>
   <data name="ExtractorType0" xml:space="preserve">
-    <value>Default</value>
+    <value>デフォルト</value>
   </data>
   <data name="ExtractorType1" xml:space="preserve">
-    <value>Background</value>
+    <value>背景</value>
   </data>
   <data name="ExtractorType2" xml:space="preserve">
-    <value>Pose</value>
+    <value>ポーズ</value>
   </data>
   <data name="MemoryMode0" xml:space="preserve">
-    <value>Auto</value>
+    <value>自動</value>
   </data>
   <data name="MemoryMode0_Description" xml:space="preserve">
-    <value>Automatically selects the best strategy.</value>
+    <value>最適な方式を自動的に選択します。</value>
   </data>
   <data name="MemoryMode1" xml:space="preserve">
-    <value>Balanced</value>
+    <value>バランス</value>
   </data>
   <data name="MemoryMode1_Description" xml:space="preserve">
-    <value>Fits model weights across GPU and CPU memory automatically.</value>
+    <value>モデルの重みをGPUメモリとCPUメモリに自動的に振り分けます。</value>
   </data>
   <data name="MemoryMode2" xml:space="preserve">
-    <value>Low</value>
+    <value>低</value>
   </data>
   <data name="MemoryMode2_Description" xml:space="preserve">
-    <value>Keeps model weights in CPU memory or on disk and moves them to the GPU when needed. Lowest VRAM, slowest.</value>
+    <value>モデルの重みをCPUメモリまたはディスクに保持し、必要なときにGPUに移動します。VRAM使用量は最小ですが、最も低速です。</value>
   </data>
   <data name="MemoryMode3" xml:space="preserve">
-    <value>Medium</value>
+    <value>中</value>
   </data>
   <data name="MemoryMode3_Description" xml:space="preserve">
-    <value>Keeps model weights in CPU memory and moves them to the GPU when needed.</value>
+    <value>モデルの重みをCPUメモリに保持し、必要なときにGPUに移動します。</value>
   </data>
   <data name="MemoryMode4" xml:space="preserve">
-    <value>High</value>
+    <value>高</value>
   </data>
   <data name="MemoryMode4_Description" xml:space="preserve">
-    <value>Loads all weights to GPU for peak performance.</value>
+    <value>すべての重みをGPUに読み込み、最高のパフォーマンスで実行します。</value>
   </data>
   <data name="ModelCategoryType0" xml:space="preserve">
-    <value>Diffusion</value>
+    <value>拡散モデル</value>
   </data>
   <data name="ModelCategoryType1" xml:space="preserve">
-    <value>ControlNets</value>
+    <value>ControlNet</value>
   </data>
   <data name="ModelCategoryType2" xml:space="preserve">
-    <value>Lora Adapters</value>
+    <value>LoRAアダプター</value>
   </data>
   <data name="ModelCategoryType3" xml:space="preserve">
-    <value>Upscalers</value>
+    <value>アップスケーラー</value>
   </data>
   <data name="ModelCategoryType4" xml:space="preserve">
-    <value>Extractors</value>
+    <value>エクストラクター</value>
   </data>
   <data name="ModelCategoryType5" xml:space="preserve">
-    <value>Components</value>
+    <value>コンポーネント</value>
   </data>
   <data name="ModelCategoryType6" xml:space="preserve">
-    <value>LLMs</value>
+    <value>LLM</value>
   </data>
   <data name="ModelSourceType0" xml:space="preserve">
-    <value>Local File</value>
+    <value>ローカルファイル</value>
   </data>
   <data name="ModelSourceType0_Description" xml:space="preserve">
-    <value>Diffusion Unet or Transformer file (Default Components)</value>
+    <value>拡散モデルのUnetまたはTransformerファイル（デフォルトのコンポーネントを使用）</value>
   </data>
   <data name="ModelSourceType1" xml:space="preserve">
-    <value>Local Folder</value>
+    <value>ローカルフォルダー</value>
   </data>
   <data name="ModelSourceType1_Description" xml:space="preserve">
-    <value>Full checkpoint directory containing all components (Diffusers Format)</value>
+    <value>すべてのコンポーネントを含むチェックポイントディレクトリ（Diffusers形式）</value>
   </data>
   <data name="ModelSourceType2" xml:space="preserve">
-    <value>Local Checkpoint</value>
+    <value>ローカルチェックポイント</value>
   </data>
   <data name="ModelSourceType2_Description" xml:space="preserve">
-    <value>Single checkpoint file containing all components (safetensors or gguf)</value>
+    <value>すべてのコンポーネントを含む単一のチェックポイントファイル（safetensorsまたはgguf）</value>
   </data>
   <data name="ModelSourceType3" xml:space="preserve">
-    <value>Custom Checkpoint</value>
+    <value>カスタムチェックポイント</value>
   </data>
   <data name="ModelSourceType3_Description" xml:space="preserve">
-    <value>Configure the model components manually</value>
+    <value>モデルのコンポーネントを手動で構成します</value>
   </data>
   <data name="ModelStatusType0" xml:space="preserve">
-    <value>Available</value>
+    <value>ダウンロード可能</value>
   </data>
   <data name="ModelStatusType1" xml:space="preserve">
-    <value>Unknown</value>
+    <value>不明</value>
   </data>
   <data name="ModelStatusType2" xml:space="preserve">
-    <value>Downloading</value>
+    <value>ダウンロード中</value>
   </data>
   <data name="ModelStatusType3" xml:space="preserve">
-    <value>Download Queued</value>
+    <value>ダウンロード待機中</value>
   </data>
   <data name="ModelStatusType4" xml:space="preserve">
-    <value>Download Failed</value>
+    <value>ダウンロード失敗</value>
   </data>
   <data name="ModelStatusType5" xml:space="preserve">
-    <value>Installed</value>
+    <value>インストール済み</value>
   </data>
   <data name="AspectType0" xml:space="preserve">
-    <value>Square</value>
+    <value>正方形</value>
   </data>
   <data name="AspectType1" xml:space="preserve">
-    <value>Portrait</value>
+    <value>縦長</value>
   </data>
   <data name="AspectType2" xml:space="preserve">
-    <value>Landscape</value>
+    <value>横長</value>
   </data>
   <data name="InputTabOption0" xml:space="preserve">
-    <value>Options</value>
+    <value>オプション</value>
   </data>
   <data name="InputTabOption1" xml:space="preserve">
-    <value>Advanced</value>
+    <value>詳細設定</value>
   </data>
   <data name="InputTabOption2" xml:space="preserve">
-    <value>Automation</value>
+    <value>自動化</value>
   </data>
   <data name="PaintDrawingTool0" xml:space="preserve">
-    <value>RoundBrush</value>
+    <value>丸ブラシ</value>
   </data>
   <data name="PaintDrawingTool1" xml:space="preserve">
-    <value>SquareBrush</value>
+    <value>四角ブラシ</value>
   </data>
   <data name="PaintDrawingTool2" xml:space="preserve">
-    <value>Highlight</value>
+    <value>蛍光ペン</value>
   </data>
   <data name="PaintDrawingTool3" xml:space="preserve">
-    <value>Eraser</value>
+    <value>消しゴム</value>
   </data>
   <data name="TimelineSegmentType0" xml:space="preserve">
-    <value>Video</value>
+    <value>動画</value>
   </data>
   <data name="TimelineSegmentType1" xml:space="preserve">
-    <value>Image</value>
-  </data>
-  <data name="TimelineSegmentType2" xml:space="preserve">
-    <value>Audio</value>
+    <value>画像</value>
   </data>
   <data name="TimelineSegmentType3" xml:space="preserve">
-    <value>Overlay</value>
+    <value>オーバーレイ</value>
   </data>
   <data name="AdapterFlags0" xml:space="preserve">
-    <value>None</value>
+    <value>なし</value>
   </data>
   <data name="AdapterFlags1" xml:space="preserve">
-    <value>Remote</value>
+    <value>リモート</value>
   </data>
   <data name="AdapterFlags2" xml:space="preserve">
-    <value>Software</value>
+    <value>ソフトウェア</value>
   </data>
   <data name="AdapterType0" xml:space="preserve">
     <value>GPU</value>
@@ -325,24 +322,24 @@
     <value>NPU</value>
   </data>
   <data name="AdapterType2" xml:space="preserve">
-    <value>Other</value>
+    <value>その他</value>
   </data>
-  <data name="ViewCategory0" xml:space="preserve">
-    <value>Other</value>
+  <data name="ModelSourceType4" xml:space="preserve">
+    <value>ローカルファイル + ビジョン</value>
   </data>
-  <data name="ViewCategory1" xml:space="preserve">
-    <value>Settings</value>
+  <data name="ModelSourceType4_Description" xml:space="preserve">
+    <value>モデルファイルとビジョンプロジェクター（mmproj）ファイル</value>
   </data>
-  <data name="ViewCategory2" xml:space="preserve">
-    <value>Image</value>
+  <data name="McpTransportType0" xml:space="preserve">
+    <value>ローカルコマンド</value>
   </data>
-  <data name="ViewCategory3" xml:space="preserve">
-    <value>Video</value>
+  <data name="McpTransportType0_Description" xml:space="preserve">
+    <value>このコンピューターで起動するプログラム</value>
   </data>
-  <data name="ViewCategory4" xml:space="preserve">
-    <value>Audio</value>
+  <data name="McpTransportType1" xml:space="preserve">
+    <value>リモートURL</value>
   </data>
-  <data name="ViewCategory5" xml:space="preserve">
-    <value>Text</value>
+  <data name="McpTransportType1_Description" xml:space="preserve">
+    <value>ネットワーク経由で接続するサーバー</value>
   </data>
 </root>

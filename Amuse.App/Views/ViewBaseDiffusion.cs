@@ -1,7 +1,6 @@
 ﻿using Amuse.App.Common;
 using Amuse.App.Resources;
 using Amuse.App.Services;
-using Amuse.Common;
 using Microsoft.Extensions.Logging;
 using System;
 using System.Diagnostics;
@@ -34,29 +33,40 @@ namespace Amuse.App.Views
         private UpscaleInputOptions _upscaleOptions;
         private AutomationOptions _automationOptions;
         private bool _isAutomating;
+        private bool _isPipelineBusy;
+        private readonly ModelOwnerType _ownerType;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="ViewBaseDiffusion"/> class.
         /// </summary>
-        public ViewBaseDiffusion(Settings settings, NavigationService navigationService, IModelDownloadService downloadService, IGenerateService generateService, IExtractService extractService, IUpscaleService upscaleService, IHistoryService historyService, ILogger logger)
-            : base(settings, navigationService, downloadService, historyService, logger)
+        /// <param name="generateService">The service that runs the view's pipelines, the diffusion service, or the audio service for an audio view.</param>
+        public ViewBaseDiffusion(Settings settings, NavigationService navigationService, IModelDownloadService downloadService, IModelAccessService modelAccessService, IGenerateService generateService, ILanguageService languageService, IExtractService extractService, IUpscaleService upscaleService, IHistoryService historyService, ILogger logger)
+            : base(settings, navigationService, downloadService, modelAccessService, historyService, logger)
         {
+            _ownerType = generateService is IAudioService ? ModelOwnerType.Audio : ModelOwnerType.Diffusion;
             GenerateService = generateService;
+            LanguageService = languageService;
             ExtractService = extractService;
             UpscaleService = upscaleService;
             Statistics = new StatisticsModel(Dispatcher);
             ProgressCallback = new Progress<RunProgress>(OnProgress);
-            ExecuteCommand = new AsyncRelayCommand(ExecuteAsync, CanExecute);
-            ExecuteAutomationCommand = new AsyncRelayCommand(ExecuteAutomationAsync, CanExecuteAutomation);
+            ExecuteCommand = new AsyncRelayCommand(() => ExecutePipelineAsync(ExecuteAsync), CanExecute);
+            ExecuteAutomationCommand = new AsyncRelayCommand(() => ExecutePipelineAsync(ExecuteAutomationAsync), CanExecuteAutomation);
             StopCommand = new AsyncRelayCommand(GenerateService.StopAsync);
             PipelineProgressCallback = new Progress<PipelineProgress>(OnProgress);
             AutomationProgress = new ProgressInfo();
         }
 
         /// <summary>
-        /// Gets the diffusion service.
+        /// Gets the service that runs the view's pipelines, the diffusion service, or the audio service for an audio view,
+        /// it runs in its own host so an audio model stays loaded next to the diffusion model.
         /// </summary>
         public IGenerateService GenerateService { get; }
+
+        /// <summary>
+        /// Gets the language service, its language model can stay loaded next to the diffusion model.
+        /// </summary>
+        public ILanguageService LanguageService { get; }
 
         /// <summary>
         /// Gets the extract service.
@@ -212,11 +222,6 @@ namespace Amuse.App.Views
         }
 
         /// <summary>
-        /// Gets the upscale model that upscaled the last result, null when no upscale ran or it failed.
-        /// </summary>
-        protected UpscaleModel UpscaledModel { get; private set; }
-
-        /// <summary>
         /// Gets or sets the automation options.
         /// </summary>
         public AutomationOptions AutomationOptions
@@ -225,7 +230,6 @@ namespace Amuse.App.Views
             set { SetProperty(ref _automationOptions, value); }
         }
 
-
         /// <summary>
         /// Gets or sets a value indicating whether this instance is automating.
         /// </summary>
@@ -233,6 +237,33 @@ namespace Amuse.App.Views
         {
             get { return _isAutomating; }
             set { SetProperty(ref _isAutomating, value); }
+        }
+
+        /// <summary>
+        /// Gets or sets a value indicating whether the view is loading, executing or automating, the model controls are locked while set.
+        /// </summary>
+        public bool IsPipelineBusy
+        {
+            get { return _isPipelineBusy; }
+            set { SetProperty(ref _isPipelineBusy, value); }
+        }
+
+
+        /// <summary>
+        /// Executes the operation with the model controls locked for every stage, not only while a service is executing.
+        /// </summary>
+        /// <param name="operation">The operation.</param>
+        protected async Task ExecutePipelineAsync(Func<Task> operation)
+        {
+            try
+            {
+                IsPipelineBusy = true;
+                await operation();
+            }
+            finally
+            {
+                IsPipelineBusy = false;
+            }
         }
 
 
@@ -255,9 +286,31 @@ namespace Amuse.App.Views
         /// <param name="args">The arguments.</param>
         public override Task OpenAsync(OpenViewArgs args = null)
         {
-            IsPipelineLoaded = GenerateService.IsLoaded && GenerateService.Pipeline == CurrentPipeline;
+            IsPipelineLoaded = IsCurrentPipelineLoaded();
             Logger.LogInformation("[{View}] [Open] View opened, IsPipelineLoaded: {IsPipelineLoaded}", ViewName, IsPipelineLoaded);
             return base.OpenAsync(args);
+        }
+
+
+        /// <summary>
+        /// Determines whether every model of the current pipeline is the one loaded.
+        /// </summary>
+        private bool IsCurrentPipelineLoaded()
+        {
+            return GenerateService.IsLoaded && GenerateService.Pipeline == CurrentPipeline
+                && (CurrentPipeline.ExtractModel is null || IsExtractModelLoaded())
+                && (CurrentPipeline.UpscaleModel is null || IsUpscaleModelLoaded());
+        }
+
+
+        /// <summary>
+        /// Loads the extract, diffusion and upscale models of the current pipeline, a model that is already loaded is kept.
+        /// </summary>
+        private async Task LoadPipelineModelsAsync()
+        {
+            await LoadExtractModelAsync();
+            await LoadDiffusionModelAsync();
+            await LoadUpscaleModelAsync();
         }
 
 
@@ -271,9 +324,14 @@ namespace Amuse.App.Views
 
             try
             {
-                await LoadExtractModelAsync();
-                await LoadDiffusionModelAsync();
-                await LoadUpscaleModelAsync();
+                await RequestModelAccessAsync(CurrentPipeline);
+                await LoadPipelineModelsAsync();
+                if (!IsCurrentPipelineLoaded())
+                {
+                    Logger.LogInformation("[{View}] [LoadPipeline] An environment install unloaded part of the pipeline, reloading...", ViewName);
+                    await LoadPipelineModelsAsync();
+                }
+
                 await Settings.SetDefaultsAsync(CurrentPipeline);
 
                 Logger.LogInformation("[{View}] [LoadPipeline] Pipeline successfully loaded, Elapsed: {Elapsed:c}", ViewName, Stopwatch.GetElapsedTime(timestamp));
@@ -294,7 +352,7 @@ namespace Amuse.App.Views
 
 
         /// <summary>
-        /// Unload pipeline
+        /// Unload pipeline, with the extractor and upscaler the view's kind of pipeline loaded, an audio view has none and leaves the diffusion pipeline's alone.
         /// </summary>
         protected virtual async Task<bool> UnloadPipelineAsync()
         {
@@ -303,7 +361,7 @@ namespace Amuse.App.Views
 
             try
             {
-                if (ExtractService.IsLoaded)
+                if (ModelAccessService.GetExtractOwner() == _ownerType)
                 {
                     await ExtractService.UnloadAsync();
                     Logger.LogInformation("[{View}] [UnloadPipeline] Unloaded extract model.", ViewName);
@@ -315,7 +373,7 @@ namespace Amuse.App.Views
                     Logger.LogInformation("[{View}] [UnloadPipeline] Unloaded diffusion model.", ViewName);
                 }
 
-                if (UpscaleService.IsLoaded)
+                if (ModelAccessService.GetUpscaleOwner() == _ownerType)
                 {
                     await UpscaleService.UnloadAsync();
                     Logger.LogInformation("[{View}] [UnloadPipeline] Unloaded upscale model.", ViewName);
@@ -338,6 +396,9 @@ namespace Amuse.App.Views
         /// </summary>
         protected virtual bool CanExecute()
         {
+            if (_ownerType != ModelOwnerType.Diffusion)
+                return !GenerateService.IsExecuting;
+
             return !GenerateService.IsExecuting
                 && !UpscaleService.IsExecuting
                 && !ExtractService.IsExecuting;
@@ -349,7 +410,7 @@ namespace Amuse.App.Views
         /// </summary>
         protected virtual bool CanExecuteAutomation()
         {
-            return CanExecute();
+            return CanExecute() && AutomationOptions?.IsValid() == true;
         }
 
 
@@ -362,14 +423,14 @@ namespace Amuse.App.Views
             await base.CancelAsync();
 
             var timestamp = Stopwatch.GetTimestamp();
-            if (UpscaleService.CanCancel)
+            if (_ownerType == ModelOwnerType.Diffusion && UpscaleService.CanCancel)
             {
                 Logger.LogInformation("[{View}] [Cancel] Canceling upscale process...", ViewName);
                 await UpscaleService.CancelAsync();
                 Logger.LogInformation("[{View}] [Cancel] Upscale process canceled, Elapsed: {Elapsed:c}", ViewName, Stopwatch.GetElapsedTime(timestamp));
             }
 
-            if (ExtractService.CanCancel)
+            if (_ownerType == ModelOwnerType.Diffusion && ExtractService.CanCancel)
             {
                 Logger.LogInformation("[{View}] [Cancel] Canceling extract process...", ViewName);
                 await ExtractService.CancelAsync();
@@ -390,6 +451,9 @@ namespace Amuse.App.Views
         /// </summary>
         protected override bool CanCancel()
         {
+            if (_ownerType != ModelOwnerType.Diffusion)
+                return base.CanCancel() || GenerateService.CanCancel;
+
             return base.CanCancel()
                 || GenerateService.CanCancel
                 || UpscaleService.CanCancel
@@ -508,7 +572,7 @@ namespace Amuse.App.Views
             var timestamp = Stopwatch.GetTimestamp();
             if (CurrentPipeline.ExtractModel is not null)
             {
-                if (!ExtractService.IsLoaded || ExtractService.Pipeline.ExtractModel != CurrentPipeline.ExtractModel)
+                if (!IsExtractModelLoaded())
                 {
                     Logger.LogInformation("[{View}] [LoadExtractModel] Loading extract model {Name}...", ViewName, CurrentPipeline.ExtractModel.Name);
                     await ExtractService.LoadAsync(CurrentPipeline);
@@ -518,9 +582,20 @@ namespace Amuse.App.Views
                 return true;
             }
 
-            await ExtractService.UnloadAsync();
+            if (ModelAccessService.GetExtractOwner() == _ownerType)
+                await ExtractService.UnloadAsync();
+
             Logger.LogInformation("[{View}] [LoadExtractModel] Unloaded extract model.", ViewName);
             return false;
+        }
+
+
+        /// <summary>
+        /// Determines whether the selected extract model is the one loaded.
+        /// </summary>
+        private bool IsExtractModelLoaded()
+        {
+            return ModelAccessService.IsExtractModelLoaded(CurrentPipeline);
         }
 
 
@@ -530,7 +605,7 @@ namespace Amuse.App.Views
         /// <param name="imageInput">The image input.</param>
         protected async Task<ImageInput> ExecuteImageExtractAsync(ImageInput imageInput)
         {
-            if (!ExtractService.IsLoaded)
+            if (!IsExtractModelLoaded())
                 return imageInput;
 
             var timestamp = Stopwatch.GetTimestamp();
@@ -554,7 +629,7 @@ namespace Amuse.App.Views
         /// <param name="videoInput">The video input.</param>
         protected async Task<VideoInputStream> ExecuteVideoExtractAsync(VideoInputStream videoInput)
         {
-            if (!ExtractService.IsLoaded)
+            if (!IsExtractModelLoaded())
                 return videoInput;
 
             var timestamp = Stopwatch.GetTimestamp();
@@ -590,7 +665,9 @@ namespace Amuse.App.Views
                 return true;
             }
 
-            await UpscaleService.UnloadAsync();
+            if (ModelAccessService.GetUpscaleOwner() == _ownerType)
+                await UpscaleService.UnloadAsync();
+
             Logger.LogInformation("[{View}] [LoadUpscaleModel] Unloaded upscale model.", ViewName);
             return false;
         }
@@ -601,64 +678,32 @@ namespace Amuse.App.Views
         /// </summary>
         private bool IsUpscaleModelLoaded()
         {
-            return UpscaleService.IsLoaded
-                && UpscaleService.Pipeline?.UpscaleModel == CurrentPipeline.UpscaleModel
-                && UpscaleService.Pipeline?.Device == CurrentPipeline.Device;
+            return ModelAccessService.IsUpscaleModelLoaded(CurrentPipeline);
         }
-
-
-        /// <summary>
-        /// Loads the selected upscale model if it is not loaded, the upscale service is shared with
-        /// the upscale views and unloads itself when its host fails.
-        /// </summary>
-        private async Task EnsureUpscaleModelAsync()
-        {
-            if (IsUpscaleModelLoaded())
-                return;
-
-            Logger.LogInformation("[{View}] [EnsureUpscaleModel] Selected upscale model {Name} is not loaded.", ViewName, CurrentPipeline.UpscaleModel.Name);
-            await LoadUpscaleModelAsync();
-        }
-
 
         /// <summary>
         /// Execute image upscale
         /// </summary>
         /// <param name="imageInput">The image input.</param>
-        /// <param name="isResultKeptOnError">Whether to keep the result without upscaling when the upscale fails, otherwise the error is thrown.</param>
-        protected async Task<ImageTensor> ExecuteImageUpscaleAsync(ImageTensor imageInput, bool isResultKeptOnError = true)
+        protected async Task<ImageTensor> ExecuteImageUpscaleAsync(ImageTensor imageInput)
         {
-            UpscaledModel = null;
-            if (CurrentPipeline?.UpscaleModel is null)
+            if (!IsUpscaleModelLoaded())
                 return imageInput;
 
             var timestamp = Stopwatch.GetTimestamp();
-            try
+            Progress.Indeterminate($"{AppDefault.UpscalingImage}...");
+            Logger.LogInformation("[{View}] [ExecuteImageUpscale] Executing upscale...", ViewName);
+
+            var upscaledImage = await UpscaleService.ExecuteAsync(new UpscaleImageRequest
             {
-                Progress.Indeterminate($"{AppDefault.UpscalingImage}...");
+                Image = imageInput,
+                Options = UpscaleOptions
+            }, ProgressCallback);
 
-                // Load, the shared upscaler may hold another model or have been unloaded
-                await EnsureUpscaleModelAsync();
-
-                // Upscale
-                Logger.LogInformation("[{View}] [ExecuteImageUpscale] Executing upscale...", ViewName);
-                var upscaledImage = await UpscaleService.ExecuteAsync(new UpscaleImageRequest
-                {
-                    Image = imageInput,
-                    Options = UpscaleOptions
-                }, ProgressCallback);
-
-                // Result
-                UpscaledModel = CurrentPipeline.UpscaleModel;
-                Logger.LogInformation("[{View}] [ExecuteImageUpscale] Upscale complete, Elapsed: {Elapsed:c}", ViewName, Stopwatch.GetElapsedTime(timestamp));
-                return upscaledImage;
-            }
-            catch (Exception ex) when (isResultKeptOnError && ex is not OperationCanceledException)
-            {
-                Logger.LogError(ex, "[{View}] [ExecuteImageUpscale] An exception occurred upscaling, keeping the result without upscaling, Elapsed: {Elapsed:c}", ViewName, Stopwatch.GetElapsedTime(timestamp));
-                await ShowUpscaleErrorAsync(ex);
-                return imageInput;
-            }
+            // Result
+            IsPipelineLoaded = IsCurrentPipelineLoaded();
+            Logger.LogInformation("[{View}] [ExecuteImageUpscale] Upscale complete, Elapsed: {Elapsed:c}", ViewName, Stopwatch.GetElapsedTime(timestamp));
+            return upscaledImage;
         }
 
 
@@ -669,50 +714,23 @@ namespace Amuse.App.Views
         /// <param name="isResultKeptOnError">Whether to keep the result without upscaling when the upscale fails, otherwise the error is thrown.</param>
         protected async Task<VideoInputStream> ExecuteVideoUpscaleAsync(VideoInputStream videoInput, bool isResultKeptOnError = true)
         {
-            UpscaledModel = null;
-            if (CurrentPipeline?.UpscaleModel is null)
+            if (!IsUpscaleModelLoaded())
                 return videoInput;
 
             var timestamp = Stopwatch.GetTimestamp();
-            try
+            Progress.Indeterminate($"{AppDefault.UpscalingVideo}...");
+            Logger.LogInformation("[{View}] [ExecuteVideoUpscale] Executing upscale...", ViewName);
+
+            var upscaledVideo = await UpscaleService.ExecuteAsync(new UpscaleVideoRequest
             {
-                Progress.Indeterminate($"{AppDefault.UpscalingVideo}...");
+                VideoStream = videoInput,
+                Options = UpscaleOptions
+            }, ProgressCallback);
 
-                // Load, the shared upscaler may hold another model or have been unloaded
-                await EnsureUpscaleModelAsync();
-
-                // Upscale
-                Logger.LogInformation("[{View}] [ExecuteVideoUpscale] Executing upscale...", ViewName);
-                var upscaledVideo = await UpscaleService.ExecuteAsync(new UpscaleVideoRequest
-                {
-                    VideoStream = videoInput,
-                    Options = UpscaleOptions
-                }, ProgressCallback);
-
-                // Result
-                UpscaledModel = CurrentPipeline.UpscaleModel;
-                Logger.LogInformation("[{View}] [ExecuteVideoUpscale] Upscale complete, Elapsed: {Elapsed:c}", ViewName, Stopwatch.GetElapsedTime(timestamp));
-                return upscaledVideo;
-            }
-            catch (Exception ex) when (isResultKeptOnError && ex is not OperationCanceledException)
-            {
-                Logger.LogError(ex, "[{View}] [ExecuteVideoUpscale] An exception occurred upscaling, keeping the result without upscaling, Elapsed: {Elapsed:c}", ViewName, Stopwatch.GetElapsedTime(timestamp));
-                await ShowUpscaleErrorAsync(ex);
-                return videoInput;
-            }
-        }
-
-
-        /// <summary>
-        /// Shows the upscale error, the result is kept without upscaling, automation logs it and continues.
-        /// </summary>
-        /// <param name="exception">The exception.</param>
-        private async Task ShowUpscaleErrorAsync(Exception exception)
-        {
-            if (IsAutomating)
-                return;
-
-            await DialogService.ShowErrorAsync(AppErrors.UpscaleFailedTitle, $"{AppErrors.UpscaleFailedResultKept}{Environment.NewLine}{exception.Message}");
+            // Result
+            IsPipelineLoaded = IsCurrentPipelineLoaded();
+            Logger.LogInformation("[{View}] [ExecuteVideoUpscale] Upscale complete, Elapsed: {Elapsed:c}", ViewName, Stopwatch.GetElapsedTime(timestamp));
+            return upscaledVideo;
         }
 
 
@@ -725,6 +743,7 @@ namespace Amuse.App.Views
         {
             try
             {
+                IsPipelineBusy = true;
                 IsPipelineLoaded = false;
                 CurrentPipeline = pipeline;
                 Logger.LogInformation("[{View}] [SelectedPipelineChanged] A new pipeline has been created.", ViewName);
@@ -743,6 +762,7 @@ namespace Amuse.App.Views
             }
             finally
             {
+                IsPipelineBusy = false;
                 Progress.Clear();
                 Statistics.Clear();
             }
@@ -756,7 +776,7 @@ namespace Amuse.App.Views
         protected virtual void OnProgress(RunProgress progress)
         {
             if (progress.Maximum > 1)
-                Progress.Update(progress.Value, progress.Maximum, $"Tile {progress.Value}/{progress.Maximum}");
+                Progress.Update(progress.Value, progress.Maximum, $"{AppDefault.Tile} {progress.Value}/{progress.Maximum}");
             else
                 Progress.Indeterminate($"{AppDefault.RenderingImage}...");
 
@@ -775,7 +795,7 @@ namespace Amuse.App.Views
 
             if (progress.Key == "Load")
             {
-                Progress.Indeterminate(progress.Message);
+                UpdateProgress(progress, Globalization.GetProgressMessage(progress));
             }
             else if (progress.Key == "Generate")
             {
@@ -792,10 +812,24 @@ namespace Amuse.App.Views
                 }
                 else
                 {
-                    Progress.Indeterminate(message);
+                    UpdateProgress(progress, message);
                     Logger.LogDebug("[{View}] [OnProgress] Step: {Subkey}, it/s: {IterationsPerSecond:N2}, s/it: {SecondsPerIteration:N2}", ViewName, progress.Subkey, progress.IterationsPerSecond, progress.SecondsPerIteration);
                 }
             }
+        }
+
+
+        /// <summary>
+        /// Updates the progress bar, indeterminate when the progress has no maximum.
+        /// </summary>
+        /// <param name="progress">The progress.</param>
+        /// <param name="message">The message.</param>
+        private void UpdateProgress(PipelineProgress progress, string message)
+        {
+            if (progress.Maximum > 0)
+                Progress.Update(progress.Value, progress.Maximum, message);
+            else
+                Progress.Indeterminate(message);
         }
 
 

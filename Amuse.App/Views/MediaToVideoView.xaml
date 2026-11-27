@@ -30,7 +30,7 @@
                         <!--ModelControl-->
                         <Grid DockPanel.Dock="Top" IsEnabled="{Binding GenerateService.IsLoading, Converter={StaticResource InverseBoolConverter}}">
                             <Grid IsEnabled="{Binding GenerateService.IsExecuting, Converter={StaticResource InverseBoolConverter}}">
-                                <Grid IsEnabled="{Binding IsAutomating, Converter={StaticResource InverseBoolConverter}}">
+                                <Grid IsEnabled="{Binding IsPipelineBusy, Converter={StaticResource InverseBoolConverter}}">
                                     <Controls:DiffusionModelControl
                                         x:Name="ModelControl"
                                         ViewType="MediaToVideo"
@@ -60,7 +60,7 @@
                                         <Button Command="{Binding CancelCommand}" >
                                             <Button.Style>
                                                 <Style TargetType="{x:Type Button}" BasedOn="{StaticResource {x:Type Button}}">
-                                                    <Setter Property="Content" Value="Cancel" />
+                                                    <Setter Property="Content" Value="{CommonControls:Localize Cancel}" />
                                                     <Style.Triggers>
                                                         <DataTrigger Binding="{Binding GenerateService.IsCanceling}" Value="True">
                                                             <Setter Property="Content" Value="{CommonControls:Localize Canceling}" />
@@ -105,12 +105,19 @@
                         <TextBlock DockPanel.Dock="Top" Text="{CommonControls:Localize References}" Style="{StaticResource FieldTextBlockStyle}" />
                         <Grid IsEnabled="{Binding GenerateService.IsLoaded}">
                             <Grid IsEnabled="{Binding GenerateService.IsExecuting, Converter={StaticResource InverseBoolConverter}}">
-                                <Grid IsEnabled="{Binding IsAutomating, Converter={StaticResource InverseBoolConverter}}">
+                                <Grid IsEnabled="{Binding IsPipelineBusy, Converter={StaticResource InverseBoolConverter}}">
                                     <Controls:MediaReferenceControl 
                                         x:Name="ReferenceControl"
                                         ImageMaxCount="{Binding CurrentPipeline.DiffusionModel.DefaultOptions.InputImageMaxCount, Mode=OneWay, FallbackValue=0}"
                                         VideoMaxCount="{Binding CurrentPipeline.DiffusionModel.DefaultOptions.InputVideoMaxCount, Mode=OneWay, FallbackValue=0}"
-                                        AudioMaxCount="{Binding CurrentPipeline.DiffusionModel.DefaultOptions.InputAudioMaxCount, Mode=OneWay, FallbackValue=0}"/>
+                                        AudioMaxCount="{Binding CurrentPipeline.DiffusionModel.DefaultOptions.InputAudioMaxCount, Mode=OneWay, FallbackValue=0}"
+                                        CaptureWidth="{Binding Options.Width, Mode=OneWay}"
+                                        CaptureHeight="{Binding Options.Height, Mode=OneWay}"
+                                        CaptureFrameRate="{Binding Options.FrameRate, Mode=OneWay}"
+                                        CaptureFrameCount="{Binding Options.Frames, Mode=OneWay}"
+                                        CaptureSampleRate="{Binding CurrentPipeline.DiffusionModel.DefaultOptions.SampleRate, Mode=OneWay, FallbackValue=0}"
+                                        CaptureChannels="{Binding CurrentPipeline.DiffusionModel.DefaultOptions.Channels, Mode=OneWay, FallbackValue=0}"
+                                        OnMediaImport="OnMediaImport"/>
                                 </Grid>
                             </Grid>
                         </Grid>

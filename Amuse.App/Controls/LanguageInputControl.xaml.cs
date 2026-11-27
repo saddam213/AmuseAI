@@ -157,7 +157,7 @@ namespace Amuse.App.Controls
                 // Keep
                 Seed = previousOptions?.Seed ?? 0,
                 Prompt = previousOptions?.Prompt ?? DefaultPrompt,
-                IsThinkingEnabled = previousOptions?.IsThinkingEnabled ?? newOptions?.IsThinkingEnabled ?? false,
+                IsThinkingEnabled = ViewType != View.ImageToText && (previousOptions?.IsThinkingEnabled ?? newOptions?.IsThinkingEnabled ?? false),
 
                 MinLength = newOptions.MinLength,
                 MaxLength = maxLength,
@@ -191,6 +191,8 @@ namespace Amuse.App.Controls
             ContextControlElement.ImageMaxCount = newOptions.InputImageMaxCount;
             ContextControlElement.AudioMaxCount = newOptions.InputAudioMaxCount;
             ContextControlElement.VideoMaxCount = newOptions.InputVideoMaxCount;
+            ContextControlElement.CaptureSampleRate = newOptions.SampleRate;
+            ContextControlElement.CaptureChannels = newOptions.Channels;
 
             // ToolCalls
             PopulateToolCalls();
@@ -236,8 +238,49 @@ namespace Amuse.App.Controls
                 {
                     ToolCalls.Add(new ToolCallModel(tool));
                 }
+                ToolService.ToolsChanged += OnToolsChanged;
             }
+            PopulateServerToolCalls();
             ToolEnableAsync(true);
+        }
+
+
+        /// <summary>
+        /// Replaces the MCP server toggles with the servers that are connected now, a server that is still connected keeps its toggle state.
+        /// </summary>
+        private void PopulateServerToolCalls()
+        {
+            var enabledServers = ToolCalls
+                .Where(x => x.IsServer && x.IsEnabled)
+                .Select(x => x.Name)
+                .ToHashSet();
+            foreach (var serverToolCall in ToolCalls.Where(x => x.IsServer).ToArray())
+            {
+                ToolCalls.Remove(serverToolCall);
+            }
+
+            foreach (var server in ToolService.McpServers.Where(x => x.IsConnected && x.Tools.Count > 0))
+            {
+                ToolCalls.Add(new ToolCallModel(server) { IsEnabled = enabledServers.Contains(server.Config.Name) });
+            }
+        }
+
+
+        /// <summary>
+        /// Called when the tools of the MCP servers change, the event can be raised from any thread.
+        /// </summary>
+        /// <param name="sender">The sender.</param>
+        /// <param name="e">The <see cref="EventArgs"/> instance containing the event data.</param>
+        private void OnToolsChanged(object sender, EventArgs e)
+        {
+            Dispatcher.InvokeAsync(() =>
+            {
+                if (Options is null)
+                    return;
+
+                PopulateServerToolCalls();
+                ToolEnableAsync(true);
+            });
         }
 
 
@@ -246,9 +289,9 @@ namespace Amuse.App.Controls
             Options.SelectedTools.Clear();
             if (Options.IsToolCallsEnabled)
             {
-                foreach (var toolCall in ToolCalls.Where(x => x.IsEnabled))
+                foreach (var toolName in ToolCalls.Where(x => x.IsEnabled).SelectMany(x => x.ToolNames))
                 {
-                    Options.SelectedTools.Add(toolCall.Name);
+                    Options.SelectedTools.Add(toolName);
                 }
             }
             return Task.CompletedTask;

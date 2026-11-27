@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Amuse.App.Resources;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net.Http;
@@ -32,7 +33,7 @@ namespace Amuse.App.Tools
         /// <summary>
         /// Gets the display name.
         /// </summary>
-        public override string DisplayName => "Wikipedia Tool";
+        public override string DisplayName => AppDefault.ToolWikipedia;
 
         /// <summary>
         /// Gets the tool icon.

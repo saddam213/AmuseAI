@@ -1,7 +1,10 @@
 ﻿using Amuse.App.Common;
 using Amuse.App.Views;
+using Microsoft.Extensions.Logging;
 using System;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
@@ -17,16 +20,37 @@ namespace Amuse.App.Services
     public sealed class HistoryService : IHistoryService
     {
         private const int HistoryVersion = 3;
+        private static readonly Dictionary<string, Func<string, IHistoryItem>> _historyLoaders = new Dictionary<string, Func<string, IHistoryItem>>(StringComparer.Ordinal)
+        {
+            { "Recent", Json.Load<RecentHistory> },
+            { "GenerateImage", Json.Load<DiffusionHistory> },
+            { "GenerateVideo", Json.Load<DiffusionHistory> },
+            { "GenerateAudio", Json.Load<DiffusionHistory> },
+            { "GenerateText", Json.Load<DiffusionHistory> },
+            { "Conversation", Json.Load<DiffusionHistory> },
+            { "ExtractImage", Json.Load<ExtractHistory> },
+            { "ExtractVideo", Json.Load<ExtractHistory> },
+            { "UpscaleImage", Json.Load<UpscaleHistory> },
+            { "UpscaleVideo", Json.Load<UpscaleHistory> },
+            { "Interpolate", Json.Load<InterpolateHistory> },
+            { "Audio", Json.Load<AudioHistory> },
+            { "Text", Json.Load<TextHistory> },
+            { "ImageCompose", Json.Load<ComposeHistory> },
+            { "VideoCompose", Json.Load<ComposeHistory> }
+        };
         private readonly Settings _settings;
+        private readonly ILogger<HistoryService> _logger;
         private readonly ObservableCollection<IHistoryItem> _historyCollection;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="HistoryService"/> class.
         /// </summary>
         /// <param name="settings">The settings.</param>
-        public HistoryService(Settings settings)
+        /// <param name="logger">The logger.</param>
+        public HistoryService(Settings settings, ILogger<HistoryService> logger)
         {
             _settings = settings;
+            _logger = logger;
             _historyCollection = [];
         }
 
@@ -36,70 +60,22 @@ namespace Amuse.App.Services
         public ObservableCollection<IHistoryItem> HistoryCollection => _historyCollection;
 
 
+        /// <summary>
+        /// Loads the most recent history items from the history directory.
+        /// </summary>
         public async Task InitializeAsync()
         {
+            var timestamp = Stopwatch.GetTimestamp();
             _historyCollection.Clear();
-            var historyFiles = Directory.EnumerateFiles(_settings.DirectoryHistory, "*.json", SearchOption.TopDirectoryOnly)
-                .Select(x => new FileInfo(x))
-                .OrderByDescending(x => x.CreationTimeUtc)
-                .Take(_settings.HistoryItems)
-                .ToList();
-            foreach (var historyFile in historyFiles)
+            if (_settings.HistoryItems <= 0)
+                return;
+
+            var historyItems = await Task.Run(LoadHistoryItems);
+            foreach (var historyItem in historyItems)
             {
-                var historyItem = default(IHistoryItem);
-                if (historyFile.Name.StartsWith("Recent_"))
-                    historyItem = await Json.LoadAsync<RecentHistory>(historyFile.FullName);
-                else if (historyFile.Name.StartsWith("GenerateImage_"))
-                    historyItem = await Json.LoadAsync<DiffusionHistory>(historyFile.FullName);
-                else if (historyFile.Name.StartsWith("GenerateVideo_"))
-                    historyItem = await Json.LoadAsync<DiffusionHistory>(historyFile.FullName);
-                else if (historyFile.Name.StartsWith("GenerateAudio_"))
-                    historyItem = await Json.LoadAsync<DiffusionHistory>(historyFile.FullName);
-                else if (historyFile.Name.StartsWith("GenerateText_"))
-                    historyItem = await Json.LoadAsync<DiffusionHistory>(historyFile.FullName);
-                else if (historyFile.Name.StartsWith("Conversation_"))
-                    historyItem = await Json.LoadAsync<DiffusionHistory>(historyFile.FullName);
-                else if (historyFile.Name.StartsWith("ExtractImage_"))
-                    historyItem = await Json.LoadAsync<ExtractHistory>(historyFile.FullName);
-                else if (historyFile.Name.StartsWith("ExtractVideo_"))
-                    historyItem = await Json.LoadAsync<ExtractHistory>(historyFile.FullName);
-                else if (historyFile.Name.StartsWith("UpscaleImage_"))
-                    historyItem = await Json.LoadAsync<UpscaleHistory>(historyFile.FullName);
-                else if (historyFile.Name.StartsWith("UpscaleVideo_"))
-                    historyItem = await Json.LoadAsync<UpscaleHistory>(historyFile.FullName);
-                else if (historyFile.Name.StartsWith("Interpolate_"))
-                    historyItem = await Json.LoadAsync<InterpolateHistory>(historyFile.FullName);
-                else if (historyFile.Name.StartsWith("Audio_"))
-                    historyItem = await Json.LoadAsync<AudioHistory>(historyFile.FullName);
-                else if (historyFile.Name.StartsWith("Text_"))
-                    historyItem = await Json.LoadAsync<TextHistory>(historyFile.FullName);
-                else if (historyFile.Name.StartsWith("ImageCompose_"))
-                    historyItem = await Json.LoadAsync<ComposeHistory>(historyFile.FullName);
-                else if (historyFile.Name.StartsWith("VideoCompose_"))
-                    historyItem = await Json.LoadAsync<ComposeHistory>(historyFile.FullName);
-                if (historyItem == null || historyItem.Version != HistoryVersion)
-                    continue;
-
-                historyItem.FilePath = historyFile.FullName;
-                historyItem.MediaPath = Path.Combine(historyFile.DirectoryName, historyFile.Name.Replace(".json", $".{historyItem.Extension}"));
-                historyItem.ThumbPath = Path.Combine(historyFile.DirectoryName, historyFile.Name.Replace(".json", ".png"));
-                if (historyItem is RecentHistory recentHistory)
-                {
-                    historyItem.MediaPath = recentHistory.OriginalPath;
-                    if (historyItem.MediaType == MediaType.Image)
-                        historyItem.ThumbPath = recentHistory.OriginalPath;
-                }
-
-                if (!File.Exists(historyItem.MediaPath))
-                {
-                    FileHelper.DeleteFiles(historyItem.FilePath, historyItem.ThumbPath);
-                    continue;
-                }
-
                 _historyCollection.Add(historyItem);
-                if (_historyCollection.Count == _settings.HistoryItems)
-                    break;
             }
+            _logger.LogInformation("[HistoryService] [Initialize] Loading history complete, Items: {Count}, Elapsed: {Elapsed:c}", historyItems.Length, Stopwatch.GetElapsedTime(timestamp));
         }
 
 
@@ -614,6 +590,58 @@ namespace Amuse.App.Services
             await Json.SaveAsync<T>(history.FilePath, history);
             AddHistoryItem(history);
             return text;
+        }
+
+
+        /// <summary>
+        /// Loads the newest history files in parallel, preserving their order.
+        /// </summary>
+        private IHistoryItem[] LoadHistoryItems()
+        {
+            var historyFiles = new DirectoryInfo(_settings.DirectoryHistory)
+                .EnumerateFiles("*.json", SearchOption.TopDirectoryOnly)
+                .OrderByDescending(x => x.CreationTimeUtc)
+                .Take(_settings.HistoryItems)
+                .ToArray();
+
+            var historyItems = new IHistoryItem[historyFiles.Length];
+            Parallel.For(0, historyFiles.Length, index => historyItems[index] = LoadHistoryItem(historyFiles[index]));
+            return historyItems
+                .Where(x => x != null)
+                .ToArray();
+        }
+
+
+        /// <summary>
+        /// Loads a history file, deleting it if its media no longer exists.
+        /// </summary>
+        /// <param name="historyFile">The history file.</param>
+        private static IHistoryItem LoadHistoryItem(FileInfo historyFile)
+        {
+            var separator = historyFile.Name.IndexOf('_');
+            if (separator <= 0 || !_historyLoaders.TryGetValue(historyFile.Name.Substring(0, separator), out var historyLoader))
+                return null;
+
+            var historyItem = historyLoader(historyFile.FullName);
+            if (historyItem == null || historyItem.Version != HistoryVersion)
+                return null;
+
+            historyItem.FilePath = historyFile.FullName;
+            historyItem.MediaPath = Path.ChangeExtension(historyFile.FullName, historyItem.Extension);
+            historyItem.ThumbPath = Path.ChangeExtension(historyFile.FullName, ".png");
+            if (historyItem is RecentHistory recentHistory)
+            {
+                historyItem.MediaPath = recentHistory.OriginalPath;
+                if (historyItem.MediaType == MediaType.Image)
+                    historyItem.ThumbPath = recentHistory.OriginalPath;
+            }
+
+            if (!File.Exists(historyItem.MediaPath))
+            {
+                FileHelper.DeleteFiles(historyItem.FilePath, historyItem.ThumbPath);
+                return null;
+            }
+            return historyItem;
         }
 
 

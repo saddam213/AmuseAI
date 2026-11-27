@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Amuse.App.Resources;
+using System;
 using System.Data;
 using System.Globalization;
 using System.Text.RegularExpressions;
@@ -31,7 +32,7 @@ namespace Amuse.App.Tools
         /// <summary>
         /// Gets the display name.
         /// </summary>
-        public override string DisplayName => "Calculator Tool";
+        public override string DisplayName => AppDefault.ToolCalculator;
 
         /// <summary>
         /// Gets the tool icon.

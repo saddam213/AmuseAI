@@ -8,10 +8,10 @@ namespace Amuse.App
     {
         public static string GetProgressMessage(PipelineProgress progress)
         {
-            if (!string.IsNullOrEmpty(progress.Subkey) && ProgressMessages.TryGetValue(progress.Subkey, out string messageTempate))
+            if (!string.IsNullOrEmpty(progress.Subkey) && ProgressMessages.TryGetValue(progress.Subkey, out string resourceKey))
             {
                 return string.Format(
-                    messageTempate,
+                    AppDefault.ResourceManager.GetString(resourceKey, AppDefault.Culture),
                     progress.Key,
                     progress.Subkey,
                     progress.ElapsedKey,
@@ -30,12 +30,15 @@ namespace Amuse.App
 
         private readonly static Dictionary<string, string> ProgressMessages = new Dictionary<string, string>()
         {
-            {"Initialize",  AppDefault.ProgressInitialize },
-            {"TextEncoder", AppDefault.ProgressTextEncoder },
-            {"Transformer", AppDefault.ProgressTransformer  },
-            {"Step",        AppDefault.ProgressStep },
-            {"AutoEncoder", AppDefault.ProgressAutoEncoder  },
-            {"Complete",    AppDefault.ProgressComplete }
+            {"Initialize",  nameof(AppDefault.ProgressInitialize) },
+            {"TextEncoder", nameof(AppDefault.ProgressTextEncoder) },
+            {"Transformer", nameof(AppDefault.ProgressTransformer) },
+            {"Step",        nameof(AppDefault.ProgressStep) },
+            {"Encoder",     nameof(AppDefault.ProgressEncoder) },
+            {"AutoEncoder", nameof(AppDefault.ProgressAutoEncoder) },
+            {"Complete",    nameof(AppDefault.ProgressComplete) },
+            {"Upscaling",   nameof(AppDefault.ProgressUpscaling) },
+            {"Chunk",       nameof(AppDefault.ProgressChunk) }
         };
     }
 }

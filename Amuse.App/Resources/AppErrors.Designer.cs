@@ -61,7 +61,70 @@ namespace Amuse.App.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Execute Automation.
+        ///   Looks up a localized string similar to Component not selected.
+        /// </summary>
+        public static string CheckpointComponentNotSelected {
+            get {
+                return ResourceManager.GetString("CheckpointComponentNotSelected", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Download file not found.
+        /// </summary>
+        public static string CheckpointDownloadFileNotFound {
+            get {
+                return ResourceManager.GetString("CheckpointDownloadFileNotFound", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Local file not found.
+        /// </summary>
+        public static string CheckpointLocalFileNotFound {
+            get {
+                return ResourceManager.GetString("CheckpointLocalFileNotFound", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Local folder not found.
+        /// </summary>
+        public static string CheckpointLocalFolderNotFound {
+            get {
+                return ResourceManager.GetString("CheckpointLocalFolderNotFound", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to No download files found.
+        /// </summary>
+        public static string CheckpointNoDownloadFiles {
+            get {
+                return ResourceManager.GetString("CheckpointNoDownloadFiles", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Checkpoint could not resolve component '{0}'.
+        /// </summary>
+        public static string CheckpointResolveComponent {
+            get {
+                return ResourceManager.GetString("CheckpointResolveComponent", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Checkpoint could not resolve online file '{0}'.
+        /// </summary>
+        public static string CheckpointResolveOnlineFile {
+            get {
+                return ResourceManager.GetString("CheckpointResolveOnlineFile", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Automation Failed.
         /// </summary>
         public static string ExecuteAutomationTitle {
             get {
@@ -70,7 +133,7 @@ namespace Amuse.App.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Execute Pipeline.
+        ///   Looks up a localized string similar to Generation Failed.
         /// </summary>
         public static string ExecutePipelineTitle {
             get {
@@ -97,15 +160,6 @@ namespace Amuse.App.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Generated text result not found..
-        /// </summary>
-        public static string GeneratedTextNotFound {
-            get {
-                return ResourceManager.GetString("GeneratedTextNotFound", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to Generated video result not found..
         /// </summary>
         public static string GeneratedVideoNotFound {
@@ -117,18 +171,18 @@ namespace Amuse.App.Resources {
         /// <summary>
         ///   Looks up a localized string similar to Failed to import component file..
         /// </summary>
-        public static string ImportComponent {
+        public static string ImportComponentFailed {
             get {
-                return ResourceManager.GetString("ImportComponent", resourceCulture);
+                return ResourceManager.GetString("ImportComponentFailed", resourceCulture);
             }
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Failed to import Environment file..
+        ///   Looks up a localized string similar to Failed to import environment file..
         /// </summary>
-        public static string ImportEnvironment {
+        public static string ImportEnvironmentFailed {
             get {
-                return ResourceManager.GetString("ImportEnvironment", resourceCulture);
+                return ResourceManager.GetString("ImportEnvironmentFailed", resourceCulture);
             }
         }
         
@@ -144,14 +198,14 @@ namespace Amuse.App.Resources {
         /// <summary>
         ///   Looks up a localized string similar to Failed to import model file..
         /// </summary>
-        public static string ImportModel {
+        public static string ImportModelFailed {
             get {
-                return ResourceManager.GetString("ImportModel", resourceCulture);
+                return ResourceManager.GetString("ImportModelFailed", resourceCulture);
             }
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Load Pipeline.
+        ///   Looks up a localized string similar to Model Load Failed.
         /// </summary>
         public static string LoadPipelineTitle {
             get {
@@ -205,7 +259,7 @@ namespace Amuse.App.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Unload Pipeline.
+        ///   Looks up a localized string similar to Model Unload Failed.
         /// </summary>
         public static string UnloadPipelineTitle {
             get {
@@ -277,6 +331,16 @@ namespace Amuse.App.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Failed to download update files.
+        ///If problems persist please try again later..
+        /// </summary>
+        public static string UpdateDownloadFailed {
+            get {
+                return ResourceManager.GetString("UpdateDownloadFailed", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Upscaling is not supported by the {0} backend..
         /// </summary>
         public static string UpscaleBackendNotSupported {
@@ -309,6 +373,519 @@ namespace Amuse.App.Resources {
         public static string UpscaleCheckpointFormat {
             get {
                 return ResourceManager.GetString("UpscaleCheckpointFormat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Model has no checkpoint files.
+        /// </summary>
+        public static string ValidationCheckpointEmpty {
+            get {
+                return ResourceManager.GetString("ValidationCheckpointEmpty", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Default resolution is not set.
+        /// </summary>
+        public static string ValidationDefaultResolutionNotSet {
+            get {
+                return ResourceManager.GetString("ValidationDefaultResolutionNotSet", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Device cannot be empty.
+        /// </summary>
+        public static string ValidationDeviceEmpty {
+            get {
+                return ResourceManager.GetString("ValidationDeviceEmpty", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Environment cannot be empty.
+        /// </summary>
+        public static string ValidationEnvironmentEmpty {
+            get {
+                return ResourceManager.GetString("ValidationEnvironmentEmpty", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Environment with name '{0}' already exists.
+        /// </summary>
+        public static string ValidationEnvironmentExists {
+            get {
+                return ResourceManager.GetString("ValidationEnvironmentExists", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Environment can only contain letters, numbers, '.', '_' and '-'.
+        /// </summary>
+        public static string ValidationEnvironmentInvalidCharacters {
+            get {
+                return ResourceManager.GetString("ValidationEnvironmentInvalidCharacters", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to {0} must be greater than 0.
+        /// </summary>
+        public static string ValidationGreaterThanZero {
+            get {
+                return ResourceManager.GetString("ValidationGreaterThanZero", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Main file cannot be empty.
+        /// </summary>
+        public static string ValidationMainFileEmpty {
+            get {
+                return ResourceManager.GetString("ValidationMainFileEmpty", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to {0} must be {1} or greater.
+        /// </summary>
+        public static string ValidationMinimum {
+            get {
+                return ResourceManager.GetString("ValidationMinimum", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Model file name cannot be empty.
+        /// </summary>
+        public static string ValidationModelFileNameEmpty {
+            get {
+                return ResourceManager.GetString("ValidationModelFileNameEmpty", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Model file not found.
+        /// </summary>
+        public static string ValidationModelFileNotFound {
+            get {
+                return ResourceManager.GetString("ValidationModelFileNotFound", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Model folder name cannot be empty.
+        /// </summary>
+        public static string ValidationModelFolderNameEmpty {
+            get {
+                return ResourceManager.GetString("ValidationModelFolderNameEmpty", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Model name cannot be empty.
+        /// </summary>
+        public static string ValidationModelNameEmpty {
+            get {
+                return ResourceManager.GetString("ValidationModelNameEmpty", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Model with name '{0}' already exists.
+        /// </summary>
+        public static string ValidationModelNameExists {
+            get {
+                return ResourceManager.GetString("ValidationModelNameExists", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Name cannot be empty.
+        /// </summary>
+        public static string ValidationNameEmpty {
+            get {
+                return ResourceManager.GetString("ValidationNameEmpty", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Pipeline cannot be empty.
+        /// </summary>
+        public static string ValidationPipelineEmpty {
+            get {
+                return ResourceManager.GetString("ValidationPipelineEmpty", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Supported functions cannot be empty.
+        /// </summary>
+        public static string ValidationProcessTypesEmpty {
+            get {
+                return ResourceManager.GetString("ValidationProcessTypesEmpty", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Quality must be selected.
+        /// </summary>
+        public static string ValidationQuantTypeEmpty {
+            get {
+                return ResourceManager.GetString("ValidationQuantTypeEmpty", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Each quality must have a different type.
+        /// </summary>
+        public static string ValidationQuantTypeExists {
+            get {
+                return ResourceManager.GetString("ValidationQuantTypeExists", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Requirements cannot be empty.
+        /// </summary>
+        public static string ValidationRequirementsEmpty {
+            get {
+                return ResourceManager.GetString("ValidationRequirementsEmpty", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Resolutions cannot be empty.
+        /// </summary>
+        public static string ValidationResolutionsEmpty {
+            get {
+                return ResourceManager.GetString("ValidationResolutionsEmpty", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Search folder cannot be empty.
+        /// </summary>
+        public static string ValidationSearchFolderEmpty {
+            get {
+                return ResourceManager.GetString("ValidationSearchFolderEmpty", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to Search folder cannot be inside the model directory.
+        /// </summary>
+        public static string ValidationSearchFolderInsideModels {
+            get {
+                return ResourceManager.GetString("ValidationSearchFolderInsideModels", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to Type cannot be empty.
+        /// </summary>
+        public static string ValidationTypeEmpty {
+            get {
+                return ResourceManager.GetString("ValidationTypeEmpty", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to {0} must be 0 or greater.
+        /// </summary>
+        public static string ValidationZeroOrGreater {
+            get {
+                return ResourceManager.GetString("ValidationZeroOrGreater", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Model folder not found.
+        /// </summary>
+        public static string ValidationModelFolderNotFound {
+            get {
+                return ResourceManager.GetString("ValidationModelFolderNotFound", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Missing Input.
+        /// </summary>
+        public static string MissingInputTitle {
+            get {
+                return ResourceManager.GetString("MissingInputTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Load or record a source audio first..
+        /// </summary>
+        public static string SourceAudioRequired {
+            get {
+                return ResourceManager.GetString("SourceAudioRequired", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Select the range of the source audio to regenerate first..
+        /// </summary>
+        public static string AudioRangeRequired {
+            get {
+                return ResourceManager.GetString("AudioRangeRequired", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Load or record a voice reference first..
+        /// </summary>
+        public static string VoiceReferenceRequired {
+            get {
+                return ResourceManager.GetString("VoiceReferenceRequired", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to This model needs the transcript of the voice reference, enter what is said in it..
+        /// </summary>
+        public static string ReferenceTextRequired {
+            get {
+                return ResourceManager.GetString("ReferenceTextRequired", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Download link cannot be empty.
+        /// </summary>
+        public static string ValidationDownloadLinkEmpty {
+            get {
+                return ResourceManager.GetString("ValidationDownloadLinkEmpty", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Download link must be a direct link to a file ending in {0}.
+        /// </summary>
+        public static string ValidationDownloadLinkInvalid {
+            get {
+                return ResourceManager.GetString("ValidationDownloadLinkInvalid", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Key cannot be empty.
+        /// </summary>
+        public static string ValidationKeyEmpty {
+            get {
+                return ResourceManager.GetString("ValidationKeyEmpty", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Component with key '{0}' already exists.
+        /// </summary>
+        public static string ValidationKeyExists {
+            get {
+                return ResourceManager.GetString("ValidationKeyExists", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Model file must end in {0}.
+        /// </summary>
+        public static string ValidationModelFileType {
+            get {
+                return ResourceManager.GetString("ValidationModelFileType", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Move Folder Failed.
+        /// </summary>
+        public static string MoveFolderErrorTitle {
+            get {
+                return ResourceManager.GetString("MoveFolderErrorTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The new location can't be the current folder or inside it.
+        /// </summary>
+        public static string MoveFolderInsideSource {
+            get {
+                return ResourceManager.GetString("MoveFolderInsideSource", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to '{0}' already has files in it, choose another location.
+        /// </summary>
+        public static string MoveFolderNotEmpty {
+            get {
+                return ResourceManager.GetString("MoveFolderNotEmpty", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to {0} must be less than or equal to {1}.
+        /// </summary>
+        public static string ValidationLessOrEqual {
+            get {
+                return ResourceManager.GetString("ValidationLessOrEqual", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to {0} must be less than {1}.
+        /// </summary>
+        public static string ValidationLessThan {
+            get {
+                return ResourceManager.GetString("ValidationLessThan", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to {0} must be between {1} and {2}.
+        /// </summary>
+        public static string ValidationBetween {
+            get {
+                return ResourceManager.GetString("ValidationBetween", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to A search folder can't contain the Amuse model folder.
+        /// </summary>
+        public static string ValidationSearchFolderContainsModels {
+            get {
+                return ResourceManager.GetString("ValidationSearchFolderContainsModels", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Search folder '{0}' was not found.
+        /// </summary>
+        public static string ValidationSearchFolderNotFound {
+            get {
+                return ResourceManager.GetString("ValidationSearchFolderNotFound", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Not enough free space on the new drive, {0:N1} GB is needed.
+        /// </summary>
+        public static string MoveFolderNoSpace {
+            get {
+                return ResourceManager.GetString("MoveFolderNoSpace", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to MCP Server Error.
+        /// </summary>
+        public static string McpServerErrorTitle {
+            get {
+                return ResourceManager.GetString("McpServerErrorTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Node.js is required to run this server. Install it from nodejs.org and restart Amuse..
+        /// </summary>
+        public static string McpRequiresNode {
+            get {
+                return ResourceManager.GetString("McpRequiresNode", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to uv is required to run this server. Install it from docs.astral.sh/uv and restart Amuse..
+        /// </summary>
+        public static string McpRequiresUv {
+            get {
+                return ResourceManager.GetString("McpRequiresUv", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The command '{0}' was not found..
+        /// </summary>
+        public static string McpCommandNotFound {
+            get {
+                return ResourceManager.GetString("McpCommandNotFound", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to '{0}' is not a valid http or https URL..
+        /// </summary>
+        public static string McpUrlInvalid {
+            get {
+                return ResourceManager.GetString("McpUrlInvalid", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Server name cannot be empty.
+        /// </summary>
+        public static string ValidationMcpNameEmpty {
+            get {
+                return ResourceManager.GetString("ValidationMcpNameEmpty", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to A server with this name already exists.
+        /// </summary>
+        public static string ValidationMcpNameExists {
+            get {
+                return ResourceManager.GetString("ValidationMcpNameExists", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Command cannot be empty.
+        /// </summary>
+        public static string ValidationMcpCommandEmpty {
+            get {
+                return ResourceManager.GetString("ValidationMcpCommandEmpty", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to URL must be a valid http or https address.
+        /// </summary>
+        public static string ValidationMcpUrlInvalid {
+            get {
+                return ResourceManager.GetString("ValidationMcpUrlInvalid", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to At least one tool must be included.
+        /// </summary>
+        public static string ValidationMcpToolsEmpty {
+            get {
+                return ResourceManager.GetString("ValidationMcpToolsEmpty", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to No servers were found in the configuration.
+        /// </summary>
+        public static string ValidationMcpImportEmpty {
+            get {
+                return ResourceManager.GetString("ValidationMcpImportEmpty", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Icon must be a Font Awesome code such as f1e6.
+        /// </summary>
+        public static string ValidationMcpIconInvalid {
+            get {
+                return ResourceManager.GetString("ValidationMcpIconInvalid", resourceCulture);
             }
         }
     }

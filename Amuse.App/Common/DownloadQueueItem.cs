@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Amuse.App.Resources;
+using System;
 using System.Threading;
 using TensorStack.Common;
 using TensorStack.Common.Common;
@@ -13,6 +14,7 @@ namespace Amuse.App.Common
         private float _speed;
         private string _description;
         private string _errorMessage;
+        private bool _isFailed;
         private string _remaining;
         private DateTime _lastUpdate;
 
@@ -55,6 +57,15 @@ namespace Amuse.App.Common
             set { SetProperty(ref _errorMessage, value); }
         }
 
+        /// <summary>
+        /// Gets or sets a value indicating whether the download failed, kept on the item as the model status can change while it waits to be retried.
+        /// </summary>
+        public bool IsFailed
+        {
+            get { return _isFailed; }
+            set { SetProperty(ref _isFailed, value); }
+        }
+
         public void Cancel()
         {
             ErrorMessage = null;
@@ -90,7 +101,7 @@ namespace Amuse.App.Common
             try
             {
                 if (DownloadModel is ComponentModel)
-                    return "Component";
+                    return AppDefault.Component;
 
                 return $"{DownloadModel.GetType().GetProperty("Pipeline").GetValue(DownloadModel)}";
             }

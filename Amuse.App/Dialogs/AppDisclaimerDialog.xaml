@@ -1,0 +1,77 @@
+﻿<CommonControls:DialogControl x:Class="Amuse.App.Dialogs.AppDisclaimerDialog"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:Amuse.App.Dialogs"
+        xmlns:CommonControls="clr-namespace:TensorStack.WPF.Controls;assembly=TensorStack.WPF"
+        mc:Ignorable="d"
+        MinWidth="600"
+        MaxWidth="600"
+        Title="{CommonControls:Localize Title_Disclaimer}"
+        Icon="/Images/Icon.ico"
+        Style="{StaticResource {x:Type CommonControls:DialogControl}}">
+    <DockPanel DataContext="{Binding RelativeSource={RelativeSource AncestorType={x:Type local:AppDisclaimerDialog}}}" Margin="15, 15, 15, 10">
+
+        <!--Continue / Exit-->
+        <DockPanel DockPanel.Dock="Bottom" Margin="0,15,0,0">
+            <UniformGrid DockPanel.Dock="Right" Columns="2" Height="30">
+                <Button Content="{CommonControls:Localize Continue}" Command="{Binding SaveCommand}" Width="100" IsDefault="True" />
+                <Button Content="{CommonControls:Localize Exit}" Command="{Binding CancelCommand}" Width="100"/>
+            </UniformGrid>
+            <CheckBox Content="{CommonControls:Localize DisclaimerAccept}" IsChecked="{Binding IsAccepted}" VerticalAlignment="Center"/>
+        </DockPanel>
+
+        <!--Message, English only-->
+        <StackPanel DockPanel.Dock="Top" Margin="0,0,0,10">
+            <TextBlock Text="Important Notices and Disclaimers" FontSize="20" FontWeight="SemiBold" TextWrapping="Wrap" TextAlignment="Center"/>
+            <TextBlock Text="Amuse is developed and maintained by TensorStack Limited. By using this software, you agree to the following:" FontSize="13" TextWrapping="Wrap" TextAlignment="Center" Margin="0,4,0,0" Opacity=".8"/>
+        </StackPanel>
+
+        <!--Disclaimer, English only-->
+        <Border Background="{StaticResource ContainerGlassBackground}" BorderBrush="{StaticResource ControlDarkerBorderBrush}" BorderThickness="1">
+            <ScrollViewer HorizontalScrollBarVisibility="Disabled" VerticalScrollBarVisibility="Auto" MaxHeight="400">
+                <StackPanel Margin="10" Opacity=".8" TextBlock.FontSize="12">
+                    <StackPanel.Resources>
+                        <Style x:Key="DisclaimerHeader" TargetType="TextBlock">
+                            <Setter Property="FontWeight" Value="Bold" />
+                            <Setter Property="TextWrapping" Value="Wrap" />
+                        </Style>
+                        <Style x:Key="DisclaimerBody" TargetType="TextBlock">
+                            <Setter Property="Margin" Value="0,2,0,12" />
+                            <Setter Property="TextWrapping" Value="Wrap" />
+                        </Style>
+                    </StackPanel.Resources>
+
+                    <TextBlock Text="General Disclaimer" Style="{StaticResource DisclaimerHeader}"/>
+                    <TextBlock Style="{StaticResource DisclaimerBody}"
+                               Text="Amuse may require compatible hardware or software. No software or component is guaranteed to be completely secure. Your results may vary based on system configuration and usage.&#10;&#10;TensorStack Limited is committed to upholding human rights and avoiding causing or contributing to adverse impacts on individuals or communities. Our software is intended to be used in ways that do not violate or undermine human rights. Misuse of Amuse for harmful or malicious purposes is strictly prohibited."/>
+
+                    <TextBlock Text="Data Privacy" Style="{StaticResource DisclaimerHeader}"/>
+                    <TextBlock Style="{StaticResource DisclaimerBody}"
+                               Text="Amuse runs locally on your device. TensorStack Limited does not collect or store any personal data, prompts or generated content. Users are solely responsible for managing any personal or sensitive data processed through the application."/>
+
+                    <TextBlock Text="Generative AI Disclaimers" Style="{StaticResource DisclaimerHeader}"/>
+                    <TextBlock Style="{StaticResource DisclaimerBody}"
+                               Text="Amuse includes generative AI capabilities, including image, video, audio and text generation powered by large-scale machine learning models. Users should:&#10;    • Carefully review outputs before sharing or taking action based on them.&#10;    • Be aware that results may be inaccurate, biased, or misleading.&#10;    • Use critical judgment when interpreting output tone, context, or attribution.&#10;    • Assume full responsibility for any use or distribution of generated content."/>
+
+                    <TextBlock Text="Misuse, Malicious Use, and Out-of-Scope Use" Style="{StaticResource DisclaimerHeader}"/>
+                    <TextBlock Style="{StaticResource DisclaimerBody}"
+                               Text="Use of Amuse to generate harmful, offensive, or misleading content is a misuse of the software. This includes but is not limited to:&#10;    • Creating demeaning, dehumanizing, or discriminatory content.&#10;    • Promoting harmful stereotypes or hostile environments.&#10;    • Generating or sharing sexual content or depictions of violence without appropriate context or consent.&#10;    • Impersonating individuals without permission.&#10;    • Distributing mis/disinformation.&#10;    • Violating the terms of use for copyrighted or licensed material."/>
+
+                    <TextBlock Text="Model Limitations" Style="{StaticResource DisclaimerHeader}"/>
+                    <TextBlock Style="{StaticResource DisclaimerBody}"
+                               Text="Amuse relies on models trained on large-scale datasets that may contain noisy or biased data. As such:&#10;    • Models do not ensure photorealism or accurate facial generation.&#10;    • Models may struggle with complex spatial relationships or rendering legible text.&#10;    • Output may be biased toward English-language prompts.&#10;    • Models may reflect memorized training data and should not be used for factual representation.&#10;    • Content moderation or filtering mechanisms are not built into the base models, additional safeguards may be necessary for production use."/>
+
+                    <TextBlock Text="Compliance with Local Laws" Style="{StaticResource DisclaimerHeader}"/>
+                    <TextBlock Style="{StaticResource DisclaimerBody}"
+                               Text="Users of Amuse are responsible for ensuring that their use of the software complies with all applicable local laws and regulations regarding AI-generated content. Users should:&#10;    • Ensure that generated content does not infringe on copyrights, trademarks, or other intellectual property rights.&#10;    • Comply with any data privacy laws and regulations, including those related to the use of personal data.&#10;    • Avoid using the software to create or distribute content that may violate local laws on hate speech, discrimination, or harassment.&#10;    • If required by local regulations, ensure that generated content is appropriately moderated to meet content guidelines set by governing bodies."/>
+
+                    <TextBlock TextWrapping="Wrap"
+                               Text="It is the user's responsibility to be aware of and adhere to any legal constraints specific to their jurisdiction. TensorStack Limited encourages responsible and lawful use of Amuse to ensure a positive and respectful environment for all."/>
+                </StackPanel>
+            </ScrollViewer>
+        </Border>
+
+    </DockPanel>
+</CommonControls:DialogControl>

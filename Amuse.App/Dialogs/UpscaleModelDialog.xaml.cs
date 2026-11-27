@@ -11,6 +11,7 @@ using System.Threading.Tasks;
 using TensorStack.Common;
 using TensorStack.WPF;
 using TensorStack.WPF.Controls;
+using TensorStack.WPF.Resources;
 using TensorStack.WPF.Services;
 
 namespace Amuse.App.Dialogs
@@ -23,6 +24,10 @@ namespace Amuse.App.Dialogs
         private UpscaleModel _upscaleModel;
         private UpscaleModel _originalUpscaleModel;
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="UpscaleModelDialog"/> class.
+        /// </summary>
+        /// <param name="settings">The settings.</param>
         public UpscaleModelDialog(Settings settings)
         {
             Settings = settings;
@@ -51,7 +56,7 @@ namespace Amuse.App.Dialogs
         /// <summary>
         /// Gets the local file picker filter, every file type an upscale backend can load.
         /// </summary>
-        public string FileFilter { get; } = "Model Files|*.onnx;*.gguf;*.pth;*.safetensors;";
+        public string FileFilter { get; } = $"{AppDefault.ModelFiles}|*.onnx;*.gguf;*.pth;*.safetensors;";
         public bool IsUpdateMode => _originalUpscaleModel is not null;
 
         public UpscaleModel UpscaleModel
@@ -61,50 +66,38 @@ namespace Amuse.App.Dialogs
         }
 
 
-        public Task<bool> AddAsync()
-        {
-            var modelId = Settings.UpscaleModels.NextId();
-            UpscaleModel = new UpscaleModel
-            {
-                Id = modelId,
-                Backend = BackendType.OnnxRuntime,
-                Pipeline = PipelineType.UpscalePipeline,
-                Status = ModelStatusType.Unknown,
-                Name = "New Upscaler",
-                Checkpoint = new CheckpointComponent
-                {
-                    Name = "Upscale",
-                    Type = CheckpointType.LocalFile
-                },
-                DefaultOptions = new UpscaleInputOptions
-                {
-                    IsTileEnabled = true,
-                    TileOverlap = 16,
-                    TileSize = 512
-                }
-            };
-            return base.ShowDialogAsync();
-        }
-
-
+        /// <summary>
+        /// Shows the dialog to update an upscaler.
+        /// </summary>
+        /// <param name="upscaleModel">The upscaler to update.</param>
         public Task<bool> UpdateAsync(UpscaleModel upscaleModel)
         {
             var modelId = upscaleModel.Id;
             _originalUpscaleModel = upscaleModel;
             UpscaleModel = upscaleModel.DeepClone(modelId);
+            Populate();
             return base.ShowDialogAsync();
         }
 
 
+        /// <summary>
+        /// Shows the dialog to add a copy of an upscaler.
+        /// </summary>
+        /// <param name="upscaleModel">The upscaler to copy.</param>
         public Task<bool> CopyAsync(UpscaleModel upscaleModel)
         {
             var modelId = Settings.UpscaleModels.NextId();
             UpscaleModel = upscaleModel.DeepClone(modelId);
             UpscaleModel.Name += " copy";
+            Populate();
             return base.ShowDialogAsync();
         }
 
 
+        /// <summary>
+        /// Imports upscalers, showing the dialog for a single upscaler and adding several directly.
+        /// </summary>
+        /// <param name="modelImports">The upscalers to import.</param>
         public async Task<bool> ImportAsync(UpscaleModel[] modelImports)
         {
             var modelId = Settings.UpscaleModels.NextId();
@@ -113,6 +106,7 @@ namespace Amuse.App.Dialogs
                 var modelImport = modelImports[0];
                 modelImport.Id = modelId;
                 UpscaleModel = modelImport;
+                Populate();
                 return await base.ShowDialogAsync();
             }
             else
@@ -128,14 +122,18 @@ namespace Amuse.App.Dialogs
                     Settings.UpscaleModels.Add(modelImport);
                 }
 
-                await DialogService.ShowMessageAsync("Import Complete", $"{imported}/{modelImports.Length} Models Imported.");
+                await DialogService.ShowMessageAsync(AppDefault.ImportCompleteTitle, string.Format(AppDefault.ImportCompleteModels, imported, modelImports.Length));
                 return true;
             }
         }
 
 
+        /// <summary>
+        /// Saves the upscaler, replacing the original when updating.
+        /// </summary>
         protected override async Task SaveAsync()
         {
+            UpscaleModel.Name = UpscaleModel.Name.Trim();
             var index = Settings.UpscaleModels.Count;
             if (IsUpdateMode)
             {
@@ -150,6 +148,9 @@ namespace Amuse.App.Dialogs
         }
 
 
+        /// <summary>
+        /// Determines whether the upscaler can be saved, listing the validation errors.
+        /// </summary>
         protected override bool CanExecuteSave()
         {
             if (UpscaleModel == null)
@@ -163,6 +164,9 @@ namespace Amuse.App.Dialogs
         }
 
 
+        /// <summary>
+        /// Cancels the dialog.
+        /// </summary>
         protected override Task CancelAsync()
         {
             UpscaleModel = default;
@@ -171,38 +175,57 @@ namespace Amuse.App.Dialogs
         }
 
 
+        /// <summary>
+        /// Closes the dialog.
+        /// </summary>
         protected override async Task CloseAsync()
         {
             await base.CloseAsync();
         }
 
 
+        /// <summary>
+        /// Gives a video upscaler a VAE to fill in when it has none.
+        /// </summary>
+        private void Populate()
+        {
+            if (UpscaleModel.IsVideoUpscaler && UpscaleModel.Vae is null)
+            {
+                UpscaleModel.Vae = new CheckpointComponent
+                {
+                    Name = "VAE",
+                    Type = CheckpointType.Component
+                };
+            }
+        }
+
+
+        /// <summary>
+        /// Gets the validation errors of the current input.
+        /// </summary>
         private IEnumerable<string> GetValidationErrors()
         {
             // Name
             if (string.IsNullOrWhiteSpace(UpscaleModel.Name))
-                yield return "Name cannot be empty";
-            if (!IsUpdateMode)
-            {
-                if (Settings.UpscaleModels.Any(x => x.Name.Equals(UpscaleModel.Name, StringComparison.OrdinalIgnoreCase)))
-                    yield return $"Model with Name '{UpscaleModel.Name}' already exists";
-            }
+                yield return AppErrors.ValidationNameEmpty;
+            else if (Settings.UpscaleModels.Any(x => x != _originalUpscaleModel && x.Name.Equals(UpscaleModel.Name.Trim(), StringComparison.OrdinalIgnoreCase)))
+                yield return string.Format(AppErrors.ValidationModelNameExists, UpscaleModel.Name.Trim());
 
             // Options
             if (UpscaleModel.Channels < 3)
-                yield return "Channels must be >= 3";
+                yield return string.Format(AppErrors.ValidationMinimum, Default.Channels, 3);
             if (UpscaleModel.ScaleFactor <= 0)
-                yield return "Scale Factor must be > 0";
+                yield return string.Format(AppErrors.ValidationGreaterThanZero, AppDefault.ScaleFactor);
             if (UpscaleModel.SampleSize < 0)
-                yield return "Sample Size must be >= 0";
+                yield return string.Format(AppErrors.ValidationZeroOrGreater, AppDefault.SampleSize);
             if (UpscaleModel.MemorySize < 0)
-                yield return "Sample Size must be >= 0";
+                yield return string.Format(AppErrors.ValidationZeroOrGreater, AppDefault.MemorySize);
 
             //DefaultOptions
             if (UpscaleModel.DefaultOptions.TileSize < 0)
-                yield return "TileSize Size must be >= 0";
+                yield return string.Format(AppErrors.ValidationZeroOrGreater, Default.TileSize);
             if (UpscaleModel.DefaultOptions.TileOverlap < 0)
-                yield return "TileOverlap Size must be >= 0";
+                yield return string.Format(AppErrors.ValidationZeroOrGreater, Default.TileOverlap);
 
             // Checkpoint
             if (!UpscaleModel.Checkpoint.IsValid(out var checkpointValidation))

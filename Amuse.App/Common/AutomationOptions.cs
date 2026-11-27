@@ -98,9 +98,9 @@ namespace Amuse.App.Common
             switch (Type)
             {
                 case AutomationType.Seed:
-                    return (UseOutputDirectory == false || Directory.Exists(_outputDirectory));
+                    return _count > 0 && (UseOutputDirectory == false || Directory.Exists(_outputDirectory));
                 case AutomationType.PromptLines:
-                    return Directory.Exists(_inputFile) && (UseOutputDirectory == false || Directory.Exists(_outputDirectory));
+                    return File.Exists(_inputFile) && (UseOutputDirectory == false || Directory.Exists(_outputDirectory));
                 case AutomationType.PromptFiles:
                     return Directory.Exists(_inputDirectory) && (UseOutputDirectory == false || Directory.Exists(_outputDirectory));
                 case AutomationType.InputFiles:
@@ -152,6 +152,10 @@ namespace Amuse.App.Common
                     return [AutomationType.Seed, AutomationType.InputFiles];
                 case View.TextToMusic:
                     return [AutomationType.Seed];
+                case View.AudioToMusic:
+                    return [AutomationType.Seed];
+                case View.VoiceClone:
+                    return [AutomationType.Seed, AutomationType.InputFiles];
                 case View.AudioToText:
                     return [AutomationType.Seed, AutomationType.InputFiles];
 

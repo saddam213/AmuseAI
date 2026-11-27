@@ -23,14 +23,13 @@ namespace Amuse.App.Controls
         private bool _isModelOptionsVisible;
         private bool _isSteps2Enabled;
         private bool _isGuidance2Enabled;
-        private SchedulerInputOptions[] _schedulers;
+        private SamplerInputOptions[] _samplers;
         private bool _isImageControlNetSupported;
         private bool _isImageToImageControlNetSupported;
         private InputTabOption _selectedOption;
 
         public DiffusionInputControl()
         {
-            FrameRates = [8f, 12f, 16f, 24f, 25f, 30f, 60f];
             LatentTileSizes = [16, 32, 64, 96, 128, 160, 192, 224, 256];
             SeedCommand = new RelayCommand<bool>(GenerateSeed);
             AddTriggerWordCommand = new AsyncRelayCommand<string>(AddTriggerWordAsync);
@@ -50,7 +49,6 @@ namespace Amuse.App.Controls
         public ProcessType ProcessType { get; set; }
         public RelayCommand<bool> SeedCommand { get; }
         public AsyncRelayCommand<string> AddTriggerWordCommand { get; }
-        public List<float> FrameRates { get; }
         public List<int> LatentTileSizes { get; }
 
         public PipelineModel Pipeline
@@ -158,10 +156,10 @@ namespace Amuse.App.Controls
             set { SetProperty(ref _isGuidance2Enabled, value); }
         }
 
-        public SchedulerInputOptions[] Schedulers
+        public SamplerInputOptions[] Samplers
         {
-            get { return _schedulers; }
-            set { SetProperty(ref _schedulers, value); }
+            get { return _samplers; }
+            set { SetProperty(ref _samplers, value); }
         }
 
         public bool IsImageControlNetSupported
@@ -198,8 +196,10 @@ namespace Amuse.App.Controls
 
             if (oldModel == newModel)
             {
-                // TODO if has lora changed
-                Options.LoraOptions = newPipeline.LoraAdapterModel?.Select(x => new LoraOptionModel { Name = x.Name, Key = x.Key, Strength = 1f }).ToList();
+                Options.LoraOptions = CreateLoraOptions(newPipeline, Options.LoraOptions);
+                if (oldPipeline?.ControlNetModel != newPipeline.ControlNetModel)
+                    Options.ControlType = newPipeline.ControlNetModel?.ControlType ?? ControlNetType.None;
+
                 return Task.CompletedTask;
             }
 
@@ -217,9 +217,10 @@ namespace Amuse.App.Controls
                 Prompt = previousOptions?.Prompt,
                 NegativePrompt = previousOptions?.NegativePrompt,
                 Seed = previousOptions?.Seed ?? 0,
-                LoraOptions = newPipeline.LoraAdapterModel?.Select(x => new LoraOptionModel { Name = x.Name, Key = x.Key, Strength = 1f }).ToList(),
+                LoraOptions = CreateLoraOptions(newPipeline, previousOptions?.LoraOptions),
                 Strength = ProcessType == ProcessType.ImageToImage && !IsImageControlNetSupported ? (previousOptions?.Strength ?? 0.7f) : 1f,
                 ControlNetStrength = IsImageControlNetSupported ? (previousOptions?.ControlNetStrength ?? 0.7f) : 1f,
+                ControlType = newPipeline.ControlNetModel?.ControlType ?? ControlNetType.None,
                 IsSource2Enabled = ProcessType == ProcessType.ImageToVideo ? (previousOptions?.IsSource2Enabled ?? false) && newOptions.IsFirstFrameLastFrameEnabled : (previousOptions?.IsSource2Enabled ?? false),
 
                 // Update
@@ -234,6 +235,8 @@ namespace Amuse.App.Controls
                 NoiseCondition = newOptions.NoiseCondition,
                 IsVaeTilingEnabled = newOptions.IsVaeTilingEnabled,
                 IsVaeSlicingEnabled = newOptions.IsVaeSlicingEnabled,
+                ClipSkip = newOptions.ClipSkip,
+                MoeBoundary = newOptions.MoeBoundary,
 
                 LatentUpscale = LatentUpscale.None,
                 LatentUpscaleSteps = newOptions.LatentUpscaleSteps,
@@ -245,9 +248,9 @@ namespace Amuse.App.Controls
             SelectedResolution = newModel?.Resolutions.FirstOrDefault(x => x.Width == _selectedResolution?.Width && x.Height == _selectedResolution?.Height)
                               ?? newModel?.Resolutions.OrderByDescending(x => x.IsDefault).FirstOrDefault();
 
-            //Schedulers
-            Schedulers = newOptions.Schedulers.Copy();
-            Options.SchedulerOptions = Schedulers.FirstOrDefault(x => x.Scheduler == newOptions.Scheduler);
+            //Samplers
+            Samplers = newOptions.Samplers.Copy();
+            Options.SamplerOptions = Samplers.FirstOrDefault(x => x.Sampler == newOptions.Sampler);
 
             // Automation
             AutomationOptions = new AutomationOptions
@@ -256,6 +259,24 @@ namespace Amuse.App.Controls
             };
 
             return Task.CompletedTask;
+        }
+
+
+        /// <summary>
+        /// Creates the LoRA options for the pipeline, keeping the strength of adapters that are still selected.
+        /// </summary>
+        /// <param name="pipeline">The pipeline.</param>
+        /// <param name="previousOptions">The previous LoRA options.</param>
+        private static List<LoraOptionModel> CreateLoraOptions(PipelineModel pipeline, List<LoraOptionModel> previousOptions)
+        {
+            return pipeline.LoraAdapterModel?
+                .Select(x => new LoraOptionModel
+                {
+                    Name = x.Name,
+                    Key = x.Key,
+                    Strength = previousOptions?.FirstOrDefault(p => p.Key == x.Key)?.Strength ?? 1f
+                })
+                .ToList();
         }
 
 

@@ -5,8 +5,8 @@
         int Id { get; set; }
         string Name { get; set; }
         ModelStatusType Status { get; set; }
-        string AccessToken { get; set; }
         string Link { get; set; }
+        ModelMetadata Metadata { get; set; }
 
         void Initialize(Settings settings);
         void Delete(Settings settings);

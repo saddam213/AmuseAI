@@ -19,6 +19,7 @@ namespace Amuse.App.Common
         private ProcessType _processType;
         private View _viewType;
         private ExecutionOptionsModel _executionOptions;
+        private DataType? _checkpointType;
 
         public DeviceModel Device
         {
@@ -105,6 +106,12 @@ namespace Amuse.App.Common
             set { SetProperty(ref _executionOptions, value); }
         }
 
+        public DataType? CheckpointType
+        {
+            get { return _checkpointType; }
+            set { SetProperty(ref _checkpointType, value); }
+        }
+
 
         /// <summary>
         /// Notifies the properties computed from the generate, upscale and extract models.
@@ -125,6 +132,7 @@ namespace Amuse.App.Common
                 || pipeline.Device != _device
                 || pipeline.DiffusionModel != _diffusionModel
                 || pipeline.LanguageModel != _languageModel
+                || pipeline.CheckpointType != _checkpointType
                 || pipeline.MemoryMode != _memoryMode
                 || pipeline.ExecutionOptions != _executionOptions;
         }

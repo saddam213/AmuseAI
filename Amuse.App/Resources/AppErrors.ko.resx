@@ -1,0 +1,397 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <!-- 
+    Microsoft ResX Schema 
+    
+    Version 2.0
+    
+    The primary goals of this format is to allow a simple XML format 
+    that is mostly human readable. The generation and parsing of the 
+    various data types are done through the TypeConverter classes 
+    associated with the data types.
+    
+    Example:
+    
+    ... ado.net/XML headers & schema ...
+    <resheader name="resmimetype">text/microsoft-resx</resheader>
+    <resheader name="version">2.0</resheader>
+    <resheader name="reader">System.Resources.ResXResourceReader, System.Windows.Forms, ...</resheader>
+    <resheader name="writer">System.Resources.ResXResourceWriter, System.Windows.Forms, ...</resheader>
+    <data name="Name1"><value>this is my long string</value><comment>this is a comment</comment></data>
+    <data name="Color1" type="System.Drawing.Color, System.Drawing">Blue</data>
+    <data name="Bitmap1" mimetype="application/x-microsoft.net.object.binary.base64">
+        <value>[base64 mime encoded serialized .NET Framework object]</value>
+    </data>
+    <data name="Icon1" type="System.Drawing.Icon, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
+        <value>[base64 mime encoded string representing a byte array form of the .NET Framework object]</value>
+        <comment>This is a comment</comment>
+    </data>
+                
+    There are any number of "resheader" rows that contain simple 
+    name/value pairs.
+    
+    Each data row contains a name, and value. The row also contains a 
+    type or mimetype. Type corresponds to a .NET class that support 
+    text/value conversion through the TypeConverter architecture. 
+    Classes that don't support this are serialized and stored with the 
+    mimetype set.
+    
+    The mimetype is used for serialized objects, and tells the 
+    ResXResourceReader how to depersist the object. This is currently not 
+    extensible. For a given mimetype the value must be set accordingly:
+    
+    Note - application/x-microsoft.net.object.binary.base64 is the format 
+    that the ResXResourceWriter will generate, however the reader can 
+    read any of the formats listed below.
+    
+    mimetype: application/x-microsoft.net.object.binary.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Binary.BinaryFormatter
+            : and then encoded with base64 encoding.
+    
+    mimetype: application/x-microsoft.net.object.soap.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Soap.SoapFormatter
+            : and then encoded with base64 encoding.
+
+    mimetype: application/x-microsoft.net.object.bytearray.base64
+    value   : The object must be serialized into a byte array 
+            : using a System.ComponentModel.TypeConverter
+            : and then encoded with base64 encoding.
+    -->
+  <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+    <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
+    <xsd:element name="root" msdata:IsDataSet="true">
+      <xsd:complexType>
+        <xsd:choice maxOccurs="unbounded">
+          <xsd:element name="metadata">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" />
+              </xsd:sequence>
+              <xsd:attribute name="name" use="required" type="xsd:string" />
+              <xsd:attribute name="type" type="xsd:string" />
+              <xsd:attribute name="mimetype" type="xsd:string" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="assembly">
+            <xsd:complexType>
+              <xsd:attribute name="alias" type="xsd:string" />
+              <xsd:attribute name="name" type="xsd:string" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="data">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1" />
+              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
+              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="resheader">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" />
+            </xsd:complexType>
+          </xsd:element>
+        </xsd:choice>
+      </xsd:complexType>
+    </xsd:element>
+  </xsd:schema>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="ExecuteAutomationTitle" xml:space="preserve">
+    <value>자동화 실패</value>
+  </data>
+  <data name="ExecutePipelineTitle" xml:space="preserve">
+    <value>생성 실패</value>
+  </data>
+  <data name="GeneratedAudioNotFound" xml:space="preserve">
+    <value>생성된 오디오 결과를 찾을 수 없습니다.</value>
+  </data>
+  <data name="GeneratedImageNotFound" xml:space="preserve">
+    <value>생성된 이미지 결과를 찾을 수 없습니다.</value>
+  </data>
+  <data name="GeneratedVideoNotFound" xml:space="preserve">
+    <value>생성된 비디오 결과를 찾을 수 없습니다.</value>
+  </data>
+  <data name="ImportComponentFailed" xml:space="preserve">
+    <value>컴포넌트 파일을 가져오지 못했습니다.</value>
+  </data>
+  <data name="ImportEnvironmentFailed" xml:space="preserve">
+    <value>환경 파일을 가져오지 못했습니다.</value>
+  </data>
+  <data name="ImportErrorTitle" xml:space="preserve">
+    <value>가져오기 오류</value>
+  </data>
+  <data name="ImportModelFailed" xml:space="preserve">
+    <value>모델 파일을 가져오지 못했습니다.</value>
+  </data>
+  <data name="LoadPipelineTitle" xml:space="preserve">
+    <value>모델 로드 실패</value>
+  </data>
+  <data name="ParseErrorDocument" xml:space="preserve">
+    <value>문서를 구문 분석하지 못했습니다.</value>
+  </data>
+  <data name="ParseErrorTitle" xml:space="preserve">
+    <value>구문 분석 오류</value>
+  </data>
+  <data name="PipelineClosedUnexpectedly" xml:space="preserve">
+    <value>파이프라인이 예기치 않게 종료되었습니다</value>
+  </data>
+  <data name="UnexpectedError" xml:space="preserve">
+    <value>예기치 않은 오류가 발생했습니다</value>
+  </data>
+  <data name="UnexpectedErrorTitle" xml:space="preserve">
+    <value>예기치 않은 오류</value>
+  </data>
+  <data name="UnloadPipelineTitle" xml:space="preserve">
+    <value>모델 언로드 실패</value>
+  </data>
+  <data name="ExtractedImageNotFound" xml:space="preserve">
+    <value>추출된 이미지 결과를 찾을 수 없습니다.</value>
+  </data>
+  <data name="ExtractModelNotLoaded" xml:space="preserve">
+    <value>로드된 추출 모델이 없습니다.</value>
+  </data>
+  <data name="ExtractBackendNotSupported" xml:space="preserve">
+    <value>{0} 백엔드에서는 추출이 지원되지 않습니다.</value>
+  </data>
+  <data name="UpscaledImageNotFound" xml:space="preserve">
+    <value>업스케일된 이미지 결과를 찾을 수 없습니다.</value>
+  </data>
+  <data name="UpscaledVideoNotFound" xml:space="preserve">
+    <value>업스케일된 비디오 결과를 찾을 수 없습니다.</value>
+  </data>
+  <data name="UpscaleModelNotLoaded" xml:space="preserve">
+    <value>로드된 업스케일 모델이 없습니다.</value>
+  </data>
+  <data name="UpscaleVideoOnly" xml:space="preserve">
+    <value>{0}은(는) 비디오만 업스케일할 수 있습니다.</value>
+  </data>
+  <data name="UpscaleBackendNotSupported" xml:space="preserve">
+    <value>{0} 백엔드에서는 업스케일이 지원되지 않습니다.</value>
+  </data>
+  <data name="UpscaleFailedTitle" xml:space="preserve">
+    <value>업스케일 실패</value>
+  </data>
+  <data name="UpscaleFailedResultKept" xml:space="preserve">
+    <value>업스케일에 실패하여 업스케일하지 않은 결과를 유지했습니다.</value>
+  </data>
+  <data name="UpscaleCheckpointFormat" xml:space="preserve">
+    <value>{1} 백엔드의 체크포인트는 {0} 파일이어야 합니다</value>
+  </data>
+  <data name="ValidationNameEmpty" xml:space="preserve">
+    <value>이름은 비워 둘 수 없습니다</value>
+  </data>
+  <data name="ValidationModelNameExists" xml:space="preserve">
+    <value>이름이 '{0}'인 모델이 이미 있습니다</value>
+  </data>
+  <data name="ValidationGreaterThanZero" xml:space="preserve">
+    <value>{0} 값은 0보다 커야 합니다</value>
+  </data>
+  <data name="ValidationZeroOrGreater" xml:space="preserve">
+    <value>{0} 값은 0 이상이어야 합니다</value>
+  </data>
+  <data name="ValidationPipelineEmpty" xml:space="preserve">
+    <value>파이프라인은 비워 둘 수 없습니다</value>
+  </data>
+  <data name="ValidationMinimum" xml:space="preserve">
+    <value>{0} 값은 {1} 이상이어야 합니다</value>
+  </data>
+  <data name="ValidationResolutionsEmpty" xml:space="preserve">
+    <value>해상도는 비워 둘 수 없습니다</value>
+  </data>
+  <data name="ValidationDefaultResolutionNotSet" xml:space="preserve">
+    <value>기본 해상도가 설정되지 않았습니다</value>
+  </data>
+  <data name="ValidationProcessTypesEmpty" xml:space="preserve">
+    <value>지원 기능은 비워 둘 수 없습니다</value>
+  </data>
+  <data name="ValidationMainFileEmpty" xml:space="preserve">
+    <value>메인 파일은 비워 둘 수 없습니다</value>
+  </data>
+  <data name="ValidationTypeEmpty" xml:space="preserve">
+    <value>유형은 비워 둘 수 없습니다</value>
+  </data>
+  <data name="ValidationModelNameEmpty" xml:space="preserve">
+    <value>모델 이름은 비워 둘 수 없습니다</value>
+  </data>
+  <data name="ValidationModelFileNameEmpty" xml:space="preserve">
+    <value>모델 파일 이름은 비워 둘 수 없습니다</value>
+  </data>
+  <data name="ValidationModelFolderNameEmpty" xml:space="preserve">
+    <value>모델 폴더 이름은 비워 둘 수 없습니다</value>
+  </data>
+  <data name="ValidationModelFileNotFound" xml:space="preserve">
+    <value>모델 파일을 찾을 수 없습니다</value>
+  </data>
+  <data name="ValidationRequirementsEmpty" xml:space="preserve">
+    <value>요구 사항은 비워 둘 수 없습니다</value>
+  </data>
+  <data name="ValidationEnvironmentEmpty" xml:space="preserve">
+    <value>환경은 비워 둘 수 없습니다</value>
+  </data>
+  <data name="ValidationEnvironmentInvalidCharacters" xml:space="preserve">
+    <value>환경 이름에는 문자, 숫자, '.', '_', '-'만 사용할 수 있습니다</value>
+  </data>
+  <data name="ValidationEnvironmentExists" xml:space="preserve">
+    <value>이름이 '{0}'인 환경이 이미 있습니다</value>
+  </data>
+  <data name="ValidationDeviceEmpty" xml:space="preserve">
+    <value>장치는 비워 둘 수 없습니다</value>
+  </data>
+  <data name="UpdateDownloadFailed" xml:space="preserve">
+    <value>업데이트 파일을 다운로드하지 못했습니다.
+문제가 계속되면 나중에 다시 시도하십시오.</value>
+  </data>
+  <data name="CheckpointNoDownloadFiles" xml:space="preserve">
+    <value>다운로드할 파일이 없습니다</value>
+  </data>
+  <data name="CheckpointDownloadFileNotFound" xml:space="preserve">
+    <value>다운로드 파일을 찾을 수 없습니다</value>
+  </data>
+  <data name="CheckpointLocalFolderNotFound" xml:space="preserve">
+    <value>로컬 폴더를 찾을 수 없습니다</value>
+  </data>
+  <data name="CheckpointLocalFileNotFound" xml:space="preserve">
+    <value>로컬 파일을 찾을 수 없습니다</value>
+  </data>
+  <data name="CheckpointComponentNotSelected" xml:space="preserve">
+    <value>컴포넌트가 선택되지 않았습니다</value>
+  </data>
+  <data name="CheckpointResolveOnlineFile" xml:space="preserve">
+    <value>체크포인트에서 온라인 파일 '{0}'을(를) 확인할 수 없습니다</value>
+  </data>
+  <data name="CheckpointResolveComponent" xml:space="preserve">
+    <value>체크포인트에서 컴포넌트 '{0}'을(를) 확인할 수 없습니다</value>
+  </data>
+  <data name="ValidationQuantTypeExists" xml:space="preserve">
+    <value>각 품질은 서로 다른 유형이어야 합니다</value>
+  </data>
+  <data name="ValidationQuantTypeEmpty" xml:space="preserve">
+    <value>품질을 선택해야 합니다</value>
+  </data>
+  <data name="ValidationCheckpointEmpty" xml:space="preserve">
+    <value>모델에 체크포인트 파일이 없습니다</value>
+  </data>
+  <data name="AudioRangeRequired" xml:space="preserve">
+    <value>먼저 다시 생성할 소스 오디오의 범위를 선택하세요.</value>
+  </data>
+  <data name="McpCommandNotFound" xml:space="preserve">
+    <value>'{0}' 명령을 찾을 수 없습니다.</value>
+  </data>
+  <data name="McpRequiresNode" xml:space="preserve">
+    <value>이 서버를 실행하려면 Node.js가 필요합니다. nodejs.org에서 설치한 후 Amuse를 다시 시작하세요.</value>
+  </data>
+  <data name="McpRequiresUv" xml:space="preserve">
+    <value>이 서버를 실행하려면 uv가 필요합니다. docs.astral.sh/uv에서 설치한 후 Amuse를 다시 시작하세요.</value>
+  </data>
+  <data name="McpServerErrorTitle" xml:space="preserve">
+    <value>MCP 서버 오류</value>
+  </data>
+  <data name="McpUrlInvalid" xml:space="preserve">
+    <value>'{0}'은(는) 올바른 http 또는 https URL이 아닙니다.</value>
+  </data>
+  <data name="MissingInputTitle" xml:space="preserve">
+    <value>입력 누락</value>
+  </data>
+  <data name="MoveFolderErrorTitle" xml:space="preserve">
+    <value>폴더 이동 실패</value>
+  </data>
+  <data name="MoveFolderInsideSource" xml:space="preserve">
+    <value>새 위치는 현재 폴더이거나 그 내부일 수 없습니다</value>
+  </data>
+  <data name="MoveFolderNoSpace" xml:space="preserve">
+    <value>새 드라이브의 여유 공간이 부족합니다. {0:N1} GB가 필요합니다</value>
+  </data>
+  <data name="MoveFolderNotEmpty" xml:space="preserve">
+    <value>'{0}'에 이미 파일이 있습니다. 다른 위치를 선택하세요</value>
+  </data>
+  <data name="ReferenceTextRequired" xml:space="preserve">
+    <value>이 모델에는 음성 참조의 대본이 필요합니다. 참조에서 말하는 내용을 입력하세요.</value>
+  </data>
+  <data name="SourceAudioRequired" xml:space="preserve">
+    <value>먼저 소스 오디오를 로드하거나 녹음하세요.</value>
+  </data>
+  <data name="ValidationBetween" xml:space="preserve">
+    <value>{0}은(는) {1}에서 {2} 사이여야 합니다</value>
+  </data>
+  <data name="ValidationDownloadLinkEmpty" xml:space="preserve">
+    <value>다운로드 링크는 비워 둘 수 없습니다</value>
+  </data>
+  <data name="ValidationDownloadLinkInvalid" xml:space="preserve">
+    <value>다운로드 링크는 {0}(으)로 끝나는 파일의 직접 링크여야 합니다</value>
+  </data>
+  <data name="ValidationKeyEmpty" xml:space="preserve">
+    <value>키는 비워 둘 수 없습니다</value>
+  </data>
+  <data name="ValidationKeyExists" xml:space="preserve">
+    <value>키가 '{0}'인 컴포넌트가 이미 있습니다</value>
+  </data>
+  <data name="ValidationLessOrEqual" xml:space="preserve">
+    <value>{0}은(는) {1} 이하여야 합니다</value>
+  </data>
+  <data name="ValidationLessThan" xml:space="preserve">
+    <value>{0}은(는) {1}보다 작아야 합니다</value>
+  </data>
+  <data name="ValidationMcpCommandEmpty" xml:space="preserve">
+    <value>명령은 비워 둘 수 없습니다</value>
+  </data>
+  <data name="ValidationMcpIconInvalid" xml:space="preserve">
+    <value>아이콘은 f1e6과 같은 Font Awesome 코드여야 합니다</value>
+  </data>
+  <data name="ValidationMcpImportEmpty" xml:space="preserve">
+    <value>구성에서 서버를 찾을 수 없습니다</value>
+  </data>
+  <data name="ValidationMcpNameEmpty" xml:space="preserve">
+    <value>서버 이름은 비워 둘 수 없습니다</value>
+  </data>
+  <data name="ValidationMcpNameExists" xml:space="preserve">
+    <value>이 이름의 서버가 이미 있습니다</value>
+  </data>
+  <data name="ValidationMcpToolsEmpty" xml:space="preserve">
+    <value>도구를 하나 이상 포함해야 합니다</value>
+  </data>
+  <data name="ValidationMcpUrlInvalid" xml:space="preserve">
+    <value>URL은 올바른 http 또는 https 주소여야 합니다</value>
+  </data>
+  <data name="ValidationModelFileType" xml:space="preserve">
+    <value>모델 파일은 {0}(으)로 끝나야 합니다</value>
+  </data>
+  <data name="ValidationModelFolderNotFound" xml:space="preserve">
+    <value>모델 폴더를 찾을 수 없습니다</value>
+  </data>
+  <data name="ValidationSearchFolderContainsModels" xml:space="preserve">
+    <value>검색 폴더에 Amuse 모델 폴더를 포함할 수 없습니다</value>
+  </data>
+  <data name="ValidationSearchFolderEmpty" xml:space="preserve">
+    <value>검색 폴더는 비워 둘 수 없습니다</value>
+  </data>
+  <data name="ValidationSearchFolderInsideModels" xml:space="preserve">
+    <value>검색 폴더는 모델 디렉터리 내부에 있을 수 없습니다</value>
+  </data>
+  <data name="ValidationSearchFolderNotFound" xml:space="preserve">
+    <value>검색 폴더 '{0}'을(를) 찾을 수 없습니다</value>
+  </data>
+  <data name="VoiceReferenceRequired" xml:space="preserve">
+    <value>먼저 음성 참조를 로드하거나 녹음하세요.</value>
+  </data>
+</root>

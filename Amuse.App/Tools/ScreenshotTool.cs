@@ -1,4 +1,5 @@
-﻿using Amuse.App.Services;
+﻿using Amuse.App.Resources;
+using Amuse.App.Services;
 using System;
 using System.Drawing;
 using System.Drawing.Imaging;
@@ -32,7 +33,7 @@ namespace Amuse.App.Tools
         /// <summary>
         /// Gets the display name.
         /// </summary>
-        public override string DisplayName => "Screenshot";
+        public override string DisplayName => AppDefault.ToolScreenshot;
 
         /// <summary>
         /// Gets the tool icon.

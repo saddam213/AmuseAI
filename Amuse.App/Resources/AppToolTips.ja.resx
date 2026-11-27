@@ -139,13 +139,17 @@
     <value>モデル：未インストール</value>
   </data>
   <data name="ToolTip_ModelStatus_Unknown" xml:space="preserve">
-    <value>モデル：更新が必要</value>
+    <value>ファイル不足
+• ダウンロードが完了していない
+• ファイルが移動または削除された
+• モデルが更新された
+再ダウンロードで完了します。</value>
   </data>
   <data name="ToolTip_Text_Branch" xml:space="preserve">
     <value>会話を分岐</value>
   </data>
   <data name="ToolTip_Text_Rewind" xml:space="preserve">
-    <value>直前のメッセージまで巻き戻す</value>
+    <value>直前のメッセージを取り消す</value>
   </data>
   <data name="ToolTip_Text_SaveResponseFile" xml:space="preserve">
     <value>応答をファイルに保存</value>
@@ -196,7 +200,7 @@
     <value>描画をクリア</value>
   </data>
   <data name="ToolTip_Seed_New" xml:space="preserve">
-    <value>ニューシード</value>
+    <value>新しいシード</value>
   </data>
   <data name="ToolTip_Seed_Random" xml:space="preserve">
     <value>ランダムシード</value>
@@ -240,14 +244,14 @@
   <data name="ToolTip_VideoTimeline_SegmentRemove" xml:space="preserve">
     <value>セグメントを削除</value>
   </data>
-  <data name="ToolTop_MemoryEstimate" xml:space="preserve">
+  <data name="ToolTip_MemoryEstimate" xml:space="preserve">
     <value>推定メモリモード</value>
   </data>
   <data name="ToolTip_Text_StreamEnable" xml:space="preserve">
-    <value>ストリーミングトークン更新を有効化</value>
+    <value>トークンのストリーミング表示を有効化</value>
   </data>
   <data name="ToolTip_Text_StreamDisable" xml:space="preserve">
-    <value>ストリーミングトークン更新を無効化</value>
+    <value>トークンのストリーミング表示を無効化</value>
   </data>
   <data name="ToolTip_Text_FormatEnable" xml:space="preserve">
     <value>結果の書式設定を有効化（実験的）</value>
@@ -256,19 +260,16 @@
     <value>結果の書式設定を無効化</value>
   </data>
   <data name="ToolTip_Text_ThinkingHide" xml:space="preserve">
-    <value>シンキング内容を非表示</value>
+    <value>思考内容を非表示</value>
   </data>
   <data name="ToolTip_Text_ThinkingShow" xml:space="preserve">
-    <value>シンキング内容を表示</value>
-  </data>
-  <data name="ToolTip_Acsess_HuggingFace" xml:space="preserve">
-    <value>制限付きモデル - HuggingFace認証が必要です。</value>
-  </data>
-  <data name="ToolTip_Acsess_Civitai" xml:space="preserve">
-    <value>制限付きモデル - Civitai認証が必要です。</value>
+    <value>思考内容を表示</value>
   </data>
   <data name="ToolTip_Theme" xml:space="preserve">
     <value>テーマを適用するにはAmuseを再起動してください。</value>
+  </data>
+  <data name="ToolTip_UIScale" xml:space="preserve">
+    <value>画面に合わせて設定されたインターフェースのサイズです。</value>
   </data>
   <data name="ToolTip_ModelFilterAll" xml:space="preserve">
     <value>すべてのモデルを表示中、クリックでインストール済みのみ表示</value>
@@ -286,82 +287,67 @@
     <value>GPUに配置するモデルレイヤーの数（-1ですべてのレイヤー）。値を小さくすると、残りのレイヤーはシステムメモリに配置されます。</value>
   </data>
   <data name="ToolTip_Threads" xml:space="preserve">
-    <value>システムメモリ上のレイヤーに使用するCPUスレッド数（0で既定値）。</value>
+    <value>システムメモリ上のレイヤーに使用するCPUスレッド数（0でデフォルト値）。</value>
   </data>
   <data name="ToolTip_ContextSize" xml:space="preserve">
     <value>会話と応答のために確保するトークン数。値を大きくするとメモリ使用量が増えます。</value>
   </data>
   <data name="ToolTip_CacheOffload" xml:space="preserve">
-    <value>会話（キー/バリュー）キャッシュをGPUメモリに保持します</value>
-  </data>
-  <data name="ToolTip_Home" xml:space="preserve">
-    <value>ホーム</value>
+    <value>会話（キー／バリュー）キャッシュをGPUメモリに保持します</value>
   </data>
   <data name="ToolTip_BackendReady" xml:space="preserve">
     <value>バックエンド環境はインストール済みで使用できます。</value>
   </data>
   <data name="ToolTip_BackendNotInstalled" xml:space="preserve">
-    <value>このデバイスで対応していますが、まだインストールされていません。「環境を管理」からインストールするか、それを使うモデルを初めて読み込むときにインストールします。</value>
+    <value>このデバイスで対応していますが、まだインストールされていません。「環境を管理」から、またはこのバックエンドを使うモデルを初めて読み込むときにインストールできます。</value>
   </data>
   <data name="ToolTip_BackendUnsupported" xml:space="preserve">
     <value>このバックエンドはこのデバイスでは使用できません。</value>
   </data>
-  <data name="ToolTip_MemoryMode_HuggingFace_High" xml:space="preserve">
-    <value>モデル全体を GPU に読み込みます。最速ですが、最も多くの VRAM が必要です。</value>
-  </data>
-  <data name="ToolTip_MemoryMode_HuggingFace_Medium" xml:space="preserve">
-    <value>モデル CPU オフロード：各サブモデルを CPU メモリに保持し、実行中のみ GPU に移動します。</value>
-  </data>
-  <data name="ToolTip_MemoryMode_HuggingFace_Low" xml:space="preserve">
-    <value>シーケンシャル CPU オフロード：各レイヤーを実行中のみ GPU に移動します。VRAM 使用量は最小ですが、大幅に遅くなります。</value>
-  </data>
-  <data name="ToolTip_MemoryMode_HuggingFace_Balanced" xml:space="preserve">
-    <value>モデルの重みを利用可能な GPU と CPU メモリに分散します。</value>
-  </data>
   <data name="ToolTip_MemoryMode_StableDiffusionCpp_High" xml:space="preserve">
-    <value>すべての重みを GPU に保持します。</value>
+    <value>すべての重みをGPUに保持します。</value>
   </data>
   <data name="ToolTip_MemoryMode_StableDiffusionCpp_Medium" xml:space="preserve">
-    <value>重みを CPU メモリにオフロードし、必要なときに GPU に移動します。</value>
+    <value>重みをCPUメモリにオフロードし、必要なときにGPUに移動します。</value>
   </data>
   <data name="ToolTip_MemoryMode_StableDiffusionCpp_Low" xml:space="preserve">
-    <value>拡散モデルの重みを CPU メモリに、VAE・テキストエンコーダーなどをディスクにオフロードし、必要なときに読み込みます。</value>
+    <value>拡散モデルの重みをCPUメモリに、VAE・テキストエンコーダーなどをディスクにオフロードし、必要なときに読み込みます。</value>
   </data>
   <data name="ToolTip_MemoryMode_StableDiffusionCpp_Balanced" xml:space="preserve">
-    <value>自動フィット：利用可能な VRAM に収まるよう重みを自動的に配置します。</value>
+    <value>自動フィット：利用可能なVRAMに収まるよう重みを自動的に配置します。</value>
   </data>
   <data name="ToolTip_MemoryMode_AudioCpp_High" xml:space="preserve">
-    <value>モデル全体を GPU に読み込んだままにします。</value>
+    <value>モデル全体をGPUに読み込んだままにします。</value>
   </data>
   <data name="ToolTip_MemoryMode_AudioCpp_Medium" xml:space="preserve">
-    <value>メモリセーバーを有効にして VRAM 使用量を減らします。</value>
+    <value>メモリセーバーを有効にしてVRAM使用量を減らします。</value>
   </data>
   <data name="ToolTip_MemoryMode_AudioCpp_Low" xml:space="preserve">
-    <value>メモリセーバーを有効にして VRAM 使用量を減らします。</value>
+    <value>メモリセーバーを有効にしてVRAM使用量を減らします。</value>
   </data>
   <data name="ToolTip_MemoryMode_AudioCpp_Balanced" xml:space="preserve">
-    <value>メモリセーバーを有効にして VRAM 使用量を減らします。</value>
+    <value>メモリセーバーを有効にしてVRAM使用量を減らします。</value>
   </data>
   <data name="ToolTip_MemoryMode_LlamaCpp_High" xml:space="preserve">
-    <value>すべてのレイヤーを GPU で実行し、KV キャッシュも GPU に保持します。</value>
+    <value>すべてのレイヤーをGPUで実行し、KVキャッシュもGPUに保持します。</value>
   </data>
   <data name="ToolTip_MemoryMode_LlamaCpp_Medium" xml:space="preserve">
-    <value>すべてのレイヤーを GPU で実行し、KV キャッシュを CPU メモリに保持します。長いコンテキストで VRAM を節約します。</value>
+    <value>すべてのレイヤーをGPUで実行し、KVキャッシュをCPUメモリに保持します。長いコンテキストでVRAMを節約します。</value>
   </data>
   <data name="ToolTip_MemoryMode_LlamaCpp_Low" xml:space="preserve">
-    <value>すべてのレイヤーを CPU で実行し、KV キャッシュを CPU メモリに保持します。最も低速です。</value>
+    <value>すべてのレイヤーをCPUで実行し、KVキャッシュをCPUメモリに保持します。最も低速です。</value>
   </data>
   <data name="ToolTip_MemoryMode_LlamaCpp_Balanced" xml:space="preserve">
-    <value>実行オプションの GPU レイヤー数とキャッシュオフロードの設定を使用します。</value>
+    <value>実行オプションの「GPUレイヤー」と「GPUキャッシュ」の値を使用します。</value>
   </data>
   <data name="ToolTip_MemoryMode_OnnxRuntime" xml:space="preserve">
-    <value>OnnxRuntime は独自にメモリを管理するため、この設定は効果がありません。</value>
+    <value>OnnxRuntimeは独自にメモリを管理するため、この設定は効果がありません。</value>
   </data>
   <data name="ToolTip_WeightType" xml:space="preserve">
-    <value>読み込み時にモデルの重みをこの型に変換します。小さい型ほどメモリ使用量は減りますが、読み込みが遅くなり、品質も多少低下します。既定ではモデル本来の型を使用します。</value>
+    <value>読み込み時にモデルの重みをこの型に変換します。小さい型ほどメモリ使用量は減りますが、読み込みが遅くなり、品質も多少低下します。「デフォルト」を選択すると、モデル本来の型のまま使用します。</value>
   </data>
   <data name="ToolTip_ResetExecutionOptions" xml:space="preserve">
-    <value>すべてのオプションを既定値に戻します。保存すると適用されます。</value>
+    <value>すべてのオプションをデフォルト値に戻します。保存すると適用されます。</value>
   </data>
   <data name="ToolTip_EnvironmentSetupDontAskAgain" xml:space="preserve">
     <value>起動時に不足している環境のインストールを確認しません。必要な更新は引き続き表示されます。</value>
@@ -373,9 +359,150 @@
     <value>チャンクごとに処理するフレーム数。値を小さくするとメモリ使用量が減ります</value>
   </data>
   <data name="ToolTip_UpscaleTileSize" xml:space="preserve">
-    <value>タイルサイズ（ピクセル）。小さいほどメモリ使用量が減ります。0 で既定値を使用します</value>
+    <value>タイルサイズ（ピクセル）。小さいほどメモリ使用量が減ります。0でデフォルト値を使用します</value>
   </data>
   <data name="ToolTip_UpscaleWindowSize" xml:space="preserve">
-    <value>参照フレームの間隔。16 の場合はフレーム 0、15、30 などを使用し、最後のフレームは常に含まれます</value>
+    <value>参照フレームの間隔。16の場合はフレーム0、15、30などを使用し、最後のフレームは常に含まれます</value>
+  </data>
+  <data name="ToolTip_HistoryFilterAudio" xml:space="preserve">
+    <value>音声でフィルター</value>
+  </data>
+  <data name="ToolTip_HistoryFilterClear" xml:space="preserve">
+    <value>フィルターをクリア</value>
+  </data>
+  <data name="ToolTip_HistoryFilterImage" xml:space="preserve">
+    <value>画像でフィルター</value>
+  </data>
+  <data name="ToolTip_HistoryFilterText" xml:space="preserve">
+    <value>テキストでフィルター</value>
+  </data>
+  <data name="ToolTip_HistoryFilterVideo" xml:space="preserve">
+    <value>動画でフィルター</value>
+  </data>
+  <data name="ToolTip_GuidanceImage" xml:space="preserve">
+    <value>編集画像と参照画像のガイダンススケール。0 でモデルの既定値を使用します</value>
+  </data>
+  <data name="ToolTip_ShiftedTimestep" xml:space="preserve">
+    <value>蒸留タイムステップモデルで使用するシフトタイムステップ。0 で無効になります</value>
+  </data>
+  <data name="ToolTip_Sigmas" xml:space="preserve">
+    <value>カスタムシグマスケジュール。0 で終わる降順のカンマ区切りリスト（例: 14.61, 7.8, 3.5, 0）。スケジューラーとステップ数を置き換えます</value>
+  </data>
+  <data name="ToolTip_SkipLayers" xml:space="preserve">
+    <value>スキップレイヤーガイダンス。7, 8, 9 のようなカンマ区切りのレイヤーリストで、ステップの開始から終了の割合の間に適用されます。スケール 0 で無効になります</value>
+  </data>
+  <data name="ToolTip_SamplerArgs" xml:space="preserve">
+    <value>stable-diffusion.cpp に key=value 形式で渡す追加のサンプラー引数</value>
+  </data>
+  <data name="ToolTip_ClipSkip" xml:space="preserve">
+    <value>スキップする CLIP テキストエンコーダーの最終レイヤー数。0 でモデルの既定値を使用します</value>
+  </data>
+  <data name="ToolTip_MoeBoundary" xml:space="preserve">
+    <value>高ノイズモデルから低ノイズモデルへ切り替わる 0 から 1 の位置。0 で既定値の 0.875 を使用します</value>
+  </data>
+  <data name="ToolTip_FrameChunk" xml:space="preserve">
+    <value>長い動画をチャンクに分けて生成し、各チャンクは前のチャンクの最後のフレームから続きます。長さは一度の生成の上限に制限されなくなり、チャンクを小さくするとメモリ使用量が減ります</value>
+  </data>
+  <data name="ToolTip_FrameCount_Frames" xml:space="preserve">
+    <value>長さをフレーム数で入力</value>
+  </data>
+  <data name="ToolTip_FrameCount_Seconds" xml:space="preserve">
+    <value>長さを秒数で入力</value>
+  </data>
+  <data name="ToolTip_SeamlessTiling" xml:space="preserve">
+    <value>画像の端を回り込ませ、その方向にシームレスにタイル状に並べられる結果を生成します</value>
+  </data>
+  <data name="ToolTip_LiveStart" xml:space="preserve">
+    <value>マイクの音声をリアルタイムで文字起こしします。話している間にテキストが表示されます。</value>
+  </data>
+  <data name="ToolTip_LiveStop" xml:space="preserve">
+    <value>聞き取りを停止し、文字起こしを完了します。</value>
+  </data>
+  <data name="ToolTip_AudioTimeline_SaveAudio" xml:space="preserve">
+    <value>音声を保存</value>
+  </data>
+  <data name="ToolTip_AudioTimeline_SaveVideo" xml:space="preserve">
+    <value>参照動画を音声付きで保存</value>
+  </data>
+  <data name="ToolTip_AudioTimeline_ReferenceRemove" xml:space="preserve">
+    <value>参照動画を削除</value>
+  </data>
+  <data name="ToolTip_AudioTimeline_ClipMove" xml:space="preserve">
+    <value>クリップを再生ヘッドへ移動</value>
+  </data>
+  <data name="ToolTip_AudioTimeline_ClipTrimStart" xml:space="preserve">
+    <value>クリップの先頭を再生ヘッドまでトリム</value>
+  </data>
+  <data name="ToolTip_AudioTimeline_ClipTrimEnd" xml:space="preserve">
+    <value>クリップの末尾を再生ヘッドまでトリム</value>
+  </data>
+  <data name="ToolTip_AudioTimeline_ClipSplit" xml:space="preserve">
+    <value>再生ヘッドでクリップを分割</value>
+  </data>
+  <data name="ToolTip_AudioTimeline_ClipRestore" xml:space="preserve">
+    <value>トリムしたクリップを元に戻す</value>
+  </data>
+  <data name="ToolTip_AudioTimeline_ClipCopy" xml:space="preserve">
+    <value>クリップをコピー</value>
+  </data>
+  <data name="ToolTip_AudioTimeline_ClipRemove" xml:space="preserve">
+    <value>クリップを削除</value>
+  </data>
+  <data name="ToolTip_VideoTimeline_ReferenceRemove" xml:space="preserve">
+    <value>参照音声を削除</value>
+  </data>
+  <data name="ToolTip_FirstRunModelFolder" xml:space="preserve">
+    <value>モデルは、選択した場所の Models フォルダーにダウンロードされます。空き容量に余裕のあるドライブを選択してください。</value>
+  </data>
+  <data name="ToolTip_ModelSearchFolders" xml:space="preserve">
+    <value>ComfyUI など他のアプリケーションに既にあるモデルファイルを、コピーや再ダウンロードなしで使用します。</value>
+  </data>
+  <data name="ToolTip_SelectAudioRange" xml:space="preserve">
+    <value>再生成するソース音声の範囲を選択</value>
+  </data>
+  <data name="ToolTip_TrackName" xml:space="preserve">
+    <value>タスクの対象トラック（例：vocals、guitar、drums、bass、piano）</value>
+  </data>
+  <data name="ToolTip_CacheMode" xml:space="preserve">
+    <value>サンプリングステップ間で結果を再利用して生成を高速化します。EasyCache、DBCache、TaylorSeer、Cache-DiT は DiT モデル向け、UCache は UNet モデル向け、Spectrum は両方に対応します</value>
+  </data>
+  <data name="ToolTip_CacheThreshold" xml:space="preserve">
+    <value>ステップを再計算するまでに許容する変化量。大きいほど高速ですが品質が下がります。0 で既定値を使用します</value>
+  </data>
+  <data name="ToolTip_CacheWarmupSteps" xml:space="preserve">
+    <value>キャッシュ開始前に必ず実行するステップ数。0 で既定値を使用します</value>
+  </data>
+  <data name="ToolTip_CacheRange" xml:space="preserve">
+    <value>キャッシュを許可するサンプリングステップの範囲</value>
+  </data>
+  <data name="ToolTip_NavigateBack" xml:space="preserve">
+    <value>戻る (Alt+←)</value>
+  </data>
+  <data name="ToolTip_NavigateForward" xml:space="preserve">
+    <value>進む (Alt+→)</value>
+  </data>
+  <data name="ToolTip_QueueAll" xml:space="preserve">
+    <value>一覧に表示されている未インストールのモデルをすべてキューに追加します</value>
+  </data>
+  <data name="ToolTip_RescanModels" xml:space="preserve">
+    <value>モデルフォルダーや検索フォルダーにファイルを手動でコピーした後、モデルファイルを再検索します。</value>
+  </data>
+  <data name="ToolTip_McpTest" xml:space="preserve">
+    <value>サーバーを一度起動して、ツールを一覧表示します。</value>
+  </data>
+  <data name="ToolTip_McpImport" xml:space="preserve">
+    <value>設定のスニペットや、他のMCPアプリケーションの設定ファイルからサーバーを追加します。</value>
+  </data>
+  <data name="ToolTip_McpEnable" xml:space="preserve">
+    <value>このサーバーを起動し、チャット時にそのツールを使えるようにします。</value>
+  </data>
+  <data name="ToolTip_McpReconnect" xml:space="preserve">
+    <value>サーバーを再起動して、もう一度接続します。</value>
+  </data>
+  <data name="ToolTip_McpIconCode" xml:space="preserve">
+    <value>任意の Font Awesome アイコンのコード（例: f1e6）。</value>
+  </data>
+  <data name="ToolTip_FrameRate_Fixed" xml:space="preserve">
+    <value>このモデルは固定のフレームレートで生成します</value>
   </data>
 </root>

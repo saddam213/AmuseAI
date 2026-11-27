@@ -4,7 +4,6 @@ using Amuse.App.Resources;
 using Amuse.App.Services;
 using Microsoft.Extensions.Logging;
 using System;
-using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Diagnostics;
 using System.Linq;
@@ -13,7 +12,6 @@ using System.Windows.Threading;
 using TensorStack.Common;
 using TensorStack.WPF;
 using TensorStack.WPF.Controls;
-using TensorStack.WPF.Dialogs;
 using TensorStack.WPF.Services;
 
 namespace Amuse.App.Views
@@ -41,12 +39,12 @@ namespace Amuse.App.Views
         /// <param name="hardwareService">The hardware service.</param>
         /// <param name="environmentService">The environment service.</param>
         /// <param name="logger">The logger.</param>
-        public HomeView(Settings settings, NavigationService navigationService, IModelDownloadService downloadService, IHistoryService historyService, IHardwareService hardwareService, IEnvironmentService environmentService, ILogger<HomeView> logger)
-            : base(settings, navigationService, downloadService, historyService, logger)
+        public HomeView(Settings settings, NavigationService navigationService, IModelDownloadService downloadService, IModelAccessService modelAccessService, IHistoryService historyService, IHardwareService hardwareService, IEnvironmentService environmentService, ILogger<HomeView> logger)
+            : base(settings, navigationService, downloadService, modelAccessService, historyService, logger)
         {
             _hardwareService = hardwareService;
             _environmentService = environmentService;
-            Backends = [BackendType.OnnxRuntime, BackendType.StableDiffusionCpp, BackendType.AudioCpp, BackendType.LlamaCpp, BackendType.HuggingFace];
+            Backends = [BackendType.OnnxRuntime, BackendType.AudioCpp, BackendType.LlamaCpp, BackendType.StableDiffusionCpp];
             Devices = new ObservableCollection<HomeDeviceItem>();
             NewModels = new ObservableCollection<IGenerateModel>();
             RecommendedModels = new ObservableCollection<IGenerateModel>();
@@ -151,12 +149,12 @@ namespace Amuse.App.Views
                 Logger.LogError(ex, "[Home] [Open] An exception occurred refreshing the home view.");
             }
 
-            // App Setup, once per run. The dialog is modal and blocks while open,
-            // so queue it to show after this view has opened and rendered
+            // Disclaimer and App Setup, once per run. The dialogs are modal and block while open,
+            // so queue them to show after this view has opened and rendered
             if (!_isAppSetupShown)
             {
                 _isAppSetupShown = true;
-                Dispatcher.InvokeAsync(() => AppSetupAsync(), DispatcherPriority.ApplicationIdle);
+                Dispatcher.InvokeAsync(() => AppStartupAsync(), DispatcherPriority.ApplicationIdle);
             }
             return base.OpenAsync(args);
         }
@@ -212,15 +210,66 @@ namespace Amuse.App.Views
 
 
         /// <summary>
-        /// Shows the app setup dialog when any environment needs an update, or any backend has no installed environment, then refreshes the device table.
+        /// Shows the disclaimer until it is accepted, then the app setup dialog.
+        /// </summary>
+        private async Task AppStartupAsync()
+        {
+            if (!await AppDisclaimerAsync())
+                return;
+
+            await AppSetupAsync();
+        }
+
+
+        /// <summary>
+        /// Shows the disclaimer until it is accepted, exiting the application if it is declined.
+        /// </summary>
+        /// <returns><c>true</c> if the disclaimer has been accepted, otherwise <c>false</c>.</returns>
+        private async Task<bool> AppDisclaimerAsync()
+        {
+            if (Settings.IsDisclaimerAccepted)
+                return true;
+
+            try
+            {
+                Logger.LogInformation("[Home] [AppDisclaimer] Showing disclaimer...");
+                var disclaimerDialog = DialogService.GetDialog<AppDisclaimerDialog>();
+                if (!await disclaimerDialog.ShowDialogAsync())
+                {
+                    Logger.LogInformation("[Home] [AppDisclaimer] Disclaimer declined, exiting...");
+                    App.Current.Shutdown();
+                    return false;
+                }
+
+                Logger.LogInformation("[Home] [AppDisclaimer] Disclaimer accepted.");
+                Settings.IsDisclaimerAccepted = true;
+                await Settings.SaveAsync();
+                return true;
+            }
+            catch (Exception ex)
+            {
+                Logger.LogError(ex, "[Home] [AppDisclaimer] An exception occurred showing the disclaimer.");
+                await DialogService.ShowErrorAsync(AppErrors.UnexpectedErrorTitle, ex.Message);
+                App.Current.Shutdown();
+                return false;
+            }
+        }
+
+
+        /// <summary>
+        /// Shows the app setup dialog on the first run, or when any environment needs an update, or any backend has no installed environment, then refreshes the device table.
         /// </summary>
         private async Task AppSetupAsync()
         {
             var timestamp = Stopwatch.GetTimestamp();
+            var app = App.Current as App;
             try
             {
+                // First Run, the setup changes the language without asking for a restart
+                app?.SuppressLanguageNotice(true);
+
                 var setupEnvironments = _environmentService.GetSetupEnvironments(!Settings.IsAppSetupAcknowledged);
-                if (setupEnvironments.Count == 0)
+                if (setupEnvironments.Count == 0 && Settings.IsFirstRunComplete)
                     return;
 
                 Logger.LogInformation("[Home] [AppSetup] {Count} environments need to be installed or updated.", setupEnvironments.Count);
@@ -236,6 +285,7 @@ namespace Amuse.App.Views
             finally
             {
                 RefreshDevices();
+                app?.SuppressLanguageNotice(false);
             }
         }
 
@@ -318,7 +368,7 @@ namespace Amuse.App.Views
 
 
         /// <summary>
-        /// Opens an installed model in its view, otherwise asks to queue the download and shows it in the Models view.
+        /// Opens an installed model in its view, otherwise selects it in the Models view.
         /// </summary>
         /// <param name="model">The model.</param>
         private async Task OpenModelAsync(IGenerateModel model)
@@ -331,34 +381,12 @@ namespace Amuse.App.Views
                 // Installed
                 if (model.Status == ModelStatusType.Installed)
                 {
-                    var view = ViewManager.GetView(model);
-                    Logger.LogInformation("[Home] [OpenModel] Opening model {Name} in {View}", model.Name, view);
-                    await NavigationService.NavigateAsync((int)view, new ModelOpenArgs(model));
+                    await OpenInstalledModelAsync(model);
                     return;
                 }
 
-                // Downloading
-                if (model.Status == ModelStatusType.Downloading || model.Status == ModelStatusType.DownloadQueue || model.Status == ModelStatusType.DownloadFailed)
-                {
-                    await DialogService.ShowMessageAsync(AppDefault.ModelDownloadingTitle, string.Format(AppDefault.ModelDownloadingMessage, model.Name), MessageDialogType.Ok, MessageBoxIconType.Info, MessageBoxStyleType.Info);
-                    await NavigationService.NavigateAsync((int)View.Models, new ModelOpenArgs(model));
-                    return;
-                }
-
-                // Queue Download
-                if (!await DialogService.ShowMessageAsync(AppDefault.QueueDownloadTitle, string.Format(AppDefault.QueueDownloadMessage, model.Name), MessageDialogType.YesNo, MessageBoxIconType.Question, MessageBoxStyleType.Info))
-                    return;
-
-                var isQueued = model switch
-                {
-                    DiffusionModel diffusionModel => await DownloadService.QueueAsync(diffusionModel),
-                    LanguageModel languageModel => await DownloadService.QueueAsync(languageModel),
-                    _ => await DownloadService.QueueAsync(model)
-                };
-                if (!isQueued)
-                    return;
-
-                Logger.LogInformation("[Home] [OpenModel] Queued model {Name} for download", model.Name);
+                // Models
+                Logger.LogInformation("[Home] [OpenModel] Opening model {Name} in Models", model.Name);
                 await NavigationService.NavigateAsync((int)View.Models, new ModelOpenArgs(model));
             }
             catch (Exception ex)
@@ -366,6 +394,18 @@ namespace Amuse.App.Views
                 Logger.LogError(ex, "[Home] [OpenModel] An exception occurred opening model {Name}", model.Name);
                 await DialogService.ShowErrorAsync(AppErrors.UnexpectedErrorTitle, ex.Message);
             }
+        }
+
+
+        /// <summary>
+        /// Opens an installed model in its view.
+        /// </summary>
+        /// <param name="model">The model.</param>
+        private async Task OpenInstalledModelAsync(IGenerateModel model)
+        {
+            var view = ViewManager.GetView(model);
+            Logger.LogInformation("[Home] [OpenModel] Opening model {Name} in {View}", model.Name, view);
+            await NavigationService.NavigateAsync((int)view, new ModelOpenArgs(model));
         }
     }
 }

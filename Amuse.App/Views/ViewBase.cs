@@ -2,6 +2,7 @@
 using Amuse.App.Controls;
 using Amuse.App.Services;
 using Microsoft.Extensions.Logging;
+using System;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Threading;
@@ -18,13 +19,14 @@ namespace Amuse.App.Views
         /// <summary>
         /// Initializes a new instance of the <see cref="ViewBase"/> class.
         /// </summary>
-        public ViewBase(Settings settings, NavigationService navigationService, IModelDownloadService downloadService, IHistoryService historyService, ILogger logger)
+        public ViewBase(Settings settings, NavigationService navigationService, IModelDownloadService downloadService, IModelAccessService modelAccessService, IHistoryService historyService, ILogger logger)
             : base(navigationService)
         {
             Logger = logger;
             Settings = settings;
             HistoryService = historyService;
             DownloadService = downloadService;
+            ModelAccessService = modelAccessService;
             Progress = new ProgressInfo();
             ViewName = View.ToString();
             CancelCommand = new AsyncRelayCommand(CancelAsync, CanCancel);
@@ -71,6 +73,11 @@ namespace Amuse.App.Views
         public IModelDownloadService DownloadService { get; }
 
         /// <summary>
+        /// Gets the model access service, asked before a pipeline's models load.
+        /// </summary>
+        public IModelAccessService ModelAccessService { get; }
+
+        /// <summary>
         /// Gets or sets the cancel command.
         /// </summary>
         public AsyncRelayCommand CancelCommand { get; set; }
@@ -97,7 +104,6 @@ namespace Amuse.App.Views
         /// <param name="args">The arguments.</param>
         public override Task OpenAsync(OpenViewArgs args = null)
         {
-            // Select after the derived view has restored its pipeline
             if (args is ModelOpenArgs modelOpenArgs)
                 Dispatcher.BeginInvoke(DispatcherPriority.Loaded, () => SelectModel(modelOpenArgs.Model));
 
@@ -116,6 +122,18 @@ namespace Amuse.App.Views
                 diffusionModelControl.SelectModel(diffusionModel);
             else if (modelControl is LanguageModelControl languageModelControl && model is LanguageModel languageModel)
                 languageModelControl.SelectModel(languageModel);
+        }
+
+
+        /// <summary>
+        /// Requests access to load the models of the pipeline, asking what to do with any loaded model it conflicts with.
+        /// </summary>
+        /// <param name="pipeline">The pipeline to load.</param>
+        /// <exception cref="OperationCanceledException">The load was canceled.</exception>
+        protected async Task RequestModelAccessAsync(PipelineModel pipeline)
+        {
+            if (!await ModelAccessService.RequestAccessAsync(pipeline))
+                throw new OperationCanceledException();
         }
 
 
